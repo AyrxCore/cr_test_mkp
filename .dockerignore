@@ -1,0 +1,10 @@
+Jenkinsfile
+Dockerfile
+docker-compose.yml
+docker-compose.override.yml
+Makefile
+.git
+var/
+node_modules/
+vendor/
+translations/

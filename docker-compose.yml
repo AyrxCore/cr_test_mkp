@@ -1,0 +1,103 @@
+version: '3.8'
+
+services:
+  php-fpm:
+    build:
+      context: .
+      target: php
+    environment:
+      - APP_ENV=${APP_ENV}
+      - APP_SECRET=${APP_SECRET}
+    command: sh -c "composer i -o ; wait-for-it db:5432 -- bin/console doctrine:migrations:migrate -n;  bin/console lexik:jwt:generate-keypair --overwrite -n; php-fpm"
+    volumes:
+      - ./:/var/www
+      - ./docker/php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ./docker/php-fpm/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    networks:
+      - dev-marketplace
+
+  php-cron:
+    build:
+      context: .
+      target: php
+    environment:
+      - APP_ENV=${APP_ENV}
+      - APP_SECRET=${APP_SECRET}
+    depends_on:
+      php-fpm:
+        condition: service_started
+    command: sh -c "bin/console cron:start --blocking -n"
+    volumes:
+      - ./:/var/www
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    networks:
+      - dev-marketplace
+
+  nodejs:
+    build:
+      context: .
+      target: node
+    working_dir: /var/www
+    command: >
+      sh -c "yarn install
+      && yarn docker"
+    environment:
+      - NODE_ENV=${APP_ENV}
+    volumes:
+      - ./:/var/www
+    ports:
+      - '3003:3003'
+    depends_on:
+      - php-fpm
+    networks:
+      - dev-marketplace
+
+  nginx:
+    build:
+      context: .
+      target: nginx
+    environment:
+      - PHP_URL=php-fpm
+    depends_on:
+      php-fpm:
+        condition: service_started
+      nodejs:
+        condition: service_started
+    volumes:
+      - ./:/var/www
+      - ./var:/var/log/nginx
+    ports:
+      - '8087:80'
+    networks:
+      - dev-marketplace
+
+  db:
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mkp_db
+    ports:
+      - '15436:5432'
+    networks:
+      - dev-marketplace
+    volumes:
+      - /var/lib/postgresql/data
+
+  maildev:
+    image: maildev/maildev
+    command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
+    ports:
+      - '8086:80'
+    restart: always
+    networks:
+      - dev-marketplace
+
+networks:
+  dev-marketplace:
+
+volumes:
+  db-data-marketplace:
