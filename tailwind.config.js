@@ -8,7 +8,10 @@ module.exports = {
     enabled: process.env.NODE_ENV === 'production',
     content: [
       './assets/**/*.{vue,ts}',
-      './src/**/*.{html,js}'
+      './src/**/*.{html,js}',
+      './templates/**/*.html.twig',
+      './node_modules/flowbite/**/*.js',
+      './node_modules/flowbite-vue/**/*.{js,jsx,ts,tsx}',
     ],
   },
   theme: {
@@ -19,6 +22,7 @@ module.exports = {
     require('@tailwindcss/line-clamp'),
     require('@tailwindcss/typography'),
     require('@tailwindcss/forms'),
+    require('flowbite/plugin'),
     plugin(function ({ addVariant, e, postcss }) {
       addVariant('firefox', ({ container, separator }) => {
         const isFirefoxRule = postcss.atRule({

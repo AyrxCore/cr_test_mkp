@@ -3,6 +3,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import pkg from './package.json'
 import { resolve } from 'path'
+import { viteStaticCopy } from 'vite-plugin-static-copy'
 
 const twigRefreshPlugin = {
   name: 'twig-refresh',
@@ -26,7 +27,18 @@ if (process.env.NODE_ENV === 'production') {
 export default defineConfig({
   root: './assets',
   base: '/assets/',
-  plugins: [twigRefreshPlugin, vue()],
+  plugins: [
+      twigRefreshPlugin,
+      vue(),
+      viteStaticCopy({
+        targets: [
+          {
+            src: 'img/*',
+            dest: 'img'
+          }
+        ]
+      })
+  ],
   server: {
     port: 3003,
     watch: {
