@@ -28,16 +28,16 @@ export default defineConfig({
   root: './assets',
   base: '/assets/',
   plugins: [
-      twigRefreshPlugin,
-      vue(),
-      viteStaticCopy({
-        targets: [
-          {
-            src: 'img/*',
-            dest: 'img'
-          }
-        ]
-      })
+    twigRefreshPlugin,
+    vue(),
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'img/*',
+          dest: 'img',
+        },
+      ],
+    }),
   ],
   server: {
     port: 3003,

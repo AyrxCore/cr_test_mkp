@@ -15,11 +15,6 @@ lint:
 	php vendor/bin/phpstan analyse
 	yarn eslint
 
-api-schema:
-	docker exec marketplace-php-fpm-1 php bin/console api:openapi:export -o ./api.json
-	npx openapi-typescript api.json --output ./assets/schema/app-api-schema.ts
-	rm -f api.json
-
 build:
 	git pull origin master
 	cp .env.prod .env
@@ -29,3 +24,5 @@ build:
 	docker exec marketplace-nodejs-1  yarn install
 	docker exec marketplace-nodejs-1  yarn build
 
+load-fixtures:
+	$(EXEC_PHP) bin/console d:f:l --force
