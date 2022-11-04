@@ -3,9 +3,7 @@
     <div class=" px-4 mx-auto md:flex md:items-center">
 
       <div class="">
-        <div class="w-full flex justify-end">
-          <img src="/assets/img/logo_fond_transparent.png" alt="" width="25"/>
-        </div>
+        <div class="w-full flex justify-end"/>
         <div>
           <a href="#" class="font-bold text-xl text-white">QANTIS</a>
         </div>
