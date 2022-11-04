@@ -11,10 +11,11 @@
 
 <script lang="ts" setup>
 import { useHead } from '@vueuse/head'
-import {computed} from 'vue'
+import {computed, onMounted} from 'vue'
 import HeaderSharedComponent from '@/vuejs/modules/shared/HeaderSharedComponent.vue'
+import {useUserStore} from '@/vuejs/stores/user'
 
-
+const userStore = useUserStore()
 const props = defineProps({
   title: {
     required: false,
@@ -32,6 +33,7 @@ useHead({
     },
   ],
 })
+
 
 </script>
 

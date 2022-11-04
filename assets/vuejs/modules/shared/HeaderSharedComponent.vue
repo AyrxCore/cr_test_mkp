@@ -4,7 +4,7 @@
 
       <div class="">
         <div class="w-full flex justify-end">
-          <img src="" alt="" width="25"/>
+          <img src="/assets/img/logo_fond_transparent.png" alt="" width="25"/>
         </div>
         <div>
           <a href="#" class="font-bold text-xl text-white">QANTIS</a>
@@ -18,11 +18,24 @@
       </div>
 
       <div id="navbar-collapse" class="hidden md:flex flex-col md:flex-row md:ml-auto mt-3 md:mt-0">
-        <button type="button" class="py-2.5 px-5 mr-4 mb-2 text-sm font-medium text-white focus:outline-none bg-transparent rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200">Devenir partenaire</button>
-        <button type="button" class="text-white bg-gradient-to-r from-purple-600 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4  focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2">Devenir adhérent</button>        </div>
+        <div v-if="user !== null" class="text-white">
+          <div>Bonjour {{ user.email }}</div>
+          <div>Mon compte</div>
+        </div>
+
+      </div>
     </div>
   </nav>
 
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+
+import {useUserStore} from '@/vuejs/stores/user'
+import {storeToRefs} from 'pinia'
+
+
+const userStore = useUserStore()
+const {user} = storeToRefs(userStore)
+
+</script>

@@ -72,7 +72,7 @@ const alertStore = useAlertStore()
 
 const loginSubmit = async () => {
   isLoading.value = true
-  await userStore.authenticate({email: username.value, password: password.value})
+  await userStore.authenticate({email: username.value, password: password.value}, true)
   isLoading.value = false
 }
 </script>

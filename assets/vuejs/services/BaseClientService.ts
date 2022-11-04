@@ -15,12 +15,16 @@ class BaseClientService {
 
     axiosHeaders['Content-Type'] = 'application/json'
 
-    axiosHeaders.Authorization =
-      userStore.getToken && 'Bearer ' + userStore.getToken
-
     this.apiClient = axios.create({
-      baseURL: '/app',
+      baseURL: '/api',
       headers: axiosHeaders,
+    })
+
+    this.apiClient.interceptors.request.use((config) => {
+      config.headers.Authorization =
+        userStore.token && 'Bearer ' + userStore.token
+
+      return config
     })
   }
 

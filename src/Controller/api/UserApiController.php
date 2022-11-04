@@ -14,6 +14,6 @@ class UserApiController extends AbstractController
     public function me(NormalizerInterface $normalizer): JsonResponse
     {
         $user = $normalizer->normalize($this->getUser(), 'json', ['groups' => 'simpleUser']);
-        return $this->json($user);
+        return new JsonResponse($user);
     }
 }

@@ -2,5 +2,7 @@
 #    path: /
 #    controller: App\Controller\DefaultController::index
 authentication_token:
-  path: /app/api/authentication/token
+  path: /api/authentication/token
   methods: ['POST']
+authentication_refresh_token:
+  path: /api/token/refresh

@@ -7,7 +7,7 @@
 
 <script lang="ts" setup>
 import {onMounted} from 'vue'
-import LoginForm from './modules/login/views/LoginForm.vue'
+import LoginForm from './modules/login/views/ExternalLoginForm.vue'
 
 const props = defineProps({
   component: {

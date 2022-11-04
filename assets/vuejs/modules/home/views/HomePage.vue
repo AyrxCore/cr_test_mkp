@@ -6,6 +6,7 @@
       <LoaderSharedComponent
         class="mt-4"
       />
+      <slot/>
     </div>
   </BaseTemplate>
 </template>
