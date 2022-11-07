@@ -26,3 +26,6 @@ services:
             $cache: '@vite_cache_pool'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\Tests\Resources\DataFixtures\:
+        resource: '../tests/Resources/DataFixtures'
+        tags: [ 'doctrine.fixture.orm' ]
