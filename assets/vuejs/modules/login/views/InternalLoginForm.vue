@@ -6,7 +6,7 @@
         @submit.prevent="loginSubmit"
     >
       <div class="mt-3">
-        <h1 class="primary text-xl font-bold">Bonjour</h1>
+        <h1 class="primary text-xl font-bold">Bonjour Internal</h1>
         <div class="gray mt-3">Déjà adhérent ? Connectez-vous ici</div>
       </div>
       <div class="mb-3 mt-3">
@@ -42,8 +42,8 @@
       <div class="mt-3 flex justify-end">
         <button
             type="submit"
-            class="text-white bg-gradient-to-r from-purple-600 via-cyan-500 to-cyan-600 flex
-                hover:bg-gradient-to-br focus:ring-4  focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800
+            class="text-white bg-gradient-to-r from-purple-800 via-blue-600 to-cyan-600 flex
+                hover:bg-gradient-to-br bg-purple-800 focus:ring-4  focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800
                 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2"
         >
           <LoaderSharedComponent

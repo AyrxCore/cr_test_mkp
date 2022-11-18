@@ -1,8 +1,8 @@
 php-bash:
-	docker exec -it marketplace-php-fpm-1 bash
+	docker exec -it marketplace_php-fpm_1 bash
 
 node-bash:
-	docker exec -it marketplace-nodejs-1 sh
+	docker exec -it marketplace_nodejs_1 sh
 
 nginx-bash:
 	docker exec -it marketplace-nginx-1 sh
