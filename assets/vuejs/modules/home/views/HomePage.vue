@@ -13,6 +13,7 @@
 <script>
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
+
 export default {
   components: {LoaderSharedComponent, BaseTemplate}
 }
