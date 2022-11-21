@@ -1,6 +1,6 @@
 <template>
   <button
-    class="mr-2 mb-2 flex rounded-full bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:from-purple-500 hover:to-purple-500"
+    class="contactez-nous mr-2 mb-2 flex items-center rounded-md bg-purple-600 px-5 py-2.5 text-sm font-medium text-white"
     :type="props.type"
     :class="{ 'button-no-click': isLoading }"
     @click="onClick"

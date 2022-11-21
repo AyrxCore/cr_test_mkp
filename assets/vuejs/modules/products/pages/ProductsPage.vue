@@ -1,9 +1,5 @@
 <template>
-  <BaseTemplate
-    title="Qantis - MarketPlace"
-  >
-    Page de produit
-  </BaseTemplate>
+  <BaseTemplate title="Qantis - MarketPlace"> Page de produit </BaseTemplate>
 </template>
 
 <script>
@@ -13,6 +9,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
