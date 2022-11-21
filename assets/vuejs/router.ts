@@ -3,6 +3,12 @@ import {
   LoginPageList,
   routes as loginRoutes,
 } from '@/vuejs/modules/login/routerLogin'
+
+import {
+  ProductPageList,
+  routes as productsRoutes,
+} from '@/vuejs/modules/products/routerProducts'
+
 import Home from '@/vuejs/modules/home/views/HomePage.vue'
 import { useUserStore } from '@/vuejs/stores/user'
 
@@ -13,6 +19,7 @@ export enum MainPageList {
 export const PageList = {
   ...MainPageList,
   ...LoginPageList,
+  ...ProductPageList,
 }
 
 const routes: RouteRecordRaw[] = [
@@ -22,6 +29,7 @@ const routes: RouteRecordRaw[] = [
     component: Home,
   },
   ...loginRoutes,
+  ...productsRoutes,
 ]
 
 const router = createRouter({
@@ -32,15 +40,15 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore()
-  if (to.name !== PageList.LOGIN_AUTH) {
-    if (!userStore.isLogged) {
-      next({ name: PageList.LOGIN_AUTH })
-    }
-    if (userStore.user === null && userStore.getToken !== null) {
-      console.log('before get me', userStore.getToken)
-      await userStore.getCurrentUserDatas()
-    }
-  }
+  // if (to.name !== PageList.LOGIN_AUTH) {
+  //   if (!userStore.isLogged) {
+  //     next({ name: PageList.LOGIN_AUTH })
+  //   }
+  //   if (userStore.user === null && userStore.getToken !== null) {
+  //     console.log('before get me', userStore.getToken)
+  //     await userStore.getCurrentUserDatas()
+  //   }
+  // }
   next()
 })
 

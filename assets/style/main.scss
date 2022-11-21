@@ -4,9 +4,50 @@
 @import url('https://fonts.cdnfonts.com/css/roboto');
 @import '_variables';
 
+@font-face {
+  font-family: 'CoText';
+  src: url('public/fonts/CoTextCorp-Regular.woff2') format('woff2'),
+  url('public/fonts/CoTextCorp-Regular.woff') format('woff'),
+  url('public/fonts/CoTextCorp-Regular.ttf') format('truetype');
+}
+
 
 .header {
   background-color: $primary;
+}
+.logo-qantis-header {
+  height: 57px;
+  width: 145px;
+  left: 60px;
+  top: 24.5px;
+  border-radius: 0px;
+
+}
+.bg-qantis {
+  background-color: $primary;
+}
+
+.footer {
+  background-color: $primary;
+  color: #FFFFFF;
+  width: 100%;
+}
+
+.footer h3 {
+  font-family: CoText, sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 26px;
+  text-align: left;
+}
+
+.footer p, .footer li {
+  font-family: CoText, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 25px;
+  letter-spacing: 0em;
+  text-align: left;
 }
 
 .secondary {
@@ -19,4 +60,160 @@
 
 .gray {
   color: $gray;
+}
+
+.b-goToPage {
+  position: fixed;
+  top: 10rem;
+  right: 0px;
+  z-index: 100;
+  width: 30px;
+  backgroundColor: red;
+}
+
+.b-goToPage button {
+  font-size: 10px;
+  width: 30px;
+  background-color: red;
+}
+
+.footer .logo-qantis {
+  height: 98px;
+  width: 202px;
+  left: 0px;
+  top: 0px;
+  border-radius: 0px;
+}
+
+.footer .logo-ecolo {
+  height: 69px;
+  width: 202px;
+  left: 0px;
+  top: 144px;
+  border-radius: 0px;
+}
+
+.footer .logo-lemway {
+  height: 48px;
+  width: 209px;
+  left: 0px;
+  top: 289px;
+  border-radius: 0px;
+}
+
+.footer .social-network-logo div {
+  box-sizing: border-box;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #FFFFFF;
+  border-radius: 20px;
+  float: left;
+  margin-right: 10px;
+  padding: 10px;
+}
+
+.menu-button {
+  width: 220px;
+  height: 50px;
+  border-radius: 5px;
+  z-index: 200;
+}
+
+
+.overlay {
+  display: none;
+  height: 100vh;
+  width: 100%;
+  position: fixed;
+  z-index: 99;
+  opacity: 0;
+  background-color: rgba(0,0,0,0.4);
+  bottom: 0;
+  right: 0;
+  left: 0;
+  animation-duration: 300ms;
+}
+
+.overlay.open {
+  display: block;
+  opacity: 1;
+  animation-duration: 300ms;
+}
+
+.hamburger-menu {
+  height: 0;
+  width: 0;
+  background: #fff;
+  position: fixed;
+  top: inherit;
+  z-index: 101;
+  overflow: hidden;
+  border-radius: 5px;
+
+  nav {
+    padding: 10px;
+    z-index: 101;
+    overflow-y: hidden;
+    overflow-x: hidden;
+
+    a {
+      display: block;
+      padding: 10px;
+      height: 2em;
+      color: $primary;
+      font-size: 1em;
+      line-height: 1em;
+      text-decoration: none;
+      overflow: hidden;
+
+      &:hover {
+        cursor: pointer;
+        border-radius: 10px;
+      }
+    }
+  }
+}
+
+.hamburger-menu.open {
+  width: 400px;
+  height: auto;
+  animation-duration: 300ms;
+}
+
+.swiper-slide img {
+  display: block;
+  width: auto;
+  height: 100%;
+}
+
+.home-title {
+  font-family: Co Text Corp;
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 49px;
+  letter-spacing: 0em;
+  text-align: left;
+  height: 98px;
+  width: 851px;
+  left: 144px;
+  top: 281px;
+}
+
+.contactez-nous {
+  height: 32px;
+  font-family: 'Co Text Corp';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 16px;
+  text-align: center;
+}
+
+.swiper-pagination-bullet {
+  opacity: 1;
+  border: #9553FF solid 2px;
+  background-color: #FFFFFF !important;
+}
+.swiper-pagination-bullet-active {
+  background-color: #9553FF !important;
 }
