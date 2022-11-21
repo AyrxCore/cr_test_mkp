@@ -112,7 +112,7 @@
   padding: 10px;
 }
 
-#menu-button {
+.menu-button {
   width: 220px;
   height: 50px;
   border-radius: 5px;
@@ -120,7 +120,7 @@
 }
 
 
-#overlay {
+.overlay {
   display: none;
   height: 100vh;
   width: 100%;
@@ -134,13 +134,13 @@
   animation-duration: 300ms;
 }
 
-#overlay.open {
+.overlay.open {
   display: block;
   opacity: 1;
   animation-duration: 300ms;
 }
 
-#hamburger-menu {
+.hamburger-menu {
   height: 0;
   width: 0;
   background: #fff;
@@ -174,8 +174,46 @@
   }
 }
 
-#hamburger-menu.open {
+.hamburger-menu.open {
   width: 400px;
   height: auto;
   animation-duration: 300ms;
+}
+
+.swiper-slide img {
+  display: block;
+  width: auto;
+  height: 100%;
+}
+
+.home-title {
+  font-family: Co Text Corp;
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 49px;
+  letter-spacing: 0em;
+  text-align: left;
+  height: 98px;
+  width: 851px;
+  left: 144px;
+  top: 281px;
+}
+
+.contactez-nous {
+  height: 32px;
+  font-family: 'Co Text Corp';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 16px;
+  text-align: center;
+}
+
+.swiper-pagination-bullet {
+  opacity: 1;
+  border: #9553FF solid 2px;
+  background-color: #FFFFFF !important;
+}
+.swiper-pagination-bullet-active {
+  background-color: #9553FF !important;
 }

@@ -1,20 +1,10 @@
 <template>
-  <BaseTemplate
-    title="Qantis - MarketPlace"
-  >
-    <div class="flex justify-center">
-      <LoaderSharedComponent
-        class="mt-4"
-      />
-      <slot/>
+  <BaseTemplate title="Qantis - MarketPlace"
+    ><div class="flex justify-center">
+      <h2>PAGE D'ACCUEIL MARKETPLACE</h2>
     </div>
   </BaseTemplate>
 </template>
-<script>
+<script lang="ts" setup>
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
-import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
-
-export default {
-  components: {LoaderSharedComponent, BaseTemplate}
-}
 </script>
