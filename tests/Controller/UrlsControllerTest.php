@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Tests\Controller;
-
 
 use App\Entity\User;
 use App\Tests\Resources\DataFixtures\ContactTestFixtures;
@@ -19,8 +17,6 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 class UrlsControllerTest extends WebTestCase
 {
-
-
     #[Required]
     public EntityManagerInterface $em;
 
@@ -36,6 +32,7 @@ class UrlsControllerTest extends WebTestCase
 
     public function setUp(): void
     {
+        $_ENV["APP_ENV"] = "test";
         parent::setUp();
         $this->client = self::createClient();
         $kernel = static::bootKernel();
@@ -61,7 +58,7 @@ class UrlsControllerTest extends WebTestCase
 
 
         $this->client->followRedirects(true);
-        foreach($checkNotLoggedUrls as $url){
+        foreach ($checkNotLoggedUrls as $url){
             echo "Test de l'url " . $url["url"] . " attente d'un code http ".$url["assertCode"]."\n";
             $this->client->request('GET', $url["url"]);
             echo "Resultat de la requete " . $this->client->getResponse()->getStatusCode() . "\n";

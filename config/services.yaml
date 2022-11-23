@@ -4,7 +4,11 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-
+    uppler_api_url: '%env(UPPLER_API_URL)%'
+    uppler_admin_client_id: '%env(UPPLER_ADMIN_CLIENT_ID)%'
+    uppler_admin_client_secret: '%env(UPPLER_ADMIN_CLIENT_SECRET)%'
+    #fichier qui stocke le token admin en cours
+    uppler_admin_token_file: '%kernel.project_dir%/var/'
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -29,3 +33,21 @@ services:
     App\Tests\Resources\DataFixtures\:
         resource: '../tests/Resources/DataFixtures'
         tags: [ 'doctrine.fixture.orm' ]
+    app.uppler_authenticator:
+        class: App\Security\UpplerAuthenticator
+        parent: lexik_jwt_authentication.security.jwt_authenticator
+        autowire: true
+
+    App\Service\UpplerAuthenticationService:
+        arguments:
+            $apiUrl: '%uppler_api_url%'
+            $adminClientId: '%uppler_admin_client_id%'
+            $adminClientSecret: '%uppler_admin_client_secret%'
+            $adminTokenFile: '%uppler_admin_token_file%'
+
+    App\Service\HttpClientProvider:
+        arguments:
+            $apiUrl: '%uppler_api_url%'
+            $adminClientId: '%uppler_admin_client_id%'
+            $adminClientSecret: '%uppler_admin_client_secret%'
+            $adminTokenFile: '%uppler_admin_token_file%'

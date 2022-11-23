@@ -11,7 +11,7 @@ export default class UserHttpClient extends BaseClientService {
   ): Promise<T> {
     return this.apiClient
       .post<T>('authentication/token', {
-        email: userDatas.email,
+        username: userDatas.username,
         password: userDatas.password,
       })
       .then((response) => response.data)

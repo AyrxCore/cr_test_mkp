@@ -9,7 +9,6 @@ import router, { PageList } from '@/vuejs/router'
 export const useUserStore = defineStore({
   id: 'user',
   state: (): UserStoreState => ({
-    token: null,
     user: null,
   }),
 
@@ -21,7 +20,7 @@ export const useUserStore = defineStore({
       const alertStore = useAlertStore()
       try {
         const authDatas = await UserHttpClient.get().getUserToken(userDatas)
-        this.token = authDatas.token
+        await this.getCurrentUserDatas()
         redirectToApp && (document.location.href = '/app')
         return true
       } catch (error) {
@@ -31,7 +30,13 @@ export const useUserStore = defineStore({
       }
     },
     async getCurrentUserDatas(): Promise<void> {
-      this.user = await UserHttpClient.get().getUserMe()
+      const alertStore = useAlertStore()
+      try {
+        this.user = await UserHttpClient.get().getUserMe()
+      } catch (error) {
+        error.response.status === HttpStatusCodes.unauthorized &&
+          alertStore.setShow('Identifiants erronnés', AlertType.danger)
+      }
     },
   },
 

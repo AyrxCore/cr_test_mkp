@@ -69,7 +69,7 @@ const alertStore = useAlertStore()
 const loginSubmit = async () => {
   isLoading.value = true
   const login = await userStore.authenticate({
-    email: username.value,
+    username: username.value,
     password: password.value,
   })
   login && router.push({ name: PageList.HOME_PAGE })

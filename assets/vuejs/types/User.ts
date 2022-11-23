@@ -6,13 +6,12 @@ export interface User {
 
 // Décrit le state général du store user
 export interface UserStoreState {
-  token: string | null
   user: User
 }
 
 // Décrit le bloc de données nécessaire à l'obtention du token
 export interface AuthenticateUserDatas {
-  email: string
+  username: string
   password: string
 }
 
