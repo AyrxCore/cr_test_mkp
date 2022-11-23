@@ -4,11 +4,11 @@
       '--swiper-navigation-color': '#050056',
     }"
     :modules="defaultModules"
-    :slides-per-view="props.slidesPerPerView"
     :space-between="props.spaceBetween"
     navigation=""
     :loop="true"
     :pagination="props.pagination"
+    :slides-per-view="props.slidesPerPerView"
     @swiper="onSwiper"
     @slideChange="onSlideChange"
     class="mx-auto items-center text-center"
@@ -17,7 +17,7 @@
   </swiper>
 </template>
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { Swiper } from 'swiper/vue'
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper'
 import 'swiper/swiper.min.css'
@@ -32,6 +32,11 @@ const props = defineProps({
     type: Number,
     default: 3,
   },
+  mobileSlidesPerPerView: {
+    required: false,
+    type: Number,
+    default: 2,
+  },
   spaceBetween: {
     required: false,
     type: Number,
@@ -44,20 +49,25 @@ const props = defineProps({
   loop: {
     required: false,
     type: Boolean,
-    default: false,
+    default: true,
   },
   pagination: {
     required: false,
-    type: Object,
-    default: () => ({ clickable: true }),
+    type: Boolean,
+    default: false,
   },
+})
+
+onMounted(()=> {
+  console.log(props.mobileSlidesPerPerView)
+  console.log(props.slidesPerPerView)
 })
 const onSlideChange = () => {
   console.log('slide change')
 }
 
 const onSwiper = (swiper) => {
-  console.log(swiper)
+  console.log(swiper.slidesPerPerView)
 }
 
 const defaultModules = computed(

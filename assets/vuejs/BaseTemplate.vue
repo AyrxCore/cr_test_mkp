@@ -1,21 +1,17 @@
 <template>
   <div class="min-h-screen">
     <div>
-      <button
-        class="fixed top-[280px] right-0 h-[51px] w-12 rounded-l-[30px] bg-purple-600 text-white hover:w-20"
-      >
-        <i class="fa fa-envelope text-lg" />
+      <button class="top-[280px] sticky-left-button" >
+        <MailIconComponent />
       </button>
     </div>
     <div>
-      <button
-        class="fixed top-[354px] right-0 h-[50px] w-12 rounded-l-[30px] bg-purple-600 text-white hover:w-20"
-      >
-        <i class="fa fa-phone text-lg" />
+      <button class="top-[354px] sticky-left-button">
+        <PhoneIconComponent />
       </button>
     </div>
     <HeaderSharedComponent />
-    <main class="m-auto my-4 max-w-screen-2xl flex-1">
+    <main class="">
       <slot />
     </main>
     <FooterSharedComponent />
@@ -28,6 +24,8 @@ import { computed, onMounted } from 'vue'
 import HeaderSharedComponent from '@/vuejs/modules/shared/HeaderSharedComponent.vue'
 import FooterSharedComponent from '@/vuejs/modules/shared/FooterSharedComponent.vue'
 import { useUserStore } from '@/vuejs/stores/user'
+import MailIconComponent from '@/vuejs/modules/shared/icon/MailIconComponent.vue';
+import PhoneIconComponent from '@/vuejs/modules/shared/icon/PhoneIconComponent.vue';
 
 const userStore = useUserStore()
 const props = defineProps({
