@@ -40,7 +40,11 @@
       >
     </div>
     <div class="mt-3 flex justify-end">
-      <DefaultButton type="submit" :is-loading="isLoading">
+      <DefaultButton
+          type="submit"
+          :is-loading="isLoading"
+          :disabled="isLoading"
+      >
         Me connecter
       </DefaultButton>
     </div>
@@ -64,7 +68,7 @@ const alertStore = useAlertStore()
 const loginSubmit = async () => {
   isLoading.value = true
   await userStore.authenticate(
-    { email: username.value, password: password.value },
+    { username: username.value, password: password.value },
     true,
   )
   isLoading.value = false

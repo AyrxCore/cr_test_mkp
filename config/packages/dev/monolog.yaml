@@ -22,5 +22,5 @@ monolog:
         api:
             type: stream
             path: "%kernel.logs_dir%/api.log"
-            level: critical
+            level: debug
             channels: [ "api"]

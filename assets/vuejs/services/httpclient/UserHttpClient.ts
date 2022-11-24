@@ -20,4 +20,8 @@ export default class UserHttpClient extends BaseClientService {
   public getUserMe<T extends User>(): Promise<T> {
     return this.apiClient.get('user/me').then((response) => response.data)
   }
+
+  public logout<T extends User>(): Promise<T> {
+    return this.apiClient.get('user/logout').then((response) => response.data)
+  }
 }

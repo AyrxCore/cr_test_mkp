@@ -20,8 +20,7 @@ export const useUserStore = defineStore({
       const alertStore = useAlertStore()
       try {
         const authDatas = await UserHttpClient.get().getUserToken(userDatas)
-        await this.getCurrentUserDatas()
-        redirectToApp && (document.location.href = '/app')
+        redirectToApp && (document.location.href = '/app/home')
         return true
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
@@ -38,6 +37,17 @@ export const useUserStore = defineStore({
           alertStore.setShow('Identifiants erronnés', AlertType.danger)
       }
     },
+    async logout(): Promise<boolean> {
+      const alertStore = useAlertStore()
+      try {
+        await UserHttpClient.get().logout()
+        return true
+      } catch (error) {
+        console.log(error)
+        alertStore.setShow('Déconnexion impossible', AlertType.danger)
+      }
+      return false
+    },
   },
 
   getters: {
@@ -48,7 +58,7 @@ export const useUserStore = defineStore({
       return this.token
     },
     isLogged(): boolean {
-      return this.token !== null
+      return this.user !== null
     },
   },
 })

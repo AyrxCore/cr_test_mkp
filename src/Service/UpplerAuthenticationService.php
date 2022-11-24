@@ -31,14 +31,15 @@ class UpplerAuthenticationService extends HttpClientProvider
         // si le username ou le password sont faux on le sait ici
         $res = $this->request(
             'POST',
-            $this->apiUrl . 'v1/user/access-token?access_token=' . $this->adminToken,
+            $this->apiUrl . 'v1/user/access-token',
             [
                 "auth_basic" => ["quantis","jj0tFWJulNYjDc"],
                 "body" => [
                     "username" => $username,
                     "password" => $password
                 ]
-            ]
+            ],
+            true
         );
 
         // la réponse Uppler est OK on récupère les infos du tokenUser
@@ -64,7 +65,6 @@ class UpplerAuthenticationService extends HttpClientProvider
             //si l'accessToken a été récupéré il doit être en session,
             // si c'est le cas on stocke  aussi les infos du tokenUser
             if ($session->has('access_token') && !empty($session->get('access_token'))) {
-                dd($tokenDatas);
                 $session->set('token_datas', $tokenDatas);
                 return true;
             }

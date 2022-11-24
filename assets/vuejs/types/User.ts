@@ -2,6 +2,13 @@
 export interface User {
   email: string
   roles: string[]
+  upplerDatas: {
+    username: string
+    email: string
+    company: string
+    firstname: string
+    lastname: string
+  }
 }
 
 // Décrit le state général du store user

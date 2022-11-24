@@ -2,7 +2,7 @@
   <div class="items-center text-white">
     <div>
       <i class="fa fa-user-check" />
-      Bonjour {{ username }}
+      Bonjour {{ user.upplerDatas.lastname }} {{ user.upplerDatas.firstname }}
     </div>
     <div class="ml-6">
       <div class="content">
@@ -38,7 +38,11 @@
             <hr
               class="border-b-{primary}-700 mx-auto mt-1 mb-1 w-[95%] border"
             />
-            <a href="#" class="mt-3 font-bold hover:bg-gray-200">
+            <a
+                href="#"
+                class="mt-3 font-bold hover:bg-gray-200"
+                @click="onLogout($event)"
+            >
               <i class="fas fa-sign-out-alt mr-1" />
               Se déconnecter
             </a>
@@ -48,7 +52,7 @@
           id="overlay-account"
           class="overlay"
           @click="onClick('close')"
-        ></div>
+        />
       </div>
     </div>
     <div class="w-[18rem]">
@@ -61,7 +65,11 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { animateSubMenu } from '@/vuejs/services/utils'
+import {useUserStore} from "@/vuejs/stores/user";
+import {storeToRefs} from "pinia";
 
+const userStore = useUserStore()
+const {user} = storeToRefs(userStore)
 const listAccount = ref<string[]>([
   'Historique des commandes',
   'Mes factures',
@@ -71,7 +79,6 @@ const listAccount = ref<string[]>([
   'Changer de SIRET',
 ])
 
-const username = ref<string>('Qantis')
 const address = ref<string>('185, allée des Cyprès, 69760 LIMONEST')
 
 const onClick = (action): void => {
@@ -79,5 +86,11 @@ const onClick = (action): void => {
   const button = document.querySelector('#menu-button-account')
   const menu = document.querySelector('#hamburger-menu-account')
   animateSubMenu(action, overlay, button, menu)
+}
+
+const onLogout = async (e: Event): Promise<void> => {
+  e.preventDefault()
+  await userStore.logout() &&
+      location.reload()
 }
 </script>

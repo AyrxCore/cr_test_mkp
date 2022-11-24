@@ -46,8 +46,44 @@ abstract class HttpClientProvider
     // Expose la requête Http Symonfy afin de centraliser tous les appels
     public function request(string $method, string $url, array $options = [], $isAdmin = false)
     {
+        if ($isAdmin) {
+            $url .= '?access_token=' . $this->adminToken;
+        }
+
         try {
             $res = $this->client->request($method, $url, $options);
+            if (Response::HTTP_UNAUTHORIZED === $res->getStatusCode()) {
+                $errorDatas = json_decode($res->getContent(false));
+                // le token a expiré
+                if (!is_object($errorDatas->error) && 'invalid_grant' === $errorDatas->error) {
+                    // il s'agit d'une requête admin donc on renégocie un token admin et onr elance la requete
+                    if ($isAdmin) {
+                        $this->apiLogger->warning("Admin Token " . $this->adminToken ." has expired , request for new");
+                        $this->getAdminToken(true);
+                        $this->request($method, $url, $options, true);
+                        //il s'agit d'un token user, on renégocie un token user,
+                        //on le remplace dans le hearder et on relance la requete
+                    } else {
+                        $session = $this->requestStack->getSession();
+                        $session->start();
+                        if ($session->has('user_client_id') && $session->has('user_client_secret')) {
+                            $userUpplerCredentials = $this->getUserOauth2Credentials();
+                            $accessToken = $this->getUserToken(
+                                $userUpplerCredentials["client_secret"],
+                                $userUpplerCredentials["user_client_id"]
+                            );
+                            if ($accessToken) {
+                                // ici le remplacement du token user
+                            }
+                            $this->request($method, $url, $options);
+                        } else {
+                            $this->apiLogger->critical("client_id and/or client_secret missing, token cannot renewed");
+                        }
+                    }
+                } else {
+                    $this->apiLogger->critical("Error " . $res->getContent(false));
+                }
+            }
             return $res;
         } catch (ClientException $e) {
             $this->apiLogger->critical("Client Error " . $url . " : " .$e->getResponse()->getContent());
@@ -90,17 +126,36 @@ abstract class HttpClientProvider
         return true;
     }
 
-    // obtient un token pour le user et le stocke en session
-    public function getUserToken(string $clientId, string $cleintSecret): bool
+    public function getUserOauth2Credentials(): array
     {
         $session = $this->requestStack->getSession();
         $session->start();
 
-        $accessToken = $this->getToken($clientId, $cleintSecret);
+        if ($session->has('user_client_id') &&
+            $session->has('user_client_secret')
+        ) {
+            return [
+              'client_secret' => $session->get('user_client_secret'),
+              'client_id' => $session->get('user_client_id')
+            ];
+        }
+
+        return [];
+    }
+
+    // obtient un token pour le user et le stocke en session
+    public function getUserToken(string $clientId, string $clientSecret): bool
+    {
+        $session = $this->requestStack->getSession();
+        $session->start();
+
+        $accessToken = $this->getToken($clientId, $clientSecret);
         if (null !== $accessToken) {
             //on stocke les données du user en session
             // elles seront utilisées pour toutes les rquêtes vers Uppler durant cette session
             $session->set('access_token', $accessToken);
+            $session->set('user_client_id', $clientId);
+            $session->set('user_client_secret', $clientSecret);
             return true;
         }
         return false;

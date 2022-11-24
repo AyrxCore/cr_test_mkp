@@ -50,8 +50,6 @@ import SearchComponent from '@/vuejs/modules/shared/SearchComponent.vue'
 import MenuComponent from '@/vuejs/modules/shared/MenuComponent.vue'
 import AccountComponent from '@/vuejs/modules/shared/AccountComponent.vue'
 
-const userStore = useUserStore()
-const { user } = storeToRefs(userStore)
 
 const qantisLogoImg = getImage(qantisHeaderLogo)
 </script>
