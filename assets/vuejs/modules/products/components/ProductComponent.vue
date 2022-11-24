@@ -26,7 +26,7 @@
         </select>
       </div>
       <DefaultButtonComponent type="submit" :is-loading="isLoading">
-        <ShoppingCartIconComponent class="mr-2" /> Ajouter
+        <ShoppingCartIconComponent class="mr-2 w-4" /> Ajouter
       </DefaultButtonComponent>
     </div>
   </div>

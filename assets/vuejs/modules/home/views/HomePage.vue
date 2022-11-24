@@ -17,9 +17,9 @@
             que vous connaissez, se tient à votre disposition pour répondre à toutes vos questions.
           </p>
         </div>
-        <purple-button-component>
-          <i class="fa fa-envelope mr-1" />
-          <i class="fa fa-phone mr-1" />
+        <purple-button-component class="rounded-full">
+          <MailIconLightComponent class="mr-1" />
+          <PhoneLightIconComponent class="mr-1" />
           Contactez-nous
         </purple-button-component>
       </div>
@@ -230,6 +230,10 @@ import imgWurth from '@/vuejs/assets/img/samples/wurth.png'
 import imgMaps from '@/vuejs/assets/img/samples/img-maps.png'
 import imgCentral from '@/vuejs/assets/img/samples/img-central.png'
 import imgMagazine from '@/vuejs/assets/img/samples/img-magazine.png'
+import MailIconComponent from '@/vuejs/modules/shared/icon/MailIconComponent.vue';
+import PhoneIconComponent from '@/vuejs/modules/shared/icon/PhoneIconComponent.vue';
+import MailIconLightComponent from '@/vuejs/modules/shared/icon/MailIconLightComponent.vue';
+import PhoneLightIconComponent from '@/vuejs/modules/shared/icon/PhoneLightIconComponent.vue';
 
 const defaultImageFile = getImage(defaultImage)
 
