@@ -1,6 +1,6 @@
 <template>
   <button
-    class="contactez-nous mr-2 mb-2 flex items-center rounded-md bg-purple-600 px-5 py-2.5 text-sm font-medium text-white"
+    class="purple-button mr-2 mb-2 flex items-center px-4 py-5 text-sm font-medium text-white"
     :type="props.type"
     :class="{ 'button-no-click': isLoading }"
     @click="onClick"
@@ -24,6 +24,11 @@ const props = defineProps({
     required: false,
     type: Boolean,
     default: false,
+  },
+  rounded: {
+    required: false,
+    type: String,
+    default: 'rounded-md',
   },
 })
 

@@ -3,10 +3,10 @@
     <div class="content">
       <button
         id="menu-button-categorie"
-        class="menu-button flex w-[2rem] items-center rounded px-3 py-1 hover:opacity-75"
+        class="menu-button flex  w-[2rem] items-center rounded px-3 py-1 hover:opacity-75"
         @click="onClick('open')"
       >
-        <i class="fa fa-bars mr-2 text-lg text-purple-600" />
+        <MenuIconComponent class="text-lg" />
         Toutes les catégories
       </button>
       <div id="hamburger-menu-categorie" class="hamburger-menu">
@@ -22,9 +22,7 @@
           >
             <a href="#" class="items-center hover:bg-gray-200">
               <span class="-mt-2">{{ categorie }}</span>
-              <i
-                class="fa fa-chevron-right primary float-right -mt-2 text-lg"
-              />
+              <ChevronRightIconComponent class="primary float-right -mt-2 text-lg" />
             </a>
           </div>
         </nav>
@@ -36,7 +34,7 @@
       ></div>
     </div>
     <div v-for="(menu, id) in listMenu" :key="id" class="flex h-[25px] px-2">
-      <a href="#" class="hover:border-b-2 hover:border-purple-600">{{
+      <a href="#" class="text-cotext hover:border-b-2 hover:border-purple-600">{{
         menu
       }}</a>
     </div>
@@ -45,6 +43,9 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
+import { listCategories } from '@/vuejs/services/utils'
+import MenuIconComponent from '@/vuejs/modules/shared/icon/MenuIconComponent.vue';
+import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightIconComponent.vue';
 
 const listMenu = ref<string[]>([
   'Fournitures de bureau',
@@ -56,23 +57,6 @@ const listMenu = ref<string[]>([
   'Quincaillerie',
   'EPI',
   'Location de matériel',
-])
-
-const listCategories = ref<string[]>([
-  'Avantages salariés',
-  'Certifications',
-  'Chimie des bâtiments et des process',
-  'Conseils',
-  'Eclairage',
-  'Emballages et expédition',
-  'Energie',
-  'Equipements atelier',
-  'Equipements de protection individuelle (EPI)',
-  'Formation',
-  'Fournitures de bureau',
-  'Gestion des déchets',
-  "Hygiène et produits d'entretien",
-  'Informatique et burautique',
 ])
 
 const onClick = (action): void => {
