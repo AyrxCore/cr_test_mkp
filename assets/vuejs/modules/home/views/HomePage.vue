@@ -27,7 +27,6 @@
         <CarouselListSharedComponent
           class="mt-10 px-4 py-4 h-[303px] items-center mx-auto rounded-xl bg-white"
           :slides-per-view="1"
-          :mobile-slides-per-view="1"
           :space-between="10"
           :pagination="true"
         >
@@ -109,7 +108,6 @@
       <CarouselListSharedComponent
         class="mt-10 px-6 py-4 h-[107px] items-center mx-auto rounded-xl px-[50px!important]"
         :slides-per-view="8"
-        :mobile-slides-per-view="4"
         :space-between="50"
       >
         <swiper-slide v-for="(partenaire, key) in partenaires" :key="key">
@@ -192,7 +190,6 @@
             <i class="fas fa-arrow-right mr-2" /> Toutes les contenus experts
           </a>
         </p>
-
       </div>
     </div>
 
@@ -230,10 +227,8 @@ import imgWurth from '@/vuejs/assets/img/samples/wurth.png'
 import imgMaps from '@/vuejs/assets/img/samples/img-maps.png'
 import imgCentral from '@/vuejs/assets/img/samples/img-central.png'
 import imgMagazine from '@/vuejs/assets/img/samples/img-magazine.png'
-import MailIconComponent from '@/vuejs/modules/shared/icon/MailIconComponent.vue';
-import PhoneIconComponent from '@/vuejs/modules/shared/icon/PhoneIconComponent.vue';
-import MailIconLightComponent from '@/vuejs/modules/shared/icon/MailIconLightComponent.vue';
-import PhoneLightIconComponent from '@/vuejs/modules/shared/icon/PhoneLightIconComponent.vue';
+import MailIconLightComponent from '@/vuejs/modules/shared/icon/MailIconLightComponent.vue'
+import PhoneLightIconComponent from '@/vuejs/modules/shared/icon/PhoneLightIconComponent.vue'
 
 const defaultImageFile = getImage(defaultImage)
 
@@ -245,10 +240,10 @@ const products = ref([
 ])
 
 const products2 = ref([
-  { imgFrn: getImage(defaultImageFile), imgProduct: getImage(defaultImageFile)},
-  { imgFrn: getImage(defaultImageFile), imgProduct: getImage(defaultImageFile)},
-  { imgFrn: getImage(defaultImageFile), imgProduct: getImage(defaultImageFile)},
-  { imgFrn: getImage(defaultImageFile), imgProduct: getImage(defaultImageFile)},
+  { imgFrn: defaultImageFile, imgProduct: defaultImageFile},
+  { imgFrn: defaultImageFile, imgProduct: defaultImageFile},
+  { imgFrn: defaultImageFile, imgProduct: defaultImageFile},
+  { imgFrn: defaultImageFile, imgProduct: defaultImageFile},
 ])
 
 const accords = ref([

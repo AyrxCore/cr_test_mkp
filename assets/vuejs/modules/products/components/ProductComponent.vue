@@ -6,9 +6,13 @@
       <HeartIconComponent />
     </div>
     <div class="items-center mx-auto ">
-      <img :src="props.product.imgProduct" alt="Image produit" class="mx-auto h-[191px!important] w-[334px!important]"/>
+      <a href="/app/product">
+        <img :src="props.product.imgProduct" alt="Image produit" class="mx-auto h-[191px!important] w-[334px!important]"/>
+      </a>
     </div>
-    <h3 class="text-left text-gray-600 font-bold text-lg text-cotext">Nom du produit</h3>
+    <h3 class="text-left text-gray-600 font-bold text-lg text-cotext">
+      <a href="/app/product">Nom du produit</a>
+    </h3>
     <p class="text-left text-gray-400 mt-1 text-lg text-cotext">Description du produit ou du service</p>
     <div class="flex items-center mt-2">
       <span class="primary text-lg font-bold mr-2">85,50€</span>
