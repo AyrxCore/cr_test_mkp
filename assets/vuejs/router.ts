@@ -15,10 +15,12 @@ import {
 } from '@/vuejs/modules/actualites/routerActualites'
 
 import Home from '@/vuejs/modules/home/views/HomePage.vue'
+import Contact from '@/vuejs/modules/ContactPage.vue'
 import { useUserStore } from '@/vuejs/stores/user'
 
 export enum MainPageList {
   HOME_PAGE = 'home-page',
+  CONTACT_PAGE = 'contact-page',
 }
 
 export const PageList = {
@@ -33,6 +35,11 @@ const routes: RouteRecordRaw[] = [
     path: '/app/home',
     name: PageList.HOME_PAGE,
     component: Home,
+  },
+  {
+    path: '/app/contact',
+    name: PageList.CONTACT_PAGE,
+    component: Contact,
   },
   ...loginRoutes,
   ...productsRoutes,
