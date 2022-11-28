@@ -1,39 +1,51 @@
 <template>
   <div class="footer mt-16">
-    <div class="w-full flex flex-row bloc-contact-footer">
-      <div class="m-auto w-[100%] my-4 grid grid-cols-3 gap-4 max-w-screen-2xl pt-5">
-        <div class=" text-lg flex">
+    <div class="bloc-contact-footer flex w-full flex-row">
+      <div
+        class="m-auto my-4 grid w-[100%] max-w-screen-2xl grid-cols-3 gap-4 pt-5"
+      >
+        <div class="flex text-lg">
           <div>
-            <div><PhoneIconComponent class="fa fa-phone text-lg mr-2" /></div>
-            <div class="mt-3"><MailIconComponent class="text-lg  mr-2" /></div>
-            <div class="mt-3"><CalendarCheckIconComponent class="fa fa-phone text-lg  mr-2" />
+            <div><PhoneIconComponent class="fa fa-phone mr-2 text-lg" /></div>
+            <div class="mt-3"><MailIconComponent class="mr-2 text-lg" /></div>
+            <div class="mt-3">
+              <CalendarCheckIconComponent class="fa fa-phone mr-2 text-lg" />
             </div>
           </div>
           <div>
             <div>04 37 65 06 61</div>
             <div class="mt-3">animation@qantis.co</div>
-            <div class="mt-3">Rendez-vous avec votre animateur
-            </div>
+            <div class="mt-3">Rendez-vous avec votre animateur</div>
           </div>
-
         </div>
         <div class="col-span-2">
           <h3>Etes-vous abonné à notre newsletter ?</h3>
-          <p class="text-lg mb-4">Recevez les actualités de nos partenaires, leurs produits et services</p>
+          <p class="mb-4 text-lg">
+            Recevez les actualités de nos partenaires, leurs produits et
+            services
+          </p>
           <input-button-component
             placeholder="Votre adresse email"
-            :btn-color="'bg-qantis'">
+            :btn-color="'bg-qantis'"
+          >
             S'inscrire
           </input-button-component>
-          <p class="text-[14px] mt-4">Votre adresse email sera uniquement utilisée pour vous envoyer nos newsletters. Vous pourrez vous désabonner à tout moment via le lien intégré dans la newsletter. En savoir plus sur la gestion de vos données et vos droits</p>
+          <p class="mt-4 text-[14px]">
+            Votre adresse email sera uniquement utilisée pour vous envoyer nos
+            newsletters. Vous pourrez vous désabonner à tout moment via le lien
+            intégré dans la newsletter. En savoir plus sur la gestion de vos
+            données et vos droits
+          </p>
         </div>
       </div>
     </div>
-    <div class="grid grid-rows-3 grid-flow-col gap-4 m-auto my-4 max-w-screen-2xl pt-10 second-part">
-      <div class="row-span-3 px-3 ">
+    <div
+      class="second-part m-auto my-4 grid max-w-screen-2xl grid-flow-col grid-rows-3 gap-4 pt-10"
+    >
+      <div class="row-span-3 px-3">
         <img :src="qantisLogoImg" alt="header" class="logo-qantis" />
         <img :src="ecologieLogoImg" alt="header" class="logo-ecolo mt-[3rem]" />
-        <p >Paiment sécurisé par :</p>
+        <p>Paiment sécurisé par :</p>
         <img
           :src="lemonwayLogoImg"
           alt="header"
@@ -75,13 +87,14 @@
         <div class="px-2">
           <h3 class="mb-7">La marketplace QANTIS</h3>
           <p>
-            Depuis 21 ans, QANTIS accompagne les entreprises françaises dans leurs
-            performances et leur croissance durable en s'appuyant sur 3 moteurs :
-            la centrale d'achat, l'expertise humaine et la marketplace.
+            Depuis 21 ans, QANTIS accompagne les entreprises françaises dans
+            leurs performances et leur croissance durable en s'appuyant sur 3
+            moteurs : la centrale d'achat, l'expertise humaine et la
+            marketplace.
           </p>
         </div>
       </div>
-      <div class="row-span-2 col-span-2">
+      <div class="col-span-2 row-span-2">
         <div class="m-auto my-4 grid grid-cols-3 gap-4 pt-10">
           <div class="px-2">
             <h3 class="mb-7">Votre espace adhérents</h3>
@@ -95,7 +108,7 @@
               <li><a href="#">Equipements ateliers</a></li>
               <li>
                 <a href="#"
-                >Equipements de protections <br />
+                  >Equipements de protections <br />
                   individuelle</a
                 >
               </li>
@@ -121,7 +134,9 @@
               <li><a href="#">Quincaillerie</a></li>
               <li><a href="#">Rubans et adhésifs</a></li>
               <li>
-                <a href="#">Sécurité, maintenance et <br />entretien des locaux</a>
+                <a href="#"
+                  >Sécurité, maintenance et <br />entretien des locaux</a
+                >
               </li>
               <li><a href="#">Services généraux</a></li>
               <li><a href="#">Téléphonie</a></li>
@@ -132,7 +147,7 @@
       </div>
     </div>
     <div
-      class="m-auto mt-10 max-w-screen-2xl border-t-2 border-white pt-10 pb-10 text-center text-cotext"
+      class="text-cotext m-auto mt-10 max-w-screen-2xl border-t-2 border-white pt-10 pb-10 text-center"
     >
       © QANTIS. Tous droits réservés - QANTIS, 185, allée des Cyprès, 69760
       LIMONEST, FRANCE
@@ -152,10 +167,9 @@ import twitterLogo from '@/vuejs/assets/img/Pictos/twitter_logo.png'
 import youtubeLogo from '@/vuejs/assets/img/Pictos/youtube_logo.png'
 import facebookLogo from '@/vuejs/assets/img/Pictos/facebook_social_logo.png'
 import InputButtonComponent from '@/vuejs/modules/shared/InputButtonComponent.vue'
-import MailIconComponent from '@/vuejs/modules/shared/icon/MailIconComponent.vue';
-import PhoneIconComponent from '@/vuejs/modules/shared/icon/PhoneIconComponent.vue';
-import CalendarCheckIconComponent from '@/vuejs/modules/shared/icon/CalendarCheckIconComponent.vue';
-
+import MailIconComponent from '@/vuejs/modules/shared/icon/MailIconComponent.vue'
+import PhoneIconComponent from '@/vuejs/modules/shared/icon/PhoneIconComponent.vue'
+import CalendarCheckIconComponent from '@/vuejs/modules/shared/icon/CalendarCheckIconComponent.vue'
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
@@ -173,7 +187,7 @@ const facebookLogoImg = getImage(facebookLogo)
 @import 'assets/style/_variables.scss';
 .footer {
   background-color: $primary;
-  color: #FFFFFF;
+  color: #ffffff;
   width: 100%;
 }
 
@@ -185,7 +199,8 @@ const facebookLogoImg = getImage(facebookLogo)
   text-align: left;
 }
 
-.footer .second-part p, .footer li {
+.footer .second-part p,
+.footer li {
   font-family: CoText, sans-serif;
   font-size: 18px;
   font-weight: 400;
@@ -204,7 +219,6 @@ const facebookLogoImg = getImage(facebookLogo)
   margin-right: 6rem;
   margin-left: 6rem;
 }
-
 
 .footer .logo-qantis {
   height: 98px;
@@ -227,12 +241,11 @@ const facebookLogoImg = getImage(facebookLogo)
   border-bottom: 2px solid $secondary;
 }
 
-
 .footer .social-network-logo div {
   box-sizing: border-box;
   width: 40px;
   height: 40px;
-  border: 1px solid #FFFFFF;
+  border: 1px solid #ffffff;
   border-radius: 20px;
   float: left;
   margin-right: 10px;

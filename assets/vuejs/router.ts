@@ -9,6 +9,11 @@ import {
   routes as productsRoutes,
 } from '@/vuejs/modules/products/routerProducts'
 
+import {
+  ActualitesPageList,
+  routes as actualitesRoutes,
+} from '@/vuejs/modules/actualites/routerActualites'
+
 import Home from '@/vuejs/modules/home/views/HomePage.vue'
 import { useUserStore } from '@/vuejs/stores/user'
 
@@ -20,6 +25,7 @@ export const PageList = {
   ...MainPageList,
   ...LoginPageList,
   ...ProductPageList,
+  ...ActualitesPageList,
 }
 
 const routes: RouteRecordRaw[] = [
@@ -30,6 +36,7 @@ const routes: RouteRecordRaw[] = [
   },
   ...loginRoutes,
   ...productsRoutes,
+  ...actualitesRoutes,
 ]
 
 const router = createRouter({

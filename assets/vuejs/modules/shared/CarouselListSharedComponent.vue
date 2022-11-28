@@ -54,10 +54,10 @@ const props = defineProps({
     default: false,
   },
   navigation: {
-  required: false,
+    required: false,
     type: Boolean,
     default: true,
-},
+  },
 })
 
 const defaultModules = computed(
