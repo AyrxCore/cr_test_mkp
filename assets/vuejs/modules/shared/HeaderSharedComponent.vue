@@ -1,7 +1,7 @@
 <template>
   <nav class="header sticky top-0 z-30 bg-white py-0.5 px-4">
-    <div class="mx-auto w-[100%] px-4 md:flex md:items-center">
-      <div class="mt-1 md:w-[10%]">
+    <div class="mx-auto px-4 md:flex md:items-center">
+      <div class="mt-1">
         <a href="#" class="text-xl font-bold text-white">
           <img
             :src="qantisLogoImg"
@@ -21,7 +21,7 @@
       </div>
       <div
         id="navbar-collapse"
-        class="mt-3 w-[20%] items-center justify-end text-white md:flex"
+        class="mt-3 items-center justify-end text-white md:flex"
       >
         <AccountComponent />
         <div class="ml-3 flex text-white">
@@ -62,7 +62,7 @@ const qantisLogoImg = getImage(qantisHeaderLogo)
 <style lang="scss">
 @import 'assets/style/_variables.scss';
 .logo-qantis-header {
-  height: 57px;
+  height: auto;
   width: 145px;
   left: 60px;
   top: 24.5px;

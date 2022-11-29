@@ -35,7 +35,7 @@
         @click="onClick('close')"
       ></div>
     </div>
-    <div v-for="(menu, id) in listMenu" :key="id" class="flex h-[25px] px-2">
+    <div v-for="(menu, id) in listMenu" :key="id" class="flex px-2">
       <a
         href="#"
         class="text-cotext hover:border-b-2 hover:border-purple-600"
