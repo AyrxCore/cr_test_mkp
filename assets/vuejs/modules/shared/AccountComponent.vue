@@ -2,7 +2,7 @@
   <div class="items-center text-white text-cotext">
     <div class="inline-flex">
       <UserCheckIconComponent class="mr-1"/>
-      Bonjour {{ user.upplerDatas.lastname }} {{ user.upplerDatas.firstname }}
+      Bonjour {{ user.lastName }} {{ user.firstName }}
     </div>
     <div class="ml-6">
       <div class="content">
@@ -84,7 +84,7 @@ const listAccount = ref<string[]>([
   'Changer de SIRET',
 ])
 
-const address = ref<string>('185, allée des Cyprès, 69760 LIMONEST')
+
 const address = ref<string>('185, allée des Cyprès, 69760')
 
 const onClick = (action): void => {

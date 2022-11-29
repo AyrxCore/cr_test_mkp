@@ -58,17 +58,17 @@ class UpplerAuthenticator extends JWTAuthenticator
             property_exists($datas, 'password') ||
             (!empty($datas->username) || !empty($datas->password)))
         ) {
-            $userAuth = $this->upplerAuthenticationService->authenticateUser($datas->username, $datas->password);
+            /**@var User $user*/
+            $user = $this->em->getRepository(User::class)->findOneBy(['username' => $datas->username]);
+            if (!$user) {
+                throw new CustomUserMessageAuthenticationException('User unkown from UPPLER');
+            }
+
+            $userAuth = $this->upplerAuthenticationService->authenticateUser($datas->username, $datas->password, $user);
 
             if ($userAuth && $session->has('access_token') && !empty($session->get('access_token'))) {
-                /**@var User $user*/
-                $user = $this->em->getRepository(User::class)->findOneBy(['username' => $datas->username]);
-                if (!$user) {
-                    throw new CustomUserMessageAuthenticationException('User unkown from UPPLER');
-                }
                 // on update le password user avec le password Uppler,
                 // nécessaire pour que lexik considère l'authentification ok
-                // on ne persist pas en database car pas nécessaire de stocker ce password il est déjà chez Uppler
                 $user->setPassword($this->userPasswordHasher->hashPassword($user, $datas->password));
                 $token = $this->JWTTokenManager->create($user);
 
