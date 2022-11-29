@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts" setup>
-import PurpleButtonComponent from '@/vuejs/modules/shared/PurpleButtonComponent.vue'
+import PurpleButtonComponent from '@/vuejs/modules/shared/DefaultButtonComponent.vue'
 import MailIconLightComponent from '@/vuejs/modules/shared/icon/MailIconLightComponent.vue'
 import PhoneLightIconComponent from '@/vuejs/modules/shared/icon/PhoneLightIconComponent.vue'
 </script>

@@ -244,7 +244,7 @@ import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListShar
 import { getImage, listCategories } from '@/vuejs/services/utils'
 import defaultImage from '@/vuejs/assets/img/default-image.png'
 import { SwiperSlide } from 'swiper/vue'
-import PurpleButtonComponent from '@/vuejs/modules/shared/PurpleButtonComponent.vue'
+import PurpleButtonComponent from '@/vuejs/modules/shared/DefaultButtonComponent.vue'
 import ProductComponent from '@/vuejs/modules/products/components/ProductComponent.vue'
 import { ref } from 'vue'
 import imgCheville from '@/vuejs/assets/img/samples/cheville.png'

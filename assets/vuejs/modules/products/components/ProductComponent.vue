@@ -47,7 +47,7 @@
 import { getImage } from '@/vuejs/services/utils'
 import { ref } from 'vue'
 import productImage from '@/vuejs/assets/img/default-image.png'
-import DefaultButtonComponent from '@/vuejs/modules/shared/DefaultButtonComponent.vue'
+import DefaultButtonComponent from '@/vuejs/modules/shared/GradientButtonComponent.vue'
 import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
 import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
 

@@ -115,7 +115,7 @@
                   type="submit"
                   class="mt-2 justify-center text-center"
                 >
-                  <ArrowRigntIconComponent
+                  <ArrowRightIconComponent
                     :stroke-color="'#FFFFFF'"
                     class="mr-2 w-4"
                   />
@@ -191,14 +191,13 @@
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import { getImage } from '@/vuejs/services/utils'
 import defaultImage from '@/vuejs/assets/img/default-image.png'
-import { computed, ref } from 'vue'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
-import ArrowRigntIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
+import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import PhoneIconComponent from '@/vuejs/modules/shared/icon/PhoneIconComponent.vue'
 import MailIconComponent from '@/vuejs/modules/shared/icon/MailIconComponent.vue'
 import MessageSquareIconComponent from '@/vuejs/modules/shared/icon/MessageSquareIconComponent.vue'
-import DefaultButtonComponent from '@/vuejs/modules/shared/DefaultButtonComponent.vue'
+import DefaultButtonComponent from '@/vuejs/modules/shared/GradientButtonComponent.vue'
 
 const defaultImageFile = getImage(defaultImage)
 </script>

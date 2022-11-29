@@ -1,6 +1,6 @@
 <template>
   <button
-    class="purple-button mr-2 mb-2 flex items-center px-4 py-5 text-sm font-medium text-white"
+    class="default-button-gradient mb-2 flex items-center rounded-full px-5 py-2.5 text-center text-sm font-medium text-white hover:from-purple-500 hover:to-purple-500"
     :type="props.type"
     :class="{ 'button-no-click': isLoading }"
     @click="onClick"
@@ -24,11 +24,6 @@ const props = defineProps({
     required: false,
     type: Boolean,
     default: false,
-  },
-  rounded: {
-    required: false,
-    type: String,
-    default: 'rounded-md',
   },
 })
 

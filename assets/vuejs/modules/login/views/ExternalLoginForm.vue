@@ -52,7 +52,7 @@ import { onMounted, ref, watch } from 'vue'
 import { useUserStore } from '@/vuejs/stores/user'
 
 import { useAlertStore } from '@/vuejs/stores/alert'
-import DefaultButton from '@/vuejs/modules/shared/DefaultButtonComponent.vue'
+import DefaultButton from '@/vuejs/modules/shared/GradientButtonComponent.vue'
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
 
 const username = ref<string>('')

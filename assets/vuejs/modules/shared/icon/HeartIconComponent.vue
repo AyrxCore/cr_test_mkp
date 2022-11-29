@@ -20,7 +20,7 @@ const props = defineProps({
   },
   strokeColor: {
     type: String,
-    default: '#FFF'
+    default: '#FFFFFF'
   },
   sizeHeight: {
     type: Number,
