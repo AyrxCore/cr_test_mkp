@@ -50,7 +50,7 @@
       </div>
       <div class="flex justify-center">
         <CarouselListSharedComponent
-          class="mx-auto mt-2 h-[450px] items-center rounded-xl px-[50px!important]"
+          class="mx-auto mt-2 items-center rounded-xl px-[50px!important]"
           :slides-per-view="4"
           :space-between="50"
           navigation=""
@@ -68,7 +68,7 @@
       </div>
       <div class="flex justify-center">
         <CarouselListSharedComponent
-          class="mx-auto mt-2 h-[450px] items-center rounded-xl px-[50px!important]"
+          class="mx-auto mt-2 items-center rounded-xl px-[50px!important]"
           :slides-per-view="4"
         >
           <swiper-slide v-for="(product, key) in products2" :key="key">
@@ -88,7 +88,7 @@
       </div>
       <div class="flex justify-center">
         <CarouselListSharedComponent
-          class="mx-auto mt-2 h-[470px] items-center rounded-xl px-[50px!important]"
+          class="mx-auto mt-2  items-center rounded-xl px-[50px!important]"
           :slides-per-view="4"
         >
           <swiper-slide v-for="(accord, key) in accords" :key="key">
@@ -99,7 +99,7 @@
                 <img
                   :src="accord.img"
                   alt="Image produit"
-                  class="mx-auto h-[273px!important] w-[340px!important]"
+                  class="mx-auto h-[auto!important] w-[340px!important]"
                 />
               </div>
               <p class="text-cotext mt-1 text-left text-lg text-white">
