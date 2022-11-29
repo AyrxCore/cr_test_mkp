@@ -3,7 +3,7 @@
     <div class="content">
       <button
         id="menu-button-categorie"
-        class="menu-button flex  w-[2rem] items-center rounded px-3 py-1 hover:opacity-75"
+        class="menu-button flex w-[2rem] items-center rounded px-3 py-1 hover:opacity-75"
         @click="onClick('open')"
       >
         <MenuIconComponent class="text-lg" />
@@ -22,7 +22,9 @@
           >
             <a href="#" class="items-center hover:bg-gray-200">
               <span class="-mt-2">{{ categorie }}</span>
-              <ChevronRightIconComponent class="primary float-right -mt-2 text-lg" />
+              <ChevronRightIconComponent
+                class="primary float-right -mt-2 text-lg"
+              />
             </a>
           </div>
         </nav>
@@ -33,10 +35,12 @@
         @click="onClick('close')"
       ></div>
     </div>
-    <div v-for="(menu, id) in listMenu" :key="id" class="flex h-[25px] px-2">
-      <a href="#" class="text-cotext hover:border-b-2 hover:border-purple-600">{{
-        menu
-      }}</a>
+    <div v-for="(menu, id) in listMenu" :key="id" class="flex px-2">
+      <a
+        href="#"
+        class="text-cotext hover:border-b-2 hover:border-purple-600"
+        >{{ menu }}</a
+      >
     </div>
   </div>
 </template>
@@ -44,8 +48,8 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { listCategories } from '@/vuejs/services/utils'
-import MenuIconComponent from '@/vuejs/modules/shared/icon/MenuIconComponent.vue';
-import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightIconComponent.vue';
+import MenuIconComponent from '@/vuejs/modules/shared/icon/MenuIconComponent.vue'
+import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightIconComponent.vue'
 
 const listMenu = ref<string[]>([
   'Fournitures de bureau',

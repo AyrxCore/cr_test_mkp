@@ -1,14 +1,14 @@
 <template>
-  <div class="items-center text-white text-cotext">
+  <div class="text-cotext items-center text-white">
     <div class="inline-flex">
-      <UserCheckIconComponent class="mr-1"/>
+      <UserCheckIconComponent class="mr-1" />
       Bonjour {{ user.lastName }} {{ user.firstName }}
     </div>
     <div class="ml-6">
       <div class="content">
         <button
           id="menu-button-account"
-          class="flex items-center rounded hover:opacity-75 ml-2"
+          class="ml-2 flex items-center rounded hover:opacity-75"
           @click="onClick('open')"
         >
           Mon compte
@@ -18,8 +18,8 @@
           class="hamburger-menu w-[220px!important]"
         >
           <nav class="w-full">
-            <a href="#" class="font-bold hover:bg-gray-200 inline-flex ml-2">
-              <UserIconComponent class="mr-2"/>
+            <a href="#" class="ml-2 inline-flex font-bold hover:bg-gray-200">
+              <UserIconComponent class="mr-2" />
               Mon compte
             </a>
             <hr
@@ -30,7 +30,7 @@
               :key="id"
               class="w-[100%] items-center py-1"
             >
-              <a href="#" class="items-center hover:bg-gray-200 inline-flex">
+              <a href="#" class="inline-flex items-center hover:bg-gray-200">
                 <ChevronRightIconComponent class="primary -mt-2 mr-2 text-lg" />
                 <span class="-mt-2">{{ value }}</span>
               </a>
@@ -40,10 +40,10 @@
             />
             <a
                 href="#"
-                class="mt-3 font-bold hover:bg-gray-200 inline-flex"
+                class="mt-3 inline-flex font-bold hover:bg-gray-200"
                 @click="onLogout($event)"
             >
-              <DisconnectIconComponent class="mr-2"/>
+              <DisconnectIconComponent class="mr-2" />
               Se déconnecter
             </a>
           </nav>
@@ -55,8 +55,8 @@
         />
       </div>
     </div>
-    <div class="w-[18rem] inline-flex">
-      <MapInIconComponent class=" mr-2" />
+    <div class="inline-flex w-[18rem]">
+      <MapInIconComponent class="mr-2" />
       <a href="#" class="text-xs">Livré à {{ address }}</a>
     </div>
   </div>
@@ -65,6 +65,11 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { animateSubMenu } from '@/vuejs/services/utils'
+import UserCheckIconComponent from '@/vuejs/modules/shared/icon/UserCheckIconComponent.vue'
+import UserIconComponent from '@/vuejs/modules/shared/icon/UserIconComponent.vue'
+import DisconnectIconComponent from '@/vuejs/modules/shared/icon/DisconnectIconComponent.vue'
+import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightIconComponent.vue'
+import MapInIconComponent from '@/vuejs/modules/shared/icon/MapInIconComponent.vue'
 import {useUserStore} from "@/vuejs/stores/user";
 import {storeToRefs} from "pinia";
 import UserCheckIconComponent from '@/vuejs/modules/shared/icon/UserCheckIconComponent.vue';

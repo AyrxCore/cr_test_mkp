@@ -4,38 +4,35 @@
       '--swiper-navigation-color': '#050056',
     }"
     :modules="defaultModules"
-    :space-between="props.spaceBetween"
-    navigation=""
+    :space-between="spaceBetween"
     :loop="true"
-    :pagination="props.pagination"
-    :slides-per-view="props.slidesPerPerView"
-    @swiper="onSwiper"
-    @slideChange="onSlideChange"
+    :navigation="navigation"
+    :pagination="pagination"
+    :slides-per-view="slidesPerPerView"
     class="mx-auto items-center text-center"
+    @swiper="emit('on-swipe')"
+    @slide-change="emit('on-slide-change')"
   >
     <slot />
   </swiper>
 </template>
 <script lang="ts" setup>
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 import { Swiper } from 'swiper/vue'
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper'
+import { Navigation, Pagination, Scrollbar, A11y, Thumbs } from 'swiper'
 import 'swiper/swiper.min.css'
 import 'swiper/css/bundle'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
 
+const emit = defineEmits(['on-swipe', 'on-slide-change'])
+
 const props = defineProps({
   slidesPerPerView: {
     required: false,
     type: Number,
-    default: 3,
-  },
-  mobileSlidesPerPerView: {
-    required: false,
-    type: Number,
-    default: 2,
+    default: 4,
   },
   spaceBetween: {
     required: false,
@@ -56,21 +53,14 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  navigation: {
+    required: false,
+    type: Boolean,
+    default: true,
+  },
 })
-
-onMounted(()=> {
-  console.log(props.mobileSlidesPerPerView)
-  console.log(props.slidesPerPerView)
-})
-const onSlideChange = () => {
-  console.log('slide change')
-}
-
-const onSwiper = (swiper) => {
-  console.log(swiper.slidesPerPerView)
-}
 
 const defaultModules = computed(
-  () => props.modules ?? [Navigation, Pagination, Scrollbar, A11y],
+  () => props.modules ?? [Navigation, Pagination, Scrollbar, A11y, Thumbs],
 )
 </script>

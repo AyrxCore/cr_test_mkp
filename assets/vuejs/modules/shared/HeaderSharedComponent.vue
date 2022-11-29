@@ -1,7 +1,7 @@
 <template>
   <nav class="header sticky top-0 z-30 bg-white py-0.5 px-4">
-    <div class="mx-auto w-[100%] px-4 md:flex md:items-center">
-      <div class="md:w-[10%] mt-1">
+    <div class="mx-auto px-4 md:flex md:items-center">
+      <div class="mt-1">
         <a href="#" class="text-xl font-bold text-white">
           <img
             :src="qantisLogoImg"
@@ -13,13 +13,15 @@
       <div
         class="mx-auto mr-10 ml-5 h-[55px] min-w-max grow flex-row md:flex md:w-[100%]"
       >
-        <SearchComponent placeholder="Recherchez un produit, un accord-cadre ou un fournisseur">
+        <SearchComponent
+          placeholder="Recherchez un produit, un accord-cadre ou un fournisseur"
+        >
           <i class="fa fa-search" />
         </SearchComponent>
       </div>
       <div
         id="navbar-collapse"
-        class="w-[20%] items-center justify-end text-white md:flex mt-3"
+        class="mt-3 items-center justify-end text-white md:flex"
       >
         <AccountComponent />
         <div class="ml-3 flex text-white">
@@ -48,8 +50,8 @@ import qantisHeaderLogo from '@/vuejs/assets/img/qantis_marketplace_logo_blanc.p
 import SearchComponent from '@/vuejs/modules/shared/InputButtonComponent.vue'
 import MenuComponent from '@/vuejs/modules/shared/MenuComponent.vue'
 import AccountComponent from '@/vuejs/modules/shared/AccountComponent.vue'
-import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue';
-import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue';
+import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
+import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
 
 
 const qantisLogoImg = getImage(qantisHeaderLogo)
@@ -58,14 +60,12 @@ const qantisLogoImg = getImage(qantisHeaderLogo)
 <style lang="scss">
 @import 'assets/style/_variables.scss';
 .logo-qantis-header {
-  height: 57px;
+  height: auto;
   width: 145px;
   left: 60px;
   top: 24.5px;
   border-radius: 0px;
-
 }
-
 
 .menu-button {
   width: 220px;
@@ -75,7 +75,6 @@ const qantisLogoImg = getImage(qantisHeaderLogo)
   font-family: CoText, sans-serif;
 }
 
-
 .overlay {
   display: none;
   height: 100vh;
@@ -83,7 +82,7 @@ const qantisLogoImg = getImage(qantisHeaderLogo)
   position: fixed;
   z-index: 99;
   opacity: 0;
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgba(0, 0, 0, 0.4);
   bottom: 0;
   right: 0;
   left: 0;
@@ -136,6 +135,4 @@ const qantisLogoImg = getImage(qantisHeaderLogo)
   height: auto;
   animation-duration: 300ms;
 }
-
-
 </style>

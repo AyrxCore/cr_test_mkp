@@ -1,26 +1,38 @@
 <template>
-  <div class="items-center mx-auto px-6 bg-white  py-2 rounded-md text-cotext h-full">
-    <div class="justify-between items-center flex">
-      <div class="h-9 w-20 bg-white"><img :src="props.product.imgFrn" alt="Image produit" /></div>
+  <div
+    class="text-cotext mx-auto h-full items-center rounded-md bg-white px-6 py-2"
+  >
+    <div class="flex items-center justify-between">
+      <div class="h-9 w-20 bg-white">
+        <img :src="props.product.imgFrn" alt="Image produit" />
+      </div>
       <div class="border"></div>
       <HeartIconComponent />
     </div>
-    <div class="items-center mx-auto ">
-      <img :src="props.product.imgProduct" alt="Image produit" class="mx-auto h-[191px!important] w-[334px!important]"/>
+    <div class="mx-auto items-center">
+      <a href="/app/product">
+        <img
+          :src="props.product.imgProduct"
+          alt="Image produit"
+          class="mx-auto h-[191px!important] w-[334px!important]"
+        />
+      </a>
     </div>
-    <h3 class="text-left text-gray-600 font-bold text-lg text-cotext">Nom du produit</h3>
-    <p class="text-left text-gray-400 mt-1 text-lg text-cotext">Description du produit ou du service</p>
-    <div class="flex items-center mt-2">
-      <span class="primary text-lg font-bold mr-2">85,50€</span>
-      <span class="line-through text-gray-400 text-lg">100,00€ HT</span>
+    <h3 class="text-cotext text-left text-lg font-bold text-gray-600">
+      <a href="/app/product">Nom du produit</a>
+    </h3>
+    <p class="text-cotext mt-1 text-left text-lg text-gray-400">
+      Description du produit ou du service
+    </p>
+    <div class="mt-2 flex items-center">
+      <span class="primary mr-2 text-lg font-bold">85,50€</span>
+      <span class="text-lg text-gray-400 line-through">100,00€ HT</span>
     </div>
-    <div class="flex justify-between mt-5 mx-auto">
+    <div class="mx-auto mt-5 flex justify-between">
       <div>
         <span class="primary text-sm text-gray-300">Qté: </span>
         <select class="rounded-md border border-gray-300">
-          <option
-            v-for="i in 5" :key="i"
-            value="{{i}}">
+          <option v-for="i in 5" :key="i" value="{{i}}">
             {{ i }}
           </option>
         </select>
@@ -35,9 +47,9 @@
 import { getImage } from '@/vuejs/services/utils'
 import { ref } from 'vue'
 import productImage from '@/vuejs/assets/img/default-image.png'
-import DefaultButtonComponent from '@/vuejs/modules/shared/DefaultButtonComponent.vue'
-import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue';
-import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue';
+import DefaultButtonComponent from '@/vuejs/modules/shared/GradientButtonComponent.vue'
+import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
+import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
 
 const props = defineProps({
   product: {
@@ -48,7 +60,6 @@ const props = defineProps({
 
 const isLoading = ref<boolean>(false)
 const productImageFile = getImage(productImage)
-
 </script>
 
 <style scoped></style>

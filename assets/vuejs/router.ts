@@ -5,16 +5,30 @@ import {
   routes as productsRoutes,
 } from '@/vuejs/modules/products/routerProducts'
 
+import {
+  ActualitesPageList,
+  routes as actualitesRoutes,
+} from '@/vuejs/modules/actualites/routerActualites'
+
+import {
+  CartPageList,
+  routes as cartRoutes,
+} from '@/vuejs/modules/cart/routerCart'
+
 import Home from '@/vuejs/modules/home/views/HomePage.vue'
+import Contact from '@/vuejs/modules/ContactPage.vue'
 import { useUserStore } from '@/vuejs/stores/user'
 
 export enum MainPageList {
   HOME_PAGE = 'home-page',
+  CONTACT_PAGE = 'contact-page',
 }
 
 export const PageList = {
   ...MainPageList,
   ...ProductPageList,
+  ...ActualitesPageList,
+  ...CartPageList,
 }
 
 const routes: RouteRecordRaw[] = [
@@ -23,7 +37,14 @@ const routes: RouteRecordRaw[] = [
     name: PageList.HOME_PAGE,
     component: Home,
   },
+  {
+    path: '/app/contact',
+    name: PageList.CONTACT_PAGE,
+    component: Contact,
+  },
   ...productsRoutes,
+  ...actualitesRoutes,
+  ...cartRoutes,
 ]
 
 const router = createRouter({
