@@ -207,10 +207,10 @@
             </div>
             <div class="px-6 text-left">
               <h3 class="primary text-[23px] font-bold">{{ contenu.titre }}</h3>
-              <p class="mt-2">
+              <p class="mt-5 mb-5">
                 <a
                   href="#"
-                  class="purple-button mr-2 mb-2 flex items-center rounded-md px-5 py-2.5 text-sm font-medium text-white"
+                  class="text-cotext w-auto bg-purple-600 mr-2 mb-2 items-center rounded-md px-5 py-2.5 text-sm text-white"
                 >
                   {{ contenu.btnNam }}
                 </a>

@@ -67,44 +67,19 @@
           Sauvegarder le panier
         </DefaultButtonComponent>
       </div>
-      <div class="text-cotext p-5 bg-white rounded-lg">
-        <h3 class="primary mb-5 text-[25px]">Récapitulatif panier</h3>
-          <div class="justify-between text-gray-500 inline-flex mb-2 text-lg w-full">
-            <div>Sous-total HT :</div>
-            <div class="float-right">XX €</div>
-          </div>
-          <div class="justify-between text-gray-500 inline-flex text-lg w-full mb-2">
-            <div>Frais de livraison HT :</div>
-            <div class="float-right">XX €</div>
-          </div>
-          <div class="justify-between primary font-bold inline-flex mb-2 text-lg w-full">
-            <div>TOTAL HT :</div>
-            <div class="float-right">XX €</div>
-          </div>
-          <div class="justify-between text-gray-500 inline-flex text-lg w-full mb-2">
-            <div>TVA :</div>
-            <div class="float-right">XX €</div>
-          </div>
-          <div class="justify-between text-gray-500 inline-flex text-lg w-full">
-            <div>TOTAL TTC :</div>
-            <div class="float-right">XX €</div>
-          </div>
-          <GradientButton
-            type="submit"
-            class="mt-5 justify-center text-center"
-          >
-            <ArrowRightIconComponent
-              :stroke-color="'#FFFFFF'"
-              class="mr-2 w-4"
-            />
-            Passer la commande
-          </GradientButton>
-      </div>
-      <div class="grid grid-cols-3 gap-4 mt-5">
-        <div class="text-cotext p-5 bg-white rounded-lg items-center m-auto">
+      <CartRightSideComponent>
+        <template #title>
+          Récapitulatif panier
+        </template>
+        <template #button-label>
+          Passer la commande
+        </template>
+      </CartRightSideComponent>
+      <div class="grid grid-cols-4 gap-x-16 mt-5">
+        <div class="text-cotext p-5 bg-white rounded-lg items-center m-auto h-14">
           <CbIconComponent />
         </div>
-        <div class="text-cotext p-5 bg-white rounded-lg items-center m-auto">
+        <div class="text-cotext p-5 bg-white rounded-lg items-center m-auto h-14">
           <SepaIconComponent />
         </div>
       </div>
@@ -116,14 +91,13 @@
 import {ref} from 'vue'
 import CartPage from '@/vuejs/modules/cart/pages/CartPage.vue'
 import FileIconComponent from '@/vuejs/modules/shared/icon/FileIconComponent.vue'
-import GradientButton from '@/vuejs/modules/shared/GradientButtonComponent.vue'
 import DefaultButtonComponent from '@/vuejs/modules/shared/DefaultButtonComponent.vue'
 import productImage from '@/vuejs/assets/img/default-image.png'
 import { getImage } from '@/vuejs/services/utils'
 import ProductRecapComponent from '@/vuejs/modules/cart/components/ProductRecapComponent.vue'
-import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import CbIconComponent from '@/vuejs/modules/shared/icon/CbIconComponent.vue'
 import SepaIconComponent from '@/vuejs/modules/shared/icon/SepaIconComponent.vue'
+import CartRightSideComponent from '@/vuejs/modules/cart/components/CartRightSideComponent.vue'
 
 const productImageFile = getImage(productImage)
 
