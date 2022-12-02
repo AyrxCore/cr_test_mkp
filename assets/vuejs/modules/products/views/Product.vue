@@ -209,18 +209,18 @@
       </div>
       <!-- Fin Bloc Caractéristiques techniques -->
 
-      <!-- Bloc produis similaire -->
+      <!-- Bloc produits similaire -->
       <div class="mt-10 justify-center">
         <h3 class="primary home-subtitle">Produits similaires</h3>
         <CarouselListSharedComponent
-          class="mx-auto mt-2 h-[450px] items-center rounded-xl px-[50px!important]"
+          class="mx-auto mt-2 items-center rounded-xl px-[50px!important]"
         >
           <swiper-slide v-for="(prod, key) in products" :key="key">
             <ProductComponent :product="prod" />
           </swiper-slide>
         </CarouselListSharedComponent>
       </div>
-      <!-- Fiin bloc produis similaire -->
+      <!-- Fiin bloc produits similaire -->
     </div>
   </BaseTemplate>
 </template>
