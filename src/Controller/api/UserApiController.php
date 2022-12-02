@@ -3,8 +3,10 @@
 namespace App\Controller\api;
 
 use App\Entity\User;
+use App\Service\UpplerAuthenticationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpClient\Exception\ServerException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -14,6 +16,7 @@ use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
+use function PHPUnit\Framework\assertGreaterThanOrEqual;
 
 #[Route("/api/user")]
 class UserApiController extends AbstractController
@@ -24,10 +27,23 @@ class UserApiController extends AbstractController
     #[Required]
     public EntityManagerInterface $em;
 
+    #[Required]
+    public UpplerAuthenticationService $upplerAuthenticationService;
+
     #[Route('/me', name: 'get_me')]
     public function me(NormalizerInterface $normalizer): JsonResponse
     {
+        $session= $this->requestStack->getSession();
+        $session->start();
+
+        if (!$session->has('account') || empty($session->get('account'))) {
+            return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        $buyerDatas = $this->upplerAuthenticationService->getUserBuyerDatas();
         $user = $normalizer->normalize($this->getUser(), 'json', ['groups' => 'simpleUser']);
+        $account = $normalizer->normalize($session->get('account'), 'json', ['groups' => 'simpleUser']);
+        $account["buyer"] = $buyerDatas;
+        $user["account"] = $account;
         return new JsonResponse($user);
     }
 
@@ -39,22 +55,4 @@ class UserApiController extends AbstractController
         return $response;
     }
 
-    #[Route("/find", methods: ['POST'])]
-    public function find(Request $request, RateLimiterFactory $protectedRateApiLimiter)
-    {
-        //ce endpoint est public, pas le choix, donc on limite le nbre d'appel pour éviter les attaques
-        $limiter = $protectedRateApiLimiter->create($request->getClientIp());
-
-        if (false === $limiter->consume(1)->isAccepted()) {
-            throw new TooManyRequestsHttpException();
-        }
-
-        if ($request->request->has('email')) {
-            $email = $request->request->get('email');
-            $check = $this->em->getRepository(User::class)->findOneBy(['username' => $email]);
-            return new JsonResponse(['exist' => null !== $check]);
-        }
-
-        throw  new \JsonException('email attribute missing');
-    }
 }

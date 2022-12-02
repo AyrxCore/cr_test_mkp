@@ -36,6 +36,7 @@ class UserTestFixtures extends Fixture implements OrderedFixtureInterface, Fixtu
 
         $user = new User();
         $user->setEmail('test@qantis.co');
+        $user->setUsername('test@qantis.co');
         $user->setPassword($this->userPasswordHasher->hashPassword($user,'0000'));
         $manager->persist($user);
 

@@ -61,7 +61,7 @@ router.beforeEach(async (to, from, next) => {
     await userStore.getCurrentUserDatas()
     const host = window.location.protocol + '//' + window.location.host
     if (!userStore.isLogged) {
-      window.location.href = host
+      //window.location.href = host
     }
   }
 

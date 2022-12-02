@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 
+use App\Entity\Account;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
@@ -33,9 +34,26 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface, FixtureGr
 
         //création d'un admin
         $user = new User();
-        $user->setEmail('test@example.com');
-        $user->setPassword($this->userPasswordHasher->hashPassword($user, '0000'));
+        $user->setEmail('m.frebet@qantis.co');
+        $user->setUsername('m.frebet@qantis.co');
+        $user->setPassword($this->userPasswordHasher->hashPassword($user, '000000'));
+        $user->setLastName('FREBET');
+        $user->setFirstName('Mélanie');
+        $user->setEnabled(true);
+
+
+        $account = new Account();
+        $account->setUpplerUserId(103);
+        $account->setUpplerClientId(31);
+        $account->setUpplerCompanyId(12);
+        $account->setUpplerUsername('m.frebet3');
+        $account->setUpplerPassword('000000');
+        $account->setUpplerSubAccountId(17);
+        $account->setUser($user);
+
         $manager->persist($user);
+        $manager->persist($account);
+
         $manager->flush();
     }
 

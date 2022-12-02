@@ -57,7 +57,12 @@
     </div>
     <div class="inline-flex w-[18rem]">
       <MapInIconComponent class="mr-2" />
-      <a href="#" class="text-xs">Livré à {{ address }}</a>
+      <a href="#" class="text-xs">
+        Livré à
+        {{ user.account.buyer.default_address.street }}
+        {{ user.account.buyer.default_address.postcode }}
+        {{ user.account.buyer.default_address.city }}
+      </a>
     </div>
   </div>
 </template>
@@ -72,11 +77,6 @@ import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightI
 import MapInIconComponent from '@/vuejs/modules/shared/icon/MapInIconComponent.vue'
 import {useUserStore} from "@/vuejs/stores/user";
 import {storeToRefs} from "pinia";
-import UserCheckIconComponent from '@/vuejs/modules/shared/icon/UserCheckIconComponent.vue';
-import UserIconComponent from '@/vuejs/modules/shared/icon/UserIconComponent.vue';
-import DisconnectIconComponent from '@/vuejs/modules/shared/icon/DisconnectIconComponent.vue';
-import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightIconComponent.vue';
-import MapInIconComponent from '@/vuejs/modules/shared/icon/MapInIconComponent.vue';
 
 const userStore = useUserStore()
 const {user} = storeToRefs(userStore)

@@ -1,12 +1,10 @@
+import {Account} from "@/vuejs/types/Account";
+
 // Décrit l'objet user
 export interface User {
   email: string
   roles: string[]
-  username: string
-  companyName: string
-  firstName: string
-  lastName: string
-  lastLogin: Date
+  account: Account
 }
 
 // Décrit le state général du store user

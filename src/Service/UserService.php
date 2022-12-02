@@ -40,6 +40,7 @@ class UserService
         $user = new User();
         $user->setUsername($email);
         $user->setEmail($email);
+        $user->setEnabled(true);
         $user->setPassword($this->passwordHasher->hashPassword($user, $password));
 
         $this->entityManager->persist($user);

@@ -3,20 +3,26 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
+#[ORM\HasLifecycleCallbacks]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
+    private ?Uuid $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
     #[Groups("simpleUser")]
@@ -37,12 +43,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $username = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $uppler_client_id = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $uppler_client_secret = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
     #[Groups("simpleUser")]
     private ?string $firstName = null;
 
@@ -51,30 +51,39 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $lastName = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups("simpleUser")]
     private ?\DateTimeInterface $lastLogin = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $createdAt = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $upplerUserId = null;
+    #[ORM\OneToMany(mappedBy: '_user', targetEntity: Account::class)]
+    private Collection $accounts;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $companyId = null;
+    #[ORM\Column]
+    private ?bool $isEnabled = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups("simpleUser")]
-    private ?string $companyName = null;
+    public function __construct()
+    {
+        $this->accounts = new ArrayCollection();
+    }
 
-    //Est utilisateur principal du Buyer
-    #[ORM\Column(nullable: true)]
-    private ?bool $isMaster = null;
+    #[ORM\PrePersist]
+    public function onPrePersist()
+    {
+        $this->updatedAt = new \DateTime('now');
+        $this->createdAt = new \DateTime('now');
+    }
 
-    public function getId(): ?int
+    #[ORM\PreUpdate]
+    public function onPreUpdate()
+    {
+        $this->updatedAt = new \DateTime('now');
+    }
+
+    public function getId(): ?Uuid
     {
         return $this->id;
     }
@@ -170,30 +179,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getUpplerClientId(): ?string
-    {
-        return $this->uppler_client_id;
-    }
-
-    public function setUpplerClientId(?string $uppler_client_id): self
-    {
-        $this->uppler_client_id = $uppler_client_id;
-
-        return $this;
-    }
-
-    public function getUpplerClientSecret(): ?string
-    {
-        return $this->uppler_client_secret;
-    }
-
-    public function setUpplerClientSecret(?string $uppler_client_secret): self
-    {
-        $this->uppler_client_secret = $uppler_client_secret;
-
-        return $this;
-    }
-
     public function getFirstName(): ?string
     {
         return $this->firstName;
@@ -254,50 +239,44 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getUpplerUserId(): ?int
+    /**
+     * @return Collection<int, Account>
+     */
+    public function getAccounts(): Collection
     {
-        return $this->upplerUserId;
+        return $this->accounts;
     }
 
-    public function setUpplerUserId(?int $upplerUserId): self
+    public function addAccount(Account $account): self
     {
-        $this->upplerUserId = $upplerUserId;
+        if (!$this->accounts->contains($account)) {
+            $this->accounts->add($account);
+            $account->setUser($this);
+        }
 
         return $this;
     }
 
-    public function getCompanyId(): ?int
+    public function removeAccount(Account $account): self
     {
-        return $this->companyId;
-    }
-
-    public function setCompanyId(?int $companyId): self
-    {
-        $this->companyId = $companyId;
+        if ($this->accounts->removeElement($account)) {
+            // set the owning side to null (unless already changed)
+            if ($account->getUser() === $this) {
+                $account->setUser(null);
+            }
+        }
 
         return $this;
     }
 
-    public function getCompanyName(): ?string
+    public function isEnabled(): ?bool
     {
-        return $this->companyName;
+        return $this->isEnabled;
     }
 
-    public function setCompanyName(?string $companyName): self
+    public function setEnabled(bool $isEnabled): self
     {
-        $this->companyName = $companyName;
-
-        return $this;
-    }
-
-    public function isMaster(): ?bool
-    {
-        return $this->isMaster;
-    }
-
-    public function setIsMaster(?bool $isMaster): self
-    {
-        $this->isMaster = $isMaster;
+        $this->isEnabled = $isEnabled;
 
         return $this;
     }

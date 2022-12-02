@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\Account;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -19,13 +20,13 @@ class UpplerAuthenticationService extends HttpClientProvider
     public EntityManagerInterface $em;
 
     // Permet d'authentifier un user auprés d'Uppler
-    public function authenticateUser(string $username, string $password, User $user): bool
+    public function authenticateUser(Account $account): bool
     {
         $session = $this->requestStack->getSession();
         $session->start();
         $session->clear();
 
-        if (empty($user->getUpplerClientId()) || empty($user->getUpplerClientSecret())) {
+        if (empty($account->getUpplerClientId()) || empty($account->getUpplerClientSecret())) {
             //on demande l'obtention d'un token Admin Uppler
             $this->getAdminToken();
 
@@ -40,8 +41,8 @@ class UpplerAuthenticationService extends HttpClientProvider
                 $this->apiUrl . 'v1/user/access-token',
                 [
                     "body" => [
-                        "username" => $username,
-                        "password" => $password
+                        "username" => $account->getUpplerUsername(),
+                        "password" => $account->getUpplerPassword()
                     ]
                 ],
                 true
@@ -49,44 +50,30 @@ class UpplerAuthenticationService extends HttpClientProvider
             // la réponse Uppler est OK on récupère les infos du tokenUser
             if ($res && Response::HTTP_OK ===$res->getStatusCode()) {
                 $payload = json_decode($res->getContent());
-                $tokenDatas = json_decode(
-                    base64_decode(
-                        str_replace(
-                            '_',
-                            '/',
-                            str_replace(
-                                '-',
-                                '+',
-                                explode('.', $payload->token)[1]
-                            )
-                        )
-                    )
-                );
-                $user->setUpplerUserId($tokenDatas->userId);
-                $user->setCompanyId($tokenDatas->companyId);
-                $user->setCompanyName($tokenDatas->company);
+                $account->setUpplerClientId($payload->client_id);
+                $account->setUpplerClientSecret($payload->client_secret);
                 // grace aux paramétres de connexion on sollicite un accessToken pour ce user
-                $this->getUserToken($payload->client_id, $payload->client_secret);
+                $this->getUserToken($account);
                 //si l'accessToken a été récupéré il doit être en session,
                 // si c'est le cas on stocke  aussi les infos du tokenUser en session
                 // et les client_id/client_secret en bdd pour les réutiliser à chaque connexion
                 if ($session->has('access_token') && !empty($session->get('access_token'))) {
-                    $user->setUpplerClientId($payload->client_id);
-                    $user->setUpplerClientSecret($payload->client_secret);
-                    $this->em->persist($user);
+                    $account->setLastConnexion(new \DateTime('now'));
+                    $this->em->persist($account);
                     $this->em->flush();
-                    $this->updateUser($user);
-                    $session->set('token_datas', $tokenDatas);
                     return true;
                 }
             }
         } else {
             // grace aux paramétres de connexion déjà connus on sollicite un accessToken pour ce user
-            $this->getUserToken($user->getUpplerClientId(), $user->getUpplerClientSecret());
-            $this->updateUser($user);
+            $this->getUserToken($account);
+
             //si l'accessToken a été récupéré il doit être en session,
             // si c'est le cas on stocke  aussi les infos du tokenUser
             if ($session->has('access_token') && !empty($session->get('access_token'))) {
+                $account->setLastConnexion(new \DateTime('now'));
+                $this->em->persist($account);
+                $this->em->flush();
                 return true;
             }
         }
@@ -94,47 +81,21 @@ class UpplerAuthenticationService extends HttpClientProvider
         return false;
     }
 
-    // met à jour les données d'un user en db à partir de ses données Uppler
-    private function updateUser(User $user)
+    public function getUserBuyerDatas(): object | null
     {
         $session = $this->requestStack->getSession();
-        $session->start();
-        //on demande l'obtention d'un token Admin Uppler
-        $this->getAdminToken();
-
-        if (null === $this->adminToken) {
-            return false;
-        }
-
-        if (!$session->has('access_token') || empty($session->get('access_token'))) {
-            return false;
-        }
-
-        if ($user->isMaster()) {
-            $res = $this->request(
-                'GET',
-                $this->apiUrl . 'v1/administrator/buyer/' . $user->getCompanyId(),
-                [],
-                true
-            );
-        } else {
-
-        }
-
+        /**@var Account $account*/
+        $account = $session->get('account');
+        $res = $this->request(
+            'GET',
+            $this->apiUrl . 'v1/buyer/profile/' . $account->getUpplerCompanyId() . '?expand[]=address'
+        );
         if (Response::HTTP_OK === $res->getStatusCode()) {
-            $payload = json_decode($res->getContent());
-            if (property_exists($payload, 'master_user')) {
-                $user->setEmail($payload->master_user->email);
-                $user->setFirstName($payload->master_user->firstname);
-                $user->setLastName($payload->master_user->lastname);
-                $user->setLastLogin(new \DateTime('now'));
-                $user->setCreatedAt(new \DateTime($payload->master_user->created_at));
-                $user->setUpdatedAt(new \DateTime($payload->master_user->updated_at));
-                $this->em->persist($user);
-                $this->em->flush();
-                return true;
-            }
+
+           return json_decode($res->getContent());
         }
 
+        return null;
     }
+
 }

@@ -19,9 +19,9 @@ security:
             pattern: ^/api
             stateless: true
             provider: app_user_provider
+            user_checker: App\Security\UserChecker
             entry_point: jwt
-            jwt:
-                authenticator: app.uppler_authenticator
+            jwt: ~
             json_login:
                 check_path: /api/authentication/token
                 success_handler: lexik_jwt_authentication.handler.authentication_success
@@ -42,8 +42,8 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/api/authentication/token, roles: PUBLIC_ACCESS }
-        - { path: ^/api/user/find, roles: PUBLIC_ACCESS }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/basic/api, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/app, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: PUBLIC_ACCESS }
         # - { path: ^/admin, roles: ROLE_ADMIN }

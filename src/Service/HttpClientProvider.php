@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\Account;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpClient\Exception\ClientException;
@@ -94,9 +95,10 @@ abstract class HttpClientProvider
         // récupère le token admin ou user
         $accessToken = $isAdmin ? $this->adminToken : $session->get('access_token')->access_token;
 
-        if ('dev' === $this->env && $isAdmin) {
+        if ('dev' === $this->env) {
             // ajoute token admin à l'url
-            $url .= '?access_token=' . $accessToken;
+            $url .=  (preg_match('/([^?&=#]+)=([^&#]*)/', $url)) ?  '&' : '?' ;
+            $url .= 'access_token=' . $accessToken;
         } else {
             //ajoute le Bearer token user dans le header
             $options["headers"] = [
@@ -202,18 +204,17 @@ abstract class HttpClientProvider
     }
 
     // obtient un token pour le user et le stocke en session
-    public function getUserToken(string $clientId, string $clientSecret): bool
+    public function getUserToken(Account $account): bool
     {
         $session = $this->requestStack->getSession();
         $session->start();
 
-        $accessToken = $this->getToken($clientId, $clientSecret);
+        $accessToken = $this->getToken($account->getUpplerClientId(), $account->getUpplerClientSecret());
         if (null !== $accessToken) {
             //on stocke les données du user en session
             // elles seront utilisées pour toutes les requêtes vers Uppler durant cette session
             $session->set('access_token', $accessToken);
-            $session->set('user_client_id', $clientId);
-            $session->set('user_client_secret', $clientSecret);
+            $session->set('account', $account);
             return true;
         }
         return false;
