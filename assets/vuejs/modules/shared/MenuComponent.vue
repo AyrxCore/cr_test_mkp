@@ -24,6 +24,7 @@
               <span class="-mt-2">{{ categorie }}</span>
               <ChevronRightIconComponent
                 class="primary float-right -mt-2 text-lg"
+                :stroke-color="'#050056'"
               />
             </a>
           </div>

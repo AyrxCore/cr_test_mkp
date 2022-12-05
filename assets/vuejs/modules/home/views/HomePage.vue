@@ -108,10 +108,10 @@
               </p>
 
               <div
-                class="mx-auto mt-7 rounded-full bg-white p-2 text-[#9553FF]"
+                class="mx-auto mt-7 rounded-full bg-white p-2 text-[#9553FF] text-cotext"
               >
-                <a href="#">
-                  <i class="fas fa-arrow-right mr-2" /> Découvrir l'accord cadre
+                <a href="#" class="flex items-center">
+                  <ArrowRightIconComponent class="mr-2" /> Découvrir l'accord cadre
                 </a>
               </div>
             </div>
@@ -130,11 +130,11 @@
         :slides-per-view="8"
         :space-between="50"
       >
-        <swiper-slide v-for="(partenaire, key) in partenaires" :key="key">
+        <swiper-slide v-for="(partenaire, key) in partenaires" :key="key" class="bg-white rounded-lg flex justify-center items-center">
           <img
             :src="partenaire.img"
             :alt="partenaire.alt"
-            class="h-[107px!important] w-[180px!important] items-center rounded-lg sm:mx-auto"
+            class="h-[auto!important]"
           />
         </swiper-slide>
       </CarouselListSharedComponent>
@@ -145,58 +145,57 @@
         </h3>
       </div>
       <div
-        class="text-cotext mt-5 inline-block h-[205px] w-[100%] text-center text-lg"
+        class="text-cotext mt-5 inline-block flex w-[100%] text-center text-lg flex-wrap justify-center"
       >
-        <span
+        <div
           v-for="(categorie, id) in listCategories"
           :key="id"
-          class="mr-6 items-start rounded bg-[#404FE6] px-1.5 py-2.5 leading-[3.5rem] text-white"
+          class="mr-8 items-center rounded bg-[#404FE6] px-1.5 py-1 mt-2 text-white justify-center"
         >
           {{ categorie }}
-        </span>
+        </div>
       </div>
     </div>
 
     <div
-      class="home-bloc-economie m-auto mt-16 h-[338px] flex-1 py-4 text-white"
+      class="home-bloc-economie m-auto mt-16 h-[338px] flex-1 py-4 text-white text-cotext"
     >
-      <div class="text-center">
-        <h3 class="text-cotext text-[35px] font-bold">
+      <div class="text-center ">
+        <h3 class="text-[35px] font-bold">
           Vous faites des économies tout en <br />
           contribuant à votre démarche RSE
         </h3>
-        <p class="text-cotext mx-auto mt-2 w-[45%] text-lg">
+        <p class="mx-auto mt-2 w-[45%] text-lg">
           Nos adhérents réalisent en moyenne 27 % d'économies, grâce à la
           mutualisation des achats. Nous notons et référençons nos partenaires
           fournisseurs à l’aide d’un référentiel RSE. Votre adhésion permet
           aussi de contribuer à la démarche RSE de votre entreprise.
         </p>
-        <p class="text-cotext mt-10">
-          <a href="#" class="default-button-gradient px-3.5 py-3">
-            <i class="fas fa-arrow-right mr-2" /> Toutes nos catégories d'achats
+        <p class="mt-10 flex justify-center">
+          <a href="#" class="text-center items-center default-button-gradient px-3.5 py-3 flex">
+            <ArrowRightIconComponent class="mr-2" :stroke-color="'#FFFFFF'"/>  Toutes nos catégories d'achats
           </a>
         </p>
       </div>
     </div>
 
     <div
-      class="m-auto my-6 mt-10 h-[634px] max-w-screen-2xl flex-1 rounded-md bg-white shadow-md"
+      class="m-auto my-6 mt-10 pb-4 max-w-screen-2xl flex-1 rounded-md bg-white shadow-md"
     >
-      <div class="pt-1 text-center">
-        <h3 class="text-cotext primary mt-10 text-[35px] font-bold">
-          Contenus experts spécialement conçus <br />
-          pour la
-          <span
-            class="bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-500 bg-clip-text text-transparent"
-          >
-            communauté QANTIS
-          </span>
+      <div class="pt-1 text-center text-cotext flex flex-col">
+        <h3 class="primary mt-10 text-[35px] font-bold pl-8 flex flex-col">
+          <p class="flex">Contenus experts spécialement conçus</p>
+          <p class="flex">pour la
+            <span class="bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-500 bg-clip-text text-transparent ml-2" >
+              communauté QANTIS
+            </span>
+          </p>
         </h3>
         <div class="mt-5 grid grid-cols-3 gap-4 p-8">
           <div
             v-for="(contenu, id) in contenusExpert"
             :key="id"
-            class="text-cotext grid grid-cols-2"
+            class="grid grid-cols-2"
           >
             <div class="flex rounded-lg border-[#F3EDFE]">
               <img
@@ -210,7 +209,7 @@
               <p class="mt-5 mb-5">
                 <a
                   href="#"
-                  class="text-cotext w-auto bg-purple-600 mr-2 mb-2 items-center rounded-md px-5 py-2.5 text-sm text-white"
+                  class="w-auto bg-purple-600 mr-2 mb-2 items-center rounded-md px-5 py-2.5 text-sm text-white"
                 >
                   {{ contenu.btnNam }}
                 </a>
@@ -229,11 +228,13 @@
             </div>
           </div>
         </div>
-        <p class="text-cotext mt-10">
-          <a href="#" class="default-button-gradient px-3.5 py-3 text-white">
-            <i class="fas fa-arrow-right mr-2" /> Toutes les contenus experts
-          </a>
-        </p>
+        <div class="flex justify-center">
+          <p class="mt-10">
+            <a href="#" class="text-white items-center default-button-gradient px-3.5 py-3 flex">
+              <ArrowRightIconComponent class="mr-2" :stroke-color="'#FFFFFF'"/> Tous les contenus experts
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   </BaseTemplate>
@@ -272,6 +273,7 @@ import imgCentral from '@/vuejs/assets/img/samples/img-central.png'
 import imgMagazine from '@/vuejs/assets/img/samples/img-magazine.png'
 import MailIconLightComponent from '@/vuejs/modules/shared/icon/MailIconLightComponent.vue'
 import PhoneLightIconComponent from '@/vuejs/modules/shared/icon/PhoneLightIconComponent.vue'
+import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue';
 
 const defaultImageFile = getImage(defaultImage)
 

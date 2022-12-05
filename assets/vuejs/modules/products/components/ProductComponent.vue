@@ -9,12 +9,12 @@
       <div class="border"></div>
       <HeartIconComponent />
     </div>
-    <div class="mx-auto items-center">
+    <div class="mx-auto rounded-lg flex justify-center items-center h-[191px!important]">
       <a href="/app/product">
         <img
           :src="props.product.imgProduct"
           alt="Image produit"
-          class="mx-auto h-[191px!important] w-[334px!important]"
+          class="h-[auto!important]"
         />
       </a>
     </div>
@@ -44,9 +44,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { getImage } from '@/vuejs/services/utils'
 import { ref } from 'vue'
-import productImage from '@/vuejs/assets/img/default-image.png'
 import DefaultButtonComponent from '@/vuejs/modules/shared/GradientButtonComponent.vue'
 import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
 import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
@@ -59,7 +57,6 @@ const props = defineProps({
 })
 
 const isLoading = ref<boolean>(false)
-const productImageFile = getImage(productImage)
 </script>
 
 <style scoped></style>

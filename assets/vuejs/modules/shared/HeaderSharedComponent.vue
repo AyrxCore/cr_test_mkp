@@ -2,7 +2,7 @@
   <nav class="header sticky top-0 z-30 bg-white py-0.5 px-4">
     <div class="mx-auto px-4 md:flex md:items-center">
       <div class="mt-1">
-        <a href="#" class="text-xl font-bold text-white">
+        <a href="/app/home" class="text-xl font-bold text-white">
           <img
             :src="qantisLogoImg"
             alt="header"
