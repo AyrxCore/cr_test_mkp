@@ -24,13 +24,13 @@
             Recevez les actualités de nos partenaires, leurs produits et
             services
           </p>
-          <input-button-component
+          <InputButtonComponent
             placeholder="Votre adresse email"
             :btn-color="'bg-qantis'"
           >
             S'inscrire
-          </input-button-component>
-          <p class="mt-4 text-[14px]">
+          </InputButtonComponent>
+          <p class="mt-4 text-sm">
             Votre adresse email sera uniquement utilisée pour vous envoyer nos
             newsletters. Vous pourrez vous désabonner à tout moment via le lien
             intégré dans la newsletter. En savoir plus sur la gestion de vos
@@ -147,7 +147,7 @@
       </div>
     </div>
     <div
-      class="text-cotext m-auto mt-10 max-w-screen-2xl border-t-2 border-white pt-10 pb-10 text-center"
+      class="m-auto mt-10 max-w-screen-2xl border-t-2 border-white pt-10 pb-10 text-center"
     >
       © QANTIS. Tous droits réservés - QANTIS, 185, allée des Cyprès, 69760
       LIMONEST, FRANCE
@@ -192,7 +192,6 @@ const facebookLogoImg = getImage(facebookLogo)
 }
 
 .footer h3 {
-  font-family: CoText, sans-serif;
   font-size: 22px;
   font-weight: 700;
   line-height: 26px;
@@ -201,7 +200,6 @@ const facebookLogoImg = getImage(facebookLogo)
 
 .footer .second-part p,
 .footer li {
-  font-family: CoText, sans-serif;
   font-size: 18px;
   font-weight: 400;
   line-height: 25px;
@@ -212,7 +210,6 @@ const facebookLogoImg = getImage(facebookLogo)
 .bloc-contact-footer {
   height: 254px;
   background: $secondary;
-  font-family: CoText, sans-serif;
 }
 
 .bloc-contact-footer > div > div {

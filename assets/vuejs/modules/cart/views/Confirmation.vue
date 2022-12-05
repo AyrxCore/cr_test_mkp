@@ -1,7 +1,7 @@
 <template>
   <CartPage :selected-tab="tab">
     <template #left-side>
-      <div class="text-cotext">
+      <div class="">
         <h3 class="primary mb-1 text-[35px]">Merci pour votre commande !</h3>
         <p class="primary text-[25px]">Commande N° XXX</p>
         <p class="text-gray-500 text-lg">Créée le 01/01/01</p>
@@ -27,42 +27,44 @@
             nous achetons mieux ensembles
           </span>
         </h3>
-        <div class="grid grid-cols-4 gap-4 mt-5">
-          <div>
-            <LayersIconComponent />
-            <h4 class="text-[20px] w-[176px] text-gray-500 mt-7">
-              Réalisez 27% d'économies
-            </h4>
-            <p class="text-[16px] w-[188px] text-gray-400 mt-3">
-              Bénéficiez d'avantages comparables à ceux des grands groupes
-            </p>
-          </div>
-          <div class="w-[154px]">
-            <FolderSearchIconComponent />
-            <h4 class="text-[20px] text-gray-500 mt-7">
-              Gagnez du temps
-            </h4>
-            <p class="text-[16px] text-gray-400 mt-3">
-              Restez concentré sur votre coeur de métier
-            </p>
-          </div>
-          <div class="w-[176px]">
-            <ExpandIconComponent />
-            <h4 class="text-[20px] text-gray-500 mt-7">
-              Structurez et optimisez vos achats
-            </h4>
-            <p class="text-[16px] text-gray-400 mt-3">
-              Déployez des accords-cadres déjà négociés, simplement
-            </p>
-          </div>
-          <div>
-            <LeafIconComponent />
-            <h4 class="text-[20px] w-[185px] text-gray-500 mt-7">
-              Commencez votre démarche RSE par vos achats
-            </h4>
-            <p class="text-[16px] text-gray-400 mt-3 w-[176px]">
-              Nous notons nos fournisseurs à l'aide d'un référentiel RSE
-            </p>
+        <div class="container mx-auto">
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 mt-5">
+            <div class="flex flex-col justify-center">
+              <LayersIconComponent />
+              <h4 class="text-[20px] w-[176px] text-gray-500 mt-7">
+                Réalisez 27% d'économies
+              </h4>
+              <p class="text-[16px] w-[188px] text-gray-400 mt-3">
+                Bénéficiez d'avantages comparables à ceux des grands groupes
+              </p>
+            </div>
+            <div class="w-[154px] flex flex-col justify-center">
+              <FolderSearchIconComponent />
+              <h4 class="text-[20px] text-gray-500 mt-7">
+                Gagnez du temps
+              </h4>
+              <p class="text-[16px] text-gray-400 mt-3">
+                Restez concentré sur votre coeur de métier
+              </p>
+            </div>
+            <div class="w-[176px] flex flex-col justify-center">
+              <ExpandIconComponent />
+              <h4 class="text-[20px] text-gray-500 mt-7">
+                Structurez et optimisez vos achats
+              </h4>
+              <p class="text-[16px] text-gray-400 mt-3">
+                Déployez des accords-cadres déjà négociés, simplement
+              </p>
+            </div>
+            <div class="flex flex-col justify-center">
+              <LeafIconComponent />
+              <h4 class="text-[20px] w-[185px] text-gray-500 mt-7">
+                Commencez votre démarche RSE par vos achats
+              </h4>
+              <p class="text-[16px] text-gray-400 mt-3 w-[176px]">
+                Nous notons nos fournisseurs à l'aide d'un référentiel RSE
+              </p>
+            </div>
           </div>
         </div>
       </div>

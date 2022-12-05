@@ -1,39 +1,49 @@
 <template>
-  <div class="items-center mx-auto px-6 bg-white  py-2 rounded-md text-cotext h-full" data-category="{{actualite.categorie.id}}">
-    <div class="items-center mx-auto ">
+  <div
+    class="mx-auto h-full items-center rounded-md bg-white px-6 py-2"
+    data-category="{{actualite.categorie.id}}"
+  >
+    <div class="mx-auto items-center">
       <a href="/app/product">
-        <img :src="actualite.img" alt="Image produit" class="mx-auto h-[205px!important] w-[334px!important]"/>
+        <img
+          :src="actualite.img"
+          alt="Image produit"
+          class="mx-auto h-[205px!important] w-[334px!important]"
+        />
       </a>
     </div>
-    <div >
+    <div>
       <p
-        class="px-2 py-1 rounded-md w-max mb-3 text-white"
-        :class="'bg-[' + actualite.categorie.color +']'"
+        class="mb-3 w-max rounded-md px-2 py-1 text-white"
+        :class="'bg-[' + actualite.categorie.color + ']'"
       >
-        {{actualite.categorie.name}}
+        {{ actualite.categorie.name }}
       </p>
       <span class="text-gray-500">
-        {{actualite.date}}
+        {{ actualite.date }}
       </span>
     </div>
-    <h3 class="text-left primary font-bold text-[25px] text-cotext">
-      <a href="/app/actualite">{{actualite.name}}</a>
+    <h3 class="text-left text-[25px] font-bold text-primary">
+      <a href="/app/actualite">{{ actualite.name }}</a>
     </h3>
-    <p class="text-left text-gray-400 mt-1 text-lg text-cotext">{{actualite.description}}</p>
-    <a href="/app/actualite" class="flex items-center bottom-0 text-sm font-medium underline primary">
+    <p class="mt-1 text-left text-lg text-gray-400">
+      {{ actualite.description }}
+    </p>
+    <a
+      href="/app/actualite"
+      class="bottom-0 flex items-center text-sm font-medium text-primary underline"
+    >
       Lire l'article
     </a>
   </div>
 </template>
 <script lang="ts" setup>
-
 const props = defineProps({
   actualite: {
     required: true,
     type: Object,
   },
 })
-
 </script>
 
 <style scoped></style>

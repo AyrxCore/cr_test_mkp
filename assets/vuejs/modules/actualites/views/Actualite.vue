@@ -9,7 +9,7 @@
         <ContactUsButtonComponent />
       </div>
       <div
-        class="text-cotext m-auto my-2 grid w-[100%] max-w-screen-2xl grid-cols-2 gap-4"
+        class="m-auto my-2 grid w-[100%] max-w-screen-2xl grid-cols-2 gap-4"
       >
         <!-- Bloc text actualité -->
         <div>
@@ -20,7 +20,7 @@
             >{{ article.category.name }}</span
           >
           <span class="text-gray-500">{{ article.date }}</span>
-          <div class="text-cotext mt-5 h-[auto] rounded-lg">
+          <div class="mt-5 h-[auto] rounded-lg">
             <p class="whitespace-pre-line text-gray-500">
               {{ article.description }}
             </p>
@@ -56,7 +56,7 @@
           <div
             v-for="(art, key) in articlesRecommandes"
             :key="key"
-            class="text-cotext grid grid-cols-2"
+            class="grid grid-cols-2"
           >
             <div class="flex rounded-lg border-[#F3EDFE] bg-white">
               <img

@@ -10,24 +10,19 @@
           <div
               v-for="(tab, key) in tabs"
               :key="key"
-              class="px-3 text-lg text-gray-500 text-cotext border-b-2 border-gray-300 hover:border-b-2 hover:border-purple-500"
+              class="px-3 text-lg text-gray-500  border-b-2 border-gray-300 hover:border-b-2 hover:border-purple-500"
               :class="{'border-b-2 border-purple-500': tab.id === selectedTab.value}"
           >
             <a :href="tab.url" :class="{'primary': tab.id === selectedTab.value}">{{tab.name}}</a>
           </div>
         </div>
         <div class="grid grid-cols-4 gap-4 mt-10">
-          <!-- Bloc détails panier -->
           <div class="col-span-3">
             <slot name="left-side" />
           </div>
-          <!-- Fin Bloc  détails panier -->
-
-          <!-- Bloc récapitulatif -->
           <div class="rounded-lg">
             <slot name="right-side" />
           </div>
-          <!-- Fin Bloc récapitulatif -->
         </div>
 
       </div>

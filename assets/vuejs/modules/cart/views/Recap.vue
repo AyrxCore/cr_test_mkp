@@ -1,10 +1,10 @@
 <template>
   <CartPage >
     <template #left-side>
-      <div class="text-cotext">
+      <div class="">
         <h3 class="primary mb-2 text-[35px]">Panier <span class="uppercase">{{ detailsCart.company_name }}</span></h3>
       </div>
-      <div v-for="(partner, key) in detailsCart.partners" :key="key" class="text-cotext mb-3">
+      <div v-for="(partner, key) in detailsCart.partners" :key="key" class="mb-3">
         <h3 class="primary bg-white p-2 text-[25px] items-center">{{ partner.name }}
           <span class="text-gray-500 text-sm font-bold ml-2">{{partner.products.length}} produit(s)</span>
         </h3>
@@ -56,7 +56,7 @@
       </div>
     </template>
     <template #right-side>
-      <div class="text-cotext inline-flex items-center mb-2">
+      <div class="inline-flex items-center mb-2">
         <a href="#" class="inline-flex text-purple-600 mr-3"><FileIconComponent class="mr-2"/> Devis en pdf </a>
         <DefaultButtonComponent
           :btn-text-color="'text-purple-500'"
@@ -76,10 +76,10 @@
         </template>
       </CartRightSideComponent>
       <div class="grid grid-cols-4 gap-x-16 mt-5">
-        <div class="text-cotext p-5 bg-white rounded-lg items-center m-auto h-14">
+        <div class="p-5 bg-white rounded-lg items-center m-auto h-14">
           <CbIconComponent />
         </div>
-        <div class="text-cotext p-5 bg-white rounded-lg items-center m-auto h-14">
+        <div class="p-5 bg-white rounded-lg items-center m-auto h-14">
           <SepaIconComponent />
         </div>
       </div>

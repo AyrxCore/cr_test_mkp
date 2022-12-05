@@ -1,5 +1,5 @@
 <template>
-  <div class="text-cotext items-center text-white">
+  <div class="items-center text-white">
     <div class="inline-flex">
       <UserCheckIconComponent class="mr-1" />
       Bonjour {{ user.lastName }} {{ user.firstName }}
@@ -22,22 +22,20 @@
               <UserIconComponent class="mr-2" />
               Mon compte
             </a>
-            <hr
-              class="border-b-{primary}-700 mx-auto mt-1 mb-1 w-[95%] border"
-            />
+            <hr class="mx-auto mt-1 mb-1 w-[95%] border border-b-primary" />
             <div
               v-for="(value, id) in listAccount"
               :key="id"
               class="w-[100%] items-center py-1"
             >
               <a href="#" class="inline-flex items-center hover:bg-gray-200">
-                <ChevronRightIconComponent class="primary -mt-2 mr-2 text-lg" />
+                <ChevronRightIconComponent
+                  class="-mt-2 mr-2 text-lg text-primary"
+                />
                 <span class="-mt-2">{{ value }}</span>
               </a>
             </div>
-            <hr
-              class="border-b-{primary}-700 mx-auto mt-1 mb-1 w-[95%] border"
-            />
+            <hr class="mx-auto mt-1 mb-1 w-[95%] border border-b-primary" />
             <a
                 href="#"
                 class="mt-3 inline-flex font-bold hover:bg-gray-200"
@@ -52,7 +50,7 @@
           id="overlay-account"
           class="overlay"
           @click="onClick('close')"
-        />
+        ></div>
       </div>
     </div>
     <div class="inline-flex w-[18rem]">
@@ -89,9 +87,6 @@ const listAccount = ref<string[]>([
   'Changer de SIRET',
 ])
 
-
-const address = ref<string>('185, allée des Cyprès, 69760')
-
 const onClick = (action): void => {
   const overlay = document.querySelector('#overlay-account')
   const button = document.querySelector('#menu-button-account')
@@ -102,6 +97,6 @@ const onClick = (action): void => {
 const onLogout = async (e: Event): Promise<void> => {
   e.preventDefault()
   await userStore.logout() &&
-      location.reload()
+  location.reload()
 }
 </script>

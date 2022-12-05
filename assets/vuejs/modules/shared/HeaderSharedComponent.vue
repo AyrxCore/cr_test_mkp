@@ -1,11 +1,11 @@
 <template>
-  <nav class="header sticky top-0 z-30 bg-white py-0.5 px-4">
+  <nav class="header sticky top-0 z-30 bg-primary py-0.5 px-4">
     <div class="mx-auto px-4 md:flex md:items-center">
       <div class="mt-1">
-        <a href="#" class="text-xl font-bold text-white">
+        <a href="/app/home" class="text-xl font-bold text-white">
           <img
             :src="qantisLogoImg"
-            alt="header"
+            alt="Logo Qantis"
             class="logo-qantis-header sm:mx-auto sm:mb-2"
           />
         </a>
@@ -72,7 +72,6 @@ const qantisLogoImg = getImage(qantisHeaderLogo)
   height: 50px;
   border-radius: 5px;
   z-index: 200;
-  font-family: CoText, sans-serif;
 }
 
 .overlay {

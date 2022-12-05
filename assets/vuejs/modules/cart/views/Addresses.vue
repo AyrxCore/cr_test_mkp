@@ -1,15 +1,15 @@
 <template>
   <CartPage :selected-tab="tab">
     <template #left-side>
-      <div class="text-cotext">
+      <div class="">
         <h3 class="primary mb-1 text-[35px]">Adresses</h3>
       </div>
-      <div class=" w-full inline-flex bg-white p-5 text-cotext rounded-md items-center">
+      <div class="w-full inline-flex bg-white p-5  rounded-md items-center">
         <label class="text-gray-500 flex-none">Référence de votre commande:</label>
         <input type="text" name="reference" class="rounded-md border border-gray-300 ml-2 w-full"/>
       </div>
       <div class="grid grid-cols-2 gap-2 mt-5">
-        <div class="text-cotext">
+        <div class="">
           <h3 class="primary mb-5 text-[25px]">
             Adresse de facturation
           </h3>
@@ -17,7 +17,7 @@
             <span>QANTIS, 185 allée des Cyprès, 69760 LIMONEST, FRANCE</span>
           </div>
         </div>
-        <div class="text-cotext">
+        <div class="">
           <h3 class="primary mb-5 text-[25px]">
             Adresse de livraison
           </h3>
@@ -50,10 +50,10 @@
         </template>
       </CartRightSideComponent>
       <div class="grid grid-cols-4 gap-x-16 mt-5">
-        <div class="text-cotext p-5 bg-white rounded-lg items-center m-auto h-14">
+        <div class="p-5 bg-white rounded-lg items-center m-auto h-14">
           <CbIconComponent />
         </div>
-        <div class="text-cotext p-5 bg-white rounded-lg items-center m-auto h-14">
+        <div class="p-5 bg-white rounded-lg items-center m-auto h-14">
           <SepaIconComponent />
         </div>
       </div>

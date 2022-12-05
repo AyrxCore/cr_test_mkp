@@ -1,6 +1,6 @@
 <template>
   <nav class="bg-grey-light w-full rounded-md text-xs">
-    <ol class="list-reset text-cotext flex text-xs">
+    <ol class="list-reset flex text-xs">
       <li><a href="/app/home" class="text-gray-400">Accueil</a></li>
       <ChevronRightIconComponent
         class="mx-1 h-4 w-4 text-gray-500"

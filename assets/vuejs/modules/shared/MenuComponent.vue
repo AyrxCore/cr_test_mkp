@@ -14,7 +14,7 @@
           <a href="#" class="font-bold hover:bg-gray-200"
             >Voir toutes les catégories</a
           >
-          <hr class="border-b-{primary}-700 mx-auto mt-1 mb-1 w-[95%] border" />
+          <hr class="mx-auto mt-1 mb-1 w-[95%] border border-b-primary" />
           <div
             v-for="(categorie, id) in listCategories"
             :key="id"
@@ -23,7 +23,8 @@
             <a href="#" class="items-center hover:bg-gray-200">
               <span class="-mt-2">{{ categorie }}</span>
               <ChevronRightIconComponent
-                class="primary float-right -mt-2 text-lg"
+                class="float-right -mt-2 text-lg text-primary"
+                :stroke-color="'#050056'"
               />
             </a>
           </div>
@@ -38,7 +39,7 @@
     <div v-for="(menu, id) in listMenu" :key="id" class="flex px-2">
       <a
         href="#"
-        class="text-cotext hover:border-b-2 hover:border-purple-600"
+        class="hover:border-b-2 hover:border-purple-600"
         >{{ menu }}</a
       >
     </div>

@@ -5,7 +5,7 @@
   <template v-if="!userAccounts.length">
     <form @submit.prevent="loginSubmit">
       <div class="mt-3">
-        <h1 class="primary text-xl font-bold">Bonjour</h1>
+        <h1 class="text-primary text-xl font-bold">Bonjour</h1>
         <div class="gray mt-3">Déjà adhérent ? Connectez-vous ici</div>
       </div>
       <div class="mb-3 mt-3">
@@ -41,13 +41,13 @@
         >
       </div>
       <div class="mt-3 flex justify-end">
-        <DefaultButton
+        <ButtonComponent
             type="submit"
             :is-loading="isLoading"
             :disabled="isLoading"
         >
           Me connecter
-        </DefaultButton>
+        </ButtonComponent>
       </div>
     </form>
   </template>
@@ -73,7 +73,7 @@ import { onMounted, ref, watch } from 'vue'
 import { useUserStore } from '@/vuejs/stores/user'
 
 import { useAlertStore } from '@/vuejs/stores/alert'
-import DefaultButton from '@/vuejs/modules/shared/GradientButtonComponent.vue'
+import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
 
 const username = ref<string>('')

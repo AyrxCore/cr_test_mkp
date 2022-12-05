@@ -1,6 +1,6 @@
 <template>
   <button
-    class="default-button-gradient mb-2 flex items-center rounded-full px-5 py-2.5 text-center text-sm font-medium text-white hover:from-purple-500 hover:to-purple-500"
+    class="default-button-gradient mb-2 flex items-center rounded-full px-5 py-1.5 text-center text-sm font-medium text-white hover:from-purple-500 hover:to-purple-500"
     :type="props.type"
     :class="{ 'button-no-click': isLoading }"
     @click="onClick"

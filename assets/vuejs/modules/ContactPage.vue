@@ -1,7 +1,7 @@
 <template>
   <BaseTemplate title="Qantis - MarketPlace">
     <div
-      class="xs:w-[100%] text-cotext m-auto my-4 max-w-screen-2xl flex-1 sm:px-8"
+      class="xs:w-[100%]  m-auto my-4 max-w-screen-2xl flex-1 sm:px-8"
     >
       <breadcrumb-shared-component :current-page="'Contact'" />
       <div class="w-[100%] max-w-screen-2xl">
@@ -13,7 +13,7 @@
         18h</span
       >
       <div
-        class="text-cotext m-auto my-2 mt-14 grid w-[100%] max-w-screen-2xl grid-cols-3 gap-4"
+        class="m-auto my-2 mt-14 grid w-[100%] max-w-screen-2xl grid-cols-3 gap-4"
       >
         <!-- Bloc text actualité -->
         <div class="grid grid-rows-2 border-r-2 border-gray-300 pr-[5.5rem]">
@@ -136,7 +136,7 @@
         <div class="mt-5 flex">
           <div class="w-[40%]">
             <div
-              class="text-cotext text-cotext inline-flex h-[191px] w-[100%] rounded-lg bg-white p-7"
+              class=" inline-flex h-[191px] w-[100%] rounded-lg bg-white p-7"
             >
               <div class="m-auto w-[25%] rounded-full border">
                 <img

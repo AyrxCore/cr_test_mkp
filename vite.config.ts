@@ -27,22 +27,7 @@ if (process.env.NODE_ENV === 'production') {
 export default defineConfig({
   root: './assets',
   base: '/assets/',
-  plugins: [
-    twigRefreshPlugin,
-    vue(),
-    viteStaticCopy({
-      targets: [
-        {
-          src: 'img/*',
-          dest: 'img',
-        },
-        {
-          src: 'fonts/*',
-          dest: 'fonts',
-        },
-      ],
-    }),
-  ],
+  plugins: [twigRefreshPlugin, vue()],
   server: {
     port: 3003,
     watch: {
