@@ -23,8 +23,7 @@ onMounted(() => {})
 
 <style lang="postcss">
 body {
-  font-family: 'Roboto', sans-serif;
-  @apply min-h-screen bg-gradient-to-b from-gray-100 to-gray-300;
+  font-family: 'CoText';
   background: #f2f0f6;
 }
 </style>

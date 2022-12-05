@@ -12,9 +12,9 @@
       >
         {{order.statut.name}}
       </div>
-      <div class=" mt-14">
+      <div class="mt-14">
         <a href="#" class="underline decoration-2 underline-offset-4 hover:decoration-purple-600 inline-flex items-center">
-          Voir le détail de la commade
+          Voir le détail de la commande
           <ArrowRightIconComponent :stroke-color="'#5E6875'" class="ml-2"/>
         </a>
       </div>

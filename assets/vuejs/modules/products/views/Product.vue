@@ -49,15 +49,15 @@
 
         <!-- Bloc détails produit -->
         <div>
-          <div class="text-cotext h-[658px] rounded-lg bg-white p-7">
-            <h3 class="primary text-[35px]">{{ product.name }}</h3>
+          <div class="h-[658px] rounded-lg bg-white p-7">
+            <h3 class="text-[35px] text-primary">{{ product.name }}</h3>
             <h4 class="mb-1.5 text-lg font-bold text-gray-500">
               Vendu par : <span class="uppercase">{{ product.partner }}</span>
             </h4>
             <span class="text-lg text-gray-500"
               >Référence : {{ product.reference }}
             </span>
-            <div class="text-cotext mt-14">
+            <div class="mt-14">
               <div>
                 <span class="text-lg text-gray-500 line-through"
                   >{{ product.priceReduce }}€ HT
@@ -67,11 +67,11 @@
                   >{{ product.percent }}%</span
                 >
               </div>
-              <div class="primary mt-3 text-[25px] font-bold">
+              <div class="mt-3 text-[25px] font-bold text-primary">
                 {{ product.price }}€ HT
               </div>
             </div>
-            <div class="text-cotext mt-12">
+            <div class="mt-12">
               <div class="inline-flex items-center text-gray-500">
                 <span class="text-lg text-gray-500">Quantité</span>
                 <select
@@ -106,23 +106,20 @@
                 </div>
               </div>
             </div>
-            <DefaultButtonComponent
-              type="button"
-              class="mt-14 w-[50%] justify-center text-center"
-            >
+            <ButtonComponent class="button-gradient mt-14 w-[50%]">
               <ShoppingCartIconComponent class="mr-2 w-4" /> Ajouter
-            </DefaultButtonComponent>
+            </ButtonComponent>
           </div>
-          <div class="text-cotext mt-[25px] h-[auto] rounded-lg bg-white p-7">
-            <h3 class="primary text-[35px]">Livraison et retour</h3>
-            <ul class="text-cotext list-disc text-gray-500">
+          <div class="mt-[25px] h-[auto] rounded-lg bg-white p-7">
+            <h3 class="text-[35px] text-primary">Livraison et retour</h3>
+            <ul class="list-disc text-gray-500">
               <li v-for="i in 3" :key="i" class="mt-1 ml-7 text-lg">
                 Curabitur ac sem at enim convallis consectetur quis sed urabitur
               </li>
             </ul>
           </div>
           <div
-            class="text-cotext text-cotext mt-[20px] inline-flex h-[158px] w-[100%] rounded-lg bg-white p-7"
+            class="mt-[20px] inline-flex h-[158px] w-[100%] rounded-lg bg-white p-7"
           >
             <div class="w-[20%]">
               <img
@@ -132,7 +129,7 @@
               />
             </div>
             <div class="w-[80%]">
-              <h3 class="primary text-[25px]">
+              <h3 class="text-[25px] text-primary">
                 Besoin d'aide pour votre commande ?
               </h3>
               <a
@@ -153,8 +150,8 @@
 
       <!-- Bloc description -->
       <div class="mt-10 justify-center">
-        <h3 class="primary home-subtitle mb-5">Description</h3>
-        <p class="text-cotext text-lg text-gray-500">
+        <h3 class="home-subtitle mb-5 text-primary">Description</h3>
+        <p class="text-lg text-gray-500">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ac
           sem at enim convallis consectetur quis sed diam. Curabitur consequat
           sagittis tempus. Nulla mollis felis erat, non tincidunt ligula mattis
@@ -164,20 +161,20 @@
           justo.
         </p>
         <div class="mt-[60px] flex">
-          <div class="text-cotext mr-2 h-[180px] rounded-lg bg-white p-7">
-            <h3 class="primary inline-flex text-[25px]">
+          <div class="mr-2 h-[180px] rounded-lg bg-white p-7">
+            <h3 class="inline-flex text-[25px] text-primary">
               Certifications et éco-label
               <LeafIconComponent class="ml-2 items-center" />
             </h3>
-            <ul class="text-cotext list-disc text-gray-500">
+            <ul class="list-disc text-gray-500">
               <li v-for="i in 3" :key="i" class="mt-1 ml-7 text-lg">
                 Curabitur ac sem at enim convallis consectetur
               </li>
             </ul>
           </div>
-          <div class="text-cotext h-[180px] rounded-lg bg-white p-7">
-            <h3 class="primary text-[25px]">Documentation</h3>
-            <ul class="text-cotext list-disc text-gray-500">
+          <div class="h-[180px] rounded-lg bg-white p-7">
+            <h3 class="text-[25px] text-primary">Documentation</h3>
+            <ul class="list-disc text-gray-500">
               <li
                 v-for="(doc, key) in documentation"
                 :key="key"
@@ -193,13 +190,15 @@
 
       <!-- Bloc Caractéristiques techniques -->
       <div class="mt-10 justify-center">
-        <h3 class="primary home-subtitle mb-5">Caractéristiques techniques</h3>
+        <h3 class="home-subtitle mb-5 text-primary">
+          Caractéristiques techniques
+        </h3>
         <table class="w-full table-auto border bg-white p-8">
           <tbody>
             <tr
               v-for="(caracteristique, key) in product.caracteristiques"
               :key="key"
-              class="text-cotext primary border text-lg"
+              class="border text-lg text-primary"
             >
               <td class="w-[20%] border p-2">{{ caracteristique.name }}</td>
               <td class="p-2">{{ caracteristique.value }}</td>
@@ -211,7 +210,7 @@
 
       <!-- Bloc produits similaire -->
       <div class="mt-10 justify-center">
-        <h3 class="primary home-subtitle">Produits similaires</h3>
+        <h3 class="home-subtitle text-primary">Produits similaires</h3>
         <CarouselListSharedComponent
           class="mx-auto mt-2 items-center rounded-xl px-[50px!important]"
         >
@@ -234,7 +233,7 @@ import { ref } from 'vue'
 import { SwiperSlide } from 'swiper/vue'
 import ProductComponent from '@/vuejs/modules/products/components/ProductComponent.vue'
 import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
-import DefaultButtonComponent from '@/vuejs/modules/shared/GradientButtonComponent.vue'
+import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
 import ArrowRigntIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import LeafIconComponent from '@/vuejs/modules/shared/icon/LeafIconComponent.vue'

@@ -1,13 +1,13 @@
 <template>
   <div
-    class="text-cotext mx-auto h-full items-center bg-white "
+    class="mx-auto h-full items-center bg-white "
   >
     <div class="flex mb-1 w-full">
       <div class="w-[2%] ml-2">
         <input type="checkbox" name="select_product" />
       </div>
       <div class="w-[13%]">
-        <img :src="product.img" alt="Image produit" class=" h-[116px] w-[190px] ml-2"/>
+        <img :src="product.img" alt="Image produit" class="h-[116px] w-[190px] ml-2"/>
       </div>
       <div class="w-[45%] ml-2">
         <h3 class="primary text-[22px] font-bold">{{ product.name }}</h3>

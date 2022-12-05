@@ -1,6 +1,6 @@
 <template>
   <BaseTemplate title="Qantis - MarketPlace">
-    <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 sm:px-8 text-cotext">
+    <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 sm:px-8 ">
       <breadcrumb-shared-component :current-page="'Mon compte'" />
       <div class="w-[100%] max-w-screen-2xl">
         <ContactUsButtonComponent />

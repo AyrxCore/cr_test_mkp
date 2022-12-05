@@ -2,13 +2,13 @@
   <div id="search-autocomplete" ref="wrapper" class="flex w-full">
     <input
       v-model="query"
-      class="text-cotext w-full rounded-l-md border-gray-300 px-5 pl-12 text-gray-500"
+      class="w-full rounded-l-md border-gray-300 px-5 pl-12 text-gray-500"
       name="search"
       :placeholder="props.placeholder"
       :type="props.type"
     />
     <button
-      class="text-cotext flex items-center rounded-r-md px-3 py-1 text-white hover:opacity-75"
+      class="flex items-center rounded-r-md px-3 py-1 text-white hover:opacity-75"
       :class="btnColor"
     >
       <slot />

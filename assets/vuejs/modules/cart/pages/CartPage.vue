@@ -10,7 +10,7 @@
           <div
               v-for="(tab, key) in tabs"
               :key="key"
-              class="px-3 text-lg text-gray-500 text-cotext border-b-2 border-gray-300 hover:border-b-2 hover:border-purple-500"
+              class="px-3 text-lg text-gray-500  border-b-2 border-gray-300 hover:border-b-2 hover:border-purple-500"
               :class="{'border-b-2 border-purple-500': tab.id === selectedTab.value}"
           >
             <a :href="tab.url" :class="{'primary': tab.id === selectedTab.value}">{{tab.name}}</a>

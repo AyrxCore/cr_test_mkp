@@ -15,7 +15,20 @@ module.exports = {
     ],
   },
   theme: {
-
+    extend: {
+      // here's how to extend fonts if needed
+      fontFamily: {
+        sans: [...defaultTheme.fontFamily.sans],
+      },
+      colors: {
+        primary: '#050056',
+        secondary: '#9553ff',
+        tertiary: '#0bb0fa',
+        'gradient-1': '#404fe6',
+        'gradient-2': '#00c7ff',
+        // gray: '#5e6875',
+      },
+    },
   },
   plugins: [
     require('@tailwindcss/aspect-ratio'),

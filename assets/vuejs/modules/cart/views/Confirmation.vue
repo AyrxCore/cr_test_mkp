@@ -1,7 +1,7 @@
 <template>
   <CartPage :selected-tab="tab">
     <template #left-side>
-      <div class="text-cotext">
+      <div class="">
         <h3 class="primary mb-1 text-[35px]">Merci pour votre commande !</h3>
         <p class="primary text-[25px]">Commande N° XXX</p>
         <p class="text-gray-500 text-lg">Créée le 01/01/01</p>

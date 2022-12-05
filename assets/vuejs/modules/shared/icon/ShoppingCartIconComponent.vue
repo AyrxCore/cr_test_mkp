@@ -8,12 +8,3 @@
 </template>
 
 <script lang="ts" setup></script>
-
-<style lang="postcss">
-.loader {
-  @apply h-5 w-5 animate-spin;
-  &.loader-xl {
-    @apply h-14 w-14;
-  }
-}
-</style>

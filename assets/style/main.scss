@@ -1,31 +1,17 @@
 @import 'node_modules/tailwindcss/base';
 @import 'node_modules/tailwindcss/components';
 @import 'node_modules/tailwindcss/utilities';
-@import url('https://fonts.cdnfonts.com/css/roboto');
 @import '_variables';
 
 @font-face {
   font-family: 'CoText';
-  src: url('../fonts/CoTextCorp-Regular.woff2') format('woff2'),
-  url('../fonts/CoTextCorp-Regular.woff') format('woff'),
-  url('../fonts/CoTextCorp-Regular.ttf') format('truetype');
-}
-
-
-.header {
-  background-color: $primary;
-}
-
-.text-cotext {
-  font-family: CoText, sans-serif;
+  src: url('/fonts/CoTextCorp-Regular.woff2') format('woff2'),
+    url('/fonts/CoTextCorp-Regular.woff') format('woff'),
+    url('/fonts/CoTextCorp-Regular.ttf') format('truetype');
 }
 
 .bg-qantis {
   background-color: $primary;
-}
-
-.decoration-primary {
-  text-decoration-color: $primary;
 }
 
 .secondary {
@@ -38,21 +24,6 @@
 
 .gray {
   color: $gray;
-}
-
-.b-goToPage {
-  position: fixed;
-  top: 10rem;
-  right: 0px;
-  z-index: 100;
-  width: 30px;
-  backgroundColor: red;
-}
-
-.b-goToPage button {
-  font-size: 10px;
-  width: 30px;
-  background-color: red;
 }
 
 .swiper-slide img {

@@ -4,7 +4,7 @@
       <input type="checkbox" name="select_product" />
     </div>
     <div class="w-2/12 mx-auto">
-      <img :src="product.img" alt="Image produit" class=" h-[116px] ml-2"/>
+      <img :src="product.img" alt="Image produit" class="h-[116px] ml-2"/>
     </div>
     <div class="w-8/12">
       <h3 class="primary text-[22px] font-bold">{{ product.name }}</h3>

@@ -1,5 +1,5 @@
 <template>
-  <div class="text-cotext p-5 bg-white rounded-lg">
+  <div class="p-5 bg-white rounded-lg">
     <h3 class="primary mb-5 text-[25px]">
       <slot name="title"/>
     </h3>

@@ -36,13 +36,17 @@ class ViteAssetExtension extends AbstractExtension
 
     public function assetDev(string $entry, array $deps): string
     {
+        if (in_array('static', $deps)) {
+            return "http://localhost:3003/assets/{$entry}";
+        }
+
         $html = <<<HTML
-            <script type="module" src="http://localhost:3003/assets/@vite/client"></script>
-        HTML;
+                <script type="module" src="http://localhost:3003/assets/@vite/client"></script>
+            HTML;
 
         $html .= <<<HTML
-            <script type="module" src="http://localhost:3003/assets/{$entry}" defer></script>
-        HTML;
+                <script type="module" src="http://localhost:3003/assets/{$entry}" defer></script>
+            HTML;
 
         return $html;
     }

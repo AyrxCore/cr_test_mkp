@@ -31,7 +31,7 @@
       <h3 class="primary mb-2 text-[25px]">Autres adresses</h3>
       <div class="py-3 px-3 grid bg-white rounded-lg flex text-gray-500 mb-8 ">
         <div class="flex justify-between">
-          <div class="inline-flex bg-white text-cotext rounded-md w-full">
+          <div class="inline-flex bg-white  rounded-md w-full">
               <label class="text-gray-500 flex-none">Recherche:</label>
               <input v-model="searchQuery" type="text"  name="query" class="rounded-md border border-gray-300 ml-2 w-3/6 h-[27px]"/>
           </div>

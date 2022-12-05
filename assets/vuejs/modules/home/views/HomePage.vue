@@ -1,9 +1,9 @@
 <template>
   <BaseTemplate title="Qantis - MarketPlace">
     <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 sm:p-8">
-      <div CLASS="flex md:justify-between text-cotext mt-7">
+      <div class="mt-7 flex md:justify-between">
         <div class="sm:w-[100%] md:w-[52rem]">
-          <h3 class="primary home-title">
+          <h3 class="home-title text-primary">
             Bienvenue sur la
             <span
               class="bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-500 bg-clip-text text-transparent"
@@ -19,11 +19,13 @@
             disposition pour répondre à toutes vos questions.
           </p>
         </div>
-        <purple-button-component class="rounded-full">
-          <MailIconLightComponent class="mr-1" />
-          <PhoneLightIconComponent class="mr-1" />
-          Contactez-nous
-        </purple-button-component>
+        <div>
+          <ButtonComponent class="button-secondary">
+            <MailIconLightComponent />
+            <PhoneLightIconComponent />
+            Contactez-nous
+          </ButtonComponent>
+        </div>
       </div>
       <div class="flex justify-center">
         <CarouselListSharedComponent
@@ -42,8 +44,8 @@
         </CarouselListSharedComponent>
       </div>
       <div class="mt-10 w-[45rem]">
-        <h3 class="primary home-subtitle">Notre sélection pour vous</h3>
-        <p class="text-cotext text-lg text-gray-400">
+        <h3 class="home-subtitle text-primary">Notre sélection pour vous</h3>
+        <p class="text-lg text-gray-400">
           Savez-vous que vous pouvez désormais acheter ces produits en quelques
           clics ?
         </p>
@@ -61,8 +63,8 @@
         </CarouselListSharedComponent>
       </div>
       <div class="mt-10 w-[45rem]">
-        <h3 class="primary home-subtitle">Top ventes</h3>
-        <p class="text-cotext text-lg text-gray-400">
+        <h3 class="home-subtitle text-primary">Top ventes</h3>
+        <p class="text-lg text-gray-400">
           D'autres adhérents ont déjà acheté ces produits
         </p>
       </div>
@@ -78,10 +80,10 @@
       </div>
 
       <div class="mt-10">
-        <h3 class="primary home-subtitle">
+        <h3 class="home-subtitle text-primary">
           Les accords-cadres incontournables
         </h3>
-        <p class="text-cotext text-lg text-gray-400">
+        <p class="text-lg text-gray-400">
           Etes-vous certains de profiter des touts les économies incluses dans
           votre adhésion ?
         </p>
@@ -102,7 +104,7 @@
                   class="mx-auto h-[auto!important] w-[340px!important]"
                 />
               </div>
-              <p class="text-cotext mt-1 text-left text-lg text-white">
+              <p class="mt-1 text-left text-lg text-white">
                 Découvrez ou téléchargez les conditions négociées de ce
                 partenaire
               </p>
@@ -119,8 +121,8 @@
         </CarouselListSharedComponent>
       </div>
       <div class="mt-10">
-        <h3 class="primary home-subtitle">Nos partenaires fournisseurs</h3>
-        <p class="text-cotext text-lg text-gray-400">
+        <h3 class="home-subtitle text-primary">Nos partenaires fournisseurs</h3>
+        <p class="text-lg text-gray-400">
           Plus de 200 partenaires fournisseurs, repartis en 26 catégories, sont
           référencés pour vos achats.
         </p>
@@ -140,12 +142,12 @@
       </CarouselListSharedComponent>
 
       <div class="mt-16 text-center">
-        <h3 class="primary text-cotext text-[35px] font-bold">
+        <h3 class="text-[35px] font-bold text-primary">
           Nos catégories de produits et d'accords-cadres
         </h3>
       </div>
       <div
-        class="text-cotext mt-5 inline-block flex w-[100%] text-center text-lg flex-wrap justify-center"
+        class="mt-5 flex w-[100%] text-center text-lg flex-wrap justify-center"
       >
         <div
           v-for="(categorie, id) in listCategories"
@@ -160,7 +162,7 @@
     <div
       class="home-bloc-economie m-auto mt-16 h-[338px] flex-1 py-4 text-white text-cotext"
     >
-      <div class="text-center ">
+      <div class="text-center">
         <h3 class="text-[35px] font-bold">
           Vous faites des économies tout en <br />
           contribuant à votre démarche RSE
@@ -168,12 +170,13 @@
         <p class="mx-auto mt-2 w-[45%] text-lg">
           Nos adhérents réalisent en moyenne 27 % d'économies, grâce à la
           mutualisation des achats. Nous notons et référençons nos partenaires
-          fournisseurs à l’aide d’un référentiel RSE. Votre adhésion permet
+          fournisseurs à l'aide d'un référentiel RSE. Votre adhésion permet
           aussi de contribuer à la démarche RSE de votre entreprise.
         </p>
         <p class="mt-10 flex justify-center">
-          <a href="#" class="text-center items-center default-button-gradient px-3.5 py-3 flex">
-            <ArrowRightIconComponent class="mr-2" :stroke-color="'#FFFFFF'"/>  Toutes nos catégories d'achats
+
+          <a href="#" class="button button-gradient">
+            <ArrowRightIconComponent :stroke-color="'#FFFFFF'"/>  Toutes nos catégories d'achats
           </a>
         </p>
       </div>
@@ -182,7 +185,7 @@
     <div
       class="m-auto my-6 mt-10 pb-4 max-w-screen-2xl flex-1 rounded-md bg-white shadow-md"
     >
-      <div class="pt-1 text-center text-cotext flex flex-col">
+      <div class="pt-1 text-center flex flex-col">
         <h3 class="primary mt-10 text-[35px] font-bold pl-8 flex flex-col">
           <p class="flex">Contenus experts spécialement conçus</p>
           <p class="flex">pour la
@@ -205,8 +208,10 @@
               />
             </div>
             <div class="px-6 text-left">
-              <h3 class="primary text-[23px] font-bold">{{ contenu.titre }}</h3>
-              <p class="mt-5 mb-5">
+              <h3 class="text-[23px] font-bold text-primary">
+                {{ contenu.titre }}
+              </h3>
+              <p class="mt-2">
                 <a
                   href="#"
                   class="w-auto bg-purple-600 mr-2 mb-2 items-center rounded-md px-5 py-2.5 text-sm text-white"
@@ -220,7 +225,7 @@
               <div class="bottom-0">
                 <a
                   href="#"
-                  class="primary bottom-0 flex items-center text-sm font-medium underline"
+                  class="bottom-0 flex items-center text-sm font-medium text-primary underline"
                 >
                   Lire l'article
                 </a>
@@ -230,8 +235,8 @@
         </div>
         <div class="flex justify-center">
           <p class="mt-10">
-            <a href="#" class="text-white items-center default-button-gradient px-3.5 py-3 flex">
-              <ArrowRightIconComponent class="mr-2" :stroke-color="'#FFFFFF'"/> Tous les contenus experts
+            <a href="#" class="button button-gradient">
+              <ArrowRightIconComponent :stroke-color="'#FFFFFF'"/> Tous les contenus experts
             </a>
           </p>
         </div>
@@ -245,7 +250,7 @@ import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListShar
 import { getImage, listCategories } from '@/vuejs/services/utils'
 import defaultImage from '@/vuejs/assets/img/default-image.png'
 import { SwiperSlide } from 'swiper/vue'
-import PurpleButtonComponent from '@/vuejs/modules/shared/DefaultButtonComponent.vue'
+import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import ProductComponent from '@/vuejs/modules/products/components/ProductComponent.vue'
 import { ref } from 'vue'
 import imgCheville from '@/vuejs/assets/img/samples/cheville.png'

@@ -4,7 +4,7 @@
   </div>
   <form @submit.prevent="loginSubmit">
     <div class="mt-3">
-      <h1 class="primary text-xl font-bold">Bonjour Internal</h1>
+      <h1 class="text-xl font-bold text-primary">Bonjour Internal</h1>
       <div class="gray mt-3">Déjà adhérent ? Connectez-vous ici</div>
     </div>
     <div class="mb-3 mt-3">
