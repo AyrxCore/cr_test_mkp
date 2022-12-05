@@ -54,3 +54,11 @@ services:
             $adminClientId: '%uppler_admin_client_id%'
             $adminClientSecret: '%uppler_admin_client_secret%'
             $adminTokenFile: '%uppler_admin_token_file%'
+
+    App\Service\UpplerCompanyService:
+        arguments:
+            $env: '%uppler_env%'
+            $apiUrl: '%uppler_api_url%'
+            $adminClientId: '%uppler_admin_client_id%'
+            $adminClientSecret: '%uppler_admin_client_secret%'
+            $adminTokenFile: '%uppler_admin_token_file%'

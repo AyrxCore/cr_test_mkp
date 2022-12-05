@@ -17,6 +17,18 @@ export default class UserHttpClient extends BaseClientService {
       .then((response) => response.data)
   }
 
+  public getUserAccounts<T extends []>(): Promise<T> {
+    return this.apiClient
+      .get<T>('user/accounts')
+      .then((response) => response.data)
+  }
+
+  public selectUserAccount<T extends []>(id: string): Promise<T> {
+    return this.apiClient
+      .get<T>(`user/account/${id}/select`)
+      .then((response) => response.data)
+  }
+
   public getUserMe<T extends User>(): Promise<T> {
     return this.apiClient.get('user/me').then((response) => response.data)
   }

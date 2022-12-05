@@ -2,9 +2,12 @@
 
 namespace App\Controller\api;
 
+use App\Entity\Account;
 use App\Entity\User;
 use App\Service\UpplerAuthenticationService;
+use App\Service\UpplerCompanyService;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpClient\Exception\ServerException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -30,6 +33,9 @@ class UserApiController extends AbstractController
     #[Required]
     public UpplerAuthenticationService $upplerAuthenticationService;
 
+    #[Required]
+    public UpplerCompanyService $upplerCompanyService;
+
     #[Route('/me', name: 'get_me')]
     public function me(NormalizerInterface $normalizer): JsonResponse
     {
@@ -47,11 +53,44 @@ class UserApiController extends AbstractController
         return new JsonResponse($user);
     }
 
+    #[Route('/accounts')]
+    public function accounts(NormalizerInterface $normalizer): JsonResponse
+    {
+        /**@var User $user*/
+        $user = $this->getUser();
+        $accounts = [];
+        /**@var  Account $account*/
+        foreach ($user->getAccounts() as $account) {
+            $datas = $this->upplerCompanyService->getCompany($account->getUpplerCompanyId());
+            $serializeAccount = $normalizer->normalize($account, 'json', ['groups' => 'simpleUser']);
+            $serializeAccount["upplerDatas"] = $datas;
+            $accounts[] = $serializeAccount;
+        }
+        return new JsonResponse($accounts);
+    }
+
+    #[Route("/account/{id}/select")]
+    #[ParamConverter("id", Account::class)]
+    public function selectAccount(NormalizerInterface $normalizer, Account $account): JsonResponse
+    {
+        $session= $this->requestStack->getSession();
+        $session->start();
+
+        $userAuth = $this->upplerAuthenticationService->authenticateUser(
+            $account
+        );
+
+        if ($userAuth && $session->has('access_token') && !empty($session->get('access_token'))) {
+            return new JsonResponse(['status' => 'ok']);
+        }
+    }
+
     #[Route("/logout")]
     public function logout()
     {
         $response = new Response();
         $response->headers->clearCookie('BEARER','/');
+        $response->headers->clearCookie('refresh_token','/');
         return $response;
     }
 

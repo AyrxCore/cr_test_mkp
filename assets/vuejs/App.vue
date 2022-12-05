@@ -1,5 +1,4 @@
 <template>
-  {{ props.component }}
   <RouterView v-if="props.component === ''" />
   <div v-else-if="props.component === 'login'">
     <LoginForm />

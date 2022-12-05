@@ -1,5 +1,4 @@
-import {Account} from "@/vuejs/types/Account";
-
+import { Account } from '@/vuejs/types/Account'
 // Décrit l'objet user
 export interface User {
   email: string
@@ -21,4 +20,10 @@ export interface AuthenticateUserDatas {
 // décrit le bloc retourné par le back avec le token
 export interface AuthenticateResponse {
   token: string
+}
+
+export enum LoginResponse {
+  UserDisabled = 'user_disabled',
+  UserEmptyAccount = 'user_empty_account',
+  InvalidCredentials = 'Invalid credentials.',
 }

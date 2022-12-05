@@ -32,7 +32,7 @@ abstract class HttpClientProvider
 
     private string $env;
 
-    public string $adminToken;
+    public string $adminToken = '';
 
     public string $apiUrl;
 
@@ -59,15 +59,29 @@ abstract class HttpClientProvider
     // Expose la requête Http Symfony afin de centraliser tous les appels
     // isAdmin indique qu'il s'agit d'une requete en mode Admin et donc nécessité de passer le token Admin
     // wihtoutToken indique qu'il ne faut pas passer de token, uniquement valable pour le endpoint getAccessToken
-    public function request(string $method, string $url, array $options = [], $isAdmin = false, $wihthoutToken = false)
-    {
-        $this->computeHeaders($url, $options, $isAdmin, $wihthoutToken);
+    public function request(
+        string $method,
+        string $url,
+        array $options = [],
+        $isAdmin = false,
+        $whithoutToken = false
+    ) {
+
+        $origUrl = $url;
+        $origOptions = $options;
+        $this->computeHeaders($url, $options, $isAdmin, $whithoutToken);
 
         try {
+            $this->apiLogger->info("Token utilisé  " . $this->adminToken . ' endpoint ' . $url);
             $res = $this->client->request($method, $url, $options);
             if (Response::HTTP_UNAUTHORIZED === $res->getStatusCode()) {
-                $this->checkResponse($res, $method, $url, $options, $isAdmin);
+                $this->apiLogger->critical('token ' . $this->adminToken  . ' retour 401 ');
+                $this->checkResponse($res, $method, $origUrl, $origOptions, $isAdmin);
+                $this->computeHeaders($origUrl, $origOptions, $isAdmin, $whithoutToken);
+                $res = $this->client->request($method, $origUrl, $origOptions);
             }
+
+            $this->apiLogger->info($res->getStatusCode() . " requete OK url ==>  " . $url);
             return $res;
         } catch (ClientException $e) {
             $this->apiLogger->critical("Client Error " . $url . " : " .$e->getResponse()->getContent());
@@ -93,7 +107,13 @@ abstract class HttpClientProvider
         }
 
         // récupère le token admin ou user
-        $accessToken = $isAdmin ? $this->adminToken : $session->get('access_token')->access_token;
+        if ($isAdmin) {
+            $this->getAdminToken();
+            $accessToken = $this->adminToken;
+        } else {
+            $accessToken = $session->get('access_token')->access_token;
+        }
+
 
         if ('dev' === $this->env) {
             // ajoute token admin à l'url
@@ -122,25 +142,17 @@ abstract class HttpClientProvider
         ) {
             // il s'agit d'une requête admin donc on renégocie un token admin et on relance la requete
             if ($isAdmin) {
-                $this->apiLogger->warning("Admin Token " . $this->adminToken ." has expired , request for new");
                 $this->getAdminToken(true);
-                $this->request($method, $url, $options, true);
             } else {
                 // il s'agit d'un token user, on renégocie un token user,
                 // on le remplace dans le hearder et on relance la requete
                 $session = $this->requestStack->getSession();
-                $session->start();
-                if (!$session->has('user_client_id') &&
-                    !$session->has('user_client_secret')
-                ) {
-                    throw  new \Exception("client_id and/or client_secret missing, token cannot renewed");
+                if (!$session->has('account')) {
+                    throw  new \Exception("account missing, token cannot renewed");
                 }
 
-                $userUpplerCredentials = $this->getUserOauth2Credentials();
-                $accessToken = $this->getUserToken(
-                    $userUpplerCredentials["client_secret"],
-                    $userUpplerCredentials["user_client_id"]
-                );
+                $account = $session->get('account');
+                $accessToken = $this->getUserToken($account);
                 // ici le remplacement du token user
                 $options["headers"] = [
                     'Authorization' => 'Bearer ' . $accessToken
@@ -183,24 +195,6 @@ abstract class HttpClientProvider
         $this->adminToken = $token;
 
         return true;
-    }
-
-    // extrait de la session les credentials Oauth2 du user courant
-    private function getUserOauth2Credentials(): array
-    {
-        $session = $this->requestStack->getSession();
-        $session->start();
-
-        if ($session->has('user_client_id') &&
-            $session->has('user_client_secret')
-        ) {
-            return [
-              'client_secret' => $session->get('user_client_secret'),
-              'client_id' => $session->get('user_client_id')
-            ];
-        }
-
-        return [];
     }
 
     // obtient un token pour le user et le stocke en session

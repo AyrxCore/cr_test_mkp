@@ -32,7 +32,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface, FixtureGr
 
         $io->writeln("Création d'un utilisateur de test'");
 
-        //création d'un admin
+        //création d'un utilisateur lié à un seul adhérent
         $user = new User();
         $user->setEmail('m.frebet@qantis.co');
         $user->setUsername('m.frebet@qantis.co');
@@ -44,7 +44,6 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface, FixtureGr
 
         $account = new Account();
         $account->setUpplerUserId(103);
-        $account->setUpplerClientId(31);
         $account->setUpplerCompanyId(12);
         $account->setUpplerUsername('m.frebet3');
         $account->setUpplerPassword('000000');
@@ -53,6 +52,37 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface, FixtureGr
 
         $manager->persist($user);
         $manager->persist($account);
+
+        //création d'un utilisatur liés à 2 adhérents
+        $user = new User();
+        $user->setEmail('buyer@qantis.co');
+        $user->setUsername('buyer@qantis.co');
+        $user->setPassword($this->userPasswordHasher->hashPassword($user, '000000'));
+        $user->setLastName('DUPOND');
+        $user->setFirstName('Loic');
+        $user->setEnabled(false);
+
+
+        $account = new Account();
+        $account->setUpplerUserId(106);
+        $account->setUpplerCompanyId(13);
+        $account->setUpplerUsername('buyer_1');
+        $account->setUpplerPassword('000000');
+        $account->setUpplerSubAccountId(20);
+        $account->setUser($user);
+        $manager->persist($account);
+
+        $account = new Account();
+        $account->setUpplerUserId(107);
+        $account->setUpplerCompanyId(14);
+        $account->setUpplerUsername('buyer_2');
+        $account->setUpplerPassword('000000');
+        $account->setUpplerSubAccountId(21);
+        $account->setUser($user);
+        $manager->persist($account);
+
+        $manager->persist($user);
+
 
         $manager->flush();
     }

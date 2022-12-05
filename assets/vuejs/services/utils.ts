@@ -31,7 +31,7 @@ export const listCategories = ref<string[]>([
   'Formation',
   'Fournitures de bureau',
   'Gestion des déchets',
-  "Hygiène et produits d'entretien",
+  'Hygiène et produits d\'entretien',
   'Informatique et burautique',
   'Location de matériels',
   'Matériaux',

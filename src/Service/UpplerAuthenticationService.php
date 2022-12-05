@@ -91,8 +91,7 @@ class UpplerAuthenticationService extends HttpClientProvider
             $this->apiUrl . 'v1/buyer/profile/' . $account->getUpplerCompanyId() . '?expand[]=address'
         );
         if (Response::HTTP_OK === $res->getStatusCode()) {
-
-           return json_decode($res->getContent());
+            return json_decode($res->getContent());
         }
 
         return null;

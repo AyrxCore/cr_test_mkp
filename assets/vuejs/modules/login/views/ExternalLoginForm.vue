@@ -2,53 +2,70 @@
   <div v-if="alertStore.show">
     <AlertSharedComponent />
   </div>
-  <form @submit.prevent="loginSubmit">
-    <div class="mt-3">
-      <h1 class="primary text-xl font-bold">Bonjour</h1>
-      <div class="gray mt-3">Déjà adhérent ? Connectez-vous ici</div>
-    </div>
-    <div class="mb-3 mt-3">
-      <input
-        v-model="username"
-        type="email"
-        class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-        placeholder="Adresse e-mail"
-        required
-      />
-    </div>
-    <div class="mb-3 mt-3">
-      <input
-        v-model="password"
-        type="password"
-        placeholder="Mot de passe"
-        class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-        required
-      />
-    </div>
-    <div class="mb-3 mt-3 flex items-start">
-      <div class="flex h-5 items-center">
+  <template v-if="!userAccounts.length">
+    <form @submit.prevent="loginSubmit">
+      <div class="mt-3">
+        <h1 class="primary text-xl font-bold">Bonjour</h1>
+        <div class="gray mt-3">Déjà adhérent ? Connectez-vous ici</div>
+      </div>
+      <div class="mb-3 mt-3">
         <input
-          type="checkbox"
-          value=""
-          class="focus:ring-3 h-4 w-4 rounded border border-gray-300 bg-gray-50 focus:ring-blue-300"
+            v-model="username"
+            type="email"
+            class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm
+             text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+            placeholder="Adresse e-mail"
+            required
         />
       </div>
-      <label
-        for="remember"
-        class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-        >Mot de passe oublié ?</label
-      >
+      <div class="mb-3 mt-3">
+        <input
+            v-model="password"
+            type="password"
+            placeholder="Mot de passe"
+            class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm
+             text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+            required
+        />
+      </div>
+      <div class="mb-3 mt-3 flex justify-between">
+        <a
+            href="#"
+            class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+        >Mot de passe oublié</a
+        >
+        <a
+            href="#"
+            class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+        >Première connexion</a
+        >
+      </div>
+      <div class="mt-3 flex justify-end">
+        <DefaultButton
+            type="submit"
+            :is-loading="isLoading"
+            :disabled="isLoading"
+        >
+          Me connecter
+        </DefaultButton>
+      </div>
+    </form>
+  </template>
+  <template v-else>
+    <div>
+      <h3 class="primary home-subtitle">Veuillez sélectionner le compte acheteur avec lequel vous souhaitez être connecté</h3>
     </div>
-    <div class="mt-3 flex justify-end">
+    <div v-for="(account, id) in userAccounts" :key="id">
       <DefaultButton
-          type="submit"
+          class="text-cotext w-auto bg-purple-600 mr-2 mb-2 items-center rounded-md px-5 py-2.5 text-sm text-white"
           :is-loading="isLoading"
           :disabled="isLoading"
+          @click="onAccountClick(account)"
       >
-        Me connecter
+        {{account.upplerDatas.name}}
       </DefaultButton>
     </div>
-  </form>
+  </template>
 </template>
 <script lang="ts" setup>
 import { onMounted, ref, watch } from 'vue'
@@ -61,16 +78,26 @@ import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vu
 
 const username = ref<string>('')
 const password = ref<string>('')
+const userAccounts = ref<string[]>([])
 const isLoading = ref<boolean>(false)
 const userStore = useUserStore()
 const alertStore = useAlertStore()
 
 const loginSubmit = async () => {
   isLoading.value = true
-  await userStore.authenticate(
-    { username: username.value, password: password.value },
-    true,
+  const accounts = await userStore.authenticate(
+    { username: username.value, password: password.value }
   )
+  accounts.length > 1
+  ? userAccounts.value =  accounts
+  : (document.location.href = '/app/home')
+  isLoading.value = false
+}
+
+const onAccountClick = async(account) => {
+  isLoading.value = true
+  const select = await userStore.selectUserAccount(account.id)
+  select &&(document.location.href = '/app/home')
   isLoading.value = false
 }
 </script>
