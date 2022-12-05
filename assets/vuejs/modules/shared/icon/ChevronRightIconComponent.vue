@@ -10,7 +10,7 @@
     stroke-linecap="round"
     stroke-linejoin="round"
   >
-    <polyline points="9 18 15 12 9 6"></polyline>
+    <polyline points="0 18 8 12 0 6"></polyline>
   </svg>
 </template>
 

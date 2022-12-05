@@ -17,17 +17,12 @@
           </div>
         </div>
         <div class="grid grid-cols-4 gap-4 mt-10">
-          <!-- Bloc détails panier -->
           <div class="col-span-3">
             <slot name="left-side" />
           </div>
-          <!-- Fin Bloc  détails panier -->
-
-          <!-- Bloc récapitulatif -->
           <div class="rounded-lg">
             <slot name="right-side" />
           </div>
-          <!-- Fin Bloc récapitulatif -->
         </div>
 
       </div>

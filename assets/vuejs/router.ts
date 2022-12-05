@@ -19,6 +19,11 @@ import {
   routes as cartRoutes,
 } from '@/vuejs/modules/cart/routerCart'
 
+import {
+  AccountPageList,
+  routes as accountRoutes,
+} from '@/vuejs/modules/account/routerAccount'
+
 import Home from '@/vuejs/modules/home/views/HomePage.vue'
 import Contact from '@/vuejs/modules/ContactPage.vue'
 import { useUserStore } from '@/vuejs/stores/user'
@@ -34,6 +39,7 @@ export const PageList = {
   ...ProductPageList,
   ...ActualitesPageList,
   ...CartPageList,
+  ...AccountPageList,
 }
 
 const routes: RouteRecordRaw[] = [
@@ -51,6 +57,7 @@ const routes: RouteRecordRaw[] = [
   ...productsRoutes,
   ...actualitesRoutes,
   ...cartRoutes,
+  ...accountRoutes,
 ]
 
 const router = createRouter({
