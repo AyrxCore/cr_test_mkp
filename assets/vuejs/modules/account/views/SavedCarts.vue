@@ -30,7 +30,7 @@ import { AccountPageList } from '@/vuejs/modules/account/routerAccount'
 import SavedCartComponent from '@/vuejs/modules/account/components/SavedCartComponent.vue';
 
 const tab = computed(() => {
-  return AccountPageList.FAVORIS_LIST
+  return AccountPageList.SAVED_CARTS
 })
 
 const listSavedCarts = computed(() => {
