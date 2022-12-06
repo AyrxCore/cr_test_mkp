@@ -36,9 +36,9 @@ const onClick = ($event: PointerEvent): void => {
 
 <style lang="postcss">
 .button {
-  @apply flex h-12 items-center justify-center rounded-full px-8 py-4 text-sm text-white;
+  @apply flex h-12 flex-nowrap items-center justify-center overflow-hidden whitespace-nowrap rounded-full px-8 py-4 text-sm text-white;
   &:hover:not(:disabled):not(:focus) {
-    @apply bg-secondary shadow-[0_0_20px_0] shadow-secondary bg-none;
+    @apply bg-secondary bg-none shadow-[0_0_20px_0] shadow-secondary;
   }
   &:focus:not(:disabled) {
     @apply bg-primary bg-none;
@@ -51,6 +51,20 @@ const onClick = ($event: PointerEvent): void => {
   }
   &-gradient {
     @apply bg-gradient-to-r from-secondary via-gradient-1 to-gradient-2;
+  }
+  &-white {
+    @apply bg-white text-primary;
+    &:hover:not(:disabled):not(:focus) {
+      @apply bg-secondary text-white;
+      svg,
+      path {
+        @apply stroke-white;
+      }
+    }
+    svg,
+    path {
+      @apply stroke-primary;
+    }
   }
 
   svg {

@@ -9,7 +9,7 @@
     :navigation="navigation"
     :pagination="pagination"
     :slides-per-view="slidesPerPerView"
-    class="mx-auto items-center text-center"
+    class="mx-auto"
     @swiper="emit('on-swipe')"
     @slide-change="emit('on-slide-change')"
   >
