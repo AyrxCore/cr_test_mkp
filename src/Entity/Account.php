@@ -55,6 +55,9 @@ class Account
     #[ORM\JoinColumn(nullable: false)]
     private ?User $_user = null;
 
+    #[ORM\Column]
+    private ?bool $isEnabled = null;
+
     #[ORM\PrePersist]
     public function onPrePersist()
     {
@@ -201,6 +204,18 @@ class Account
     public function setUser(?User $_user): self
     {
         $this->_user = $_user;
+
+        return $this;
+    }
+
+    public function isIsEnabled(): ?bool
+    {
+        return $this->isEnabled;
+    }
+
+    public function setIsEnabled(bool $isEnabled): self
+    {
+        $this->isEnabled = $isEnabled;
 
         return $this;
     }

@@ -24,6 +24,7 @@ export const useUserStore = defineStore({
             getErrorMessage(error.response.data.message),
             AlertType.danger,
           )
+        return []
       }
     },
     async selectUserAccount(id: string): Promise<boolean> {

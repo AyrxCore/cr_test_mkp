@@ -10,6 +10,10 @@ parameters:
     uppler_admin_client_secret: '%env(UPPLER_ADMIN_CLIENT_SECRET)%'
     #fichier qui stocke le token admin en cours
     uppler_admin_token_file: '%kernel.project_dir%/var/'
+    #ttl entre 2 essais de reinit de password en minutes
+    retry_ttl: 120
+    #Expéditeur des mails
+    mail_from: '%env(MAIL_FROM)%'
 services:
     # default configuration for services in *this* file
     _defaults:

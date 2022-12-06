@@ -65,6 +65,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $isEnabled = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $confirmation_token = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $password_requested_at = null;
+
     public function __construct()
     {
         $this->accounts = new ArrayCollection();
@@ -277,6 +283,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEnabled(bool $isEnabled): self
     {
         $this->isEnabled = $isEnabled;
+
+        return $this;
+    }
+
+    public function getConfirmationToken(): ?string
+    {
+        return $this->confirmation_token;
+    }
+
+    public function setConfirmationToken(?string $confirmation_token): self
+    {
+        $this->confirmation_token = $confirmation_token;
+
+        return $this;
+    }
+
+    public function getPasswordRequestedAt(): ?\DateTimeInterface
+    {
+        return $this->password_requested_at;
+    }
+
+    public function setPasswordRequestedAt(?\DateTimeInterface $password_requested_at): self
+    {
+        $this->password_requested_at = $password_requested_at;
 
         return $this;
     }

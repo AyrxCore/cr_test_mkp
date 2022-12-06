@@ -8,7 +8,18 @@
     {% endblock %}
 </head>
 <body class="bg-white">
+{% set types = {'success':'green','info':'blue', 'warning':'yellow', 'danger':'red'} %}
 {{ include('_partials/_header.html.twig') }}
+{% set messages = app.flashes %}
+{% if messages | length %}
+    <div class="m-auto w-1/2 mt-2">
+        {% for type, message in messages %}
+            <div class="p-4 mb-4 text-sm text-{{ types[type] }}-700 bg-{{ types[type] }}-100 rounded-lg" role="alert">
+                {{ message[0] }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
 {% block body %}
 
 {% endblock %}

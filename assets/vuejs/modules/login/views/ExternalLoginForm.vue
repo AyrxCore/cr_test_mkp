@@ -30,7 +30,7 @@
       </div>
       <div class="mb-3 mt-3 flex justify-between">
         <a
-            href="#"
+            href="/mot-de-passe-oublie"
             class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
         >Mot de passe oublié</a
         >
@@ -45,6 +45,7 @@
             type="submit"
             :is-loading="isLoading"
             :disabled="isLoading"
+            class="button-gradient"
         >
           Me connecter
         </ButtonComponent>
@@ -53,17 +54,21 @@
   </template>
   <template v-else>
     <div>
-      <h3 class="primary home-subtitle">Veuillez sélectionner le compte acheteur avec lequel vous souhaitez être connecté</h3>
+      <h3 class="primary home-subtitle">
+        Veuillez sélectionner le compte acheteur avec lequel vous souhaitez être connecté
+      </h3>
     </div>
     <div v-for="(account, id) in userAccounts" :key="id">
-      <DefaultButton
+      <ButtonComponent
           class="text-cotext w-auto bg-purple-600 mr-2 mb-2 items-center rounded-md px-5 py-2.5 text-sm text-white"
-          :is-loading="isLoading"
           :disabled="isLoading"
           @click="onAccountClick(account)"
       >
         {{account.upplerDatas.name}}
-      </DefaultButton>
+      </ButtonComponent>
+    </div>
+    <div v-show="isLoading">
+      <LoaderSharedComponent/>
     </div>
   </template>
 </template>
@@ -75,6 +80,7 @@ import { useUserStore } from '@/vuejs/stores/user'
 import { useAlertStore } from '@/vuejs/stores/alert'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
+import LoaderSharedComponent from "@/vuejs/modules/shared/LoaderSharedComponent.vue";
 
 const username = ref<string>('')
 const password = ref<string>('')
@@ -88,6 +94,12 @@ const loginSubmit = async () => {
   const accounts = await userStore.authenticate(
     { username: username.value, password: password.value }
   )
+
+  if(accounts.length === 0) {
+    isLoading.value = false
+    return false
+  }
+
   accounts.length > 1
   ? userAccounts.value =  accounts
   : (document.location.href = '/app/home')

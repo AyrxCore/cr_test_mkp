@@ -48,6 +48,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface, FixtureGr
         $account->setUpplerUsername('m.frebet3');
         $account->setUpplerPassword('000000');
         $account->setUpplerSubAccountId(17);
+        $account->setIsEnabled(true);
         $account->setUser($user);
 
         $manager->persist($user);
@@ -69,6 +70,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface, FixtureGr
         $account->setUpplerUsername('buyer_1');
         $account->setUpplerPassword('000000');
         $account->setUpplerSubAccountId(20);
+        $account->setIsEnabled(true);
         $account->setUser($user);
         $manager->persist($account);
 
@@ -78,6 +80,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface, FixtureGr
         $account->setUpplerUsername('buyer_2');
         $account->setUpplerPassword('000000');
         $account->setUpplerSubAccountId(21);
+        $account->setIsEnabled(true);
         $account->setUser($user);
         $manager->persist($account);
 
