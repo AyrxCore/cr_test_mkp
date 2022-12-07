@@ -2,7 +2,7 @@
 
 namespace App\EventSubscriber;
 
-use App\Events\ResettingPasswordEvent;
+use App\Events\FirstConnexionEvent;
 use App\Service\MailerProvider;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -15,7 +15,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 
-class ResettingPasswordSubscriber implements EventSubscriberInterface
+class FirstConnexionSubscriber implements EventSubscriberInterface
 {
     #[Required]
     public RouterInterface $router;
@@ -36,24 +36,24 @@ class ResettingPasswordSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            ResettingPasswordEvent::class => 'onPasswordReset',
+            FirstConnexionEvent::class => 'onFirstConnexion',
         ];
     }
 
 
-    public function onPasswordReset(ResettingPasswordEvent $event): void
+    public function onFirstConnexion(FirstConnexionEvent $event): void
     {
         $user = $event->getUser();
         $confirmation_url = $this->router->generate(
-            'resetting_action',
+            'resetting_first_connexion_action',
             ['token' => $user->getConfirmationToken()],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
         $this->mailerProvider->send(
             $this->parameterBag->get('mail_from'),
             $user->getEmail(),
-            $this->translator->trans('emails.request.resetting.subject', [], 'prehome'),
-            $this->twig->render('mails/request.resetting.password.html.twig', [
+            $this->translator->trans('emails.request.first_connexion.subject', [], 'prehome'),
+            $this->twig->render('mails/request.first_connexion.html.twig', [
                 'username' => $user->getLastName() . " " . $user->getFirstName(),
                 'confirmation_url' => $confirmation_url
             ])

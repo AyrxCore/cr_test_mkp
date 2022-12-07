@@ -7,7 +7,7 @@ namespace App\Events;
 use App\Entity\User;
 use Symfony\Contracts\EventDispatcher\Event;
 
-class ResettingPasswordEvent extends Event
+class FirstConnexionEvent extends Event
 {
     protected $user;
 

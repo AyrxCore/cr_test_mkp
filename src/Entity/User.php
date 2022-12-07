@@ -71,6 +71,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $password_requested_at = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $first_connexion_requested_at = null;
+
     public function __construct()
     {
         $this->accounts = new ArrayCollection();
@@ -307,6 +310,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPasswordRequestedAt(?\DateTimeInterface $password_requested_at): self
     {
         $this->password_requested_at = $password_requested_at;
+
+        return $this;
+    }
+
+    public function getFirstConnexionRequestedAt(): ?\DateTimeInterface
+    {
+        return $this->first_connexion_requested_at;
+    }
+
+    public function setFirstConnexionRequestedAt(?\DateTimeInterface $first_connexion_requested_at): self
+    {
+        $this->first_connexion_requested_at = $first_connexion_requested_at;
 
         return $this;
     }

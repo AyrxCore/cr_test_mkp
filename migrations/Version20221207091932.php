@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20221206093913 extends AbstractMigration
+final class Version20221207091932 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,17 +20,13 @@ final class Version20221206093913 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE account ADD is_enabled BOOLEAN NOT NULL');
-        $this->addSql('ALTER TABLE "user" ADD confirmation_token VARCHAR(255) DEFAULT NULL');
-        $this->addSql('ALTER TABLE "user" ADD password_requested_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL');
+        $this->addSql('ALTER TABLE "user" ADD first_connexion_requested_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
-        $this->addSql('ALTER TABLE account DROP is_enabled');
-        $this->addSql('ALTER TABLE "user" DROP confirmation_token');
-        $this->addSql('ALTER TABLE "user" DROP password_requested_at');
+        $this->addSql('ALTER TABLE "user" DROP first_connexion_requested_at');
     }
 }

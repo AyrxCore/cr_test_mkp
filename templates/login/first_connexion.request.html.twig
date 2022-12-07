@@ -1,9 +1,9 @@
 {% extends "base.html.twig" %}
-{% block title %}Mot de passe oublié{% endblock %}
+{% block title %}Première connexion{% endblock %}
 {% block body %}
     <div class="container m-auto">
-        <form action="{{ path('resetting_request') }}" method="post" class="w-full">
-            <h1 >Vous avez oublié votre mot de passe ?</h1>
+        <form action="{{ path('first_connexion_request') }}" method="post" class="w-full">
+            <h1 >Activation de votre compte</h1>
             <div>
                 <label for="username">Veuillez saisir l'identifiant/email de votre compte</label>
                 <div class="input-group">

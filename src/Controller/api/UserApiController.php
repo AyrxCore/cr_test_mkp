@@ -61,6 +61,9 @@ class UserApiController extends AbstractController
         $accounts = [];
         /**@var  Account $account*/
         foreach ($user->getAccounts() as $account) {
+            if (!$account->isEnabled()) {
+                continue;
+            }
             $datas = $this->upplerCompanyService->getCompany($account->getUpplerCompanyId());
             $serializeAccount = $normalizer->normalize($account, 'json', ['groups' => 'simpleUser']);
             $serializeAccount["upplerDatas"] = $datas;
