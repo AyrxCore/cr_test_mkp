@@ -15,22 +15,25 @@
         </button>
         <div
           id="hamburger-menu-account"
-          class="hamburger-menu w-[220px!important]"
+          class="hamburger-menu flex w-[300px!important]"
         >
-          <nav class="w-full">
-            <a href="#" class="ml-2 inline-flex font-bold hover:bg-gray-200">
-              <UserIconComponent class="mr-2" />
-              Mon compte
+          <nav class="flex w-full flex-col">
+            <a
+              href="/app/account"
+              class="flex-row items-center font-bold hover:bg-gray-200"
+            >
+              <UserIconComponent class="mr-3" />
+              <span>Mon compte</span>
             </a>
             <hr class="mx-auto mt-1 mb-1 w-[95%] border border-b-primary" />
             <div
               v-for="(value, id) in listAccount"
               :key="id"
-              class="w-[100%] items-center py-1"
+              class="flex flex-row items-center py-1"
             >
               <a href="#" class="inline-flex items-center hover:bg-gray-200">
                 <ChevronRightIconComponent
-                  class="-mt-2 mr-2 text-lg text-primary"
+                  class="-mt-2 mr-2 stroke-primary text-lg text-primary"
                 />
                 <span class="-mt-2">{{ value }}</span>
               </a>

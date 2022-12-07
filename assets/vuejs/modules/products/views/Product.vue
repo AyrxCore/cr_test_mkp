@@ -50,7 +50,7 @@
         <!-- Bloc détails produit -->
         <div>
           <div class="h-[658px] rounded-lg bg-white p-7">
-            <h3 class="text-[35px] text-primary">{{ product.name }}</h3>
+            <h3 class="text-title text-primary">{{ product.name }}</h3>
             <h4 class="mb-1.5 text-lg font-bold text-gray-500">
               Vendu par : <span class="uppercase">{{ product.partner }}</span>
             </h4>

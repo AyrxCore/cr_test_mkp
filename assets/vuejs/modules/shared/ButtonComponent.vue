@@ -51,9 +51,14 @@ const onClick = ($event: PointerEvent): void => {
   }
   &-gradient {
     @apply bg-gradient-to-r from-secondary via-gradient-1 to-gradient-2;
+    svg,
+    path {
+      @apply stroke-white;
+    }
   }
   &-white {
-    @apply bg-white text-primary;
+    @apply bg-white;
+
     &:hover:not(:disabled):not(:focus) {
       @apply bg-secondary text-white;
       svg,
@@ -61,9 +66,22 @@ const onClick = ($event: PointerEvent): void => {
         @apply stroke-white;
       }
     }
-    svg,
-    path {
-      @apply stroke-primary;
+    &-primary {
+      @apply bg-white text-primary;
+      svg,
+      path {
+        @apply stroke-primary;
+      }
+    }
+    &-secondary {
+      @apply border border-secondary text-secondary;
+      &:focus:not(:disabled) {
+        @apply border-none bg-none text-white;
+      }
+      svg,
+      path {
+        @apply stroke-secondary;
+      }
     }
   }
 

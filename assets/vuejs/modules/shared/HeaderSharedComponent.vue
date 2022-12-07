@@ -31,7 +31,7 @@
             </a>
           </div>
           <div class="flex">
-            <a href="#">
+            <a href="/app/cart">
               <ShoppingCartIconComponent />
             </a>
           </div>
@@ -114,7 +114,7 @@ const qantisLogoImg = getImage(qantisHeaderLogo)
     overflow-x: hidden;
 
     a {
-      display: block;
+      display: flex;
       padding: 10px;
       height: 2em;
       color: $primary;

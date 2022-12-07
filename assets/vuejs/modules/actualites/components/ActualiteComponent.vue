@@ -15,7 +15,7 @@
     <div>
       <p
         class="mb-3 w-max rounded-md px-2 py-1 text-white"
-        :class="'bg-[' + actualite.categorie.color + ']'"
+        :class="actualite.categorie.color"
       >
         {{ actualite.categorie.name }}
       </p>

@@ -8,15 +8,13 @@
       <div class="w-[100%] max-w-screen-2xl">
         <ContactUsButtonComponent />
       </div>
-      <div
-        class="m-auto my-2 grid w-[100%] max-w-screen-2xl grid-cols-2 gap-4"
-      >
+      <div class="m-auto my-2 grid w-[100%] max-w-screen-2xl grid-cols-2 gap-4">
         <!-- Bloc text actualité -->
         <div>
           <h3 class="primary mb-2 text-[35px]">{{ article.name }}</h3>
           <span
             class="mr-2 w-max rounded-md px-2 py-1 text-white text-white"
-            :class="'bg-[' + article.category.color + ']'"
+            :class="article.category.color"
             >{{ article.category.name }}</span
           >
           <span class="text-gray-500">{{ article.date }}</span>
@@ -122,7 +120,7 @@ const article = ref({
   name: "Titre de l'article",
   category: {
     name: 'Partenaires',
-    color: '#050056',
+    color: 'bg-primary',
   },
   date: '12/12/2022',
   description:

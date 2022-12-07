@@ -20,13 +20,21 @@ module.exports = {
       fontFamily: {
         sans: [...defaultTheme.fontFamily.sans],
       },
+      fontSize: {
+        'title-35': '35px',
+      },
+      spacing: {
+        7.5: '1.875rem',
+        8.5: '2.125rem',
+      },
       colors: {
         primary: '#050056',
         secondary: '#9553ff',
         tertiary: '#0bb0fa',
         'gradient-1': '#404fe6',
         'gradient-2': '#00c7ff',
-        // gray: '#5e6875',
+        // gray: '#5E6875',
+        green: '#65AC5D',
       },
     },
   },

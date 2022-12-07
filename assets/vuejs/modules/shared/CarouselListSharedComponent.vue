@@ -64,3 +64,11 @@ const defaultModules = computed(
   () => props.modules ?? [Navigation, Pagination, Scrollbar, A11y, Thumbs],
 )
 </script>
+<style lang="postcss">
+.swiper-button-prev {
+  @apply -left-1.5;
+}
+.swiper-button-next {
+  @apply -right-1.5;
+}
+</style>

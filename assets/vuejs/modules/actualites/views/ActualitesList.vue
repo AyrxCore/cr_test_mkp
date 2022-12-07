@@ -20,7 +20,7 @@
               v-for="categorie in categories"
               :key="categorie.id"
               class="mb-3 w-max rounded-md px-2 py-1 text-white"
-              :class="'bg-[' + categorie.color + ']'"
+              :class="categorie.color"
             >
               {{ categorie.name }}
             </p>
@@ -104,7 +104,7 @@ import { getImage } from '@/vuejs/services/utils'
 import defaultImage from '@/vuejs/assets/img/default-image.png'
 import guideQantisImg from '@/vuejs/assets/img/samples/guide-qantis.png'
 import { computed, ref } from 'vue'
-import ActualiteComponentComponent from '@/vuejs/modules/actualites/components/ActualiteComponentComponent.vue'
+import ActualiteComponentComponent from '@/vuejs/modules/actualites/components/ActualiteComponent.vue'
 import InputButtonComponent from '@/vuejs/modules/shared/InputButtonComponent.vue'
 import CheckCircleInIconComponent from '@/vuejs/modules/shared/icon/CheckCircleInIconComponent.vue'
 
@@ -115,27 +115,27 @@ const categories = ref([
   {
     id: 'partner',
     name: 'Partenaires',
-    color: '#050056',
+    color: 'bg-primary',
   },
   {
     id: 'rse',
     name: 'RSE',
-    color: '#65ac5d',
+    color: 'bg-green',
   },
   {
     id: 'actualites',
     name: 'Actualités',
-    color: '#9553FF',
+    color: 'bg-secondary',
   },
   {
     id: 'evenements',
     name: 'Evénements',
-    color: '#00C7FF',
+    color: 'bg-cyan-400',
   },
   {
     id: 'bons_plans',
     name: 'Bons plans',
-    color: '#404FE6',
+    color: 'bg-blue-700',
   },
 ])
 

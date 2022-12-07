@@ -6,7 +6,7 @@
         class="menu-button flex w-[2rem] items-center rounded px-3 py-1 hover:opacity-75"
         @click="onClick('open')"
       >
-        <MenuIconComponent class="text-lg" />
+        <MenuIconComponent class="mr-0.5 text-lg" />
         Toutes les catégories
       </button>
       <div id="hamburger-menu-categorie" class="hamburger-menu">
@@ -37,11 +37,9 @@
       ></div>
     </div>
     <div v-for="(menu, id) in listMenu" :key="id" class="flex px-2">
-      <a
-        href="#"
-        class="hover:border-b-2 hover:border-purple-600"
-        >{{ menu }}</a
-      >
+      <a href="#" class="hover:border-b-2 hover:border-purple-600">{{
+        menu
+      }}</a>
     </div>
   </div>
 </template>

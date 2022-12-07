@@ -5,11 +5,7 @@
         <div class="sm:w-[100%] md:w-[52rem]">
           <h3 class="home-title text-primary">
             Bienvenue sur la
-            <span
-              class="bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-500 bg-clip-text text-transparent"
-            >
-              marketplace réservée</span
-            >
+            <span class="text-gradient"> marketplace réservée</span>
             à nos 30 000 entreprises adhérentes
           </h3>
           <p class="mt-5 text-lg text-gray-400">
@@ -44,25 +40,6 @@
         </CarouselListSharedComponent>
       </div>
       <div class="mt-10 w-[45rem]">
-        <h3 class="home-subtitle text-primary">Notre sélection pour vous</h3>
-        <p class="text-lg text-gray-400">
-          Savez-vous que vous pouvez désormais acheter ces produits en quelques
-          clics ?
-        </p>
-      </div>
-      <div class="flex justify-center">
-        <CarouselListSharedComponent
-          class="mx-auto mt-2 items-center rounded-xl px-[50px!important]"
-          :slides-per-view="4"
-          :space-between="50"
-          navigation=""
-        >
-          <SwiperSlide v-for="(product, key) in products" :key="key">
-            <ProductComponent :product="product" />
-          </SwiperSlide>
-        </CarouselListSharedComponent>
-      </div>
-      <div class="mt-10 w-[45rem]">
         <h3 class="home-subtitle text-primary">Top ventes</h3>
         <p class="text-lg text-gray-400">
           D'autres adhérents ont déjà acheté ces produits
@@ -70,8 +47,9 @@
       </div>
       <div class="flex justify-center">
         <CarouselListSharedComponent
-          class="mx-auto mt-2 items-center rounded-xl px-[50px!important]"
+          class="mx-auto mt-2 items-center rounded-xl px-[20px!important]"
           :slides-per-view="4"
+          :space-between="20"
         >
           <SwiperSlide v-for="(product, key) in products2" :key="key">
             <ProductComponent :product="product" />
@@ -90,8 +68,9 @@
       </div>
       <div class="flex justify-center">
         <CarouselListSharedComponent
-          class="mx-auto mt-2 rounded-xl px-[50px!important]"
+          class="mx-auto mt-2 rounded-xl px-[20px!important]"
           :slides-per-view="4"
+          :space-between="20"
         >
           <SwiperSlide v-for="(accord, key) in accords" :key="key">
             <div class="h-full rounded-md bg-primary p-8">
@@ -103,24 +82,52 @@
                 partenaire
               </p>
 
-              <a href="#" class="button button-white !px-2">
+              <a
+                href="/app/partner"
+                class="button button-white button-white-primary !px-2"
+              >
                 <ArrowRightIconComponent />Découvrir l'accord cadre
               </a>
             </div>
           </SwiperSlide>
         </CarouselListSharedComponent>
       </div>
+
+      <!-- Bloc sélection de produits -->
+      <div class="mt-10 w-[45rem]">
+        <h3 class="home-subtitle text-primary">Une sélection de produits</h3>
+        <p class="text-lg text-gray-400">
+          Savez-vous que vous pouvez désormais acheter ces produits en quelques
+          clics ?
+        </p>
+      </div>
+      <div class="flex justify-center">
+        <CarouselListSharedComponent
+          class="mx-auto mt-2 items-center rounded-xl px-[20px!important]"
+          :slides-per-view="4"
+          :space-between="20"
+          navigation=""
+        >
+          <swiper-slide v-for="(product, key) in products" :key="key">
+            <ProductComponent :product="product" />
+          </swiper-slide>
+        </CarouselListSharedComponent>
+      </div>
+      <!-- Fin bloc sélection de produits -->
       <div class="mt-10">
         <h3 class="home-subtitle text-primary">Nos partenaires fournisseurs</h3>
         <p class="text-lg text-gray-400">
           Plus de 200 partenaires fournisseurs, repartis en 26 catégories, sont
           référencés pour vos achats.
+          <a href="#" class="font-normal text-secondary underline"
+            >Découvrir toutes les catégories d'achats</a
+          >
         </p>
       </div>
       <CarouselListSharedComponent
-        class="mx-auto mt-10 h-[107px] items-center rounded-xl px-6 py-4 px-[50px!important]"
+        class="mx-auto mt-10 h-[107px] items-center rounded-xl px-6 py-4 px-[20px!important]"
         :slides-per-view="8"
-        :space-between="50"
+        :space-between="20"
       >
         <SwiperSlide
           v-for="(partenaire, key) in partenaires"
@@ -184,11 +191,7 @@
           <p class="flex">Contenus experts spécialement conçus</p>
           <p class="flex">
             pour la
-            <span
-              class="ml-2 bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-500 bg-clip-text text-transparent"
-            >
-              communauté QANTIS
-            </span>
+            <span class="text-gradient ml-2"> communauté QANTIS </span>
           </p>
         </h3>
         <div class="mt-5 grid grid-cols-3 gap-4 p-8">
@@ -208,7 +211,7 @@
               <h3 class="text-[23px] font-bold text-primary">
                 {{ contenu.titre }}
               </h3>
-              <p class="mt-2">
+              <p class="my-4">
                 <a
                   href="#"
                   class="mr-2 mb-2 w-auto items-center rounded-md bg-purple-600 px-5 py-2.5 text-sm text-white"
@@ -358,5 +361,9 @@ const contenusExpert = ref([
   font-size: 35px;
   font-weight: 700;
   text-align: left;
+}
+
+.text-gradient {
+  @apply bg-gradient-to-r from-secondary via-gradient-1 to-gradient-2 bg-clip-text text-transparent;
 }
 </style>
