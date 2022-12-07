@@ -1,12 +1,12 @@
 <template>
   <div class="min-h-screen">
     <div>
-      <button class="top-[220px] sticky-left-button" >
+      <button class="top-[280px] sticky-left-button" >
         <MailIconComponent />
       </button>
     </div>
     <div>
-      <button class="top-[274px] sticky-left-button">
+      <button class="top-[354px] sticky-left-button">
         <PhoneIconComponent />
       </button>
     </div>

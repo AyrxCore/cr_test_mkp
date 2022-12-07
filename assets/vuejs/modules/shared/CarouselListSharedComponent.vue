@@ -5,7 +5,7 @@
     }"
     :modules="defaultModules"
     :space-between="spaceBetween"
-    :loop="true"
+    :loop="loop"
     :navigation="navigation"
     :pagination="pagination"
     :slides-per-view="slidesPerPerView"

@@ -40,6 +40,13 @@
     </div>
     <MenuComponent />
   </nav>
+  <div class="flex bg-gradient h-[59px] justify-center py-4 text-white">
+    <span class="mr-2">Pneumatiques : êtes-vous concernés par la Loi Montagne ?</span>
+    <a href="#" class="underline">Découvrir</a>
+    <button class="text-white right-2 absolute">
+      <CloseIconComponent />
+    </button>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -52,6 +59,7 @@ import MenuComponent from '@/vuejs/modules/shared/MenuComponent.vue'
 import AccountComponent from '@/vuejs/modules/shared/AccountComponent.vue'
 import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
 import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
+import CloseIconComponent from '@/vuejs/modules/shared/icon/CloseIconComponent.vue';
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
@@ -61,12 +69,13 @@ const qantisLogoImg = getImage(qantisHeaderLogo)
 
 <style lang="scss">
 @import 'assets/style/_variables.scss';
+
 .logo-qantis-header {
-  height: auto;
-  width: 145px;
-  left: 60px;
-  top: 24.5px;
-  border-radius: 0px;
+  @apply h-auto w-[145px] left-[60px] top-[24.5px];
+}
+
+.bg-gradient {
+  @apply bg-gradient-to-r from-secondary via-gradient-1 to-gradient-2;
 }
 
 .menu-button {

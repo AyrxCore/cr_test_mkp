@@ -20,7 +20,7 @@
             :key="id"
             class="w-[100%] items-center py-1"
           >
-            <a href="#" class="items-center hover:bg-gray-200">
+            <a href="#" class="items-center hover:bg-gray-200 justify-between">
               <span class="-mt-2">{{ categorie }}</span>
               <ChevronRightIconComponent
                 class="float-right -mt-2 text-lg text-primary"

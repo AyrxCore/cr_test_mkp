@@ -42,10 +42,12 @@
         >
       </div>
       <div class="float-right inline-flex flex-1">
-        <a href="#">
-          <HeartIconComponent :stroke-color="'#5E6875'" class="mr-2"
-        /></a>
-        <a href="#"> <TrashIconComponent :stroke-color="'#5E6875'" /></a>
+        <button class="flex text-gray-500">
+          <HeartIconComponent class="stroke-gray-500 mr-2" />
+        </button>
+        <button class="flex text-gray-500">
+          <TrashIconComponent :stroke-color="'#5E6875'" />
+        </button>
       </div>
     </div>
   </div>

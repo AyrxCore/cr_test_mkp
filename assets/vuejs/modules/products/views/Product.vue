@@ -5,10 +5,10 @@
         :list-url="listUrl"
         :current-page="'Produit'"
       />
-      <div class="w-[100%] max-w-screen-2xl">
+      <div class="w-[100%] max-w-screen-2xl flex justify-end">
         <ContactUsButtonComponent />
       </div>
-      <div class="m-auto my-2 grid w-[100%] max-w-screen-2xl grid-cols-2 gap-4">
+      <div class="m-auto my-3.5 grid w-[100%] max-w-screen-2xl grid-cols-2 gap-4">
         <!-- Bloc image produit -->
         <div>
           <CarouselListSharedComponent
@@ -28,10 +28,11 @@
             </swiper-slide>
           </CarouselListSharedComponent>
           <CarouselListSharedComponent
-            class="mx-auto h-[150px] items-center rounded-xl px-4 py-4"
+            class="mx-auto h-[150px] items-center rounded-xl px-4 mt-5 py-4"
             :space-between="10"
             watch-slides-progress
             :pagination="false"
+            :loop="false"
             :navigation="false"
             @on-slide-change="onSlideChange"
             @swiper="setThumbsSwiper"
@@ -40,7 +41,7 @@
               <img
                 :src="defaultImageFile"
                 alt="Picture"
-                class="items-center sm:mx-auto"
+                class="items-center bg-white rounded"
               />
             </swiper-slide>
           </CarouselListSharedComponent>
@@ -106,7 +107,7 @@
                 </div>
               </div>
             </div>
-            <ButtonComponent class="button-gradient mt-14 w-[50%]">
+            <ButtonComponent class="button-gradient mt-14 w-full">
               <ShoppingCartIconComponent class="mr-2 w-4" /> Ajouter
             </ButtonComponent>
           </div>
@@ -242,7 +243,7 @@ import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedCo
 
 const defaultImageFile = getImage(defaultImage)
 const helpImageFile = getImage(helpImage)
-const nbImageToShow = 5
+const nbImageToShow = 3
 const thumbsSwiper = ref(null)
 
 const products = ref([

@@ -10,7 +10,7 @@
     <input
       :id="props.id"
       type="checkbox"
-      class="appearance-none rounded border border-gray-400 text-secondary checked:bg-secondary focus:ring-secondary"
+      class="appearance-none border border-gray-400 text-secondary checked:bg-secondary focus:ring-secondary"
     />
     <label
       v-if="props.positionAfter"
