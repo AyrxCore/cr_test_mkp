@@ -34,13 +34,13 @@
           :space-between="10"
           :pagination="true"
         >
-          <swiper-slide v-for="i in 5" :key="i">
+          <SwiperSlide v-for="i in 5" :key="i">
             <img
               :src="defaultImageFile"
               alt="Picture"
               class="items-center sm:mx-auto"
             />
-          </swiper-slide>
+          </SwiperSlide>
         </CarouselListSharedComponent>
       </div>
       <div class="mt-10 w-[45rem]">
@@ -57,9 +57,9 @@
           :space-between="50"
           navigation=""
         >
-          <swiper-slide v-for="(product, key) in products" :key="key">
+          <SwiperSlide v-for="(product, key) in products" :key="key">
             <ProductComponent :product="product" />
-          </swiper-slide>
+          </SwiperSlide>
         </CarouselListSharedComponent>
       </div>
       <div class="mt-10 w-[45rem]">
@@ -73,9 +73,9 @@
           class="mx-auto mt-2 items-center rounded-xl px-[50px!important]"
           :slides-per-view="4"
         >
-          <swiper-slide v-for="(product, key) in products2" :key="key">
+          <SwiperSlide v-for="(product, key) in products2" :key="key">
             <ProductComponent :product="product" />
-          </swiper-slide>
+          </SwiperSlide>
         </CarouselListSharedComponent>
       </div>
 
@@ -90,34 +90,24 @@
       </div>
       <div class="flex justify-center">
         <CarouselListSharedComponent
-          class="mx-auto mt-2  items-center rounded-xl px-[50px!important]"
+          class="mx-auto mt-2 rounded-xl px-[50px!important]"
           :slides-per-view="4"
         >
-          <swiper-slide v-for="(accord, key) in accords" :key="key">
-            <div
-              class="mx-auto h-full items-center rounded-md bg-purple-600 px-8 py-4"
-            >
-              <div class="mx-auto items-center">
-                <img
-                  :src="accord.img"
-                  alt="Image produit"
-                  class="mx-auto h-[auto!important] w-[340px!important]"
-                />
+          <SwiperSlide v-for="(accord, key) in accords" :key="key">
+            <div class="h-full rounded-md bg-primary p-8">
+              <div class="mx-auto">
+                <img :src="accord.img" alt="Image produit" />
               </div>
-              <p class="mt-1 text-left text-lg text-white">
+              <p class="my-8 text-lg font-normal text-white">
                 Découvrez ou téléchargez les conditions négociées de ce
                 partenaire
               </p>
 
-              <div
-                class="mx-auto mt-7 rounded-full bg-white p-2 text-[#9553FF] text-cotext"
-              >
-                <a href="#" class="flex items-center">
-                  <ArrowRightIconComponent class="mr-2" /> Découvrir l'accord cadre
-                </a>
-              </div>
+              <a href="#" class="button button-white !px-2">
+                <ArrowRightIconComponent />Découvrir l'accord cadre
+              </a>
             </div>
-          </swiper-slide>
+          </SwiperSlide>
         </CarouselListSharedComponent>
       </div>
       <div class="mt-10">
@@ -132,13 +122,17 @@
         :slides-per-view="8"
         :space-between="50"
       >
-        <swiper-slide v-for="(partenaire, key) in partenaires" :key="key" class="bg-white rounded-lg flex justify-center items-center">
+        <SwiperSlide
+          v-for="(partenaire, key) in partenaires"
+          :key="key"
+          class="flex items-center justify-center rounded-lg bg-white"
+        >
           <img
             :src="partenaire.img"
             :alt="partenaire.alt"
             class="h-[auto!important]"
           />
-        </swiper-slide>
+        </SwiperSlide>
       </CarouselListSharedComponent>
 
       <div class="mt-16 text-center">
@@ -147,12 +141,12 @@
         </h3>
       </div>
       <div
-        class="mt-5 flex w-[100%] text-center text-lg flex-wrap justify-center"
+        class="mt-5 flex w-[100%] flex-wrap justify-center text-center text-lg"
       >
         <div
           v-for="(categorie, id) in listCategories"
           :key="id"
-          class="mr-8 items-center rounded bg-[#404FE6] px-1.5 py-1 mt-2 text-white justify-center"
+          class="mr-8 mt-2 items-center justify-center rounded bg-[#404FE6] px-1.5 py-1 text-white"
         >
           {{ categorie }}
         </div>
@@ -160,7 +154,7 @@
     </div>
 
     <div
-      class="home-bloc-economie m-auto mt-16 h-[338px] flex-1 py-4 text-white text-cotext"
+      class="home-bloc-economie text-cotext m-auto mt-16 h-[338px] flex-1 py-4 text-white"
     >
       <div class="text-center">
         <h3 class="text-[35px] font-bold">
@@ -174,22 +168,25 @@
           aussi de contribuer à la démarche RSE de votre entreprise.
         </p>
         <p class="mt-10 flex justify-center">
-
           <a href="#" class="button button-gradient">
-            <ArrowRightIconComponent :stroke-color="'#FFFFFF'"/>  Toutes nos catégories d'achats
+            <ArrowRightIconComponent :stroke-color="'#FFFFFF'" /> Toutes nos
+            catégories d'achats
           </a>
         </p>
       </div>
     </div>
 
     <div
-      class="m-auto my-6 mt-10 pb-4 max-w-screen-2xl flex-1 rounded-md bg-white shadow-md"
+      class="m-auto my-6 mt-10 max-w-screen-2xl flex-1 rounded-md bg-white pb-4 shadow-md"
     >
-      <div class="pt-1 text-center flex flex-col">
-        <h3 class="primary mt-10 text-[35px] font-bold pl-8 flex flex-col">
+      <div class="flex flex-col pt-1 text-center">
+        <h3 class="primary mt-10 flex flex-col pl-8 text-[35px] font-bold">
           <p class="flex">Contenus experts spécialement conçus</p>
-          <p class="flex">pour la
-            <span class="bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-500 bg-clip-text text-transparent ml-2" >
+          <p class="flex">
+            pour la
+            <span
+              class="ml-2 bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-500 bg-clip-text text-transparent"
+            >
               communauté QANTIS
             </span>
           </p>
@@ -214,7 +211,7 @@
               <p class="mt-2">
                 <a
                   href="#"
-                  class="w-auto bg-purple-600 mr-2 mb-2 items-center rounded-md px-5 py-2.5 text-sm text-white"
+                  class="mr-2 mb-2 w-auto items-center rounded-md bg-purple-600 px-5 py-2.5 text-sm text-white"
                 >
                   {{ contenu.btnNam }}
                 </a>
@@ -236,7 +233,8 @@
         <div class="flex justify-center">
           <p class="mt-10">
             <a href="#" class="button button-gradient">
-              <ArrowRightIconComponent :stroke-color="'#FFFFFF'"/> Tous les contenus experts
+              <ArrowRightIconComponent :stroke-color="'#FFFFFF'" /> Tous les
+              contenus experts
             </a>
           </p>
         </div>
@@ -278,7 +276,7 @@ import imgCentral from '@/vuejs/assets/img/samples/img-central.png'
 import imgMagazine from '@/vuejs/assets/img/samples/img-magazine.png'
 import MailIconLightComponent from '@/vuejs/modules/shared/icon/MailIconLightComponent.vue'
 import PhoneLightIconComponent from '@/vuejs/modules/shared/icon/PhoneLightIconComponent.vue'
-import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue';
+import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 
 const defaultImageFile = getImage(defaultImage)
 
