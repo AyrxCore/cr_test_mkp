@@ -27,25 +27,6 @@
   color: $gray;
 }
 
-.sticky-left-button {
-  width: 245px;
-  position: fixed;
-  border-top-left-radius: 30px;
-  border-bottom-left-radius: 30px;
-  height: 50px;
-  right: -180px;
-  color: white;
-  background: linear-gradient(90deg, $secondary 0%, #404FE6 52.08%, #00C7FF 100%);
-  z-index: 9;
-  text-align: left;
-  padding-left: 25px;
-}
-
-.sticky-left-button:hover {
-  right: 0px;
-  text-align: center;
-}
-
  .default-button-gradient {
    background: linear-gradient(90deg, $secondary 0%, #404FE6 52.08%, #00C7FF 100%);
    border-radius: 25px;
@@ -53,8 +34,4 @@
 
 .default-button-gradient:hover {
   background: $secondary;
-}
-
-.bg-sticky-button-gradient {
-  background: linear-gradient(90deg, $secondary 0%, #404FE6 52.08%, #00C7FF 100%);
 }

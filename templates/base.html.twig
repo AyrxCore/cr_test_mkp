@@ -33,9 +33,10 @@
     {% endblock %}
 </head>
 <body>
-{{ include('_partials/_header.html.twig') }}
-  {% block body %}
-  {% endblock %}
+  <div class="vue-app" data-component="sticky-contact-buttons"></div>
+  {{ include('_partials/_header.html.twig') }}
+    {% block body %}
+    {% endblock %}
 {{ include('_partials/_footer.html.twig') }}
 </body>
 </html>
