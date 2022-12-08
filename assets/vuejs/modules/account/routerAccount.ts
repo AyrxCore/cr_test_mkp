@@ -66,6 +66,6 @@ export const routes: RouteRecordRaw[] = [
         component: OrdersValidationPage,
         name: AccountPageList.ORDERS_VALIDATION,
       },
-    ]
-  }
+    ],
+  },
 ]

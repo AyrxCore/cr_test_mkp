@@ -31,11 +31,7 @@
           :pagination="true"
         >
           <SwiperSlide v-for="i in 5" :key="i">
-            <img
-              :src="defaultImageFile"
-              alt="Picture"
-              class="items-center sm:mx-auto"
-            />
+            <img :src="defaultImageFile" alt="Picture" class="sm:mx-auto" />
           </SwiperSlide>
         </CarouselListSharedComponent>
       </div>
@@ -124,23 +120,8 @@
           >
         </p>
       </div>
-      <CarouselListSharedComponent
-        class="mx-auto mt-10 h-[107px] items-center rounded-xl px-6 py-4 px-[20px!important]"
-        :slides-per-view="8"
-        :space-between="20"
-      >
-        <SwiperSlide
-          v-for="(partenaire, key) in partenaires"
-          :key="key"
-          class="flex items-center justify-center rounded-lg bg-white"
-        >
-          <img
-            :src="partenaire.img"
-            :alt="partenaire.alt"
-            class="h-[auto!important]"
-          />
-        </SwiperSlide>
-      </CarouselListSharedComponent>
+
+      <PartnersCarousel class="mt-5" />
 
       <div class="mt-16 text-center">
         <h3 class="text-[35px] font-bold text-primary">
@@ -253,6 +234,8 @@ import defaultImage from '@/vuejs/assets/img/default-image.png'
 import { SwiperSlide } from 'swiper/vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import ProductComponent from '@/vuejs/modules/products/components/ProductComponent.vue'
+import PartnersCarousel from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
+
 import { ref } from 'vue'
 import imgCheville from '@/vuejs/assets/img/samples/cheville.png'
 import imgAmpoules from '@/vuejs/assets/img/samples/ampoules.png'
@@ -268,11 +251,6 @@ import imgPeugeot from '@/vuejs/assets/img/samples/peugeot.png'
 import imgLoxam from '@/vuejs/assets/img/samples/loxam.png'
 import imgBusiness from '@/vuejs/assets/img/samples/business.png'
 import imgAdecco from '@/vuejs/assets/img/samples/adecco.png'
-import imgHertz from '@/vuejs/assets/img/samples/hertz.png'
-import imgKiloutou from '@/vuejs/assets/img/samples/kiloutou.png'
-import imgLdlc from '@/vuejs/assets/img/samples/ldlc.png'
-import imgRenault from '@/vuejs/assets/img/samples/renault.png'
-import imgWurth from '@/vuejs/assets/img/samples/wurth.png'
 
 import imgMaps from '@/vuejs/assets/img/samples/img-maps.png'
 import imgCentral from '@/vuejs/assets/img/samples/img-central.png'
@@ -302,17 +280,6 @@ const accords = ref([
   { img: getImage(imgLoxam), alt: 'Loxam' },
   { img: getImage(imgBusiness), alt: 'Business' },
   { img: getImage(imgAdecco), alt: 'Adecco' },
-])
-
-const partenaires = ref([
-  { img: getImage(imgPeugeot), alt: 'Peugeot' },
-  { img: getImage(imgRenault), alt: 'Renault' },
-  { img: getImage(imgLoxam), alt: 'Loxam' },
-  { img: getImage(imgKiloutou), alt: 'Kiloutou' },
-  { img: getImage(imgAdecco), alt: 'Adecco' },
-  { img: getImage(imgWurth), alt: 'Wurth' },
-  { img: getImage(imgLdlc), alt: 'LDLC Pro' },
-  { img: getImage(imgHertz), alt: 'Herts' },
 ])
 
 const contenusExpert = ref([

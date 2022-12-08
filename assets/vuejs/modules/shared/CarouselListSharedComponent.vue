@@ -1,8 +1,5 @@
 <template>
-  <swiper
-    :style="{
-      '--swiper-navigation-color': '#050056',
-    }"
+  <Swiper
     :modules="defaultModules"
     :space-between="spaceBetween"
     :loop="loop"
@@ -14,17 +11,18 @@
     @slide-change="emit('on-slide-change')"
   >
     <slot />
-  </swiper>
+  </Swiper>
 </template>
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { Swiper } from 'swiper/vue'
 import { Navigation, Pagination, Scrollbar, A11y, Thumbs } from 'swiper'
-import 'swiper/swiper.min.css'
-import 'swiper/css/bundle'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
-import 'swiper/css/scrollbar'
+import 'swiper/scss'
+import 'swiper/scss/a11y'
+import 'swiper/scss/navigation'
+import 'swiper/scss/pagination'
+import 'swiper/scss/scrollbar'
+import 'swiper/scss/thumbs'
 
 const emit = defineEmits(['on-swipe', 'on-slide-change'])
 
@@ -55,8 +53,8 @@ const props = defineProps({
   },
   navigation: {
     required: false,
-    type: Boolean,
-    default: true,
+    type: [Boolean, Object],
+    default: false,
   },
 })
 
@@ -64,11 +62,27 @@ const defaultModules = computed(
   () => props.modules ?? [Navigation, Pagination, Scrollbar, A11y, Thumbs],
 )
 </script>
+
 <style lang="postcss">
-.swiper-button-prev {
-  @apply -left-1.5;
+.swiper-slide {
+  img {
+    @apply max-h-full;
+  }
 }
-.swiper-button-next {
-  @apply -right-1.5;
+
+.swiper-pagination-bullet {
+  @apply h-[0.625rem] w-[0.625rem] border border-secondary bg-white opacity-100;
+  &-active {
+    @apply bg-secondary;
+  }
+}
+
+.swiper-button {
+  &-prev,
+  &-next {
+    &:after {
+      @apply text-2xl text-primary;
+    }
+  }
 }
 </style>

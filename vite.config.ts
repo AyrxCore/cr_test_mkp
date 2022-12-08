@@ -3,7 +3,6 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import pkg from './package.json'
 import { resolve } from 'path'
-import { viteStaticCopy } from 'vite-plugin-static-copy'
 
 const twigRefreshPlugin = {
   name: 'twig-refresh',

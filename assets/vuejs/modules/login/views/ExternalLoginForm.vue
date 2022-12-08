@@ -3,15 +3,15 @@
     <AlertSharedComponent />
   </div>
   <form @submit.prevent="loginSubmit">
-    <div class="mt-3">
-      <h1 class="text-xl font-bold text-primary">Bonjour</h1>
-      <div class="gray mt-3">Déjà adhérent ? Connectez-vous ici</div>
+    <h1 class="text-2xl font-bold text-primary sm:text-4xl">Bonjour</h1>
+    <div class="mt-3 text-lg text-gray-500">
+      Déjà adhérent ? Connectez-vous ici
     </div>
     <div class="mb-3 mt-3">
       <input
         v-model="username"
         type="email"
-        class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+        class="input"
         placeholder="Adresse e-mail"
         required
       />
@@ -21,32 +21,32 @@
         v-model="password"
         type="password"
         placeholder="Mot de passe"
-        class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+        class="input"
         required
       />
     </div>
-    <div class="mb-3 mt-3 flex items-start">
-      <div class="flex h-5 items-center">
-        <input
-          type="checkbox"
-          value=""
-          class="focus:ring-3 h-4 w-4 rounded border border-gray-300 bg-gray-50 focus:ring-blue-300"
-        />
-      </div>
-      <label
-        for="remember"
-        class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-        >Mot de passe oublié ?</label
-      >
-    </div>
-    <div class="mt-3 flex justify-end">
+    <a href="#" class="text-gray-500 underline">Mot de passe oublié ? </a>
+    <div class="mt-3 items-center sm:mt-6 sm:flex">
       <ButtonComponent
         :is-loading="isLoading"
         type="submit"
-        class="button-gradient"
+        class="button-gradient min-w-[180px]"
       >
+        <ArrowRightIcon />
         Me connecter
       </ButtonComponent>
+      <div class="text-gray-500 sm:ml-10 sm:flex">
+        <div class="pt-6 sm:pt-0">
+          Vous n'êtes pas encore adhérent ?<br />
+          <span class="text-secondary underline">
+            Et si on se rencontrait ?
+          </span>
+        </div>
+        <div class="py-6 sm:pt-0">
+          Ou appelez nous directement au <br />
+          <span class="text-secondary underline">04.37.65.06.21</span>
+        </div>
+      </div>
     </div>
   </form>
 </template>
@@ -58,6 +58,7 @@ import { useUserStore } from '@/vuejs/stores/user'
 import { useAlertStore } from '@/vuejs/stores/alert'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
+import ArrowRightIcon from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 
 const username = ref<string>('')
 const password = ref<string>('')

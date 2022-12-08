@@ -5,12 +5,37 @@
     <title>{% block title %}{% endblock %}</title>
     {% block javascripts %}
         {{ vite_asset('main.ts', []) }}
+
+        {# Hamburger menu logic #}
+        <script type="text/javascript">
+          const initApp = () => {
+              const openMenuBtn = document.getElementById('open-menu-button')
+              const closeMenuBtn = document.getElementById('close-menu-button')
+              const mobileMenu = document.getElementById('mobile-menu')
+
+              const toggleMenu = () => {
+                  openMenuBtn.classList.toggle('hidden')
+                  openMenuBtn.classList.toggle('flex')
+                  closeMenuBtn.classList.toggle('hidden')
+                  closeMenuBtn.classList.toggle('flex')
+                  mobileMenu.classList.toggle('hidden')
+                  mobileMenu.classList.toggle('fixed')
+                  mobileMenu.classList.toggle('flex')
+                  document.body.classList.toggle('overflow-hidden')
+              }
+
+              openMenuBtn.addEventListener('click', toggleMenu)
+              closeMenuBtn.addEventListener('click', toggleMenu)
+          }
+
+          document.addEventListener('DOMContentLoaded', initApp)
+        </script>
     {% endblock %}
 </head>
-<body class="bg-white">
+<body>
 {{ include('_partials/_header.html.twig') }}
-{% block body %}
-
-{% endblock %}
+  {% block body %}
+  {% endblock %}
+{{ include('_partials/_footer.html.twig') }}
 </body>
 </html>

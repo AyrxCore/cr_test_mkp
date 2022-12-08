@@ -1,14 +1,13 @@
 <template>
-  {{ props.component }}
   <RouterView v-if="props.component === ''" />
-  <div v-else-if="props.component === 'login'">
-    <LoginForm />
-  </div>
+  <LoginForm v-else-if="props.component === 'login'" />
+  <PartnersCarousel v-else-if="props.component === 'partners-carousel'" />
 </template>
 
 <script lang="ts" setup>
 import { onMounted } from 'vue'
 import LoginForm from './modules/login/views/ExternalLoginForm.vue'
+import PartnersCarousel from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
 
 const props = defineProps({
   component: {
