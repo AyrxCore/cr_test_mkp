@@ -56,7 +56,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { listCategories } from '@/vuejs/services/utils'
+import { listCategories, animateSubMenu } from '@/vuejs/services/utils'
 import MenuIconComponent from '@/vuejs/modules/shared/icon/MenuIconComponent.vue'
 import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightIconComponent.vue'
 
@@ -73,25 +73,11 @@ const listMenu = ref<string[]>([
 ])
 
 const onClick = (action): void => {
-  console.log(action)
   const overlay = document.querySelector('#overlay-categorie')
   const button = document.querySelector('#menu-button-categorie')
   const menu = document.querySelector('#hamburger-menu-categorie')
-  animateMenu(action, overlay, button, menu)
+  animateSubMenu(action, overlay, button, menu)
 }
 
-const animateMenu = (menuToggle: string, overlay, button, menu) => {
-  if (menuToggle === 'open') {
-    console.log('e')
-    overlay.classList.add('open')
-    menu.classList.add('open')
-    button.classList.add('on')
-  }
 
-  if (menuToggle === 'close') {
-    button.classList.remove('on')
-    overlay.classList.remove('open')
-    menu.classList.remove('open')
-  }
-}
 </script>

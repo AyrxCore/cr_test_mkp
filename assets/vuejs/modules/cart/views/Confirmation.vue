@@ -10,10 +10,10 @@
           l'adresse suivante :
           <span class="primary">qantis@email.com</span>
         </p>
-        <a class="mt-10 button button-gradient" href="/app/home">
+        <RouterLink class="mt-10 button button-gradient" :to="{ path: '/app/home' }">
           <ArrowRightIconComponent :stroke-color="'#FFFFFF'" class="mr-2 w-4" />
           Continuer vos achats
-        </a>
+        </RouterLink>
         <h3 class="primary mt-24 text-[25px]">
           <span class="text-gradient"> Depuis plus de 20 ans, </span>
           <br />

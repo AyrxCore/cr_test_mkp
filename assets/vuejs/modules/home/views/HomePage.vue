@@ -89,12 +89,13 @@
                 partenaire
               </p>
 
-              <a
-                href="/app/partner"
+
+              <RouterLink
+                :to="{ path: '/app/partner' }"
                 class="button button-white button-white-primary flex justify-center"
               >
                 <ArrowRightIconComponent />Découvrir l'accord cadre
-              </a>
+              </RouterLink>
             </div>
           </SwiperSlide>
         </CarouselListSharedComponent>
