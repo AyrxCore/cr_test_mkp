@@ -184,10 +184,13 @@
         <ContenusExpertComponent :contenus="contenusExpert" />
         <div class="flex justify-center">
           <p class="mt-10">
-            <a href="/app/actualites" class="button button-gradient">
-              <ArrowRightIconComponent :stroke-color="'#FFFFFF'" /> Tous les
-              contenus experts
-            </a>
+            <RouterLink
+              :to="{ path: '/app/actualites' }"
+              class="button button-gradient"
+            >
+              <ArrowRightIconComponent :stroke-color="'#FFFFFF'" />
+              Tous les contenus experts
+            </RouterLink>
           </p>
         </div>
       </div>
@@ -271,9 +274,5 @@ const contenusExpert = ref([
 
 .home-subtitle {
   @apply text-left text-[23px] font-bold leading-[27px] md:text-[35px] md:leading-[38.11px];
-}
-
-.text-gradient {
-  @apply bg-gradient-to-r from-secondary via-gradient-1 to-gradient-2 bg-clip-text text-transparent;
 }
 </style>

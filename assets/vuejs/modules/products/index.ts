@@ -29,7 +29,8 @@ import { ref } from 'vue'
 
 export const product = ref({
   name: 'Souris optique filaire bleu',
-  description: 'Souris optique filaire bleu.\n' +
+  description:
+    'Souris optique filaire bleu.\n' +
     '- 5 boutons (latéraux pour la navigation internet, page suivante,précédente).\n' +
     '- Résolution: 1000 dpi.\n' +
     '- Désign ergonomique.\n' +
@@ -44,8 +45,9 @@ export const product = ref({
   conditionnement: '1',
   livraison: [
     {
-      label: 'Franco à partir de 50€ HT de commande – en dessous, 12€ HT de frais de port seront appliqués.'
-    }
+      label:
+        'Franco à partir de 50€ HT de commande - en dessous, 12€ HT de frais de port seront appliqués.',
+    },
   ],
   caracteristiques: [
     {
@@ -63,16 +65,15 @@ export const product = ref({
   ],
   images: [
     {
-      img: getImage(imgSouris)
+      img: getImage(imgSouris),
     },
     {
-      img: getImage(imgSouris1)
+      img: getImage(imgSouris1),
     },
     {
-      img: getImage(imgSouris2)
-    }
-
-  ]
+      img: getImage(imgSouris2),
+    },
+  ],
 })
 
 export const productsTopVenteHomepage = [
@@ -134,8 +135,8 @@ export const productsSelectionHomepage = [
     fournisseur_image: getImage(imgFrn3),
   },
   {
-    name: 'Plaque aimantée – Taille S',
-    description: 'Plaque aimantée – Personnalisable…',
+    name: 'Plaque aimantée - Taille S',
+    description: 'Plaque aimantée - Personnalisable…',
     partner: '',
     price_line_through: '174',
     price: '147,90',

@@ -40,13 +40,7 @@
       >
     </div>
     <div class="mt-3 flex justify-end">
-      <button
-        type="submit"
-        class="mr-2 mb-2 flex rounded-full bg-purple-800 bg-gradient-to-r from-purple-800 via-blue-600 to-cyan-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-br focus:outline-none focus:ring-4 focus:ring-cyan-300 dark:focus:ring-cyan-800"
-      >
-        <LoaderSharedComponent v-show="isLoading" class="mr-2" />
-        Me connecter
-      </button>
+      <ButtonComponent type="submit">Me connecter</ButtonComponent>
     </div>
   </form>
 </template>
@@ -56,9 +50,9 @@ import { ref } from 'vue'
 import { useUserStore } from '@/vuejs/stores/user'
 
 import { useAlertStore } from '@/vuejs/stores/alert'
-import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
 import router, { PageList } from '@/vuejs/router'
+import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 
 const username = ref<string>('')
 const password = ref<string>('')

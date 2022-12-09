@@ -11,7 +11,9 @@
       <div class="m-auto my-2 grid w-[100%] max-w-screen-2xl grid-cols-2 gap-4">
         <!-- Bloc text actualité -->
         <div>
-          <h3 class="primary mb-2 text-[35px]">{{ contenusExpert[1].title }}</h3>
+          <h3 class="primary mb-2 text-[35px]">
+            {{ contenusExpert[1].title }}
+          </h3>
           <span
             class="mr-2 w-max rounded-md px-2 py-1 text-white text-white"
             :class="contenusExpert[1].categorie.color"
@@ -56,7 +58,7 @@
             :key="key"
             class="grid grid-cols-2"
           >
-            <div class="flex rounded-lg  bg-white">
+            <div class="flex rounded-lg bg-white">
               <img
                 :src="art.img"
                 alt="Picture"

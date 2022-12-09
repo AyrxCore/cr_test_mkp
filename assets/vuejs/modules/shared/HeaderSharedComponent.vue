@@ -1,51 +1,21 @@
 <template>
-  <!-- Bloc desktop menu -->
-  <nav class="header sticky top-0 z-30 bg-primary md:py-0.5 px-4 hidden md:block">
-    <div class="mx-auto px-4 md:flex md:items-center">
-      <LogoComponent />
-      <div
-        class="mx-auto mr-10 ml-5 h-[55px] min-w-max grow flex-row md:flex md:w-[100%]"
-      >
+  <nav class="sticky top-0 z-30 bg-primary px-4 pt-5 pb-3 md:block">
+    <div class="mx-auto items-center px-4 md:flex">
+      <div class="flex justify-between">
+        <MenuComponent class="md:hidden" />
+        <LogoComponent class="w-1/2" />
+        <AccountComponent class="md:hidden" />
+      </div>
+      <div class="my-4 md:flex md:w-[100%]">
         <SearchComponent
           placeholder="Recherchez un produit, un accord-cadre ou un fournisseur"
         >
           <i class="fa fa-search" />
         </SearchComponent>
       </div>
-      <div
-        id="navbar-collapse"
-        class="mt-3 items-center justify-end text-white md:flex"
-      >
-        <AccountComponent />
-      </div>
+      <AccountComponent class="hidden md:flex" />
     </div>
-    <MenuComponent />
-  </nav>
-  <!-- Fin Bloc desktop menu -->
-
-  <nav class="header sticky top-0 z-30 bg-primary px-4 w-full block md:hidden">
-    <div class="mx-auto flex items-center flex-col">
-      <div class="flex flex-row w-full">
-        <MenuComponent class="w-4/12"/>
-        <LogoComponent class="w-4/12 flex justify-center"/>
-        <div
-          id="navbar-collapse"
-          class="w-4/12 mt-0 flex justify-end items-center text-white"
-        >
-          <AccountComponent />
-        </div>
-      </div>
-
-      <div
-        class="mx-auto mt-2 mr-0 ml-0 h-[55px] min-w-max grow flex-row w-full"
-      >
-        <SearchComponent
-          placeholder="Recherchez un produit, un accord-cadre ou un fournisseur"
-        >
-          <SearchIconComponent />
-        </SearchComponent>
-      </div>
-    </div>
+    <MenuComponent class="hidden md:flex" />
   </nav>
 </template>
 
@@ -56,7 +26,6 @@ import SearchComponent from '@/vuejs/modules/shared/InputButtonComponent.vue'
 import MenuComponent from '@/vuejs/modules/shared/header-component/MenuComponent.vue'
 import AccountComponent from '@/vuejs/modules/shared/header-component/AccountComponent.vue'
 import LogoComponent from '@/vuejs/modules/shared/header-component/LogoComponent.vue'
-import SearchIconComponent from '@/vuejs/modules/shared/icon/SearchIconComponent.vue'
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
@@ -65,16 +34,8 @@ const { user } = storeToRefs(userStore)
 <style lang="scss">
 @import 'assets/style/_variables.scss';
 
-.logo-qantis-header {
-  @apply h-auto w-[145px] left-[60px] top-[24.5px];
-}
-
-.bg-gradient {
-  @apply bg-gradient-to-r from-secondary via-gradient-1 to-gradient-2;
-}
-
 .menu-button {
-  @apply flex rounded z-50 md:w-[220px] md:h-[50px];
+  @apply z-50 flex rounded md:h-[50px] md:w-[220px];
 }
 
 .overlay {

@@ -1,16 +1,8 @@
 <template>
-  <div class="mt-5 grid md:grid-cols-3 gap-4 p-8">
-    <div
-      v-for="(contenu, id) in contenus"
-      :key="id"
-      class="grid grid-cols-2"
-    >
+  <div class="mt-5 grid gap-4 p-8 md:grid-cols-3">
+    <div v-for="(contenu, id) in contenus" :key="id" class="grid grid-cols-2">
       <div class="flex rounded-lg border-[#F3EDFE]">
-        <img
-          :src="contenu.img"
-          alt="Picture"
-          class="items-center sm:mx-auto"
-        />
+        <img :src="contenu.img" alt="Picture" class="items-center sm:mx-auto" />
       </div>
       <div class="px-6 text-left">
         <h3 class="text-[23px] font-bold text-primary">
@@ -28,12 +20,12 @@
           {{ contenu.desc }}
         </p>
         <div class="bottom-0">
-          <a
-            href="/app/actualite"
+          <RouterLink
+            :to="{ path: '/app/actualite' }"
             class="bottom-0 flex items-center text-sm font-medium text-primary underline"
           >
             Lire l'article
-          </a>
+          </RouterLink>
         </div>
       </div>
     </div>
@@ -41,7 +33,6 @@
 </template>
 
 <script lang="ts" setup>
-
 const props = defineProps({
   contenus: {
     required: true,
@@ -50,6 +41,4 @@ const props = defineProps({
 })
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -35,3 +35,27 @@
 .default-button-gradient:hover {
   background: $secondary;
 }
+
+.bg-gradient {
+  @apply bg-gradient-to-r from-secondary via-gradient-1 to-gradient-2;
+}
+
+.text-gradient {
+  @apply bg-gradient-to-r from-secondary via-gradient-1 to-gradient-2 bg-clip-text text-transparent w-fit;
+}
+
+.badge {
+  @apply inline-flex items-center justify-center rounded-full px-2 py-1 text-xs font-bold leading-none;
+
+  &.badge-sticked {
+    @apply absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 transform;
+  }
+
+  &.badge-red {
+    @apply bg-red-600 text-red-100;
+  }
+
+  &.badge-outline {
+    @apply border bg-transparent;
+  }
+}

@@ -53,7 +53,7 @@
           <div class="m-auto my-2 grid w-[100%] grid-cols-2 gap-4">
             <div>
               <h3
-                class="mt-20 w-[205px] bg-gradient-to-r from-secondary via-gradient-1 to-gradient-2 bg-clip-text text-[35px] text-transparent"
+                class="bg-gradient mt-20 w-[205px] bg-clip-text text-[35px] text-transparent"
               >
                 Ressources
               </h3>

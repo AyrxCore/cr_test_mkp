@@ -1,8 +1,8 @@
 <template>
-  <div id="search-autocomplete" ref="wrapper" class="flex w-full">
+  <div ref="wrapper" class="flex w-full">
     <input
       v-model="query"
-      class="w-full rounded-l-md border-gray-300 px-5 pl-12 text-gray-500"
+      class="input !rounded-r-none"
       name="search"
       :placeholder="props.placeholder"
       :type="props.type"

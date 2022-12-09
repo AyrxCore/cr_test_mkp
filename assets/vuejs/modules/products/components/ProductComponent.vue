@@ -32,11 +32,11 @@
     <!-- Fin bloc image -->
 
     <!-- Bloc nom et description -->
-    <div class="flex flex-col w-full justify-start ">
-      <h3
-        class="text-left text-lg font-bold text-gray-600"
-      >
-        <a href="/app/product">{{ props.product.name }}</a>
+    <div class="flex w-full flex-col justify-start">
+      <h3 class="text-left text-lg font-bold text-gray-600">
+        <RouterLink :to="{ path: '/app/product' }">{{
+          props.product.name
+        }}</RouterLink>
       </h3>
       <p class="mt-1 w-full justify-start text-left text-lg text-gray-400">
         {{ props.product.description }}
@@ -46,8 +46,14 @@
 
     <!-- Bloc prix -->
     <div class="mt-2 flex w-full items-center justify-start">
-      <span class="mr-2 text-lg font-bold text-primary">{{ props.product.price }}€</span>
-      <span v-if="props.product.price_line_through" class="text-lg text-gray-400 line-through">{{ props.product.price_line_through }}€ HT</span>
+      <span class="mr-2 text-lg font-bold text-primary"
+        >{{ props.product.price }}€</span
+      >
+      <span
+        v-if="props.product.price_line_through"
+        class="text-lg text-gray-400 line-through"
+        >{{ props.product.price_line_through }}€ HT</span
+      >
     </div>
     <!-- Fin bloc prix -->
 

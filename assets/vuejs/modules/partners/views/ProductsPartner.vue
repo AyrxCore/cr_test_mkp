@@ -66,15 +66,18 @@
                 Découvrez ou téléchargez les conditions négociées de ce
                 partenaire
               </p>
-              <a
-                href="/app/partner"
+              <RouterLink
+                :to="{ path: '/app/partner' }"
                 class="button button-white button-white-primary flex"
               >
                 <ArrowRightIconComponent />Découvrir l'accord cadre
-              </a>
+              </RouterLink>
             </div>
             <div>
-              <ProductComponent :product="productsTopVenteHomepage[0]" class="h-[516px]" />
+              <ProductComponent
+                :product="productsTopVenteHomepage[0]"
+                class="h-[516px]"
+              />
             </div>
             <div v-for="(product, key) in productsSimilaire" :key="key">
               <ProductComponent :product="product" class="h-[516px]" />
@@ -93,10 +96,12 @@ import ProductComponent from '@/vuejs/modules/products/components/ProductCompone
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightIconComponent.vue'
 import ChevronLeftIconComponent from '@/vuejs/modules/shared/icon/ChevronLeftIconComponent.vue'
-import { productsSimilaire, productsTopVenteHomepage } from '@/vuejs/modules/products'
+import {
+  productsSimilaire,
+  productsTopVenteHomepage,
+} from '@/vuejs/modules/products'
 import alda from '@/vuejs/assets/img/demo/alda-partner.png'
 import { getImage } from '@/vuejs/services/utils'
-
 </script>
 
 <style scoped>

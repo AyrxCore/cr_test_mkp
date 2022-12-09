@@ -15,13 +15,13 @@
         :key="key"
         class="flex h-full items-center justify-center overflow-hidden rounded-lg bg-white"
       >
-        <a href="/app/products-partner">
+        <RouterLink :to="{ path: '/app/products-partner' }">
           <img
             :src="partenaire.img"
             :alt="partenaire.alt"
             class="w-full object-contain sm:h-[107px]"
           />
-        </a>
+        </RouterLink>
       </SwiperSlide>
     </CarouselListSharedComponent>
   </div>
@@ -33,7 +33,6 @@ import { getImage } from '@/vuejs/services/utils'
 
 import { SwiperSlide } from 'swiper/vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
-import ChevronLeftIcon from '@/vuejs/modules/shared/icon/ChevronLeftIconComponent.vue'
 
 import imgPeugeot from '@/vuejs/assets/img/samples/peugeot.png'
 import imgLoxam from '@/vuejs/assets/img/samples/loxam.png'

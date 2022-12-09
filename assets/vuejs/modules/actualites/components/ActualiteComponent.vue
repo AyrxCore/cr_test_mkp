@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col mx-auto h-[524px] items-center rounded-md bg-white px-6 py-2 "
+    class="mx-auto flex h-[524px] flex-col items-center rounded-md bg-white px-6 py-2"
     data-category="{{actualite.categorie.id}}"
   >
     <div class="mx-auto items-center">
@@ -12,7 +12,7 @@
         />
       </a>
     </div>
-    <div class="mt-5 justify-start w-full">
+    <div class="mt-5 w-full justify-start">
       <p
         class="mb-3 w-max rounded-md px-2 py-1 text-white"
         :class="actualite.categorie.color"
@@ -23,21 +23,20 @@
         {{ actualite.date }}
       </span>
     </div>
-    <h3 class="text-left text-[25px] font-bold text-primary mt-6">
+    <h3 class="mt-6 text-left text-[25px] font-bold text-primary">
       <a href="/app/actualite">{{ actualite.title }}</a>
     </h3>
     <p class="mt-1 text-left text-lg text-gray-400">
       {{ actualite.description }}
     </p>
-    <div class="flex w-full bottom-0 h-full items-end">
-      <a
-        href="/app/actualite"
-        class="bottom-0 items-center text-sm font-medium text-primary underline "
+    <div class="bottom-0 flex h-full w-full items-end">
+      <RouterLink
+        :to="{ path: '/app/actualite' }"
+        class="bottom-0 items-center text-sm font-medium text-primary underline"
       >
         Lire l'article
-      </a>
+      </RouterLink>
     </div>
-
   </div>
 </template>
 <script lang="ts" setup>
