@@ -34,7 +34,7 @@ module.exports = {
         'gradient-1': '#404fe6',
         'gradient-2': '#00c7ff',
         // gray: '#5E6875',
-        green: '#65AC5D',
+        'green-qantis': '#65AC5D',
       },
     },
   },

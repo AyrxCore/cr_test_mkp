@@ -6,13 +6,10 @@
       <div class="mt-10 mt-5 flex grid grid-cols-9 gap-4 text-gray-600">
         <div class="col-span-5 rounded-lg bg-white px-7.5 pt-7.5 pb-4 text-lg">
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur
-            vitae urna nec dolor ultrices cursus at quis magna. Nunc ac tortor
-            tempor, malesuada ante non, pharetra elit. Nulla eleifend tellus
-            vitae ex semper volutpat. Nunc condimentum metus velit, in hendrerit
-            ligula consectetur sed. In euismod nulla varius convallis volutpat.
-            Curabitur facilisis libero sed condimentum aliquam. Etiam eget erat
-            iaculis, cursus ante eu, cursus arcu. Sed venenatis viverra egestas.
+            <span class="uppercase">ALDA MAJUSCULE-OFFICE DEPOT</span> votre spécialiste en fournitures de bureau, mobiliers, consommables informatiques.
+          </p>
+          <p class="mt-3">
+            <span class="uppercase">ALDA MAJUSCULE-OFFICE DEPOT</span> vous propose une offre de proximité régionale multicanale unique en France : BtoB et magasins Office Depot.
           </p>
         </div>
         <div
@@ -20,37 +17,33 @@
         >
           <ul>
             <li
-              v-for="i in 3"
-              :key="i"
+              v-for="(pointCle, key) in pointsCleTop"
+              :key="key"
               class="mb-7.5 flex flex-row items-center text-lg"
             >
               <CheckIconComponent class="mr-1 h-[20px] w-[20px]" />
-              <strong>Point clé n° {{ i }} : </strong> lorem ipsum dolor sit
-              amet, consectetur adipiscing elit.
+              <strong class="mr-1">Point clé n° {{ key + 1 }} : </strong> {{ pointCle }}
             </li>
           </ul>
         </div>
       </div>
       <div class="mt-10 mt-5 flex grid grid-cols-9 gap-4 text-lg">
-        <div class="bloc-content col-span-5">
+        <div class="bloc-content flex flex-col col-span-5 h-full">
           <h3
             class="mb-[1.563rem] w-3/4 text-title-35 font-bold leading-9 text-primary"
           >
             Vos conditions négociées
           </h3>
-          <p class="mb-10">
+          <p class="flex mb-10">
             Remise applicables sur XXXX / mentions légales conditions
           </p>
           <AutomobilePartnerComponent v-if="isAutomobile" />
-          <ul v-else class="mx-7 list-disc">
-            <li v-for="i in 4" :key="i" class="mb-5">
-              Lorem <strong>ipsum dolor sit amet</strong>, consectetur
-              adipiscing elit. <strong>Curabitur vitae </strong>urna nec dolor
-              ultrices cursus at quis magna. Nunc ac tortor tempor,
-              <strong>malesuada ante non</strong>, pharetra elit
+          <ul v-else class="mx-7 list-disc flex flex-col">
+            <li v-for="(condition, key) in listConditions" :key="key" class="mb-5">
+              {{ condition }}
             </li>
           </ul>
-          <div class="flex justify-center">
+          <div class="flex justify-center items-end">
             <ButtonComponent class="button-gradient mr-5 w-1/2">
               <DownloadIconComponent />
               Télécharger les conditions négociées
@@ -66,33 +59,25 @@
           <ButtonComponent class="button-gradient mb-7">
             <ArrowRightIconComponent /> Bénéficiez des conditions
           </ButtonComponent>
-          <p class="mb-8">
-            Process pour expliquer comment profiter des conditons ou toute autre
-            information utile pour l'adhérent concernant la demande de
-            rattachement Lorem ipsum dolor sit amet, consectetur adipiscing
-            elit. Curabitur vitae urna nec dolor ultrices cursus at quis magna.
-            Nunc ac tortor tempor, malesuada ante non, pharetra elit. Nulla
-            eleifend tellus vitae ex semper volutpat.
-          </p>
-          <p>
-            Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco
-            cillum dolor. Voluptate exercitation incididunt aliquip deserunt
-            reprehenderit elit laborum. Amet minim mollit non deserunt ullamco
-            est sit aliqua dolor do amet sint. Velit officia consequat duis enim
-            velit mollit. Exercitation veniam consequat sunt nostrud amet.
-          </p>
+          <div class="condition-beneficiaire">
+            <p>Contactez votre animateur dédié ou le service adhérent afin d’effectuer une ouverture de compte.</p>
+            <p>Une fois vos codes d’accès en votre possession (délais 48h à 72h), commandez directement sur le site : https://shop.majuscule.com/alda/Default-Start</p>
+            <p>Si vous souhaitez également acheter en magasin, téléchargez et complétez l’attestation d’adhésion ci-dessous pour bénéficier de la réduction de 10% en magasin.</p>
+            <p>Pour toute question, n’hésitez pas à nous contacter.</p>
+          </div>
+
           <div class="mt-6 flex justify-between">
             <ButtonComponent class="button-secondary mr-5 w-1/2">
               <PhoneLightIconComponent />
-              Contactez le fournisseur
+              Attestation d’adhésion
             </ButtonComponent>
             <ButtonComponent class="button-secondary w-1/2">
-              Bouton CTA
+              Contactez le Service Adhérents
             </ButtonComponent>
           </div>
         </div>
       </div>
-      <div class="flex justify-center">
+      <div class="relative">
         <CarouselListSharedComponent
           class="mx-auto mt-10 h-[443px] items-center rounded-xl bg-white px-4 py-4"
           :slides-per-view="1"
@@ -105,7 +90,7 @@
                 class="col-span-5 ml-10 flex h-[374px!important] items-center justify-center rounded-lg border py-8.5"
               >
                 <img
-                  :src="defaultImageFile"
+                  :src="aldaImg"
                   alt="Picture"
                   class="object-cover"
                 />
@@ -116,24 +101,18 @@
                 <h3
                   class="mb-[1.563rem] w-3/4 text-title-35 font-bold leading-9 text-primary"
                 >
-                  Titre de la mise en avant du partenaire
+                  Mise en avant partenaire
                 </h3>
                 <p class="mb-5">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Curabitur vitae urna nec dolor ultrices cursus at quis magna.
-                  Nunc ac tortor tempor, malesuada ante non, pharetra elit.
-                  Nulla eleifend tellus vitae ex semper volutpat. Nunc
-                  condimentum metus velit, in hendrerit ligula consectetur sed.
-                  In euismod nulla varius convallis volutpat.
-                </p>
-                <p>
-                  Amet minim mollit non deserunt ullamco est sit aliqua dolor do
-                  amet sint. Velit officia consequat duis enim velit mollit.
+                  Tout ce dont vous avez besoin auprès d’un seul fournisseur.
+                  Un groupe d’envergure à taille humaine spécialisé dans la distribution de fournitures de bureau, papier,
+                  consommables informatiques, ergonomie au travail et beaux-arts.
+                  Mais aussi des offres exclusives de produits vert et fabrication française à votre service.
                 </p>
 
-                <ButtonComponent class="button-secondary mt-6 w-1/2">
-                  Bouton CTA
-                </ButtonComponent>
+<!--                <ButtonComponent class="button-secondary mt-6 w-1/2 hidden">-->
+<!--                  Bouton CTA-->
+<!--                </ButtonComponent>-->
               </div>
             </div>
           </SwiperSlide>
@@ -141,7 +120,7 @@
       </div>
 
       <div class="mt-10 mt-5 flex grid h-[337px] grid-cols-3 gap-4">
-        <div class="bloc-content col-span-2">
+        <div class="bloc-content flex flex-col col-span-2">
           <h3
             class="mb-[1.563rem] w-3/4 text-title-35 font-bold leading-9 text-primary"
           >
@@ -160,27 +139,37 @@
             vous souhaitez utiliser ce référentiel RSE, contactez-nous.
           </p>
         </div>
-        <div class="rounded-lg bg-white pl-7.5 pt-11 text-lg text-gray-500">
+        <div class="rounded-lg bg-white px-3 pt-11 text-lg text-gray-500">
           <ul>
             <li
-              v-for="i in 3"
-              :key="i"
-              class="mb-16 flex flex-row items-center text-lg"
+              v-for="(pointRse, key) in pointsRSE"
+              :key="key"
+              class="mb-8 flex flex-row items-center text-lg grid grid-cols-5 gap-2"
             >
-              <CheckCircleIconComponent class="mr-2 h-[20px] w-[20px]" />
-              <strong class="mr-1">Point clé n° {{ i }} : </strong> lorem ipsum
-              dolor sit amet
+              <span class="flex col-span-2 items-center">
+                <CheckCircleIconComponent class="mr-2 h-[20px] w-[20px]" />
+                <strong class="mr-1">Point clé n° {{ key + 1 }} : </strong>
+              </span>
+              <span class="flex col-span-3">
+                 {{ pointRse}}
+              </span>
             </li>
           </ul>
         </div>
       </div>
-      <div class="mt-10">
+      <div class="mt-10 flex flex-col">
         <h3 class="home-subtitle text-primary">
           Trouvez l'agence la plus <br />près de chez vous
         </h3>
       </div>
       <div class="my-10 mt-5 flex grid h-[379px] grid-cols-3 gap-4">
-        <div class="col-span-2 rounded-lg bg-white"></div>
+        <div class="col-span-2 rounded-lg bg-white">
+          <img
+            :src="aldaMapImg"
+            alt="Picture"
+            class="object-cover h-[379px] rounded-lg"
+          />
+        </div>
         <div class="bloc-content">
           <h3
             class="mb-[1.563rem] w-3/4 text-title-35 font-bold leading-9 text-primary"
@@ -213,23 +202,7 @@
           <span class="text-gradient">vous intéresser</span>
         </h3>
       </div>
-      <CarouselListSharedComponent
-        class="mx-auto mt-10 h-[107px] items-center rounded-xl px-6 py-4 px-[20px!important]"
-        :slides-per-view="8"
-        :space-between="20"
-      >
-        <SwiperSlide
-          v-for="i in 10"
-          :key="i"
-          class="flex items-center justify-center rounded-lg bg-white"
-        >
-          <img
-            :src="defaultImageFile"
-            alt="partenaire"
-            class="h-[auto!important]"
-          />
-        </SwiperSlide>
-      </CarouselListSharedComponent>
+      <PartnersCarouselComponent class="mt-5" />
     </div>
   </BaseTemplate>
 </template>
@@ -238,7 +211,6 @@ import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import HeaderPartnerComponent from '@/vuejs/modules/partners/components/HeaderPartnerComponent.vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
 import { getImage } from '@/vuejs/services/utils'
-import defaultImage from '@/vuejs/assets/img/default-image.png'
 import { SwiperSlide } from 'swiper/vue'
 import CheckIconComponent from '@/vuejs/modules/shared/icon/CheckIconComponent.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
@@ -248,13 +220,38 @@ import DownloadIconComponent from '@/vuejs/modules/shared/icon/DownloadIconCompo
 import CheckCircleIconComponent from '@/vuejs/modules/shared/icon/CheckCircleIconComponent.vue'
 import { ref } from 'vue'
 import AutomobilePartnerComponent from '@/vuejs/modules/partners/components/AutomobilePartnerComponent.vue'
+import alda from '@/vuejs/assets/img/demo/alda-mise-en-avant.jpg'
+import aldaMap from '@/vuejs/assets/img/demo/alda-map.png'
+import PartnersCarouselComponent from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
 
-const defaultImageFile = getImage(defaultImage)
-const isAutomobile = ref<Boolean>(true)
+const aldaImg = getImage(alda)
+const aldaMapImg = getImage(aldaMap)
+const isAutomobile = ref<Boolean>(false)
+
+const pointsCleTop = [
+  'Des conditions négociées grands-comptes',
+  'Des remises sur le mobilier & en magasin',
+  'Un délai de livraison entre 24 et 72h',
+]
+
+const listConditions = [
+  'Bénéficiez de conditions négociées sur plus de 7000 références en fournitures de bureau, petits matériels informatiques, etc.',
+  'Bénéficiez également de remise sur le mobilier de bureau, ainsi que dans tous les points de ventes Office Depot.',
+]
+
+const pointsRSE = [
+  'Certifications ISO-9001, ISO-14-0001, et ISO-45-0001',
+  'Membre de l’UFIPA et du Pacte Mondial des Nations',
+  'Fournisseurs sélectionnés dans le respect des normes REACH',
+]
 </script>
 
 <style scoped>
 .bloc-content {
   @apply rounded-lg bg-white px-7.5 py-7.5 text-gray-500;
+}
+
+.condition-beneficiaire p {
+  @apply mb-4
 }
 </style>

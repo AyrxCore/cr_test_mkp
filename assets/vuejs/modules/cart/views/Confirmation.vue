@@ -3,17 +3,17 @@
     <template #left-side>
       <div class="">
         <h3 class="primary mb-1 text-[35px]">Merci pour votre commande !</h3>
-        <p class="primary text-[25px]">Commande N° XXX</p>
-        <p class="text-lg text-gray-500">Créée le 01/01/01</p>
+        <p class="primary text-[25px]">Commande N° 2022120001</p>
+        <p class="text-lg text-gray-500">Créée le 12/12/2022</p>
         <p class="text-lg text-gray-500">
           Vous allez bientôt recevoir un email récapitulatif de votre commande à
           l'adresse suivante :
-          <span class="primary">adresse@email.com</span>
+          <span class="primary">qantis@email.com</span>
         </p>
-        <GradientLinkComponent class="mt-10 justify-center" :href="'#'">
+        <a class="mt-10 button button-gradient" href="/app/home">
           <ArrowRightIconComponent :stroke-color="'#FFFFFF'" class="mr-2 w-4" />
           Continuer vos achats
-        </GradientLinkComponent>
+        </a>
         <h3 class="primary mt-24 text-[25px]">
           <span class="text-gradient"> Depuis plus de 20 ans, </span>
           <br />
@@ -62,7 +62,7 @@
       </div>
     </template>
     <template #right-side>
-      <CartRightSideComponent class="mt-14">
+      <CartRightSideComponent class="mt-14" :show-next-button="false">
         <template #title> Récapitulatif </template>
         <template #button-label> Passer la commande </template>
       </CartRightSideComponent>
@@ -71,13 +71,10 @@
 </template>
 <script lang="ts" setup>
 import CartPage from '@/vuejs/modules/cart/pages/CartPage.vue'
-import DefaultButtonComponent from '@/vuejs/modules/shared/DefaultButtonComponent.vue'
 import CartRightSideComponent from '@/vuejs/modules/cart/components/CartRightSideComponent.vue'
 import { TAB_CONFIRMATION } from '@/vuejs/modules/cart'
 import { computed } from 'vue'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
-import GradientLinkComponent from '@/vuejs/modules/shared/GradientLinkComponent.vue'
-import EconomyIconComponent from '@/vuejs/modules/shared/icon/EconomyIconComponent.vue'
 import FolderSearchIconComponent from '@/vuejs/modules/shared/icon/FolderSearchIconComponent.vue'
 import LayersIconComponent from '@/vuejs/modules/shared/icon/LayersIconComponent.vue'
 import LeafIconComponent from '@/vuejs/modules/shared/icon/LeafIconComponent.vue'

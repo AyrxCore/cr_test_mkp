@@ -7,10 +7,10 @@
         <h3 class="text-[35px] text-primary">Nos contenus experts</h3>
         <!-- Bloc liste des actus -->
         <div class="m-auto my-2 grid w-[100%] grid-cols-4 gap-4">
-          <div class="col-span-3 border">
+          <div class="col-span-3">
             <div class="m-auto grid grid-cols-3 gap-4">
-              <div v-for="(actualite, key) in listActualites" :key="key">
-                <ActualiteComponentComponent :actualite="actualite" />
+              <div v-for="(contenu, key) in contenusExpert" :key="key">
+                <ActualiteComponentComponent :actualite="contenu" />
               </div>
             </div>
           </div>
@@ -107,6 +107,7 @@ import { computed, ref } from 'vue'
 import ActualiteComponentComponent from '@/vuejs/modules/actualites/components/ActualiteComponent.vue'
 import InputButtonComponent from '@/vuejs/modules/shared/InputButtonComponent.vue'
 import CheckCircleInIconComponent from '@/vuejs/modules/shared/icon/CheckCircleInIconComponent.vue'
+import { contenusExpert } from '@/vuejs/modules/actualites'
 
 const defaultImageFile = getImage(defaultImage)
 const guideQantisImgFile = getImage(guideQantisImg)
@@ -120,7 +121,7 @@ const categories = ref([
   {
     id: 'rse',
     name: 'RSE',
-    color: 'bg-green',
+    color: 'bg-green-qantis',
   },
   {
     id: 'actualites',

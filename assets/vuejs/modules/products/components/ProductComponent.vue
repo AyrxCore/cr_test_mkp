@@ -1,12 +1,12 @@
 <template>
   <div
-    class="mx-auto grid h-full items-center justify-start rounded-md bg-white px-6 py-2"
+    class="mx-auto grid h-[516px] w-[392px] items-center justify-start rounded-md bg-white px-6 py-2"
   >
     <!-- Bloc header -->
     <div class="flex w-full items-center justify-between">
       <div class="flex h-[37px] w-[78px] items-center justify-start bg-white">
         <img
-          :src="props.product.imgFrn"
+          :src="props.product.fournisseur_image"
           alt="Image produit"
           class="flex h-[100%!important]"
         />
@@ -24,7 +24,7 @@
       class="mx-auto flex h-[191px!important] w-full items-center justify-center rounded-lg"
     >
       <img
-        :src="props.product.imgProduct"
+        :src="props.product.image"
         alt="Image produit"
         class="flex h-[191px!important]"
       />
@@ -32,22 +32,22 @@
     <!-- Fin bloc image -->
 
     <!-- Bloc nom et description -->
-    <div>
+    <div class="flex flex-col w-full justify-start ">
       <h3
-        class="w-full justify-start text-left text-lg font-bold text-gray-600"
+        class="text-left text-lg font-bold text-gray-600"
       >
-        <a href="/app/product">Nom du produit</a>
+        <a href="/app/product">{{ props.product.name }}</a>
       </h3>
       <p class="mt-1 w-full justify-start text-left text-lg text-gray-400">
-        Description du produit ou du service
+        {{ props.product.description }}
       </p>
     </div>
     <!-- Fin bloc nom et description -->
 
     <!-- Bloc prix -->
     <div class="mt-2 flex w-full items-center justify-start">
-      <span class="mr-2 text-lg font-bold text-primary">85,50€</span>
-      <span class="text-lg text-gray-400 line-through">100,00€ HT</span>
+      <span class="mr-2 text-lg font-bold text-primary">{{ props.product.price }}€</span>
+      <span v-if="props.product.price_line_through" class="text-lg text-gray-400 line-through">{{ props.product.price_line_through }}€ HT</span>
     </div>
     <!-- Fin bloc prix -->
 

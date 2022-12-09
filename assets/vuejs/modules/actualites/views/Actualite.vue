@@ -11,13 +11,13 @@
       <div class="m-auto my-2 grid w-[100%] max-w-screen-2xl grid-cols-2 gap-4">
         <!-- Bloc text actualité -->
         <div>
-          <h3 class="primary mb-2 text-[35px]">{{ article.name }}</h3>
+          <h3 class="primary mb-2 text-[35px]">{{ contenusExpert[1].title }}</h3>
           <span
             class="mr-2 w-max rounded-md px-2 py-1 text-white text-white"
-            :class="article.category.color"
-            >{{ article.category.name }}</span
+            :class="contenusExpert[1].categorie.color"
+            >{{ contenusExpert[1].categorie.name }}</span
           >
-          <span class="text-gray-500">{{ article.date }}</span>
+          <span class="text-gray-500">{{ contenusExpert[1].date }}</span>
           <div class="mt-5 h-[auto] rounded-lg">
             <p class="whitespace-pre-line text-gray-500">
               {{ article.description }}
@@ -39,7 +39,7 @@
         <!-- Bloc image -->
         <div class="mt-[7rem] h-[421px] rounded-lg bg-white">
           <img
-            :src="defaultImageFile"
+            :src="contenusExpert[1].img_landscape"
             alt="Picture"
             class="m-auto h-[inherit] items-center"
           />
@@ -52,11 +52,11 @@
         <h3 class="primary home-subtitle mb-5">Articles recommandés</h3>
         <div class="mt-5 grid grid-cols-3 gap-4 p-8">
           <div
-            v-for="(art, key) in articlesRecommandes"
+            v-for="(art, key) in contenusExpert"
             :key="key"
             class="grid grid-cols-2"
           >
-            <div class="flex rounded-lg border-[#F3EDFE] bg-white">
+            <div class="flex rounded-lg  bg-white">
               <img
                 :src="art.img"
                 alt="Picture"
@@ -64,7 +64,7 @@
               />
             </div>
             <div class="px-6 text-left">
-              <h3 class="primary text-[23px] font-bold">{{ art.name }}</h3>
+              <h3 class="primary text-[23px] font-bold">{{ art.title }}</h3>
               <p class="text-lg">
                 {{ art.description }}
               </p>
@@ -92,6 +92,7 @@ import { computed, ref } from 'vue'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import ArrowRigntIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
+import { contenusExpert } from '@/vuejs/modules/actualites'
 
 const defaultImageFile = getImage(defaultImage)
 

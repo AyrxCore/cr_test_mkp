@@ -23,7 +23,7 @@
             />
           </button>
         </div>
-        <div class="mr-2">{{ listProducts.length }} produits</div>
+        <div class="mr-2">{{ productsSimilaire.length + 1 }} produits</div>
         <div class="h-[28px] rounded-md border bg-white">
           <select class="h-[28px] rounded-md py-0 text-[14px]">
             <option>Trier par produit</option>
@@ -57,7 +57,7 @@
                 class="mx-auto flex h-[273px] items-center justify-center bg-white"
               >
                 <img
-                  :src="defaultImageFile"
+                  :src="getImage(alda)"
                   alt="Image produit"
                   class="flex h-[auto!important]"
                 />
@@ -73,7 +73,10 @@
                 <ArrowRightIconComponent />Découvrir l'accord cadre
               </a>
             </div>
-            <div v-for="(product, key) in listProducts" :key="key">
+            <div>
+              <ProductComponent :product="productsTopVenteHomepage[0]" class="h-[516px]" />
+            </div>
+            <div v-for="(product, key) in productsSimilaire" :key="key">
               <ProductComponent :product="product" class="h-[516px]" />
             </div>
           </div>
@@ -85,28 +88,15 @@
 <script lang="ts" setup>
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import HeaderPartnerComponent from '@/vuejs/modules/partners/components/HeaderPartnerComponent.vue'
-import { getImage } from '@/vuejs/services/utils'
-import defaultImage from '@/vuejs/assets/img/default-image.png'
-import { computed } from 'vue'
 import CheckboxComponent from '@/vuejs/modules/shared/CheckboxComponent.vue'
 import ProductComponent from '@/vuejs/modules/products/components/ProductComponent.vue'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightIconComponent.vue'
 import ChevronLeftIconComponent from '@/vuejs/modules/shared/icon/ChevronLeftIconComponent.vue'
+import { productsSimilaire, productsTopVenteHomepage } from '@/vuejs/modules/products'
+import alda from '@/vuejs/assets/img/demo/alda-partner.png'
+import { getImage } from '@/vuejs/services/utils'
 
-const defaultImageFile = getImage(defaultImage)
-
-const listProducts = computed(() => {
-  const products = []
-  for (let i = 0; i < 8; i++) {
-    products.push({
-      imgFrn: defaultImageFile,
-      imgProduct: defaultImageFile,
-    })
-  }
-
-  return products
-})
 </script>
 
 <style scoped>

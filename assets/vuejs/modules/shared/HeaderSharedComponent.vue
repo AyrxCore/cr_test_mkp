@@ -1,15 +1,8 @@
 <template>
-  <nav class="header sticky top-0 z-30 bg-primary py-0.5 px-4">
+  <!-- Bloc desktop menu -->
+  <nav class="header sticky top-0 z-30 bg-primary md:py-0.5 px-4 hidden md:block">
     <div class="mx-auto px-4 md:flex md:items-center">
-      <div class="mt-1">
-        <a href="/app/home" class="text-xl font-bold text-white">
-          <img
-            :src="qantisLogoImg"
-            alt="Logo Qantis"
-            class="logo-qantis-header sm:mx-auto sm:mb-2"
-          />
-        </a>
-      </div>
+      <LogoComponent />
       <div
         class="mx-auto mr-10 ml-5 h-[55px] min-w-max grow flex-row md:flex md:w-[100%]"
       >
@@ -24,47 +17,49 @@
         class="mt-3 items-center justify-end text-white md:flex"
       >
         <AccountComponent />
-        <div class="ml-3 flex text-white">
-          <div class="mr-4 flex">
-            <a href="#">
-              <HeartIconComponent />
-            </a>
-          </div>
-          <div class="flex">
-            <a href="/app/cart">
-              <ShoppingCartIconComponent />
-            </a>
-          </div>
-        </div>
       </div>
     </div>
     <MenuComponent />
   </nav>
-  <div class="flex bg-gradient h-[59px] justify-center py-4 text-white">
-    <span class="mr-2">Pneumatiques : êtes-vous concernés par la Loi Montagne ?</span>
-    <a href="#" class="underline">Découvrir</a>
-    <button class="text-white right-2 absolute">
-      <CloseIconComponent />
-    </button>
-  </div>
+  <!-- Fin Bloc desktop menu -->
+
+  <nav class="header sticky top-0 z-30 bg-primary px-4 w-full block md:hidden">
+    <div class="mx-auto flex items-center flex-col">
+      <div class="flex flex-row w-full">
+        <MenuComponent class="w-4/12"/>
+        <LogoComponent class="w-4/12 flex justify-center"/>
+        <div
+          id="navbar-collapse"
+          class="w-4/12 mt-0 flex justify-end items-center text-white"
+        >
+          <AccountComponent />
+        </div>
+      </div>
+
+      <div
+        class="mx-auto mt-2 mr-0 ml-0 h-[55px] min-w-max grow flex-row w-full"
+      >
+        <SearchComponent
+          placeholder="Recherchez un produit, un accord-cadre ou un fournisseur"
+        >
+          <SearchIconComponent />
+        </SearchComponent>
+      </div>
+    </div>
+  </nav>
 </template>
 
 <script lang="ts" setup>
 import { useUserStore } from '@/vuejs/stores/user'
 import { storeToRefs } from 'pinia'
-import { getImage } from '@/vuejs/services/utils'
-import qantisHeaderLogo from '@/vuejs/assets/img/qantis_marketplace_logo_blanc.png'
 import SearchComponent from '@/vuejs/modules/shared/InputButtonComponent.vue'
-import MenuComponent from '@/vuejs/modules/shared/MenuComponent.vue'
-import AccountComponent from '@/vuejs/modules/shared/AccountComponent.vue'
-import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
-import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
-import CloseIconComponent from '@/vuejs/modules/shared/icon/CloseIconComponent.vue';
+import MenuComponent from '@/vuejs/modules/shared/header-component/MenuComponent.vue'
+import AccountComponent from '@/vuejs/modules/shared/header-component/AccountComponent.vue'
+import LogoComponent from '@/vuejs/modules/shared/header-component/LogoComponent.vue'
+import SearchIconComponent from '@/vuejs/modules/shared/icon/SearchIconComponent.vue'
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
-
-const qantisLogoImg = getImage(qantisHeaderLogo)
 </script>
 
 <style lang="scss">
@@ -79,10 +74,7 @@ const qantisLogoImg = getImage(qantisHeaderLogo)
 }
 
 .menu-button {
-  width: 220px;
-  height: 50px;
-  border-radius: 5px;
-  z-index: 200;
+  @apply flex rounded z-50 md:w-[220px] md:h-[50px];
 }
 
 .overlay {

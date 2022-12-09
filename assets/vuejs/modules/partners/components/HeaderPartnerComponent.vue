@@ -4,8 +4,8 @@
     :current-page="'Nom du partenaire'"
   />
   <ContactUsButtonComponent />
-  <div class="flex items-center text-green">
-    <h3 class="text-[35px] text-primary">Nom du partenaire</h3>
+  <div class="flex items-center text-green mt-3.5">
+    <h3 class="text-[35px] text-primary">ALDA MAJUSCULE-OFFICE DEPOT</h3>
     <div class="flex h-4 flex-row">
       <LeafIconComponent class="mx-2" />
       <span class="mr-2 flex text-lg font-bold">7,8/10</span>
@@ -23,16 +23,16 @@
   <div class="mt-10 grid grid-cols-4 gap-4">
     <div class="flex items-center justify-center rounded-lg bg-white">
       <img
-        :src="defaultImageFile"
+        :src="aldaImg"
         alt="Picture"
-        class="items-center sm:mx-auto"
+        class="items-center sm:mx-auto rounded-lg"
       />
     </div>
     <div class="col-span-3 rounded-lg bg-white">
       <img
-        :src="defaultImageFile"
+        :src="aldaHeaderImg"
         alt="Picture"
-        class="items-center sm:mx-auto"
+        class="items-center sm:mx-auto rounded-lg"
       />
     </div>
   </div>
@@ -41,12 +41,13 @@
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import { getImage } from '@/vuejs/services/utils'
-import defaultImage from '@/vuejs/assets/img/default-image.png'
 import { ref } from 'vue'
 import LeafIconComponent from '@/vuejs/modules/shared/icon/LeafIconComponent.vue'
 import InformationIconComponent from '@/vuejs/modules/shared/icon/InformationIconComponent.vue'
-
-const defaultImageFile = getImage(defaultImage)
+import alda from '@/vuejs/assets/img/demo/alda.png'
+import aldaHeader from '@/vuejs/assets/img/demo/a-propos-header.jpg'
+const aldaImg = getImage(alda)
+const aldaHeaderImg = getImage(aldaHeader)
 
 const listUrl = ref([
   {

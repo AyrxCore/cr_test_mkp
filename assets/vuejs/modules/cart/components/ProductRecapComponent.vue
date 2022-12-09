@@ -6,7 +6,7 @@
       </div>
       <div class="w-[13%]">
         <img
-          :src="product.img"
+          :src="product.image"
           alt="Image produit"
           class="ml-2 h-[116px] w-[190px]"
         />
@@ -14,7 +14,7 @@
       <div class="ml-2 w-[45%]">
         <h3 class="primary text-[22px] font-bold">{{ product.name }}</h3>
         <span class="text-lg text-gray-500"
-          >Vendu par: {{ product.seller }}</span
+          >Vendu par: {{ product.partner }}</span
         >
         <br />
         <span class="text-lg text-gray-500"
@@ -25,7 +25,7 @@
       </div>
       <div class="w-[10%]">
         <input
-          :value="product.qte"
+          :value="1"
           type="text"
           name="qte"
           class="w-14 rounded-lg border border-gray-300 text-center"
@@ -33,12 +33,12 @@
       </div>
       <div class="mr-3 w-[10%] text-center">
         <span class="mt-2 text-lg text-gray-400"
-          >{{ product.price_ht }}€ HT</span
+          >{{ product.price }}€ HT</span
         >
       </div>
       <div class="w-[10%] text-center">
         <span class="primary mt-2 text-lg font-bold"
-          >{{ product.price_ttc }}€ HT</span
+          >{{ product.price }}€ HT</span
         >
       </div>
       <div class="float-right inline-flex flex-1">

@@ -1,6 +1,6 @@
 <template>
   <BaseTemplate title="Qantis - MarketPlace">
-    <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 sm:p-8">
+    <div class="m-auto my-4 max-w-screen-2xl flex-1 px-5 md:p-8">
       <div class="mt-7 flex md:justify-between">
         <div class="sm:w-[100%] md:w-[52rem]">
           <h3 class="home-title text-primary">
@@ -8,14 +8,14 @@
             <span class="text-gradient"> marketplace réservée</span>
             à nos 30 000 entreprises adhérentes
           </h3>
-          <p class="mt-5 text-lg text-gray-400">
+          <p class="mt-2.5 text-sm text-gray-400 md:mt-5 md:text-lg">
             Cher adhérent, ce nouvel espace dédié vous permet d'acheter
             directement en ligne et de trouver vos accords-cadres, en quelques
             clics. Notre équipe, que vous connaissez, se tient à votre
             disposition pour répondre à toutes vos questions.
           </p>
         </div>
-        <div>
+        <div class="hidden md:block">
           <ButtonComponent class="button-secondary">
             <MailIconLightComponent />
             <PhoneLightIconComponent />
@@ -23,64 +23,75 @@
           </ButtonComponent>
         </div>
       </div>
-      <div class="flex justify-center">
+      <div class="relative mt-2">
         <CarouselListSharedComponent
-          class="mx-auto mt-10 h-[303px] items-center rounded-xl bg-white px-4 py-4"
           :slides-per-view="1"
-          :space-between="10"
-          :pagination="true"
+          :space-between="20"
+          :breakpoints="{
+            640: {
+              slidesPerView: 1,
+              spaceBetween: 20,
+            },
+          }"
         >
-          <SwiperSlide v-for="i in 5" :key="i">
-            <img :src="defaultImageFile" alt="Picture" class="sm:mx-auto" />
+          <SwiperSlide
+            v-for="(banniere, key) in bannieres"
+            :key="key"
+            class="flex h-full items-center justify-center overflow-hidden rounded-lg bg-white"
+          >
+            <img
+              :src="banniere.image"
+              alt="Picture"
+              class="mx-auto items-center"
+            />
           </SwiperSlide>
         </CarouselListSharedComponent>
       </div>
-      <div class="mt-10 w-[45rem]">
+      <div class="mt-10 md:w-[45rem]">
         <h3 class="home-subtitle text-primary">Top ventes</h3>
-        <p class="text-lg text-gray-400">
+        <p class="text-sm text-gray-400 md:text-lg">
           D'autres adhérents ont déjà acheté ces produits
         </p>
       </div>
-      <div class="flex justify-center">
-        <CarouselListSharedComponent
-          class="mx-auto mt-2 items-center rounded-xl px-[20px!important]"
-          :slides-per-view="4"
-          :space-between="20"
-        >
-          <SwiperSlide v-for="(product, key) in products2" :key="key">
-            <ProductComponent :product="product" />
-          </SwiperSlide>
-        </CarouselListSharedComponent>
-      </div>
+      <ProductsCarouselComponent :products="productsTopVenteHomepage" />
 
       <div class="mt-10">
         <h3 class="home-subtitle text-primary">
           Les accords-cadres incontournables
         </h3>
-        <p class="text-lg text-gray-400">
+        <p class="text-sm text-gray-400 md:text-lg">
           Etes-vous certains de profiter des touts les économies incluses dans
           votre adhésion ?
         </p>
       </div>
-      <div class="flex justify-center">
+      <div class="relative mt-5">
         <CarouselListSharedComponent
-          class="mx-auto mt-2 rounded-xl px-[20px!important]"
-          :slides-per-view="4"
+          :slides-per-view="1"
           :space-between="20"
+          :breakpoints="{
+            640: {
+              slidesPerView: 4,
+              spaceBetween: 20,
+            },
+          }"
         >
-          <SwiperSlide v-for="(accord, key) in accords" :key="key">
-            <div class="h-full rounded-md bg-primary p-8">
+          <SwiperSlide
+            v-for="(accord, key) in accords"
+            :key="key"
+            class="flex h-full items-center justify-center overflow-hidden rounded-lg bg-white"
+          >
+            <div class="flex h-full flex-col rounded-md bg-primary p-8">
               <div class="mx-auto">
                 <img :src="accord.img" alt="Image produit" />
               </div>
-              <p class="my-8 text-lg font-normal text-white">
+              <p class="my-8 text-sm font-normal text-white md:text-lg">
                 Découvrez ou téléchargez les conditions négociées de ce
                 partenaire
               </p>
 
               <a
                 href="/app/partner"
-                class="button button-white button-white-primary !px-2"
+                class="button button-white button-white-primary flex justify-center"
               >
                 <ArrowRightIconComponent />Découvrir l'accord cadre
               </a>
@@ -90,29 +101,22 @@
       </div>
 
       <!-- Bloc sélection de produits -->
-      <div class="mt-10 w-[45rem]">
+      <div class="mt-10 md:w-[45rem]">
         <h3 class="home-subtitle text-primary">Une sélection de produits</h3>
-        <p class="text-lg text-gray-400">
+        <p class="text-sm text-gray-400 md:text-lg">
           Savez-vous que vous pouvez désormais acheter ces produits en quelques
           clics ?
         </p>
       </div>
-      <div class="flex justify-center">
-        <CarouselListSharedComponent
-          class="mx-auto mt-2 items-center rounded-xl px-[20px!important]"
-          :slides-per-view="4"
-          :space-between="20"
-          navigation=""
-        >
-          <swiper-slide v-for="(product, key) in products" :key="key">
-            <ProductComponent :product="product" />
-          </swiper-slide>
-        </CarouselListSharedComponent>
-      </div>
+
+      <ProductsCarouselComponent
+        :products="productsSelectionHomepage"
+        class="mt-4"
+      />
       <!-- Fin bloc sélection de produits -->
       <div class="mt-10">
         <h3 class="home-subtitle text-primary">Nos partenaires fournisseurs</h3>
-        <p class="text-lg text-gray-400">
+        <p class="text-sm text-gray-400 md:text-lg">
           Plus de 200 partenaires fournisseurs, repartis en 26 catégories, sont
           référencés pour vos achats.
           <a href="#" class="font-normal text-secondary underline"
@@ -124,12 +128,12 @@
       <PartnersCarousel class="mt-5" />
 
       <div class="mt-16 text-center">
-        <h3 class="text-[35px] font-bold text-primary">
+        <h3 class="home-subtitle font-bold text-primary">
           Nos catégories de produits et d'accords-cadres
         </h3>
       </div>
       <div
-        class="mt-5 flex w-[100%] flex-wrap justify-center text-center text-lg"
+        class="mt-5 flex hidden w-[100%] flex-wrap justify-center text-center text-lg md:flex"
       >
         <div
           v-for="(categorie, id) in listCategories"
@@ -142,14 +146,16 @@
     </div>
 
     <div
-      class="home-bloc-economie text-cotext m-auto mt-16 h-[338px] flex-1 py-4 text-white"
+      class="home-bloc-economie text-cotext m-auto mt-16 flex-1 py-4 text-white"
     >
-      <div class="text-center">
-        <h3 class="text-[35px] font-bold">
+      <div class="px-5 text-left md:text-center">
+        <h3
+          class="text-[23px] font-bold font-bold leading-[27px] md:text-[35px] md:leading-[38.11px]"
+        >
           Vous faites des économies tout en <br />
           contribuant à votre démarche RSE
         </h3>
-        <p class="mx-auto mt-2 w-[45%] text-lg">
+        <p class="mt-2 text-sm md:mx-auto md:w-[45%] md:text-lg">
           Nos adhérents réalisent en moyenne 27 % d'économies, grâce à la
           mutualisation des achats. Nous notons et référençons nos partenaires
           fournisseurs à l'aide d'un référentiel RSE. Votre adhésion permet
@@ -168,55 +174,17 @@
       class="m-auto my-6 mt-10 max-w-screen-2xl flex-1 rounded-md bg-white pb-4 shadow-md"
     >
       <div class="flex flex-col pt-1 text-center">
-        <h3 class="primary mt-10 flex flex-col pl-8 text-[35px] font-bold">
+        <h3 class="primary home-subtitle mt-10 flex flex-col pl-8 font-bold">
           <p class="flex">Contenus experts spécialement conçus</p>
           <p class="flex">
             pour la
             <span class="text-gradient ml-2"> communauté QANTIS </span>
           </p>
         </h3>
-        <div class="mt-5 grid grid-cols-3 gap-4 p-8">
-          <div
-            v-for="(contenu, id) in contenusExpert"
-            :key="id"
-            class="grid grid-cols-2"
-          >
-            <div class="flex rounded-lg border-[#F3EDFE]">
-              <img
-                :src="contenu.img"
-                alt="Picture"
-                class="items-center sm:mx-auto"
-              />
-            </div>
-            <div class="px-6 text-left">
-              <h3 class="text-[23px] font-bold text-primary">
-                {{ contenu.titre }}
-              </h3>
-              <p class="my-4">
-                <a
-                  href="#"
-                  class="mr-2 mb-2 w-auto items-center rounded-md bg-purple-600 px-5 py-2.5 text-sm text-white"
-                >
-                  {{ contenu.btnNam }}
-                </a>
-              </p>
-              <p class="text-lg">
-                {{ contenu.desc }}
-              </p>
-              <div class="bottom-0">
-                <a
-                  href="#"
-                  class="bottom-0 flex items-center text-sm font-medium text-primary underline"
-                >
-                  Lire l'article
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ContenusExpertComponent :contenus="contenusExpert" />
         <div class="flex justify-center">
           <p class="mt-10">
-            <a href="#" class="button button-gradient">
+            <a href="/app/actualites" class="button button-gradient">
               <ArrowRightIconComponent :stroke-color="'#FFFFFF'" /> Tous les
               contenus experts
             </a>
@@ -230,49 +198,34 @@
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
 import { getImage, listCategories } from '@/vuejs/services/utils'
-import defaultImage from '@/vuejs/assets/img/default-image.png'
+import banniere1 from '@/vuejs/assets/img/demo/banniere-1-desktop.png'
+import banniere2 from '@/vuejs/assets/img/demo/banniere-2-desktop.png'
 import { SwiperSlide } from 'swiper/vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import ProductComponent from '@/vuejs/modules/products/components/ProductComponent.vue'
+import {
+  productsTopVenteHomepage,
+  productsSelectionHomepage,
+} from '@/vuejs/modules/products'
 import PartnersCarousel from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
 
 import { ref } from 'vue'
-import imgCheville from '@/vuejs/assets/img/samples/cheville.png'
-import imgAmpoules from '@/vuejs/assets/img/samples/ampoules.png'
-import imgTapis from '@/vuejs/assets/img/samples/tapis.png'
-import imgGomme from '@/vuejs/assets/img/samples/gomme.png'
-
-import imgFrn1 from '@/vuejs/assets/img/samples/berner.png'
-import imgFrn2 from '@/vuejs/assets/img/samples/mieko.png'
-import imgFrn3 from '@/vuejs/assets/img/samples/sign.png'
-import imgFrn4 from '@/vuejs/assets/img/samples/jpg.png'
 
 import imgPeugeot from '@/vuejs/assets/img/samples/peugeot.png'
 import imgLoxam from '@/vuejs/assets/img/samples/loxam.png'
 import imgBusiness from '@/vuejs/assets/img/samples/business.png'
 import imgAdecco from '@/vuejs/assets/img/samples/adecco.png'
-
 import imgMaps from '@/vuejs/assets/img/samples/img-maps.png'
 import imgCentral from '@/vuejs/assets/img/samples/img-central.png'
 import imgMagazine from '@/vuejs/assets/img/samples/img-magazine.png'
 import MailIconLightComponent from '@/vuejs/modules/shared/icon/MailIconLightComponent.vue'
 import PhoneLightIconComponent from '@/vuejs/modules/shared/icon/PhoneLightIconComponent.vue'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
+import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
+import ContenusExpertComponent from '@/vuejs/modules/home/component/ContenusExpertComponent.vue'
 
-const defaultImageFile = getImage(defaultImage)
-
-const products = ref([
-  { imgFrn: getImage(imgFrn1), imgProduct: getImage(imgCheville) },
-  { imgFrn: getImage(imgFrn2), imgProduct: getImage(imgAmpoules) },
-  { imgFrn: getImage(imgFrn3), imgProduct: getImage(imgTapis) },
-  { imgFrn: getImage(imgFrn4), imgProduct: getImage(imgGomme) },
-])
-
-const products2 = ref([
-  { imgFrn: defaultImageFile, imgProduct: defaultImageFile },
-  { imgFrn: defaultImageFile, imgProduct: defaultImageFile },
-  { imgFrn: defaultImageFile, imgProduct: defaultImageFile },
-  { imgFrn: defaultImageFile, imgProduct: defaultImageFile },
+const bannieres = ref([
+  { image: getImage(banniere1) },
+  { image: getImage(banniere2) },
 ])
 
 const accords = ref([
@@ -313,21 +266,11 @@ const contenusExpert = ref([
 }
 
 .home-title {
-  font-family: CoText, sans-serif;
-  font-size: 42px;
-  font-weight: 700;
-  line-height: 49px;
-  text-align: left;
-  height: 98px;
-  left: 144px;
-  top: 281px;
+  @apply text-left text-[28px] font-bold leading-[33px] md:text-[42px] md:leading-[49px];
 }
 
 .home-subtitle {
-  font-family: CoText, sans-serif;
-  font-size: 35px;
-  font-weight: 700;
-  text-align: left;
+  @apply text-left text-[23px] font-bold leading-[27px] md:text-[35px] md:leading-[38.11px];
 }
 
 .text-gradient {
