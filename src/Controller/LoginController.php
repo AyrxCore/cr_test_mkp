@@ -62,6 +62,18 @@ class LoginController extends AbstractController
                     }
                 }
 
+                if (!$user->isEnabled()) {
+                    $session->getFlashBag()->add(
+                        'warning',
+                        $translator->trans(
+                            'resetting.user.disabled',
+                            [],
+                            'prehome'
+                        )
+                    );
+                    return $this->redirectToRoute($request->attributes->get('_route'));
+                }
+
                 $user->setPasswordRequestedAt(new \DateTime('now'));
                 $token = md5(random_bytes(100));
                 $user->setConfirmationToken($token);

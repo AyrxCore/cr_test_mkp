@@ -11,6 +11,7 @@ use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpClient\Exception\ServerException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -97,6 +98,7 @@ abstract class HttpClientProvider
     private function computeHeaders(string &$url, array &$options = [], $isAdmin = false, $wihthoutToken = false): void
     {
         $session = $this->requestStack->getSession();
+
         // pas de token nécessaire et env de dév on ajoute juste le header http_basic
         if ('dev' === $this->env) {
             $options["auth_basic"] = ["quantis","jj0tFWJulNYjDc"];

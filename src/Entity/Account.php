@@ -2,34 +2,53 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\Post;
+use App\Dto\UserAccountInputDto;
 use App\Repository\AccountRepository;
+use App\State\UserAccountProcessor;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AccountRepository::class)]
 #[ORM\HasLifecycleCallbacks]
+#[ApiResource(
+    collectionOperations: [
+
+    ],
+    itemOperations: ['get' => [
+        'normalization_context' => ['groups' => ['account:get']]
+        ]
+    ],
+    normalizationContext: ['groups' => ['account:get']]
+)]
 class Account
 {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    #[Groups("simpleUser")]
+    #[Groups(["simpleUser","account:list", "account:get"])]
     private ?Uuid $id = null;
 
     #[ORM\Column()]
+    #[Groups(["account:list","account:get"])]
     private ?int $upplerUserId = null;
 
     #[ORM\Column()]
+    #[Groups(["account:list","account:get"])]
     private ?int $upplerSubAccountId = null;
 
     #[ORM\Column]
+    #[Groups(["account:list","account:get"])]
     private ?int $upplerCompanyId = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["account:list","account:get"])]
     private ?string $upplerUsername = null;
 
     #[ORM\Column(length: 255)]
@@ -53,6 +72,7 @@ class Account
 
     #[ORM\ManyToOne(inversedBy: 'accounts', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(["account:get"])]
     private ?User $_user = null;
 
     #[ORM\Column]

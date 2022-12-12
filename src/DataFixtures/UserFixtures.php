@@ -30,7 +30,18 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface, FixtureGr
 
         $io = new ConsoleOutput();
 
-        $io->writeln("Création d'un utilisateur de test'");
+        $io->writeln("Création d'utilisateurs de test'");
+
+        //création d'un utilisateur test pour l'api
+        $user = new User();
+        $user->setEmail('test@qantis.co');
+        $user->setUsername('test_api');
+        $user->setPassword($this->userPasswordHasher->hashPassword($user, '000000'));
+        $user->setLastName('TEST');
+        $user->setFirstName('api');
+        $user->setEnabled(true);
+        $user->addRole('ROLE_API');
+        $manager->persist($user);
 
         //création d'un utilisateur lié à un seul adhérent
         $user = new User();

@@ -36,8 +36,8 @@ class UserChecker implements UserCheckerInterface
             return;
         }
 
-        //le user n'est lié à aucun compte, il ne peut pas entrer
-        if ($user->getAccounts()->isEmpty()) {
+        //le user n'est lié à aucun compte, il ne peut pas entrer saufs'il s'agit d'un utilisteur api (bot Neo)
+        if (!$user->hasRole('ROLE_API') && $user->getAccounts()->isEmpty()) {
             throw new CustomUserMessageAccountStatusException('user_empty_account');
         } elseif (1 === $user->getAccounts()->count()) {
             //le user est lié à un seul compte on l'identifie automatiquement dessus
@@ -53,9 +53,6 @@ class UserChecker implements UserCheckerInterface
             if ($userAuth && $session->has('access_token') && !empty($session->get('access_token'))) {
                 return;
             }
-        } else {
-            //le user est lié à plusieurs comptes on renvoi la liste
-            // pour qu'il choisisse avec lequel il souhaite se loguer
         }
     }
 }
