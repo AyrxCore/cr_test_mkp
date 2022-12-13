@@ -28,7 +28,10 @@ import HeaderSharedComponent from '@/vuejs/modules/shared/HeaderSharedComponent.
 import FooterSharedComponent from '@/vuejs/modules/shared/FooterSharedComponent.vue'
 import StickyContactButtons from '@/vuejs/modules/shared/StickyContactButtonsComponent.vue'
 import CloseIconComponent from '@/vuejs/modules/shared/icon/CloseIconComponent.vue'
-
+import {useUserStore} from "@/vuejs/stores/user";
+import {storeToRefs} from "pinia";
+const userStore = useUserStore()
+const { user } = storeToRefs(userStore)
 const props = defineProps({
   title: {
     required: false,

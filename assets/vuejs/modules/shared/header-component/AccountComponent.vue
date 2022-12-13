@@ -11,7 +11,7 @@
         </div>
         <div class="md:ml-3 md:max-w-[250px]">
           <div class="sr-only items-center md:not-sr-only">
-            Bonjour {{ username }}
+            Bonjour {{ user.lastName }} {{ user.firstName }}
             <div>
               <button
                 id="menu-button-account"
@@ -23,7 +23,11 @@
             </div>
           </div>
           <div class="sr-only inline-flex items-center md:not-sr-only">
-            <a href="#" class="text-xs">Livré à {{ address }}</a>
+            <a href="#" class="text-xs">Livré à
+              {{ user.account.buyer.default_address.street }}
+              {{ user.account.buyer.default_address.postcode }}
+              {{ user.account.buyer.default_address.city }}
+            </a>
           </div>
         </div>
         <a class="ml-4 self-center md:ml-0" href="#">
@@ -65,7 +69,11 @@
               </a>
             </div>
             <hr class="mx-auto mt-1 mb-1 w-[95%] border border-b-primary" />
-            <a href="#" class="mt-3 inline-flex font-bold hover:bg-gray-200">
+            <a
+                href="#"
+                class="mt-3 inline-flex font-bold hover:bg-gray-200"
+                @click="onLogout($event)"
+            >
               <DisconnectIconComponent class="mr-2" />
               Se déconnecter
             </a>
@@ -92,6 +100,11 @@ import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightI
 import MapInIconComponent from '@/vuejs/modules/shared/icon/MapInIconComponent.vue'
 import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
 import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
+import {useUserStore} from "@/vuejs/stores/user";
+import {storeToRefs} from "pinia";
+
+const userStore = useUserStore()
+const { user } = storeToRefs(userStore)
 
 const listAccount = ref<string[]>([
   'Historique des commandes',
@@ -102,13 +115,17 @@ const listAccount = ref<string[]>([
   'Changer de SIRET',
 ])
 
-const username = ref<string>('Qantis')
-const address = ref<string>('185, allée des Cyprès, 69760 Limonest')
 
 const onClick = (action): void => {
   const overlay = document.querySelector('#overlay-account')
   const button = document.querySelector('#menu-button-account')
   const menu = document.querySelector('#hamburger-menu-account')
   animateSubMenu(action, overlay, button, menu)
+}
+
+const onLogout = async (e: Event): Promise<void> => {
+  e.preventDefault()
+  await userStore.logout() &&
+  location.reload()
 }
 </script>

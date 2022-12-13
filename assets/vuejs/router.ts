@@ -74,7 +74,6 @@ router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore()
 
   if (!userStore.isLogged) {
-    console.log('before get me', userStore.getToken)
     await userStore.getCurrentUserDatas()
     const host = window.location.protocol + '//' + window.location.host
     if (!userStore.isLogged) {

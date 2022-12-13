@@ -53,7 +53,6 @@
 
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import EditIconComponent from '@/vuejs/modules/shared/icon/EditIconComponent.vue'
-import {user} from '@/vuejs/modules/account'
 import { AccountPageList } from '@/vuejs/modules/account/routerAccount'
 import { computed } from 'vue'
 

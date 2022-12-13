@@ -14,6 +14,7 @@
         type="email"
         class="input"
         placeholder="Adresse e-mail"
+        :disabled="isLoading"
         required
       />
     </div>
@@ -23,22 +24,21 @@
         type="password"
         placeholder="Mot de passe"
         class="input"
+        :disabled="isLoading"
         required
       />
     </div>
     <a href="#" class="text-gray-500 underline">Mot de passe oublié ? </a>
     <div class="mt-3 items-center sm:mt-6 sm:flex">
-      <!-- <ButtonComponent
+      <ButtonComponent
         :is-loading="isLoading"
         type="submit"
         class="button-gradient min-w-[180px]"
       >
         <ArrowRightIcon />
         Me connecter
-      </ButtonComponent> -->
-      <a href="/app/home" class="button button-gradient min-w-[180px]">
-        <ArrowRightIcon />Me connecter
-      </a>
+      </ButtonComponent>
+
       <div class="text-gray-500 sm:ml-10 sm:flex">
         <div class="pt-6 sm:pt-0">
           Vous n'êtes pas encore adhérent ?<br />

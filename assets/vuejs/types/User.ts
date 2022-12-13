@@ -4,6 +4,9 @@ export interface User {
   email: string
   roles: string[]
   account: Account
+  username: string
+  firstName: string
+  lastName: string
 }
 
 // Décrit le state général du store user
@@ -25,5 +28,5 @@ export interface AuthenticateResponse {
 export enum LoginResponse {
   UserDisabled = 'user_disabled',
   UserEmptyAccount = 'user_empty_account',
-  InvalidCredentials = 'Invalid credentials.',
+  InvalidCredentials = 'Identifiants invalides.',
 }

@@ -30,7 +30,6 @@ import LogoComponent from '@/vuejs/modules/shared/header-component/LogoComponent
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
 
-const qantisLogoImg = getImage(qantisHeaderLogo)
 </script>
 
 <style lang="scss">
