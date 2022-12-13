@@ -1,15 +1,22 @@
 <template>
   <nav class="bg-grey-light w-full rounded-md text-xs">
     <ol class="list-reset flex text-xs">
-      <li><a href="/app/home" class="text-gray-400">Accueil</a></li>
+      <li>
+        <RouterLink
+          :to="{ path: '/app/home' }"
+          class="text-gray-400"
+        >
+          Accueil
+        </RouterLink>
+        </li>
       <ChevronRightIconComponent
-        class="mx-1 h-4 w-4 text-gray-500"
+        class="ml-1 h-4 text-gray-500"
         :stroke-color="'#A4A4A4'"
       />
       <li v-for="(list, key) in listUrl" :key="key" class="inline-flex">
-        <a :href="list.url ?? '#'" class="text-gray-400">{{ list.name }}</a>
+        <RouterLink :to="{ path: list.url ?? '#'}" class="text-gray-400">{{ list.name }}</RouterLink>
         <ChevronRightIconComponent
-          class="mx-1 h-4 w-4 text-gray-500"
+          class="ml-1 h-4 text-gray-500"
           :stroke-color="'#A4A4A4'"
         />
       </li>

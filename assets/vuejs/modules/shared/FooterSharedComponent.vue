@@ -66,9 +66,9 @@
         <div class="px-2">
           <h3 class="mb-7">Votre espace adhérents</h3>
           <ul>
-            <li><a href="#">Mon compte</a></li>
+            <li><a href="/app/account">Mon compte</a></li>
             <li><a href="#">Mes économies</a></li>
-            <li><a href="#">Historique de commandes</a></li>
+            <li><a href="/app/account/orders-history">Historique de commandes</a></li>
             <li><a href="#">Factures</a></li>
           </ul>
         </div>

@@ -1,77 +1,43 @@
 <template>
-  <nav class="header sticky top-0 z-30 bg-primary py-0.5 px-4">
-    <div class="mx-auto px-4 md:flex md:items-center">
-      <div class="mt-1">
-        <a href="/app/home" class="text-xl font-bold text-white">
-          <img
-            :src="qantisLogoImg"
-            alt="Logo Qantis"
-            class="logo-qantis-header sm:mx-auto sm:mb-2"
-          />
-        </a>
+  <nav class="sticky top-0 z-30 bg-primary px-4 pt-5 pb-3 md:block">
+    <div class="mx-auto items-center px-4 md:flex">
+      <div class="flex justify-between">
+        <MenuComponent class="md:hidden" />
+        <LogoComponent class="w-1/2" />
+        <AccountComponent class="md:hidden" />
       </div>
-      <div
-        class="mx-auto mr-10 ml-5 h-[55px] min-w-max grow flex-row md:flex md:w-[100%]"
-      >
+      <div class="my-4 md:flex md:w-[100%]">
         <SearchComponent
           placeholder="Recherchez un produit, un accord-cadre ou un fournisseur"
         >
           <i class="fa fa-search" />
         </SearchComponent>
       </div>
-      <div
-        id="navbar-collapse"
-        class="mt-3 items-center justify-end text-white md:flex"
-      >
-        <AccountComponent />
-        <div class="ml-3 flex text-white">
-          <div class="mr-4 flex">
-            <a href="#">
-              <HeartIconComponent />
-            </a>
-          </div>
-          <div class="flex">
-            <a href="#">
-              <ShoppingCartIconComponent />
-            </a>
-          </div>
-        </div>
-      </div>
+      <AccountComponent class="hidden md:flex" />
     </div>
-    <MenuComponent />
+    <MenuComponent class="hidden md:flex" />
   </nav>
 </template>
 
 <script lang="ts" setup>
 import { useUserStore } from '@/vuejs/stores/user'
 import { storeToRefs } from 'pinia'
-import { getImage } from '@/vuejs/services/utils'
-import qantisHeaderLogo from '@/vuejs/assets/img/qantis_marketplace_logo_blanc.png'
 import SearchComponent from '@/vuejs/modules/shared/InputButtonComponent.vue'
-import MenuComponent from '@/vuejs/modules/shared/MenuComponent.vue'
-import AccountComponent from '@/vuejs/modules/shared/AccountComponent.vue'
-import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
-import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
+import MenuComponent from '@/vuejs/modules/shared/header-component/MenuComponent.vue'
+import AccountComponent from '@/vuejs/modules/shared/header-component/AccountComponent.vue'
+import LogoComponent from '@/vuejs/modules/shared/header-component/LogoComponent.vue'
 
+const userStore = useUserStore()
+const { user } = storeToRefs(userStore)
 
 const qantisLogoImg = getImage(qantisHeaderLogo)
 </script>
 
 <style lang="scss">
 @import 'assets/style/_variables.scss';
-.logo-qantis-header {
-  height: auto;
-  width: 145px;
-  left: 60px;
-  top: 24.5px;
-  border-radius: 0px;
-}
 
 .menu-button {
-  width: 220px;
-  height: 50px;
-  border-radius: 5px;
-  z-index: 200;
+  @apply z-50 flex rounded md:h-[50px] md:w-[220px];
 }
 
 .overlay {
@@ -112,7 +78,7 @@ const qantisLogoImg = getImage(qantisHeaderLogo)
     overflow-x: hidden;
 
     a {
-      display: block;
+      display: flex;
       padding: 10px;
       height: 2em;
       color: $primary;

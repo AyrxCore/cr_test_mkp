@@ -1,16 +1,19 @@
 <template>
   <div class="min-h-screen">
-    <div>
-      <button class="top-[220px] sticky-left-button" >
-        <MailIconComponent />
-      </button>
-    </div>
-    <div>
-      <button class="top-[274px] sticky-left-button">
-        <PhoneIconComponent />
-      </button>
-    </div>
+    <StickyContactButtons />
     <HeaderSharedComponent />
+    <div
+      class="bg-gradient flex h-[59px] flex-row items-center justify-center py-4 text-white"
+    >
+      <p class="mr-0 w-[305px] text-[16px] md:mr-2 md:w-auto md:text-lg">
+        Pneumatiques : êtes-vous concernés par la Loi Montagne ?
+        <a href="#" class="underline">Découvrir</a>
+      </p>
+
+      <button class="absolute right-2 text-white">
+        <CloseIconComponent />
+      </button>
+    </div>
     <main class="">
       <slot />
     </main>
@@ -23,8 +26,8 @@ import { useHead } from '@vueuse/head'
 import { computed } from 'vue'
 import HeaderSharedComponent from '@/vuejs/modules/shared/HeaderSharedComponent.vue'
 import FooterSharedComponent from '@/vuejs/modules/shared/FooterSharedComponent.vue'
-import MailIconComponent from '@/vuejs/modules/shared/icon/MailIconComponent.vue'
-import PhoneIconComponent from '@/vuejs/modules/shared/icon/PhoneIconComponent.vue'
+import StickyContactButtons from '@/vuejs/modules/shared/StickyContactButtonsComponent.vue'
+import CloseIconComponent from '@/vuejs/modules/shared/icon/CloseIconComponent.vue'
 
 const props = defineProps({
   title: {

@@ -20,6 +20,11 @@ import {
   routes as accountRoutes,
 } from '@/vuejs/modules/account/routerAccount'
 
+import {
+  PartnersPageList,
+  routes as partnerRoutes,
+} from '@/vuejs/modules/partners/routerPartners'
+
 import Home from '@/vuejs/modules/home/views/HomePage.vue'
 import Contact from '@/vuejs/modules/ContactPage.vue'
 import { useUserStore } from '@/vuejs/stores/user'
@@ -35,6 +40,7 @@ export const PageList = {
   ...ActualitesPageList,
   ...CartPageList,
   ...AccountPageList,
+  ...PartnersPageList,
 }
 
 const routes: RouteRecordRaw[] = [
@@ -52,12 +58,16 @@ const routes: RouteRecordRaw[] = [
   ...actualitesRoutes,
   ...cartRoutes,
   ...accountRoutes,
+  ...partnerRoutes,
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   linkActiveClass: 'current-route',
   routes,
+  scrollBehavior() {
+    window.scrollTo(0, 0)
+  },
 })
 
 router.beforeEach(async (to, from, next) => {

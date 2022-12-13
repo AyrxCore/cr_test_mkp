@@ -1,0 +1,8 @@
+.input,
+.textarea {
+  @apply block w-full rounded-lg border-none border-gray-300 bg-white px-8 py-4 text-base text-gray-900;
+
+  &:focus {
+    @apply outline-none border-primary ring-primary;
+  }
+}

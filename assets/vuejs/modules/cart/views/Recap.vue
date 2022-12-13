@@ -33,12 +33,12 @@
             <span class="text-gray-400 mt-2 text-[14px]">Sous-total fournisseur</span>
           </div>
           <div class="w-[10%]">
-            <span class="primary font-bold text-lg mt-2">XX€ HT</span>
+            <span class="primary font-bold text-lg mt-2">{{ totalPriceByPartner(partner.products) }}€ HT</span>
           </div>
         </div>
         <div class="p-2 w-full flex-row bg-white px-6">
           <p class="text-gray-500 text-lg">
-            Il vous reste XX€ HT de commande pour bénéficier de la livraison gratuite
+            {{ partner.label_livraison }}
           </p>
           <p class="text-gray-500  text-lg inline-flex w-full items-center mt-7">
             Méthode de livraison:
@@ -67,7 +67,7 @@
           Sauvegarder le panier
         </DefaultButtonComponent>
       </div>
-      <CartRightSideComponent>
+      <CartRightSideComponent :next-url="'/app/cart/adresses'">
         <template #title>
           Récapitulatif panier
         </template>
@@ -88,62 +88,47 @@
 </template>
 <script lang="ts" setup>
 
-import {ref} from 'vue'
+import { ref } from 'vue'
 import CartPage from '@/vuejs/modules/cart/pages/CartPage.vue'
 import FileIconComponent from '@/vuejs/modules/shared/icon/FileIconComponent.vue'
 import DefaultButtonComponent from '@/vuejs/modules/shared/DefaultButtonComponent.vue'
-import productImage from '@/vuejs/assets/img/default-image.png'
-import { getImage } from '@/vuejs/services/utils'
 import ProductRecapComponent from '@/vuejs/modules/cart/components/ProductRecapComponent.vue'
 import CbIconComponent from '@/vuejs/modules/shared/icon/CbIconComponent.vue'
 import SepaIconComponent from '@/vuejs/modules/shared/icon/SepaIconComponent.vue'
 import CartRightSideComponent from '@/vuejs/modules/cart/components/CartRightSideComponent.vue'
-
-const productImageFile = getImage(productImage)
+import {productsTopVenteHomepage, productsSimilaire} from '@/vuejs/modules/products'
 
 const detailsCart = ref({
   company_name: 'Qantis',
   partners: [
     {
-      name: 'Partenaire N°1',
+      name: 'ALDA MAJUSCULE',
       products: [
-        {
-          name: 'Description du produit ou du service N°1',
-          reference: 'XXXXXXXXXXX',
-          seller: 'XXXXXXXXXX',
-          qte: '3',
-          price_ht: 'XX',
-          price_ttc: 'XX',
-          img: productImageFile
-        },
-        {
-          name: 'Description du produit ou du service N°2',
-          reference: 'XXXXXXXXXXX',
-          seller: 'XXXXXXXXXX',
-          qte: '3',
-          price_ht: 'XX',
-          price_ttc: 'XX',
-          img: productImageFile
-        }
-      ]
+        productsSimilaire[0],
+        productsSimilaire[1],
+      ],
+      label_livraison: 'Il vous reste 18,28€ HT de commande pour bénéficier de la livraison gratuite'
     },
     {
-      name: 'Partenaire N°2',
+      name: 'BERNER',
       products: [
-        {
-          name: 'Description du produit ou du service N°3',
-          reference: 'XXXXXXXXXXX',
-          seller: 'XXXXXXXXXX',
-          qte: '3',
-          price_ht: 'XX',
-          price_ttc: 'XX',
-          img: productImageFile
-        }
-      ]
+        productsTopVenteHomepage[1]
+      ],
+      label_livraison: 'Livraison offerte pour les adhérents QANTIS'
     }
   ]
 })
 
+const totalPriceByPartner = (products: Array): Promise<any> => {
+  let total = 0
+  products.forEach((value, index) => {
+    console.log(value)
+
+    total = parseFloat(value.price.replace(',', '.')) + parseFloat(total)
+  })
+
+  return total.toLocaleString().replace('.', ',')
+}
 </script>
 
 <style scoped></style>

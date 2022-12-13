@@ -5,52 +5,72 @@
         :list-url="listUrl"
         :current-page="'Produit'"
       />
-      <div class="w-[100%] max-w-screen-2xl">
+      <div class="w-[100%] max-w-screen-2xl flex justify-end">
         <ContactUsButtonComponent />
       </div>
-      <div class="m-auto my-2 grid w-[100%] max-w-screen-2xl grid-cols-2 gap-4">
+      <div class="m-auto my-3.5 grid w-[100%] max-w-screen-2xl grid-cols-2 gap-4">
         <!-- Bloc image produit -->
         <div>
-          <CarouselListSharedComponent
-            class="mx-auto h-[590px] items-center rounded-xl bg-white px-4"
-            :slides-per-view="1"
-            :space-between="10"
-            :pagination="true"
-            :thumbs="{ swiper: thumbsSwiper }"
-            @on-slide-change="onSlideChange"
-          >
-            <swiper-slide v-for="i in nbImageToShow" :key="i">
-              <img
-                :src="defaultImageFile"
-                alt="Picture"
-                class="items-center sm:mx-auto"
-              />
-            </swiper-slide>
-          </CarouselListSharedComponent>
-          <CarouselListSharedComponent
-            class="mx-auto h-[150px] items-center rounded-xl px-4 py-4"
-            :space-between="10"
-            watch-slides-progress
-            :pagination="false"
-            :navigation="false"
-            @on-slide-change="onSlideChange"
-            @swiper="setThumbsSwiper"
-          >
-            <swiper-slide v-for="i in nbImageToShow" :key="i">
-              <img
-                :src="defaultImageFile"
-                alt="Picture"
-                class="items-center sm:mx-auto"
-              />
-            </swiper-slide>
-          </CarouselListSharedComponent>
+          <div class="relative">
+            <CarouselListSharedComponent
+              class="mx-auto h-[590px] items-center rounded-xl bg-white px-4"
+              :slides-per-view="1"
+              :space-between="20"
+              :breakpoints="{
+                640: {
+                  slidesPerView: 1,
+                  spaceBetween: 20,
+                },
+              }"
+              :pagination="true"
+              :navigation="false"
+              :show-nav="false"
+              :thumbs="{ swiper: thumbsSwiper }"
+              @on-slide-change="onSlideChange"
+            >
+              <swiperSlide v-for="(image, key) in product.images" :key="key">
+                <img
+                  :src="image.img"
+                  alt="Picture"
+                  class="items-center sm:mx-auto"
+                />
+              </swiperSlide>
+            </CarouselListSharedComponent>
+          </div>
+          <div class="relative">
+            <CarouselListSharedComponent
+              class="mx-auto h-[150px] items-center rounded-xl px-4 mt-5 py-4"
+              :space-between="10"
+              watch-slides-progress
+              :pagination="false"
+              :loop="false"
+              :navigation="false"
+              :show-nav="false"
+              :breakpoints="{
+                640: {
+                  slidesPerView: 4,
+                  spaceBetween: 20,
+                },
+              }"
+              @on-slide-change="onSlideChange"
+              @swiper="setThumbsSwiper"
+            >
+              <swiperSlide v-for="(image, key) in product.images" :key="key">
+                <img
+                  :src="image.img"
+                  alt="Picture"
+                  class="items-center bg-white rounded"
+                />
+              </swiperSlide>
+            </CarouselListSharedComponent>
+          </div>
         </div>
         <!-- Fin Bloc image produit -->
 
         <!-- Bloc détails produit -->
         <div>
           <div class="h-[658px] rounded-lg bg-white p-7">
-            <h3 class="text-[35px] text-primary">{{ product.name }}</h3>
+            <h3 class="text-title-35 text-primary">{{ product.name }}</h3>
             <h4 class="mb-1.5 text-lg font-bold text-gray-500">
               Vendu par : <span class="uppercase">{{ product.partner }}</span>
             </h4>
@@ -106,15 +126,15 @@
                 </div>
               </div>
             </div>
-            <ButtonComponent class="button-gradient mt-14 w-[50%]">
+            <ButtonComponent class="button-gradient mt-14 w-full">
               <ShoppingCartIconComponent class="mr-2 w-4" /> Ajouter
             </ButtonComponent>
           </div>
           <div class="mt-[25px] h-[auto] rounded-lg bg-white p-7">
             <h3 class="text-[35px] text-primary">Livraison et retour</h3>
             <ul class="list-disc text-gray-500">
-              <li v-for="i in 3" :key="i" class="mt-1 ml-7 text-lg">
-                Curabitur ac sem at enim convallis consectetur quis sed urabitur
+              <li v-for="(livraison, key) in product.livraison" :key="key" class="mt-1 ml-7 text-lg">
+                {{ livraison.label }}
               </li>
             </ul>
           </div>
@@ -151,14 +171,8 @@
       <!-- Bloc description -->
       <div class="mt-10 justify-center">
         <h3 class="home-subtitle mb-5 text-primary">Description</h3>
-        <p class="text-lg text-gray-500">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ac
-          sem at enim convallis consectetur quis sed diam. Curabitur consequat
-          sagittis tempus. Nulla mollis felis erat, non tincidunt ligula mattis
-          vulputate. Aenean cursus dictum tempor. Proin sit amet quam in diam
-          tempor cursus. Curabitur aliquet ut odio at vehicula. Donec tristique
-          gravida tristique. Sed ullam interdum vestibulum. Proin eu tincidunt
-          justo.
+        <p class="text-lg text-gray-500 whitespace-pre-line">
+          {{ product.description }}
         </p>
         <div class="mt-[60px] flex">
           <div class="mr-2 h-[180px] rounded-lg bg-white p-7">
@@ -211,13 +225,7 @@
       <!-- Bloc produits similaire -->
       <div class="mt-10 justify-center">
         <h3 class="home-subtitle text-primary">Produits similaires</h3>
-        <CarouselListSharedComponent
-          class="mx-auto mt-2 items-center rounded-xl px-[50px!important]"
-        >
-          <swiper-slide v-for="(prod, key) in products" :key="key">
-            <ProductComponent :product="prod" />
-          </swiper-slide>
-        </CarouselListSharedComponent>
+        <ProductsCarouselComponent :products="productsSimilaire" class="mt-4"/>
       </div>
       <!-- Fiin bloc produits similaire -->
     </div>
@@ -231,7 +239,6 @@ import defaultImage from '@/vuejs/assets/img/default-image.png'
 import helpImage from '@/vuejs/assets/img/samples/img-help-product.png'
 import { ref } from 'vue'
 import { SwiperSlide } from 'swiper/vue'
-import ProductComponent from '@/vuejs/modules/products/components/ProductComponent.vue'
 import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
@@ -239,42 +246,12 @@ import ArrowRigntIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconC
 import LeafIconComponent from '@/vuejs/modules/shared/icon/LeafIconComponent.vue'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
+import { product, productsSimilaire } from '@/vuejs/modules/products'
+import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
 
-const defaultImageFile = getImage(defaultImage)
 const helpImageFile = getImage(helpImage)
-const nbImageToShow = 5
 const thumbsSwiper = ref(null)
 
-const products = ref([
-  { imgFrn: defaultImageFile, imgProduct: defaultImageFile },
-  { imgFrn: defaultImageFile, imgProduct: defaultImageFile },
-  { imgFrn: defaultImageFile, imgProduct: defaultImageFile },
-  { imgFrn: defaultImageFile, imgProduct: defaultImageFile },
-])
-
-const product = ref({
-  name: 'Nom du produit',
-  partner: 'Partenaire',
-  reference: 'XXXXXXXXXX',
-  price: '29.90',
-  priceReduce: '19.90',
-  percent: 'XX',
-  conditionnement: 'XXXXXXXX',
-  caracteristiques: [
-    {
-      name: 'Marque',
-      value: 'Qantis',
-    },
-    {
-      name: 'Nom du produit',
-      value: 'Test nom produit',
-    },
-    {
-      name: 'Poids',
-      value: '125 KG',
-    },
-  ],
-})
 
 const productAttrubutes = ref(['Taille', 'Couleur', 'Autre propriété produit'])
 

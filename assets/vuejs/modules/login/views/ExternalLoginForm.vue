@@ -3,54 +3,56 @@
     <AlertSharedComponent />
   </div>
   <template v-if="!userAccounts.length">
-    <form @submit.prevent="loginSubmit">
-      <div class="mt-3">
-        <h1 class="text-primary text-xl font-bold">Bonjour</h1>
-        <div class="gray mt-3">Déjà adhérent ? Connectez-vous ici</div>
+  <form @submit.prevent="loginSubmit">
+    <h1 class="text-2xl font-bold text-primary sm:text-4xl">Bonjour</h1>
+    <div class="mt-3 text-lg text-gray-500">
+      Déjà adhérent ? Connectez-vous ici
+    </div>
+    <div class="mb-3 mt-3">
+      <input
+        v-model="username"
+        type="email"
+        class="input"
+        placeholder="Adresse e-mail"
+        required
+      />
+    </div>
+    <div class="mb-3 mt-3">
+      <input
+        v-model="password"
+        type="password"
+        placeholder="Mot de passe"
+        class="input"
+        required
+      />
+    </div>
+    <a href="#" class="text-gray-500 underline">Mot de passe oublié ? </a>
+    <div class="mt-3 items-center sm:mt-6 sm:flex">
+      <!-- <ButtonComponent
+        :is-loading="isLoading"
+        type="submit"
+        class="button-gradient min-w-[180px]"
+      >
+        <ArrowRightIcon />
+        Me connecter
+      </ButtonComponent> -->
+      <a href="/app/home" class="button button-gradient min-w-[180px]">
+        <ArrowRightIcon />Me connecter
+      </a>
+      <div class="text-gray-500 sm:ml-10 sm:flex">
+        <div class="pt-6 sm:pt-0">
+          Vous n'êtes pas encore adhérent ?<br />
+          <span class="text-secondary underline">
+            Et si on se rencontrait ?
+          </span>
+        </div>
+        <div class="py-6 sm:pt-0">
+          Ou appelez nous directement au <br />
+          <span class="text-secondary underline">04.37.65.06.21</span>
+        </div>
       </div>
-      <div class="mb-3 mt-3">
-        <input
-            v-model="username"
-            type="email"
-            class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm
-             text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-            placeholder="Adresse e-mail"
-            required
-        />
-      </div>
-      <div class="mb-3 mt-3">
-        <input
-            v-model="password"
-            type="password"
-            placeholder="Mot de passe"
-            class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm
-             text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-            required
-        />
-      </div>
-      <div class="mb-3 mt-3 flex justify-between">
-        <a
-            href="/mot-de-passe-oublie"
-            class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-        >Mot de passe oublié</a
-        >
-        <a
-            href="/premiere-connexion"
-            class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-        >Première connexion</a
-        >
-      </div>
-      <div class="mt-3 flex justify-end">
-        <ButtonComponent
-            type="submit"
-            :is-loading="isLoading"
-            :disabled="isLoading"
-            class="button-gradient"
-        >
-          Me connecter
-        </ButtonComponent>
-      </div>
-    </form>
+    </div>
+  </form>
   </template>
   <template v-else>
     <div>
@@ -81,6 +83,7 @@ import { useAlertStore } from '@/vuejs/stores/alert'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
 import LoaderSharedComponent from "@/vuejs/modules/shared/LoaderSharedComponent.vue";
+import ArrowRightIcon from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 
 const username = ref<string>('')
 const password = ref<string>('')

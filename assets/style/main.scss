@@ -2,6 +2,7 @@
 @import 'node_modules/tailwindcss/components';
 @import 'node_modules/tailwindcss/utilities';
 @import '_variables';
+@import 'form';
 
 @font-face {
   font-family: 'CoText';
@@ -26,46 +27,6 @@
   color: $gray;
 }
 
-.swiper-slide img {
-  display: block;
-  width: auto;
-  height: 100%;
-}
-
-.sticky-left-button {
-  width: 245px;
-  position: fixed;
-  border-top-left-radius: 30px;
-  border-bottom-left-radius: 30px;
-  height: 50px;
-  right: -180px;
-  color: white;
-  background: linear-gradient(90deg, $secondary 0%, #404FE6 52.08%, #00C7FF 100%);
-  z-index: 9;
-  text-align: left;
-  padding-left: 25px;
-}
-
-.sticky-left-button:hover {
-  right: 0px;
-  text-align: center;
-}
-
-.swiper-pagination-bullet {
-  opacity: 1 !important;
-  border: $secondary solid 1px;
-  background-color: #FFFFFF !important;
-  width: 0.625rem !important;
-  height: 0.625rem !important;
-}
-.swiper-pagination-bullet-active {
-  background-color: $secondary !important;
-}
-
- .swiper-button-prev:after, .swiper-button-next:after {
-   font-size: 25px !important;
- }
-
  .default-button-gradient {
    background: linear-gradient(90deg, $secondary 0%, #404FE6 52.08%, #00C7FF 100%);
    border-radius: 25px;
@@ -75,6 +36,26 @@
   background: $secondary;
 }
 
-.bg-sticky-button-gradient {
-  background: linear-gradient(90deg, $secondary 0%, #404FE6 52.08%, #00C7FF 100%);
+.bg-gradient {
+  @apply bg-gradient-to-r from-secondary via-gradient-1 to-gradient-2;
+}
+
+.text-gradient {
+  @apply bg-gradient-to-r from-secondary via-gradient-1 to-gradient-2 bg-clip-text text-transparent w-fit;
+}
+
+.badge {
+  @apply inline-flex items-center justify-center rounded-full px-2 py-1 text-xs font-bold leading-none;
+
+  &.badge-sticked {
+    @apply absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 transform;
+  }
+
+  &.badge-red {
+    @apply bg-red-600 text-red-100;
+  }
+
+  &.badge-outline {
+    @apply border bg-transparent;
+  }
 }

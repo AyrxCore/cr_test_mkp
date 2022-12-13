@@ -1,12 +1,12 @@
 import { RouteRecordRaw } from 'vue-router'
 import RecapPage from '@/vuejs/modules/cart/views/Recap.vue'
-import AddressesPage from '@/vuejs/modules/cart/views/Addresses.vue'
+import AdressPage from '@/vuejs/modules/cart/views/Addresses.vue'
 import ConfirmationPage from '@/vuejs/modules/cart/views/Confirmation.vue'
 
 export enum CartPageList {
   CART = 'cart',
   RECAP = 'recap',
-  ADDRESSES = 'addresses',
+  ADDRESSES = 'adresses',
   CONFIRMATION = 'confirmation',
 }
 
@@ -23,7 +23,7 @@ export const routes: RouteRecordRaw[] = [
       },
       {
         path: CartPageList.ADDRESSES,
-        component: AddressesPage,
+        component: AdressPage,
         name: CartPageList.ADDRESSES,
       },
       {

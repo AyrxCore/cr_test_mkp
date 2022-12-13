@@ -5,23 +5,48 @@
     <title>{% block title %}{% endblock %}</title>
     {% block javascripts %}
         {{ vite_asset('main.ts', []) }}
+
+        {# Hamburger menu logic #}
+        <script type="text/javascript">
+          const initApp = () => {
+              const openMenuBtn = document.getElementById('open-menu-button')
+              const closeMenuBtn = document.getElementById('close-menu-button')
+              const mobileMenu = document.getElementById('mobile-menu')
+
+              const toggleMenu = () => {
+                  openMenuBtn.classList.toggle('hidden')
+                  openMenuBtn.classList.toggle('flex')
+                  closeMenuBtn.classList.toggle('hidden')
+                  closeMenuBtn.classList.toggle('flex')
+                  mobileMenu.classList.toggle('hidden')
+                  mobileMenu.classList.toggle('fixed')
+                  mobileMenu.classList.toggle('flex')
+                  document.body.classList.toggle('overflow-hidden')
+              }
+
+              openMenuBtn.addEventListener('click', toggleMenu)
+              closeMenuBtn.addEventListener('click', toggleMenu)
+          }
+
+          document.addEventListener('DOMContentLoaded', initApp)
+        </script>
     {% endblock %}
 </head>
-<body class="bg-white">
-{% set types = {'success':'green','info':'blue', 'warning':'yellow', 'danger':'red'} %}
-{{ include('_partials/_header.html.twig') }}
-{% set messages = app.flashes %}
-{% if messages | length %}
-    <div class="m-auto w-1/2 mt-2">
-        {% for type, message in messages %}
-            <div class="p-4 mb-4 text-sm text-{{ types[type] }}-700 bg-{{ types[type] }}-100 rounded-lg" role="alert">
-                {{ message[0] }}
-            </div>
-        {% endfor %}
-    </div>
-{% endif %}
-{% block body %}
-
-{% endblock %}
+<body>
+  <div class="vue-app" data-component="sticky-contact-buttons"></div>
+  {{ include('_partials/_header.html.twig') }}
+  {% set messages = app.flashes %}
+  {% if messages | length %}
+      <div class="m-auto w-1/2 mt-2">
+          {% for type, message in messages %}
+              <div class="p-4 mb-4 text-sm text-{{ types[type] }}-700 bg-{{ types[type] }}-100 rounded-lg" role="alert">
+                  {{ message[0] }}
+              </div>
+          {% endfor %}
+      </div>
+  {% endif %}
+    {% block body %}
+    {% endblock %}
+{{ include('_partials/_footer.html.twig') }}
 </body>
 </html>

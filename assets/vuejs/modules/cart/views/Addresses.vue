@@ -41,12 +41,12 @@
       </div>
     </template>
     <template #right-side>
-      <CartRightSideComponent class="mt-14">
+      <CartRightSideComponent class="mt-14" :next-url="'/app/cart/confirmation'">
         <template #title>
           Récapitulatif
         </template>
         <template #button-label>
-          Passer la commande
+          Continuer
         </template>
       </CartRightSideComponent>
       <div class="grid grid-cols-4 gap-x-16 mt-5">

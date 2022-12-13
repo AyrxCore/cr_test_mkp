@@ -7,10 +7,10 @@
         <h3 class="text-[35px] text-primary">Nos contenus experts</h3>
         <!-- Bloc liste des actus -->
         <div class="m-auto my-2 grid w-[100%] grid-cols-4 gap-4">
-          <div class="col-span-3 border">
+          <div class="col-span-3">
             <div class="m-auto grid grid-cols-3 gap-4">
-              <div v-for="(actualite, key) in listActualites" :key="key">
-                <ActualiteComponentComponent :actualite="actualite" />
+              <div v-for="(contenu, key) in contenusExpert" :key="key">
+                <ActualiteComponentComponent :actualite="contenu" />
               </div>
             </div>
           </div>
@@ -20,7 +20,7 @@
               v-for="categorie in categories"
               :key="categorie.id"
               class="mb-3 w-max rounded-md px-2 py-1 text-white"
-              :class="'bg-[' + categorie.color + ']'"
+              :class="categorie.color"
             >
               {{ categorie.name }}
             </p>
@@ -53,7 +53,7 @@
           <div class="m-auto my-2 grid w-[100%] grid-cols-2 gap-4">
             <div>
               <h3
-                class="mt-20 w-[205px] bg-gradient-to-r from-secondary via-gradient-1 to-gradient-2 bg-clip-text text-[35px] text-transparent"
+                class="bg-gradient mt-20 w-[205px] bg-clip-text text-[35px] text-transparent"
               >
                 Ressources
               </h3>
@@ -104,9 +104,10 @@ import { getImage } from '@/vuejs/services/utils'
 import defaultImage from '@/vuejs/assets/img/default-image.png'
 import guideQantisImg from '@/vuejs/assets/img/samples/guide-qantis.png'
 import { computed, ref } from 'vue'
-import ActualiteComponentComponent from '@/vuejs/modules/actualites/components/ActualiteComponentComponent.vue'
+import ActualiteComponentComponent from '@/vuejs/modules/actualites/components/ActualiteComponent.vue'
 import InputButtonComponent from '@/vuejs/modules/shared/InputButtonComponent.vue'
 import CheckCircleInIconComponent from '@/vuejs/modules/shared/icon/CheckCircleInIconComponent.vue'
+import { contenusExpert } from '@/vuejs/modules/actualites'
 
 const defaultImageFile = getImage(defaultImage)
 const guideQantisImgFile = getImage(guideQantisImg)
@@ -115,27 +116,27 @@ const categories = ref([
   {
     id: 'partner',
     name: 'Partenaires',
-    color: '#050056',
+    color: 'bg-primary',
   },
   {
     id: 'rse',
     name: 'RSE',
-    color: '#65ac5d',
+    color: 'bg-green-qantis',
   },
   {
     id: 'actualites',
     name: 'Actualités',
-    color: '#9553FF',
+    color: 'bg-secondary',
   },
   {
     id: 'evenements',
     name: 'Evénements',
-    color: '#00C7FF',
+    color: 'bg-cyan-400',
   },
   {
     id: 'bons_plans',
     name: 'Bons plans',
-    color: '#404FE6',
+    color: 'bg-blue-700',
   },
 ])
 

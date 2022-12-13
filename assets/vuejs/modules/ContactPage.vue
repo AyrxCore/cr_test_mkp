@@ -1,8 +1,6 @@
 <template>
   <BaseTemplate title="Qantis - MarketPlace">
-    <div
-      class="xs:w-[100%]  m-auto my-4 max-w-screen-2xl flex-1 sm:px-8"
-    >
+    <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 sm:px-8">
       <breadcrumb-shared-component :current-page="'Contact'" />
       <div class="w-[100%] max-w-screen-2xl">
         <ContactUsButtonComponent />
@@ -135,9 +133,7 @@
         </h3>
         <div class="mt-5 flex">
           <div class="w-[40%]">
-            <div
-              class=" inline-flex h-[191px] w-[100%] rounded-lg bg-white p-7"
-            >
+            <div class="inline-flex h-[191px] w-[100%] rounded-lg bg-white p-7">
               <div class="m-auto w-[25%] rounded-full border">
                 <img
                   :src="defaultImageFile"
@@ -147,7 +143,7 @@
               </div>
               <div class="w-[80%] pl-5">
                 <h3
-                  class="bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-500 bg-clip-text text-[25px] text-transparent"
+                  class="bg-gradient bg-clip-text text-[25px] text-transparent"
                 >
                   Nom de l'animateur
                 </h3>
