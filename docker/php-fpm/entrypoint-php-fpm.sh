@@ -5,6 +5,7 @@ echo "Run composer install..."
 composer i -o
 echo "Migrations for production..."
 bin/console doctrine:migrations:migrate -n
+bin/console d:f:l --group=dev -q
 # echo "Generate keys..."
 # bin/console lexik:jwt:generate-keypair --overwrite -n
 echo "Start PHP-FPM..."
