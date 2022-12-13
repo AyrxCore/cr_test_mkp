@@ -4,8 +4,8 @@
       <h3 class="primary mb-2 text-[35px]">
         Bonjour,
         <span class="text-gradient">
-          {{ user.firstname }}
-          <span class="uppercase">{{ user.lastname }}</span>
+          {{ user.firstName }}
+          <span class="uppercase">{{ user.lastName }}</span>
         </span>
       </h3>
     </template>
@@ -22,8 +22,12 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
-import { user } from '@/vuejs/modules/account'
 import OrderDetailsComponent from '@/vuejs/modules/account/components/OrderAccountComponent.vue'
+import {useUserStore} from "@/vuejs/stores/user";
+import {storeToRefs} from "pinia";
+
+const userStore = useUserStore()
+const { user } = storeToRefs(userStore)
 
 const listOrders = ref([
   {

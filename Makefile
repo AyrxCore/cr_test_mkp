@@ -25,4 +25,4 @@ build:
 	docker exec marketplace-nodejs-1  yarn build
 
 load-fixtures:
-	$(EXEC_PHP) bin/console d:f:l -q
+	$(EXEC_PHP) bin/console d:f:l -q --group=dev

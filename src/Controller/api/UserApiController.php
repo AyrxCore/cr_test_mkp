@@ -2,18 +2,99 @@
 
 namespace App\Controller\api;
 
+use App\Entity\Account;
+use App\Entity\User;
+use App\Service\UpplerAuthenticationService;
+use App\Service\UpplerCompanyService;
+use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpClient\Exception\ServerException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Contracts\Service\Attribute\Required;
+use function PHPUnit\Framework\assertGreaterThanOrEqual;
 
 #[Route("/api/user")]
 class UserApiController extends AbstractController
 {
+    #[Required]
+    public RequestStack $requestStack;
+
+    #[Required]
+    public EntityManagerInterface $em;
+
+    #[Required]
+    public UpplerAuthenticationService $upplerAuthenticationService;
+
+    #[Required]
+    public UpplerCompanyService $upplerCompanyService;
+
     #[Route('/me', name: 'get_me')]
     public function me(NormalizerInterface $normalizer): JsonResponse
     {
+        $session= $this->requestStack->getSession();
+        $session->start();
+
+        if (!$session->has('account') || empty($session->get('account'))) {
+            return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        $buyerDatas = $this->upplerAuthenticationService->getUserBuyerDatas();
         $user = $normalizer->normalize($this->getUser(), 'json', ['groups' => 'simpleUser']);
+        $account = $normalizer->normalize($session->get('account'), 'json', ['groups' => 'simpleUser']);
+        $account["buyer"] = $buyerDatas;
+        $user["account"] = $account;
         return new JsonResponse($user);
     }
+
+    #[Route('/accounts')]
+    public function accounts(NormalizerInterface $normalizer): JsonResponse
+    {
+        /**@var User $user*/
+        $user = $this->getUser();
+        $accounts = [];
+        /**@var  Account $account*/
+        foreach ($user->getAccounts() as $account) {
+            if (!$account->isEnabled()) {
+                continue;
+            }
+            $datas = $this->upplerCompanyService->getCompany($account->getUpplerCompanyId());
+            $serializeAccount = $normalizer->normalize($account, 'json', ['groups' => 'simpleUser']);
+            $serializeAccount["upplerDatas"] = $datas;
+            $accounts[] = $serializeAccount;
+        }
+        return new JsonResponse($accounts);
+    }
+
+    #[Route("/account/{id}/select")]
+    #[ParamConverter("id", Account::class)]
+    public function selectAccount(NormalizerInterface $normalizer, Account $account): JsonResponse
+    {
+        $session= $this->requestStack->getSession();
+        $session->start();
+
+        $userAuth = $this->upplerAuthenticationService->authenticateUser(
+            $account
+        );
+
+        if ($userAuth && $session->has('access_token') && !empty($session->get('access_token'))) {
+            return new JsonResponse(['status' => 'ok']);
+        }
+    }
+
+    #[Route("/logout")]
+    public function logout()
+    {
+        $response = new Response();
+        $response->headers->clearCookie('BEARER','/');
+        $response->headers->clearCookie('refresh_token','/');
+        return $response;
+    }
+
 }

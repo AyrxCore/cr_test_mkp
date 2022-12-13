@@ -1,8 +1,4 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import {
-  LoginPageList,
-  routes as loginRoutes,
-} from '@/vuejs/modules/login/routerLogin'
 
 import {
   ProductPageList,
@@ -40,7 +36,6 @@ export enum MainPageList {
 
 export const PageList = {
   ...MainPageList,
-  ...LoginPageList,
   ...ProductPageList,
   ...ActualitesPageList,
   ...CartPageList,
@@ -59,7 +54,6 @@ const routes: RouteRecordRaw[] = [
     name: PageList.CONTACT_PAGE,
     component: Contact,
   },
-  ...loginRoutes,
   ...productsRoutes,
   ...actualitesRoutes,
   ...cartRoutes,
@@ -78,15 +72,15 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore()
-  // if (to.name !== PageList.LOGIN_AUTH) {
-  //   if (!userStore.isLogged) {
-  //     next({ name: PageList.LOGIN_AUTH })
-  //   }
-  //   if (userStore.user === null && userStore.getToken !== null) {
-  //     console.log('before get me', userStore.getToken)
-  //     await userStore.getCurrentUserDatas()
-  //   }
-  // }
+
+  if (!userStore.isLogged) {
+    await userStore.getCurrentUserDatas()
+    const host = window.location.protocol + '//' + window.location.host
+    if (!userStore.isLogged) {
+      window.location.href = host
+    }
+  }
+
   next()
 })
 

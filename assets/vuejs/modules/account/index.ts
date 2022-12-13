@@ -1,9 +1,9 @@
-export const user = {
+export const fakeUser = {
   lastname: 'De Sainte Marie',
   firstname: 'Gaëtan',
   email: 'g.desaintemarie@qantis.co',
   animateur: {
     name: 'Nom animateur',
-    email: 'animation@qantis.co'
+    email: 'animation@qantis.co',
   },
 }

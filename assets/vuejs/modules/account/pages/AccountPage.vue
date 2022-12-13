@@ -26,6 +26,7 @@
               <a
                 href="#"
                 class="border-b-2 border-gray-500 text-gray-500 hover:border-b-2 hover:border-purple-600"
+                @click="onLogout"
               >
                 Deconnexion
               </a>
@@ -95,11 +96,13 @@
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
-import { user } from '@/vuejs/modules/account'
+
 import { AccountPageList, baseUrl } from '@/vuejs/modules/account/routerAccount'
 import ArrowLeftIconComponent from '@/vuejs/modules/shared/icon/ArrowLeftIconComponent.vue'
 import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightIconComponent.vue'
 import { ref } from 'vue'
+import {useUserStore} from "@/vuejs/stores/user";
+import {storeToRefs} from "pinia";
 
 const props = defineProps({
   selectedTab: {
@@ -107,7 +110,8 @@ const props = defineProps({
     type: String,
   },
 })
-
+const userStore = useUserStore()
+const {user} = storeToRefs(userStore)
 const meenuItems = ref([
   {
     title: 'Mes commandes',
@@ -190,6 +194,12 @@ const meenuItems = ref([
     ],
   },
 ])
+
+const onLogout = async (e: Event): Promise<void> => {
+  e.preventDefault()
+  await userStore.logout() &&
+  location.reload()
+}
 </script>
 
 <style scoped></style>

@@ -29,6 +29,7 @@ import LogoComponent from '@/vuejs/modules/shared/header-component/LogoComponent
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
+
 </script>
 
 <style lang="scss">

@@ -1,0 +1,18 @@
+resetting:
+  ttl_not_reached: "Une demande est déjà en cours, vous devez patienter %duration% minutes entre chaque demande"
+  request.success: "Un mail contenant un lien de réinitialisation a été envoyé"
+  request.first_connexion.success: "Un mail contenant un lien d'initialisation de votre mot de passe a été envoyé"
+  request.failed: "Vous ne semblez pas disposer de compte sur cette plateforme..."
+  token.error: "Le token de réinitialisation n'est pas valide ou a déjà été utilisé"
+  password.first.label: "Nouveau mot de passe"
+  password.second.label: "Confirmation"
+  password.notmatch: "Le mot de passe et sa confirmation doivent être identiques"
+  success: "Votre mot de passe a été réinitialisé avec succès"
+  first_connexion.success: "Votre mot de passe ainsi que votre compte ont été réinitialisés avec succès"
+  user.disabled: "Votre compte n'est pas actif, vous devez utiliser le lien de première connexion pour initialiser votre accès"
+  form:
+    first.label: "Mot de passe"
+    second.label: "Confirmation"
+emails:
+  request.resetting.subject: "Réinitialisation de mot de passe"
+  request.first_connexion.subject: "Première connexion"

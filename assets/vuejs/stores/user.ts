@@ -4,34 +4,63 @@ import UserHttpClient from '@/vuejs/services/httpclient/UserHttpClient'
 import { useAlertStore } from '@/vuejs/stores/alert'
 import { AlertType } from '@/vuejs/types/Alert'
 import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
-import router, { PageList } from '@/vuejs/router'
+import { getErrorMessage } from '@/vuejs/services/login'
 
 export const useUserStore = defineStore({
   id: 'user',
   state: (): UserStoreState => ({
-    token: null,
     user: null,
   }),
 
   actions: {
-    async authenticate(
-      userDatas: AuthenticateUserDatas,
-      redirectToApp = false,
-    ): Promise<boolean> {
+    async authenticate(userDatas: AuthenticateUserDatas): Promise<[]> {
       const alertStore = useAlertStore()
       try {
-        const authDatas = await UserHttpClient.get().getUserToken(userDatas)
-        this.token = authDatas.token
-        redirectToApp && (document.location.href = '/app')
+        await UserHttpClient.get().getUserToken(userDatas)
+        return await UserHttpClient.get().getUserAccounts()
+      } catch (error) {
+        error.response.status === HttpStatusCodes.unauthorized &&
+          alertStore.setShow(
+            getErrorMessage(error.response.data.message),
+            AlertType.danger,
+          )
+        return []
+      }
+    },
+    async selectUserAccount(id: string): Promise<boolean> {
+      const alertStore = useAlertStore()
+      try {
+        await UserHttpClient.get().selectUserAccount(id)
         return true
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow('Identifiants erronnés', AlertType.danger)
+          alertStore.setShow(
+            getErrorMessage(error.response.data.message),
+            AlertType.danger,
+          )
         return false
       }
     },
     async getCurrentUserDatas(): Promise<void> {
-      this.user = await UserHttpClient.get().getUserMe()
+      const alertStore = useAlertStore()
+      try {
+        this.user = await UserHttpClient.get().getUserMe()
+      } catch (error) {
+        console.log(error)
+        error.response.status === HttpStatusCodes.unauthorized &&
+          alertStore.setShow('Erreur technique', AlertType.danger)
+      }
+    },
+    async logout(): Promise<boolean> {
+      const alertStore = useAlertStore()
+      try {
+        await UserHttpClient.get().logout()
+        return true
+      } catch (error) {
+        console.log(error)
+        alertStore.setShow('Déconnexion impossible', AlertType.danger)
+      }
+      return false
     },
   },
 
@@ -43,7 +72,7 @@ export const useUserStore = defineStore({
       return this.token
     },
     isLogged(): boolean {
-      return this.token !== null
+      return this.user !== null
     },
   },
 })

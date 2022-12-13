@@ -1,0 +1,23 @@
+{% extends "base.html.twig" %}
+{% block title %}Mot de passe oublié{% endblock %}
+{% block body %}
+    <div class="container m-auto">
+        <form action="{{ path('resetting_request') }}" method="post" class="w-full">
+            <h1 >Vous avez oublié votre mot de passe ?</h1>
+            <div>
+                <label for="username">Veuillez saisir l'identifiant/email de votre compte</label>
+                <div class="input-group">
+                    <input type="email" id="username" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm
+                    text-gray-900 focus:border-blue-500 focus:ring-blue-500" name="_username" value="" autocomplete="username" required/>
+                </div>
+            </div>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            <div class="text-right mt-2">
+                <button type="submit" class="text-white bg-gradient-to-r from-purple-600 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4  focus:outline-none focus:ring-cyan-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2">
+                    Valider
+                </button>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

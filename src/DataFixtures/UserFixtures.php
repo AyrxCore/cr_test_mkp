@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 
+use App\Entity\Account;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
@@ -29,13 +30,74 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface, FixtureGr
 
         $io = new ConsoleOutput();
 
-        $io->writeln("Création d'un utilisateur de test'");
+        $io->writeln("Création d'utilisateurs de test'");
 
-        //création d'un admin
+        //création d'un utilisateur test pour l'api
         $user = new User();
-        $user->setEmail('test@example.com');
-        $user->setPassword($this->userPasswordHasher->hashPassword($user, '0000'));
+        $user->setEmail('test@qantis.co');
+        $user->setUsername('test_api');
+        $user->setPassword($this->userPasswordHasher->hashPassword($user, '000000'));
+        $user->setLastName('TEST');
+        $user->setFirstName('api');
+        $user->setEnabled(true);
+        $user->addRole('ROLE_API');
         $manager->persist($user);
+
+        //création d'un utilisateur lié à un seul adhérent
+        $user = new User();
+        $user->setEmail('m.frebet@qantis.co');
+        $user->setUsername('m.frebet@qantis.co');
+        $user->setPassword($this->userPasswordHasher->hashPassword($user, '000000'));
+        $user->setLastName('FREBET');
+        $user->setFirstName('Mélanie');
+        $user->setEnabled(true);
+
+
+        $account = new Account();
+        $account->setUpplerUserId(103);
+        $account->setUpplerCompanyId(12);
+        $account->setUpplerUsername('m.frebet3');
+        $account->setUpplerPassword('000000');
+        $account->setUpplerSubAccountId(17);
+        $account->setIsEnabled(true);
+        $account->setUser($user);
+
+        $manager->persist($user);
+        $manager->persist($account);
+
+        //création d'un utilisatur liés à 2 adhérents
+        $user = new User();
+        $user->setEmail('buyer@qantis.co');
+        $user->setUsername('buyer@qantis.co');
+        $user->setPassword($this->userPasswordHasher->hashPassword($user, '000000'));
+        $user->setLastName('DUPOND');
+        $user->setFirstName('Loic');
+        $user->setEnabled(false);
+
+
+        $account = new Account();
+        $account->setUpplerUserId(106);
+        $account->setUpplerCompanyId(18);
+        $account->setUpplerUsername('buyer_1');
+        $account->setUpplerPassword('000000');
+        $account->setUpplerSubAccountId(20);
+        $account->setIsEnabled(true);
+        $account->setUser($user);
+        $manager->persist($account);
+
+        $account = new Account();
+        $account->setUpplerUserId(107);
+        $account->setUpplerCompanyId(14);
+        $account->setUpplerUsername('buyer_2');
+        $account->setUpplerPassword('000000');
+        $account->setUpplerSubAccountId(21);
+        $account->setIsEnabled(true);
+        $account->setUser($user);
+        $manager->persist($account);
+
+        $manager->persist($user);
+
+
         $manager->flush();
     }
 

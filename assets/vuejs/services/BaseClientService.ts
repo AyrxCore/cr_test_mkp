@@ -18,13 +18,7 @@ class BaseClientService {
     this.apiClient = axios.create({
       baseURL: '/api',
       headers: axiosHeaders,
-    })
-
-    this.apiClient.interceptors.request.use((config) => {
-      config.headers.Authorization =
-        userStore.token && 'Bearer ' + userStore.token
-
-      return config
+      withCredentials: true,
     })
   }
 
