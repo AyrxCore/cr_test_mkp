@@ -1,5 +1,5 @@
 <template>
-  <AccountPage :selected-tab="tab">
+  <AccountPage>
     <template #right-side>
       <h3 class="primary mb-2 text-[35px]">Les coordonnées</h3>
       <!-- Bloc email -->

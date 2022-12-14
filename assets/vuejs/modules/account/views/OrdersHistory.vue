@@ -1,5 +1,5 @@
 <template>
-  <AccountPage :selected-tab="tab">
+  <AccountPage>
     <template #right-side>
       <h3 class="primary mb-2 text-[35px]">Historique de commandes</h3>
       <span class="flex text-[16px] text-gray-500">La commande la plus récente apparaît en premier</span>
