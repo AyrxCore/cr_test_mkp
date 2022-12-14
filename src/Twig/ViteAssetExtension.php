@@ -27,7 +27,7 @@ class ViteAssetExtension extends AbstractExtension
 
     public function asset(string $entry, array $deps)
     {
-        if ('dev' === $this->isDev) {
+        if ('local' === $this->isDev) {
             return $this->assetDev($entry, $deps);
         }
 
