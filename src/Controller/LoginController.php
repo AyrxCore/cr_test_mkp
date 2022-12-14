@@ -62,7 +62,7 @@ class LoginController extends AbstractController
                     }
                 }
 
-                if (!$user->isEnabled()) {
+                if ($request->attributes->get('_route') === 'resetting_request' && !$user->isEnabled()) {
                     $session->getFlashBag()->add(
                         'warning',
                         $translator->trans(

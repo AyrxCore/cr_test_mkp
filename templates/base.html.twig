@@ -40,7 +40,7 @@
   {% if messages | length %}
       <div class="m-auto w-1/2 mt-2">
           {% for type, message in messages %}
-              <div class="p-4 mb-4 text-sm text-{{ types[type] }}-700 bg-{{ types[type] }}-100 rounded-lg" role="alert">
+              <div class="p-4 mb-4 text-sm text-{{ type }}-700 bg-{{ type }}-100 rounded-lg" role="alert">
                   {{ message[0] }}
               </div>
           {% endfor %}
