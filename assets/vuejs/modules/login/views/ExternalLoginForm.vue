@@ -28,7 +28,18 @@
         required
       />
     </div>
-    <a href="#" class="text-gray-500 underline">Mot de passe oublié ? </a>
+    <div class="mb-3 mt-3 flex justify-between">
+      <a
+          href="/mot-de-passe-oublie"
+          class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+      >Mot de passe oublié ?</a
+      >
+      <a
+          href="/premiere-connexion"
+          class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+      >Première connexion</a
+      >
+    </div>
     <div class="mt-3 items-center sm:mt-6 sm:flex">
       <ButtonComponent
         :is-loading="isLoading"
