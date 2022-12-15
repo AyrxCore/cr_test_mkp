@@ -2,7 +2,6 @@
 
 namespace App\Tests\Resources\DataFixtures;
 
-
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
@@ -14,10 +13,8 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
-
 class UserTestFixtures extends Fixture implements OrderedFixtureInterface, FixtureGroupInterface
 {
-
     #[Required]
     public EntityManagerInterface $em;
 
@@ -37,7 +34,9 @@ class UserTestFixtures extends Fixture implements OrderedFixtureInterface, Fixtu
         $user = new User();
         $user->setEmail('test@qantis.co');
         $user->setUsername('test@qantis.co');
-        $user->setPassword($this->userPasswordHasher->hashPassword($user,'0000'));
+        $user->setEnabled(true);
+        $user->addRole('ROLE_API');
+        $user->setPassword($this->userPasswordHasher->hashPassword($user, '0000'));
         $manager->persist($user);
 
         $manager->flush();

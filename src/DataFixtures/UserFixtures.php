@@ -56,6 +56,8 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface, FixtureGr
         $account = new Account();
         $account->setUpplerUserId(103);
         $account->setUpplerCompanyId(12);
+        $account->setUpplerClientId('77_2nm0d8jjbi4g84swkcg80ossc0kwsk8c4wgwowk4g8g0gc048c');
+        $account->setUpplerClientSecret('sibr9m87pwgkgccso4cssc80o0cck4s8w80ko4coogwgckwkk');
         $account->setUpplerUsername('m.frebet3');
         $account->setUpplerPassword('000000');
         $account->setUpplerSubAccountId(17);
@@ -78,8 +80,8 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface, FixtureGr
         $account = new Account();
         $account->setUpplerUserId(106);
         $account->setUpplerCompanyId(18);
-        $account->setUpplerUsername('buyer_1');
-        $account->setUpplerPassword('000000');
+        $account->setUpplerClientId('95_1qd3taz81edc0o4cgc8o8gwcswg8go08s08w4kcsc8okcskwk4');
+        $account->setUpplerClientSecret('30uzknniomasoo0wk48o0w00g0ogc4s84gc4wkw00404scw8wg');
         $account->setUpplerSubAccountId(20);
         $account->setIsEnabled(true);
         $account->setUser($user);
@@ -88,8 +90,8 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface, FixtureGr
         $account = new Account();
         $account->setUpplerUserId(107);
         $account->setUpplerCompanyId(14);
-        $account->setUpplerUsername('buyer_2');
-        $account->setUpplerPassword('000000');
+        $account->setUpplerClientId('6cp0dzzzzckccc0kwwc4w0cw8wo04c8cc0g4sw8s4ooks4o8s8');
+        $account->setUpplerClientSecret('4oiwit9r09a8wkogogk8k84wcw8kscgcco0wg8oc0oswo4w08o');
         $account->setUpplerSubAccountId(21);
         $account->setIsEnabled(true);
         $account->setUser($user);
