@@ -1,5 +1,5 @@
 <template>
-  <AccountPage :selected-tab="tab">
+  <AccountPage>
     <template #right-side>
       <h3 class="primary mb-2 text-[35px]">Mes produits favoris</h3>
       <div class="items-center flex text-lg text-gray-500 mb-2.5">

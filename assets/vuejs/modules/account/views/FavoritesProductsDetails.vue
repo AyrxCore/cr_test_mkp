@@ -1,5 +1,5 @@
 <template>
-  <AccountPage :selected-tab="tab">
+  <AccountPage>
     <template #right-side>
       <div class="flex justify-between">
         <h3 class="primary mb-2 text-[35px]">Nom de la liste</h3>

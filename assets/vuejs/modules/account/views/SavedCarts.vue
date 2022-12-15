@@ -1,5 +1,5 @@
 <template>
-  <AccountPage :selected-tab="tab">
+  <AccountPage>
     <template #right-side>
       <h3 class="primary mb-2 text-[35px]">Paniers sauvegardés</h3>
       <div class="mb-2.5 flex items-center text-lg text-gray-500">
