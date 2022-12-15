@@ -74,7 +74,7 @@ class UrlsControllerTest extends WebTestCase
             UserTestFixtures::class
         ]);
 
-        echo "test de récupération d'un token ... \n";
+        echo "test de récupération d'un cookie httpOnly ... \n";
 
         $this->client->request(
             'POST',
@@ -82,12 +82,12 @@ class UrlsControllerTest extends WebTestCase
             [],
             [],
             ['CONTENT_TYPE' => 'application/json'],
-            json_encode(['email' => 'test@qantis.co','password'=>'0000'])
+            json_encode(['username' => 'test@qantis.co','password'=>'0000'])
         );
+        //$result = json_decode($this->client->getResponse()->getContent());
 
-      $result = json_decode($this->client->getResponse()->getContent());
+        $this->assertResponseHasCookie('BEARER', '/', null, 'Aucun cookie présent');
 
-      $this->assertObjectHasAttribute('token',$result, 'Aucun token n\'a été renvoyé');
     }
 
     private function logIn(User $user, $client)
