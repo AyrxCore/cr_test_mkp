@@ -2,7 +2,9 @@
 
 namespace App\Twig;
 
+use Exception;
 use Psr\Cache\CacheItemPoolInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -12,9 +14,10 @@ class ViteAssetExtension extends AbstractExtension
     public const CACHE_KEY = 'vite_manifest';
 
     public function __construct(
-        private string $isDev,
+        private string $env,
         private string $manifest,
         private CacheItemPoolInterface $cache,
+        private HttpClientInterface $client,
     ) {
     }
 
@@ -27,7 +30,7 @@ class ViteAssetExtension extends AbstractExtension
 
     public function asset(string $entry, array $deps)
     {
-        if ('local' === $this->isDev) {
+        if ('dev' === $this->env && $this->isDevServerRunning()) {
             return $this->assetDev($entry, $deps);
         }
 
@@ -82,5 +85,21 @@ class ViteAssetExtension extends AbstractExtension
         }
 
         return $html;
+    }
+
+    public function isDevServerRunning(): bool
+    {
+        // Don't expect to have the dev server running when the symfony env is prod
+        if ($this->env === 'prod') {
+            return false;
+        }
+
+        // Check to see if the dev server is actually running by pinging the vite endpoint
+        try {
+            $response = $this->client->request('GET', 'http://nodejs:3003/assets/@vite/client');
+            return $response->getStatusCode() === 200;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 }
