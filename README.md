@@ -24,8 +24,8 @@ Access to http://localhost:8087
 
 # Configuration
 dupliquer le fichier .env en .env.local
-le fichier .env contient tous le sparamétres de connexion vers l'api Uppler de prod
-Dupliquer ces paramètres dnas le .env.local et les ajutser pour l'api de preprod
+le fichier .env contient tous les paramétres de connexion vers l'api Uppler de prod
+Dupliquer ces paramètres dans le .env.local et les ajuster pour l'api de preprod
 
 ```sh
 UPPLER_ENV=dev
