@@ -47,11 +47,11 @@ class Account
     #[Groups(["account:list","account:get"])]
     private ?int $upplerCompanyId = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     #[Groups(["account:list","account:get"])]
     private ?string $upplerUsername = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $upplerPassword = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]

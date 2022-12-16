@@ -54,13 +54,13 @@ final class UserAccount
     #[Assert\Type("integer", message: "(upplerCompanyId) integer required")]
     private int $upplerCompanyId;
 
-    #[Assert\NotBlank(message: "upplerSubAccountUsername cannot be null")]
-    #[Assert\Type("string", message: "(upplerSubAccountUsername) string required")]
-    private string $upplerSubAccountUsername;
+    #[Assert\NotBlank(message: "upplerSubAccountClientId cannot be null")]
+    #[Assert\Type("string", message: "(upplerSubAccountClientId) string required")]
+    private string $upplerSubAccountClientId;
 
-    #[Assert\NotBlank(message: "upplerSubAccountPassword cannot be null")]
-    #[Assert\Type("string", message: "(upplerSubAccountPassword) string required")]
-    private string $upplerSubAccountPassword;
+    #[Assert\NotBlank(message: "upplerSubAccountClientSecret cannot be null")]
+    #[Assert\Type("string", message: "(upplerSubAccountClientSecret) string required")]
+    private string $upplerSubAccountClientSecret;
 
     public function getAccountId(): ?Uuid
     {
@@ -134,26 +134,26 @@ final class UserAccount
         return $this;
     }
 
-    public function getUpplerSubAccountUsername(): string
+    public function getUpplerSubAccountClientId(): string
     {
-        return $this->upplerSubAccountUsername;
+        return $this->upplerSubAccountClientId;
     }
 
-    public function setUpplerSubAccountUsername(string $upplerSubAccountUsername): self
+    public function setUpplerSubAccountClientId(string $upplerSubAccountClientId): self
     {
-        $this->upplerSubAccountUsername = $upplerSubAccountUsername;
+        $this->upplerSubAccountClientId = $upplerSubAccountClientId;
 
         return $this;
     }
 
-    public function getUpplerSubAccountPassword(): string
+    public function getUpplerSubAccountClientSecret(): string
     {
-        return $this->upplerSubAccountPassword;
+        return $this->upplerSubAccountClientSecret;
     }
 
-    public function setUpplerSubAccountPassword(string $upplerSubAccountPassword): self
+    public function setUpplerSubAccountClientSecret(string $upplerSubAccountClientSecret): self
     {
-        $this->upplerSubAccountPassword = $upplerSubAccountPassword;
+        $this->upplerSubAccountClientSecret = $upplerSubAccountClientSecret;
 
         return $this;
     }
