@@ -5,6 +5,10 @@
       :space-between="10"
       :breakpoints="{
         640: {
+          slidesPerView: 6,
+          spaceBetween: 10,
+        },
+        1280: {
           slidesPerView: 8,
           spaceBetween: 20,
         },
