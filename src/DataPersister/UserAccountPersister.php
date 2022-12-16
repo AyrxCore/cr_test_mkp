@@ -46,7 +46,7 @@ class UserAccountPersister implements ContextAwareDataPersisterInterface
         }
 
         $account = $this->em->getRepository(Account::class)->findOneBy(
-            ['upplerUsername' => $data->getUpplerSubAccountUsername()]
+            ['upplerClientId' => $data->getUpplerSubAccountClientId()]
         );
 
         if ($account) {
@@ -55,8 +55,8 @@ class UserAccountPersister implements ContextAwareDataPersisterInterface
 
         $account = new Account();
         $account->setUpplerSubAccountId($data->getUpplerSubAccountId());
-        $account->setUpplerUsername($data->getUpplerSubAccountUsername());
-        $account->setUpplerPassword($data->getUpplerSubAccountPassword());
+        $account->setUpplerClientId($data->getUpplerSubAccountClientId());
+        $account->setUpplerClientSecret($data->getUpplerSubAccountClientSecret());
         $account->setUpplerUserId($data->getUpplerUserId());
         $account->setUpplerCompanyId($data->getUpplerCompanyId());
         $account->setUser($user);

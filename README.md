@@ -101,7 +101,7 @@ services:
 ```
 2 users sont créés : 
 
-- mfrebet@qatis.co / 000000 => attaché à un seul compte Acheteur et actif
+- mfrebet@qantis.co / 000000 => attaché à un seul compte Acheteur et actif
 - buyer@qantis.oc / 000000 => attaché à 2 comptes acheteurs et inactif donc nécessité de passer par première connexion
 
 https://symfony.com/bundles/DoctrineFixturesBundle/current/index.html

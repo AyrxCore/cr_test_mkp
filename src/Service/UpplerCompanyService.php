@@ -47,4 +47,39 @@ class UpplerCompanyService extends HttpClientProvider
         return null;
     }
 
+    public function getAdresses(): array | null
+    {
+        $session = $this->requestStack->getSession();
+        $session->start();
+        $urlFilters = null;
+
+        $res = $this->request(
+            'GET',
+            $this->apiUrl . 'v1/buyer/company-address',
+            []
+        );
+        if (Response::HTTP_OK === $res->getStatusCode()) {
+            $addresses = json_decode($res->getContent());
+            return $this->computeAdresses($addresses);
+        }
+
+        return null;
+    }
+
+    private function computeAdresses(array &$addresses)
+    {
+        foreach ($addresses as $address) {
+            $country = $address->country->name->fr;
+            $address->country = $country;
+            unset($address->companies);
+            unset($address->first_name);
+            unset($address->last_name);
+            unset($address->external_id);
+            unset($address->phone);
+            unset($address->email);
+        }
+
+        return $addresses;
+    }
+
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\api;
+namespace App\Controller\Api;
 
 use App\Entity\Account;
 use App\Entity\User;
@@ -9,17 +9,12 @@ use App\Service\UpplerCompanyService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpClient\Exception\ServerException;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
-use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
-use function PHPUnit\Framework\assertGreaterThanOrEqual;
 
 #[Route("/api/user")]
 class UserApiController extends AbstractController
@@ -92,8 +87,8 @@ class UserApiController extends AbstractController
     public function logout()
     {
         $response = new Response();
-        $response->headers->clearCookie('BEARER','/');
-        $response->headers->clearCookie('refresh_token','/');
+        $response->headers->clearCookie('BEARER', '/');
+        $response->headers->clearCookie('refresh_token', '/');
         return $response;
     }
 

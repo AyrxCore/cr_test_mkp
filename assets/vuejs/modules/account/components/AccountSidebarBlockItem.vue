@@ -5,12 +5,12 @@
       v-slot="{isExactActive}"
       :to="{name: item.url}"
   >
-    <div
+    <span
       class="text-[16px] text-gray-500 underline decoration-2 underline-offset-4 hover:decoration-purple-600"
       :class="isExactActive ? 'decoration-purple-600 decoration-purple-600' : ''"
     >
       {{ item.name }}
-    </div>
+    </span>
   </RouterLink>
 </p>
 </template>
