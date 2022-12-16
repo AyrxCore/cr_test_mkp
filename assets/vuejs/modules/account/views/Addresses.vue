@@ -66,23 +66,28 @@
                 <th class="p-5">Adresse postale</th>
                 <th class="p-5">Code postal</th>
                 <th class="p-5">Ville</th>
-                <th class="p-5">Code service</th>
                 <th></th>
               </tr>
             </thead>
-            <tbody>
-              <tr v-for="(address, key) in listAddresses" :key="key">
-                <td class="p-5">{{address.number}}</td>
-                <td class="p-5">{{address.enterprise}}</td>
-                <td class="p-5">{{address.postal_address}}</td>
-                <td class="p-5">{{address.postal_code}}</td>
+            <tbody v-if="!isloading">
+              <tr v-for="(address, key) in adresses" :key="key">
+                <td class="p-5">{{address.id}}</td>
+                <td class="p-5">{{address.company}}</td>
+                <td class="p-5">{{address.street}}</td>
+                <td class="p-5">{{address.postcode}}</td>
                 <td class="p-5">{{address.city}}</td>
-                <td></td>
                 <td>
                   <div v-if="!address.default" class="flex">
                     <button><EditIconComponent class="mr-2" /></button>
                     <button><TrashIconComponent :stroke-color="'#9866ff'"/></button>
                   </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody v-else>
+              <tr>
+                <td colspan="6">
+                  <LoaderSharedComponent/>
                 </td>
               </tr>
             </tbody>
@@ -98,13 +103,19 @@
 
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import EditIconComponent from '@/vuejs/modules/shared/icon/EditIconComponent.vue'
-import { computed, ref } from 'vue'
+import {computed, onMounted, ref} from 'vue'
 import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
 import DefaultButtonComponent from '@/vuejs/modules/shared/DefaultButtonComponent.vue'
-import { AccountPageList } from '@/vuejs/modules/account/routerAccount'
+import {useCompanyStore} from "@/vuejs/stores/company";
+import {storeToRefs} from "pinia";
+import LoaderSharedComponent from "@/vuejs/modules/shared/LoaderSharedComponent.vue";
+const companyStore = useCompanyStore()
+const {adresses, isloading} = storeToRefs(companyStore)
 
-const tab = computed(() => {
-  return AccountPageList.ADDRESSES
+onMounted(async () => {
+  companyStore.isloading = !companyStore.adresses.length
+  await companyStore.getAdresses()
+  companyStore.isloading = false
 })
 
 const searchQuery = ref<string>('')

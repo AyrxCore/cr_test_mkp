@@ -84,6 +84,6 @@ router.beforeEach(async (to, from, next) => {
   next()
 })
 
-router.beforeResolve(async (to) => {})
+// router.beforeResolve(async (to) => {})
 
 export default router
