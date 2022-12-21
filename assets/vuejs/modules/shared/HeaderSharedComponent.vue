@@ -1,21 +1,21 @@
 <template>
-  <nav class="sticky top-0 z-30 bg-primary px-4 pt-5 pb-3 md:block">
-    <div class="mx-auto items-center px-4 md:flex">
+  <nav class="sticky top-0 z-30 bg-primary px-4 pt-5 pb-3 lg:block">
+    <div class="mx-auto items-center px-4 lg:flex">
       <div class="flex justify-between">
-        <MenuComponent class="md:hidden" />
+        <MenuComponent class="lg:hidden" />
         <LogoComponent class="w-1/2" />
-        <AccountComponent class="md:hidden" />
+        <AccountComponent class="lg:hidden" />
       </div>
-      <div class="my-4 md:flex md:w-[100%]">
+      <div class="my-4 lg:flex lg:w-[100%]">
         <SearchComponent
           placeholder="Recherchez un produit, un accord-cadre ou un fournisseur"
         >
           <i class="fa fa-search" />
         </SearchComponent>
       </div>
-      <AccountComponent class="hidden md:flex" />
+      <AccountComponent class="hidden lg:flex" />
     </div>
-    <MenuComponent class="hidden md:flex" />
+    <MenuComponent class="hidden lg:flex" />
   </nav>
 </template>
 
@@ -29,15 +29,10 @@ import LogoComponent from '@/vuejs/modules/shared/header-component/LogoComponent
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
-
 </script>
 
 <style lang="scss">
 @import 'assets/style/_variables.scss';
-
-.menu-button {
-  @apply z-50 flex rounded md:h-[50px] md:w-[220px];
-}
 
 .overlay {
   display: none;

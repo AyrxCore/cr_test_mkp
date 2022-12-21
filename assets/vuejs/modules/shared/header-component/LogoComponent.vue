@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-center md:min-w-[200px]">
     <RouterLink
-      :to="{ name: MainPageList.HOME_PAGE }"
+      :to="{ path: '/app/home' }"
       class="text-xl font-bold text-white"
     >
       <img
@@ -15,7 +15,6 @@
 
 <script lang="ts" setup>
 import { getImage } from '@/vuejs/services/utils'
-import { MainPageList } from '@/vuejs/router'
 import qantisHeaderLogo from '@/vuejs/assets/img/qantis_marketplace_logo_blanc.png'
 
 const qantisLogoImg = getImage(qantisHeaderLogo)

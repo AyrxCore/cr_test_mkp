@@ -1,21 +1,7 @@
-import { ref } from 'vue';
+import { ref } from 'vue'
 
 export function getImage(urlImage: string): string {
   return new URL(urlImage, import.meta.url).href
-}
-
-export function animateSubMenu(menuToggle :string, overlay, button, menu): void {
-  if(menuToggle === 'open') {
-    overlay.classList.add('open')
-    menu.classList.add('open')
-    button.classList.add('on')
-  }
-
-  if(menuToggle === 'close') {
-    button.classList.remove('on')
-    overlay.classList.remove('open')
-    menu.classList.remove('open')
-  }
 }
 
 export const listCategories = ref<string[]>([
@@ -31,7 +17,7 @@ export const listCategories = ref<string[]>([
   'Formation',
   'Fournitures de bureau',
   'Gestion des déchets',
-  'Hygiène et produits d\'entretien',
+  "Hygiène et produits d'entretien",
   'Informatique et burautique',
   'Location de matériels',
   'Matériaux',

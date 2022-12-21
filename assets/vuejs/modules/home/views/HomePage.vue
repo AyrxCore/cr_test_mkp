@@ -1,6 +1,6 @@
 <template>
   <BaseTemplate title="Qantis - MarketPlace">
-    <div class="m-auto my-4 max-w-screen-2xl flex-1 px-5 md:p-8">
+    <div class="m-auto max-w-screen-2xl flex-1 px-5 md:p-8">
       <div class="mt-7 flex md:justify-between">
         <div class="sm:w-[100%] md:w-[52rem]">
           <h3 class="home-title text-primary">
@@ -88,7 +88,6 @@
                 Découvrez ou téléchargez les conditions négociées de ce
                 partenaire
               </p>
-
 
               <RouterLink
                 :to="{ path: '/app/partner' }"

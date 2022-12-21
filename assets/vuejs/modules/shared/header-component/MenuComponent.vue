@@ -1,15 +1,15 @@
 <template>
   <div
-    class="top-3 flex items-center text-white md:top-0 md:mt-5 md:w-auto md:justify-around"
+    class="top-3 flex items-center text-white lg:top-0 lg:mt-5 lg:w-auto lg:justify-around"
   >
     <div>
       <button
         id="menu-button-categorie"
-        class="flex items-center rounded border-b-2 border-b-transparent py-1 hover:opacity-75 md:px-3"
+        class="flex items-center rounded border-b-2 border-b-transparent py-1 hover:opacity-75 lg:px-3"
         @click="onClick('open')"
       >
-        <MenuIconComponent class="mr-0.5 text-xl md:w-auto" />
-        <span class="ml-4 hidden md:block">Toutes les catégories</span>
+        <MenuIconComponent class="mr-0.5 text-xl lg:w-auto" />
+        <span class="ml-4 hidden lg:block">Toutes les catégories</span>
       </button>
       <div id="hamburger-menu-categorie" class="hamburger-menu">
         <nav class="w-full">
@@ -17,7 +17,7 @@
             Voir toutes les catégories
           </a>
           <hr
-            class="mx-auto mt-1 mb-1 w-[90%] border border-b-primary md:w-[95%]"
+            class="mx-auto mt-1 mb-1 w-[90%] border border-b-primary lg:w-[95%]"
           />
           <div
             v-for="(categorie, id) in listCategories"
@@ -43,7 +43,7 @@
     <div
       v-for="(menu, id) in listMenu"
       :key="id"
-      class="sr-only flex px-2 md:not-sr-only"
+      class="sr-only flex px-2 lg:not-sr-only"
     >
       <a
         href="#"
@@ -56,7 +56,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { listCategories, animateSubMenu } from '@/vuejs/services/utils'
+import { listCategories } from '@/vuejs/services/utils'
 import MenuIconComponent from '@/vuejs/modules/shared/icon/MenuIconComponent.vue'
 import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightIconComponent.vue'
 
@@ -71,13 +71,4 @@ const listMenu = ref<string[]>([
   'EPI',
   'Location de matériel',
 ])
-
-const onClick = (action): void => {
-  const overlay = document.querySelector('#overlay-categorie')
-  const button = document.querySelector('#menu-button-categorie')
-  const menu = document.querySelector('#hamburger-menu-categorie')
-  animateSubMenu(action, overlay, button, menu)
-}
-
-
 </script>
