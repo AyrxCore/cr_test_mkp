@@ -93,7 +93,7 @@ import { useUserStore } from '@/vuejs/stores/user'
 import { useAlertStore } from '@/vuejs/stores/alert'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
-import LoaderSharedComponent from "@/vuejs/modules/shared/LoaderSharedComponent.vue";
+import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 import ArrowRightIcon from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 
 const username = ref<string>('')
@@ -114,10 +114,12 @@ const loginSubmit = async () => {
     return false
   }
 
-  accounts.length > 1
-  ? userAccounts.value =  accounts
-  : (document.location.href = '/app/home')
-  isLoading.value = false
+  if(accounts.length > 1) {
+    userAccounts.value =  accounts
+    isLoading.value = false
+  } else {
+    document.location.href = '/app/home'
+  }
 }
 
 const onAccountClick = async(account) => {

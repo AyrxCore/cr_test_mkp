@@ -1,9 +1,9 @@
-import { Address } from '@/vuejs/types/Account'
+import { Account } from '@/vuejs/types/Account'
 // Décrit l'objet user
 export interface User {
   email: string
   roles: string[]
-  account: Address
+  account: Account
   username: string
   firstName: string
   lastName: string

@@ -7,11 +7,14 @@ namespace App\Service;
 use App\Entity\Account;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpClient\CachingHttpClient;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpClient\Exception\ServerException;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpKernel\HttpCache\Store;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -22,8 +25,14 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 abstract class HttpClientProvider
 {
-    #[Required]
-    public HttpClientInterface $client;
+    // Liste des codes retours http considérés comme success
+    private const HTTP_SUCCESS_RESPONSES = [
+      Response::HTTP_OK,
+      Response::HTTP_ACCEPTED,
+      Response::HTTP_CREATED,
+      Response::HTTP_NO_CONTENT,
+      Response::HTTP_PARTIAL_CONTENT
+    ];
 
     #[Required]
     public LoggerInterface $apiLogger;
@@ -43,18 +52,22 @@ abstract class HttpClientProvider
 
     public string $adminTokenFile;
 
+    public  string $httpCachePath;
+
     public function __construct(
         string $env,
         string $apiUrl,
         string $adminClientId,
         string $adminClientSecret,
-        string $adminTokenFile
+        string $adminTokenFile,
+        string $httpCachePath
     ) {
         $this->env = $env;
         $this->apiUrl = $apiUrl;
         $this->adminClientId = $adminClientId;
         $this->adminClientSecret = $adminClientSecret;
         $this->adminTokenFile = $adminTokenFile;
+        $this->httpCachePath = $httpCachePath;
     }
 
     // Expose la requête Http Symfony afin de centraliser tous les appels
@@ -65,8 +78,16 @@ abstract class HttpClientProvider
         string $url,
         array $options = [],
         $isAdmin = false,
-        $whithoutToken = false
+        $whithoutToken = false,
+        $withCache = false
     ) {
+
+        $client = HttpClient::create();
+
+        if ($withCache) {
+            $store = new Store($this->httpCachePath);
+            $client = new CachingHttpClient($client, $store);
+        }
 
         $origUrl = $url;
         $origOptions = $options;
@@ -74,12 +95,15 @@ abstract class HttpClientProvider
 
         try {
             $this->apiLogger->info("Token utilisé  " . $this->adminToken . ' endpoint ' . $url);
-            $res = $this->client->request($method, $url, $options);
+            $res = $client->request($method, $url, $options);
             if (Response::HTTP_UNAUTHORIZED === $res->getStatusCode()) {
                 $this->apiLogger->critical('token ' . $this->adminToken  . ' retour 401 ');
                 $this->checkResponse($res, $method, $origUrl, $origOptions, $isAdmin);
                 $this->computeHeaders($origUrl, $origOptions, $isAdmin, $whithoutToken);
-                $res = $this->client->request($method, $origUrl, $origOptions);
+                $res = $client->request($method, $origUrl, $origOptions);
+            } elseif (!in_array($res->getStatusCode(), self::HTTP_SUCCESS_RESPONSES)) {
+                $errorDatas = $res->getContent(false);
+                $this->apiLogger->critical("error " . $errorDatas);
             }
 
             $this->apiLogger->info($res->getStatusCode() . " requete OK url ==>  " . $url);

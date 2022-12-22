@@ -2,7 +2,7 @@
   <button
     :class="{ 'button-no-click': isLoading }"
     class="button"
-    type="button"
+    :type="props.type"
     @click="onClick"
   >
     <LoaderSharedComponent v-if="isLoading" class="mr-2" />
@@ -24,6 +24,11 @@ const props = defineProps({
     type: String,
     default: 'rounded-md',
   },
+  type: {
+    required: false,
+    type: String,
+    default: 'submit'
+  }
 })
 
 const emit = defineEmits(['click'])

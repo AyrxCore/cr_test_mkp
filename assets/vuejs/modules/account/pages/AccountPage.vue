@@ -49,38 +49,7 @@
                 <span class="ml-6 flex font-bold">animation@qantis.co</span>
               </p>
             </div>
-            <AccountSidebarBlock
-                :items="[
-                  {name: 'Historiques de commandes',id: AccountPageList.ORDERS_HISTORY, url: AccountPageList.ORDERS_HISTORY},
-                  {name: 'Factures',id: '', url:  AccountPageList.ORDERS_HISTORY},
-                  {name: 'Paniers sauvegardés',id: AccountPageList.SAVED_CARTS, url:  AccountPageList.SAVED_CARTS},
-                  {name: 'Bons de livraison', id: '',url:  AccountPageList.ORDERS_HISTORY},
-                  {name: 'Validation de commandes',id: AccountPageList.ORDERS_VALIDATION,url:  AccountPageList.ORDERS_VALIDATION},
-              ]"
-                :title="'Mes Commandes'"
-            />
-            <AccountSidebarBlock
-                :items="[
-                  {name: 'Coordonnées',id: AccountPageList.CONTACT_INFORMATION, url: AccountPageList.CONTACT_INFORMATION},
-                  {name: 'Liste de produits favoris',id: AccountPageList.FAVORIS_LIST, url: AccountPageList.FAVORIS_LIST},
-              ]"
-                title="Mon profil"
-            />
-            <AccountSidebarBlock
-                :items="[
-                  {name: 'Utilisateurs',id: '', url: AccountPageList.ACCOUNT},
-                  {name: 'Adresses',id: AccountPageList.ADDRESSES, url: AccountPageList.ADDRESSES},
-                  {name: 'Directions - circuits de validation',id: '', url: AccountPageList.ACCOUNT},
-                  {name: 'Statuts',id: '', url: AccountPageList.ACCOUNT},
-              ]"
-                title="Mon organisation"
-            />
-            <AccountSidebarBlock
-                :items="[
-                  {name: 'Statistiques de consommation',id: '', url: AccountPageList.ACCOUNT},
-              ]"
-                title="Statistiques"
-            />
+            <AccountSidebar/>
           </div>
 
           <div class="col-span-3">
@@ -105,17 +74,16 @@ import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 
-import {AccountPageList, baseUrl} from '@/vuejs/modules/account/routerAccount'
 import ArrowLeftIconComponent from '@/vuejs/modules/shared/icon/ArrowLeftIconComponent.vue'
 import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightIconComponent.vue'
+import {useUserStore} from '@/vuejs/stores/user'
+import {storeToRefs} from 'pinia'
+import AccountSidebar from '@/vuejs/modules/account/components/sidebar/AccountSidebar.vue'
 import {ref} from 'vue'
-import {useUserStore} from "@/vuejs/stores/user";
-import {storeToRefs} from "pinia";
-import AccountSidebarBlock from "@/vuejs/modules/account/components/AccountSidebarBlock.vue";
 
 const userStore = useUserStore()
 const {user} = storeToRefs(userStore)
-
+const searchQuery = ref<string>('')
 const onLogout = async (e: Event): Promise<void> => {
   e.preventDefault()
   await userStore.logout() &&

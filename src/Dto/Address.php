@@ -6,155 +6,219 @@ namespace App\Dto;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Entity\Account;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Uid\Uuid;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\Scalar;
 use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     collectionOperations: [
         'create' => [
             "openapi_context" => [
-                'summary' => 'Déclarer un account Uppler',
-                'description' => 'Permet de créer un account Uppler sur la marketplace 
-            en passant toutes les infos de ce compte. Un compte utilisateur est automatiquement créé si nécessaire'
+                'summary' => 'Créer une nouvelle adresse',
+                'description' => 'Permet de créer une nouvelle adresse pour une company'
             ],
             "method" => "POST",
             "validate" => true,
         ]
     ],
-    itemOperations: ['get']
+    itemOperations: [
+        'get',
+        'update' => [
+            "openapi_context" => [
+                'summary' => 'Editer une adresse',
+                'description' => "Permet d'éditer adresse pour une company"
+            ],
+            "method" => "PUT",
+            "validate" => true,
+        ]
+    ],
+    routePrefix: '/company'
 )]
-final class UserAccount
+final class Address
 {
-    #[ORM\Id]
-    #[ORM\Column(type: 'uuid', unique: true)]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     #[ApiProperty(identifier: true)]
-    private ?Uuid $accountId = null;
+    private ?int $id = null;
 
-    private ?Uuid $userId = null;
-
-    #[Assert\Email(message: "email required", groups: ["create"])]
-    private string $email;
-
-    #[Assert\NotBlank(message: "upplerSubAccountId cannot be null", groups: ["create"])]
     #[Assert\Type("integer", message: "(upplerSubAccountId) Integer required", groups: ["create"])]
-    private int $upplerSubAccountId;
+    private int $companyId;
 
-    #[Assert\NotBlank(message: "upplerUserId cannot be null", groups: ["create"])]
-    #[Assert\Type("integer", message: "(upplerUserId) integer required", groups: ["create"])]
-    private int $upplerUserId;
+    #[Assert\Type("string", message: "(name) string required")]
+    private ?string $name;
 
-    #[Assert\NotBlank(message: "upplerCompanyId cannot be null")]
-    #[Assert\Type("integer", message: "(upplerCompanyId) integer required")]
-    private int $upplerCompanyId;
 
-    #[Assert\NotBlank(message: "upplerSubAccountClientId cannot be null")]
-    #[Assert\Type("string", message: "(upplerSubAccountClientId) string required")]
-    private string $upplerSubAccountClientId;
+    private string | null $type;
 
-    #[Assert\NotBlank(message: "upplerSubAccountClientSecret cannot be null")]
-    #[Assert\Type("string", message: "(upplerSubAccountClientSecret) string required")]
-    private string $upplerSubAccountClientSecret;
+    #[Assert\NotBlank(message: "company cannot be null", groups: ["create"])]
+    private string $company;
 
-    public function getAccountId(): ?Uuid
+    #[Assert\NotBlank(message: "street cannot be null", groups: ["create"])]
+    private string $street;
+
+    #[Assert\NotBlank(message: "postcode cannot be null")]
+    private string $postcode;
+
+    #[Assert\NotBlank(message: "city cannot be null")]
+    #[Assert\Type("string", message: "(city) string required")]
+    private string $city;
+
+    #[Assert\NotBlank(message: "country cannot be null")]
+    #[Assert\Type("integer", message: "(country) int required")]
+    private int $country;
+
+    #[Assert\NotBlank(message: "lastName cannot be null")]
+    #[Assert\Type("string", message: "(lastName) string required")]
+    private string $lastName;
+
+    #[Assert\NotBlank(message: "firstName cannot be null")]
+    #[Assert\Type("string", message: "(firstName) string required")]
+    private string $firstName;
+
+    #[Assert\NotBlank(message: "phone cannot be null")]
+    #[Assert\Type("string", message: "(phone) string required")]
+    private string $phone;
+
+    public function getId(): ?int
     {
-        return $this->accountId;
+        return $this->id;
     }
 
-    public function setUserId(Uuid $id): ?self
+    public function setId(int $id): self
     {
-        $this->userId = $id;
+        $this->id = $id;
 
         return $this;
     }
 
-    public function getUserId(): ?Uuid
+    public function getCompanyId(): ?int
     {
-        return $this->userId;
+        return $this->companyId;
     }
 
-    public function setAccountId(Uuid $id): ?self
+    public function setCompanyId(int $companyId): ?self
     {
-        $this->accountId = $id;
+        $this->companyId = $companyId;
 
         return $this;
     }
 
-    public function getEmail(): string
+    public function getName(): string
     {
-        return $this->email;
+        return $this->name;
     }
 
-    public function setEmail(string $email): self
+    public function setName(string $name): self
     {
-        $this->email = $email;
+        $this->name = $name;
 
         return $this;
     }
 
-    public function getUpplerSubAccountId(): int
+    public function getType(): string | null
     {
-        return $this->upplerSubAccountId;
+        return $this->type;
     }
 
-    public function setUpplerSubAccountId(int $upplerSubAccountId): self
+    public function setType(string | null $type): self
     {
-        $this->upplerSubAccountId = $upplerSubAccountId;
+        $this->type = $type;
 
         return $this;
     }
 
-    public function getUpplerUserId(): int
+    public function getCompany(): string
     {
-        return $this->upplerUserId;
+        return $this->company;
     }
 
-    public function setUpplerUserId(int $upplerUserId): self
+    public function setCompany(string $company): self
     {
-        $this->upplerUserId = $upplerUserId;
+        $this->company = $company;
 
         return $this;
     }
 
-    public function getUpplerCompanyId(): int
+    public function getStreet(): string
     {
-        return $this->upplerCompanyId;
+        return $this->street;
     }
 
-    public function setUpplerCompanyId(int $upplerCompanyId): self
+    public function setStreet(string $street): self
     {
-        $this->upplerCompanyId = $upplerCompanyId;
+        $this->street = $street;
 
         return $this;
     }
 
-    public function getUpplerSubAccountClientId(): string
+    public function getPostCode(): string
     {
-        return $this->upplerSubAccountClientId;
+        return $this->postcode;
     }
 
-    public function setUpplerSubAccountClientId(string $upplerSubAccountClientId): self
+    public function setPostCode(string $postCode): self
     {
-        $this->upplerSubAccountClientId = $upplerSubAccountClientId;
+        $this->postcode = $postCode;
 
         return $this;
     }
 
-    public function getUpplerSubAccountClientSecret(): string
+    public function getCity(): string
     {
-        return $this->upplerSubAccountClientSecret;
+        return $this->city;
     }
 
-    public function setUpplerSubAccountClientSecret(string $upplerSubAccountClientSecret): self
+    public function setCity(string $city): self
     {
-        $this->upplerSubAccountClientSecret = $upplerSubAccountClientSecret;
+        $this->city = $city;
 
         return $this;
     }
+
+    public function getCountry(): int
+    {
+        return $this->country;
+    }
+
+    public function setCountry(int $country): self
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    public function getLastName(): string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): self
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getFirstName(): string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): self
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getPhone(): string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(string $phone): self
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+
 }

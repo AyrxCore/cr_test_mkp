@@ -1,4 +1,4 @@
-// Liste des codes http (à compléter) afin de les d'utiliser les constantes et de typer
+// Liste des codes http (à compléter) afin  d'utiliser les constantes et de typer
 export enum HttpStatusCodes {
   success = 200,
   created = 201,

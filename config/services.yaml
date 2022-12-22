@@ -8,6 +8,7 @@ parameters:
   uppler_api_url: '%env(UPPLER_API_URL)%'
   uppler_admin_client_id: '%env(UPPLER_ADMIN_CLIENT_ID)%'
   uppler_admin_client_secret: '%env(UPPLER_ADMIN_CLIENT_SECRET)%'
+  http_cache_path: '%kernel.project_dir%/var/cache/%env(APP_ENV)%'
   #fichier qui stocke le token admin en cours
   uppler_admin_token_file: '%kernel.project_dir%/var/'
   #ttl entre 2 essais de reinit de password en minutes
@@ -43,14 +44,6 @@ services:
     parent: lexik_jwt_authentication.security.jwt_authenticator
     autowire: true
 
-  App\Service\UpplerAuthenticationService:
-    arguments:
-      $env: '%uppler_env%'
-      $apiUrl: '%uppler_api_url%'
-      $adminClientId: '%uppler_admin_client_id%'
-      $adminClientSecret: '%uppler_admin_client_secret%'
-      $adminTokenFile: '%uppler_admin_token_file%'
-
   App\Service\HttpClientProvider:
     arguments:
       $env: '%uppler_env%'
@@ -58,11 +51,13 @@ services:
       $adminClientId: '%uppler_admin_client_id%'
       $adminClientSecret: '%uppler_admin_client_secret%'
       $adminTokenFile: '%uppler_admin_token_file%'
+      $httpCachePath: '%http_cache_path%'
+
+  App\Service\UpplerAuthenticationService:
+    parent: App\Service\HttpClientProvider
 
   App\Service\UpplerCompanyService:
-    arguments:
-      $env: '%uppler_env%'
-      $apiUrl: '%uppler_api_url%'
-      $adminClientId: '%uppler_admin_client_id%'
-      $adminClientSecret: '%uppler_admin_client_secret%'
-      $adminTokenFile: '%uppler_admin_token_file%'
+    parent: App\Service\HttpClientProvider
+
+  App\Service\UpplerRepositoryService:
+    parent: App\Service\HttpClientProvider

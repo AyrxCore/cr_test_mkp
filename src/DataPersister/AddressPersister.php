@@ -5,16 +5,18 @@ declare(strict_types=1);
 namespace App\DataPersister;
 
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
+use App\Dto\Address;
 use App\Dto\UserAccount;
 use App\Entity\Account;
 use App\Entity\User;
+use App\Service\UpplerCompanyService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
-class UserAccountPersister implements ContextAwareDataPersisterInterface
+class AddressPersister implements ContextAwareDataPersisterInterface
 {
     #[Required]
     public EntityManagerInterface $em;
@@ -25,49 +27,45 @@ class UserAccountPersister implements ContextAwareDataPersisterInterface
     #[Required]
     public NormalizerInterface $normalizer;
 
+    #[Required]
+    public UpplerCompanyService $upplerCompanyService;
+
     public function supports($data, array $context = []): bool
     {
-        return $data instanceof UserAccount;
+        return $data instanceof Address;
     }
 
     /**
-     * @param UserAccount $data
+     * @param Address $data
      */
     public function persist($data, array $context = [])
     {
-        $user = $this->em->getRepository(User::class)->findOneBy(['username' => $data->getEmail()]);
-        if (!$user) {
-            $user = new User();
-            $user->setUsername($data->getEmail());
-            $user->setEmail($data->getEmail());
-            $user->setPassword($this->userPasswordHasher->hashPassword($user, uniqid()));
-            $user->setEnabled(false);
-            $this->em->persist($user);
+        $address = new Address();
+
+        if (isset($context["item_operation_name"]) && 'update' === $context["item_operation_name"]) {
+            $address->setId($data->getId());
         }
 
-        $account = $this->em->getRepository(Account::class)->findOneBy(
-            ['upplerClientId' => $data->getUpplerSubAccountClientId()]
-        );
+        $address->setType($data->getType());
+        $address->setLastName($data->getLastName());
+        $address->setFirstName($data->getFirstName());
+        $address->setCity($data->getCity());
+        $address->setCompany($data->getCompany());
+        $address->setCompanyId($data->getCompanyId());
+        $address->setCountry($data->getCountry());
+        $address->setName($data->getName());
+        $address->setPhone($data->getPhone());
+        $address->setPostCode($data->getPostCode());
+        $address->setStreet($data->getStreet());
+        $result = [];
 
-        if ($account) {
-           throw  new BadRequestException("Account with this username already exist");
+        if (isset($context["item_operation_name"]) && 'update' === $context["item_operation_name"]) {
+            $result = $this->upplerCompanyService->updateAddress($address);
+        } elseif (isset($context["collection_operation_name"]) && 'create' === $context["collection_operation_name"]) {
+            $result = $this->upplerCompanyService->createAddress($address);
         }
 
-        $account = new Account();
-        $account->setUpplerSubAccountId($data->getUpplerSubAccountId());
-        $account->setUpplerClientId($data->getUpplerSubAccountClientId());
-        $account->setUpplerClientSecret($data->getUpplerSubAccountClientSecret());
-        $account->setUpplerUserId($data->getUpplerUserId());
-        $account->setUpplerCompanyId($data->getUpplerCompanyId());
-        $account->setUser($user);
-        $account->setIsEnabled(false);
-        $this->em->persist($account);
-        $this->em->flush();
-
-        $data->setAccountId($account->getId());
-        $data->setUserId($user->getId());
-
-        return $data;
+        return $result;
     }
 
     public function remove($data, array $context = [])

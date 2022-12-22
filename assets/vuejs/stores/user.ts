@@ -46,7 +46,6 @@ export const useUserStore = defineStore({
       try {
         this.user = await UserHttpClient.get().getUserMe()
       } catch (error) {
-        console.log(error)
         error.response.status === HttpStatusCodes.unauthorized &&
           alertStore.setShow('Erreur technique', AlertType.danger)
       }
@@ -57,7 +56,6 @@ export const useUserStore = defineStore({
         await UserHttpClient.get().logout()
         return true
       } catch (error) {
-        console.log(error)
         alertStore.setShow('Déconnexion impossible', AlertType.danger)
       }
       return false
