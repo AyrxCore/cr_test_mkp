@@ -27,10 +27,7 @@
             </span>
           </div>
           <div class="h-[180px] rounded-lg bg-white py-8 text-center">
-            <MailIconComponent
-              :stroke-color="'#9553FF'"
-              class="mx-auto mb-2 w-full"
-            />
+            <MailIconComponent class="mx-auto mb-2 w-full text-secondary" />
             <h4 class="primary mb-2 font-bold">Par email</h4>
             <span class="w-[313px] text-lg text-gray-500">
               à <a href="mailto:animation@qantis.co">animation@qantis.co</a>

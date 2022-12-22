@@ -23,17 +23,17 @@ $ docker-compose up
 Access to http://localhost:8087
 
 # Configuration
+
 dupliquer le fichier .env en .env.local
 le fichier .env contient tous les paramétres de connexion vers l'api Uppler de prod
-Dupliquer ces paramètres dans le .env.local et les ajuster pour l'api de preprod
+Dupliquer ces paramètres dans le .env.local et les ajuster pour l'api de preprod (à récuperer sur VAULT)
 
 ```sh
 UPPLER_ENV=dev
-UPPLER_API_URL="https://api.preprod-yousg3q-qbpekzlwwankw.fr-3.platformsh.site/"
-UPPLER_ADMIN_CLIENT_ID="9_5fsndcuwidk4kc8wgcw8c0gww8k8444448sccs4ssc8scsgc00"
-UPPLER_ADMIN_CLIENT_SECRET="2ikh2lc57y4g8o80coo04sc8c0ckogkkos8o840cw84k0sw88c"
+UPPLER_API_URL=
+UPPLER_ADMIN_CLIENT_ID=
+UPPLER_ADMIN_CLIENT_SECRET=
 ```
-
 
 ## Add a new user
 
@@ -54,10 +54,11 @@ $ php bin/console user:demote {email} {role}
 ```
 
 ## Test unitaires et fonctionnelles
-Afin de lancer les tests
- `sh runtest.sh`
 
-# Authentification / Login / 
+Afin de lancer les tests
+`sh runtest.sh`
+
+# Authentification / Login /
 
 ## Entités / Base de données
 
@@ -80,6 +81,7 @@ Ce jeu de test est délivré par la mécanisme standard sur Symfony des Fixtures
 Le jeu de fixtures est disponible dans le fichier app/DataFixtures/UserFixtures.
 Les fixtures doivent être injectées automatiquement au docker_compose build grâce à une ligne dans le docker_compose.yaml (d:f:l --group=dev -q)
 Si toutefois les fixtures ne sont pas injectées il suffit de lancer cette en cli.
+
 ```
 services:
   php-fpm:
@@ -99,7 +101,8 @@ services:
     networks:
       - dev-marketplace
 ```
-2 users sont créés : 
+
+2 users sont créés :
 
 - mfrebet@qantis.co / 000000 => attaché à un seul compte Acheteur et actif
 - buyer@qantis.oc / 000000 => attaché à 2 comptes acheteurs et inactif donc nécessité de passer par première connexion
@@ -117,6 +120,7 @@ Une fois le cookie obtenu il doit être joint à toutes les requêtes vers l'api
 https://symfony.com/doc/5.4/security/user_checkers.html
 
 Les règles implémentées dans ce userChecker sont les suivantes :
+
 - Pour pouvoir se connecter un user doit être actif (isEnabled) sinon userChecker refuse la connexion
 - Pour pouvoir se connecter un user doit avoir au moins un account lié sinon userChecker refuse la connexion
 
@@ -124,14 +128,13 @@ Les règles implémentées dans ce userChecker sont les suivantes :
 - Si un user vient de se connecter et qu'il ne possède aucun account (une exception existe cf : ci-dessous), la connexion est refusée.
 - Une exception est toutefois consentie à la règle ci-dessus afin que des plateformes externes (neo par exemple) puisse dialoguer avec l'api sans avoir d'account. Il est pour cela nécessaire de posséder le rôle 'ROLE_API'
 
-
 **Attention !!! En cas redémarrage du container Docker il faut penser à détruire l'ancien cookie du navigateur car il ne sera plus reconnu par la nouvelle session.**
 
 ## Authentification Back / Uppler
 
-### Mécanisme / Architecture 
+### Mécanisme / Architecture
 
-L'authentification entre le back et l'api Uppler repose sur Oauth2 et donc dans ce cas 
+L'authentification entre le back et l'api Uppler repose sur Oauth2 et donc dans ce cas
 l'obtention d'un accessToken en envoyant un couple client_id/client_secret.
 Une fois le token obtenu il doit être passé dans chaque requête dans une en-tête Authorization BEARER.
 Ce mécanisme est géré de manière totalement transparente dans la classe de connexion abstraite HttpClientProvider.
@@ -145,8 +148,9 @@ Tous les services devant communiquer avec Uppler devraient étendre cette classe
 #### Token Admin
 
 Un token admin permet d'effectuer sur l'api UPPLER des requêtes en mode Admin 'Operator'.
-Ce token est obtenu grace à un couple client_id/client_secret issue du back office et stockés en dur 
+Ce token est obtenu grace à un couple client_id/client_secret issue du back office et stockés en dur
 dans le fichier conf/services.yaml qui s'hydrate grace aux memes valeurs situées dans les fichiers .env.
+
 ```
 parameters:
   uppler_env: '%env(UPPLER_ENV)%'
@@ -154,6 +158,7 @@ parameters:
   uppler_admin_client_id: '%env(UPPLER_ADMIN_CLIENT_ID)%'
   uppler_admin_client_secret: '%env(UPPLER_ADMIN_CLIENT_SECRET)%'
 ```
+
 Si un token Admin est récupéré il est stocké sur le serveur dans le fichier /var/token.txt ainsi il est disponbile et partagé entre toues les sessions.
 Ce token a une durée de vie de 3600 secondes, au dela de laquelle il doit être remplacé.
 La classe HttpClientProvider gére cela de manière transparente, toutes les requêtes sont centralisées et les code retour sont analysés
@@ -164,7 +169,7 @@ Si un code 401 est retourné alors le token est renégocié, remplacé dans le f
 Un token utilisateur permet d'effectuer des appels sur l'api UPPLER en mode utilisateur (Buyer)
 Le back Office est ainsi scopé aux seules permissions du user authentifié.
 Ce token est obtenu grace à un couple client_id/client_secret stocké en base dans l'entité Account à connecter.
-Il a une durée de vie de 3600 secondes, au dela de laquelle il doit être remplacé. 
+Il a une durée de vie de 3600 secondes, au dela de laquelle il doit être remplacé.
 Il est stockée en session (sous le nom access_token) ainsi que l'account de manière a être naturellement attaché à l'utilisateur connecté.
 L'entité Account a elle même été créé et hydratée par la synchronization issue de neo.
 La classe HttpClientProvider gére cela de manière transparente, toutes les requêtes sont centralisées et les code retour sont analysés
@@ -182,4 +187,5 @@ Pour exploiter ce fichier un canal monolog spécifique a ét créé le canal 'ap
         level: error
         channels: [ "api" ]
 ```
+
 https://symfony.com/doc/5.4/logging/channels_handlers.html

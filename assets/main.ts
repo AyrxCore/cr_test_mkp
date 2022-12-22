@@ -5,6 +5,8 @@ import { createPinia } from 'pinia'
 import App from './vuejs/App.vue'
 import router from '@/vuejs/router'
 
+import clickOutside from '@/vuejs/directives/click-outside'
+
 const rootElements = document.querySelectorAll('.vue-app')
 // Permet de gérer des multi-composants vue intégrées dans twig
 // Chaque composant intégré dans twig doit posséder un attribut data-component
@@ -27,6 +29,6 @@ if (document.getElementById('app')) {
   const head = createHead()
   app.use(router)
   app.use(head)
-  app.use(createPinia())
+  app.use(createPinia()).directive('click-outside', clickOutside)
   app.mount('#app')
 }
