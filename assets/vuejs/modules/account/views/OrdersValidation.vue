@@ -1,49 +1,51 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="primary mb-2 text-[35px]">Historique de commandes</h3>
-      <span class="flex text-[16px] text-gray-500">La commande la plus récente apparaît en premier</span>
-      <div class="inline-flex w-5/6 mt-5">
+      <h3 class="primary mb-2 page-principal-title mt-2 md:mt-0">Historique de commandes</h3>
+      <span
+        class="flex text-sm md:text-base lg:text-lg text-gray-500"
+      >La commande la plus récente apparaît en premier</span
+      >
+      <div class="mt-5 mb-3 md:mb-0 flex flex-col md:flex-row w-full lg:w-11/12">
         <input-button-component
           placeholder="Date début - date fin"
-          class="h-[28px] mr-2"
+          class="mr-2 h-[28px] w-full lg:w-4/12 text-sm md:text-base lg:text-lg mb-3 md:mb-0"
         >
           <CalendarCheckIconComponent />
         </input-button-component>
-        <select class="h-[28px] text-[14px] w-3/6 rounded-md text-gray-600 placeholder-gray-400 py-0 text-center mr-2" >
+        <select
+          class="mr-2 h-[28px] w-full lg:w-3/12 rounded-md py-0 md:text-center text-sm md:text-base lg:text-lg text-gray-600 placeholder-gray-400 mb-3 md:mb-0"
+        >
           <option>Etat de la commande</option>
         </select>
-        <select class="h-[28px] text-[14px] w-3/6 rounded-md text-gray-600 placeholder-gray-400 py-0 text-center mr-2" >
+        <select
+          class="mr-2 h-[28px] w-full lg:w-3/12 rounded-md py-0 md:text-center text-sm md:text-base lg:text-lg text-gray-600 placeholder-gray-400 mb-3 md:mb-0"
+        >
           <option>Compte</option>
         </select>
-        <select class="h-[28px] text-[14px] w-3/6 rounded-md text-gray-600 placeholder-gray-400 py-0 text-center" >
+        <select
+          class="h-[28px] w-full lg:w-3/12 rounded-md py-0 md:text-center text-sm md:text-base lg:text-lg text-gray-600 placeholder-gray-400 mb-3 md:mb-0"
+        >
           <option>Acheteur</option>
         </select>
       </div>
-      <div class="flex text-[16px] text-gray-500 py-2.5 mt-10">
-        <div class="w-3/12">
-          Date de la commande
-        </div>
-        <div class="w-4/12">
-          Détails de la commande
-        </div>
-        <div class="w-2/12">
-          Etat
-        </div>
-        <div class="w-3/12">
-          Livraison
-        </div>
-        <div class="w-3/12">
-          Total de la commande
-        </div>
+      <div class="mt-10 mb-2.5 px-2.5 items-center text-sm lg:text-base text-gray-500 hidden md:flex">
+        <div class="md:w-2/12 lg:w-3/12">Date de la commande</div>
+        <div class="md:w-5/12 w-4/12">Détails de la commande</div>
+        <div class="w-2/12">Etat</div>
+        <div class="w-3/12">Livraison</div>
+        <div class="w-3/12">Total de la commande</div>
         <div class="w-1/12"></div>
       </div>
-      <OrderHistoryComponent v-for="(order, key) in listOrders" :key="key" :order="order" />
+      <OrderHistoryComponent
+        v-for="(order, key) in listOrders"
+        :key="key"
+        :order="order"
+      />
     </template>
   </AccountPage>
 </template>
 <script lang="ts" setup>
-
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import { computed } from 'vue'
 import { AccountPageList } from '@/vuejs/modules/account/routerAccount'
@@ -73,7 +75,7 @@ const listOrders = computed(() => {
       statut: {
         name: statuts[i],
         color: colorStatuts[i],
-        type: 'pending'
+        type: 'pending',
       },
       address: {
         name: 'QANTIS',
@@ -82,13 +84,12 @@ const listOrders = computed(() => {
         city: 'LIMONEST',
         country: 'FRANCE',
       },
-      total: 'XX,XX'
+      total: 'XX,XX',
     })
   }
 
   return orders
 })
-
 </script>
 
 <style scoped></style>

@@ -4,7 +4,7 @@
     :current-page="'Nom du partenaire'"
   />
   <ContactUsButtonComponent />
-  <div class="flex items-center text-green mt-3.5">
+  <div class="text-green mt-3.5 flex items-center">
     <h3 class="text-[35px] text-primary">ALDA MAJUSCULE-OFFICE DEPOT</h3>
     <div class="flex h-4 flex-row">
       <LeafIconComponent class="mx-2" />
@@ -25,14 +25,14 @@
       <img
         :src="aldaImg"
         alt="Picture"
-        class="items-center sm:mx-auto rounded-lg"
+        class="items-center rounded-lg sm:mx-auto"
       />
     </div>
     <div class="col-span-3 rounded-lg bg-white">
       <img
         :src="aldaHeaderImg"
         alt="Picture"
-        class="items-center sm:mx-auto rounded-lg"
+        class="items-center rounded-lg sm:mx-auto"
       />
     </div>
   </div>

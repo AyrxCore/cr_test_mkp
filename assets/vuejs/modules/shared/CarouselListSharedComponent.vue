@@ -104,18 +104,23 @@ const defaultModules = computed(
     &-next {
       @apply absolute top-0 bottom-0 z-10 flex cursor-pointer items-center text-primary;
       svg {
-        @apply h-12 w-12 rounded-full bg-white sm:bg-transparent;
+        @apply h-12 w-12 rounded-full bg-white xl:bg-transparent;
       }
     }
     &-prev {
-      @apply -left-4 sm:-left-14;
+      @apply -left-4 xl:-left-14;
     }
     &-next {
-      @apply -right-4 sm:-right-12;
+      @apply -right-4 xl:-right-12;
       svg {
         @apply rotate-180;
       }
     }
   }
+}
+
+.nav-mobile-only .swiper-button-direction-prev,
+.nav-mobile-only .swiper-button-direction-next {
+  @apply flex xl:hidden;
 }
 </style>

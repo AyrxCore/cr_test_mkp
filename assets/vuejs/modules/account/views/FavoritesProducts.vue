@@ -2,27 +2,22 @@
   <AccountPage>
     <template #right-side>
       <h3 class="primary mb-2 text-[35px]">Mes produits favoris</h3>
-      <div class="items-center flex text-lg text-gray-500 mb-2.5">
-        <div class="w-5/12">
-          Nom de la liste
-        </div>
-        <div class="w-2/12">
-          Créée le
-        </div>
-        <div class="w-2/12">
-          Modifiée le
-        </div>
-        <div class="w-2/12">
-          Nombre d'articles
-        </div>
+      <div class="mb-2.5 flex items-center text-lg text-gray-500">
+        <div class="w-5/12">Nom de la liste</div>
+        <div class="w-2/12">Créée le</div>
+        <div class="w-2/12">Modifiée le</div>
+        <div class="w-2/12">Nombre d'articles</div>
         <div class="w-1/12"></div>
       </div>
-      <FavoritesProductsComponent v-for="(favorite, key) in listFavorites" :key="key" :favorite="favorite" />
+      <FavoritesProductsComponent
+        v-for="(favorite, key) in listFavorites"
+        :key="key"
+        :favorite="favorite"
+      />
     </template>
   </AccountPage>
 </template>
 <script lang="ts" setup>
-
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import { computed, ref } from 'vue'
 import FavoritesProductsComponent from '@/vuejs/modules/account/components/FavoriteProductComponent.vue'
@@ -51,7 +46,6 @@ const listFavorites = computed(() => {
 
   return articles
 })
-
 </script>
 
 <style scoped></style>

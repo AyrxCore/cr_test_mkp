@@ -1,7 +1,7 @@
 <template>
-  <AccountPage>
+  <AccountPage :selected-tab="''">
     <template #header>
-      <h3 class="primary mb-2 text-[35px]">
+      <h3 class="text-primary lg:mb-2 page-principal-title">
         Bonjour,
         <span class="text-gradient">
           {{ user.firstName }}
@@ -10,7 +10,7 @@
       </h3>
     </template>
     <template #right-side>
-      <h3 class="primary mb-2 text-[35px]">Les dernières commandes</h3>
+      <h3 class="text-primary mb-2 page-principal-title mt-5 lg:mt-0">Les dernières commandes</h3>
       <OrderDetailsComponent
         v-for="(order, key) in listOrders"
         :key="key"
@@ -23,8 +23,8 @@
 import { ref } from 'vue'
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import OrderDetailsComponent from '@/vuejs/modules/account/components/OrderAccountComponent.vue'
-import {useUserStore} from "@/vuejs/stores/user";
-import {storeToRefs} from "pinia";
+import { useUserStore } from '@/vuejs/stores/user'
+import { storeToRefs } from 'pinia'
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)

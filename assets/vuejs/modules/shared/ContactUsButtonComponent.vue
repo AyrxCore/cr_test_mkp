@@ -1,9 +1,11 @@
 <template>
-  <ButtonComponent class="button-secondary right-0 float-right">
-    <MailIconLightComponent class="mr-1" />
-    <PhoneLightIconComponent class="mr-1" />
-    Contactez-nous
-  </ButtonComponent>
+  <div class="right-0 float-right hidden lg:flex">
+    <ButtonComponent class="button-secondary">
+      <MailIconLightComponent class="mr-1" />
+      <PhoneLightIconComponent class="mr-1" />
+      Contactez-nous
+    </ButtonComponent>
+  </div>
 </template>
 
 <script lang="ts" setup>

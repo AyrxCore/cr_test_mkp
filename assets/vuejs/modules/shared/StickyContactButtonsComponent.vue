@@ -1,9 +1,9 @@
 <template>
   <div class="hidden sm:block">
-    <button class="sticky-left-button top-[280px]">
+    <button class="sticky-right-button top-[280px]">
       <MailIconComponent />
     </button>
-    <button class="sticky-left-button top-[340px]">
+    <button class="sticky-right-button top-[340px]">
       <PhoneIconComponent />
     </button>
   </div>
@@ -15,7 +15,7 @@ import PhoneIconComponent from '@/vuejs/modules/shared/icon/PhoneIconComponent.v
 </script>
 
 <style lang="postcss">
-.sticky-left-button {
+.sticky-right-button {
   @apply fixed -right-[190px] z-50 h-[50px] w-[245px] rounded-l-full bg-gradient-to-r from-secondary via-gradient-1 to-gradient-2
   pl-5 text-white;
   &:hover {

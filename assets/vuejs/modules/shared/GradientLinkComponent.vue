@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import {  PropType } from 'vue'
+import { PropType } from 'vue'
 
 const props = defineProps({
   href: {
@@ -19,8 +19,7 @@ const props = defineProps({
   target: {
     required: false,
     type: String as PropType<HTMLAnchorElement['target']>,
-    default: ''
+    default: '',
   },
 })
-
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center md:min-w-[200px]">
+  <div class="flex justify-center lg:min-w-[200px]">
     <RouterLink
       :to="{ path: '/app/home' }"
       class="text-xl font-bold text-white"
@@ -7,7 +7,7 @@
       <img
         :src="qantisLogoImg"
         alt="Logo Qantis"
-        class="left-[60px] top-[24.5px] flex h-auto w-[145px]"
+        class="left-[60px] top-[24.5px] flex h-auto w-[123px] md:w-[145px]"
       />
     </RouterLink>
   </div>

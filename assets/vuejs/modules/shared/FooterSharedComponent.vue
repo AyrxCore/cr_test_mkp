@@ -2,25 +2,27 @@
   <div class="footer mt-16">
     <div class="bloc-contact-footer flex w-full flex-row">
       <div
-        class="m-auto my-4 grid w-[100%] max-w-screen-2xl grid-cols-3 gap-4 pt-5"
+        class="flex w-[100%] max-w-screen-2xl flex-col pt-5 lg:m-auto lg:my-4 lg:grid-cols-3 lg:gap-4 lg:grid"
       >
-        <div class="flex text-lg">
-          <div>
-            <div><PhoneIconComponent class="fa fa-phone mr-2 text-lg" /></div>
-            <div class="mt-3"><MailIconComponent class="mr-2 text-lg" /></div>
-            <div class="mt-3">
-              <CalendarCheckIconComponent class="fa fa-phone mr-2 text-lg" />
+        <div class="flex flex-col text-lg">
+          <div class="items-center">
+            <div class="flex items-center">
+              <PhoneIconComponent class="mr-4 w-[24px] h-[24px]" />
+              <div class="text-sm md:text-base lg:text-lg">04 37 65 06 61</div>
             </div>
-          </div>
-          <div>
-            <div>04 37 65 06 61</div>
-            <div class="mt-3">animation@qantis.co</div>
-            <div class="mt-3">Rendez-vous avec votre animateur</div>
+            <div class="flex items-center mt-2">
+              <MailIconComponent class="mr-4 w-[24px] h-[24px]" />
+              <div class="text-sm md:text-base lg:text-lg">animation@qantis.co</div>
+            </div>
+            <div class="flex mt-2">
+              <CalendarCheckIconComponent class="mr-4 w-[24px] h-[24px]" />
+              <div class="text-sm md:text-base lg:text-lg">Rendez-vous avec votre animateur</div>
+            </div>
           </div>
         </div>
         <div class="col-span-2">
           <h3>Etes-vous abonné à notre newsletter ?</h3>
-          <p class="mb-4 text-lg">
+          <p class="mb-4 text-sm md:text-base lg:text-lg">
             Recevez les actualités de nos partenaires, leurs produits et
             services
           </p>
@@ -28,7 +30,7 @@
             placeholder="Votre adresse email"
             :btn-color="'bg-qantis'"
           >
-            S'inscrire
+            <span class="text-sm md:text-base lg:text-lg"> S'inscrire</span>
           </InputButtonComponent>
           <p class="mt-4 text-sm">
             Votre adresse email sera uniquement utilisée pour vous envoyer nos
@@ -40,40 +42,49 @@
       </div>
     </div>
     <div
-      class="second-part m-auto my-4 grid max-w-screen-2xl grid-flow-col grid-rows-3 gap-4 pt-10"
+      class="second-part mx-5 my-2 flex max-w-screen-2xl flex-col pt-10 md:m-auto lg:my-4 lg:grid lg:grid-flow-col lg:grid-rows-3 lg:gap-4"
     >
-      <div class="row-span-3 px-3">
-        <img :src="qantisLogoImg" alt="header" class="logo-qantis" />
-        <img :src="ecologieLogoImg" alt="header" class="logo-ecolo mt-[3rem]" />
-        <p>Paiment sécurisé par :</p>
-        <img
-          :src="lemonwayLogoImg"
-          alt="header"
-          class="logo-lemway mt-[0.5rem]"
-        />
-        <p class="mt-[3.5rem] mb-5">
-          Retrouvez l'actualité économique <br />de la Communauté QANTIS sur
-          <br />nos réseaux :
-        </p>
-        <div class="social-network-logo inline">
-          <div><img :src="linkedInLogoImg" alt="Linkedin" /></div>
-          <div><img :src="facebookLogoImg" alt="Facebook" /></div>
-          <div><img :src="twitterLogoImg" alt="Twitter" /></div>
-          <div><img :src="youtubeLogoImg" alt="Youtube" class="mt-0.5" /></div>
+      <div class="row-span-3 md:px-6 lg:px-3">
+        <div class="flex flex-col md:justify-between md:flex-row lg:flex-col">
+          <img :src="qantisLogoImg" alt="header" class="logo-qantis" />
+          <img :src="ecologieLogoImg" alt="header" class="logo-ecolo mt-[3rem] md:mt-0 lg:mt-[3rem]" />
+          <div class="mt-12 md:mt-0 lg:mt-12">
+            <p >Paiment sécurisé par :</p>
+            <img
+              :src="lemonwayLogoImg"
+              alt="header"
+              class="logo-lemway mt-[0.5rem]"
+            />
+          </div>
+        </div>
+        <div class="mt-[3.5rem]  w-[241px] flex flex-col md:flex-row lg:flex-col md:w-full lg:w-[241px] md:items-center lg:items-start">
+          <p class="mb-5 w-full md:w-3/6 lg:w-full">
+            Retrouvez l'actualité économique de la Communauté QANTIS sur nos réseaux :
+          </p>
+          <div class="social-network-logo mb-2 inline">
+            <div><img :src="linkedInLogoImg" alt="Linkedin" /></div>
+            <div><img :src="facebookLogoImg" alt="Facebook" /></div>
+            <div><img :src="twitterLogoImg" alt="Twitter" /></div>
+            <div><img :src="youtubeLogoImg" alt="Youtube" class="mt-0.5" /></div>
+          </div>
         </div>
       </div>
-      <div class="col-span-2 grid grid-cols-3 gap-4">
-        <div class="px-2">
-          <h3 class="mb-7">Votre espace adhérents</h3>
+      <div
+        class="mt-6 flex flex-col md:col-span-2 lg:mt-0 md:grid md:grid-cols-3 md:gap-4 md:px-6 lg:px-3"
+      >
+        <div class="px-2 md:px-0 lg:px-2">
+          <h3 class="mb-7 md:mb-4 lg:mb-7">Votre espace adhérents</h3>
           <ul>
             <li><a href="/app/account">Mon compte</a></li>
             <li><a href="#">Mes économies</a></li>
-            <li><a href="/app/account/orders-history">Historique de commandes</a></li>
+            <li>
+              <a href="/app/account/orders-history">Historique de commandes</a>
+            </li>
             <li><a href="#">Factures</a></li>
           </ul>
         </div>
-        <div class="px-2">
-          <h3 class="mb-7">A propos</h3>
+        <div class="mt-6 px-2 md:px-0 lg:px-2 md:mt-0">
+          <h3 class="mb-7 md:mb-10 lg:mb-7">A propos</h3>
           <ul>
             <li><a href="#">Nous contacter</a></li>
             <li><a href="#">Conditions d'utilisation</a></li>
@@ -84,8 +95,8 @@
             <li><a href="#">Cookies</a></li>
           </ul>
         </div>
-        <div class="px-2">
-          <h3 class="mb-7">La marketplace QANTIS</h3>
+        <div class="mt-6 px-2 md:px-0 lg:px-2 md:mt-0">
+          <h3 class="mb-7 md:mb-4 lg:mb-7">La marketplace QANTIS</h3>
           <p>
             Depuis 21 ans, QANTIS accompagne les entreprises françaises dans
             leurs performances et leur croissance durable en s'appuyant sur 3
@@ -94,10 +105,12 @@
           </p>
         </div>
       </div>
-      <div class="col-span-2 row-span-2">
-        <div class="m-auto my-4 grid grid-cols-3 gap-4 pt-10">
-          <div class="px-2">
-            <h3 class="mb-7">Votre espace adhérents</h3>
+      <div class="md:col-span-2 md:row-span-2">
+        <div
+          class="m-auto my-2 flex flex-col pt-4 md:my-4 md:grid md:grid-cols-3 md:gap-4 md:px-6 lg:px-3"
+        >
+          <div class="px-2 md:px-0 lg:px-2">
+            <h3 class="mb-7 md:mb-4 lg:mb-7">Nos catégories d'achats</h3>
             <ul>
               <li><a href="#">Avantages salariés</a></li>
               <li><a href="#">Certifications</a></li>
@@ -114,8 +127,8 @@
               </li>
             </ul>
           </div>
-          <div class="px-2">
-            <ul class="mt-[3rem] mb-7">
+          <div class="px-2 md:px-0 lg:px-2">
+            <ul class="mt-[3rem] mb-7 md:mb-4 md:mt-[4rem] lg:mb-7 lg:mt-[3rem]">
               <li><a href="#">Formation</a></li>
               <li><a href="#">Fourniture de bureaux</a></li>
               <li><a href="#">Gestion des déchets</a></li>
@@ -127,8 +140,8 @@
               <li><a href="#">Mobilier et agencement</a></li>
             </ul>
           </div>
-          <div class="px-2">
-            <ul class="mt-[3rem] mb-7">
+          <div class="px-2 md:px-0 lg:px-2">
+            <ul class="mt-[3rem] mb-7 md:mb-4 md:mt-[4rem] lg:mb-7 lg:mt-[3rem]">
               <li><a href="#">Outillage</a></li>
               <li><a href="#">Peinture</a></li>
               <li><a href="#">Quincaillerie</a></li>
@@ -146,8 +159,9 @@
         </div>
       </div>
     </div>
+    <hr class="m-auto w-11/12 border md:max-w-screen-2xl" />
     <div
-      class="m-auto mt-10 max-w-screen-2xl border-t-2 border-white pt-10 pb-10 text-center"
+      class="m-auto mt-7 py-10 px-5 text-left text-sm md:max-w-screen-2xl md:text-center lg:text-lg lg:mt-10 lg:px-0 "
     >
       © QANTIS. Tous droits réservés - QANTIS, 185, allée des Cyprès, 69760
       LIMONEST, FRANCE
@@ -200,21 +214,15 @@ const facebookLogoImg = getImage(facebookLogo)
 
 .footer .second-part p,
 .footer li {
-  font-size: 18px;
-  font-weight: 400;
-  line-height: 25px;
-  letter-spacing: 0em;
-  text-align: left;
+  @apply text-left text-sm font-normal leading-6 md:text-base xl:text-lg;
 }
 
 .bloc-contact-footer {
-  height: 254px;
-  background: $secondary;
+  @apply h-auto bg-secondary xl:h-[254px];
 }
 
 .bloc-contact-footer > div > div {
-  margin-right: 6rem;
-  margin-left: 6rem;
+  @apply m-5 sm:mx-12 xl:mx-24;
 }
 
 .footer .logo-qantis {
@@ -239,13 +247,6 @@ const facebookLogoImg = getImage(facebookLogo)
 }
 
 .footer .social-network-logo div {
-  box-sizing: border-box;
-  width: 40px;
-  height: 40px;
-  border: 1px solid #ffffff;
-  border-radius: 20px;
-  float: left;
-  margin-right: 10px;
-  padding: 10px;
+  @apply float-left mr-2.5 box-border h-[40px] w-[40px] rounded-full border border-white p-2.5;
 }
 </style>

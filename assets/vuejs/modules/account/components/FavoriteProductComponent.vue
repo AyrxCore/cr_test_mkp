@@ -1,20 +1,27 @@
 <template>
-  <div class="items-center flex text-lg text-gray-500 rounded-lg items-center bg-white p-2.5 mb-2.5">
+  <div
+    class="mb-2.5 flex items-center items-center rounded-lg bg-white p-2.5 text-lg text-gray-500"
+  >
     <div class="w-5/12">
-      <a href="/app/account/favoris-details" class="underline text-purple-600">{{favorite.name}}</a>
+      <a
+        href="/app/account/favoris-details"
+        class="text-purple-600 underline"
+        >{{ favorite.name }}</a
+      >
     </div>
     <div class="w-2/12">
-      {{favorite.dateCreate}}
+      {{ favorite.dateCreate }}
     </div>
     <div class="w-2/12">
-      {{favorite.dateUpdate}}
+      {{ favorite.dateUpdate }}
     </div>
     <div class="w-2/12">
-      {{favorite.numberArticle}} {{favorite.numberArticle > 1 ? 'articles' : 'article'}}
+      {{ favorite.numberArticle }}
+      {{ favorite.numberArticle > 1 ? 'articles' : 'article' }}
     </div>
-    <div class="w-1/12 flex">
-        <button><EditIconComponent class="mr-2" /></button>
-      <button><TrashIconComponent :stroke-color="'#9866ff'"/></button>
+    <div class="flex w-1/12">
+      <button><EditIconComponent class="mr-2" /></button>
+      <button><TrashIconComponent :stroke-color="'#9866ff'" /></button>
     </div>
   </div>
 </template>
@@ -27,5 +34,4 @@ const props = defineProps({
     type: Object,
   },
 })
-
 </script>

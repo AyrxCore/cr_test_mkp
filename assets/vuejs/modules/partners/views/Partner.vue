@@ -6,10 +6,14 @@
       <div class="mt-10 mt-5 flex grid grid-cols-9 gap-4 text-gray-600">
         <div class="col-span-5 rounded-lg bg-white px-7.5 pt-7.5 pb-4 text-lg">
           <p>
-            <span class="uppercase">ALDA MAJUSCULE-OFFICE DEPOT</span> votre spécialiste en fournitures de bureau, mobiliers, consommables informatiques.
+            <span class="uppercase">ALDA MAJUSCULE-OFFICE DEPOT</span> votre
+            spécialiste en fournitures de bureau, mobiliers, consommables
+            informatiques.
           </p>
           <p class="mt-3">
-            <span class="uppercase">ALDA MAJUSCULE-OFFICE DEPOT</span> vous propose une offre de proximité régionale multicanale unique en France : BtoB et magasins Office Depot.
+            <span class="uppercase">ALDA MAJUSCULE-OFFICE DEPOT</span> vous
+            propose une offre de proximité régionale multicanale unique en
+            France : BtoB et magasins Office Depot.
           </p>
         </div>
         <div
@@ -22,28 +26,33 @@
               class="mb-7.5 flex flex-row items-center text-lg"
             >
               <CheckIconComponent class="mr-1 h-[20px] w-[20px]" />
-              <strong class="mr-1">Point clé n° {{ key + 1 }} : </strong> {{ pointCle }}
+              <strong class="mr-1">Point clé n° {{ key + 1 }} : </strong>
+              {{ pointCle }}
             </li>
           </ul>
         </div>
       </div>
       <div class="mt-10 mt-5 flex grid grid-cols-9 gap-4 text-lg">
-        <div class="bloc-content flex flex-col col-span-5 h-full">
+        <div class="bloc-content col-span-5 flex h-full flex-col">
           <h3
             class="mb-[1.563rem] w-3/4 text-title-35 font-bold leading-9 text-primary"
           >
             Vos conditions négociées
           </h3>
-          <p class="flex mb-10">
+          <p class="mb-10 flex">
             Remise applicables sur XXXX / mentions légales conditions
           </p>
           <AutomobilePartnerComponent v-if="isAutomobile" />
-          <ul v-else class="mx-7 list-disc flex flex-col">
-            <li v-for="(condition, key) in listConditions" :key="key" class="mb-5">
+          <ul v-else class="mx-7 flex list-disc flex-col">
+            <li
+              v-for="(condition, key) in listConditions"
+              :key="key"
+              class="mb-5"
+            >
               {{ condition }}
             </li>
           </ul>
-          <div class="flex justify-center items-end">
+          <div class="flex items-end justify-center">
             <ButtonComponent class="button-gradient mr-5 w-1/2">
               <DownloadIconComponent />
               Télécharger les conditions négociées
@@ -60,9 +69,20 @@
             <ArrowRightIconComponent /> Bénéficiez des conditions
           </ButtonComponent>
           <div class="condition-beneficiaire">
-            <p>Contactez votre animateur dédié ou le service adhérent afin d’effectuer une ouverture de compte.</p>
-            <p>Une fois vos codes d’accès en votre possession (délais 48h à 72h), commandez directement sur le site : https://shop.majuscule.com/alda/Default-Start</p>
-            <p>Si vous souhaitez également acheter en magasin, téléchargez et complétez l’attestation d’adhésion ci-dessous pour bénéficier de la réduction de 10% en magasin.</p>
+            <p>
+              Contactez votre animateur dédié ou le service adhérent afin
+              d’effectuer une ouverture de compte.
+            </p>
+            <p>
+              Une fois vos codes d’accès en votre possession (délais 48h à 72h),
+              commandez directement sur le site :
+              https://shop.majuscule.com/alda/Default-Start
+            </p>
+            <p>
+              Si vous souhaitez également acheter en magasin, téléchargez et
+              complétez l’attestation d’adhésion ci-dessous pour bénéficier de
+              la réduction de 10% en magasin.
+            </p>
             <p>Pour toute question, n’hésitez pas à nous contacter.</p>
           </div>
 
@@ -89,11 +109,7 @@
               <div
                 class="col-span-5 ml-10 flex h-[374px!important] items-center justify-center rounded-lg border py-8.5"
               >
-                <img
-                  :src="aldaImg"
-                  alt="Picture"
-                  class="object-cover"
-                />
+                <img :src="aldaImg" alt="Picture" class="object-cover" />
               </div>
               <div
                 class="col-span-4 flex flex-col rounded-lg bg-white pr-12 text-lg text-gray-500"
@@ -104,15 +120,17 @@
                   Mise en avant partenaire
                 </h3>
                 <p class="mb-5">
-                  Tout ce dont vous avez besoin auprès d’un seul fournisseur.
-                  Un groupe d’envergure à taille humaine spécialisé dans la distribution de fournitures de bureau, papier,
-                  consommables informatiques, ergonomie au travail et beaux-arts.
-                  Mais aussi des offres exclusives de produits vert et fabrication française à votre service.
+                  Tout ce dont vous avez besoin auprès d’un seul fournisseur. Un
+                  groupe d’envergure à taille humaine spécialisé dans la
+                  distribution de fournitures de bureau, papier, consommables
+                  informatiques, ergonomie au travail et beaux-arts. Mais aussi
+                  des offres exclusives de produits vert et fabrication
+                  française à votre service.
                 </p>
 
-<!--                <ButtonComponent class="button-secondary mt-6 w-1/2 hidden">-->
-<!--                  Bouton CTA-->
-<!--                </ButtonComponent>-->
+                <!--                <ButtonComponent class="button-secondary mt-6 w-1/2 hidden">-->
+                <!--                  Bouton CTA-->
+                <!--                </ButtonComponent>-->
               </div>
             </div>
           </SwiperSlide>
@@ -120,7 +138,7 @@
       </div>
 
       <div class="mt-10 mt-5 flex grid h-[337px] grid-cols-3 gap-4">
-        <div class="bloc-content flex flex-col col-span-2">
+        <div class="bloc-content col-span-2 flex flex-col">
           <h3
             class="mb-[1.563rem] w-3/4 text-title-35 font-bold leading-9 text-primary"
           >
@@ -144,14 +162,14 @@
             <li
               v-for="(pointRse, key) in pointsRSE"
               :key="key"
-              class="mb-8 flex flex-row items-center text-lg grid grid-cols-5 gap-2"
+              class="mb-8 flex grid grid-cols-5 flex-row items-center gap-2 text-lg"
             >
-              <span class="flex col-span-2 items-center">
+              <span class="col-span-2 flex items-center">
                 <CheckCircleIconComponent class="mr-2 h-[20px] w-[20px]" />
                 <strong class="mr-1">Point clé n° {{ key + 1 }} : </strong>
               </span>
-              <span class="flex col-span-3">
-                 {{ pointRse}}
+              <span class="col-span-3 flex">
+                {{ pointRse }}
               </span>
             </li>
           </ul>
@@ -167,7 +185,7 @@
           <img
             :src="aldaMapImg"
             alt="Picture"
-            class="object-cover h-[379px] rounded-lg"
+            class="h-[379px] rounded-lg object-cover"
           />
         </div>
         <div class="bloc-content">
@@ -252,6 +270,6 @@ const pointsRSE = [
 }
 
 .condition-beneficiaire p {
-  @apply mb-4
+  @apply mb-4;
 }
 </style>

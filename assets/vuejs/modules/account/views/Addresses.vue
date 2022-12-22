@@ -4,47 +4,64 @@
       <h3 class="primary mb-2 text-[35px]">Adresses</h3>
       <!-- Bloc adresse de facturation par défaut -->
       <h3 class="primary mb-2 text-[25px]">Votre adresse de facturation</h3>
-      <span class="text-gray-500 text-lg">Votre adresse de facturation par défaut est : </span>
-      <div class="py-3 px-3 justify-between bg-white rounded-lg flex text-gray-500 mb-8 items-center">
+      <span class="text-lg text-gray-500"
+        >Votre adresse de facturation par défaut est :
+      </span>
+      <div
+        class="mb-8 flex items-center justify-between rounded-lg bg-white py-3 px-3 text-gray-500"
+      >
         <div>
           <span>QANTIS, 185 allée des Cyprès, 69760 LIMONEST, FRANCE</span>
         </div>
-        <div class="float-right text-white px-2 py-1 w-fit">
+        <div class="float-right w-fit px-2 py-1 text-white">
           <button><EditIconComponent /></button>
         </div>
       </div>
       <!-- Fin bloc adresse de facturation par défaut -->
 
       <!-- Bloc adresse de livraison préférée -->
-      <h3 class="primary mb-2 text-[25px]">Votre adresse de livraison préférée</h3>
-      <span class="text-gray-500 text-lg">Votre adresse de livraison par défaut est : : </span>
-      <div class="py-3 px-3 justify-between bg-white rounded-lg flex text-gray-500 mb-8 items-center">
+      <h3 class="primary mb-2 text-[25px]">
+        Votre adresse de livraison préférée
+      </h3>
+      <span class="text-lg text-gray-500"
+        >Votre adresse de livraison par défaut est : :
+      </span>
+      <div
+        class="mb-8 flex items-center justify-between rounded-lg bg-white py-3 px-3 text-gray-500"
+      >
         <div>
           <span>QANTIS, 185 allée des Cyprès, 69760 LIMONEST, FRANCE</span>
         </div>
-        <div class="float-right text-white px-2 py-1 w-fit">
+        <div class="float-right w-fit px-2 py-1 text-white">
           <button><EditIconComponent /></button>
         </div>
       </div>
       <!-- Fin bloc adresse de livraison préférée -->
       <!-- Bloc liste des adresses -->
       <h3 class="primary mb-2 text-[25px]">Autres adresses</h3>
-      <div class="py-3 px-3 grid bg-white rounded-lg flex text-gray-500 mb-8 ">
+      <div class="mb-8 flex grid rounded-lg bg-white py-3 px-3 text-gray-500">
         <div class="flex justify-between">
-          <div class="inline-flex bg-white  rounded-md w-full">
-              <label class="text-gray-500 flex-none">Recherche:</label>
-              <input v-model="searchQuery" type="text"  name="query" class="rounded-md border border-gray-300 ml-2 w-3/6 h-[27px]"/>
+          <div class="inline-flex w-full rounded-md bg-white">
+            <label class="flex-none text-gray-500">Recherche:</label>
+            <input
+              v-model="searchQuery"
+              type="text"
+              name="query"
+              class="ml-2 h-[27px] w-3/6 rounded-md border border-gray-300"
+            />
           </div>
-          <div class="text-white px-2 py-1 w-fit flex">
+          <div class="flex w-fit px-2 py-1 text-white">
             <DefaultButtonComponent
               :btn-text-color="'text-gray-500'"
               :btn-color="'bg-transparent'"
               :rounded="'rounded-md'"
-              class="border border-gray-600 text-gray-500 py-2"
+              class="border border-gray-600 py-2 text-gray-500"
             >
               Précédent
             </DefaultButtonComponent>
-            <div class="text-gray-500 px-4 py-2 border items-center border-gray-300 rounded-md h-[32px] mr-2">
+            <div
+              class="mr-2 h-[32px] items-center rounded-md border border-gray-300 px-4 py-2 text-gray-500"
+            >
               <span>1</span>
             </div>
             <DefaultButtonComponent
@@ -79,7 +96,9 @@
                 <td>
                   <div v-if="!address.default" class="flex">
                     <button><EditIconComponent class="mr-2" /></button>
-                    <button><TrashIconComponent :stroke-color="'#9866ff'"/></button>
+                    <button>
+                      <TrashIconComponent :stroke-color="'#9866ff'" />
+                    </button>
                   </div>
                 </td>
               </tr>
@@ -95,12 +114,10 @@
         </div>
       </div>
       <!-- Fin bloc liste des adresses -->
-
     </template>
   </AccountPage>
 </template>
 <script lang="ts" setup>
-
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import EditIconComponent from '@/vuejs/modules/shared/icon/EditIconComponent.vue'
 import {computed, onMounted, ref} from 'vue'
@@ -139,7 +156,6 @@ const listAddresses = ref<Array<any>>([
     default: false,
   }
 ])
-
 </script>
 
 <style scoped></style>

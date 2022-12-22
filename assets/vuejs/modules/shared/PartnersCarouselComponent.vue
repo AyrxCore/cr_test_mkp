@@ -1,8 +1,8 @@
 <template>
   <div class="relative">
     <CarouselListSharedComponent
-      :slides-per-view="1"
-      :space-between="10"
+      :slides-per-view="2"
+      :space-between="5"
       :breakpoints="{
         640: {
           slidesPerView: 6,
@@ -23,7 +23,7 @@
           <img
             :src="partenaire.img"
             :alt="partenaire.alt"
-            class="w-full object-contain sm:h-[107px]"
+            class="h-[107px] w-full object-contain"
           />
         </RouterLink>
       </SwiperSlide>
@@ -47,6 +47,14 @@ import imgLdlc from '@/vuejs/assets/img/samples/ldlc.png'
 import imgRenault from '@/vuejs/assets/img/samples/renault.png'
 import imgWurth from '@/vuejs/assets/img/samples/wurth.png'
 import imgAlda from '@/vuejs/assets/img/demo/alda.png'
+import imgCrit from '@/vuejs/assets/img/samples/crit.png'
+import imgEdenred from '@/vuejs/assets/img/samples/edenred.png'
+import imgEuromaster from '@/vuejs/assets/img/samples/euromaster.png'
+import imgFiducial from '@/vuejs/assets/img/samples/fiducial.png'
+import imgSfr from '@/vuejs/assets/img/samples/sfr.png'
+import imgShell from '@/vuejs/assets/img/samples/shell.png'
+import imgBerner from '@/vuejs/assets/img/samples/berner.png'
+import imgSynergie from '@/vuejs/assets/img/samples/synergie.jpeg'
 
 const partenaires = ref([
   { img: getImage(imgPeugeot), alt: 'Peugeot' },
@@ -58,5 +66,13 @@ const partenaires = ref([
   { img: getImage(imgWurth), alt: 'Wurth' },
   { img: getImage(imgLdlc), alt: 'LDLC Pro' },
   { img: getImage(imgHertz), alt: 'Herts' },
+  { img: getImage(imgEuromaster), alt: 'Euromaster' },
+  { img: getImage(imgShell), alt: 'Shell' },
+  { img: getImage(imgSfr), alt: 'SFR' },
+  { img: getImage(imgFiducial), alt: 'Fiducial' },
+  { img: getImage(imgCrit), alt: 'Crit' },
+  { img: getImage(imgBerner), alt: 'Berner' },
+  { img: getImage(imgEdenred), alt: 'Edenred' },
+  { img: getImage(imgSynergie), alt: 'Synergie' },
 ])
 </script>

@@ -1,13 +1,13 @@
 <template>
   <BaseTemplate title="Qantis - MarketPlace">
-    <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 sm:px-8">
-      <breadcrumb-shared-component :current-page="'Mon compte'"/>
+    <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 px-4 sm:px-8">
+      <breadcrumb-shared-component :current-page="'Mon compte'" />
       <div class="w-[100%] max-w-screen-2xl">
         <ContactUsButtonComponent/>
       </div>
       <a
-          href="/app/home"
-          class="my-7 flex items-center text-[14px] text-purple-600"
+        href="/app/home"
+        class="my-4 lg:my-7 flex items-center text-[14px] text-secondary"
       >
         <ArrowLeftIconComponent class="mr-2"/>
         Retour sur la page d'accueil
@@ -88,7 +88,7 @@
           </div>
         </div>
         <div class="items-center p-6 text-center">
-          <p class="text-lg text-gray-500">
+          <p class="text-sm md:text-base lg:text-lg text-gray-500">
             Les informations liées à votre compte restent strictement
             confidentielles et ne sont utilisées que conformément à notre
             <a href="#" class="font-bold underline decoration-2">
@@ -116,11 +116,9 @@ import AccountSidebarBlock from "@/vuejs/modules/account/components/AccountSideb
 const userStore = useUserStore()
 const {user} = storeToRefs(userStore)
 
-const onLogout = async (e: Event): Promise<void> => {
-  e.preventDefault()
-  await userStore.logout() &&
-  location.reload()
-}
 </script>
-
-<style scoped></style>
+<style>
+.page-principal-title {
+  @apply text-[23px] md:text-[29px] lg:text-[35px];
+}
+</style>

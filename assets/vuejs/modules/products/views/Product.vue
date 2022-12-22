@@ -1,19 +1,29 @@
 <template>
   <BaseTemplate title="Qantis - MarketPlace">
-    <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 sm:px-8">
+    <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 px-5 sm:px-8">
       <breadcrumb-shared-component
         :list-url="listUrl"
         :current-page="'Produit'"
       />
-      <div class="w-[100%] max-w-screen-2xl flex justify-end">
+      <div class="w-[100%] max-w-screen-2xl justify-end">
         <ContactUsButtonComponent />
       </div>
-      <div class="m-auto my-3.5 grid w-[100%] max-w-screen-2xl grid-cols-2 gap-4">
+      <div
+        class="m-auto my-3.5 flex w-[100%] max-w-screen-2xl flex-col lg:grid lg:grid-cols-2 lg:gap-4"
+      >
         <!-- Bloc image produit -->
         <div>
+          <ProductTitleComponent
+            class="mb-5 flex rounded-lg bg-white p-5 lg:hidden"
+          >
+            <template #name> {{ product.name }}</template>
+            <template #partner> {{ product.partner }}</template>
+            <template #reference> {{ product.reference }}</template>
+          </ProductTitleComponent>
+
           <div class="relative">
             <CarouselListSharedComponent
-              class="mx-auto h-[590px] items-center rounded-xl bg-white px-4"
+              class="nav-mobile-only mx-auto h-[303px] items-center rounded-xl bg-white px-4 md:h-[590px]"
               :slides-per-view="1"
               :space-between="20"
               :breakpoints="{
@@ -24,11 +34,15 @@
               }"
               :pagination="true"
               :navigation="false"
-              :show-nav="false"
+              :show-nav="true"
               :thumbs="{ swiper: thumbsSwiper }"
               @on-slide-change="onSlideChange"
             >
-              <swiperSlide v-for="(image, key) in product.images" :key="key">
+              <swiperSlide
+                v-for="(image, key) in product.images"
+                :key="key"
+                class="md:h-auto"
+              >
                 <img
                   :src="image.img"
                   alt="Picture"
@@ -39,7 +53,7 @@
           </div>
           <div class="relative">
             <CarouselListSharedComponent
-              class="mx-auto h-[150px] items-center rounded-xl px-4 mt-5 py-4"
+              class="mx-auto mt-5 hidden h-[150px] items-center rounded-xl px-4 py-4 md:flex md:justify-center"
               :space-between="10"
               watch-slides-progress
               :pagination="false"
@@ -59,7 +73,7 @@
                 <img
                   :src="image.img"
                   alt="Picture"
-                  class="items-center bg-white rounded"
+                  class="items-center rounded bg-white"
                 />
               </swiperSlide>
             </CarouselListSharedComponent>
@@ -69,17 +83,17 @@
 
         <!-- Bloc détails produit -->
         <div>
-          <div class="h-[658px] rounded-lg bg-white p-7">
-            <h3 class="text-title-35 text-primary">{{ product.name }}</h3>
-            <h4 class="mb-1.5 text-lg font-bold text-gray-500">
-              Vendu par : <span class="uppercase">{{ product.partner }}</span>
-            </h4>
-            <span class="text-lg text-gray-500"
-              >Référence : {{ product.reference }}
-            </span>
-            <div class="mt-14">
+          <div
+            class="mt-5 flex flex-col rounded-lg bg-white p-5 md:mt-0 lg:h-[658px] md:p-7"
+          >
+            <ProductTitleComponent class="hidden lg:flex">
+              <template #name> {{ product.name }}</template>
+              <template #partner> {{ product.partner }}</template>
+              <template #reference> {{ product.reference }}</template>
+            </ProductTitleComponent>
+            <div class="mt-14 hidden flex-col lg:flex">
               <div>
-                <span class="text-lg text-gray-500 line-through"
+                <span class="text-sm md:text-base lg:text-lg text-gray-500 line-through"
                   >{{ product.priceReduce }}€ HT
                 </span>
                 <span
@@ -91,9 +105,9 @@
                 {{ product.price }}€ HT
               </div>
             </div>
-            <div class="mt-12">
+            <div class="lg:mt-12">
               <div class="inline-flex items-center text-gray-500">
-                <span class="text-lg text-gray-500">Quantité</span>
+                <span class="text-sm md:text-base lg:text-lg text-gray-500">Quantité</span>
                 <select
                   class="ml-2 h-[1.75rem] rounded-md border border-[#5E6875] pt-0"
                 >
@@ -101,23 +115,25 @@
                     {{ i }}
                   </option>
                 </select>
-                <HeartIconComponent class="ml-5" :stroke-color="'#5E6875'" />
-                <a href="#" class="ml-5 font-bold underline"
-                  >Ajouter ce produit à mes favoris</a
-                >
+                <div class="hidden lg:flex">
+                  <HeartIconComponent class="ml-5" :stroke-color="'#5E6875'" />
+                  <a href="#" class="ml-5 font-bold underline"
+                    >Ajouter ce produit à mes favoris</a
+                  >
+                </div>
               </div>
               <p class="mt-1">
-                <span class="text-lg text-gray-500"
+                <span class="text-sm md:text-base lg:text-lg text-gray-500"
                   >Conditionnement conseillé : {{ product.conditionnement }}
                 </span>
               </p>
-              <div class="mt-12 w-[50%]">
+              <div class="mt-12 md:w-1/2">
                 <div
                   v-for="(attr, key) in productAttrubutes"
                   :key="key"
                   class="mt-2 w-full items-center text-gray-500"
                 >
-                  <span class="text-lg text-gray-500">{{ attr }}</span>
+                  <span class="text-sm md:text-base lg:text-lg text-gray-500">{{ attr }}</span>
                   <select
                     class="right-0 float-right ml-2 h-[1.75rem] w-[25%] rounded-md border border-[#5E6875] pt-0"
                   >
@@ -126,35 +142,39 @@
                 </div>
               </div>
             </div>
-            <ButtonComponent class="button-gradient mt-14 w-full">
-              <ShoppingCartIconComponent class="mr-2 w-4" /> Ajouter
-            </ButtonComponent>
+            <ButtonAddToCartComponent class="hidden lg:flex" />
           </div>
-          <div class="mt-[25px] h-[auto] rounded-lg bg-white p-7">
-            <h3 class="text-[35px] text-primary">Livraison et retour</h3>
+          <div class="mt-[25px] h-[auto] rounded-lg bg-white p-5 md:p-7">
+            <h3 class="text-[25px] text-primary md:text-[35px]">
+              Livraison et retour
+            </h3>
             <ul class="list-disc text-gray-500">
-              <li v-for="(livraison, key) in product.livraison" :key="key" class="mt-1 ml-7 text-lg">
+              <li
+                v-for="(livraison, key) in product.livraison"
+                :key="key"
+                class="mt-1 ml-7 text-sm md:text-base lg:text-lg"
+              >
                 {{ livraison.label }}
               </li>
             </ul>
           </div>
           <div
-            class="mt-[20px] inline-flex h-[158px] w-[100%] rounded-lg bg-white p-7"
+            class="mt-[20px] flex w-full flex-col rounded-lg bg-white p-5 text-center md:h-[158px] md:flex-row md:p-7 md:text-left"
           >
-            <div class="w-[20%]">
+            <div class="flex justify-center md:w-[20%]">
               <img
                 :src="helpImageFile"
                 alt="Picture"
                 class="h-[98px] w-[98px] items-center sm:mx-auto"
               />
             </div>
-            <div class="w-[80%]">
+            <div class="flex flex-col justify-center md:w-[80%]">
               <h3 class="text-[25px] text-primary">
                 Besoin d'aide pour votre commande ?
               </h3>
               <a
                 href="#"
-                class="default-button-gradient mt-2 inline-flex justify-center px-3.5 py-3 text-center font-bold text-white"
+                class="default-button-gradient mt-2 inline-flex justify-center px-3.5 py-3 text-center font-bold text-white text-sm md:text-base lg:text-lg"
               >
                 <ArrowRigntIconComponent
                   class="mt-1 mr-2 w-4 items-center"
@@ -171,28 +191,28 @@
       <!-- Bloc description -->
       <div class="mt-10 justify-center">
         <h3 class="home-subtitle mb-5 text-primary">Description</h3>
-        <p class="text-lg text-gray-500 whitespace-pre-line">
+        <p class="whitespace-pre-line text-sm md:text-base lg:text-lg text-gray-500">
           {{ product.description }}
         </p>
-        <div class="mt-[60px] flex">
-          <div class="mr-2 h-[180px] rounded-lg bg-white p-7">
+        <div class="flex flex-col md:mt-[60px] md:flex-row">
+          <div class="mr-2 mt-5 rounded-lg bg-white p-7 md:mt-0 lg:h-[180px]">
             <h3 class="inline-flex text-[25px] text-primary">
               Certifications et éco-label
               <LeafIconComponent class="ml-2 items-center" />
             </h3>
             <ul class="list-disc text-gray-500">
-              <li v-for="i in 3" :key="i" class="mt-1 ml-7 text-lg">
+              <li v-for="i in 3" :key="i" class="mt-1 ml-7 text-sm md:text-base lg:text-lg">
                 Curabitur ac sem at enim convallis consectetur
               </li>
             </ul>
           </div>
-          <div class="h-[180px] rounded-lg bg-white p-7">
+          <div class="mt-5 rounded-lg bg-white p-7 md:mt-0 lg:h-[180px]">
             <h3 class="text-[25px] text-primary">Documentation</h3>
             <ul class="list-disc text-gray-500">
               <li
                 v-for="(doc, key) in documentation"
                 :key="key"
-                class="mt-1 ml-7 text-lg"
+                class="mt-1 ml-7 text-sm md:text-base lg:text-lg"
               >
                 <a href="#" class="underline">{{ doc }}</a>
               </li>
@@ -212,7 +232,7 @@
             <tr
               v-for="(caracteristique, key) in product.caracteristiques"
               :key="key"
-              class="border text-lg text-primary"
+              class="border text-sm md:text-base lg:text-lg text-primary"
             >
               <td class="w-[20%] border p-2">{{ caracteristique.name }}</td>
               <td class="p-2">{{ caracteristique.value }}</td>
@@ -225,33 +245,32 @@
       <!-- Bloc produits similaire -->
       <div class="mt-10 justify-center">
         <h3 class="home-subtitle text-primary">Produits similaires</h3>
-        <ProductsCarouselComponent :products="productsSimilaire" class="mt-4"/>
+        <ProductsCarouselComponent :products="productsSimilaire" class="mt-4" />
       </div>
       <!-- Fiin bloc produits similaire -->
     </div>
   </BaseTemplate>
+  <ButtonAddToCartComponent :product="product" class="z-10 flex lg:hidden" />
 </template>
 <script lang="ts" setup>
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
 import { getImage } from '@/vuejs/services/utils'
-import defaultImage from '@/vuejs/assets/img/default-image.png'
 import helpImage from '@/vuejs/assets/img/samples/img-help-product.png'
 import { ref } from 'vue'
 import { SwiperSlide } from 'swiper/vue'
 import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
-import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
 import ArrowRigntIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import LeafIconComponent from '@/vuejs/modules/shared/icon/LeafIconComponent.vue'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import { product, productsSimilaire } from '@/vuejs/modules/products'
 import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
+import ButtonAddToCartComponent from '@/vuejs/modules/products/components/ButtonAddToCartComponent.vue'
+import ProductTitleComponent from '@/vuejs/modules/products/components/ProductTitleComponent.vue'
 
 const helpImageFile = getImage(helpImage)
 const thumbsSwiper = ref(null)
-
 
 const productAttrubutes = ref(['Taille', 'Couleur', 'Autre propriété produit'])
 

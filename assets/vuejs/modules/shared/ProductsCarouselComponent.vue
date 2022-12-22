@@ -4,10 +4,18 @@
       :slides-per-view="1"
       :space-between="10"
       :breakpoints="{
-        640: {
+        1280: {
           slidesPerView: 4,
           spaceBetween: 20,
         },
+        1024: {
+            slidesPerView: 3,
+            spaceBetween: 20,
+          },
+        640: {
+            slidesPerView: 2,
+            spaceBetween: 20,
+          },
       }"
     >
       <SwiperSlide
@@ -21,7 +29,6 @@
   </div>
 </template>
 <script lang="ts" setup>
-
 import { SwiperSlide } from 'swiper/vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
 import ProductComponent from '@/vuejs/modules/products/components/ProductComponent.vue'
