@@ -86,9 +86,6 @@ services:
     build:
       context: .
       target: php
-    environment:
-      - APP_ENV=${APP_ENV}
-      - APP_SECRET=${APP_SECRET}
     command: sh -c "composer i -o ; wait-for-it db:5432 -- bin/console doctrine:migrations:migrate -n; bin/console d:f:l --group=dev -q;  bin/console lexik:jwt:generate-keypair --overwrite -n; php-fpm"
     volumes:
       - ./:/var/www
