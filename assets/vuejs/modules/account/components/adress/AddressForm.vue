@@ -59,7 +59,7 @@
         <SelectField
             v-model="currentAddress.country"
             :options="countryStore.getCountriesForSelect()"
-            placceholder="Sélectionner un pays"
+            placeholder="Sélectionner un pays"
         />
       </div>
       <div  class="mb-6">

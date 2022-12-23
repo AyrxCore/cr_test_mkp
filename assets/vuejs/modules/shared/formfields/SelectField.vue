@@ -19,7 +19,7 @@
 </template>
 <script lang="ts" setup>
 import {ref, watch, PropType} from 'vue'
-import {SelectOption} from "@/vuejs/types/Select";
+import {SelectOption} from '@/vuejs/types/Select'
 
 const internalValue = ref<string>('')
 
@@ -31,7 +31,7 @@ const props = defineProps({
   placeholder: {
     required: false,
     type: String,
-    default: 'Sélectionner une valeur pour filtrer la liste'
+    default: 'Sélectionner une valeur'
   },
   classes: {
     required: false,

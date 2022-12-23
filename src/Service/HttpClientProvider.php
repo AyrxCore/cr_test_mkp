@@ -52,7 +52,7 @@ abstract class HttpClientProvider
 
     public string $adminTokenFile;
 
-    public  string $httpCachePath;
+    public string $httpCachePath;
 
     public function __construct(
         string $env,
