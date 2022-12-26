@@ -67,6 +67,7 @@ import AddressesDefaultBilling from '@/vuejs/modules/account/components/adresses
 import AddressesDefaultShipping from '@/vuejs/modules/account/components/adresses/AddressesDefaultShipping.vue'
 import router from '@/vuejs/router'
 import {AccountPageList} from '@/vuejs/modules/account/routerAccount'
+import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 const companyStore = useCompanyStore()
 
 

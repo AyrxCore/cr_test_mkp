@@ -73,17 +73,15 @@
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
-
 import ArrowLeftIconComponent from '@/vuejs/modules/shared/icon/ArrowLeftIconComponent.vue'
 import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightIconComponent.vue'
 import {useUserStore} from '@/vuejs/stores/user'
 import {storeToRefs} from 'pinia'
 import AccountSidebar from '@/vuejs/modules/account/components/sidebar/AccountSidebar.vue'
-import {ref} from 'vue'
+
 
 const userStore = useUserStore()
 const {user} = storeToRefs(userStore)
-const searchQuery = ref<string>('')
 const onLogout = async (e: Event): Promise<void> => {
   e.preventDefault()
   await userStore.logout() &&
