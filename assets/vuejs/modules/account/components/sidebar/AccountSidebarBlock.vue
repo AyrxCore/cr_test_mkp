@@ -11,7 +11,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import AccountSidebarBlockItem from "@/vuejs/modules/account/components/AccountSidebarBlockItem.vue";
+import AccountSidebarBlockItem from '@/vuejs/modules/account/components/sidebar/AccountSidebarBlockItem.vue'
 
 const props = defineProps({
   title: {

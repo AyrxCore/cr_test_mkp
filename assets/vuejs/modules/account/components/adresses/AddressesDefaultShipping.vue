@@ -1,0 +1,26 @@
+<template>
+  <h3 class="primary mb-2 text-[25px]">Votre adresse de livraison préférée</h3>
+  <span class="text-gray-500 text-lg">Votre adresse de livraison par défaut est :</span>
+  <div class="py-3 px-3 justify-between bg-white rounded-lg flex text-gray-500 mb-8 items-center">
+    <div>
+       <span v-if="companyStore.getDefaultBillingAddress">
+        {{ companyStore.getDefaultShippingAddress.company }},
+        {{ companyStore.getDefaultShippingAddress.street }}
+        {{ companyStore.getDefaultShippingAddress.postcode }}
+        {{ companyStore.getDefaultShippingAddress.city }}
+      </span>
+      <span v-else>
+        <LoaderSharedComponent
+          class="text-purple-600"
+        />
+      </span>
+    </div>
+  </div>
+</template>
+<script lang="ts" setup>
+
+import {useCompanyStore} from '@/vuejs/stores/company'
+import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
+
+const companyStore = useCompanyStore()
+</script>

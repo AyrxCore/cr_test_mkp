@@ -1,6 +1,8 @@
 import { RouteRecordRaw } from 'vue-router'
 import MyAccountPage from '@/vuejs/modules/account/views/MyAccount.vue'
-import AddressesPage from '@/vuejs/modules/account/views/Addresses.vue'
+import AddressesPage from '@/vuejs/modules/account/views/adresses/AddressesContainer.vue'
+import AddressCreate from '@/vuejs/modules/account/views/adress/AddressCreate.vue'
+import AddressEdit from '@/vuejs/modules/account/views/adress/AddressEdit.vue'
 import ContactInformationPage from '@/vuejs/modules/account/views/ContactInformation.vue'
 import FavoritesProductsPage from '@/vuejs/modules/account/views/FavoritesProducts.vue'
 import FavoritesProductsDetailsPage from '@/vuejs/modules/account/views/FavoritesProductsDetails.vue'
@@ -12,6 +14,8 @@ export enum AccountPageList {
   ACCOUNT = 'account',
   CONTACT_INFORMATION = 'contact-information',
   ADDRESSES = 'addresses',
+  ADDRESS_EDIT = 'address-edit',
+  ADDRESS_CREATE = 'address-create',
   FAVORIS_LIST = 'favoris-list',
   FAVORIS_DETAILS = 'favoris-details',
   ORDERS_HISTORY = 'orders-history',
@@ -40,6 +44,17 @@ export const routes: RouteRecordRaw[] = [
         path: baseUrl + AccountPageList.ADDRESSES,
         component: AddressesPage,
         name: AccountPageList.ADDRESSES,
+      },
+      {
+        path: baseUrl + AccountPageList.ADDRESS_CREATE + '/:type',
+        component: AddressCreate,
+        name: AccountPageList.ADDRESS_CREATE,
+        props: true,
+      },
+      {
+        path: baseUrl + AccountPageList.ADDRESS_EDIT + '/:id',
+        component: AddressEdit,
+        name: AccountPageList.ADDRESS_EDIT,
       },
       {
         path: baseUrl + AccountPageList.FAVORIS_LIST,

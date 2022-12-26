@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Dto\Address;
 use App\Entity\Account;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use phpDocumentor\Reflection\Types\Scalar;
+use PhpParser\Node\Expr\Cast\Object_;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Service\Attribute\Required;
@@ -60,26 +63,125 @@ class UpplerCompanyService extends HttpClientProvider
         );
         if (Response::HTTP_OK === $res->getStatusCode()) {
             $addresses = json_decode($res->getContent());
-            return $this->computeAdresses($addresses);
+            $this->computeAdresses($addresses);
+            return $addresses;
         }
 
         return null;
     }
 
-    private function computeAdresses(array &$addresses)
+    public function getAddress(?int $addressId = null, string $url = null): \stdClass | null
     {
-        foreach ($addresses as $address) {
-            $country = $address->country->name->fr;
-            $address->country = $country;
-            unset($address->companies);
-            unset($address->first_name);
-            unset($address->last_name);
-            unset($address->external_id);
-            unset($address->phone);
-            unset($address->email);
+        $session = $this->requestStack->getSession();
+        $session->start();
+
+        $res = $this->request(
+            'GET',
+            null !== $url ? $url : $this->apiUrl . 'v1/administrator/company-address/' . $addressId,
+            [],
+            true
+        );
+
+        if (Response::HTTP_OK === $res->getStatusCode()) {
+            $address = json_decode($res->getContent());
+            $this->computeAddress($address);
+            return $address;
         }
 
-        return $addresses;
+        return null;
+    }
+
+    private function computeAdresses(array &$addresses): void
+    {
+        foreach ($addresses as $address) {
+            $this->computeAddress($address);
+        }
+    }
+
+    private function computeAddress(&$address): void
+    {
+        $country = $address->country->id;
+        $address->country = $country;
+        unset($address->companies);
+        unset($address->external_id);
+        unset($address->email);
+    }
+
+    public function createAddress(Address $address)
+    {
+        $res = $this->request(
+            'POST',
+            $this->apiUrl . 'v1/administrator/company-address/',
+            [
+                'json' => [
+                    'name' => $address->getName(),
+                    'type' => $address->getType(),
+                    'first_name' => $address->getFirstName(),
+                    'last_name' => $address->getLastName(),
+                    'street' => $address->getStreet(),
+                    'postcode' => $address->getPostCode(),
+                    'city' => $address->getCity(),
+                    'country' => $address->getCountry(),
+                    'company' => $address->getCompany(),
+                    'companies' => [$address->getCompanyId()],
+                    'phone' => $address->getPhone()
+                ]
+            ],
+            true
+        );
+        if (Response::HTTP_CREATED === $res->getStatusCode()) {
+            $headers = $res->getHeaders();
+            $address = $this->getAddress(null, $headers["location"][0]);
+            return $address;
+        }
+
+        return null;
+    }
+
+    public function updateAddress(Address $address)
+    {
+        $res = $this->request(
+            'PATCH',
+            $this->apiUrl . 'v1/administrator/company-address/' . $address->getId(),
+            [
+                'json' => [
+                    'name' => $address->getName(),
+                    'type' => $address->getType(),
+                    'first_name' => $address->getFirstName(),
+                    'last_name' => $address->getLastName(),
+                    'street' => $address->getStreet(),
+                    'postcode' => $address->getPostCode(),
+                    'city' => $address->getCity(),
+                    'country' => $address->getCountry(),
+                    'company' => $address->getCompany(),
+                    'phone' => $address->getPhone()
+                ]
+            ],
+            true
+        );
+        if (Response::HTTP_OK === $res->getStatusCode()) {
+            $addresses = json_decode($res->getContent());
+            $this->computeAdresses($addresses);
+            return $addresses;
+        }
+
+        return null;
+    }
+
+    public function getUserBuyerDatas(): object | null
+    {
+        $session = $this->requestStack->getSession();
+        /**@var Account $account*/
+        $account = $session->get('account');
+        $res = $this->request(
+            'GET',
+            $this->apiUrl . 'v1/buyer/profile/' . $account->getUpplerCompanyId() . '?expand[]=address'
+        );
+        if (Response::HTTP_OK === $res->getStatusCode()) {
+            return json_decode($res->getContent());
+        }
+
+        return null;
     }
 
 }

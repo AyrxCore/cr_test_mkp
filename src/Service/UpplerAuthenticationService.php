@@ -45,20 +45,4 @@ class UpplerAuthenticationService extends HttpClientProvider
         return false;
     }
 
-    public function getUserBuyerDatas(): object | null
-    {
-        $session = $this->requestStack->getSession();
-        /**@var Account $account*/
-        $account = $session->get('account');
-        $res = $this->request(
-            'GET',
-            $this->apiUrl . 'v1/buyer/profile/' . $account->getUpplerCompanyId() . '?expand[]=address'
-        );
-        if (Response::HTTP_OK === $res->getStatusCode()) {
-            return json_decode($res->getContent());
-        }
-
-        return null;
-    }
-
 }

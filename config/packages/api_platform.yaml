@@ -1,6 +1,6 @@
 api_platform:
     title: "Qantis - MarketPlace API"
-    description: "Cet API expose des endpoint permettant de la synchroniser avec les données Uppler"
+    description: "Cette API expose des endpoint permettant de synchroniser la marketplace avec les données Uppler"
     version: '1.0.0'
     http_cache:
         public: false

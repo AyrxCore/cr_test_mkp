@@ -24,7 +24,7 @@ class CompanyApiController extends AbstractController
     #[Required]
     public UpplerCompanyService $upplerCompanyService;
 
-    #[Route('/adresses', name: 'get_adresses')]
+    #[Route('/addresses', name: 'get_addresses')]
     public function me(NormalizerInterface $normalizer): JsonResponse
     {
         $session= $this->requestStack->getSession();

@@ -1,6 +1,6 @@
 <template>
   <svg
-    class="loader"
+    :class="classes"
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
     viewBox="0 0 24 24"
@@ -21,13 +21,22 @@
   </svg>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+const props = defineProps({
+  classes: {
+    required: false,
+    type: String,
+    default: 'loader'
+  }
+})
+
+</script>
 
 <style lang="postcss">
 .loader {
   @apply h-5 w-5 animate-spin;
   &.loader-xl {
-    @apply h-14 w-14;
+    @apply h-6 w-6;
   }
 }
 </style>

@@ -46,6 +46,34 @@ export const useUserStore = defineStore({
       try {
         this.user = await UserHttpClient.get().getUserMe()
       } catch (error) {
+        error.response.status === HttpStatusCodes.unauthorized &&
+          alertStore.setShow('Erreur technique', AlertType.danger)
+      }
+    },
+    async updateUserDefaultBillingAddress(id: number): Promise<void> {
+      const alertStore = useAlertStore()
+
+      try {
+        await UserHttpClient.get(true).updateUserAddress({
+          billingAddressId: id,
+          id: this.user.account.subaccount.id,
+        })
+        this.user.account.subaccount.billing_address = id
+      } catch (error) {
+        console.log(error)
+        error.response.status === HttpStatusCodes.unauthorized &&
+          alertStore.setShow('Erreur technique', AlertType.danger)
+      }
+    },
+    async updateUserDefaultShippingAddress(id: number): Promise<void> {
+      const alertStore = useAlertStore()
+      try {
+        await UserHttpClient.get(true).updateUserAddress({
+          shippingAddressId: id,
+          id: this.user.account.subaccount.id,
+        })
+        this.user.account.subaccount.shipping_address = id
+      } catch (error) {
         console.log(error)
         error.response.status === HttpStatusCodes.unauthorized &&
           alertStore.setShow('Erreur technique', AlertType.danger)
@@ -57,7 +85,6 @@ export const useUserStore = defineStore({
         await UserHttpClient.get().logout()
         return true
       } catch (error) {
-        console.log(error)
         alertStore.setShow('Déconnexion impossible', AlertType.danger)
       }
       return false

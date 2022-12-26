@@ -3,7 +3,7 @@
   <ChevronRightIconComponent :stroke-color="'#5E6875'" />
   <RouterLink
       v-slot="{isExactActive}"
-      :to="{name: item.url}"
+      :to="{name: props.item.url}"
   >
     <span
       class="text-[16px] text-gray-500 underline decoration-2 underline-offset-4 hover:decoration-purple-600"

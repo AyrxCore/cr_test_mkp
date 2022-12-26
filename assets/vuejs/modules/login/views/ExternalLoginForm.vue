@@ -128,10 +128,12 @@ const loginSubmit = async () => {
     return false
   }
 
-  accounts.length > 1
-    ? (userAccounts.value = accounts)
-    : (document.location.href = '/app/home')
-  isLoading.value = false
+  if(accounts.length > 1) {
+    userAccounts.value =  accounts
+    isLoading.value = false
+  } else {
+     document.location.href = '/app/home'
+  }
 }
 
 const onAccountClick = async (account) => {
