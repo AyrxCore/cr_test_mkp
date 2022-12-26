@@ -24,7 +24,9 @@
       </span>
     </div>
     <h3 class="mt-6 text-left text-[25px] font-bold text-primary">
-      <RouterLink :to="{ path: '/app/actualite' }">{{ actualite.title }}</RouterLink>
+      <RouterLink :to="{ path: '/app/actualite' }">{{
+        actualite.title
+      }}</RouterLink>
     </h3>
     <p class="mt-1 text-left text-lg text-gray-400">
       {{ actualite.description }}

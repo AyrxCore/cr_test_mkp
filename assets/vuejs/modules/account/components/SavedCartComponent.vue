@@ -1,22 +1,31 @@
 <template>
-  <div class="flex text-lg text-gray-500 rounded-lg bg-white p-2.5 mb-2.5">
-    <div class="w-3/12">
-      <a href="/app/account/favoris-details" class="underline text-purple-600">{{cart.name}}</a>
+  <div class="bloc-cart-saved">
+    <div class="md:w-3/12">
+      <a
+        href="/app/account/favoris-details"
+        class="text-purple-600 underline"
+        >{{ cart.name }}</a
+      >
     </div>
-    <div class="w-2/12">
-      {{cart.dateCreate}}
+    <div class="md:w-2/12">
+      {{ cart.dateCreate }}
     </div>
-    <div class="w-3/12">
-      {{cart.numberArticle}} {{cart.numberArticle > 1 ? 'articles' : 'article'}}
+    <div class="md:w-3/12">
+      {{ cart.numberArticle }}
+      {{ cart.numberArticle > 1 ? 'articles' : 'article' }}
     </div>
-    <div class="w-2/12">
+    <div class="md:w-2/12">
       <span class="primary flex font-bold">{{ cart.total }}€ HT</span>
-      <span class="text-gray-500 flex">({{ cart.total }}€ HT)</span>
+      <span class="flex text-gray-500">({{ cart.total }}€ HT)</span>
     </div>
-    <div class="w-2/12 flex">
-      <a  href="#" class="underline mr-3">Détails</a>
+    <div class="flex justify-between md:w-2/12">
+      <a href="#" class="mr-3 underline">Détails</a>
+      <div class="flex">
         <button class="flex"><EditIconComponent class="mr-2" /></button>
-        <button class="flex"><TrashIconComponent :stroke-color="'#9866ff'"/></button>
+        <button class="flex">
+          <TrashIconComponent :stroke-color="'#9866ff'" />
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -29,5 +38,9 @@ const props = defineProps({
     type: Object,
   },
 })
-
 </script>
+<style scoped>
+.bloc-cart-saved {
+  @apply w-[48.5%] mb-2.5 text-gray-500 flex flex-col rounded-lg bg-white p-2.5 text-sm md:flex-row md:text-base lg:text-lg md:w-full;
+}
+</style>

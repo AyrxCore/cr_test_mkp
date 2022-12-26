@@ -55,7 +55,6 @@ const onClick = ($event: PointerEvent): void => {
 }
 </script>
 <style lang="scss" scoped>
-
 .default-button {
   height: 32px;
   font-family: CoText, sans-serif;
@@ -65,5 +64,4 @@ const onClick = ($event: PointerEvent): void => {
   line-height: 16px;
   text-align: center;
 }
-
 </style>

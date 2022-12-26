@@ -1,19 +1,22 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="primary mb-2 text-[35px]">Paniers sauvegardés</h3>
-      <div class="mb-2.5 flex items-center text-lg text-gray-500">
+      <h3 class="text-primary mb-2 page-principal-title mt-2 md:mt-0">Paniers sauvegardés</h3>
+      <div class="mb-2.5 items-center text-sm lg:text-base text-gray-500 hidden md:flex">
         <div class="w-3/12">Nom du panier</div>
         <div class="w-2/12">Créé le</div>
         <div class="w-3/12">Nombre d'articles</div>
         <div class="w-2/12">Total</div>
         <div class="w-2/12"></div>
       </div>
-      <SavedCartComponent
-        v-for="(cart, key) in listSavedCarts"
-        :key="key"
-        :cart="cart"
-      />
+      <div class="flex flex-row flex-wrap justify-between">
+        <SavedCartComponent
+          v-for="(cart, key) in listSavedCarts"
+          :key="key"
+          :cart="cart"
+        />
+      </div>
+
     </template>
   </AccountPage>
 </template>

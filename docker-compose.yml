@@ -39,7 +39,7 @@ services:
       sh -c "yarn install
       && yarn docker"
     environment:
-      - NODE_ENV=${APP_ENV}
+      - NODE_ENV=dev
     volumes:
       - ./:/var/www
     ports:

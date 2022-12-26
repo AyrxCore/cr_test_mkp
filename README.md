@@ -24,13 +24,11 @@ Access to http://localhost:8087
 
 # Configuration
 
-dupliquer le fichier .env en .env.local
-le fichier .env contient tous les paramétres de connexion vers l'api Uppler de prod
-Dupliquer ces paramètres dans le .env.local et les ajuster pour l'api de preprod (à récuperer sur VAULT)
+Le fichier .env contient tous les paramètres de connexion vers l'api Uppler de prod sauf les secrets
+Le fichier .env.dev contient tous les paramètres de connexion vers l'api Uppler de preprod sauf les secrets
+Ajouter dans un nouveau fichier .env.dev.local les paramètres de connexion Uppler de preprod (à récuperer sur VAULT)
 
 ```sh
-UPPLER_ENV=dev
-UPPLER_API_URL=
 UPPLER_ADMIN_CLIENT_ID=
 UPPLER_ADMIN_CLIENT_SECRET=
 ```
@@ -88,9 +86,6 @@ services:
     build:
       context: .
       target: php
-    environment:
-      - APP_ENV=${APP_ENV}
-      - APP_SECRET=${APP_SECRET}
     command: sh -c "composer i -o ; wait-for-it db:5432 -- bin/console doctrine:migrations:migrate -n; bin/console d:f:l --group=dev -q;  bin/console lexik:jwt:generate-keypair --overwrite -n; php-fpm"
     volumes:
       - ./:/var/www
