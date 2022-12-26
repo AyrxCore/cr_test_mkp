@@ -12,11 +12,6 @@
         <div>
           <h3 class="primary text-[25px]">
             Adresses de livraison
-            <span>
-              <LoaderSharedComponent
-                  class="text-purple-600 block"
-              />
-            </span>
           </h3>
         </div>
         <div>
