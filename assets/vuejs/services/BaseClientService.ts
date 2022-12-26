@@ -5,12 +5,20 @@ class BaseClientService {
   public apiClient: AxiosInstance
   public static self: InstanceType<any>
 
-  public constructor() {
+  public isPatch: boolean
+
+  public constructor(isPatch: boolean) {
+    this.isPatch = isPatch
+
     const headers = {
       accept: 'application/json',
     }
 
     headers['Content-Type'] = 'application/json'
+
+    if (isPatch) {
+      headers['Content-Type'] = 'application/merge-patch+json'
+    }
 
     this.apiClient = axios.create({
       baseURL: '/api',
@@ -47,12 +55,13 @@ class BaseClientService {
 
   public static get<T extends typeof BaseClientService>(
     this: T,
+    isPatch = false,
   ): InstanceType<T> {
-    if (this.self) {
+    if (this.self && this.self.ispatch === isPatch) {
       return this.self
     }
 
-    const instance = new this()
+    const instance = new this(isPatch)
     this.self = instance
     return instance as InstanceType<T>
   }

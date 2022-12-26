@@ -4,6 +4,7 @@
       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm
         rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
       :class="props.classes"
+      :required="props.required"
       :disabled="props.disabled"
       @change="onChange($event); updateModel()"
   >
@@ -47,6 +48,11 @@ const props = defineProps({
     required: true,
     type: Object as PropType<SelectOption[]>
   },
+  required: {
+    required: false,
+    type: Boolean,
+    default: false
+  }
 })
 
 const emit = defineEmits<{

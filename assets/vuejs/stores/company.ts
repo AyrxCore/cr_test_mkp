@@ -12,6 +12,7 @@ import {
   setAdressForUpdate,
 } from '@/vuejs/services/company'
 import { useUserStore } from '@/vuejs/stores/user'
+import router, { PageList } from '@/vuejs/router'
 
 export const useCompanyStore = defineStore({
   id: 'company',
@@ -38,9 +39,12 @@ export const useCompanyStore = defineStore({
     setCurrentAddress(address: Address): void {
       this.currentAddress = address
     },
-    initNewAddress(): void {
+    initNewAddress(type: string): void {
       const userStore = useUserStore()
-      this.currentAddress = getEmptyAddress(userStore.user.account.buyer.id)
+      this.currentAddress = getEmptyAddress(
+        userStore.user.account.buyer.id,
+        type,
+      )
     },
     async createAddress(): void {
       const alertStore = useAlertStore()
@@ -52,6 +56,7 @@ export const useCompanyStore = defineStore({
           "L'adresse a été créée avec succès",
           AlertType.success,
         )
+        router.push({ name: PageList.ADDRESSES })
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
           alertStore.setShow(
@@ -72,6 +77,7 @@ export const useCompanyStore = defineStore({
           'Les modifications ont été enregistrées avec succès',
           AlertType.success,
         )
+        router.push({ name: PageList.ADDRESSES })
       } catch (error) {
         console.log(error)
         error.response.status === HttpStatusCodes.unauthorized &&
@@ -98,6 +104,20 @@ export const useCompanyStore = defineStore({
   getters: {
     getCurrentAddress(): Address {
       return this.currentAddress
+    },
+    getDefaultShippingAddress(): Address {
+      const userStore = useUserStore()
+      return this.adresses.find(
+        (address) =>
+          address.id === userStore.user.account.subaccount.shipping_address,
+      )
+    },
+    getDefaultBillingAddress(): Address {
+      const userStore = useUserStore()
+      return this.adresses.find(
+        (address) =>
+          address.id === userStore.user.account.subaccount.billing_address,
+      )
     },
   },
 })

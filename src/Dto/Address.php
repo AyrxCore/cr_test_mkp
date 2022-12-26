@@ -64,17 +64,14 @@ final class Address
     #[Assert\Type("integer", message: "(country) int required")]
     private int $country;
 
-    #[Assert\NotBlank(message: "lastName cannot be null")]
     #[Assert\Type("string", message: "(lastName) string required")]
     private string $lastName;
 
-    #[Assert\NotBlank(message: "firstName cannot be null")]
     #[Assert\Type("string", message: "(firstName) string required")]
-    private string $firstName;
+    private ?string $firstName;
 
-    #[Assert\NotBlank(message: "phone cannot be null")]
     #[Assert\Type("string", message: "(phone) string required")]
-    private string $phone;
+    private ?string $phone;
 
     public function getId(): ?int
     {
@@ -196,7 +193,7 @@ final class Address
         return $this;
     }
 
-    public function getFirstName(): string
+    public function getFirstName(): ?string
     {
         return $this->firstName;
     }
@@ -208,7 +205,7 @@ final class Address
         return $this;
     }
 
-    public function getPhone(): string
+    public function getPhone(): ?string
     {
         return $this->phone;
     }

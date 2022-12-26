@@ -1,16 +1,35 @@
 <template>
-  <input
-      v-model="internalValue"
-      :type="props.type"
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm
+  <template v-if="props.pattern === ''">
+    <input
+        v-model="internalValue"
+        :type="props.type"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm
         rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-      :class="props.classes"
-      :disabled="props.disabled"
-      :readonly="props.readonly"
-      :placeholder="props.placeholder"
-      @change="onChange($event); updateModel()"
-  />
+        :class="props.classes"
+        :disabled="props.disabled"
+        :readonly="props.readonly"
+        :required="props.required"
+        :placeholder="props.placeholder"
+        @change="onChange($event); updateModel()"
+    />
+  </template>
+  <template v-else>
+    <input
+        v-model="internalValue"
+        :type="props.type"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm
+        rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        :class="props.classes"
+        :disabled="props.disabled"
+        :readonly="props.readonly"
+        :required="props.required"
+        :pattern="props.pattern"
+        :placeholder="props.placeholder"
+        @change="onChange($event); updateModel()"
+    />
+  </template>
 </template>
+
 <script lang="ts" setup>
 import {ref, watch} from 'vue'
 
@@ -45,6 +64,16 @@ const props = defineProps({
     required: false,
     type: Boolean,
     default: false
+  },
+  required: {
+    required: false,
+    type: Boolean,
+    default: false
+  },
+  pattern: {
+    required: false,
+    type: String,
+    default: ''
   }
 })
 

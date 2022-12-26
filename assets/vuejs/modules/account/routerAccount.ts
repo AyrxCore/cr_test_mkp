@@ -1,6 +1,6 @@
 import { RouteRecordRaw } from 'vue-router'
 import MyAccountPage from '@/vuejs/modules/account/views/MyAccount.vue'
-import AddressesPage from '@/vuejs/modules/account/views/adresses/Addresses.vue'
+import AddressesPage from '@/vuejs/modules/account/views/adresses/AddressesContainer.vue'
 import AddressCreate from '@/vuejs/modules/account/views/adress/AddressCreate.vue'
 import AddressEdit from '@/vuejs/modules/account/views/adress/AddressEdit.vue'
 import ContactInformationPage from '@/vuejs/modules/account/views/ContactInformation.vue'
@@ -46,9 +46,10 @@ export const routes: RouteRecordRaw[] = [
         name: AccountPageList.ADDRESSES,
       },
       {
-        path: baseUrl + AccountPageList.ADDRESS_CREATE,
+        path: baseUrl + AccountPageList.ADDRESS_CREATE + '/:type',
         component: AddressCreate,
         name: AccountPageList.ADDRESS_CREATE,
+        props: true,
       },
       {
         path: baseUrl + AccountPageList.ADDRESS_EDIT + '/:id',

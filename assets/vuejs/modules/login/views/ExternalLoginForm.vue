@@ -132,7 +132,7 @@ const loginSubmit = async () => {
     userAccounts.value =  accounts
     isLoading.value = false
   } else {
-    document.location.href = '/app/home'
+     document.location.href = '/app/home'
   }
 }
 

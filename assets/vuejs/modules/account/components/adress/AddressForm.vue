@@ -5,15 +5,17 @@
   >
     <div class="grid grid-rows grid-flow-col gap-6">
       <div  class="mb-6">
-          <LabelField title="Nom"/>
+          <LabelField title="Nom *"/>
           <InputField
             v-model="currentAddress.name"
+            required="true"
           />
       </div>
       <div  class="mb-6">
-        <LabelField title="Entreprise"/>
+        <LabelField title="Entreprise *"/>
         <InputField
             v-model="currentAddress.company"
+            required="true"
         />
       </div>
     </div>
@@ -33,33 +35,38 @@
     </div>
     <div class="grid grid-rows grid-flow-col gap-12">
       <div  class="mb-6">
-        <LabelField title="Adresse"/>
+        <LabelField title="Adresse *"/>
         <InputField
             v-model="currentAddress.street"
+            required="true"
         />
       </div>
     </div>
     <div class="grid grid-rows grid-flow-col gap-6">
       <div  class="mb-6">
-        <LabelField title="Code postal"/>
+        <LabelField title="Code postal *"/>
         <InputField
             v-model="currentAddress.postcode"
+            required="true"
+            pattern="(?:0[1-9]|[1-8]\d|9[0-8])\d{3}$"
         />
       </div>
       <div  class="mb-6">
-        <LabelField title="Ville"/>
+        <LabelField title="Ville *"/>
         <InputField
             v-model="currentAddress.city"
+            required="true"
         />
       </div>
     </div>
     <div class="grid grid-rows grid-flow-col gap-6">
       <div  class="mb-6">
-        <LabelField title="Pays"/>
+        <LabelField title="Pays *"/>
         <SelectField
             v-model="currentAddress.country"
             :options="countryStore.getCountriesForSelect()"
             placeholder="Sélectionner un pays"
+            required="true"
         />
       </div>
       <div  class="mb-6">
@@ -70,6 +77,14 @@
       </div>
     </div>
     <div class="flex justify-end">
+      <ButtonComponent
+          class="default-button mr-2 mb-2 flex items-center px-4 py-5 text-sm font-medium bg-transparent
+             !text-purple-500 rounded-full border border-purple-600"
+          type="button"
+          @click="onCancelClick"
+      >
+        Annuler
+      </ButtonComponent>
       <ButtonComponent
           class="default-button mr-2 mb-2 flex items-center px-4 py-5 text-sm font-medium bg-transparent
              !text-purple-500 rounded-full border border-purple-600"
@@ -99,6 +114,7 @@ import {useRoute} from 'vue-router'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 import {useCoutryStore} from '@/vuejs/stores/country'
 import SelectField from '@/vuejs/modules/shared/formfields/SelectField.vue'
+import router, {PageList} from '@/vuejs/router'
 
 const route = useRoute()
 const companyStore = useCompanyStore()
@@ -108,6 +124,14 @@ const isEditedLoaded = ref<boolean>(false)
 const countryStore = useCoutryStore()
 const {countries} = storeToRefs(countryStore)
 
+const props = defineProps({
+  type: {
+    required: false,
+    type: String
+  },
+})
+
+
 onMounted(async () => {
   await countryStore.getCountries()
 })
@@ -116,7 +140,7 @@ watch(
     () => route.params.id as number,
     async (id: number) => {
       if (!id) {
-        companyStore.initNewAddress()
+        companyStore.initNewAddress(props.type)
         isEditedLoaded.value = true
       } else if (id && companyStore.currentAddress === null) {
         isEditing.value = true
@@ -141,5 +165,11 @@ const onAddressFormSubmit = async () => {
   }
 
   companyStore.isloading = false
+}
+
+const onCancelClick = () => {
+  router.push({
+    name: PageList.ADDRESSES
+  })
 }
 </script>

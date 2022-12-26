@@ -6,7 +6,7 @@ interface CommonAddress {
   street: string
   postcode: string
   city: string
-  country: string
+  country: number
   phone: string
 }
 

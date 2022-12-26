@@ -61,3 +61,6 @@ services:
 
   App\Service\UpplerRepositoryService:
     parent: App\Service\HttpClientProvider
+
+  App\Service\UpplerAccountService:
+    parent: App\Service\HttpClientProvider

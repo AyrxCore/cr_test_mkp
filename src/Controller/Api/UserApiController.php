@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use App\Entity\Account;
 use App\Entity\User;
+use App\Service\UpplerAccountService;
 use App\Service\UpplerAuthenticationService;
 use App\Service\UpplerCompanyService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,6 +32,9 @@ class UserApiController extends AbstractController
     #[Required]
     public UpplerCompanyService $upplerCompanyService;
 
+    #[Required]
+    public UpplerAccountService $upplerAccountService;
+
     #[Route('/me', name: 'get_me')]
     public function me(NormalizerInterface $normalizer): JsonResponse
     {
@@ -40,11 +44,13 @@ class UserApiController extends AbstractController
         if (!$session->has('account') || empty($session->get('account'))) {
             return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-        $buyerDatas = $this->upplerAuthenticationService->getUserBuyerDatas();
+        $buyerDatas = $this->upplerCompanyService->getUserBuyerDatas();
+        $subAccountDatas = $this->upplerAccountService->getUserSubAccountDatas();
         $user = $normalizer->normalize($this->getUser(), 'json', ['groups' => 'simpleUser']);
         $account = $normalizer->normalize($session->get('account'), 'json', ['groups' => 'simpleUser']);
-        $account["buyer"] = $buyerDatas;
         $user["account"] = $account;
+        $user["account"]["subaccount"] = $subAccountDatas;
+        $user["account"]["buyer"] = $buyerDatas;
         return new JsonResponse($user);
     }
 
