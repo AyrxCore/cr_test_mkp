@@ -1,6 +1,5 @@
 <template>
-  <h3 class="primary mb-2 text-[25px]">Votre adresse de facturation préférée</h3>
-  <span class="text-gray-500 text-lg">Votre adresse de facturation par défaut est :</span>
+  <h3 class="primary mb-2 text-[25px]">Votre adresse de facturation par défaut</h3>
   <div class="py-3 px-3 justify-between bg-white rounded-lg flex text-gray-500 mb-8 items-center">
     <div>
       <span v-if="companyStore.getDefaultBillingAddress">

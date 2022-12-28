@@ -11,7 +11,7 @@
   />
   <AccountSidebarBlock
       :items="[
-                  {name: 'Coordonnées',id: AccountPageList.CONTACT_INFORMATION, url: AccountPageList.CONTACT_INFORMATION},
+                  {name: 'Coordonnées',id: AccountPageList.ACCOUNT, url: AccountPageList.ACCOUNT},
                   {name: 'Liste de produits favoris',id: AccountPageList.FAVORIS_LIST, url: AccountPageList.FAVORIS_LIST},
               ]"
       title="Mon profil"

@@ -53,11 +53,30 @@ class SubAccountPersister implements ContextAwareDataPersisterInterface
             $subAccount->setShippingAddressId($data->getShippingAddressId());
         }
 
+        if (null !== $data->getEmail()) {
+            $subAccount->setEmail($data->getEmail());
+        }
+
+        if (null !== $data->getLastName()) {
+            $subAccount->setLastName($data->getLastName());
+        }
+
+        if (null !== $data->getFirstName()) {
+            $subAccount->setFirstName($data->getFirstName());
+        }
+
+        if (null !== $data->getPhone()) {
+            $subAccount->setPhone($data->getPhone());
+        }
+
 
         $result = $this->upplerAccountService->updateUserSubAccountDatas($subAccount);
 
+        if ($result) {
+            return $result;
+        }
 
-        return $result;
+        throw new BadRequestException('update account error');
     }
 
     public function remove($data, array $context = [])

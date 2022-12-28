@@ -3,7 +3,10 @@ import MyAccountPage from '@/vuejs/modules/account/views/MyAccount.vue'
 import AddressesPage from '@/vuejs/modules/account/views/adresses/AddressesContainer.vue'
 import AddressCreate from '@/vuejs/modules/account/views/adress/AddressCreate.vue'
 import AddressEdit from '@/vuejs/modules/account/views/adress/AddressEdit.vue'
-import ContactInformationPage from '@/vuejs/modules/account/views/ContactInformation.vue'
+import ProfileInformationsReadonly from '@/vuejs/modules/account/views/ProfileInformations/ProfileInformationsReadonly.vue'
+import ProfilePasswordChangeForm from '@/vuejs/modules/account/views/ProfileInformations/ProfilePasswordChangeForm.vue'
+import ProfileEmailEditForm from '@/vuejs/modules/account/views/ProfileInformations/ProfileEmailEditForm.vue'
+import ProfileDetailsEditForm from '@/vuejs/modules/account/views/ProfileInformations/ProfileDetailsEditForm.vue'
 import FavoritesProductsPage from '@/vuejs/modules/account/views/FavoritesProducts.vue'
 import FavoritesProductsDetailsPage from '@/vuejs/modules/account/views/FavoritesProductsDetails.vue'
 import OrdersHistoryPage from '@/vuejs/modules/account/views/OrdersHistory.vue'
@@ -13,6 +16,9 @@ import OrdersValidationPage from '@/vuejs/modules/account/views/OrdersValidation
 export enum AccountPageList {
   ACCOUNT = 'account',
   CONTACT_INFORMATION = 'contact-information',
+  CONTACT_INFORMATION_PASSWORD_CHANGE = 'contact-information-password-change',
+  CONTACT_INFORMATION_EMAIL_EDIT = 'contact-information-email-edit',
+  CONTACT_INFORMATION_DETAILS_EDIT = 'contact-information-details-edit',
   ADDRESSES = 'addresses',
   ADDRESS_EDIT = 'address-edit',
   ADDRESS_CREATE = 'address-create',
@@ -37,8 +43,23 @@ export const routes: RouteRecordRaw[] = [
       },
       {
         path: baseUrl + AccountPageList.CONTACT_INFORMATION,
-        component: ContactInformationPage,
+        component: ProfileInformationsReadonly,
         name: AccountPageList.ACCOUNT,
+      },
+      {
+        path: baseUrl + AccountPageList.CONTACT_INFORMATION_PASSWORD_CHANGE,
+        component: ProfilePasswordChangeForm,
+        name: AccountPageList.CONTACT_INFORMATION_PASSWORD_CHANGE,
+      },
+      {
+        path: baseUrl + AccountPageList.CONTACT_INFORMATION_EMAIL_EDIT,
+        component: ProfileEmailEditForm,
+        name: AccountPageList.CONTACT_INFORMATION_EMAIL_EDIT,
+      },
+      {
+        path: baseUrl + AccountPageList.CONTACT_INFORMATION_DETAILS_EDIT,
+        component: ProfileDetailsEditForm,
+        name: AccountPageList.CONTACT_INFORMATION_DETAILS_EDIT,
       },
       {
         path: baseUrl + AccountPageList.ADDRESSES,

@@ -30,3 +30,9 @@ export enum LoginResponse {
   UserEmptyAccount = 'user_empty_account',
   InvalidCredentials = 'Identifiants invalides.',
 }
+
+export interface PasswordChangeRequest {
+  password: string
+  confirmation: string
+  currentPassword: string
+}

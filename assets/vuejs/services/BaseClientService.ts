@@ -35,7 +35,8 @@ class BaseClientService {
         if (error.response?.status === 401 && !originalConfig._retry) {
           if (
             error.config.url !== 'token/refresh' &&
-            error.config.url !== 'user/me'
+            error.config.url !== 'user/me' &&
+            error.config.url !== 'authentication/token'
           ) {
             return await this.refreshToken().then(() => {
               console.log('error 401 refresh the token ')
