@@ -4,7 +4,7 @@
       <div class="md:flex md:flex-col md:justify-around">
         <UserCheckIcon class="cursor-pointer" @click.stop="toggleMenu" />
         <MapInIcon class="hidden md:block" />
-        <MenuAccount class="sm:hidden" v-model="isMenuOpen" />
+        <MenuAccount v-model="isMenuOpen" class="sm:hidden" />
       </div>
       <div class="md:ml-3 md:max-w-[250px]">
         <div class="sr-only items-center md:not-sr-only">
@@ -22,11 +22,16 @@
           </div>
         </div>
         <div class="sr-only inline-flex items-center md:not-sr-only">
-          <a href="#" class="text-xs">
+          <a
+              v-if="companyStore.getDefaultBillingAddress"
+              href="#"
+              class="text-xs"
+          >
             Livré à
-            {{ user.account.buyer.default_address.street }}
-            {{ user.account.buyer.default_address.postcode }}
-            {{ user.account.buyer.default_address.city }}
+            {{ companyStore.getDefaultShippingAddress.company }},
+            {{ companyStore.getDefaultShippingAddress.street }}
+            {{ companyStore.getDefaultShippingAddress.postcode }}
+            {{ companyStore.getDefaultShippingAddress.city }}
           </a>
         </div>
       </div>
@@ -54,8 +59,10 @@ import HeartIcon from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
 import MenuAccount from '@/vuejs/modules/shared/header-component/MenuAccountComponent.vue'
 import { useUserStore } from '@/vuejs/stores/user'
 import { storeToRefs } from 'pinia'
+import {useCompanyStore} from '@/vuejs/stores/company'
 
 const userStore = useUserStore()
+const companyStore = useCompanyStore()
 const { user } = storeToRefs(userStore)
 
 const isMenuOpen = ref<boolean>(false)

@@ -41,7 +41,7 @@ class UpplerAccountService extends HttpClientProvider
         return null;
     }
 
-    public function updateUserSubAccountDatas(SubAccount $subAccount): object | null
+    public function updateUserSubAccountDatas(SubAccount $subAccount): bool
     {
         $datas = [];
         if (null !== $subAccount->getBillingAddressId()) {
@@ -51,6 +51,24 @@ class UpplerAccountService extends HttpClientProvider
         if (null !== $subAccount->getShippingAddressId()) {
             $datas["shipping_address_id"] = $subAccount->getShippingAddressId();
         }
+
+        if (null !== $subAccount->getEmail()) {
+            $datas["email"] = $subAccount->getEmail();
+        }
+
+        if (null !== $subAccount->getLastName()) {
+            $datas["lastname"] = $subAccount->getLastName();
+        }
+
+        if (null !== $subAccount->getFirstName()) {
+            $datas["firstname"] = $subAccount->getFirstName();
+        }
+
+            // TODO Uppler n'accepte pas ce champ en PATCH, voir avec eux pour faire évoluer cela
+//        if (null !== $subAccount->getPhone()) {
+//            $datas["phone"] = $subAccount->getPhone();
+//        }
+
         $res = $this->request(
             'PATCH',
             $this->apiUrl . 'v1/administrator/sub-account/' . $subAccount->getId(),
@@ -60,10 +78,10 @@ class UpplerAccountService extends HttpClientProvider
             true
         );
         if (Response::HTTP_NO_CONTENT === $res->getStatusCode()) {
-            return json_decode($res->getContent());
+            return true;
         }
 
-        return null;
+        return false;
     }
 
     private function computeSubAccount($subAccount)

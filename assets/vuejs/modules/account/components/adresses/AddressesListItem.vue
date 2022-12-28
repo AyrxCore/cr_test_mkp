@@ -23,6 +23,7 @@
       />
     </div>
   </td>
+  <td class="p-5">{{ props.address.name }}</td>
   <td class="p-5">{{ props.address.company }}</td>
   <td class="p-5">{{ props.address.street }}</td>
   <td class="p-5">{{ props.address.postcode }}</td>

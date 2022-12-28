@@ -11,8 +11,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
@@ -96,6 +98,31 @@ class UserApiController extends AbstractController
         $response->headers->clearCookie('BEARER', '/');
         $response->headers->clearCookie('refresh_token', '/');
         return $response;
+    }
+
+    #[Route("/change-password")]
+    public function changePassword(
+        Request $request,
+        UserPasswordHasherInterface $userPasswordHasher,
+        EntityManagerInterface $em
+    ) {
+        $datas = json_decode($request->getContent());
+        /**@var User $user*/
+        $user = $this->getUser();
+
+        if (!$userPasswordHasher->isPasswordValid($user, $datas->currentPassword)) {
+            return new JsonResponse(['current password invalid'], Response::HTTP_BAD_REQUEST);
+        }
+
+        if ($datas->password !== $datas->confirmation) {
+            return new JsonResponse(['password and its confirmation must be identical'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $newHashedPassword = $userPasswordHasher->hashPassword($user, $datas->password);
+        $user->setPassword($newHashedPassword);
+        $em->persist($user);
+        $em->flush();
+        return new JsonResponse(['password changed'], Response::HTTP_OK);
     }
 
 }

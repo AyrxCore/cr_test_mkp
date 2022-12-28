@@ -2,7 +2,10 @@
   <table class="table-auto w-full">
     <AddressesListHeader/>
     <tbody v-if="!isloading">
-      <tr v-for="(address, key) in adresses.filter((address) => address.type === props.type)" :key="key">
+      <tr
+          v-for="(address, key) in adresses.filter((address) => address.type === props.type)"
+          :key="key"
+      >
         <AddressesListItem
           :address="address"
           :type="props.type"

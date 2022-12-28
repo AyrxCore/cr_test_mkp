@@ -24,6 +24,7 @@ export interface SubAccount {
   firstname: string | null
   shipping_address: number | null
   billing_address: number | null
+  phone: string | null
 }
 
 export interface Account {
@@ -31,6 +32,7 @@ export interface Account {
   lastConnexion: Date
   buyer: AccountBuyer
   subaccount: SubAccount
+  editingSubAccount: SubAccount
 }
 
 export interface DefaultBillingAddressToUpdate {
@@ -42,3 +44,15 @@ export interface DefaultShippingAddressToUpdate {
   shippingAddressId: number
   id: number
 }
+
+interface AccountToUpdate {
+  email: string
+  id: number
+  lastName: string
+  firstName: string
+  phone: string
+}
+
+export type AccountEmail = Omit<AccountToUpdate, 'lastName' | 'firstName' | 'phone'>
+
+export type AccountDetails = Omit<AccountToUpdate, 'email'>

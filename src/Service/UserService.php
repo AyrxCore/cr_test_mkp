@@ -5,16 +5,12 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\User;
-use App\Mail\MailerService;
-use App\Mail\MailListTemplate;
 use App\Repository\UserRepository;
-use App\Repository\SettingRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Http\LoginLink\LoginLinkHandlerInterface;
+
 use Symfony\Contracts\Service\Attribute\Required;
 
 class UserService

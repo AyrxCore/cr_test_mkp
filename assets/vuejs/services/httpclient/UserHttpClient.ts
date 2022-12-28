@@ -1,13 +1,14 @@
 import BaseClientService from '@/vuejs/services/BaseClientService'
 import {
   AuthenticateResponse,
-  AuthenticateUserDatas,
+  AuthenticateUserDatas, PasswordChangeRequest,
   User,
 } from '@/vuejs/types/User'
 import {
+  AccountDetails,
+  AccountEmail,
   DefaultBillingAddressToUpdate,
   DefaultShippingAddressToUpdate,
-  SubAccount,
 } from '@/vuejs/types/Account'
 
 export default class UserHttpClient extends BaseClientService {
@@ -44,6 +45,22 @@ export default class UserHttpClient extends BaseClientService {
     return this.apiClient
       .patch(`sub_accounts/${adress.id}`, adress)
       .then((response) => response.data)
+  }
+
+  public updateUserAccountEmail<T extends User>(
+   accountEmail: AccountEmail
+  ): Promise<T> {
+    return this.apiClient
+      .patch(`sub_accounts/${accountEmail.id}`, accountEmail)
+      .then((response) => response.data)
+  }
+
+  public updateUserPassword<T extends User>(
+      datas: PasswordChangeRequest
+  ): Promise<T> {
+    return this.apiClient
+        .patch(`user/change-password`, datas)
+        .then((response) => response.data)
   }
 
   public logout<T extends User>(): Promise<T> {

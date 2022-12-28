@@ -12,7 +12,8 @@ import { onMounted } from 'vue'
 import LoginForm from './modules/login/views/ExternalLoginForm.vue'
 import PartnersCarousel from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
 import StickyContactButtons from '@/vuejs/modules/shared/StickyContactButtonsComponent.vue'
-
+import {useCompanyStore} from '@/vuejs/stores/company'
+const companyStore = useCompanyStore()
 const props = defineProps({
   component: {
     required: false,
@@ -21,7 +22,9 @@ const props = defineProps({
   },
 })
 
-onMounted(() => {})
+onMounted(async () => {
+  await companyStore.getAdresses()
+})
 </script>
 
 <style lang="postcss">
