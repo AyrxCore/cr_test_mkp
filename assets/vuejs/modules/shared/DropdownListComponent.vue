@@ -1,22 +1,22 @@
 <template>
   <div class="dropdown-select w-full">
-    <button
-      class="button-dropdown"
-      @click='toggle = !toggle'
-    >
+    <button class="button-dropdown" @click="toggle = !toggle">
       Mon compte
-      <ChevronDownIconComponent :class="{'hidden': toggle}"/>
-      <ChevronDownIconComponent class="rotate-180" :class="{'hidden': !toggle}"/>
+      <ChevronDownIconComponent :class="{ hidden: toggle }" />
+      <ChevronDownIconComponent
+        class="rotate-180"
+        :class="{ hidden: !toggle }"
+      />
     </button>
     <div
       class="dropdown-menu"
       :class="{
-       'hidden': !toggle,
-       '!flex': toggle
-      }">
+        hidden: !toggle,
+        '!flex': toggle,
+      }"
+    >
       <slot />
     </div>
-
   </div>
 </template>
 
@@ -24,28 +24,25 @@
 import ChevronDownIconComponent from '@/vuejs/modules/shared/icon/ChevronDownIconComponent.vue'
 import { ref } from 'vue'
 const toggle = ref<boolean>(false)
-
 </script>
 
 <style lang="postcss">
 .button-dropdown {
-  @apply bg-white text-primary flex flex-row justify-between p-2.5 rounded-lg items-center w-full md:w-1/2 lg:hidden;
+  @apply flex w-full flex-row items-center justify-between rounded-lg bg-white p-2.5 text-primary md:w-1/2 xl:hidden;
 }
 .dropdown-select .dropdown-menu {
-  @apply absolute hidden bg-white mt-1 px-5
-  rounded-lg z-10
-  overflow-auto
+  @apply absolute z-10 mt-1 hidden h-[428px]
+  flex-wrap overflow-auto
+  rounded-lg
+  bg-white
+  px-5 text-left
   shadow-xl
-  h-[428px] flex-wrap
-  text-left
-  lg:h-auto
-  lg:px-0 lg:mt-0 lg:overflow-auto
-  lg:flex lg:flex-col lg:relative
-  lg:bg-transparent  lg:shadow-none
-  ;
+  xl:relative
+  xl:mt-0 xl:flex xl:h-auto
+  xl:flex-col xl:overflow-auto xl:bg-transparent
+  xl:px-0  xl:shadow-none;
 }
 
 .dropdown-select .dropdown-menu > div {
-
 }
 </style>

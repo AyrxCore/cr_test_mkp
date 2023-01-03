@@ -1,7 +1,7 @@
 <template>
-  <AccountPage :selected-tab="''">
+  <AccountPage>
     <template #header>
-      <h3 class="text-primary lg:mb-2 page-principal-title">
+      <h3 class="page-principal-title text-primary lg:mb-2">
         Bonjour,
         <span class="text-gradient">
           {{ user.firstName }}
@@ -10,7 +10,9 @@
       </h3>
     </template>
     <template #right-side>
-      <h3 class="text-primary mb-2 page-principal-title mt-5 lg:mt-0">Les dernières commandes</h3>
+      <h3 class="page-principal-title mb-2 mt-5 text-primary xl:mt-0">
+        Les dernières commandes
+      </h3>
       <OrderDetailsComponent
         v-for="(order, key) in listOrders"
         :key="key"

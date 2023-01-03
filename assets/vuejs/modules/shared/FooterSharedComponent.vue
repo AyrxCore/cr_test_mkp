@@ -2,21 +2,25 @@
   <div class="footer mt-16">
     <div class="bloc-contact-footer flex w-full flex-row">
       <div
-        class="flex w-[100%] max-w-screen-2xl flex-col pt-5 lg:m-auto lg:my-4 lg:grid-cols-3 lg:gap-4 lg:grid"
+        class="flex w-[100%] max-w-screen-2xl flex-col pt-5 lg:m-auto lg:my-4 lg:grid lg:grid-cols-3 lg:gap-4"
       >
         <div class="flex flex-col text-lg">
           <div class="items-center">
             <div class="flex items-center">
-              <PhoneIconComponent class="mr-4 w-[24px] h-[24px]" />
+              <PhoneIconComponent class="mr-4 h-[24px] w-[24px]" />
               <div class="text-sm md:text-base lg:text-lg">04 37 65 06 61</div>
             </div>
-            <div class="flex items-center mt-2">
-              <MailIconComponent class="mr-4 w-[24px] h-[24px]" />
-              <div class="text-sm md:text-base lg:text-lg">animation@qantis.co</div>
+            <div class="mt-2 flex items-center">
+              <MailIconComponent class="mr-4 h-[24px] w-[24px]" />
+              <div class="text-sm md:text-base lg:text-lg">
+                animation@qantis.co
+              </div>
             </div>
-            <div class="flex mt-2">
-              <CalendarCheckIconComponent class="mr-4 w-[24px] h-[24px]" />
-              <div class="text-sm md:text-base lg:text-lg">Rendez-vous avec votre animateur</div>
+            <div class="mt-2 flex">
+              <CalendarCheckIconComponent class="mr-4 h-[24px] w-[24px]" />
+              <div class="text-sm md:text-base lg:text-lg">
+                Rendez-vous avec votre animateur
+              </div>
             </div>
           </div>
         </div>
@@ -45,11 +49,15 @@
       class="second-part mx-5 my-2 flex max-w-screen-2xl flex-col pt-10 md:m-auto lg:my-4 lg:grid lg:grid-flow-col lg:grid-rows-3 lg:gap-4"
     >
       <div class="row-span-3 md:px-6 lg:px-3">
-        <div class="flex flex-col md:justify-between md:flex-row lg:flex-col">
+        <div class="flex flex-col md:flex-row md:justify-between lg:flex-col">
           <img :src="qantisLogoImg" alt="header" class="logo-qantis" />
-          <img :src="ecologieLogoImg" alt="header" class="logo-ecolo mt-[3rem] md:mt-0 lg:mt-[3rem]" />
+          <img
+            :src="ecologieLogoImg"
+            alt="header"
+            class="logo-ecolo mt-[3rem] md:mt-0 lg:mt-[3rem]"
+          />
           <div class="mt-12 md:mt-0 lg:mt-12">
-            <p >Paiment sécurisé par :</p>
+            <p>Paiment sécurisé par :</p>
             <img
               :src="lemonwayLogoImg"
               alt="header"
@@ -57,20 +65,25 @@
             />
           </div>
         </div>
-        <div class="mt-[3.5rem]  w-[241px] flex flex-col md:flex-row lg:flex-col md:w-full lg:w-[241px] md:items-center lg:items-start">
+        <div
+          class="mt-[3.5rem] flex w-[241px] flex-col md:w-full md:flex-row md:items-center lg:w-[241px] lg:flex-col lg:items-start"
+        >
           <p class="mb-5 w-full md:w-3/6 lg:w-full">
-            Retrouvez l'actualité économique de la Communauté QANTIS sur nos réseaux :
+            Retrouvez l'actualité économique de la Communauté QANTIS sur nos
+            réseaux :
           </p>
           <div class="social-network-logo mb-2 inline">
             <div><img :src="linkedInLogoImg" alt="Linkedin" /></div>
             <div><img :src="facebookLogoImg" alt="Facebook" /></div>
             <div><img :src="twitterLogoImg" alt="Twitter" /></div>
-            <div><img :src="youtubeLogoImg" alt="Youtube" class="mt-0.5" /></div>
+            <div>
+              <img :src="youtubeLogoImg" alt="Youtube" class="mt-0.5" />
+            </div>
           </div>
         </div>
       </div>
       <div
-        class="mt-6 flex flex-col md:col-span-2 lg:mt-0 md:grid md:grid-cols-3 md:gap-4 md:px-6 lg:px-3"
+        class="mt-6 flex flex-col md:col-span-2 md:grid md:grid-cols-3 md:gap-4 md:px-6 lg:mt-0 lg:px-3"
       >
         <div class="px-2 md:px-0 lg:px-2">
           <h3 class="mb-7 md:mb-4 lg:mb-7">Votre espace adhérents</h3>
@@ -83,7 +96,7 @@
             <li><a href="#">Factures</a></li>
           </ul>
         </div>
-        <div class="mt-6 px-2 md:px-0 lg:px-2 md:mt-0">
+        <div class="mt-6 px-2 md:mt-0 md:px-0 lg:px-2">
           <h3 class="mb-7 md:mb-10 lg:mb-7">A propos</h3>
           <ul>
             <li><a href="#">Nous contacter</a></li>
@@ -95,7 +108,7 @@
             <li><a href="#">Cookies</a></li>
           </ul>
         </div>
-        <div class="mt-6 px-2 md:px-0 lg:px-2 md:mt-0">
+        <div class="mt-6 px-2 md:mt-0 md:px-0 lg:px-2">
           <h3 class="mb-7 md:mb-4 lg:mb-7">La marketplace QANTIS</h3>
           <p>
             Depuis 21 ans, QANTIS accompagne les entreprises françaises dans
@@ -128,7 +141,9 @@
             </ul>
           </div>
           <div class="px-2 md:px-0 lg:px-2">
-            <ul class="mt-[3rem] mb-7 md:mb-4 md:mt-[4rem] lg:mb-7 lg:mt-[3rem]">
+            <ul
+              class="mt-[3rem] mb-7 md:mb-4 md:mt-[4rem] lg:mb-7 lg:mt-[3rem]"
+            >
               <li><a href="#">Formation</a></li>
               <li><a href="#">Fourniture de bureaux</a></li>
               <li><a href="#">Gestion des déchets</a></li>
@@ -141,7 +156,9 @@
             </ul>
           </div>
           <div class="px-2 md:px-0 lg:px-2">
-            <ul class="mt-[3rem] mb-7 md:mb-4 md:mt-[4rem] lg:mb-7 lg:mt-[3rem]">
+            <ul
+              class="mt-[3rem] mb-7 md:mb-4 md:mt-[4rem] lg:mb-7 lg:mt-[3rem]"
+            >
               <li><a href="#">Outillage</a></li>
               <li><a href="#">Peinture</a></li>
               <li><a href="#">Quincaillerie</a></li>
@@ -161,7 +178,7 @@
     </div>
     <hr class="m-auto w-11/12 border md:max-w-screen-2xl" />
     <div
-      class="m-auto mt-7 py-10 px-5 text-left text-sm md:max-w-screen-2xl md:text-center lg:text-lg lg:mt-10 lg:px-0 "
+      class="m-auto mt-7 py-10 px-5 text-left text-sm md:max-w-screen-2xl md:text-center lg:mt-10 lg:px-0 lg:text-lg"
     >
       © QANTIS. Tous droits réservés - QANTIS, 185, allée des Cyprès, 69760
       LIMONEST, FRANCE
@@ -218,7 +235,7 @@ const facebookLogoImg = getImage(facebookLogo)
 }
 
 .bloc-contact-footer {
-  @apply h-auto bg-secondary xl:h-[254px];
+  @apply h-auto bg-secondary;
 }
 
 .bloc-contact-footer > div > div {

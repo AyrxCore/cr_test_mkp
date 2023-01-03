@@ -13,44 +13,53 @@
         Retour sur la page d'accueil
       </a>
       <div class="m-auto max-w-screen-2xl">
-        <slot name="header"/>
-        <div class="mt-10 grid grid-cols-4 gap-11">
-          <div class="flex grid gap-4">
-            <div class="rounded-lg bg-white p-7">
-              <h3 class="primary mb-2 text-[20px]">
-                {{ user.firstname }}
-                <span class="uppercase">{{ user.lastname }}</span>
-              </h3>
-              <p class="font-bold text-gray-500">Qantis</p>
-              <p class="mb-4 text-gray-500">Statut:</p>
-              <a
-                  href="#"
-                  class="border-b-2 border-gray-500 text-gray-500 hover:border-b-2 hover:border-purple-600"
-                  @click="onLogout"
-              >
-                Deconnexion
-              </a>
+        <slot name="header" />
+        <div class="mt-10 gap-11 xl:grid xl:grid-cols-4">
+          <DropdownListComponent>
+            <div class="flex flex-col flex-col-reverse gap-4 xl:grid">
+              <div class="rounded-lg bg-white pt-2 xl:p-7">
+                <div class="hidden xl:flex xl:flex-col">
+                  <h3 class="tex-primary font-bold mb-2 text-md xl:text-[20px]">
+                    {{ user.firstName }} test
+                    <span class="uppercase">{{ user.lastName }}</span>
+                  </h3>
+                  <p class="font-bold text-gray-500">Qantis</p>
+                  <p class="mb-4 text-gray-500">Statut:</p>
+                </div>
+                <div class="sticky bottom-0 flex">
+                  <DisconnectIconComponent class="mr-2 xl:hidden" />
+                  <a
+                    href="#"
+                    class="w-fit border-b-2 border-gray-500 text-gray-500 hover:border-b-2 hover:border-purple-600"
+                    @click="onLogout"
+                  >
+                    Deconnexion
+                  </a>
+                </div>
+              </div>
+              <div class="grid gap-4">
+                <div class="rounded-lg bg-white xl:p-7">
+                  <h3 class="mb-2 font-bold text-md xl:text-[20px] text-primary">Mes contacts</h3>
+                  <p class="items-center text-sm md:text-base text-gray-500">
+                    <span class="flex">
+                      <ChevronRightIconComponent :stroke-color="'#5E6875'" />
+                      Service adhérents
+                    </span>
+                    <span class="ml-6 font-bold">04 37 65 06 21</span>
+                  </p>
+                  <p class="mt-4 items-center text-sm md:text-base text-gray-500">
+                    <span class="flex">
+                      <ChevronRightIconComponent :stroke-color="'#5E6875'" />
+                      Votre animateur:
+                    </span>
+                    <span class="ml-6 flex"> Nom Animateur</span>
+                    <span class="ml-6 flex font-bold">animation@qantis.co</span>
+                  </p>
+                </div>
+                <AccountSidebar/>
+              </div>
             </div>
-            <div class="rounded-lg bg-white p-7">
-              <h3 class="primary mb-2 text-[20px]">Mes contacts</h3>
-              <p class="items-center text-[16px] text-gray-500">
-                <span class="flex">
-                  <ChevronRightIconComponent :stroke-color="'#5E6875'"/>
-                  Service adhérents
-                </span>
-                <span class="ml-6 font-bold">04 37 65 06 21</span>
-              </p>
-              <p class="mt-4 items-center text-[16px] text-gray-500">
-                <span class="flex">
-                  <ChevronRightIconComponent :stroke-color="'#5E6875'"/>
-                  Votre animateur:
-                </span>
-                <span class="ml-6 flex"> Nom Animateur</span>
-                <span class="ml-6 flex font-bold">animation@qantis.co</span>
-              </p>
-            </div>
-            <AccountSidebar/>
-          </div>
+          </DropdownListComponent>
 
           <div class="col-span-3">
             <slot name="right-side"/>
@@ -78,6 +87,8 @@ import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightI
 import {useUserStore} from '@/vuejs/stores/user'
 import {storeToRefs} from 'pinia'
 import AccountSidebar from '@/vuejs/modules/account/components/sidebar/AccountSidebar.vue'
+import DisconnectIconComponent from '@/vuejs/modules/shared/icon/DisconnectIconComponent.vue'
+import DropdownListComponent from '@/vuejs/modules/shared/DropdownListComponent.vue'
 
 
 const userStore = useUserStore()

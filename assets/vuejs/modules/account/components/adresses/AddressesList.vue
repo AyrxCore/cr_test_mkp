@@ -1,5 +1,5 @@
 <template>
-  <table class="table-auto w-full">
+  <table class="table-auto w-full list-address">
     <AddressesListHeader/>
     <tbody v-if="!isloading">
       <tr
@@ -46,3 +46,12 @@ const userStore = useUserStore()
 const {adresses, isloading} = storeToRefs(companyStore)
 
 </script>
+
+<style scoped>
+.list-address {
+  th,
+  td {
+    @apply p-2 md:p-4;
+  }
+}
+</style>

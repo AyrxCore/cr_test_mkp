@@ -6,7 +6,7 @@
       :to="{name: props.item.url}"
   >
     <span
-      class="text-[16px] text-gray-500 underline decoration-2 underline-offset-4 hover:decoration-purple-600"
+      class="text-sm md:text-base text-gray-500 underline decoration-2 underline-offset-4 hover:decoration-purple-600"
       :class="isExactActive ? 'decoration-purple-600 decoration-purple-600' : ''"
     >
       {{ item.name }}

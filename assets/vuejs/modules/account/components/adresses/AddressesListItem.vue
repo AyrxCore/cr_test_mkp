@@ -1,5 +1,5 @@
 <template>
-  <td class="p-5 flex justify-center">
+  <td class="p-3 flex justify-center">
     <div v-if="props.address.id !== selectedAddress">
       <a
           href="#"
@@ -23,11 +23,11 @@
       />
     </div>
   </td>
-  <td class="p-5">{{ props.address.name }}</td>
-  <td class="p-5">{{ props.address.company }}</td>
-  <td class="p-5">{{ props.address.street }}</td>
-  <td class="p-5">{{ props.address.postcode }}</td>
-  <td class="p-5">{{ props.address.city }}</td>
+  <td class="p-3">{{ props.address.name }}</td>
+  <td class="p-3">{{ props.address.company }}</td>
+  <td class="p-3">{{ props.address.street }}</td>
+  <td class="p-3">{{ props.address.postcode }}</td>
+  <td class="p-3">{{ props.address.city }}</td>
   <td>
     <div v-if="!props.address.default" class="flex">
       <button

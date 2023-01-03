@@ -1,11 +1,11 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="primary mb-2 page-principal-title mt-2 md:mt-0">Les coordonnées</h3>
+      <h3 class="primary page-principal-title mb-2 mt-2 md:mt-0">
+        Les coordonnées
+      </h3>
       <!-- Bloc email -->
-      <div
-        class="bloc-contact-information"
-      >
+      <div class="bloc-contact-information">
         <div class="">
           <h3 class="primary mb-2 text-[20px]">E-mail</h3>
           <p class="mb-2.5">E-mail: {{ user.account.subaccount.email }}</p>
@@ -22,9 +22,7 @@
       <!-- Fin bloc email -->
 
       <!-- Bloc password -->
-      <div
-        class="bloc-contact-information"
-      >
+      <div class="bloc-contact-information">
         <div class="">
           <h3 class="primary mb-2 text-[20px]">Mot de passe</h3>
           <p class="mb-2.5">Mot de passe:</p>
@@ -40,9 +38,7 @@
       <!-- Fin bloc password -->
 
       <!-- Bloc coordonnées -->
-      <div
-        class="bloc-contact-information"
-      >
+      <div class="bloc-contact-information">
         <div class="">
           <h3 class="primary mb-2 text-[20px]">Coordonnées</h3>
           <p class="mb-2.5">Nom : {{ user.account.subaccount.lastname }}</p>
@@ -79,7 +75,7 @@ const tab = computed(() => {
 </script>
 
 <style scoped>
-  .bloc-contact-information {
-    @apply mb-3 flex justify-between rounded-lg bg-white p-3 md:p-6 text-gray-500;
-  }
+.bloc-contact-information {
+  @apply mb-3 flex justify-between rounded-lg bg-white p-3 text-gray-500 md:p-6;
+}
 </style>
