@@ -108,7 +108,7 @@ const defaultModules = computed(
       }
     }
     &-prev {
-      @apply -left-4 xl:-left-14;
+      @apply -left-4 xl:-left-12;
     }
     &-next {
       @apply -right-4 xl:-right-12;

@@ -1,19 +1,25 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="primary mb-2 text-[35px]">Mes produits favoris</h3>
-      <div class="mb-2.5 flex items-center text-lg text-gray-500">
+      <h3 class="page-principal-title mb-2 mt-2 text-primary md:mt-0">
+        Mes produits favoris
+      </h3>
+      <div
+        class="mt-10 mb-2.5 hidden items-center px-2.5 text-sm text-gray-500 md:flex lg:text-base"
+      >
         <div class="w-5/12">Nom de la liste</div>
         <div class="w-2/12">Créée le</div>
         <div class="w-2/12">Modifiée le</div>
         <div class="w-2/12">Nombre d'articles</div>
         <div class="w-1/12"></div>
       </div>
-      <FavoritesProductsComponent
-        v-for="(favorite, key) in listFavorites"
-        :key="key"
-        :favorite="favorite"
-      />
+      <div class="flex flex-row flex-wrap justify-between">
+        <FavoritesProductsComponent
+          v-for="(favorite, key) in listFavorites"
+          :key="key"
+          :favorite="favorite"
+        />
+      </div>
     </template>
   </AccountPage>
 </template>

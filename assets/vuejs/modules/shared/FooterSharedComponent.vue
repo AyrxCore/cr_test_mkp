@@ -141,9 +141,7 @@
             </ul>
           </div>
           <div class="px-2 md:px-0 lg:px-2">
-            <ul
-              class="mt-[3rem] mb-7 md:mb-4 md:mt-[4rem] lg:mb-7 lg:mt-[3rem]"
-            >
+            <ul class="mt-0 md:mb-7 md:mb-4 md:mt-[4rem] lg:mb-7 lg:mt-[3rem]">
               <li><a href="#">Formation</a></li>
               <li><a href="#">Fourniture de bureaux</a></li>
               <li><a href="#">Gestion des déchets</a></li>
@@ -156,9 +154,7 @@
             </ul>
           </div>
           <div class="px-2 md:px-0 lg:px-2">
-            <ul
-              class="mt-[3rem] mb-7 md:mb-4 md:mt-[4rem] lg:mb-7 lg:mt-[3rem]"
-            >
+            <ul class="mt-0 mb-7 md:mb-4 md:mt-[4rem] lg:mb-7 lg:mt-[3rem]">
               <li><a href="#">Outillage</a></li>
               <li><a href="#">Peinture</a></li>
               <li><a href="#">Quincaillerie</a></li>

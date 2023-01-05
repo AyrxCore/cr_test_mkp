@@ -1,25 +1,23 @@
 <template>
-  <div
-    class="mb-2.5 flex items-center items-center rounded-lg bg-white p-2.5 text-lg text-gray-500"
-  >
-    <div class="w-5/12">
+  <div class="bloc-item-favoris">
+    <div class="md:w-5/12">
       <a
         href="/app/account/favoris-details"
         class="text-purple-600 underline"
         >{{ favorite.name }}</a
       >
     </div>
-    <div class="w-2/12">
+    <div class="md:w-2/12">
       {{ favorite.dateCreate }}
     </div>
-    <div class="w-2/12">
+    <div class="md:w-2/12">
       {{ favorite.dateUpdate }}
     </div>
-    <div class="w-2/12">
+    <div class="md:w-2/12">
       {{ favorite.numberArticle }}
       {{ favorite.numberArticle > 1 ? 'articles' : 'article' }}
     </div>
-    <div class="flex w-1/12">
+    <div class="flex justify-end md:w-1/12">
       <button><EditIconComponent class="mr-2" /></button>
       <button><TrashIconComponent :stroke-color="'#9866ff'" /></button>
     </div>
@@ -35,3 +33,8 @@ const props = defineProps({
   },
 })
 </script>
+<style scoped>
+.bloc-item-favoris {
+  @apply mb-2.5 flex w-[48.5%] flex-col rounded-lg bg-white p-2.5 text-sm text-gray-500 md:w-full md:flex-row md:text-base lg:text-lg;
+}
+</style>

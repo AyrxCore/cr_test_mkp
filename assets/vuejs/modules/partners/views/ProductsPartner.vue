@@ -1,6 +1,6 @@
 <template>
   <BaseTemplate title="Qantis - MarketPlace">
-    <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl">
+    <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl px-5 sm:px-8">
       <HeaderPartnerComponent />
 
       <div
@@ -30,28 +30,38 @@
           </select>
         </div>
       </div>
-      <div class="mt-10 mt-5 flex grid grid-cols-5 gap-4 text-gray-600">
-        <div class="h-max rounded-lg bg-white px-7.5 pt-7.5 pb-4 text-lg">
-          <h3 class="text-[25px] text-primary">Catégorie</h3>
+      <div
+        class="mt-10 mt-5 flex flex-col gap-4 text-gray-600 xl:grid xl:grid-cols-5"
+      >
+        <DropdownListComponent>
+          <template #button-label> Filtres </template>
+          <template #content>
+            <div class="h-max rounded-lg bg-white px-7.5 pt-7.5 pb-4 text-lg">
+              <h3 class="text-[25px] text-primary">Catégorie</h3>
 
-          <div v-for="i in 3" :key="i" class="mt-5 mb-6">
-            <h3 class="mb-5 text-[25px] text-primary">Filtre n°{{ i }}</h3>
-            <CheckboxComponent
-              v-for="j in 4"
-              :key="j"
-              :position-after="true"
-              class="flex flex-row items-center"
-            >
-              <template #label-after>
-                <span class="text-lg text-gray-500">Filtre 0{{ j }}</span>
-              </template>
-            </CheckboxComponent>
-          </div>
-        </div>
+              <div v-for="i in 3" :key="i" class="mt-5 mb-6">
+                <h3 class="mb-5 text-[25px] text-primary">Filtre n°{{ i }}</h3>
+                <CheckboxComponent
+                  v-for="j in 4"
+                  :key="j"
+                  :position-after="true"
+                  class="flex flex-row items-center"
+                >
+                  <template #label-after>
+                    <span class="text-lg text-gray-500">Filtre 0{{ j }}</span>
+                  </template>
+                </CheckboxComponent>
+              </div>
+            </div>
+          </template>
+        </DropdownListComponent>
+
         <div class="col-span-4 flex flex-col rounded-lg pb-4 text-gray-500">
-          <div class="flex grid grid-cols-3 gap-8 text-gray-600">
+          <div
+            class="flex flex-col text-gray-600 md:grid md:grid-cols-2 md:gap-8 lg:grid-cols-3"
+          >
             <div
-              class="flex h-[516px] flex-col rounded-md bg-primary px-8 pt-8"
+              class="flex h-[516px] w-auto flex-col rounded-md bg-primary px-8 pt-8"
             >
               <div
                 class="mx-auto flex h-[273px] items-center justify-center bg-white"
@@ -76,11 +86,14 @@
             <div>
               <ProductComponent
                 :product="productsTopVenteHomepage[0]"
-                class="h-[516px]"
+                class="mt-5 h-[516px] !w-auto md:mt-0 md:w-[392px]"
               />
             </div>
             <div v-for="(product, key) in productsSimilaire" :key="key">
-              <ProductComponent :product="product" class="h-[516px]" />
+              <ProductComponent
+                :product="product"
+                class="mt-5 h-[516px] !w-auto md:mt-0 md:w-[392px]"
+              />
             </div>
           </div>
         </div>
@@ -102,6 +115,7 @@ import {
 } from '@/vuejs/modules/products'
 import alda from '@/vuejs/assets/img/demo/alda-partner.png'
 import { getImage } from '@/vuejs/services/utils'
+import DropdownListComponent from '@/vuejs/modules/shared/DropdownListComponent.vue'
 </script>
 
 <style scoped>

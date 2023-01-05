@@ -8,7 +8,9 @@
             <span class="text-gradient"> marketplace réservée</span>
             à nos 30 000 entreprises adhérentes
           </h3>
-          <p class="mt-2.5 text-sm text-gray-400 sm:mt-5 sm:text-base xl:text-lg">
+          <p
+            class="mt-2.5 text-sm text-gray-400 sm:mt-5 sm:text-base xl:text-lg"
+          >
             Cher adhérent, ce nouvel espace dédié vous permet d'acheter
             directement en ligne et de trouver vos accords-cadres, en quelques
             clics. Notre équipe, que vous connaissez, se tient à votre
@@ -145,25 +147,23 @@
           Nos catégories de produits et d'accords-cadres
         </h3>
       </div>
-      <div
-        class="mt-5 flex w-full text-lg sm:flex"
-      >
-        <div class="dropdown flex w-full sm:w-1/2 xl:w-auto">
-          <button class="bg-white text-primary flex flex-row justify-between p-2.5 rounded items-center w-full xl:hidden">
-            <span class="mr-1">Toutes les catégories</span>
-            <ChevronDownIconComponent />
-          </button>
-          <ul class="dropdown-menu">
-            <li
-              v-for="(categorie, id) in listCategories"
-              :key="id"
-            >
-              <a href="#">
-                {{ categorie }}
-              </a>
-            </li>
-          </ul>
-        </div>
+      <div class="mt-5 flex w-full text-lg sm:flex">
+        <DropdownListComponent>
+          <template #button-label> Toutes les catégories </template>
+          <template #content>
+            <div class="list-categories">
+              <div
+                v-for="(categorie, id) in listCategories"
+                :key="id"
+                class="list-categories-items"
+              >
+                <a href="#">
+                  {{ categorie }}
+                </a>
+              </div>
+            </div>
+          </template>
+        </DropdownListComponent>
       </div>
     </div>
 
@@ -177,7 +177,7 @@
           Vous faites des économies tout en <br />
           contribuant à votre démarche RSE
         </h3>
-        <p class="mt-2 text-sm sm:mx-auto xl:w-[45%] sm:text-base xl:text-lg">
+        <p class="mt-2 text-sm sm:mx-auto sm:text-base xl:w-[45%] xl:text-lg">
           Nos adhérents réalisent en moyenne 27 % d'économies, grâce à la
           mutualisation des achats. Nous notons et référençons nos partenaires
           fournisseurs à l'aide d'un référentiel RSE. Votre adhésion permet
@@ -249,7 +249,7 @@ import PhoneLightIconComponent from '@/vuejs/modules/shared/icon/PhoneLightIconC
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
 import ContenusExpertComponent from '@/vuejs/modules/home/component/ContenusExpertComponent.vue'
-import ChevronDownIconComponent from '@/vuejs/modules/shared/icon/ChevronDownIconComponent.vue'
+import DropdownListComponent from '@/vuejs/modules/shared/DropdownListComponent.vue'
 
 const bannieres = ref([
   { image: getImage(banniere1), image_mobile: getImage(banniereMobile1) },
@@ -268,19 +268,20 @@ const contenusExpert = ref([
     img: getImage(imgMaps),
     titre: 'Loi montagne : êtes-vous concernés ? ',
     btnNam: 'Actualités',
-    desc: 'A partir du 1er novembre 2022, la loi Montagne...',
+    description: 'A partir du 1er novembre 2022, la loi Montagne...',
   },
   {
     img: getImage(imgCentral),
     titre: 'Tout savoir sur le décret tertiaire',
     btnNam: 'Actualités',
-    desc: 'Le décret tertiaire impose une réduction \nde consommation...',
+    description:
+      'Le décret tertiaire impose une réduction \nde consommation...',
   },
   {
     img: getImage(imgMagazine),
     titre: 'Comment entretenir votre véhicule ? ',
     btnNam: 'Conseil',
-    desc: 'Les équipes de QANTIS ont conçu pour vous un guide...',
+    description: 'Les équipes de QANTIS ont conçu pour vous un guide...',
   },
 ])
 </script>
@@ -301,23 +302,22 @@ const contenusExpert = ref([
   @apply text-left text-[23px] font-bold leading-[27px] sm:text-[29px] sm:leading-[33px] xl:text-[35px] xl:leading-[38.11px];
 }
 
-.dropdown .dropdown-menu {
-  @apply absolute hidden bg-white mt-14 px-2
-  rounded-lg
+.list-categories {
+  @apply h-[366px] flex-wrap
+  justify-center
   overflow-auto
-  h-[366px] flex-wrap justify-center
+  rounded-lg bg-white p-1
   text-left
-  xl:h-auto
-  xl:px-0 xl:mt-2 xl:text-center xl:overflow-auto
-  xl:bg-transparent text-gray-700 xl:flex xl:relative;
+  text-gray-700
+  xl:relative xl:mt-2 xl:flex xl:h-auto
+  xl:overflow-auto xl:bg-transparent xl:p-0 xl:text-center;
 }
 
-.dropdown .dropdown-menu li {
-  @apply bg-white text-primary text-sm mt-2 items-center xl:justify-center xl:rounded  xl:px-2.5 xl:py-1.5 xl:text-white sm:text-base xl:text-lg xl:bg-[#404FE6] xl:mx-4;
+.list-categories-items {
+  @apply mt-2 items-center bg-white text-sm text-primary sm:text-base xl:mx-4  xl:justify-center xl:rounded xl:bg-[#404FE6] xl:px-2.5 xl:py-1.5 xl:text-lg xl:text-white;
 }
 
 .dropdown:hover .dropdown-menu {
-  @apply block xl:flex ;
+  @apply block xl:flex;
 }
-
 </style>

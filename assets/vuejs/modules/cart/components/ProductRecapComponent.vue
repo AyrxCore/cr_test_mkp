@@ -33,7 +33,9 @@
           >
         </div>
       </div>
-      <div class="flex w-full items-center justify-between md:w-1/2 lg:w-5/12 md:float-right lg:float-none">
+      <div
+        class="flex w-full items-center justify-between md:float-right lg:float-none lg:w-5/12"
+      >
         <div class="text-center lg:mr-5 lg:w-2/12">
           <input
             :value="1"
@@ -52,12 +54,14 @@
             {{ product.price }}€ HT
           </span>
         </div>
-        <button class="flex text-gray-500">
-          <HeartIconComponent class="mr-2 stroke-gray-500" />
-        </button>
-        <button class="flex text-gray-500">
-          <TrashIconComponent :stroke-color="'#5E6875'" />
-        </button>
+        <div class="flex">
+          <button class="flex text-gray-500">
+            <HeartIconComponent class="mr-2 stroke-gray-500" />
+          </button>
+          <button class="flex text-gray-500">
+            <TrashIconComponent :stroke-color="'#5E6875'" />
+          </button>
+        </div>
       </div>
     </div>
   </div>

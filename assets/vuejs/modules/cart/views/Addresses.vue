@@ -24,7 +24,9 @@
           </div>
         </div>
         <div>
-          <h3 class="my-5 text-[19px] text-primary md:mb-5 md:text-[25px]">
+          <h3
+            class="my-5 text-[19px] text-primary md:mb-5 md:text-[25px] lg:my-0"
+          >
             Adresse de livraison
           </h3>
           <div class="mt-5 items-center rounded-lg bg-white p-5 text-gray-500">
@@ -54,7 +56,7 @@
         <template #button-label> Continuer </template>
       </CartRightSideComponent>
       <div class="mt-5 flex justify-start">
-        <div class="h-14 mr-4 items-center rounded-lg bg-white p-5">
+        <div class="mr-4 h-14 items-center rounded-lg bg-white p-5">
           <CbIconComponent />
         </div>
         <div class="h-14 items-center rounded-lg bg-white p-5">

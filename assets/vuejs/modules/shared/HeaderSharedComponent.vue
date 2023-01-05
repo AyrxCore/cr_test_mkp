@@ -1,5 +1,5 @@
 <template>
-  <nav class="sticky top-0 z-30 bg-primary px-4 pt-5 pb-3 lg:block">
+  <nav class="sticky top-0 z-30 w-full bg-primary px-4 pt-5 pb-3">
     <div class="mx-auto items-center px-4 lg:flex">
       <div class="flex justify-between">
         <MenuComponent class="lg:hidden" />

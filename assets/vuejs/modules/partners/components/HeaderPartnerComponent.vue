@@ -4,23 +4,25 @@
     :current-page="'Nom du partenaire'"
   />
   <ContactUsButtonComponent />
-  <div class="text-green mt-3.5 flex items-center">
-    <h3 class="text-[35px] text-primary">ALDA MAJUSCULE-OFFICE DEPOT</h3>
-    <div class="flex h-4 flex-row">
+  <div class="text-green mt-3.5 flex flex-col lg:flex-row lg:items-center">
+    <h3 class="page-principal-title text-primary">
+      ALDA MAJUSCULE-OFFICE DEPOT
+    </h3>
+    <div class="flex flex-row">
       <LeafIconComponent class="mx-2" />
-      <span class="mr-2 flex text-lg font-bold">7,8/10</span>
-      <span class="mt-2 flex text-xs text-gray-500"
+      <span class="mr-2 flex text-sm font-bold md:text-lg">7,8/10</span>
+      <span class="mt-1 flex text-xs text-gray-500 md:mt-2"
         >Selon notre référentiel RSE</span
       >
       <span
-        class="mt-1 flex cursor-pointer"
+        class="flex cursor-pointer md:mt-1"
         title="Message explicatif du référentiel RSE"
         ><InformationIconComponent
       /></span>
     </div>
   </div>
 
-  <div class="mt-10 grid grid-cols-4 gap-4">
+  <div class="mt-10 flex flex-col md:grid md:grid-cols-4 md:gap-4">
     <div class="flex items-center justify-center rounded-lg bg-white">
       <img
         :src="aldaImg"
@@ -28,7 +30,7 @@
         class="items-center rounded-lg sm:mx-auto"
       />
     </div>
-    <div class="col-span-3 rounded-lg bg-white">
+    <div class="col-span-3 mt-5 rounded-lg bg-white md:mt-0">
       <img
         :src="aldaHeaderImg"
         alt="Picture"

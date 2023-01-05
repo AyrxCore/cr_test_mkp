@@ -19,7 +19,7 @@
       <SwiperSlide
         v-for="(contenu, id) in contenus"
         :key="id"
-        class="flex h-full items-center justify-center overflow-hidden rounded-lg bg-white"
+        class="flex h-full items-center justify-center overflow-hidden rounded-lg"
       >
         <div class="grid lg:grid-cols-2">
           <div class="flex rounded-lg border-[#F3EDFE]">
@@ -42,7 +42,7 @@
               </a>
             </p>
             <p class="text-lg">
-              {{ contenu.desc }}
+              {{ contenu.description }}
             </p>
             <div class="bottom-0">
               <a

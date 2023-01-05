@@ -33,32 +33,36 @@
 
     <!-- Bloc nom et description -->
     <div class="flex w-full flex-col justify-start">
-      <h3 class="text-left text-lg font-bold text-gray-600">
+      <h3
+        class="text-left text-sm font-bold text-gray-600 md:text-base lg:text-lg"
+      >
         <RouterLink :to="{ path: '/app/product' }">{{
           props.product.name
         }}</RouterLink>
       </h3>
-      <p class="mt-1 w-full justify-start text-left text-lg text-gray-400">
+      <p
+        class="mt-1 w-full justify-start text-left text-sm text-gray-400 md:text-base lg:text-lg"
+      >
         {{ props.product.description }}
       </p>
     </div>
     <!-- Fin bloc nom et description -->
 
     <!-- Bloc prix -->
-    <div class="mt-2 flex w-full items-center justify-start">
-      <span class="mr-2 text-lg font-bold text-primary"
+    <div class="flex w-full items-center justify-start xl:mt-2">
+      <span class="mr-2 text-sm font-bold text-primary md:text-base lg:text-lg"
         >{{ props.product.price }}€</span
       >
       <span
         v-if="props.product.price_line_through"
-        class="text-lg text-gray-400 line-through"
+        class="text-sm text-gray-400 line-through md:text-base lg:text-lg"
         >{{ props.product.price_line_through }}€ HT</span
       >
     </div>
     <!-- Fin bloc prix -->
 
     <!-- Bloc quantité -->
-    <div class="mx-auto mt-5 flex w-full justify-between">
+    <div class="mx-auto flex w-full justify-between xl:mt-5">
       <div class="justify-end">
         <span class="text-sm text-gray-500">Qté: </span>
         <select class="rounded-md border border-gray-300">

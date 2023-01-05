@@ -5,20 +5,21 @@
     <div class="flex w-full flex-col">
       <div
         v-if="product"
-        class="mb-2 flex flex-row items-center justify-between md:justify-evenly  lg:hidden"
+        class="mb-2 flex flex-row items-center justify-between md:justify-evenly lg:hidden"
       >
-        <div class="flex items-center text-center justify-center">
+        <div class="flex items-center justify-center text-center">
           <span class="text-lg text-gray-500 line-through"
             >{{ product.priceReduce }}€ HT
           </span>
         </div>
         <div
-          class="items-center justify-center flex text-[25px] font-bold text-primary"
+          class="flex items-center justify-center text-[22px] font-bold text-primary md:text-[25px]"
         >
           {{ product.price }}€ HT
         </div>
         <div class="mt-3 ml-2 flex">
-          <span class="ml-2 rounded-lg bg-purple-600 px-2.5 py-1.5 text-white text-sm md:text-lg"
+          <span
+            class="ml-2 rounded-lg bg-purple-600 px-2.5 py-1.5 text-sm text-white md:text-lg"
             >{{ product.percent }}%</span
           >
         </div>

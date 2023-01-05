@@ -32,8 +32,7 @@
                   spaceBetween: 20,
                 },
               }"
-              :pagination="true"
-              :navigation="false"
+              :navigation="true"
               :show-nav="true"
               :thumbs="{ swiper: thumbsSwiper }"
               @on-slide-change="onSlideChange"
@@ -84,7 +83,7 @@
         <!-- Bloc détails produit -->
         <div>
           <div
-            class="mt-5 flex flex-col rounded-lg bg-white p-5 md:mt-0 lg:h-[658px] md:p-7"
+            class="mt-5 flex flex-col rounded-lg bg-white p-5 md:mt-0 md:p-7"
           >
             <ProductTitleComponent class="hidden lg:flex">
               <template #name> {{ product.name }}</template>
@@ -93,7 +92,8 @@
             </ProductTitleComponent>
             <div class="mt-14 hidden flex-col lg:flex">
               <div>
-                <span class="text-sm md:text-base lg:text-lg text-gray-500 line-through"
+                <span
+                  class="text-sm text-gray-500 line-through md:text-base lg:text-lg"
                   >{{ product.priceReduce }}€ HT
                 </span>
                 <span
@@ -107,7 +107,9 @@
             </div>
             <div class="lg:mt-12">
               <div class="inline-flex items-center text-gray-500">
-                <span class="text-sm md:text-base lg:text-lg text-gray-500">Quantité</span>
+                <span class="text-sm text-gray-500 md:text-base lg:text-lg"
+                  >Quantité</span
+                >
                 <select
                   class="ml-2 h-[1.75rem] rounded-md border border-[#5E6875] pt-0"
                 >
@@ -123,7 +125,7 @@
                 </div>
               </div>
               <p class="mt-1">
-                <span class="text-sm md:text-base lg:text-lg text-gray-500"
+                <span class="text-sm text-gray-500 md:text-base lg:text-lg"
                   >Conditionnement conseillé : {{ product.conditionnement }}
                 </span>
               </p>
@@ -133,7 +135,9 @@
                   :key="key"
                   class="mt-2 w-full items-center text-gray-500"
                 >
-                  <span class="text-sm md:text-base lg:text-lg text-gray-500">{{ attr }}</span>
+                  <span class="text-sm text-gray-500 md:text-base lg:text-lg">{{
+                    attr
+                  }}</span>
                   <select
                     class="right-0 float-right ml-2 h-[1.75rem] w-[25%] rounded-md border border-[#5E6875] pt-0"
                   >
@@ -145,7 +149,7 @@
             <ButtonAddToCartComponent class="hidden lg:flex" />
           </div>
           <div class="mt-[25px] h-[auto] rounded-lg bg-white p-5 md:p-7">
-            <h3 class="text-[25px] text-primary md:text-[35px]">
+            <h3 class="text-[19px] text-primary md:text-[25px] xl:text-[35px]">
               Livraison et retour
             </h3>
             <ul class="list-disc text-gray-500">
@@ -169,12 +173,12 @@
               />
             </div>
             <div class="flex flex-col justify-center md:w-[80%]">
-              <h3 class="text-[25px] text-primary">
+              <h3 class="text-[19px] text-primary md:text-[25px]">
                 Besoin d'aide pour votre commande ?
               </h3>
               <a
                 href="#"
-                class="default-button-gradient mt-2 inline-flex justify-center px-3.5 py-3 text-center font-bold text-white text-sm md:text-base lg:text-lg"
+                class="default-button-gradient mt-2 inline-flex justify-center px-3.5 py-3 text-center text-sm font-bold text-white md:text-base lg:text-lg"
               >
                 <ArrowRigntIconComponent
                   class="mt-1 mr-2 w-4 items-center"
@@ -191,23 +195,33 @@
       <!-- Bloc description -->
       <div class="mt-10 justify-center">
         <h3 class="home-subtitle mb-5 text-primary">Description</h3>
-        <p class="whitespace-pre-line text-sm md:text-base lg:text-lg text-gray-500">
+        <p
+          class="whitespace-pre-line text-sm text-gray-500 md:text-base lg:text-lg"
+        >
           {{ product.description }}
         </p>
         <div class="flex flex-col md:mt-[60px] md:flex-row">
-          <div class="mr-2 mt-5 rounded-lg bg-white p-7 md:mt-0 lg:h-[180px]">
-            <h3 class="inline-flex text-[25px] text-primary">
+          <div
+            class="mt-5 rounded-lg bg-white p-5 md:mt-0 md:mr-2 lg:h-[180px] lg:p-7"
+          >
+            <h3 class="inline-flex text-[19px] text-primary md:text-[25px]">
               Certifications et éco-label
               <LeafIconComponent class="ml-2 items-center" />
             </h3>
             <ul class="list-disc text-gray-500">
-              <li v-for="i in 3" :key="i" class="mt-1 ml-7 text-sm md:text-base lg:text-lg">
+              <li
+                v-for="i in 3"
+                :key="i"
+                class="mt-1 ml-7 text-sm md:text-base lg:text-lg"
+              >
                 Curabitur ac sem at enim convallis consectetur
               </li>
             </ul>
           </div>
           <div class="mt-5 rounded-lg bg-white p-7 md:mt-0 lg:h-[180px]">
-            <h3 class="text-[25px] text-primary">Documentation</h3>
+            <h3 class="text-[19px] text-primary md:text-[25px]">
+              Documentation
+            </h3>
             <ul class="list-disc text-gray-500">
               <li
                 v-for="(doc, key) in documentation"
@@ -232,7 +246,7 @@
             <tr
               v-for="(caracteristique, key) in product.caracteristiques"
               :key="key"
-              class="border text-sm md:text-base lg:text-lg text-primary"
+              class="border text-sm text-primary md:text-base lg:text-lg"
             >
               <td class="w-[20%] border p-2">{{ caracteristique.name }}</td>
               <td class="p-2">{{ caracteristique.value }}</td>

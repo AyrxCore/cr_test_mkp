@@ -1,6 +1,6 @@
 <template>
   <BaseTemplate title="Qantis - MarketPlace">
-    <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 sm:px-8">
+    <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 px-5 sm:px-8">
       <breadcrumb-shared-component
         :list-url="listUrl"
         :current-page="'Actualité'"
@@ -8,10 +8,12 @@
       <div class="w-[100%] max-w-screen-2xl">
         <ContactUsButtonComponent />
       </div>
-      <div class="m-auto my-2 grid w-[100%] max-w-screen-2xl grid-cols-2 gap-4">
+      <div
+        class="m-auto my-2 flex w-[100%] max-w-screen-2xl flex-col lg:grid lg:grid-cols-2 lg:gap-4"
+      >
         <!-- Bloc text actualité -->
         <div>
-          <h3 class="primary mb-2 text-[35px]">
+          <h3 class="primary page-principal-title mb-2">
             {{ contenusExpert[1].title }}
           </h3>
           <span
@@ -52,35 +54,7 @@
       <!-- Bloc articles recommandés -->
       <div class="mt-10 justify-center">
         <h3 class="primary home-subtitle mb-5">Articles recommandés</h3>
-        <div class="mt-5 grid grid-cols-3 gap-4 p-8">
-          <div
-            v-for="(art, key) in contenusExpert"
-            :key="key"
-            class="grid grid-cols-2"
-          >
-            <div class="flex rounded-lg bg-white">
-              <img
-                :src="art.img"
-                alt="Picture"
-                class="items-center sm:mx-auto"
-              />
-            </div>
-            <div class="px-6 text-left">
-              <h3 class="primary text-[23px] font-bold">{{ art.title }}</h3>
-              <p class="text-lg">
-                {{ art.description }}
-              </p>
-              <div class="bottom-0">
-                <a
-                  href="#"
-                  class="primary mt-5 flex items-center text-sm font-medium underline"
-                >
-                  Lire l'article
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ContenusExpertComponent :contenus="contenusExpert" />
       </div>
       <!-- Fin Bloc articles recommandés -->
     </div>
@@ -95,6 +69,7 @@ import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComp
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import ArrowRigntIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import { contenusExpert } from '@/vuejs/modules/actualites'
+import ContenusExpertComponent from '@/vuejs/modules/home/component/ContenusExpertComponent.vue'
 
 const defaultImageFile = getImage(defaultImage)
 
