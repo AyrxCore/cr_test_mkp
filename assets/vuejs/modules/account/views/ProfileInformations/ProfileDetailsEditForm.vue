@@ -34,10 +34,10 @@
             />
           </div>
         </div>
-        <div class="flex justify-end">
+        <div class="flex justify-between md:justify-end">
           <ButtonComponent
               class="default-button mr-2 mb-2 flex items-center px-4 py-5 text-sm font-medium bg-transparent
-             !text-purple-500 rounded-full border border-purple-600"
+             !text-purple-500 rounded-full border border-purple-600 hover:!text-white"
               type="button"
               @click="onCancelClick"
           >
@@ -45,7 +45,7 @@
           </ButtonComponent>
           <ButtonComponent
               class="default-button mr-2 mb-2 flex items-center px-4 py-5 text-sm font-medium bg-transparent
-             !text-purple-500 rounded-full border border-purple-600"
+             !text-purple-500 rounded-full border border-purple-600 hover:!text-white"
               :is-loading="isLoading"
           >
             Enregistrer
@@ -58,14 +58,9 @@
 </template>
 <script lang="ts" setup>
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import {storeToRefs} from 'pinia'
 import InputField from '@/vuejs/modules/shared/formfields/InputField.vue'
 import LabelField from '@/vuejs/modules/shared/formfields/LabelField.vue'
-import {onBeforeMount, onMounted, ref, watch} from 'vue'
-import {useRoute} from 'vue-router'
-import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
-import {useCoutryStore} from '@/vuejs/stores/country'
-import SelectField from '@/vuejs/modules/shared/formfields/SelectField.vue'
+import {onBeforeMount, ref} from 'vue'
 import router, {PageList} from '@/vuejs/router'
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import {useUserStore} from '@/vuejs/stores/user'

@@ -71,11 +71,11 @@ const listAccount = ref<any[]>([
   },
   {
     label: 'Validation de commande',
-    url: '/app/account/orders-history',
+    url: '/app/account/orders-validation',
   },
   {
     label: 'Mes coordonnées',
-    url: '/app/account/orders-history',
+    url: '/app/account/contact-information',
   },
   {
     label: 'Changer de SIRET',

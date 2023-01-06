@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center lg:min-w-[200px]">
+  <div class="flex justify-center items-center lg:min-w-[200px]">
     <RouterLink
       :to="{ path: '/app/home' }"
       class="text-xl font-bold text-white"

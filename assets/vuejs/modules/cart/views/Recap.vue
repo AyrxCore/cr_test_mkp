@@ -1,7 +1,7 @@
 <template>
   <CartPage>
     <template #left-side>
-      <div class="">
+      <div>
         <h3 class="primary mb-2 text-[35px]">
           Panier <span class="uppercase">{{ detailsCart.company_name }}</span>
         </h3>
@@ -12,7 +12,8 @@
         class="mb-3"
       >
         <h3
-          class="flex items-center justify-between rounded-t-lg bg-white p-5 text-[19px] text-primary md:justify-start lg:rounded-none md:text-[25px]"
+          class="flex items-center justify-between rounded-t-lg bg-white p-5 text-[19px] text-primary
+          md:justify-start lg:rounded-none md:text-[25px]"
         >
           <span>{{ partner.name }}</span>
           <span class="ml-2 text-sm font-bold text-gray-500"
@@ -65,7 +66,7 @@
           <div class="hidden lg:flex lg:w-1/12"></div>
         </div>
         <div
-          class="float-left flex w-full flex-col rounded-b-lg bg-white p-2 px-3 lg:rounded-none lg:px-6"
+          class="flex w-full flex-col rounded-b-lg bg-white p-2 px-3 lg:rounded-none lg:px-6"
         >
           <p class="text-sm text-gray-500 lg:text-lg">
             {{ partner.label_livraison }}

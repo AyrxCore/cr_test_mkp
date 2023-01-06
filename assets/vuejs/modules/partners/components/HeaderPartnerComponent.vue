@@ -30,7 +30,7 @@
         class="items-center rounded-lg sm:mx-auto"
       />
     </div>
-    <div class="col-span-3 mt-5 rounded-lg bg-white md:mt-0">
+    <div class="col-span-3 mt-5 hidden rounded-lg bg-white md:mt-0 md:flex">
       <img
         :src="aldaHeaderImg"
         alt="Picture"

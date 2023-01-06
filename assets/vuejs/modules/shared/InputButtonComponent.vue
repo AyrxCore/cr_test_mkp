@@ -2,7 +2,7 @@
   <div ref="wrapper" class="flex w-full">
     <input
       v-model="query"
-      class="input !rounded-r-none !p-3 !text-sm md:!text-base md:!text-lg lg:!p-8"
+      class="input !rounded-r-none !p-2 !text-sm md:!text-base md:!text-lg lg:!px-8 lg:!py-4 truncate md:text-clip"
       name="search"
       :placeholder="props.placeholder"
       :type="props.type"

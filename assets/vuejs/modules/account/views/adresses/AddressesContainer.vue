@@ -14,7 +14,7 @@
       <AddressesDefault :address="companyStore.getDefaultShippingAddress">
         <template #title> Votre adresse de livraison par défaut </template>
       </AddressesDefault>
-      <div class="mb-8 flex justify-between">
+      <div class="mb-4 md:mb-8 flex justify-between">
         <div>
           <h3 class="mb-2 text-[19px] text-primary sm:text-[25px]">
             Adresses de livraison
@@ -30,12 +30,12 @@
           </ButtonComponent>
         </div>
       </div>
-      <div class="w-full bg-white">
+      <div class="w-full bg-white rounded">
         <AddressesList type="shipping" />
       </div>
-      <div class="mb-8 mt-8 flex justify-between">
+      <div class="mb-4 mt-4 md:mb-8 md:mt-8 flex justify-between">
         <div>
-          <h3 class="primary text-[25px]">Adresses de facturation</h3>
+          <h3 class="text-primary text-[19px] sm:text-[25px]">Adresses de facturation</h3>
         </div>
         <div>
           <ButtonComponent
@@ -49,7 +49,7 @@
           </ButtonComponent>
         </div>
       </div>
-      <div class="w-full bg-white">
+      <div class="w-full bg-white rounded">
         <AddressesList type="billing" />
       </div>
     </template>
@@ -83,6 +83,6 @@ const onCreateAddressClick = (type: string) => {
 
 <style scoped>
 .btn-address {
-  @apply mr-2 mb-2 flex !h-8 items-center rounded-full border border-purple-600 bg-transparent !px-1.5 !py-1 text-sm font-medium !text-purple-500 md:!h-12 md:px-4 md:py-5;
+  @apply mr-2 mb-2 flex !h-8 items-center rounded-full border border-purple-600 bg-transparent !px-1.5 !py-1 text-sm font-medium !text-purple-500 md:!h-12 md:px-4 md:py-5 hover:!text-white;
 }
 </style>

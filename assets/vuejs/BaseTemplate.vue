@@ -5,7 +5,7 @@
     <div
       class="bg-gradient flex h-[59px] flex-row items-center justify-center py-4 text-white"
     >
-      <p class="mr-0 w-[305px] text-[16px] md:mr-2 md:w-auto md:text-lg">
+      <p class="mr-0 w-[305px] text-sm md:mr-2 md:w-auto md:text-base lg:text-lg">
         Pneumatiques : êtes-vous concernés par la Loi Montagne ?
         <a href="#" class="underline">Découvrir</a>
       </p>
@@ -17,19 +17,24 @@
     <main class="">
       <slot />
     </main>
+
+    <div v-show="scY.value > 500" id="pagetop" class="fixed right-1 bottom-10 p-1 bg-secondary rounded cursor-pointer z-10" @click="toTop">
+      <ChevronDownIconComponent class="stroke-white rotate-180" />
+    </div>
     <FooterSharedComponent />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { useHead } from '@vueuse/head'
-import { computed } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 import HeaderSharedComponent from '@/vuejs/modules/shared/HeaderSharedComponent.vue'
 import FooterSharedComponent from '@/vuejs/modules/shared/FooterSharedComponent.vue'
 import StickyContactButtons from '@/vuejs/modules/shared/StickyContactButtonsComponent.vue'
 import CloseIconComponent from '@/vuejs/modules/shared/icon/CloseIconComponent.vue'
 import {useUserStore} from "@/vuejs/stores/user";
 import {storeToRefs} from "pinia";
+import ChevronDownIconComponent from '@/vuejs/modules/shared/icon/ChevronDownIconComponent.vue';
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
 const props = defineProps({
@@ -39,7 +44,29 @@ const props = defineProps({
     default: '',
   },
 })
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
 
+const scTimer = reactive({ value: 0 })
+const scY = reactive({ value: 0 })
+
+
+const handleScroll = (() => {
+  if (scTimer.value) return
+  scTimer.value = setTimeout(() => {
+    scY.value = window.scrollY
+    clearTimeout(scTimer.value)
+    scTimer.value = 0
+  }, 100)
+})
+
+const toTop = (() => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
+})
 useHead({
   title: computed(() => props.title),
   meta: [

@@ -57,14 +57,16 @@
     </div>
     <div class="flex justify-between md:justify-end">
       <ButtonComponent
-        class="default-button mr-2 mb-2 flex items-center rounded-full border border-purple-600 bg-transparent px-4 py-5 text-sm font-medium !text-purple-500"
+        class="default-button mr-2 mb-2 flex items-center rounded-full border border-purple-600 bg-transparent
+        px-4 py-5 text-sm font-medium !text-purple-500 hover:!text-white"
         type="button"
         @click="onCancelClick"
       >
         Annuler
       </ButtonComponent>
       <ButtonComponent
-        class="default-button mr-2 mb-2 flex items-center rounded-full border border-purple-600 bg-transparent px-4 py-5 text-sm font-medium !text-purple-500"
+        class="default-button mr-2 mb-2 flex items-center rounded-full border border-purple-600 bg-transparent
+        px-4 py-5 text-sm font-medium !text-purple-500 hover:!text-white"
         :is-loading="isloading"
       >
         Enregistrer

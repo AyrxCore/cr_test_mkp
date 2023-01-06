@@ -13,6 +13,7 @@
             class="border-b-2 border-gray-300 px-3 text-sm md:text-base lg:text-lg text-gray-500 hover:border-b-2 hover:border-secondary"
             :class="{
               'border-b-2 border-purple-500': tab.id === selectedTab.value,
+              'border-b-2 border-primary-500': tab.id < selectedTab.value,
             }"
           >
             <a
@@ -65,11 +66,6 @@ const tabs = ref([
     url: '/app/cart/' + CartPageList.RECAP,
   },
   {
-    id: TAB_BON_COMMANDE,
-    name: 'Bon de commande',
-    url: '/app/cart/' + CartPageList.RECAP,
-  },
-  {
     id: TAB_ADRESSES,
     name: 'Adresses',
     url: '/app/cart/' + CartPageList.ADDRESSES,
@@ -78,11 +74,6 @@ const tabs = ref([
     id: TAB_PAIEMENT,
     name: 'Paiement',
     url: '/app/cart/' + CartPageList.RECAP,
-  },
-  {
-    id: TAB_CONFIRMATION,
-    name: 'Confirmation',
-    url: '/app/cart/' + CartPageList.CONFIRMATION,
   },
 ])
 </script>

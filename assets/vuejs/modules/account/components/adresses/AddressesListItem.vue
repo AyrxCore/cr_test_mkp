@@ -1,6 +1,5 @@
 <template>
-  <td class="p-3">{{ props.address.id }}</td>
-  <td class="hidden p-3 md:table-cell">{{ props.address.name }}</td>
+  <td class="p-3">{{ props.address.name }}</td>
   <td
     class="hidden p-3 md:table-cell"
     :class="{ 'italic text-gray-300': !props.address.company }"

@@ -1,12 +1,12 @@
 <template>
-  <nav class="sticky top-0 z-30 w-full bg-primary px-4 pt-5 pb-3">
+  <nav class="sticky top-0 z-30 w-full bg-primary px-4 py-1 lg:pt-5 lg:pb-3">
     <div class="mx-auto items-center px-4 lg:flex">
       <div class="flex justify-between">
         <MenuComponent class="lg:hidden" />
         <LogoComponent class="w-1/2" />
         <AccountComponent class="lg:hidden" />
       </div>
-      <div class="my-4 lg:flex lg:w-[100%]">
+      <div class="mt-4 mb-2 lg:my-4 lg:flex lg:w-[100%]">
         <SearchComponent
           placeholder="Recherchez un produit, un accord-cadre ou un fournisseur"
         >
