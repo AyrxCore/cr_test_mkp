@@ -48,7 +48,7 @@
       >
         <div class="bloc-content col-span-5 flex h-full flex-col">
           <h3
-            class="page-principal-title mb-[1.563rem] font-bold leading-9 text-primary xl:w-3/4"
+            class="text-title-35 mb-[1.563rem] font-bold leading-9 text-primary xl:w-3/4"
           >
             Vos conditions négociées
           </h3>
@@ -74,7 +74,7 @@
         </div>
         <div class="bloc-content col-span-4 mt-5 xl:mt-0">
           <h3
-            class="page-principal-title mb-[1.563rem] mt-5 font-bold leading-9 text-primary xl:w-3/4"
+            class="text-title-35 mb-[1.563rem] mt-5 font-bold leading-9 text-primary xl:w-3/4"
           >
             Comment bénéficier des conditions ?
           </h3>
@@ -136,7 +136,7 @@
                 class="mt-5 flex flex-col rounded-lg bg-white p-5 text-lg text-gray-500 lg:mt-0 lg:w-1/2 lg:pr-12"
               >
                 <h3
-                  class="page-principal-title mb-[1.563rem] font-bold leading-9 text-primary lg:w-3/4"
+                  class="text-title-35 mb-[1.563rem] font-bold leading-9 text-primary lg:w-3/4"
                 >
                   Mise en avant partenaire
                 </h3>
@@ -161,7 +161,7 @@
       <div class="mt-10 mt-5 flex flex-col lg:grid lg:grid-cols-3 lg:gap-4">
         <div class="bloc-content col-span-2 flex flex-col">
           <h3
-            class="page-principal-title mb-[1.563rem] font-bold leading-9 text-primary lg:w-3/4"
+            class="text-title-35 mb-[1.563rem] font-bold leading-9 text-primary lg:w-3/4"
           >
             Achats durables : <br />
             <span class="text-green-qantis">engagements RSE</span> du partenaire
@@ -227,7 +227,7 @@
         </div>
         <div class="bloc-content mt-5 lg:mt-0">
           <h3
-            class="page-principal-title mb-[1.563rem] justify-center font-bold leading-9 text-primary lg:w-3/4 lg:justify-start"
+            class="text-title-35 mb-[1.563rem] justify-center font-bold leading-9 text-primary lg:w-3/4 lg:justify-start"
           >
             En savoir plus sur ce partenaire
           </h3>
@@ -282,7 +282,7 @@ import LeafIconComponent from '@/vuejs/modules/shared/icon/LeafIconComponent.vue
 
 const aldaImg = getImage(alda)
 const aldaMapImg = getImage(aldaMap)
-const isAutomobile = ref<Boolean>(false)
+const isAutomobile = ref<Boolean>(true)
 
 const pointsCleTop = [
   'Des conditions négociées grands-comptes',

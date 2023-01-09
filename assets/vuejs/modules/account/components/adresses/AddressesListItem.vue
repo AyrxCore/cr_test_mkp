@@ -6,7 +6,7 @@
   >
     {{ props.address.company ? props.address.company : 'Non renseignée' }}
   </td>
-  <td class="p-3">
+  <td class="p-3 max-w-xs">
     <span class="flex">{{ props.address.street }}</span>
     <span class="flex">{{ props.address.postcode }}</span>
     <span class="flex">{{ props.address.city }}</span>

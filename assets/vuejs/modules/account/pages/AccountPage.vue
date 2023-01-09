@@ -111,7 +111,7 @@ const onLogout = async (e: Event): Promise<void> => {
 }
 </script>
 <style>
-.page-principal-title {
+.text-title-35 {
   @apply text-[23px] md:text-[29px] lg:text-[35px];
 }
 </style>

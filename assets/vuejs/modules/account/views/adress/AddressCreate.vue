@@ -1,7 +1,7 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="page-principal-title mt-2 mb-2 text-primary lg:mt-0">
+      <h3 class="text-title-35 mt-2 mb-2 text-primary lg:mt-0">
         Créer une adresse de
         <span v-if="props.type === 'billing'"> facturation </span>
         <span v-else-if="props.type === 'shipping'"> livraison </span>

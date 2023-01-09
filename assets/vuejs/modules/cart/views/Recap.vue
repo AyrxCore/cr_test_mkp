@@ -2,43 +2,57 @@
   <CartPage>
     <template #left-side>
       <div>
-        <h3 class="primary mb-2 text-[35px]">
+        <h3 class="text-primary mb-2 text-title-35">
           Panier <span class="uppercase">{{ detailsCart.company_name }}</span>
         </h3>
       </div>
       <div
         v-for="(partner, key) in detailsCart.partners"
         :key="key"
-        class="mb-3"
+        class="mb-3 rounded-lg"
       >
+        <div
+          class="flex w-full flex-col rounded-t-lg bg-white p-2 lg:p-5"
+        >
+          <h3
+            class="inline bg-white  text-title-35 text-primary"
+          >
+            <span>Numéro ou Nom de la commande</span>
+            <span class="ml-2 text-sm font-bold text-gray-500">(facultatif)</span>
+          </h3>
+          <input
+            type="text"
+            name="nom_commande"
+            class=" w-full lg:w-5/6 rounded-md border border-gray-300"
+          />
+        </div>
         <h3
-          class="flex items-center justify-between rounded-t-lg bg-white p-5 text-[19px] text-primary
-          md:justify-start lg:rounded-none md:text-[25px]"
+          class="flex items-center justify-between bg-white p-2 lg:p-5 text-[19px] text-primary
+          md:justify-start md:text-[25px]"
         >
           <span>{{ partner.name }}</span>
-          <span class="ml-2 text-sm font-bold text-gray-500"
-            >{{ partner.products.length }} produit(s)</span
+          <span class="ml-2 text-sm font-bold text-gray-500">{{ partner.products.length }} produit(s)</span
           >
         </h3>
         <div class="hidden lg:flex lg:w-full lg:flex-row lg:bg-white lg:p-2">
           <div class="flex lg:w-7/12">
             <div class="ml-2">
-              <span class="mt-2 text-[14px] text-gray-400"
+              <span class="mt-2 text-sm text-gray-400"
                 >Description de l’article</span
               >
             </div>
           </div>
           <div class="flex lg:w-5/12">
             <div class="mr-5 w-2/12 text-center">
-              <span class="mt-2 text-[14px] text-gray-400">Qté</span>
+              <span class="mt-2 text-sm text-gray-400">Qté</span>
             </div>
             <div class="w-4/12 text-left">
-              <span class="mt-2 text-[14px] text-gray-400"
+              <span class="mt-2 text-sm text-gray-400"
                 >Prix unitaire HT</span
               >
             </div>
             <div class="w-4/12 text-left">
-              <span class="mt-2 text-[14px] text-gray-400">Sous-total HT</span>
+              <span class="mt-2 text-sm text-gray-400">Sous-total HT</span>
             </div>
             <div class="w-1/12"></div>
           </div>
@@ -54,19 +68,19 @@
         >
           <div class="hidden lg:ml-2 lg:flex lg:w-8/12"></div>
           <div class="w-4/12 text-center lg:w-2/12">
-            <span class="mt-2 text-[14px] text-gray-400"
+            <span class="mt-2 text-sm text-gray-400"
               >Sous-total fournisseur</span
             >
           </div>
           <div class="w-5/12 text-left lg:w-2/12 lg:text-center">
-            <span class="primary mt-2 text-lg font-bold"
+            <span class="text-primary mt-2 text-lg font-bold"
               >{{ totalPriceByPartner(partner.products) }}€ HT</span
             >
           </div>
           <div class="hidden lg:flex lg:w-1/12"></div>
         </div>
         <div
-          class="flex w-full flex-col rounded-b-lg bg-white p-2 px-3 lg:rounded-none lg:px-6"
+          class="flex w-full flex-col rounded-b-lg bg-white p-2 px-3 lg:px-6"
         >
           <p class="text-sm text-gray-500 lg:text-lg">
             {{ partner.label_livraison }}

@@ -13,7 +13,7 @@
       >
         <!-- Bloc text actualité -->
         <div>
-          <h3 class="primary page-principal-title mb-2">
+          <h3 class="primary text-title-35 mb-2">
             {{ contenusExpert[1].title }}
           </h3>
           <span

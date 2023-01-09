@@ -1,7 +1,7 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="primary mb-4 page-principal-title mt-2 md:mt-0">Modifier mon mot de passe</h3>
+      <h3 class="primary mb-4 text-title-35 mt-2 md:mt-0">Modifier mon mot de passe</h3>
       <div
           v-show="passwordError !== ''"
           class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert"

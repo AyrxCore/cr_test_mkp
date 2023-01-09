@@ -5,7 +5,7 @@
   />
   <ContactUsButtonComponent />
   <div class="text-green mt-3.5 flex flex-col lg:flex-row lg:items-center">
-    <h3 class="page-principal-title text-primary">
+    <h3 class="text-title-35 text-primary">
       ALDA MAJUSCULE-OFFICE DEPOT
     </h3>
     <div class="flex flex-row">
@@ -25,7 +25,7 @@
   <div class="mt-10 flex flex-col md:grid md:grid-cols-4 md:gap-4">
     <div class="flex items-center justify-center rounded-lg bg-white">
       <img
-        :src="aldaImg"
+        :src="kiloutouImg"
         alt="Picture"
         class="items-center rounded-lg sm:mx-auto"
       />
@@ -48,8 +48,14 @@ import LeafIconComponent from '@/vuejs/modules/shared/icon/LeafIconComponent.vue
 import InformationIconComponent from '@/vuejs/modules/shared/icon/InformationIconComponent.vue'
 import alda from '@/vuejs/assets/img/demo/alda.png'
 import aldaHeader from '@/vuejs/assets/img/demo/a-propos-header.jpg'
+import kiloutou from '@/vuejs/assets/img/samples/kiloutou.png'
+import renault from '@/vuejs/assets/img/samples/renault.png'
+
 const aldaImg = getImage(alda)
 const aldaHeaderImg = getImage(aldaHeader)
+
+const kiloutouImg  = getImage(kiloutou)
+const renaultImg  = getImage(renault)
 
 const listUrl = ref([
   {

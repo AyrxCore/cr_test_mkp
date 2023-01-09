@@ -3,7 +3,7 @@
     <template #right-side>
       <div class="flex justify-between">
         <div>
-          <h3 class="page-principal-title mb-2 mt-2 text-primary md:mt-0">
+          <h3 class="text-title-35 mb-2 mt-2 text-primary md:mt-0">
             Adresses
           </h3>
         </div>
@@ -25,7 +25,7 @@
             class="default-button btn-address"
             @click="onCreateAddressClick('shipping')"
           >
-            <AddIconComponent class="!mr-0 flex text-primary md:hidden" />
+            <AddIconComponent class="!mr-0 flex text-primary  w-[20px] md:hidden" />
             <span class="hidden md:flex">Ajouter une adresse de livraison</span>
           </ButtonComponent>
         </div>
@@ -42,7 +42,7 @@
             class="default-button btn-address"
             @click="onCreateAddressClick('billing')"
           >
-            <AddIconComponent class="!mr-0 flex text-primary md:hidden" />
+            <AddIconComponent class="!mr-0 flex text-primary  w-[20px] md:hidden" />
             <span class="hidden md:flex"
               >Ajouter une adresse de facturation</span
             >

@@ -31,38 +31,24 @@
           <span class="mt-2 flex text-sm text-green-400 lg:text-lg"
             >En stock</span
           >
+          <ProductRecapPriceComponent class="hidden mt-0 md:mt-5 md:flex lg:mt-0 lg:hidden">
+            <template #lineThroughPrice>
+              {{ product.price_line_through }}€ HT
+            </template>
+            <template #price>
+              {{ product.price }}€ HT
+            </template>
+          </ProductRecapPriceComponent>
         </div>
       </div>
-      <div
-        class="flex w-full items-center justify-between md:float-right lg:float-none lg:w-5/12"
-      >
-        <div class="text-center lg:mr-5 lg:w-2/12">
-          <input
-            :value="1"
-            type="text"
-            name="qte"
-            class="w-10 rounded-lg border border-gray-300 text-center lg:w-14"
-          />
-        </div>
-        <div class="lg:w-4/12">
-          <span class="mt-2 text-sm text-gray-400 lg:text-lg">
-            {{ product.price }}€ HT
-          </span>
-        </div>
-        <div class="lg:w-4/12">
-          <span class="mt-2 text-sm font-bold text-primary lg:text-lg">
-            {{ product.price }}€ HT
-          </span>
-        </div>
-        <div class="flex">
-          <button class="flex text-gray-500">
-            <HeartIconComponent class="mr-2 stroke-gray-500" />
-          </button>
-          <button class="flex text-gray-500">
-            <TrashIconComponent :stroke-color="'#5E6875'" />
-          </button>
-        </div>
-      </div>
+      <ProductRecapPriceComponent class="md:hidden lg:flex">
+        <template #lineThroughPrice>
+          {{ product.price_line_through }}€ HT
+        </template>
+        <template #price>
+          {{ product.price }}€ HT
+        </template>
+      </ProductRecapPriceComponent>
     </div>
   </div>
 </template>
@@ -70,6 +56,7 @@
 import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
 import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
 import CheckboxComponent from '@/vuejs/modules/shared/CheckboxComponent.vue'
+import ProductRecapPriceComponent from '@/vuejs/modules/cart/components/ProductRecapPriceComponent.vue';
 
 const props = defineProps({
   product: {

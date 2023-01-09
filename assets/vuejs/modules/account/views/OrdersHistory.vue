@@ -1,7 +1,7 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="primary page-principal-title my-2 lg:mb-2">Historique de commandes</h3>
+      <h3 class="primary text-title-35 my-2 lg:mb-2">Historique de commandes</h3>
       <span
         class="flex text-sm md:text-base text-gray-500"
         >

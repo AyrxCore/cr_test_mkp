@@ -1,7 +1,7 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="text-primary mb-2 page-principal-title mt-2 md:mt-0">Paniers sauvegardés</h3>
+      <h3 class="text-primary mb-2 text-title-35 mt-2 md:mt-0">Paniers sauvegardés</h3>
       <div class="mb-2.5 items-center text-sm lg:text-base text-gray-500 hidden md:flex">
         <div class="w-3/12">Nom du panier</div>
         <div class="w-2/12">Créé le</div>

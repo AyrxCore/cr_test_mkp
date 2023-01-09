@@ -12,13 +12,12 @@
             :key="key"
             class="border-b-2 border-gray-300 px-3 text-sm md:text-base lg:text-lg text-gray-500 hover:border-b-2 hover:border-secondary"
             :class="{
-              'border-b-2 border-purple-500': tab.id === selectedTab.value,
-              'border-b-2 border-primary-500': tab.id < selectedTab.value,
+              'border-b-2 border-secondary': tab.id === selectedTab.value,
             }"
           >
             <a
               :href="tab.url"
-              :class="{ primary: tab.id === selectedTab.value }"
+              :class="{ 'text-secondary': tab.id === selectedTab.value }"
               >{{ tab.name }}</a
             >
           </div>
@@ -26,7 +25,7 @@
         <div
           class="mt-10 flex flex-col-reverse lg:grid lg:grid-cols-4 lg:gap-4 lg:px-0"
         >
-          <div class="col-span-3 mt-10 lg:mt-0">
+          <div class="col-span-3 mt-10 lg:mt-0 rounded-lg">
             <slot name="left-side" />
           </div>
           <div class="rounded-lg">

@@ -2,7 +2,7 @@
   <AccountPage>
     <template #right-side>
       <div class="flex justify-between mt-2 md:mt-0">
-        <h3 class="text-primary mb-2 page-principal-title">Nom de la liste</h3>
+        <h3 class="text-primary mb-2 text-title-35">Nom de la liste</h3>
         <DefaultButtonComponent
           :btn-text-color="'text-purple-500'"
           :btn-color="'bg-transparent'"
