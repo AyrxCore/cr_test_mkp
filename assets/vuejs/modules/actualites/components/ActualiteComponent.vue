@@ -1,7 +1,6 @@
 <template>
   <div
     class="mx-auto flex h-[524px] flex-col items-center rounded-md bg-white px-6 py-2"
-    data-category="{{actualite.categorie.id}}"
   >
     <div class="mx-auto items-center">
       <a href="/app/actualite">
@@ -15,9 +14,9 @@
     <div class="mt-5 w-full justify-start">
       <p
         class="mb-3 w-max rounded-md px-2 py-1 text-white"
-        :class="actualite.categorie.color"
+        :class="actualite.categorie_color"
       >
-        {{ actualite.categorie.name }}
+        {{ actualite.categorie_name }}
       </p>
       <span class="text-gray-500">
         {{ actualite.date }}
@@ -28,8 +27,8 @@
         actualite.title
       }}</RouterLink>
     </h3>
-    <p class="mt-1 text-left text-lg text-gray-400">
-      {{ actualite.description }}
+    <p class="mt-1 text-left text-lg text-gray-400 flex">
+      {{ actualite.teaser }}
     </p>
     <div class="bottom-0 flex h-full w-full items-end">
       <RouterLink

@@ -234,6 +234,7 @@ import {
   productsSelectionHomepage,
 } from '@/vuejs/modules/products'
 import PartnersCarousel from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
+import { contenusExpert } from '@/vuejs/modules/actualites'
 
 import { ref } from 'vue'
 
@@ -263,27 +264,6 @@ const accords = ref([
   { img: getImage(imgAdecco), alt: 'Adecco' },
 ])
 
-const contenusExpert = ref([
-  {
-    img: getImage(imgMaps),
-    titre: 'Loi montagne : êtes-vous concernés ? ',
-    btnNam: 'Actualités',
-    description: 'A partir du 1er novembre 2022, la loi Montagne...',
-  },
-  {
-    img: getImage(imgCentral),
-    titre: 'Tout savoir sur le décret tertiaire',
-    btnNam: 'Actualités',
-    description:
-      'Le décret tertiaire impose une réduction \nde consommation...',
-  },
-  {
-    img: getImage(imgMagazine),
-    titre: 'Comment entretenir votre véhicule ? ',
-    btnNam: 'Conseil',
-    description: 'Les équipes de QANTIS ont conçu pour vous un guide...',
-  },
-])
 </script>
 
 <style lang="scss">

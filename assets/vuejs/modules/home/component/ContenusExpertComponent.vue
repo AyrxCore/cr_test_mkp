@@ -24,7 +24,7 @@
         <div class="grid lg:grid-cols-2">
           <div class="flex rounded-lg border-[#F3EDFE]">
             <img
-              :src="contenu.img"
+              :src="contenu.img_portrait"
               alt="Picture"
               class="items-center sm:mx-auto"
             />
@@ -38,11 +38,11 @@
                 href="#"
                 class="mr-2 mb-2 w-auto items-center rounded-md bg-purple-600 px-5 py-2.5 text-sm text-white"
               >
-                {{ contenu.btnNam }}
+                {{ contenu.categorie_name }}
               </a>
             </p>
             <p class="text-lg">
-              {{ contenu.description }}
+              {{ contenu.teaser }}
             </p>
             <div class="bottom-0">
               <a
