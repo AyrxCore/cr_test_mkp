@@ -4,6 +4,18 @@ export function getImage(urlImage: string): string {
   return new URL(urlImage, import.meta.url).href
 }
 
+export const HOME_TOP_VENTE_PROPERTY = {
+  property_id: '176',
+  value: '8389'
+}
+export const HOME_SELECTION_PROPERTY = {
+  property_id: '176',
+  value: '8388'
+}
+export const PRODUCT_ACCORD_PROPERTY = {
+  property_id: '176',
+  value: '8390'
+}
 export const listCategories = ref<string[]>([
   'Avantages salariés',
   'Certifications',

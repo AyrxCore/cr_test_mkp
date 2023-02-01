@@ -56,8 +56,8 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface, FixtureGr
         $account = new Account();
         $account->setUpplerUserId(103);
         $account->setUpplerCompanyId(12);
-        $account->setUpplerClientId('77_2nm0d8jjbi4g84swkcg80ossc0kwsk8c4wgwowk4g8g0gc048c');
-        $account->setUpplerClientSecret('sibr9m87pwgkgccso4cssc80o0cck4s8w80ko4coogwgckwkk');
+        $account->setUpplerClientId('17_3umu0hsqbpkwwg40wcwsk0o0ko8koskgc8kww4k08ok44cwcg0');
+        $account->setUpplerClientSecret('7s0wfr6lz9sscw84k48888c8cgo0ss44gs0g480oc8wgks0wg');
         $account->setUpplerUsername('m.frebet3');
         $account->setUpplerPassword('000000');
         $account->setUpplerSubAccountId(17);

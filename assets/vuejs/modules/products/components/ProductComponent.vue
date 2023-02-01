@@ -4,11 +4,11 @@
   >
     <!-- Bloc header -->
     <div class="flex w-full items-center justify-between">
-      <div class="flex h-[37px] w-[78px] items-center justify-start bg-white">
+      <div class="flex h-[50px] items-center justify-start bg-white">
         <img
-          :src="props.product.fournisseur_image"
-          alt="Image produit"
-          class="flex h-[100%!important]"
+          :src="props.product.company.avatar"
+          :alt="props.product.company.name"
+          class="flex "
         />
       </div>
       <div class="flex items-center justify-end">
@@ -24,8 +24,8 @@
       class="mx-auto flex h-[191px!important] w-full items-center justify-center rounded-lg"
     >
       <img
-        :src="props.product.image"
-        alt="Image produit"
+        :src="props.product.images[0]"
+        :alt="props.product.name"
         class="flex h-[191px!important]"
       />
     </div>
@@ -36,28 +36,27 @@
       <h3
         class="text-left text-sm font-bold text-gray-600 md:text-base lg:text-lg"
       >
-        <RouterLink :to="{ path: '/app/product' }">{{
+        <RouterLink :to="{ path: '/app/product/' + props.product.id }">{{
           props.product.name
         }}</RouterLink>
       </h3>
       <p
         class="mt-1 w-full justify-start text-left text-sm text-gray-400 md:text-base lg:text-lg"
-      >
-        {{ props.product.description }}
-      </p>
+        v-html="props.product.description"
+       />
     </div>
     <!-- Fin bloc nom et description -->
 
     <!-- Bloc prix -->
     <div class="flex w-full items-center justify-start xl:mt-2">
       <span class="mr-2 text-sm font-bold text-primary md:text-base lg:text-lg"
-        >{{ props.product.price }}€</span
+        >{{ props.product.price?.formattedDisplayPrice }}</span
       >
       <span
-        v-if="props.product.price_line_through"
         class="text-sm text-gray-400 line-through md:text-base lg:text-lg"
-        >{{ props.product.price_line_through }}€ HT</span
-      >
+        >
+          {{ props.product.basePrice?.formattedDisplayPrice }} HT
+      </span>
     </div>
     <!-- Fin bloc prix -->
 
@@ -79,18 +78,18 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { PropType, ref } from 'vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
 import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
+import {Product } from '@/vuejs/types/Product'
 
 const props = defineProps({
   product: {
     required: true,
-    type: Object,
+    type: Object as PropType<Product>,
   },
 })
-
 const isLoading = ref<boolean>(false)
 </script>
 

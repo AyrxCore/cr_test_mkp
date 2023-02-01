@@ -60,7 +60,8 @@
           D'autres adhérents ont déjà acheté ces produits
         </p>
       </div>
-      <ProductsCarouselComponent :products="productsTopVenteHomepage" />
+
+      <TopVenteComponent />
 
       <div class="mt-10">
         <h3 class="home-subtitle text-primary">
@@ -124,10 +125,8 @@
         </p>
       </div>
 
-      <ProductsCarouselComponent
-        :products="productsSelectionHomepage"
-        class="mt-4"
-      />
+      <SelectionComponent class="mt-4" />
+
       <!-- Fin bloc sélection de produits -->
       <div class="mt-10">
         <h3 class="home-subtitle text-primary">Nos partenaires fournisseurs</h3>
@@ -229,10 +228,6 @@ import banniereMobile1 from '@/vuejs/assets/img/demo/banniere-1-mobile.png'
 import banniereMobile2 from '@/vuejs/assets/img/demo/banniere-2-mobile.png'
 import { SwiperSlide } from 'swiper/vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import {
-  productsTopVenteHomepage,
-  productsSelectionHomepage,
-} from '@/vuejs/modules/products'
 import PartnersCarousel from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
 import { contenusExpert } from '@/vuejs/modules/actualites'
 
@@ -242,15 +237,13 @@ import imgPeugeot from '@/vuejs/assets/img/samples/peugeot.png'
 import imgLoxam from '@/vuejs/assets/img/samples/loxam.png'
 import imgBusiness from '@/vuejs/assets/img/samples/business.png'
 import imgAdecco from '@/vuejs/assets/img/samples/adecco.png'
-import imgMaps from '@/vuejs/assets/img/samples/img-maps.png'
-import imgCentral from '@/vuejs/assets/img/samples/img-central.png'
-import imgMagazine from '@/vuejs/assets/img/samples/img-magazine.png'
 import MailIconLightComponent from '@/vuejs/modules/shared/icon/MailIconLightComponent.vue'
 import PhoneLightIconComponent from '@/vuejs/modules/shared/icon/PhoneLightIconComponent.vue'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
-import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
 import ContenusExpertComponent from '@/vuejs/modules/home/component/ContenusExpertComponent.vue'
 import DropdownListComponent from '@/vuejs/modules/shared/DropdownListComponent.vue'
+import SelectionComponent from '@/vuejs/modules/home/component/SelectionComponent.vue'
+import TopVenteComponent from '@/vuejs/modules/home/component/TopVenteComponent.vue'
 
 const bannieres = ref([
   { image: getImage(banniere1), image_mobile: getImage(banniereMobile1) },

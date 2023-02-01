@@ -1,5 +1,5 @@
 import BaseClientService from '@/vuejs/services/BaseClientService'
-import {Address, AddressToSend} from '@/vuejs/types/Address'
+import {Address, AddressToUpdate} from '@/vuejs/types/Address'
 
 export default class CompanyHttpClient extends BaseClientService {
   public getAdressesAsBuyer<T extends []>(): Promise<T> {
@@ -20,7 +20,7 @@ export default class CompanyHttpClient extends BaseClientService {
       .then((response) => response.data)
   }
 
-  public updateAdressesAsAdmin<T extends []>(address: AddressToSend): Promise<T> {
+  public updateAdressesAsAdmin<T extends []>(address: AddressToUpdate): Promise<T> {
     return this.apiClient
         .put<T>(`company/addresses/${address.id}`, address)
         .then((response) => response.data)
