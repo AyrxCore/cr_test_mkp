@@ -1,9 +1,12 @@
 <template>
-  <BaseTemplate title="Qantis - MarketPlace">
-    <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 px-5 sm:px-8">
+  <BaseTemplate  title="Qantis - MarketPlace">
+    <div
+      v-if="product"
+      class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 px-5 sm:px-8"
+    >
       <breadcrumb-shared-component
-        :list-url="listUrl"
-        :current-page="'Produit'"
+        :list-url="breadcrumbUrl"
+        :current-page="product.name"
       />
       <div class="w-[100%] max-w-screen-2xl justify-end">
         <ContactUsButtonComponent />
@@ -16,8 +19,9 @@
           <ProductTitleComponent
             class="mb-5 flex rounded-lg bg-white p-5 lg:hidden"
           >
+
             <template #name> {{ product.name }}</template>
-            <template #partner> {{ product.partner }}</template>
+            <template #partner> {{ product.company.name }}</template>
             <template #reference> {{ product.reference }}</template>
           </ProductTitleComponent>
 
@@ -40,19 +44,19 @@
               <swiperSlide
                 v-for="(image, key) in product.images"
                 :key="key"
-                class="md:h-auto"
+                class="md:h-auto flex items-center justify-center"
               >
                 <img
-                  :src="image.img"
+                  :src="image"
                   alt="Picture"
-                  class="items-center sm:mx-auto"
+                  class="items-center sm:mx-auto h-auto"
                 />
               </swiperSlide>
             </CarouselListSharedComponent>
           </div>
           <div class="relative">
             <CarouselListSharedComponent
-              class="mx-auto mt-5 hidden h-[150px] items-center rounded-xl px-4 py-4 md:flex md:justify-center"
+              class="mx-auto mt-5 hidden h-[150px] items-center px-4 py-4 md:flex md:justify-center"
               :space-between="10"
               watch-slides-progress
               :pagination="false"
@@ -70,9 +74,9 @@
             >
               <swiperSlide v-for="(image, key) in product.images" :key="key">
                 <img
-                  :src="image.img"
+                  :src="image"
                   alt="Picture"
-                  class="items-center rounded bg-white"
+                  class="items-center rounded bg-white rounded-xl"
                 />
               </swiperSlide>
             </CarouselListSharedComponent>
@@ -85,24 +89,29 @@
           <div
             class="mt-5 flex flex-col rounded-lg bg-white p-5 md:mt-0 md:p-7"
           >
+
             <ProductTitleComponent class="hidden lg:flex">
               <template #name> {{ product.name }}</template>
-              <template #partner> {{ product.partner }}</template>
+              <template #partner> {{ product.company.name }}</template>
               <template #reference> {{ product.reference }}</template>
             </ProductTitleComponent>
             <div class="mt-14 hidden flex-col lg:flex">
               <div>
                 <span
+                  v-if="product.priceReference"
                   class="text-sm text-gray-500 line-through md:text-base lg:text-lg"
-                  >{{ product.priceReduce }}€ HT
+                  >{{ product.priceReference }} HT
                 </span>
                 <span
+                  v-if="product.percent > 0"
                   class="ml-2 rounded-lg bg-purple-600 px-2.5 py-1.5 text-white"
                   >{{ product.percent }}%</span
                 >
               </div>
-              <div class="mt-3 text-[25px] font-bold text-primary">
-                {{ product.price }}€ HT
+              <div
+                v-if="product.price?.formattedDisplayPrice"
+                class="mt-3 text-[25px] font-bold text-primary">
+                {{ product.price?.formattedDisplayPrice }} HT
               </div>
             </div>
             <div class="lg:mt-12">
@@ -129,19 +138,22 @@
                   >Conditionnement conseillé : {{ product.conditionnement }}
                 </span>
               </p>
-              <div class="mt-12 md:w-1/2">
+              <div class="mt-12">
                 <div
-                  v-for="(attr, key) in productAttrubutes"
+                  v-for="(children, key) in product.options"
                   :key="key"
                   class="mt-2 w-full items-center text-gray-500"
                 >
                   <span class="text-sm text-gray-500 md:text-base lg:text-lg">{{
-                    attr
+                      key
                   }}</span>
                   <select
-                    class="right-0 float-right ml-2 h-[1.75rem] w-[25%] rounded-md border border-[#5E6875] pt-0"
+                    v-if="children.length > 1"
+                    class="right-0 float-right ml-2 h-[1.75rem] w-1/2 rounded-md border border-[#5E6875] pt-0"
                   >
-                    <option></option>
+                    <option v-for="child in children" :key="child.id">
+                        {{ child.value }}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -154,11 +166,11 @@
             </h3>
             <ul class="list-disc text-gray-500">
               <li
-                v-for="(livraison, key) in product.livraison"
+                v-for="(livraison, key) in product.livraisons"
                 :key="key"
                 class="mt-1 ml-7 text-sm md:text-base lg:text-lg"
               >
-                {{ livraison.label }}
+                {{ livraison }}
               </li>
             </ul>
           </div>
@@ -178,7 +190,8 @@
               </h3>
               <a
                 href="#"
-                class="default-button-gradient mt-2 inline-flex justify-center px-3.5 py-3 text-center text-sm font-bold text-white md:text-base lg:text-lg"
+                class="default-button-gradient mt-2 inline-flex justify-center
+                 px-3.5 py-3 text-center text-sm font-bold text-white md:text-base lg:text-lg"
               >
                 <ArrowRigntIconComponent
                   class="mt-1 mr-2 w-4 items-center"
@@ -197,9 +210,8 @@
         <h3 class="home-subtitle mb-5 text-primary">Description</h3>
         <p
           class="whitespace-pre-line text-sm text-gray-500 md:text-base lg:text-lg"
-        >
-          {{ product.description }}
-        </p>
+          v-html="product.description"
+        />
         <div class="flex flex-col md:mt-[60px] md:flex-row">
           <div
             class="mt-5 rounded-lg bg-white p-5 md:mt-0 md:mr-2 lg:h-[180px] lg:p-7"
@@ -224,11 +236,11 @@
             </h3>
             <ul class="list-disc text-gray-500">
               <li
-                v-for="(doc, key) in documentation"
+                v-for="(documentation, key) in documentations"
                 :key="key"
                 class="mt-1 ml-7 text-sm md:text-base lg:text-lg"
               >
-                <a href="#" class="underline">{{ doc }}</a>
+                <a href="#" class="underline">{{ documentation }}</a>
               </li>
             </ul>
           </div>
@@ -244,12 +256,12 @@
         <table class="w-full table-auto border bg-white p-8">
           <tbody>
             <tr
-              v-for="(caracteristique, key) in product.caracteristiques"
-              :key="key"
+              v-for="property in product.properties"
+              :key="property.id"
               class="border text-sm text-primary md:text-base lg:text-lg"
             >
-              <td class="w-[20%] border p-2">{{ caracteristique.name }}</td>
-              <td class="p-2">{{ caracteristique.value }}</td>
+              <td class="w-[20%] border p-2">{{ property.name }}</td>
+              <td class="p-2">{{ property.value }}</td>
             </tr>
           </tbody>
         </table>
@@ -257,10 +269,9 @@
       <!-- Fin Bloc Caractéristiques techniques -->
 
       <!-- Bloc produits similaire -->
-      <div class="mt-10 justify-center">
+      <!-- <div class="mt-10 justify-center">
         <h3 class="home-subtitle text-primary">Produits similaires</h3>
-        <ProductsCarouselComponent :products="productsSimilaire" class="mt-4" />
-      </div>
+      </div> -->
       <!-- Fiin bloc produits similaire -->
     </div>
   </BaseTemplate>
@@ -271,36 +282,45 @@ import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
 import { getImage } from '@/vuejs/services/utils'
 import helpImage from '@/vuejs/assets/img/samples/img-help-product.png'
-import { ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { SwiperSlide } from 'swiper/vue'
 import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
 import ArrowRigntIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import LeafIconComponent from '@/vuejs/modules/shared/icon/LeafIconComponent.vue'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
-import { product, productsSimilaire } from '@/vuejs/modules/products'
-import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
 import ButtonAddToCartComponent from '@/vuejs/modules/products/components/ButtonAddToCartComponent.vue'
 import ProductTitleComponent from '@/vuejs/modules/products/components/ProductTitleComponent.vue'
+import { useRoute } from 'vue-router'
+import { useProductStore } from '@/vuejs/stores/product'
+import Product from '@/vuejs/modules/products/views/Product.vue'
 
+
+const route = useRoute()
+const productStore = useProductStore()
 const helpImageFile = getImage(helpImage)
 const thumbsSwiper = ref(null)
 
-const productAttrubutes = ref(['Taille', 'Couleur', 'Autre propriété produit'])
+const product = ref<Product>()
 
-const listUrl = ref([
-  {
-    name: 'Catégories',
-  },
-  {
-    name: 'Sous Catégories',
-  },
-])
+const breadcrumbUrl = computed(() => {
+  const breadcrumb = []
+  if (product.value) {
+    Object.entries(product.value.categories).forEach(([key, value], index) => {
+      breadcrumb.push({
+        id: key,
+        name: value,
+      })
+    })
+  }
 
-const documentation = ref([
+  return breadcrumb
+})
+
+const documentations = ref([
   'Fiche produit',
   'Fiche technique',
-  "Guid d'utilisation",
+  "Guide d'utilisation",
 ])
 
 const onSlideChange = () => {
@@ -310,6 +330,14 @@ const onSlideChange = () => {
 const setThumbsSwiper = (swiper) => {
   thumbsSwiper.value = swiper
 }
+
+watch(
+  () => route.params.id as string,
+  async (id: string) => {
+        if (id) product.value = await productStore.findProductById(id)
+      },
+  { immediate: true },
+)
 </script>
 
 <style scoped></style>

@@ -6,13 +6,13 @@ import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
 import { getErrorMessage } from '@/vuejs/services/login'
 import ProductHttpClient from '@/vuejs/services/httpclient/ProductHttpClient'
 import { Product } from '@/vuejs/types/Product'
+import { Address } from '@/vuejs/types/Address';
 
 export interface ProductStoreState {
   products: Product[],
   productsTopVente: Product[],
   productsSelection: Product[],
   cart: [],
-  currentProductId: number
 }
 
 export const useProductStore = defineStore({
@@ -21,7 +21,6 @@ export const useProductStore = defineStore({
     products: [],
     productsTopVente: [],
     productsSelection: [],
-    currentProductId: null,
     cart: []
   }),
 
@@ -54,20 +53,17 @@ export const useProductStore = defineStore({
       }
     },
 
-    async getProduct() {
+    async findProductById(id) {
       const alertStore = useAlertStore()
-      if (this.currentProductId) {
-        try {
-          return await ProductHttpClient.get().getProduct(this.currentProductId)
-        } catch (error) {
-          error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow(
-            getErrorMessage(error.response.data.message),
-            AlertType.danger,
-          )
-        }
+      try {
+        return await ProductHttpClient.get().getProduct(id)
+      } catch (error) {
+        error.response.status === HttpStatusCodes.unauthorized &&
+        alertStore.setShow(
+          getErrorMessage(error.response.data.message),
+          AlertType.danger,
+        )
       }
-      return null
 
     },
   },

@@ -1,6 +1,6 @@
 <template>
   <nav class="bg-grey-light w-full rounded-md text-xs">
-    <ol class="list-reset flex text-xs">
+    <ol class="list-reset text-xs hidden lg:flex">
       <li>
         <RouterLink :to="{ path: '/app/home' }" class="text-gray-400">
           Accueil
@@ -21,23 +21,37 @@
       </li>
       <li class="text-gray-400">{{ currentPage }}</li>
     </ol>
+    <div class="flex lg:hidden">
+      <ChevronRightIconComponent
+        class="mr-1 h-4 text-gray-500 rotate-180"
+        :stroke-color="'#A4A4A4'"
+      />
+      <RouterLink :to="{ path: lastBreadcrumbUrl.url ?? '#' }" class="text-gray-400">{{
+          lastBreadcrumbUrl.name
+        }}</RouterLink>
+    </div>
+
   </nav>
 </template>
 
 <script lang="ts" setup>
 import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightIconComponent.vue'
-import { PropType } from 'vue'
+import { computed, PropType } from 'vue'
 
 const props = defineProps({
   listUrl: {
     required: false,
     type: Object as PropType<any[]>,
-    default: [],
+    default: null,
   },
   currentPage: {
     required: true,
     type: String,
   },
+})
+
+const lastBreadcrumbUrl = computed(() => {
+    return props.listUrl[props.listUrl.length - 1]
 })
 </script>
 

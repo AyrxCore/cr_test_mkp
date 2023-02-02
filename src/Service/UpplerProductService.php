@@ -18,6 +18,7 @@ class UpplerProductService extends HttpClientProvider
 {
     private const DEFAULT_IMG = '/vuejs/assets/img/default-image.png';
     private string $upplerUrlSourceProductImg;
+    private string $upplerUrlSourceListProductImg;
     private string $upplerUrlSourceSellerImg;
     public function __construct(
         string $env,
@@ -27,11 +28,13 @@ class UpplerProductService extends HttpClientProvider
         string $adminTokenFile,
         string $httpCachePath,
         string $upplerUrlSourceProductImg,
+        string $upplerUrlSourceListProductImg,
         string $upplerUrlSourceSellerImg
     )
     {
         parent::__construct($env, $apiUrl, $adminClientId, $adminClientSecret, $adminTokenFile, $httpCachePath);
         $this->upplerUrlSourceProductImg = $upplerUrlSourceProductImg;
+        $this->upplerUrlSourceListProductImg = $upplerUrlSourceListProductImg;
         $this->upplerUrlSourceSellerImg = $upplerUrlSourceSellerImg;
     }
 
@@ -104,8 +107,6 @@ class UpplerProductService extends HttpClientProvider
         } else {
             throw new NotFoundHttpException('Aucun produit trouvé');
         }
-
-        return [];
     }
 
     public function getSeller(int $companyId = null): Seller | null
@@ -153,13 +154,17 @@ class UpplerProductService extends HttpClientProvider
 
         $images = [];
         foreach ($remoteProduct->images as $image) {
-            $images[] = !empty($image->path) ? $this->upplerUrlSourceProductImg . $image->path : self::DEFAULT_IMG ;
+            $images[] = !empty($image->path) ? $this->upplerUrlSourceListProductImg . $image->path : self::DEFAULT_IMG ;
         }
         $product->setImages($images);
 
         $options = [];
         foreach ($remoteProduct->option_values as $option_value) {
-            $options[$option_value->id] = $option_value->value->default ?? null;
+            $options[$option_value->option->name->default ?? ''][] = [
+                'parent_id' => $option_value->option->id,
+                'id' => $option_value->id,
+                'value' => $option_value->value->default ?? null
+            ];
         }
         $product->setOptions($options);
 
@@ -178,27 +183,26 @@ class UpplerProductService extends HttpClientProvider
             $price = new Price();
             $price->setId($remoteProduct->price->id);
             $price->setAmount($remoteProduct->price->amount);
-            $price->setDisplayPrice($remoteProduct->price->display_price);
+            $price->setDisplayPrice(round($remoteProduct->price->display_price * 0.01, 2));
             $price->setFormattedDisplayPrice($remoteProduct->price->formatted_display_price);
             $price->setFormattedDisplayUnitPrice($remoteProduct->price->formatted_display_unit_price);
             $product->setPrice($price);
         }
 
-        if (null !== $remoteProduct->base_price) {
-            $basePrice = new Price();
-            $basePrice->setId($remoteProduct->base_price->id);
-            $basePrice->setAmount($remoteProduct->base_price->amount);
-            $basePrice->setDisplayPrice($remoteProduct->base_price->display_price);
-            $basePrice->setFormattedDisplayPrice($remoteProduct->base_price->formatted_display_price);
-            $basePrice->setFormattedDisplayUnitPrice($remoteProduct->base_price->formatted_display_unit_price);
-            $product->setBasePrice($basePrice);
+        if ($product->getPriceReference() && $product->getPrice()) {
+            $priceDiff = $product->getPriceReference() - $product->getPrice()->getDisplayPrice();
+            $percent = round(($priceDiff * 100) / $product->getPriceReference() );
+            $product->setPercent($percent);
         }
-
 
         if (isset($remoteProduct->company->id)) {
             $company = $this->getSeller($remoteProduct->company->id);
             $product->setCompany($company);
         }
+
+        #TODO A remplacer par les vraies données après concertation avec JM
+        $product->setConditionnement('1');
+        $product->setLivraisons(['Franco à partir de 50€ HT de commande - en dessous, 12€ HT de frais de port seront appliqués.']);
 
         return $product;
     }

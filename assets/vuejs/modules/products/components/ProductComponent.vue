@@ -21,12 +21,12 @@
 
     <!-- Bloc image -->
     <div
-      class="mx-auto flex h-[191px!important] w-full items-center justify-center rounded-lg"
+      class="mx-auto flex h-auto w-full items-center justify-center rounded-lg"
     >
       <img
         :src="props.product.images[0]"
         :alt="props.product.name"
-        class="flex h-[191px!important]"
+        class="flex"
       />
     </div>
     <!-- Fin bloc image -->
@@ -36,9 +36,7 @@
       <h3
         class="text-left text-sm font-bold text-gray-600 md:text-base lg:text-lg"
       >
-        <RouterLink :to="{ path: '/app/product/' + props.product.id }">{{
-          props.product.name
-        }}</RouterLink>
+        <RouterLink :to="{ path: `/app/product/${props.product.id}` }">{{ props.product.name }}</RouterLink>
       </h3>
       <p
         class="mt-1 w-full justify-start text-left text-sm text-gray-400 md:text-base lg:text-lg"
@@ -49,13 +47,15 @@
 
     <!-- Bloc prix -->
     <div class="flex w-full items-center justify-start xl:mt-2">
-      <span class="mr-2 text-sm font-bold text-primary md:text-base lg:text-lg"
+      <span
+        class="mr-2 text-sm font-bold text-primary md:text-base lg:text-lg"
         >{{ props.product.price?.formattedDisplayPrice }}</span
       >
       <span
+        v-if="showLineThroughPrice"
         class="text-sm text-gray-400 line-through md:text-base lg:text-lg"
         >
-          {{ props.product.basePrice?.formattedDisplayPrice }} HT
+          {{ props.product.priceReference }}€ HT
       </span>
     </div>
     <!-- Fin bloc prix -->
@@ -78,7 +78,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { PropType, ref } from 'vue'
+import { computed, PropType, ref } from 'vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
 import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
@@ -91,6 +91,10 @@ const props = defineProps({
   },
 })
 const isLoading = ref<boolean>(false)
+
+const showLineThroughPrice = computed(() => {
+  return props.product.priceReference && props.product.priceReference !== props.product.price?.displayPrice
+})
 </script>
 
 <style scoped></style>

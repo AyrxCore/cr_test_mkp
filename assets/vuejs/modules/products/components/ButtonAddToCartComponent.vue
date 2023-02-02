@@ -4,23 +4,28 @@
   >
     <div class="flex w-full flex-col">
       <div
-        v-if="product"
+        v-if="props.product"
         class="mb-2 flex flex-row items-center justify-between md:justify-evenly lg:hidden"
       >
-        <div class="flex items-center justify-center text-center">
+        <div
+          v-if="props.product.priceReference"
+          class="flex items-center justify-center text-center">
           <span class="text-lg text-gray-500 line-through"
-            >{{ product.priceReduce }}€ HT
+            >{{ props.product.priceReference }}€ HT
           </span>
         </div>
         <div
+          v-if="props.product.price?.formattedDisplayPrice"
           class="flex items-center justify-center text-[22px] font-bold text-primary md:text-[25px]"
         >
-          {{ product.price }}€ HT
+          {{ props.product.price?.formattedDisplayPrice }} HT
         </div>
-        <div class="mt-3 ml-2 flex">
+        <div
+          class="mt-3 ml-2 flex">
           <span
+            v-if="props.product.percent > 0"
             class="ml-2 rounded-lg bg-purple-600 px-2.5 py-1.5 text-sm text-white md:text-lg"
-            >{{ product.percent }}%</span
+            >{{ props.product.percent }} %</span
           >
         </div>
       </div>
@@ -43,11 +48,14 @@
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
 import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
+import { PropType } from 'vue'
+import { Product } from '@/vuejs/types/Product'
 
 const props = defineProps({
   product: {
     required: false,
-    type: Object,
+    type: Object as PropType<Product>,
+    default: null,
   },
 })
 </script>

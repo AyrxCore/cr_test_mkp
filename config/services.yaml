@@ -16,6 +16,7 @@ parameters:
   #Expéditeur des mails
   mail_from: '%env(MAIL_FROM)%'
   uppler_url_source_product_img: '%env(UPPLER_URL_SOURCE_PRODUCT_IMG)%'
+  uppler_url_source_list_product_img: '%env(UPPLER_URL_SOURCE_LIST_PRODUCT_IMG)%'
   uppler_url_source_seller_img: '%env(UPPLER_URL_SOURCE_SELLER_IMG)%'
 services:
   # default configuration for services in *this* file
@@ -71,4 +72,5 @@ services:
     parent: App\Service\HttpClientProvider
     arguments:
       $upplerUrlSourceProductImg: '%uppler_url_source_product_img%'
+      $upplerUrlSourceListProductImg: '%uppler_url_source_list_product_img%'
       $upplerUrlSourceSellerImg: '%uppler_url_source_seller_img%'

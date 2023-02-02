@@ -12,7 +12,7 @@ final class Price implements \JsonSerializable
     private int $id;
 
     private ?int $amount;
-    private ?int $displayPrice;
+    private ?float $displayPrice;
     private ?string $formattedDisplayPrice;
     private ?string $formattedDisplayUnitPrice;
 
@@ -47,15 +47,15 @@ final class Price implements \JsonSerializable
     /**
      * @return int|null
      */
-    public function getDisplayPrice(): ?int
+    public function getDisplayPrice(): ?float
     {
         return $this->displayPrice;
     }
 
     /**
-     * @param int|null $displayPrice
+     * @param float|null $displayPrice
      */
-    public function setDisplayPrice(?int $displayPrice): void
+    public function setDisplayPrice(?float $displayPrice): void
     {
         $this->displayPrice = $displayPrice;
     }

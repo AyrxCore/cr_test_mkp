@@ -5,16 +5,8 @@ declare(strict_types=1);
 namespace App\Dto;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
-use ApiPlatform\Core\Annotation\ApiResource;
 
-#[ApiResource(
-    itemOperations: [
-        'get' => [
-            'path' => '/company/{id}',
-            'requirements' => ['id' => '\d+']
-        ],
-    ]
-)]
+
 final class Seller implements \JsonSerializable
 {
     #[ApiProperty(identifier: true)]

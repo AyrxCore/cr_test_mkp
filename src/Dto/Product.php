@@ -35,14 +35,17 @@ final class Product implements \JsonSerializable
     private ?string $name;
     private ?string $reference;
     private ?string $description;
+    private ?string $conditionnement;
+    private array $livraisons;
     private array $categories;
     private array $images;
     private array $options;
     private array $properties;
     private array $variants;
     private ?float $priceReference;
-    private ?Price $price;
-    private ?Price $basePrice;
+    private ?float $percent = 0;
+    private ?Price $price = null;
+    private ?Price $basePrice = null;
     private ?Seller $company;
 
     public function getId(): ?int
@@ -249,8 +252,57 @@ final class Product implements \JsonSerializable
         $this->company = $company;
     }
 
+    /**
+     * @return string|null
+     */
+    public function getConditionnement(): ?string
+    {
+        return $this->conditionnement;
+    }
+
+    /**
+     * @param string|null $conditionnement
+     */
+    public function setConditionnement(?string $conditionnement): void
+    {
+        $this->conditionnement = $conditionnement;
+    }
+
+    /**
+     * @return array
+     */
+    public function getLivraisons(): array
+    {
+        return $this->livraisons;
+    }
+
+    /**
+     * @param array $livraisons
+     */
+    public function setLivraisons(array $livraisons): void
+    {
+        $this->livraisons = $livraisons;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getPercent(): ?float
+    {
+        return $this->percent;
+    }
+
+    /**
+     * @param float|null $percent
+     */
+    public function setPercent(?float $percent): void
+    {
+        $this->percent = $percent;
+    }
+
     public function jsonSerialize()
     {
         return  get_object_vars($this);
     }
+
 }
