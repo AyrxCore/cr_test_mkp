@@ -9,6 +9,7 @@ use App\Dto\Price;
 use App\Dto\Product;
 use App\Dto\Property;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -29,7 +30,8 @@ class UpplerProductService extends HttpClientProvider
         string $httpCachePath,
         string $upplerUrlSourceProductImg,
         string $upplerUrlSourceListProductImg,
-        string $upplerUrlSourceSellerImg
+        string $upplerUrlSourceSellerImg,
+        private AdapterInterface $cache
     )
     {
         parent::__construct($env, $apiUrl, $adminClientId, $adminClientSecret, $adminTokenFile, $httpCachePath);
@@ -87,6 +89,12 @@ class UpplerProductService extends HttpClientProvider
         $session = $this->requestStack->getSession();
         $session->start();
 
+        $item = $this->cache->getItem('product_id_' . $productId);
+
+        if ($item->isHit()) {
+            return $item->get();
+        }
+
         $filters =  empty($filters) ? ['price', 'properties', 'variants'] : $filters;
 
         $urlFilters = null;
@@ -103,7 +111,13 @@ class UpplerProductService extends HttpClientProvider
         );
 
         if (Response::HTTP_OK === $res->getStatusCode()) {
-            return $this->populateProduct(json_decode($res->getContent()));
+
+            $product = $this->populateProduct(json_decode($res->getContent()));
+            $item->set($product);
+            $item->expiresAfter(new \DateInterval('P1D')); // the item will be cached for 10 seconds
+            $this->cache->save($item);
+
+            return $item->get();
         } else {
             throw new NotFoundHttpException('Aucun produit trouvé');
         }

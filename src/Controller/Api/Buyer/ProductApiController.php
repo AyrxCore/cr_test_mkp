@@ -43,6 +43,7 @@ class ProductApiController extends AbstractController
             return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
+        $this->cache->clear($cacheKey);
         $item = $this->cache->getItem($cacheKey);
         if (!$item->isHit()) {
             $products = $this->upplerProductService->searchProductsByParams($options, ['price', 'properties']);

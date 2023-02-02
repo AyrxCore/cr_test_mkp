@@ -15,10 +15,10 @@
           </span>
         </div>
         <div
-          v-if="props.product.price?.formattedDisplayPrice"
+          v-if="props.product.price?.displayPrice"
           class="flex items-center justify-center text-[22px] font-bold text-primary md:text-[25px]"
         >
-          {{ props.product.price?.formattedDisplayPrice }} HT
+          {{ props.product.price?.displayPrice }}€ HT
         </div>
         <div
           class="mt-3 ml-2 flex">

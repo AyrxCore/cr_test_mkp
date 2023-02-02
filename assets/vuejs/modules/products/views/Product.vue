@@ -99,19 +99,22 @@
               <div>
                 <span
                   v-if="product.priceReference"
-                  class="text-sm text-gray-500 line-through md:text-base lg:text-lg"
-                  >{{ product.priceReference }} HT
+                  :class="{
+                    'line-through text-sm text-gray-500  md:text-base lg:text-lg': product.price?.displayPrice,
+                    'text-[25px] font-bold text-primary': product.price === null
+                  }"
+                  >{{ product.priceReference }}€ HT
                 </span>
                 <span
                   v-if="product.percent > 0"
-                  class="ml-2 rounded-lg bg-purple-600 px-2.5 py-1.5 text-white"
+                  class="ml-2 rounded-lg bg-secondary px-2.5 py-1.5 text-white"
                   >{{ product.percent }}%</span
                 >
               </div>
               <div
-                v-if="product.price?.formattedDisplayPrice"
+                v-if="product.price?.displayPrice"
                 class="mt-3 text-[25px] font-bold text-primary">
-                {{ product.price?.formattedDisplayPrice }} HT
+                {{ product.price?.displayPrice }}€ HT
               </div>
             </div>
             <div class="lg:mt-12">

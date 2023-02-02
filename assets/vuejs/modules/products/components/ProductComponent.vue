@@ -48,12 +48,16 @@
     <!-- Bloc prix -->
     <div class="flex w-full items-center justify-start xl:mt-2">
       <span
+        v-if="props.product.price?.displayPrice"
         class="mr-2 text-sm font-bold text-primary md:text-base lg:text-lg"
-        >{{ props.product.price?.formattedDisplayPrice }}</span
+        >{{ props.product.price?.displayPrice }}€</span
       >
       <span
         v-if="showLineThroughPrice"
-        class="text-sm text-gray-400 line-through md:text-base lg:text-lg"
+        :class="{
+          'line-through text-sm text-gray-500  md:text-base lg:text-lg': product.price?.displayPrice,
+          'text-sm md:text-base lg:text-lg font-bold text-primary': product.price === null
+        }"
         >
           {{ props.product.priceReference }}€ HT
       </span>
