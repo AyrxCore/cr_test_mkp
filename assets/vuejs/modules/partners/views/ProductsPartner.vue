@@ -1,7 +1,17 @@
 <template>
   <BaseTemplate title="Qantis - MarketPlace">
-    <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl px-5 sm:px-8">
-      <HeaderPartnerComponent />
+    <div
+      v-if="accord"
+      class="xs:w-[100%] m-auto my-4 max-w-screen-2xl px-5 sm:px-8"
+    >
+
+      <HeaderPartnerComponent
+        :name="accord.name"
+        :note="accord.properties.note_rse"
+        :logo="accord.properties.logo_partenaire"
+        :barner="accord.properties.banniere_partenaire"
+        :categories="accord.categories"
+      />
 
       <div
         class="mt-10 mb-7.5 flex flex-row items-center justify-end text-[14px] text-gray-500"
@@ -116,6 +126,27 @@ import {
 import alda from '@/vuejs/assets/img/demo/alda-partner.png'
 import { getImage } from '@/vuejs/services/utils'
 import DropdownListComponent from '@/vuejs/modules/shared/DropdownListComponent.vue'
+import { AccordCadre } from '@/vuejs/types/AccordCadre'
+import { useRoute } from 'vue-router'
+import { useAccordCadreStore } from '@/vuejs/stores/accord_cadre'
+import { computed, ref, watch } from 'vue'
+
+const route = useRoute()
+const accordStore = useAccordCadreStore()
+
+const accord = ref<AccordCadre>()
+
+const breadcrumbUrl = computed(() => {
+  return []
+})
+
+watch(
+  () => route.params.id as string,
+  async (id: string) => {
+    if (id) accord.value = await accordStore.findAccordCadreById(id)
+  },
+  { immediate: true },
+)
 </script>
 
 <style scoped>

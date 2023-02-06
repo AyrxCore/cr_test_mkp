@@ -8,119 +8,48 @@ use App\Dto\Seller;
 use App\Dto\Price;
 use App\Dto\Product;
 use App\Dto\Property;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Cache\Adapter\AdapterInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Contracts\Service\Attribute\Required;
 
-class UpplerProductService extends HttpClientProvider
+class UpplerProductService extends AbstractUpplerProductService
 {
-    private const DEFAULT_IMG = '/vuejs/assets/img/default-image.png';
-    private string $upplerUrlSourceProductImg;
-    private string $upplerUrlSourceListProductImg;
-    private string $upplerUrlSourceSellerImg;
-    public function __construct(
-        string $env,
-        string $apiUrl,
-        string $adminClientId,
-        string $adminClientSecret,
-        string $adminTokenFile,
-        string $httpCachePath,
-        string $upplerUrlSourceProductImg,
-        string $upplerUrlSourceListProductImg,
-        string $upplerUrlSourceSellerImg,
-        private AdapterInterface $cache
-    )
+    public function getProductsByParams(array $options = [], array $filters = []): array | null
     {
-        parent::__construct($env, $apiUrl, $adminClientId, $adminClientSecret, $adminTokenFile, $httpCachePath);
-        $this->upplerUrlSourceProductImg = $upplerUrlSourceProductImg;
-        $this->upplerUrlSourceListProductImg = $upplerUrlSourceListProductImg;
-        $this->upplerUrlSourceSellerImg = $upplerUrlSourceSellerImg;
-    }
-
-    #[Required]
-    public RequestStack $requestStack;
-
-    #[Required]
-    public EntityManagerInterface $em;
-
-    public function searchProductsByParams(array $options = [], array $filters = []): array | null
-    {
-        $session = $this->requestStack->getSession();
-        $session->start();
-
-        $urlFilters = null;
-
-        if (!empty($filters)) {
-            foreach ($filters as $filter) {
-                $urlFilters.= null === $urlFilters ? '?expand[]=' . $filter : '&expand[]=' . $filter;
-            }
+        $res = $this->searchProductsByParams($options, $filters);
+        if (null === $res) {
+            return null;
         }
 
-        $res = $this->request(
-            'POST',
-            $this->apiUrl . 'v1/buyer/search/product'. $urlFilters,
-            [
-                'json' => $options
-            ]
-        );
-
-        if (Response::HTTP_OK === $res->getStatusCode()) {
-            $upplerProductsData =  json_decode($res->getContent());
-            $products = [];
-            foreach ($upplerProductsData->results as $result) {
-                $products[] = $this->getProduct($result->id);
-            }
-            return [
-                'filters'=> $upplerProductsData->filters,
-                'results_count' => $upplerProductsData->results_count,
-                'page' => $upplerProductsData->page,
-                'results' => $products
-            ];
+        $products = [];
+        foreach ($res->results as $result) {
+            $products[] = $this->getProduct($result->id);
         }
-
-        return null;
+        return [
+            'filters'=> $res->filters,
+            'results_count' => $res->results_count,
+            'page' => $res->page,
+            'results' => $products
+        ];
     }
 
-    public function getProduct(int $productId = null, array $filters = []): Product
+    public function getProduct(int $productId = null, array $filters = []): Product|null
     {
-        $session = $this->requestStack->getSession();
-        $session->start();
-
-        $item = $this->cache->getItem('product_id_' . $productId);
+        $item = $this->cache->getItem('product_' . $productId);
 
         if ($item->isHit()) {
             return $item->get();
         }
+        $res = $this->getObject($productId, $filters);
 
-        $filters =  empty($filters) ? ['price', 'properties', 'variants'] : $filters;
-
-        $urlFilters = null;
-
-        if (!empty($filters)) {
-            foreach ($filters as $filter) {
-                $urlFilters.= null === $urlFilters ? '?expand[]=' . $filter : '&expand[]=' . $filter;
-            }
+        if (null === $res) {
+            return null;
         }
 
-        $res = $this->request(
-            'GET',
-            $this->apiUrl . 'v1/buyer/product/' . $productId . $urlFilters
-        );
+        $item->set($this->populateProduct($res));
+        $item->expiresAfter(new \DateInterval('P1D')); // the item will be cached for 10 seconds
+        $this->cache->save($item);
 
-        if (Response::HTTP_OK === $res->getStatusCode()) {
-
-            $product = $this->populateProduct(json_decode($res->getContent()));
-            $item->set($product);
-            $item->expiresAfter(new \DateInterval('P1D')); // the item will be cached for 10 seconds
-            $this->cache->save($item);
-
-            return $item->get();
-        } else {
-            throw new NotFoundHttpException('Aucun produit trouvé');
-        }
+        return $item->get();
     }
 
     public function getSeller(int $companyId = null): Seller | null
@@ -152,6 +81,7 @@ class UpplerProductService extends HttpClientProvider
 
     private function populateProduct($remoteProduct)
     {
+
         $product = new Product();
         $product->setId($remoteProduct->id);
         $categories = [];

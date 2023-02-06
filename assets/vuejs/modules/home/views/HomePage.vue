@@ -54,80 +54,19 @@
           </SwiperSlide>
         </CarouselListSharedComponent>
       </div>
-      <div class="mt-10 sm:w-[45rem]">
-        <h3 class="home-subtitle text-primary">Top ventes</h3>
-        <p class="text-sm text-gray-400 sm:text-lg">
-          D'autres adhérents ont déjà acheté ces produits
-        </p>
-      </div>
 
+      <!-- Bloc Produits top ventes -->
       <TopVenteComponent />
+      <!-- Fin bloc Produits top ventes -->
 
-      <div class="mt-10">
-        <h3 class="home-subtitle text-primary">
-          Les accords-cadres incontournables
-        </h3>
-        <p class="text-sm text-gray-400 sm:text-lg">
-          Etes-vous certains de profiter des touts les économies incluses dans
-          votre adhésion ?
-        </p>
-      </div>
-      <div class="relative mt-5">
-        <CarouselListSharedComponent
-          :slides-per-view="1"
-          :space-between="20"
-          :breakpoints="{
-            1280: {
-              slidesPerView: 4,
-              spaceBetween: 20,
-            },
-            1024: {
-              slidesPerView: 3,
-              spaceBetween: 20,
-            },
-            640: {
-              slidesPerView: 2,
-              spaceBetween: 20,
-            },
-          }"
-        >
-          <SwiperSlide
-            v-for="(accord, key) in accords"
-            :key="key"
-            class="flex h-full items-center justify-center overflow-hidden rounded-lg bg-white"
-          >
-            <div class="flex h-full flex-col rounded-md bg-primary p-8">
-              <div class="mx-auto">
-                <img :src="accord.img" alt="Image produit" />
-              </div>
-              <p class="my-8 text-sm font-normal text-white sm:text-lg">
-                Découvrez ou téléchargez les conditions négociées de ce
-                partenaire
-              </p>
-
-              <RouterLink
-                :to="{ path: '/app/partner' }"
-                class="button button-white button-white-primary flex justify-center"
-              >
-                <ArrowRightIconComponent />Découvrir l'accord cadre
-              </RouterLink>
-            </div>
-          </SwiperSlide>
-        </CarouselListSharedComponent>
-      </div>
+      <!-- Bloc accords cadre -->
+      <AccordCadreComponent />
+      <!-- Fin Bloc accords cadre -->
 
       <!-- Bloc sélection de produits -->
-      <div class="mt-10 sm:w-[45rem]">
-        <h3 class="home-subtitle text-primary">Une sélection de produits</h3>
-        <p class="text-sm text-gray-400 sm:text-lg">
-          Savez-vous que vous pouvez désormais acheter ces produits en quelques
-          clics ?
-        </p>
-      </div>
-
       <SelectionComponent class="mt-4" />
-
       <!-- Fin bloc sélection de produits -->
+
       <div class="mt-10">
         <h3 class="home-subtitle text-primary">Nos partenaires fournisseurs</h3>
         <p class="text-sm text-gray-400 sm:text-lg">
@@ -233,10 +172,6 @@ import { contenusExpert } from '@/vuejs/modules/actualites'
 
 import { ref } from 'vue'
 
-import imgPeugeot from '@/vuejs/assets/img/samples/peugeot.png'
-import imgLoxam from '@/vuejs/assets/img/samples/loxam.png'
-import imgBusiness from '@/vuejs/assets/img/samples/business.png'
-import imgAdecco from '@/vuejs/assets/img/samples/adecco.png'
 import MailIconLightComponent from '@/vuejs/modules/shared/icon/MailIconLightComponent.vue'
 import PhoneLightIconComponent from '@/vuejs/modules/shared/icon/PhoneLightIconComponent.vue'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
@@ -244,17 +179,11 @@ import ContenusExpertComponent from '@/vuejs/modules/home/component/ContenusExpe
 import DropdownListComponent from '@/vuejs/modules/shared/DropdownListComponent.vue'
 import SelectionComponent from '@/vuejs/modules/home/component/SelectionComponent.vue'
 import TopVenteComponent from '@/vuejs/modules/home/component/TopVenteComponent.vue'
+import AccordCadreComponent from '@/vuejs/modules/home/component/AccordsCadreComponent.vue'
 
 const bannieres = ref([
   { image: getImage(banniere1), image_mobile: getImage(banniereMobile1) },
   { image: getImage(banniere2), image_mobile: getImage(banniereMobile2) },
-])
-
-const accords = ref([
-  { img: getImage(imgPeugeot), alt: 'Peugeot' },
-  { img: getImage(imgLoxam), alt: 'Loxam' },
-  { img: getImage(imgBusiness), alt: 'Business' },
-  { img: getImage(imgAdecco), alt: 'Adecco' },
 ])
 
 </script>

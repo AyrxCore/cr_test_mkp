@@ -1,5 +1,11 @@
 <template>
-  <div>
+  <div v-if="products.length > 0">
+    <div class="mt-10 sm:w-[45rem]">
+      <h3 class="home-subtitle text-primary">Top ventes</h3>
+      <p class="text-sm text-gray-400 sm:text-lg">
+        D'autres adhérents ont déjà acheté ces produits
+      </p>
+    </div>
       <ProductsCarouselComponent :products="products" />
   </div>
 </template>

@@ -13,8 +13,8 @@ export const HOME_SELECTION_PROPERTY = {
   value: '8388'
 }
 export const PRODUCT_ACCORD_PROPERTY = {
-  property_id: '176',
-  value: '8390'
+  property_id: '169',
+  value: 'Oui'
 }
 export const listCategories = ref<string[]>([
   'Avantages salariés',

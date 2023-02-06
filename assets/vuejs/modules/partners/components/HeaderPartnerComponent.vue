@@ -1,16 +1,16 @@
 <template>
   <breadcrumb-shared-component
-    :list-url="listUrl"
-    :current-page="'Nom du partenaire'"
+    :list-url="breadcrumbUrl"
+    :current-page="name"
   />
   <ContactUsButtonComponent />
   <div class="text-green mt-3.5 flex flex-col lg:flex-row lg:items-center">
     <h3 class="text-title-35 text-primary">
-      ALDA MAJUSCULE-OFFICE DEPOT
+      {{ name }}
     </h3>
     <div class="flex flex-row">
       <LeafIconComponent class="mx-2" />
-      <span class="mr-2 flex text-sm font-bold md:text-lg">7,8/10</span>
+      <span class="mr-2 flex text-sm font-bold md:text-lg">{{ note }}</span>
       <span class="mt-1 flex text-xs text-gray-500 md:mt-2"
         >Selon notre référentiel RSE</span
       >
@@ -25,15 +25,15 @@
   <div class="mt-10 flex flex-col md:grid md:grid-cols-4 md:gap-4">
     <div class="flex items-center justify-center rounded-lg bg-white">
       <img
-        :src="kiloutouImg"
-        alt="Picture"
+        :src="logo"
+        :alt="'Logo ' + name"
         class="items-center rounded-lg sm:mx-auto"
       />
     </div>
     <div class="col-span-3 mt-5 hidden rounded-lg bg-white md:mt-0 md:flex">
       <img
-        :src="aldaHeaderImg"
-        alt="Picture"
+        :src="barner"
+        :alt="'Bannière ' + name"
         class="items-center rounded-lg sm:mx-auto"
       />
     </div>
@@ -42,20 +42,46 @@
 <script lang="ts" setup>
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
-import { getImage } from '@/vuejs/services/utils'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import LeafIconComponent from '@/vuejs/modules/shared/icon/LeafIconComponent.vue'
 import InformationIconComponent from '@/vuejs/modules/shared/icon/InformationIconComponent.vue'
-import alda from '@/vuejs/assets/img/demo/alda.png'
-import aldaHeader from '@/vuejs/assets/img/demo/a-propos-header.jpg'
-import kiloutou from '@/vuejs/assets/img/samples/kiloutou.png'
-import renault from '@/vuejs/assets/img/samples/renault.png'
 
-const aldaImg = getImage(alda)
-const aldaHeaderImg = getImage(aldaHeader)
+const props = defineProps({
+  name: {
+    required: true,
+    type: String,
+  },
+  note: {
+    required: true,
+    type: String,
+  },
+  logo: {
+    required: true,
+    type: String,
+  },
+  barner: {
+    required: true,
+    type: String,
+  },
+  categories: {
+    required: true,
+    type: Array,
+  },
+})
 
-const kiloutouImg  = getImage(kiloutou)
-const renaultImg  = getImage(renault)
+const breadcrumbUrl = computed(() => {
+  const breadcrumb = []
+  if (props.categories) {
+    Object.entries(props.categories).forEach(([key, value], index) => {
+      breadcrumb.push({
+        id: key,
+        name: value,
+      })
+    })
+  }
+
+  return breadcrumb
+})
 
 const listUrl = ref([
   {

@@ -1,7 +1,16 @@
 <template>
   <BaseTemplate title="Qantis - MarketPlace">
-    <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl px-5 sm:px-8">
-      <HeaderPartnerComponent />
+    <div
+      v-if="accord"
+      class="xs:w-[100%] m-auto my-4 max-w-screen-2xl px-5 sm:px-8"
+    >
+      <HeaderPartnerComponent
+        :name="accord.name"
+        :note="accord.properties.note_rse"
+        :logo="accord.properties.logo_partenaire"
+        :barner="accord.properties.banniere_partenaire"
+        :categories="accord.categories"
+      />
 
       <div
         class="mt-10 mt-5 flex flex-col text-gray-600 xl:grid xl:grid-cols-9 xl:gap-4"
@@ -128,7 +137,8 @@
           <SwiperSlide v-for="i in 5" :key="i">
             <div class="mt-5 flex flex-col lg:flex-row">
               <div
-                class="flex h-[217px!important] justify-center rounded-lg px-2 lg:ml-10 lg:h-[374px!important] lg:w-1/2 lg:items-center lg:border lg:px-0 lg:py-8.5"
+                class="flex h-[217px!important] justify-center rounded-lg px-2 lg:ml-10
+                lg:h-[374px!important] lg:w-1/2 lg:items-center lg:border lg:px-0 lg:py-8.5"
               >
                 <img :src="aldaImg" alt="Picture" class="object-cover" />
               </div>
@@ -273,16 +283,28 @@ import PhoneLightIconComponent from '@/vuejs/modules/shared/icon/PhoneLightIconC
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import DownloadIconComponent from '@/vuejs/modules/shared/icon/DownloadIconComponent.vue'
 import CheckCircleIconComponent from '@/vuejs/modules/shared/icon/CheckCircleIconComponent.vue'
-import { ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import AutomobilePartnerComponent from '@/vuejs/modules/partners/components/AutomobilePartnerComponent.vue'
 import alda from '@/vuejs/assets/img/demo/alda-mise-en-avant.jpg'
 import aldaMap from '@/vuejs/assets/img/demo/alda-map.png'
 import PartnersCarouselComponent from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
 import LeafIconComponent from '@/vuejs/modules/shared/icon/LeafIconComponent.vue'
+import { AccordCadre } from '@/vuejs/types/AccordCadre'
+import { useRoute } from 'vue-router'
+import { useAccordCadreStore } from '@/vuejs/stores/accord_cadre'
 
+const route = useRoute()
+const accordStore = useAccordCadreStore()
 const aldaImg = getImage(alda)
 const aldaMapImg = getImage(aldaMap)
+
 const isAutomobile = ref<Boolean>(true)
+
+const accord = ref<AccordCadre>()
+
+const breadcrumbUrl = computed(() => {
+  return []
+})
 
 const pointsCleTop = [
   'Des conditions négociées grands-comptes',
@@ -300,6 +322,15 @@ const pointsRSE = [
   'Membre de l’UFIPA et du Pacte Mondial des Nations',
   'Fournisseurs sélectionnés dans le respect des normes REACH',
 ]
+
+
+watch(
+  () => route.params.id as string,
+  async (id: string) => {
+    if (id) accord.value = await accordStore.findAccordCadreById(id)
+  },
+  { immediate: true },
+)
 </script>
 
 <style scoped>
@@ -311,7 +342,4 @@ const pointsRSE = [
   @apply mb-4 text-sm md:text-base xl:text-lg;
 }
 
-/*.partner-carousel > .swiper-button-direction-next, .partner-carousel > .swiper-button-direction-prev {*/
-/*  @apply top-[-280px!important] md:top-[-230px!important] lg:top-0;*/
-/*}*/
 </style>

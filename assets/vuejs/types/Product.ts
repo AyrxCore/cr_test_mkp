@@ -7,11 +7,11 @@ export interface Product {
   name: string
   description?: string
   conditionnement?: string
-  livraisons: []
-  categories: []
-  images: []
-  options: []
-  properties: Property[]
+  livraisons: Array<any>
+  categories: Array<any>
+  images: Array<any>
+  options: Array<any>
+  properties: Array<Property>
   variants: []
   priceReference: number
   percent?: number

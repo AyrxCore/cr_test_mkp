@@ -17,7 +17,7 @@ use App\Controller\Api\Buyer\ProductApiController;
             ],
             'path' => '/products',
             'controller' => ProductApiController::class,
-            'method' => 'POST'
+            'method' => 'post'
         ]
     ],
     itemOperations: [

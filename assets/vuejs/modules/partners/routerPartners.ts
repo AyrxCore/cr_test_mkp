@@ -9,7 +9,7 @@ export enum PartnersPageList {
 
 export const routes: RouteRecordRaw[] = [
   {
-    path: '/app/' + PartnersPageList.PARTNER,
+    path: `/app/${ PartnersPageList.PARTNER }/:id`,
     name: PartnersPageList.PARTNER,
     component: PartnerPage,
   },
