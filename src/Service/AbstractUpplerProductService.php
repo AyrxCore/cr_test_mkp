@@ -4,11 +4,6 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Dto\AccordCadre;
-use App\Dto\Seller;
-use App\Dto\Price;
-use App\Dto\Product;
-use App\Dto\Property;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpFoundation\RequestStack;

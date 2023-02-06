@@ -9,7 +9,6 @@ use App\Dto\Price;
 use App\Dto\Product;
 use App\Dto\Property;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UpplerProductService extends AbstractUpplerProductService
 {
@@ -34,26 +33,23 @@ class UpplerProductService extends AbstractUpplerProductService
 
     public function getProduct(int $productId = null, array $filters = []): Product|null
     {
-        $item = $this->cache->getItem('product_' . $productId);
-
-        if ($item->isHit()) {
-            return $item->get();
-        }
         $res = $this->getObject($productId, $filters);
 
         if (null === $res) {
             return null;
         }
 
-        $item->set($this->populateProduct($res));
-        $item->expiresAfter(new \DateInterval('P1D')); // the item will be cached for 10 seconds
-        $this->cache->save($item);
-
-        return $item->get();
+        return $this->populateProduct($res);
     }
 
     public function getSeller(int $companyId = null): Seller | null
     {
+        $item = $this->cache->getItem('company_' . $companyId);
+
+        if ($item->isHit()) {
+            return $item->get();
+        }
+
         $session = $this->requestStack->getSession();
         $session->start();
 
@@ -73,7 +69,12 @@ class UpplerProductService extends AbstractUpplerProductService
             $company->setAvatar($avatar);
             $description = !empty($upplerCompany->description->default) ? $upplerCompany->description->default : null;
             $company->setDescription($description);
-            return $company;
+
+            $item->set($company);
+            $item->expiresAfter(new \DateInterval('P1D')); // the item will be cached for 10 seconds
+            $this->cache->save($item);
+
+            return $item->get();
         }
 
         return null;

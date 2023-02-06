@@ -25,22 +25,13 @@ class UpplerAccordCadreService extends AbstractUpplerProductService
 
     public function getAccordCadre(int $productId): AccordCadre|null
     {
-        $this->cache->clear('accord_cadre_' . $productId);
-        $item = $this->cache->getItem('accord_cadre_' . $productId);
-
-        if ($item->isHit()) {
-            return $item->get();
-        }
         $res = $this->getObject($productId);
 
         if (null === $res) {
             return null;
         }
-        $item->set($this->populateAccordCadre($res));
-        $item->expiresAfter(new \DateInterval('P1D')); // the item will be cached for 10 seconds
-        $this->cache->save($item);
 
-        return $item->get();
+        return $this->populateAccordCadre($res);
     }
 
     private function populateAccordCadre($remoteAccordCadre)

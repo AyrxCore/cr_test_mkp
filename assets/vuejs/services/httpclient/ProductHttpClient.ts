@@ -16,7 +16,7 @@ export default class ProductHttpClient extends BaseClientService {
   public findProductsByParams<T extends []>(params): Promise<T> {
     return this.apiClient
       .postForm<T>(
-        `products/${params.cache_key}`,
+        `products`,
         {
               categories: params.categories,
               properties: params.properties,
