@@ -4,6 +4,10 @@ export function getImage(urlImage: string): string {
   return new URL(urlImage, import.meta.url).href
 }
 
+export function openInNewTab(url) {
+  window.open(url, '_blank', 'noreferrer')
+}
+
 export const HOME_TOP_VENTE_PROPERTY = {
   property_id: '176',
   value: '8389'

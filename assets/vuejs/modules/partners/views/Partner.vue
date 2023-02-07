@@ -18,23 +18,14 @@
         <div
           class="rounded-lg bg-white px-4 pt-7.5 pb-4 text-sm md:text-base xl:col-span-5 xl:px-7.5 xl:text-lg"
         >
-          <p>
-            <span class="uppercase">ALDA MAJUSCULE-OFFICE DEPOT</span> votre
-            spécialiste en fournitures de bureau, mobiliers, consommables
-            informatiques.
-          </p>
-          <p class="mt-3">
-            <span class="uppercase">ALDA MAJUSCULE-OFFICE DEPOT</span> vous
-            propose une offre de proximité régionale multicanale unique en
-            France : BtoB et magasins Office Depot.
-          </p>
+          <p v-html="accord.description" />
         </div>
         <div
           class="mt-5 rounded-lg bg-white px-4 pt-7 pb-4 text-gray-500 xl:col-span-4 xl:mt-0"
         >
           <ul>
             <li
-              v-for="(pointCle, key) in pointsCleTop"
+              v-for="(pointCle, key) in pointsCles"
               :key="key"
               class="mb-7.5 text-sm md:text-base xl:text-lg"
             >
@@ -55,32 +46,13 @@
       <div
         class="mt-10 mt-5 flex flex-col text-sm md:text-base xl:grid xl:grid-cols-9 xl:gap-4 xl:text-lg"
       >
-        <div class="bloc-content col-span-5 flex h-full flex-col">
-          <h3
-            class="text-title-35 mb-[1.563rem] font-bold leading-9 text-primary xl:w-3/4"
-          >
-            Vos conditions négociées
-          </h3>
-          <p class="mb-10 flex">
-            Remise applicables sur XXXX / mentions légales conditions
-          </p>
-          <AutomobilePartnerComponent v-if="isAutomobile" />
-          <ul v-else class="mx-7 flex list-disc flex-col">
-            <li
-              v-for="(condition, key) in listConditions"
-              :key="key"
-              class="mb-5"
-            >
-              {{ condition }}
-            </li>
-          </ul>
-          <div class="flex items-end justify-center">
-            <ButtonComponent class="button-gradient md:mr-5 md:w-1/2">
-              <DownloadIconComponent />
-              Télécharger les conditions négociées
-            </ButtonComponent>
-          </div>
-        </div>
+
+        <ConditionsNegocieesPartnerComponent
+          :mentions-legales="accord.properties.mentions_legales_conditions"
+          :images="imagesConditionsNegociees"
+          :textes="textesConditionsNegociees"
+          :buttons="buttonsConditionsNegociees"
+        />
         <div class="bloc-content col-span-4 mt-5 xl:mt-0">
           <h3
             class="text-title-35 mb-[1.563rem] mt-5 font-bold leading-9 text-primary xl:w-3/4"
@@ -121,52 +93,8 @@
           </div>
         </div>
       </div>
-      <div class="partner-carousel relative">
-        <CarouselListSharedComponent
-          class="mx-auto mt-10 items-center rounded-xl bg-white px-4 py-4 lg:h-[443px]"
-          :slides-per-view="1"
-          :space-between="10"
-          :pagination="true"
-          :breakpoints="{
-            640: {
-              slidesPerView: 1,
-              spaceBetween: 10,
-            },
-          }"
-        >
-          <SwiperSlide v-for="i in 5" :key="i">
-            <div class="mt-5 flex flex-col lg:flex-row">
-              <div
-                class="flex h-[217px!important] justify-center rounded-lg px-2 lg:ml-10
-                lg:h-[374px!important] lg:w-1/2 lg:items-center lg:border lg:px-0 lg:py-8.5"
-              >
-                <img :src="aldaImg" alt="Picture" class="object-cover" />
-              </div>
-              <div
-                class="mt-5 flex flex-col rounded-lg bg-white p-5 text-lg text-gray-500 lg:mt-0 lg:w-1/2 lg:pr-12"
-              >
-                <h3
-                  class="text-title-35 mb-[1.563rem] font-bold leading-9 text-primary lg:w-3/4"
-                >
-                  Mise en avant partenaire
-                </h3>
-                <p class="mb-5 text-sm md:text-base xl:text-lg">
-                  Tout ce dont vous avez besoin auprès d’un seul fournisseur. Un
-                  groupe d’envergure à taille humaine spécialisé dans la
-                  distribution de fournitures de bureau, papier, consommables
-                  informatiques, ergonomie au travail et beaux-arts. Mais aussi
-                  des offres exclusives de produits vert et fabrication
-                  française à votre service.
-                </p>
 
-                <!--                <ButtonComponent class="button-secondary mt-6 w-1/2 hidden">-->
-                <!--                  Bouton CTA-->
-                <!--                </ButtonComponent>-->
-              </div>
-            </div>
-          </SwiperSlide>
-        </CarouselListSharedComponent>
-      </div>
+      <MiseEnAvantPartnerComponent />
 
       <div class="mt-10 mt-5 flex flex-col lg:grid lg:grid-cols-3 lg:gap-4">
         <div class="bloc-content col-span-2 flex flex-col">
@@ -269,36 +197,35 @@
       </div>
       <PartnersCarouselComponent class="mt-5" />
     </div>
+    <div v-else class="w-full flex h-16 justify-center items-center">
+      <LoaderSharedComponent />
+    </div>
   </BaseTemplate>
 </template>
 <script lang="ts" setup>
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import HeaderPartnerComponent from '@/vuejs/modules/partners/components/HeaderPartnerComponent.vue'
-import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
 import { getImage } from '@/vuejs/services/utils'
-import { SwiperSlide } from 'swiper/vue'
 import CheckIconComponent from '@/vuejs/modules/shared/icon/CheckIconComponent.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import PhoneLightIconComponent from '@/vuejs/modules/shared/icon/PhoneLightIconComponent.vue'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
-import DownloadIconComponent from '@/vuejs/modules/shared/icon/DownloadIconComponent.vue'
 import CheckCircleIconComponent from '@/vuejs/modules/shared/icon/CheckCircleIconComponent.vue'
 import { computed, ref, watch } from 'vue'
-import AutomobilePartnerComponent from '@/vuejs/modules/partners/components/AutomobilePartnerComponent.vue'
-import alda from '@/vuejs/assets/img/demo/alda-mise-en-avant.jpg'
 import aldaMap from '@/vuejs/assets/img/demo/alda-map.png'
 import PartnersCarouselComponent from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
 import LeafIconComponent from '@/vuejs/modules/shared/icon/LeafIconComponent.vue'
 import { AccordCadre } from '@/vuejs/types/AccordCadre'
 import { useRoute } from 'vue-router'
 import { useAccordCadreStore } from '@/vuejs/stores/accord_cadre'
+import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
+import MiseEnAvantPartnerComponent from '@/vuejs/modules/partners/components/CarouselMiseEnAvantPartnerComponent.vue'
+import ConditionsNegocieesPartnerComponent
+  from '@/vuejs/modules/partners/components/ConditionsNegocieesPartnerComponent.vue'
 
 const route = useRoute()
 const accordStore = useAccordCadreStore()
-const aldaImg = getImage(alda)
 const aldaMapImg = getImage(aldaMap)
-
-const isAutomobile = ref<Boolean>(true)
 
 const accord = ref<AccordCadre>()
 
@@ -306,16 +233,53 @@ const breadcrumbUrl = computed(() => {
   return []
 })
 
-const pointsCleTop = [
-  'Des conditions négociées grands-comptes',
-  'Des remises sur le mobilier & en magasin',
-  'Un délai de livraison entre 24 et 72h',
-]
+const pointsCles = computed(() => {
+  const list = [
+    accord.value.properties.points_cles_1,
+    accord.value.properties.points_cles_2,
+    accord.value.properties.points_cles_3,
+  ]
 
-const listConditions = [
-  'Bénéficiez de conditions négociées sur plus de 7000 références en fournitures de bureau, petits matériels informatiques, etc.',
-  'Bénéficiez également de remise sur le mobilier de bureau, ainsi que dans tous les points de ventes Office Depot.',
-]
+  return list.filter(function (el) {
+    return el != null
+  })
+
+})
+
+const imagesConditionsNegociees = computed(() => {
+  if (accord.value.properties.tableau_conditions_negocies) {
+    return accord.value.properties.tableau_conditions_negocies.split(';')
+  }
+
+  return []
+})
+
+const textesConditionsNegociees = computed(() => {
+  const textes = [
+    accord.value.properties.text1_conditions_negocies,
+    accord.value.properties.text2_conditions_negocies,
+    accord.value.properties.text3_conditions_negocies,
+  ]
+  return textes.filter(function (el) {
+    return el != null
+  })
+})
+
+const buttonsConditionsNegociees = computed(() => {
+  const buttons = [
+    {
+      name: accord.value.properties.cta1_text,
+      url: accord.value.properties.cta1_link,
+    },
+    {
+      name: accord.value.properties.cta2_text,
+      url: accord.value.properties.cta2_link,
+    }
+  ]
+  return buttons.filter(function (el) {
+    return el.url != null
+  })
+})
 
 const pointsRSE = [
   'Certifications ISO-9001, ISO-14-0001, et ISO-45-0001',

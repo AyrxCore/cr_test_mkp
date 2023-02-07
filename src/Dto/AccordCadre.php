@@ -7,16 +7,15 @@ namespace App\Dto;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\Api\Buyer\AccordCadreApiController;
-use App\Controller\Api\Buyer\ProductApiController;
 
 #[ApiResource(
     collectionOperations: [
-        'search_accords_cadre' => [
+        'search' => [
             "openapi_context" => [
                 'summary' => 'Liste des FAT',
                 'description' => 'Permet de récupérer la liste des produits de type accord cadre avec les paramètres de propriétés'
             ],
-            'path' => '/list-accord-cadre',
+            'path' => '/accords-cadre',
             'controller' => AccordCadreApiController::class,
             'method' => 'POST'
         ]
