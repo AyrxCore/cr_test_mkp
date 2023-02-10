@@ -5,6 +5,14 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Dto\AccordCadre;
+use App\Entity\AccountAccordCadre;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class UpplerAccordCadreService extends AbstractUpplerProductService
 {
@@ -23,7 +31,10 @@ class UpplerAccordCadreService extends AbstractUpplerProductService
         return $accordsCadre;
     }
 
-    public function getAccordCadre(int $productId): AccordCadre|null
+    /**
+     * @throws ExceptionInterface
+     */
+    public function getAccordCadre(int $productId, ?string $accountId = null)
     {
         $res = $this->getObject($productId);
 
@@ -31,10 +42,10 @@ class UpplerAccordCadreService extends AbstractUpplerProductService
             return null;
         }
 
-        return $this->populateAccordCadre($res);
+        return $this->populateAccordCadre($res, $accountId);
     }
 
-    private function populateAccordCadre($remoteAccordCadre)
+    private function populateAccordCadre($remoteAccordCadre, ?string $accountId = null)
     {
         $accordCadre = new AccordCadre();
         $accordCadre->setId($remoteAccordCadre->id);
@@ -52,8 +63,22 @@ class UpplerAccordCadreService extends AbstractUpplerProductService
         foreach($remoteAccordCadre->properties as $property) {
             $properties[$property->property->name->fr] = $property->value;
         }
-
         $accordCadre->setProperties($properties);
+
+        if ($accountId) {
+            $accountAccordCadre = $this->em->getRepository(AccountAccordCadre::class)->findOneBy(['accordCadreId' => $remoteAccordCadre->id, 'accountId' => $accountId]);
+            if (null === $accountAccordCadre) {
+                $accountAccordCadre = new AccountAccordCadre();
+                $accountAccordCadre->setAccountId($accountId);
+                $accountAccordCadre->setStatus(AccordCadre::PROCESS_STATUS_NOT_ACTIVATED);
+                $accountAccordCadre->setAccordCadreId($remoteAccordCadre->id);
+                $this->em->persist($accountAccordCadre);
+                $this->em->flush();
+            }
+
+            $accordCadre->setAccountAccordCadre($accountAccordCadre);
+        }
+
         return $accordCadre;
     }
 }

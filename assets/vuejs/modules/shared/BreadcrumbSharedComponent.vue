@@ -21,7 +21,10 @@
       </li>
       <li class="text-gray-400">{{ currentPage }}</li>
     </ol>
-    <div class="flex lg:hidden">
+    <div
+      v-if="lastBreadcrumbUrl"
+      class="flex lg:hidden"
+    >
       <ChevronRightIconComponent
         class="mr-1 h-4 text-gray-500 rotate-180"
         :stroke-color="'#A4A4A4'"
@@ -51,7 +54,11 @@ const props = defineProps({
 })
 
 const lastBreadcrumbUrl = computed(() => {
+  if (props.listUrl) {
     return props.listUrl[props.listUrl.length - 1]
+  }
+
+  return null
 })
 </script>
 

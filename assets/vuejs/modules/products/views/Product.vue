@@ -262,6 +262,9 @@
               v-for="property in product.properties"
               :key="property.id"
               class="border text-sm text-primary md:text-base lg:text-lg"
+              :class="{
+                'hidden': property.value === 'home-top-vente' || property.value === 'home-selection'
+              }"
             >
               <td class="w-[20%] border p-2">{{ property.name }}</td>
               <td class="p-2">{{ property.value }}</td>
@@ -276,6 +279,12 @@
         <h3 class="home-subtitle text-primary">Produits similaires</h3>
       </div> -->
       <!-- Fiin bloc produits similaire -->
+    </div>
+    <div v-else class="w-full flex h-16 justify-center items-center">
+      <LoaderSharedComponent
+        class="text-secondary"
+        classes="loader-xl loader"
+      />
     </div>
   </BaseTemplate>
   <ButtonAddToCartComponent :product="product" class="z-10 flex lg:hidden" />
@@ -297,6 +306,7 @@ import ProductTitleComponent from '@/vuejs/modules/products/components/ProductTi
 import { useRoute } from 'vue-router'
 import { useProductStore } from '@/vuejs/stores/product'
 import Product from '@/vuejs/modules/products/views/Product.vue'
+import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue';
 
 
 const route = useRoute()

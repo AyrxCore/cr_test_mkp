@@ -7,11 +7,11 @@
     </h3>
     <p
       class="mb-10 flex"
-      v-html="mentionsLegales"
+      v-html="properties.mentions_legales_conditions"
     />
     <div class="relative">
       <div
-        v-if="imagesCarousel.length"
+        v-if="images.length"
         class="partner-carousel relative"
       >
         <CarouselListSharedComponent
@@ -26,7 +26,7 @@
             },
           }"
         >
-          <SwiperSlide v-for="(image, key) in imagesCarousel" :key="key">
+          <SwiperSlide v-for="(image, key) in images" :key="key">
                 <img :src="image" alt="Picture" class="items-center" />
         </SwiperSlide>
         </CarouselListSharedComponent>
@@ -72,25 +72,47 @@ const props = defineProps({
     type: String,
     default: null
   },
-  images: {
-    type: Array,
-    default: null
-  },
-  textes: {
-    type: Array,
-    default: null
-  },
-  buttons: {
-    type: Array,
+  properties: {
+    type: Object,
     default: null
   },
 })
 
-const imagesCarousel = computed(() => {
-  return props.images
+const images = computed(() => {
+  if (props.properties.tableau_conditions_negocies) {
+    return props.properties.tableau_conditions_negocies.split(';')
+  }
+
+  return []
 })
 
+const textes = computed(() => {
+  const textes = [
+    props.properties.text1_conditions_negocies,
+    props.properties.text2_conditions_negocies,
+    props.properties.text3_conditions_negocies,
+  ]
+  return textes.filter(function (el) {
+    return el != null
+  })
+})
 
+const buttons = computed(() => {
+  const buttons = [
+    {
+      name: props.properties.cta1_text,
+      url: props.properties.cta1_link,
+    },
+    {
+      name: props.properties.cta2_text,
+      url: props.properties.cta2_link,
+    }
+  ]
+
+  return buttons.filter(function (el) {
+    return el.url != null
+  })
+})
 </script>
 
 <style scoped></style>

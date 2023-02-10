@@ -1,5 +1,5 @@
 import BaseClientService from '@/vuejs/services/BaseClientService'
-import { AccordCadre } from '@/vuejs/types/AccordCadre'
+import { AccordCadre, AccountAccordCadre } from '@/vuejs/types/AccordCadre'
 
 export default class AccordCadreHttpClient extends BaseClientService {
   public findAccordsCadresByParams<T extends []>(params): Promise<T> {
@@ -17,5 +17,11 @@ export default class AccordCadreHttpClient extends BaseClientService {
     return this.apiClient
         .get(`accord-cadre/${id}`)
         .then((response) => response.data)
+  }
+
+  public updateAccountAccordsCadresByParams<T extends []>(params): Promise<T> {
+    return this.apiClient
+      .put<T>(`account_accord_cadres/${params.id}`,  params)
+      .then((response) => response.data)
   }
 }

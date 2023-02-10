@@ -2,7 +2,8 @@
   <div
     v-if="modelValue"
     v-click-outside="closeMenu"
-    class="fixed top-0 left-0 z-50 h-screen w-full bg-white px-5 py-2.5 text-sm text-primary shadow sm:absolute sm:h-fit sm:w-auto sm:rounded"
+    class="fixed top-0 left-0 z-50 h-screen w-full bg-white px-5 py-2.5 text-sm
+    text-primary shadow sm:absolute sm:h-fit sm:w-auto sm:rounded"
   >
     <div class="flex items-center">
       <RouterLink
@@ -19,7 +20,8 @@
     </div>
     <hr class="my-2.5" />
     <RouterLink
-      v-for="(value, id) in listAccount"
+      v-for="(value, key) in listAccount"
+      :key="key"
       :to="{ path: value.url }"
       class="flex items-center py-2.5 hover:text-secondary"
     >

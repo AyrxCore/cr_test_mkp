@@ -23,7 +23,6 @@ onBeforeMount(async () => {
     properties: [
       HOME_TOP_VENTE_PROPERTY
     ],
-    cache_key: 'product-top-vente'
   }
 
   await productStore.findProductsTopVente(params)

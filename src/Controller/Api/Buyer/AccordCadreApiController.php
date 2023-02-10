@@ -2,9 +2,11 @@
 
 namespace App\Controller\Api\Buyer;
 
+use App\Service\MailerProvider;
 use App\Service\UpplerAccordCadreService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -12,6 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Environment;
 
 class AccordCadreApiController extends AbstractController
 {
@@ -22,6 +26,18 @@ class AccordCadreApiController extends AbstractController
     public EntityManagerInterface $em;
     #[Required]
     public UpplerAccordCadreService $upplerAccordCadreService;
+
+    #[Required]
+    public MailerProvider $mailerProvider;
+
+    #[Required]
+    public ParameterBagInterface $parameterBag;
+
+    #[Required]
+    public Environment $twig;
+
+    #[Required]
+    public TranslatorInterface $translator;
 
     #[Route('/api/accords-cadre', name: 'search_accords_cadre', methods: ['POST'])]
     public function list(Request $request, NormalizerInterface $normalizer): JsonResponse
@@ -37,5 +53,4 @@ class AccordCadreApiController extends AbstractController
 
         return new JsonResponse($this->upplerAccordCadreService->getAccordsCadresByParams($options, ['properties']));
     }
-
 }

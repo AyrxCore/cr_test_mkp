@@ -10,7 +10,7 @@
         {{ addressLabel(address) }}
       </span>
       <span v-else>
-        <LoaderSharedComponent class="text-purple-600" />
+        <LoaderSharedComponent class="text-secondary" />
       </span>
     </div>
   </div>

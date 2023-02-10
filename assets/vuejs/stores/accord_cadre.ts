@@ -5,15 +5,18 @@ import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
 import { getErrorMessage } from '@/vuejs/services/login'
 import { Product } from '@/vuejs/types/Product'
 import AccordCadreHttpClient from '@/vuejs/services/httpclient/AccordCadreHttpClient'
+import { AccountAccordCadre } from '@/vuejs/types/AccordCadre';
 
 export interface AccordCadreStoreState {
-  accords_cadre: []
+  accords_cadre: [],
+  account_accord_cadre: AccountAccordCadre
 }
 
 export const useAccordCadreStore = defineStore({
   id: 'accord_cadre',
   state: (): AccordCadreStoreState => ({
     accords_cadre: [],
+    account_accord_cadre: null
   }),
 
   actions: {

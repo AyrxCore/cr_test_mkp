@@ -77,6 +77,8 @@ class UpplerAccountService extends HttpClientProvider
             ],
             true
         );
+
+        dump($res);
         if (Response::HTTP_NO_CONTENT === $res->getStatusCode()) {
             return true;
         }

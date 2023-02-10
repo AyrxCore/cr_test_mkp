@@ -24,7 +24,6 @@ onBeforeMount(async () => {
     properties: [
       HOME_SELECTION_PROPERTY
     ],
-    cache_key: 'products-selection'
   }
 
   await productStore.findProductsSelection(params)

@@ -19,7 +19,7 @@
         :key="key"
         class="flex h-full items-center justify-center overflow-hidden rounded-lg bg-white"
       >
-        <RouterLink :to="{ path: '/app/products-partner' }">
+        <RouterLink :to="{ path: '/app/products-partner/10586' }">
           <img
             :src="partenaire.img"
             :alt="partenaire.alt"

@@ -33,7 +33,7 @@
             />
           </button>
         </div>
-        <div class="mr-2">{{ productsSimilaire.length + 1 }} produits</div>
+        <div class="mr-2">{{ products.length }} produits</div>
         <div class="h-[28px] rounded-md border bg-white">
           <select class="h-[28px] rounded-md py-0 text-[14px]">
             <option>Trier par produit</option>
@@ -77,7 +77,7 @@
                 class="mx-auto flex h-[273px] items-center justify-center bg-white"
               >
                 <img
-                  :src="getImage(alda)"
+                  :src="accord.properties.logo_partenaire"
                   alt="Image produit"
                   class="flex h-[auto!important]"
                 />
@@ -87,19 +87,14 @@
                 partenaire
               </p>
               <RouterLink
-                :to="{ path: '/app/partner' }"
+                :to="{ path: `/app/partner/${accord.id}` }"
                 class="button button-white button-white-primary flex"
               >
                 <ArrowRightIconComponent />Découvrir l'accord cadre
               </RouterLink>
             </div>
-            <div>
-              <ProductComponent
-                :product="productsTopVenteHomepage[0]"
-                class="mt-5 h-[516px] !w-auto md:mt-0 md:w-[392px]"
-              />
-            </div>
-            <div v-for="(product, key) in productsSimilaire" :key="key">
+
+            <div v-for="(product, key) in products" :key="key">
               <ProductComponent
                 :product="product"
                 class="mt-5 h-[516px] !w-auto md:mt-0 md:w-[392px]"
@@ -108,6 +103,12 @@
           </div>
         </div>
       </div>
+    </div>
+    <div v-else class="w-full flex h-16 justify-center items-center">
+      <LoaderSharedComponent
+        class="text-secondary"
+        classes="loader-xl loader"
+      />
     </div>
   </BaseTemplate>
 </template>
@@ -119,25 +120,35 @@ import ProductComponent from '@/vuejs/modules/products/components/ProductCompone
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightIconComponent.vue'
 import ChevronLeftIconComponent from '@/vuejs/modules/shared/icon/ChevronLeftIconComponent.vue'
-import {
-  productsSimilaire,
-  productsTopVenteHomepage,
-} from '@/vuejs/modules/products'
-import alda from '@/vuejs/assets/img/demo/alda-partner.png'
-import { getImage } from '@/vuejs/services/utils'
+import { HOME_TOP_VENTE_PROPERTY } from '@/vuejs/services/utils'
 import DropdownListComponent from '@/vuejs/modules/shared/DropdownListComponent.vue'
 import { AccordCadre } from '@/vuejs/types/AccordCadre'
 import { useRoute } from 'vue-router'
 import { useAccordCadreStore } from '@/vuejs/stores/accord_cadre'
-import { computed, ref, watch } from 'vue'
+import { computed, onBeforeMount, ref, watch } from 'vue'
+import { useProductStore } from '@/vuejs/stores/product'
+import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 
 const route = useRoute()
 const accordStore = useAccordCadreStore()
-
+const productStore = useProductStore()
 const accord = ref<AccordCadre>()
 
 const breadcrumbUrl = computed(() => {
   return []
+})
+
+onBeforeMount(async () => {
+  const params =  {
+    properties: [
+      HOME_TOP_VENTE_PROPERTY
+    ]
+  }
+
+  await productStore.findProductsTopVente(params)
+})
+const products = computed(() => {
+  return productStore.getProductsTopVente
 })
 
 watch(

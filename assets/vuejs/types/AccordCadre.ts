@@ -1,3 +1,12 @@
+export interface AccountAccordCadre {
+  accordCadreId: number
+  accountId: number
+  id: string
+  status: string
+  createdAt: Date
+  updatedAt: Date
+}
+
 export interface AccordCadre {
   id: number
   reference: string
@@ -6,4 +15,5 @@ export interface AccordCadre {
   properties: Array<any>
 
   categories: Array<any>
+  accountAccordCadre: AccountAccordCadre
 }

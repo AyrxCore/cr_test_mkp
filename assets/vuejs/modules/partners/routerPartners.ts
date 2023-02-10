@@ -14,7 +14,7 @@ export const routes: RouteRecordRaw[] = [
     component: PartnerPage,
   },
   {
-    path: '/app/' +PartnersPageList.PRODUCTS_PARTNER,
+    path: `/app/${PartnersPageList.PRODUCTS_PARTNER}/:id`,
     component: ProductsPartnerPage,
     name: PartnersPageList.PRODUCTS_PARTNER,
   },

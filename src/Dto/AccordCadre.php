@@ -7,6 +7,7 @@ namespace App\Dto;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\Api\Buyer\AccordCadreApiController;
+use App\Entity\AccountAccordCadre;
 
 #[ApiResource(
     collectionOperations: [
@@ -45,6 +46,7 @@ final class AccordCadre implements \JsonSerializable
     private ?string $description;
     private array $properties;
     private array $categories;
+    private ?AccountAccordCadre $accountAccordCadre;
 
     public function getId(): ?int
     {
@@ -136,6 +138,22 @@ final class AccordCadre implements \JsonSerializable
     public function setCategories(array $categories): void
     {
         $this->categories = $categories;
+    }
+
+    /**
+     * @return AccountAccordCadre|null
+     */
+    public function getAccountAccordCadre(): ?AccountAccordCadre
+    {
+        return $this->accountAccordCadre;
+    }
+
+    /**
+     * @param AccountAccordCadre|null $accountAccordCadre
+     */
+    public function setAccountAccordCadre(?AccountAccordCadre $accountAccordCadre): void
+    {
+        $this->accountAccordCadre = $accountAccordCadre;
     }
 
 

@@ -69,14 +69,11 @@ class SubAccountPersister implements ContextAwareDataPersisterInterface
             $subAccount->setPhone($data->getPhone());
         }
 
-
-        $result = $this->upplerAccountService->updateUserSubAccountDatas($subAccount);
-
-        if ($result) {
-            return $result;
+        try {
+            return $this->upplerAccountService->updateUserSubAccountDatas($subAccount);
+        } catch (\Exception $exception) {
+            throw new \Exception('update account error: ' . $exception);
         }
-
-        throw new BadRequestException('update account error');
     }
 
     public function remove($data, array $context = [])

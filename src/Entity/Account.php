@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Metadata\Post;
 use App\Dto\UserAccountInputDto;
 use App\Repository\AccountRepository;
 use App\State\UserAccountProcessor;
