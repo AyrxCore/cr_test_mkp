@@ -18,7 +18,7 @@
           </h3>
           <span
             class="mr-2 w-max rounded-md px-2 py-1 text-white text-white"
-            :class="contenusExpert[1].categorie_color"
+            :style="{'background': contenusExpert[1].categorie_color}"
             >{{ contenusExpert[1].categorie_name }}</span
           >
           <span class="text-gray-500">{{ contenusExpert[1].date }}</span>

@@ -5,7 +5,7 @@
       class="border border-orange-500 text-orange-500 p-2 flex justify-center w-2/3"
     >
       Votre rattachement est en cours
-      <PendingIconComponent class="text-orange-500 w-5 stroke-gray-500 fill-orange-400"/>
+      <PendingIconComponent class="text-orange-700 w-5 stroke-gray-500 fill-orange-400 ml-1"/>
     </div>
     <div
       v-else
@@ -51,11 +51,10 @@ import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import PhoneLightIconComponent from '@/vuejs/modules/shared/icon/PhoneLightIconComponent.vue'
 import { openInNewTab } from '@/vuejs/services/utils'
 import { status } from '@/vuejs/modules/partners/partner'
-import CheckCircleIconComponent from '@/vuejs/modules/shared/icon/CheckCircleIconComponent.vue'
 import CheckIconComponent from '@/vuejs/modules/shared/icon/CheckIconComponent.vue'
 import { PropType } from 'vue'
-import { AccountAccordCadre } from '@/vuejs/types/Account'
-import PendingIconComponent from '@/vuejs/modules/shared/icon/PendingIconComponent.vue';
+import { AccountAccordCadre } from '@/vuejs/types/AccordCadre'
+import PendingIconComponent from '@/vuejs/modules/shared/icon/PendingIconComponent.vue'
 
 
 const props = defineProps({

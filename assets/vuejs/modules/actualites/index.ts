@@ -19,7 +19,7 @@ export const contenusExpert = ref([
       'Curabitur turpis lectus, suscipit et velit non, ornare facilisis justo. In maximus tempor est, sodales congue dui accumsan ut. In bibendum mi nunc, ac aliquet eros placerat eu. Nunc dictum ipsum sed cursus laoreet. Vestibulum tincidunt sapien dolor, sit amet tempus purus posuere quis. Praesent tempus risus ligula, eget rhoncus velit tempus id. Fusce placerat, odio non auctor lacinia, mi libero varius diam, id sagittis ipsum tellus ac erat. Maecenas quis erat maximus, pharetra metus eget, egestas leo. Aliquam eu tortor blandit, dignissim nibh in, elementum elit.',
     date: '19/09/2022',
     categorie_name: 'Actualités',
-    categorie_color: 'bg-secondary',
+    categorie_color: '#9553ff',
   },
   {
     img_portrait: getImage(imgCentral),
@@ -31,7 +31,7 @@ export const contenusExpert = ref([
       'Curabitur turpis lectus, suscipit et velit non, ornare facilisis justo. In maximus tempor est, sodales congue dui accumsan ut. In bibendum mi nunc, ac aliquet eros placerat eu. Nunc dictum ipsum sed cursus laoreet. Vestibulum tincidunt sapien dolor, sit amet tempus purus posuere quis. Praesent tempus risus ligula, eget rhoncus velit tempus id. Fusce placerat, odio non auctor lacinia, mi libero varius diam, id sagittis ipsum tellus ac erat. Maecenas quis erat maximus, pharetra metus eget, egestas leo. Aliquam eu tortor blandit, dignissim nibh in, elementum elit.',
     date: '19/09/2022',
     categorie_name: 'Actualités',
-    categorie_color: 'bg-secondary',
+    categorie_color: '#9553FF',
   },
   {
     img_portrait: getImage(imgMagazine),
@@ -43,6 +43,6 @@ export const contenusExpert = ref([
       'Curabitur turpis lectus, suscipit et velit non, ornare facilisis justo. In maximus tempor est, sodales congue dui accumsan ut. In bibendum mi nunc, ac aliquet eros placerat eu. Nunc dictum ipsum sed cursus laoreet. Vestibulum tincidunt sapien dolor, sit amet tempus purus posuere quis. Praesent tempus risus ligula, eget rhoncus velit tempus id. Fusce placerat, odio non auctor lacinia, mi libero varius diam, id sagittis ipsum tellus ac erat. Maecenas quis erat maximus, pharetra metus eget, egestas leo. Aliquam eu tortor blandit, dignissim nibh in, elementum elit.',
     date: '19/09/2022',
     categorie_name: 'Conseil',
-    categorie_color: 'bg-primary',
+    categorie_color: '#050056',
   },
 ])

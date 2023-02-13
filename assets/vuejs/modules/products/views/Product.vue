@@ -215,39 +215,39 @@
           class="whitespace-pre-line text-sm text-gray-500 md:text-base lg:text-lg"
           v-html="product.description"
         />
-        <div class="flex flex-col md:mt-[60px] md:flex-row">
-          <div
-            class="mt-5 rounded-lg bg-white p-5 md:mt-0 md:mr-2 lg:h-[180px] lg:p-7"
-          >
-            <h3 class="inline-flex text-[19px] text-primary md:text-[25px]">
-              Certifications et éco-label
-              <LeafIconComponent class="ml-2 items-center" />
-            </h3>
-            <ul class="list-disc text-gray-500">
-              <li
-                v-for="i in 3"
-                :key="i"
-                class="mt-1 ml-7 text-sm md:text-base lg:text-lg"
-              >
-                Curabitur ac sem at enim convallis consectetur
-              </li>
-            </ul>
-          </div>
-          <div class="mt-5 rounded-lg bg-white p-7 md:mt-0 lg:h-[180px]">
-            <h3 class="text-[19px] text-primary md:text-[25px]">
-              Documentation
-            </h3>
-            <ul class="list-disc text-gray-500">
-              <li
-                v-for="(documentation, key) in documentations"
-                :key="key"
-                class="mt-1 ml-7 text-sm md:text-base lg:text-lg"
-              >
-                <a href="#" class="underline">{{ documentation }}</a>
-              </li>
-            </ul>
-          </div>
-        </div>
+<!--        <div class="flex flex-col md:mt-[60px] md:flex-row">-->
+<!--          <div-->
+<!--            class="mt-5 rounded-lg bg-white p-5 md:mt-0 md:mr-2 lg:h-[180px] lg:p-7"-->
+<!--          >-->
+<!--            <h3 class="inline-flex text-[19px] text-primary md:text-[25px]">-->
+<!--              Certifications et éco-label-->
+<!--              <LeafIconComponent class="ml-2 items-center" />-->
+<!--            </h3>-->
+<!--            <ul class="list-disc text-gray-500">-->
+<!--              <li-->
+<!--                v-for="i in 3"-->
+<!--                :key="i"-->
+<!--                class="mt-1 ml-7 text-sm md:text-base lg:text-lg"-->
+<!--              >-->
+<!--                Curabitur ac sem at enim convallis consectetur-->
+<!--              </li>-->
+<!--            </ul>-->
+<!--          </div>-->
+<!--          <div class="mt-5 rounded-lg bg-white p-7 md:mt-0 lg:h-[180px]">-->
+<!--            <h3 class="text-[19px] text-primary md:text-[25px]">-->
+<!--              Documentation-->
+<!--            </h3>-->
+<!--            <ul class="list-disc text-gray-500">-->
+<!--              <li-->
+<!--                v-for="(documentation, key) in documentations"-->
+<!--                :key="key"-->
+<!--                class="mt-1 ml-7 text-sm md:text-base lg:text-lg"-->
+<!--              >-->
+<!--                <a href="#" class="underline">{{ documentation }}</a>-->
+<!--              </li>-->
+<!--            </ul>-->
+<!--          </div>-->
+<!--        </div>-->
       </div>
       <!-- Fin Bloc description -->
 

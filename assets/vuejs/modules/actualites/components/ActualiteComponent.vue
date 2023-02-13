@@ -14,7 +14,7 @@
     <div class="mt-5 w-full justify-start">
       <p
         class="mb-3 w-max rounded-md px-2 py-1 text-white"
-        :class="actualite.categorie_color"
+        :style="{'background': actualite.categorie_color}"
       >
         {{ actualite.categorie_name }}
       </p>
