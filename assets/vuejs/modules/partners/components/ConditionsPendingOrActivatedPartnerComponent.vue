@@ -2,14 +2,14 @@
   <div>
     <div
       v-if="currentStatus.status === status.pending"
-      class="border border-orange-500 text-orange-500 p-2 flex justify-center w-2/3"
+      class="border border-orange-500 text-orange-500 p-2 flex justify-center lg:w-2/3"
     >
       Votre rattachement est en cours
       <PendingIconComponent class="text-orange-700 w-5 stroke-gray-500 fill-orange-400 ml-1"/>
     </div>
     <div
       v-else
-      class="border border-green-qantis text-green-qantis p-2 flex justify-around w-2/3"
+      class="border border-green-qantis text-green-qantis p-2 flex justify-around lg:w-2/3"
     >
       Vous bénéficier des conditions
       <CheckIconComponent />

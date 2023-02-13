@@ -6,11 +6,11 @@
       </h3>
     </div>
     <div class="bg-white p-4 text-gray-500 md:p-7.5 mt-5 lg:mt-2 lg:w-auto rounded-xl">
-      <div class="flex justify-around">
+      <div class="flex flex-col lg:flex-row justify-around">
         <ButtonComponent
           v-for="(button, key) in listButtons"
           :key="key"
-          class="button-white button-white-secondary"
+          class="button-white button-white-secondary mb-5 lg:mb-0"
           @click="openInNewTab(button.url)"
         >
           <ArrowRightIconComponent />

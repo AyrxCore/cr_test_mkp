@@ -1,14 +1,14 @@
 <template>
   <div
-    class="mt-10 mt-5 flex flex-col text-gray-600 xl:grid xl:grid-cols-9 xl:gap-4"
+    class="mt-10 mt-5 flex flex-col text-gray-600 lg:grid lg:grid-cols-9 lg:gap-4"
   >
     <div
-      class="rounded-lg bg-white px-4 pt-7.5 pb-4 text-sm md:text-base xl:col-span-5 xl:px-7.5 xl:text-lg"
+      class="rounded-lg bg-white px-4 pt-7.5 pb-4 text-sm md:text-base lg:col-span-5 xl:px-7.5 xl:text-lg"
     >
       <p v-html="description" />
     </div>
     <div
-      class="mt-5 rounded-lg bg-white px-4 pt-7 pb-4 text-gray-500 xl:col-span-4 xl:mt-0"
+      class="mt-5 rounded-lg bg-white px-4 pt-7 pb-4 text-gray-500 lg:col-span-4 lg:mt-0"
     >
       <ul>
         <li

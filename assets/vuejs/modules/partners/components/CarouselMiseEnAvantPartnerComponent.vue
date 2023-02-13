@@ -49,7 +49,7 @@
             />
 
             <ButtonComponent
-              class="button-secondary mt-6 w-1/2 hidden"
+              class="button-secondary mt-6 lg:w-1/2"
               @click="openInNewTab(miseEnAvant.buttonUrl)"
             >
               {{ miseEnAvant.buttonName }}

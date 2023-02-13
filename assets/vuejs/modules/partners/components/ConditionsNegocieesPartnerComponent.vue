@@ -47,11 +47,11 @@
         <ButtonComponent
           v-for="(button, key) in buttons"
           :key="key"
-          class="button-gradient md:mr-5 mb-5"
+          class="button-gradient md:mr-5 mb-5 !whitespace-normal lg:whitespace-nowrap h-auto lg:h-12"
           @click="openInNewTab(button.url)"
         >
-          <DownloadIconComponent />
-          {{ button.name }}
+          <DownloadIconComponent class="h-[20px] h-[28px] w-[20px] md:w-[24px]"/>
+          <span class="w-full">{{ button.name }}</span>
         </ButtonComponent>
       </div>
     </div>

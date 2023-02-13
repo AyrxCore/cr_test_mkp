@@ -18,12 +18,12 @@
       />
 
       <div
-        class="mt-10 mt-5 flex flex-col text-sm md:text-base xl:grid xl:grid-cols-9 xl:gap-4 xl:text-lg"
+        class="mt-10 mt-5 flex flex-col text-sm md:text-base lg:grid lg:grid-cols-9 lg:gap-4 lg:text-lg"
       >
 
         <ConditionsNegocieesPartnerComponent :properties="accord.properties" />
 
-        <div class="bloc-content col-span-4 mt-5 xl:mt-0">
+        <div class="bloc-content col-span-4 mt-5 lg:mt-0">
           <h3
             class="text-title-35 mb-[1.563rem] mt-5 font-bold leading-9 text-primary xl:w-3/4"
           >
