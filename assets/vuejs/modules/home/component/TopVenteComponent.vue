@@ -13,23 +13,22 @@
 <script lang="ts" setup>
 import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
 import { HOME_TOP_VENTE_PROPERTY } from '@/vuejs/services/utils'
-import { computed, onBeforeMount } from 'vue'
+import { computed, onBeforeMount, onMounted, ref } from 'vue'
 import { useProductStore } from '@/vuejs/stores/product'
 
 const productStore = useProductStore()
+const products = ref([])
 
-onBeforeMount(async () => {
+onMounted(async () => {
   const params =  {
     properties: [
       HOME_TOP_VENTE_PROPERTY
     ],
   }
 
-  await productStore.findProductsTopVente(params)
+  products.value = await productStore.getProductsTopVente(params)
 })
-const products = computed(() => {
-  return productStore.getProductsTopVente
-})
+
 
 </script>
 

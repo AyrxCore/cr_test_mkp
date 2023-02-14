@@ -25,35 +25,30 @@ export const useProductStore = defineStore({
   }),
 
   actions: {
-    async findProductsByParams(params): Promise<[]> {
+    async getProductsByParams(params): Promise<[]> {
       try {
-        return  await ProductHttpClient.get().findProductsByParams(params)
+        return  await ProductHttpClient.get().fetchProductsByParams(params)
       } catch (error) {
         return []
       }
     },
-    async findProductsTopVente(params): Promise<void> {
+    async getProductsTopVente(params) {
       try {
-        if (this.productsTopVente.length === 0) {
-          this.productsTopVente = await this.findProductsByParams(params)
-        }
+          return await this.getProductsByParams(params)
       } catch (error) {
         console.log(error)
 
       }
     },
-    async findProductsSelection(params): Promise<void> {
+    async getProductsSelection(params) {
       try {
-        if (this.productsSelection.length === 0) {
-          this.productsSelection = await this.findProductsByParams(params)
-        }
+          return  await this.getProductsByParams(params)
       } catch (error) {
         console.log(error)
 
       }
     },
-
-    async findProductById(id) {
+    async getProductById(id) {
       const alertStore = useAlertStore()
       try {
         return await ProductHttpClient.get().getProduct(id)
@@ -64,19 +59,6 @@ export const useProductStore = defineStore({
           AlertType.danger,
         )
       }
-
-    },
-  },
-
-  getters: {
-    getProducts() :Array<Product>{
-      return this.products
-    },
-    getProductsTopVente() :Array<Product>{
-      return this.productsTopVente
-    },
-    getProductsSelection() :Array<Product>{
-      return this.productsSelection
     },
   },
 })

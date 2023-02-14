@@ -12,7 +12,7 @@
       class="border border-green-qantis text-green-qantis p-2 flex justify-around lg:w-2/3"
     >
       Vous bénéficier des conditions
-      <CheckIconComponent />
+      <CheckIconComponent class="stroke-green-qantis"/>
     </div>
     <div class="condition-beneficiaire mt-4">
       <p v-html="text" />

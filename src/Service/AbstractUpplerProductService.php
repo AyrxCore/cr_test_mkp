@@ -43,7 +43,7 @@ Abstract class AbstractUpplerProductService extends HttpClientProvider
     #[Required]
     public EntityManagerInterface $em;
 
-    public function searchProductsByParams(array $options = [], array $filters = []): \stdClass | null
+    public function searchProductsByParams(array $options = [], array $filters = [], int $perPage = 5): \stdClass | null
     {
         $session = $this->requestStack->getSession();
         $session->start();
@@ -52,13 +52,13 @@ Abstract class AbstractUpplerProductService extends HttpClientProvider
 
         if (!empty($filters)) {
             foreach ($filters as $filter) {
-                $urlFilters.= null === $urlFilters ? '?expand[]=' . $filter : '&expand[]=' . $filter;
+                $urlFilters.= '&expand[]=' . $filter;
             }
         }
 
         $res = $this->request(
             'POST',
-            $this->apiUrl . 'v1/buyer/search/product'. $urlFilters,
+            $this->apiUrl . 'v1/buyer/search/product?perPage=' . $perPage . $urlFilters,
             [
                 'json' => $options
             ]
