@@ -315,6 +315,8 @@ const helpImageFile = getImage(helpImage)
 const thumbsSwiper = ref(null)
 
 const product = ref<Product>()
+console.log('product')
+console.log(product)
 
 const breadcrumbUrl = computed(() => {
   const breadcrumb = []

@@ -9,7 +9,7 @@
             à nos 30 000 entreprises adhérentes
           </h3>
           <p
-            class="mt-2.5 text-sm text-gray-400 sm:mt-5 sm:text-base xl:text-lg"
+              class="mt-2.5 text-sm text-gray-400 sm:mt-5 sm:text-base xl:text-lg"
           >
             Cher adhérent, ce nouvel espace dédié vous permet d'acheter
             directement en ligne et de trouver vos accords-cadres, en quelques
@@ -19,17 +19,17 @@
         </div>
         <div class="hidden xl:block">
           <ButtonComponent class="button-secondary">
-            <MailIconLightComponent />
-            <PhoneLightIconComponent />
+            <MailIconLightComponent/>
+            <PhoneLightIconComponent/>
             Contactez-nous
           </ButtonComponent>
         </div>
       </div>
       <div class="relative mt-2">
         <CarouselListSharedComponent
-          :slides-per-view="1"
-          :space-between="20"
-          :breakpoints="{
+            :slides-per-view="1"
+            :space-between="20"
+            :breakpoints="{
             640: {
               slidesPerView: 1,
               spaceBetween: 20,
@@ -37,34 +37,34 @@
           }"
         >
           <SwiperSlide
-            v-for="(banniere, key) in bannieres"
-            :key="key"
-            class="flex h-[303px] items-center justify-center overflow-hidden rounded-lg bg-white xl:h-full"
+              v-for="(banniere, key) in bannieres"
+              :key="key"
+              class="flex h-[303px] items-center justify-center overflow-hidden rounded-lg bg-white xl:h-full"
           >
             <img
-              :src="banniere.image_mobile"
-              alt="Picture"
-              class="flex w-full items-center md:hidden"
+                :src="banniere.image_mobile"
+                alt="Picture"
+                class="flex w-full items-center md:hidden"
             />
             <img
-              :src="banniere.image"
-              alt="Picture"
-              class="mx-auto hidden items-center md:flex"
+                :src="banniere.image"
+                alt="Picture"
+                class="mx-auto hidden items-center md:flex"
             />
           </SwiperSlide>
         </CarouselListSharedComponent>
       </div>
 
       <!-- Bloc Produits top ventes -->
-      <TopVenteComponent />
+      <TopVenteComponent/>
       <!-- Fin bloc Produits top ventes -->
 
       <!-- Bloc accords cadre -->
-      <AccordCadreComponent />
+      <AccordCadreComponent/>
       <!-- Fin Bloc accords cadre -->
 
       <!-- Bloc sélection de produits -->
-      <SelectionComponent class="mt-4" />
+      <SelectionComponent class="mt-4"/>
       <!-- Fin bloc sélection de produits -->
 
       <div class="mt-10">
@@ -73,12 +73,12 @@
           Plus de 200 partenaires fournisseurs, repartis en 26 catégories, sont
           référencés pour vos achats.
           <a href="#" class="font-normal text-secondary underline"
-            >Découvrir toutes les catégories d'achats</a
+          >Découvrir toutes les catégories d'achats</a
           >
         </p>
       </div>
 
-      <PartnersCarousel class="mt-5" />
+      <PartnersCarousel class="mt-5"/>
 
       <div class="mt-16 text-center">
         <h3 class="home-subtitle font-bold text-primary">
@@ -87,13 +87,13 @@
       </div>
       <div class="mt-5 flex w-full text-lg sm:flex">
         <DropdownListComponent>
-          <template #button-label> Toutes les catégories </template>
+          <template #button-label> Toutes les catégories</template>
           <template #content>
             <div class="list-categories">
               <div
-                v-for="(categorie, id) in listCategories"
-                :key="id"
-                class="list-categories-items"
+                  v-for="(categorie, id) in listCategories"
+                  :key="id"
+                  class="list-categories-items"
               >
                 <a href="#">
                   {{ categorie }}
@@ -106,13 +106,13 @@
     </div>
 
     <div
-      class="home-bloc-economie text-cotext m-auto mt-16 flex-1 py-4 text-white"
+        class="home-bloc-economie text-cotext m-auto mt-16 flex-1 py-4 text-white"
     >
       <div class="px-5 text-left sm:text-center">
         <h3
-          class="text-[23px] font-bold font-bold leading-[27px] sm:text-[35px] sm:leading-[38.11px]"
+            class="text-[23px] font-bold font-bold leading-[27px] sm:text-[35px] sm:leading-[38.11px]"
         >
-          Vous faites des économies tout en <br />
+          Vous faites des économies tout en <br/>
           contribuant à votre démarche RSE
         </h3>
         <p class="mt-2 text-sm sm:mx-auto sm:text-base xl:w-[45%] xl:text-lg">
@@ -123,54 +123,57 @@
         </p>
         <p class="mt-10 flex justify-center">
           <a href="#" class="button button-gradient">
-            <ArrowRightIconComponent :stroke-color="'#FFFFFF'" /> Toutes nos
+            <ArrowRightIconComponent :stroke-color="'#FFFFFF'"/>
+            Toutes nos
             catégories d'achats
           </a>
         </p>
       </div>
     </div>
 
-    <div
-      class="my-6 mx-4 mt-10 max-w-screen-2xl flex-1 rounded-md bg-white pb-4 shadow-md xl:mx-auto"
-    >
-      <div class="flex flex-col pt-1 text-center">
-        <h3 class="primary home-subtitle mt-10 flex flex-col pl-8 font-bold">
-          <p class="flex">Contenus experts spécialement conçus</p>
-          <p class="flex">
-            pour la
-            <span class="text-gradient ml-2"> communauté QANTIS </span>
-          </p>
-        </h3>
-        <ContenusExpertComponent :contenus="contenusExpert" />
-        <div class="flex justify-center">
-          <p class="mt-10">
-            <RouterLink
-              :to="{ path: '/app/actualites' }"
-              class="button button-gradient"
-            >
-              <ArrowRightIconComponent :stroke-color="'#FFFFFF'" />
-              Tous les contenus experts
-            </RouterLink>
-          </p>
+    <template v-if="getExpertsContents.length">
+      <div
+          class="my-6 mx-4 mt-10 max-w-screen-2xl flex-1 rounded-md bg-white pb-4 shadow-md xl:mx-auto"
+      >
+        <div class="flex flex-col pt-1 text-center">
+          <h3 class="primary home-subtitle mt-10 flex flex-col pl-8 font-bold">
+            <p class="flex">Contenus experts spécialement conçus</p>
+            <p class="flex">
+              pour la
+              <span class="text-gradient ml-2"> communauté QANTIS </span>
+            </p>
+          </h3>
+          <ContenusExpertComponent/>
+          <div class="flex justify-center">
+            <p class="mt-10">
+              <RouterLink
+                  :to="{ path: '/app/actualites' }"
+                  class="button button-gradient"
+              >
+                <ArrowRightIconComponent :stroke-color="'#FFFFFF'"/>
+                Tous les contenus experts
+              </RouterLink>
+            </p>
+          </div>
         </div>
       </div>
-    </div>
+    </template>
+
   </BaseTemplate>
 </template>
 <script lang="ts" setup>
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
-import { getImage, listCategories } from '@/vuejs/services/utils'
+import {getImage, listCategories} from '@/vuejs/services/utils'
 import banniere1 from '@/vuejs/assets/img/demo/banniere-1-desktop.png'
 import banniere2 from '@/vuejs/assets/img/demo/banniere-2-desktop.png'
 import banniereMobile1 from '@/vuejs/assets/img/demo/banniere-1-mobile.png'
 import banniereMobile2 from '@/vuejs/assets/img/demo/banniere-2-mobile.png'
-import { SwiperSlide } from 'swiper/vue'
+import {SwiperSlide} from 'swiper/vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import PartnersCarousel from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
-import { contenusExpert } from '@/vuejs/modules/actualites'
 
-import { ref } from 'vue'
+import {onMounted, ref} from 'vue'
 
 import MailIconLightComponent from '@/vuejs/modules/shared/icon/MailIconLightComponent.vue'
 import PhoneLightIconComponent from '@/vuejs/modules/shared/icon/PhoneLightIconComponent.vue'
@@ -181,9 +184,23 @@ import SelectionComponent from '@/vuejs/modules/home/component/SelectionComponen
 import TopVenteComponent from '@/vuejs/modules/home/component/TopVenteComponent.vue'
 import AccordCadreComponent from '@/vuejs/modules/home/component/AccordsCadreComponent.vue'
 
+
+import {useExpertContentStore} from '@/vuejs/stores/expertContent'
+import {storeToRefs} from 'pinia';
+
+const expertContentStore = useExpertContentStore()
+const {getExpertsContents} = storeToRefs(expertContentStore)
+
+const expertsContentsLoaded = ref<boolean>(false)
+
+onMounted(async () => {
+  await expertContentStore.init()
+  expertsContentsLoaded.value = true
+})
+
 const bannieres = ref([
-  { image: getImage(banniere1), image_mobile: getImage(banniereMobile1) },
-  { image: getImage(banniere2), image_mobile: getImage(banniereMobile2) },
+  {image: getImage(banniere1), image_mobile: getImage(banniereMobile1)},
+  {image: getImage(banniere2), image_mobile: getImage(banniereMobile2)},
 ])
 
 </script>

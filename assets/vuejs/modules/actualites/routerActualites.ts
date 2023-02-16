@@ -14,7 +14,7 @@ export const routes: RouteRecordRaw[] = [
     component: ActualitesPage,
   },
   {
-    path: '/app/' +ActualitesPageList.ACTUALITE,
+    path: '/app/' +ActualitesPageList.ACTUALITE+'/:slug',
     component: ActualitePage,
     name: ActualitesPageList.ACTUALITE,
   },

@@ -1,39 +1,41 @@
 <template>
   <div
-    class="mx-auto flex h-[524px] flex-col items-center rounded-md bg-white px-6 py-2"
+      class="mx-auto flex h-[524px] flex-col items-center rounded-md bg-white px-6 py-2"
   >
     <div class="mx-auto items-center">
-      <a href="/app/actualite">
+      <a href="" @click="goToArticle(contenu.slug)">
         <img
-          :src="actualite.img_landscape"
-          alt="Image produit"
-          class="mx-auto h-[205px!important] w-[334px!important]"
+            :src="contenu.page_actus_img_desktop"
+            alt="Image produit"
+            class="mx-auto h-[205px!important] w-[334px!important]"
         />
       </a>
     </div>
     <div class="mt-5 w-full justify-start">
       <p
-        class="mb-3 w-max rounded-md px-2 py-1 text-white"
-        :style="{'background': actualite.categorie_color}"
+          class="mb-3 w-max rounded-md px-2 py-1 text-white"
+          :style="{'background': contenu.categoryColor}"
       >
-        {{ actualite.categorie_name }}
+        {{ contenu.categoryName }}
       </p>
       <span class="text-gray-500">
-        {{ actualite.date }}
+        {{ moment(String(contenu.date)).format('MM/DD/YYYY') }}
+
       </span>
     </div>
     <h3 class="mt-6 text-left text-[25px] font-bold text-primary">
-      <RouterLink :to="{ path: '/app/actualite' }">{{
-        actualite.title
-      }}</RouterLink>
+      <RouterLink :to="{}" @click="goToArticle(contenu.slug)">{{
+          contenu.articleTitle
+        }}
+      </RouterLink>
     </h3>
     <p class="mt-1 text-left text-lg text-gray-400 flex">
-      {{ actualite.teaser }}
+      {{ contenu.articleTeaser }}
     </p>
     <div class="bottom-0 flex h-full w-full items-end">
       <RouterLink
-        :to="{ path: '/app/actualite' }"
-        class="bottom-0 items-center text-sm font-medium text-primary underline"
+          :to="{}" @click="goToArticle(contenu.slug)"
+          class="bottom-0 items-center text-sm font-medium text-primary underline"
       >
         Lire l'article
       </RouterLink>
@@ -41,12 +43,25 @@
   </div>
 </template>
 <script lang="ts" setup>
+import {useRouter} from 'vue-router'
+import {PageList} from '@/vuejs/router';
+import {ExpertContent} from '@/vuejs/types/ExpertContent';
+import {PropType} from 'vue';
+import moment from 'moment'
+
+const router = useRouter()
+
 const props = defineProps({
-  actualite: {
+  contenu: {
+    type: Object as PropType<ExpertContent>,
     required: true,
-    type: Object,
   },
 })
+
+const goToArticle = (slug) => {
+  router.push({name: PageList.ACTUALITE, params: {slug: slug}})
+}
+
 </script>
 
 <style scoped></style>

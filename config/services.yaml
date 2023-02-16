@@ -81,3 +81,9 @@ services:
 
   App\Service\UpplerAccordCadreService:
     parent: App\Service\AbstractUpplerProductService
+
+  App\Service\UpplerDynamicEntityService:
+    parent: App\Service\HttpClientProvider
+    arguments:
+      $upplerUrlSourceProductImg: '%uppler_url_source_product_img%'
+      $upplerUrlSourceSellerImg: '%uppler_url_source_seller_img%'

@@ -13,7 +13,8 @@
     "plugins": [{ "name": "@vuedx/typescript-plugin-vue" }],
     "paths": {
       "@/*": ["./assets/*"]
-    }
+    },
+    "allowSyntheticDefaultImports": true
   },
   "include": ["./**/*.ts", "./**/*.d.ts", "./**/*.vue"],
   "exclude": ["node_modules", "dist", "public", "tests"]
