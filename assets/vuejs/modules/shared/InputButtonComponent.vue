@@ -36,7 +36,7 @@ const props = defineProps({
   btnColor: {
     required: false,
     type: String,
-    default: 'bg-purple-600',
+    default: 'bg-secondary',
   },
 })
 </script>

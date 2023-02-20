@@ -6,17 +6,18 @@
         <ContactUsButtonComponent/>
         <h3 class="text-[35px] text-primary">Nos contenus experts</h3>
         <!-- Bloc liste des actus -->
-        <div class="m-auto my-2 grid w-[100%] grid-cols-4 gap-4">
-          <div class="col-span-3">
-            <div class="m-auto grid grid-cols-3 gap-4">
-              <div v-for="contenu in expertsContents"
-                   :key="contenu.id"
+        <div class="m-auto my-2 flex">
+          <div class="w-3/4">
+            <div class="m-auto md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-4">
+              <div
+                v-for="contenu in expertsContents"
+                :key="contenu.id"
               >
                 <ActualiteComponentComponent :contenu="contenu"/>
               </div>
             </div>
           </div>
-          <div>
+          <div class="w-1/4">
             <h3 class="text-[25px] text-primary">Catégories</h3>
             <p
                 v-for="category in getExpertsContentsCategories"
@@ -34,7 +35,7 @@
               </h3>
               <InputButtonComponent
                   placeholder="Votre email"
-                  :btn-color="'bg-purple-600'"
+                  :btn-color="'bg-secondary'"
               >
                 S'inscrire
               </InputButtonComponent>
