@@ -106,33 +106,23 @@ import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import {getImage} from '@/vuejs/services/utils'
-import defaultImage from '@/vuejs/assets/img/default-image.png'
 import guideQantisImg from '@/vuejs/assets/img/samples/guide-qantis.png'
-import {computed, onMounted, ref} from 'vue'
+import {onMounted, ref} from 'vue'
 import ActualiteComponentComponent from '@/vuejs/modules/actualites/components/ActualiteComponent.vue'
 import InputButtonComponent from '@/vuejs/modules/shared/InputButtonComponent.vue'
 import CheckCircleInIconComponent from '@/vuejs/modules/shared/icon/CheckCircleInIconComponent.vue'
-// import { contenusExpert } from '@/vuejs/modules/actualites'
-import {useExpertContentStore} from '@/vuejs/stores/expertContent';
-import {storeToRefs} from 'pinia';
+import {useExpertContentStore} from '@/vuejs/stores/expertContent'
+import {storeToRefs} from 'pinia'
+import {ExpertContent} from '@/vuejs/types/ExpertContent'
 
 const expertContentStore = useExpertContentStore()
-const {getExpertsContents, getExpertsContentsCategories} = storeToRefs(expertContentStore)
+const { getExpertsContentsCategories} = storeToRefs(expertContentStore)
+const expertsContents = ref<Array<ExpertContent>>([])
 
-
-const defaultImageFile = getImage(defaultImage)
 const guideQantisImgFile = getImage(guideQantisImg)
-const expertsContents = computed(() => {
-  return expertContentStore.expertsContents
-})
 
 onMounted(async () => {
-  console.log('onMounted')
-  const expertsContents = await expertContentStore.init()
-
-  console.log(expertsContents)
-  console.log('onMounted ok')
-  // expertsContentsLoaded.value = true
+  expertsContents.value = await expertContentStore.init()
 })
 </script>
 

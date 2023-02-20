@@ -366,12 +366,8 @@ class ExpertContent implements \JsonSerializable
     {
         $id = $dynamicEntity['id'];
         $slug = $dynamicEntity['slug'];
-        $is_enable = $dynamicEntity['is_enabled'] === "true";
 
-        //            $categorie_id = $dynamicEntity['dynamic_entity_configuration']['id'];
-        //            $categorie_name = $dynamicEntity['dynamic_entity_configuration']['name'];
-        //            $date = new \DateTime($dynamicEntity['created_at']);
-        //            $date = new \DateTime($dynamicEntity['updated_at']);
+        $urlImg = 'https://uppler-platform-quantis.s3.eu-west-3.amazonaws.com/image/';
 
         foreach ($dynamicEntity['dynamic_fields'] as $dynamicField) {
             //                $fieldName = $dynamicField['dynamic_field_configuration']['name']['default'];
@@ -380,9 +376,7 @@ class ExpertContent implements \JsonSerializable
             switch ($fieldName) {
                 case 'mise_en_avant_homepage_img_desktop':
                     if (count($dynamicField['images']) === 1) {
-                        $mise_en_avant_homepage_img_desktop
-                            = 'https://uppler-platform-quantis.s3.eu-west-3.amazonaws.com/uppler_medium/'
-                            . $dynamicField['images'][0]['path'];
+                        $mise_en_avant_homepage_img_desktop  = $urlImg . $dynamicField['images'][0]['path'];
                     } else {
                         throw new NotFoundHttpException('mise_en_avant_homepage_img_desktop img is empty');
                     }
@@ -390,9 +384,7 @@ class ExpertContent implements \JsonSerializable
 
                 case 'mise_en_avant_homepage_img_mobile':
                     if (count($dynamicField['images']) === 1) {
-                        $mise_en_avant_homepage_img_mobile
-                            = 'https://uppler-platform-quantis.s3.eu-west-3.amazonaws.com/uppler_medium/'
-                            . $dynamicField['images'][0]['path'];
+                        $mise_en_avant_homepage_img_mobile = $urlImg . $dynamicField['images'][0]['path'];
                     } else {
                         throw new NotFoundHttpException('mise_en_avant_homepage_img_mobile img is empty');
                     }
@@ -400,9 +392,7 @@ class ExpertContent implements \JsonSerializable
 
                 case 'page_actus_img_desktop':
                     if (count($dynamicField['images']) === 1) {
-                        $page_actus_img_desktop
-                            = 'https://uppler-platform-quantis.s3.eu-west-3.amazonaws.com/uppler_medium/'
-                            . $dynamicField['images'][0]['path'];
+                        $page_actus_img_desktop = $urlImg . $dynamicField['images'][0]['path'];
                     } else {
                         throw new NotFoundHttpException('page_actus_img_desktop img is empty');
                     }
@@ -410,9 +400,7 @@ class ExpertContent implements \JsonSerializable
 
                 case 'page_actus_img_mobile':
                     if (count($dynamicField['images']) === 1) {
-                        $page_actus_img_mobile
-                            = 'https://uppler-platform-quantis.s3.eu-west-3.amazonaws.com/uppler_medium/'
-                            . $dynamicField['images'][0]['path'];
+                        $page_actus_img_mobile = $urlImg . $dynamicField['images'][0]['path'];
                     } else {
                         throw new NotFoundHttpException('page_actus_img_mobile img is empty');
                     }
@@ -420,9 +408,7 @@ class ExpertContent implements \JsonSerializable
 
                 case 'slider_img_desktop':
                     if (count($dynamicField['images']) === 1) {
-                        $slider_img_desktop
-                            = 'https://uppler-platform-quantis.s3.eu-west-3.amazonaws.com/uppler_medium/'
-                            . $dynamicField['images'][0]['path'];
+                        $slider_img_desktop = $urlImg . $dynamicField['images'][0]['path'];
                     } else {
                         throw new NotFoundHttpException('slider_img_desktop img is empty');
                     }
@@ -430,9 +416,7 @@ class ExpertContent implements \JsonSerializable
 
                 case 'slider_img_mobile':
                     if (count($dynamicField['images']) === 1) {
-                        $slider_img_mobile
-                            = 'https://uppler-platform-quantis.s3.eu-west-3.amazonaws.com/uppler_medium/'
-                            . $dynamicField['images'][0]['path'];
+                        $slider_img_mobile = $urlImg . $dynamicField['images'][0]['path'];
                     } else {
                         throw new NotFoundHttpException('slider_img_mobile img is empty');
                     }
@@ -440,9 +424,7 @@ class ExpertContent implements \JsonSerializable
 
                 case 'article_img_desktop':
                     if (count($dynamicField['images']) === 1) {
-                        $article_img_desktop
-                            = 'https://uppler-platform-quantis.s3.eu-west-3.amazonaws.com/uppler_medium/'
-                            . $dynamicField['images'][0]['path'];
+                        $article_img_desktop = $urlImg . $dynamicField['images'][0]['path'];
                     } else {
                         throw new NotFoundHttpException('article_img_desktop img is empty');
                     }
@@ -450,9 +432,7 @@ class ExpertContent implements \JsonSerializable
 
                 case 'article_img_mobile':
                     if (count($dynamicField['images']) === 1) {
-                        $article_img_mobile
-                            = 'https://uppler-platform-quantis.s3.eu-west-3.amazonaws.com/uppler_medium/'
-                            . $dynamicField['images'][0]['path'];
+                        $article_img_mobile = $urlImg . $dynamicField['images'][0]['path'];
                     } else {
                         throw new NotFoundHttpException('article_img_mobile img is empty');
                     }

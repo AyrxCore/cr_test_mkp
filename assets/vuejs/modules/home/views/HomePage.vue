@@ -186,7 +186,7 @@ import AccordCadreComponent from '@/vuejs/modules/home/component/AccordsCadreCom
 
 
 import {useExpertContentStore} from '@/vuejs/stores/expertContent'
-import {storeToRefs} from 'pinia';
+import {storeToRefs} from 'pinia'
 
 const expertContentStore = useExpertContentStore()
 const {getExpertsContents} = storeToRefs(expertContentStore)

@@ -62,8 +62,7 @@ class ExpertContentCategoryProvider implements RestrictedDataProviderInterface, 
                 }
             }
         }
-        dump($names);
-        dump($colors);
+
         $categories = [];
         foreach($names as $k=>$name){
             $category = new ExpertContentCategory();
@@ -72,7 +71,7 @@ class ExpertContentCategoryProvider implements RestrictedDataProviderInterface, 
             $category->setColor($colors[$k]);
             $categories[] = $category;
         }
-        dump($categories);
+
         return $categories;
     }
 

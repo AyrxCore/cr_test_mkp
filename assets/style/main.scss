@@ -59,3 +59,17 @@
     @apply border bg-transparent;
   }
 }
+
+.truncate-custom {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  &.truncate-custom-2 {
+    -webkit-line-clamp: 2;
+    }
+
+  &.truncate-custom-3 {
+      -webkit-line-clamp: 3;
+    }
+}
