@@ -52,7 +52,6 @@ const props = defineProps({
     type: String,
   },
 })
-const lastBreadcrumbUrl = computed(() => {  if (props.listUrl) {    return props.listUrl[props.listUrl.length - 1]  }  return []})
 
 const lastBreadcrumbUrl = computed(() => {
   if (props.listUrl) {
