@@ -73,7 +73,7 @@ import LabelField from '@/vuejs/modules/shared/formfields/LabelField.vue'
 import {computed, ref} from 'vue'
 import router, {PageList} from '@/vuejs/router'
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
-import {useUserStore} from "@/vuejs/stores/user";
+import {useUserStore} from '@/vuejs/stores/user'
 
 const currentPassword = ref<string>('')
 const newPassword = ref<string>('')
@@ -95,7 +95,7 @@ const classes = computed((): string => {
 
 const onPasswordFormSubmit = async () => {
   if(newPassword.value !== confirmation.value) {
-    passwordError.value = "Le mot de passe et sa confirmation doivent être identiques"
+    passwordError.value = 'Le mot de passe et sa confirmation doivent être identiques'
     return
   }
   isLoading.value = true

@@ -12,6 +12,7 @@ final class Property implements \JsonSerializable
     private int $id;
     private ?string $name;
     private ?string $value;
+    private ?bool $checked = null;
 
     public function getId(): int
     {
@@ -60,5 +61,21 @@ final class Property implements \JsonSerializable
     public function jsonSerialize()
     {
         return  get_object_vars($this);
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getChecked(): ?bool
+    {
+        return $this->checked;
+    }
+
+    /**
+     * @param bool|null $checked
+     */
+    public function setChecked(?bool $checked): void
+    {
+        $this->checked = $checked;
     }
 }

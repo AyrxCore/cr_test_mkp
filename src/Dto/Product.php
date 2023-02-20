@@ -46,7 +46,7 @@ final class Product implements \JsonSerializable
     private ?float $percent = 0;
     private ?Price $price = null;
     private ?Price $basePrice = null;
-    private ?Seller $company;
+    private ?Seller $seller;
 
     public function getId(): ?int
     {
@@ -239,17 +239,17 @@ final class Product implements \JsonSerializable
     /**
      * @return Seller|null
      */
-    public function getCompany(): ?Seller
+    public function getSeller(): ?Seller
     {
-        return $this->company;
+        return $this->seller;
     }
 
     /**
-     * @param Seller|null $company
+     * @param Seller|null $seller
      */
-    public function setCompany(?Seller $company): void
+    public function setSeller(?Seller $seller): void
     {
-        $this->company = $company;
+        $this->seller = $seller;
     }
 
     /**

@@ -7,10 +7,11 @@ import { getErrorMessage } from '@/vuejs/services/login'
 import ProductHttpClient from '@/vuejs/services/httpclient/ProductHttpClient'
 import { Product } from '@/vuejs/types/Product'
 import { Address } from '@/vuejs/types/Address';
+import { Filter } from '@/vuejs/types/Filter';
 
 export interface ProductStoreState {
   products: Product[],
-  productsTopVente: Product[],
+  filters: Filter[],
   productsSelection: Product[],
   cart: [],
 }
@@ -19,7 +20,7 @@ export const useProductStore = defineStore({
   id: 'product',
   state: (): ProductStoreState => ({
     products: [],
-    productsTopVente: [],
+    filters: [],
     productsSelection: [],
     cart: []
   }),
@@ -40,7 +41,7 @@ export const useProductStore = defineStore({
 
       }
     },
-    async getProductsSelection(params) {
+    async getProductsWithFilterByParams(params) {
       try {
           return  await this.getProductsByParams(params)
       } catch (error) {

@@ -10,7 +10,7 @@ use App\Dto\SubAccount;
 use App\Dto\UserAccount;
 use App\Entity\User;
 use App\Service\UpplerAccountService;
-use App\Service\UpplerCompanyService;
+use App\Service\UpplerBuyerCompanyService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;

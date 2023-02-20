@@ -1,21 +1,22 @@
 import { RouteRecordRaw } from 'vue-router'
-import PartnerPage from '@/vuejs/modules/partners/views/Partner.vue'
+import AccordCadrePage from '@/vuejs/modules/partners/views/AccordCadre.vue'
 import ProductsPartnerPage from '@/vuejs/modules/partners/views/ProductsPartner.vue'
 
 export enum PartnersPageList {
+  ACCORD_CADRE = 'accord-cadre',
   PARTNER = 'partner',
-  PRODUCTS_PARTNER = 'products-partner',
+  LISTE_PRODUITS_PARTENAIRE = 'liste-produits-partenaire',
 }
 
 export const routes: RouteRecordRaw[] = [
   {
-    path: `/app/${ PartnersPageList.PARTNER }/:id`,
-    name: PartnersPageList.PARTNER,
-    component: PartnerPage,
+    path: `/app/${ PartnersPageList.ACCORD_CADRE }/:id`,
+    name: PartnersPageList.ACCORD_CADRE,
+    component: AccordCadrePage,
   },
   {
-    path: `/app/${PartnersPageList.PRODUCTS_PARTNER}/:id`,
+    path: `/app/${PartnersPageList.LISTE_PRODUITS_PARTENAIRE}/:id`,
     component: ProductsPartnerPage,
-    name: PartnersPageList.PRODUCTS_PARTNER,
+    name: PartnersPageList.LISTE_PRODUITS_PARTENAIRE,
   },
 ]

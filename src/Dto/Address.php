@@ -18,10 +18,14 @@ use Symfony\Component\Validator\Constraints as Assert;
             ],
             "method" => "POST",
             "validate" => true,
+            "path" => "/create-address"
         ]
     ],
     itemOperations: [
-        'get',
+        'get' => [
+            "method" => "GET",
+            "path" => "/get-address/{id}"
+        ],
         'update' => [
             "openapi_context" => [
                 'summary' => 'Editer une adresse',
@@ -29,9 +33,10 @@ use Symfony\Component\Validator\Constraints as Assert;
             ],
             "method" => "PUT",
             "validate" => true,
+            "path" => "/update-address/{id}"
         ]
     ],
-    routePrefix: '/company'
+    routePrefix: '/buyer'
 )]
 final class Address
 {

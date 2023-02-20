@@ -41,7 +41,7 @@
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import InputField from '@/vuejs/modules/shared/formfields/InputField.vue'
 import LabelField from '@/vuejs/modules/shared/formfields/LabelField.vue'
-import {onBeforeMount, onMounted, ref} from 'vue'
+import {onBeforeMount, ref} from 'vue'
 import router, {PageList} from '@/vuejs/router'
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import {useUserStore} from '@/vuejs/stores/user'

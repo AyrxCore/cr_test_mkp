@@ -8,10 +8,10 @@
           </h3>
         </div>
       </div>
-      <AddressesDefault :address="companyStore.getDefaultBillingAddress">
+      <AddressesDefault :address="buyerCompanyStore.getDefaultBillingAddress">
         <template #title> Votre adresse de facturation par défaut </template>
       </AddressesDefault>
-      <AddressesDefault :address="companyStore.getDefaultShippingAddress">
+      <AddressesDefault :address="buyerCompanyStore.getDefaultShippingAddress">
         <template #title> Votre adresse de livraison par défaut </template>
       </AddressesDefault>
       <div class="mb-4 md:mb-8 flex justify-between">
@@ -58,19 +58,19 @@
 <script lang="ts" setup>
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import { onMounted } from 'vue'
-import { useCompanyStore } from '@/vuejs/stores/company'
+import { useBuyerCompanyStore } from '@/vuejs/stores/buyer_company'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import AddressesList from '@/vuejs/modules/account/components/adresses/AddressesList.vue'
 import AddressesDefault from '@/vuejs/modules/account/components/adresses/AddressesDefault.vue'
 import router from '@/vuejs/router'
 import { AccountPageList } from '@/vuejs/modules/account/routerAccount'
 import AddIconComponent from '@/vuejs/modules/shared/icon/AddIconComponent.vue'
-const companyStore = useCompanyStore()
+const buyerCompanyStore = useBuyerCompanyStore()
 
 onMounted(async () => {
-  companyStore.isloading = !companyStore.adresses.length
-  await companyStore.getAdresses()
-  companyStore.isloading = false
+  buyerCompanyStore.isloading = !buyerCompanyStore.adresses.length
+  await buyerCompanyStore.getAdresses()
+  buyerCompanyStore.isloading = false
 })
 
 const onCreateAddressClick = (type: string) => {

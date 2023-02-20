@@ -2,7 +2,7 @@
 
 namespace App\Controller\Api\Buyer;
 
-use App\Service\UpplerCompanyService;
+use App\Service\UpplerBuyerCompanyService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -12,8 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
-#[Route("/api/buyer/company")]
-class CompanyApiController extends AbstractController
+class AddressApiController extends AbstractController
 {
     #[Required]
     public RequestStack $requestStack;
@@ -22,10 +21,10 @@ class CompanyApiController extends AbstractController
     public EntityManagerInterface $em;
 
     #[Required]
-    public UpplerCompanyService $upplerCompanyService;
+    public UpplerBuyerCompanyService $upplerBuyerCompanyService;
 
-    #[Route('/addresses', name: 'get_addresses')]
-    public function me(NormalizerInterface $normalizer): JsonResponse
+    #[Route('/api/buyer/addresses', name: 'get_addresses')]
+    public function list(NormalizerInterface $normalizer): JsonResponse
     {
         $session= $this->requestStack->getSession();
         $session->start();
@@ -34,9 +33,8 @@ class CompanyApiController extends AbstractController
             return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        $addresses = $this->upplerCompanyService->getAdresses();
+        $addresses = $this->upplerBuyerCompanyService->getAdresses();
 
         return new JsonResponse($addresses);
     }
-
 }

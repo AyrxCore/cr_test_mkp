@@ -10,7 +10,7 @@ use App\Dto\Address;
 use App\Dto\SubAccount;
 use App\Entity\Account;
 use App\Service\UpplerAccountService;
-use App\Service\UpplerCompanyService;
+use App\Service\UpplerBuyerCompanyService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 

@@ -6,15 +6,12 @@ namespace App\Service;
 
 use App\Dto\Address;
 use App\Entity\Account;
-use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use phpDocumentor\Reflection\Types\Scalar;
-use PhpParser\Node\Expr\Cast\Object_;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Service\Attribute\Required;
 
-class UpplerCompanyService extends HttpClientProvider
+class UpplerBuyerCompanyService extends HttpClientProvider
 {
     #[Required]
     public RequestStack $requestStack;
@@ -25,7 +22,7 @@ class UpplerCompanyService extends HttpClientProvider
     // filters : filtres disponibles pour étendre la quantité d'informations retournées
     // Valeurs possibles ("accounts","files","subscriptions","dynamicFields")
     // https://app.preprod-yousg3q-qbpekzlwwankw.fr-3.platformsh.site/api-documentation/operator#section-Company
-    public function getCompany(int $id, array $filters = []): object | null
+    public function getBuyerByCompanyId(int $id, array $filters = []): object | null
     {
         $session = $this->requestStack->getSession();
         $session->start();

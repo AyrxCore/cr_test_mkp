@@ -1,6 +1,6 @@
 import { Address } from '@/vuejs/types/Address'
 
-export interface CompanyStoreState {
+export interface BuyerCompanyStoreState {
   adresses: Address[]
   currentAddress: Address
   isloading: boolean

@@ -17,9 +17,8 @@
 </template>
 <script lang="ts" setup>
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
-import { computed, PropType } from 'vue'
+import { PropType } from 'vue'
 import { Address } from '@/vuejs/types/Address'
-import InformationIconComponent from '@/vuejs/modules/shared/icon/InformationIconComponent.vue';
 
 const props = defineProps({
   address: {

@@ -42,10 +42,10 @@ class UpplerAccordCadreService extends AbstractUpplerProductService
             return null;
         }
 
-        return $this->populateAccordCadre($res, $accountId);
+        return $this->hydrateAccordCadre($res, $accountId);
     }
 
-    private function populateAccordCadre($remoteAccordCadre, ?string $accountId = null)
+    private function hydrateAccordCadre($remoteAccordCadre, ?string $accountId = null)
     {
         $accordCadre = new AccordCadre();
         $accordCadre->setId($remoteAccordCadre->id);

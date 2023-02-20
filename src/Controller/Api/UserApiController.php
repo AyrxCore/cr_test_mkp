@@ -6,7 +6,7 @@ use App\Entity\Account;
 use App\Entity\User;
 use App\Service\UpplerAccountService;
 use App\Service\UpplerAuthenticationService;
-use App\Service\UpplerCompanyService;
+use App\Service\UpplerBuyerCompanyService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,7 +32,7 @@ class UserApiController extends AbstractController
     public UpplerAuthenticationService $upplerAuthenticationService;
 
     #[Required]
-    public UpplerCompanyService $upplerCompanyService;
+    public UpplerBuyerCompanyService $upplerBuyerCompanyService;
 
     #[Required]
     public UpplerAccountService $upplerAccountService;
@@ -46,7 +46,7 @@ class UserApiController extends AbstractController
         if (!$session->has('account') || empty($session->get('account'))) {
             return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-        $buyerDatas = $this->upplerCompanyService->getUserBuyerDatas();
+        $buyerDatas = $this->upplerBuyerCompanyService->getUserBuyerDatas();
         $subAccountDatas = $this->upplerAccountService->getUserSubAccountDatas();
         $user = $normalizer->normalize($this->getUser(), 'json', ['groups' => 'simpleUser']);
         $account = $normalizer->normalize($session->get('account'), 'json', ['groups' => 'simpleUser']);
@@ -67,7 +67,7 @@ class UserApiController extends AbstractController
             if (!$account->isEnabled()) {
                 continue;
             }
-            $datas = $this->upplerCompanyService->getCompany($account->getUpplerCompanyId());
+            $datas = $this->upplerBuyerCompanyService->getBuyerByCompanyId($account->getUpplerCompanyId());
             $serializeAccount = $normalizer->normalize($account, 'json', ['groups' => 'simpleUser']);
             $serializeAccount["upplerDatas"] = $datas;
             $accounts[] = $serializeAccount;

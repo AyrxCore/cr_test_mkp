@@ -22,15 +22,13 @@ export const useAccordCadreStore = defineStore({
   actions: {
     async findAccordsCadresByParams(params): Promise<[]> {
       try {
-        if (this.accords_cadre.length === 0) {
-          this.accords_cadre = await AccordCadreHttpClient.get().findAccordsCadresByParams(params)
-        }
+          return await AccordCadreHttpClient.get().findAccordsCadresByParams(params)
       } catch (error) {
         return []
       }
     },
 
-    async findAccordCadreById(id) {
+    async getAccordCadreById(id) {
       const alertStore = useAlertStore()
       try {
         return await AccordCadreHttpClient.get().getAccordCadre(id)

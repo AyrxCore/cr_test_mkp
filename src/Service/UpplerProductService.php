@@ -4,31 +4,46 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Dto\Seller;
 use App\Dto\Price;
 use App\Dto\Product;
 use App\Dto\Property;
-use Symfony\Component\HttpFoundation\Response;
 
 class UpplerProductService extends AbstractUpplerProductService
 {
-    public function getProductsByParams(array $options = [], array $filters = []): array | null
+    public function getProductsByParams(array $options = [], array $filters = [], int $perPage = 5, $page = 1): array | null
     {
-        $res = $this->searchProductsByParams($options, $filters);
+        $showFilters = false;
+
+        if (!empty($options['with_filter'])) {
+            $showFilters = true;
+            unset($options['with_filter']);
+            $perPage = 12;
+        }
+
+        $res = $this->searchProductsByParams($options, $filters, $perPage, $page);
         if (null === $res) {
             return null;
         }
 
         $products = [];
         foreach ($res->results as $result) {
+            if (str_contains($result->reference, 'fat-')) {
+                continue;
+            }
             $products[] = $this->getProduct($result->id);
         }
-        return [
-            'filters'=> $res->filters,
-            'results_count' => $res->results_count,
-            'page' => $res->page,
-            'results' => $products
-        ];
+
+        if ($showFilters) {
+            return [
+                'filters'=> $this->hydrateFilters($res->filters),
+                'results_count' => $res->results_count,
+                'page' => $res->page,
+                'results' => $products
+            ];
+        } else {
+            return $products;
+        }
+
     }
 
     public function getProduct(int $productId = null, array $filters = []): Product|null
@@ -39,48 +54,10 @@ class UpplerProductService extends AbstractUpplerProductService
             return null;
         }
 
-        return $this->populateProduct($res);
+        return $this->hydrateProduct($res);
     }
 
-    public function getSeller(int $companyId = null): Seller | null
-    {
-        $item = $this->cache->getItem('company_' . $companyId);
-
-        if ($item->isHit()) {
-            return $item->get();
-        }
-
-        $session = $this->requestStack->getSession();
-        $session->start();
-
-        $res = $this->request(
-            'GET',
-            $this->apiUrl . 'v1/buyer/seller/' . $companyId
-        );
-
-        if (Response::HTTP_OK === $res->getStatusCode()) {
-            $upplerCompany = json_decode($res->getContent());
-
-            $company = new Seller();
-            $company->setId($upplerCompany->id);
-            $company->setName($upplerCompany->name);
-            $company->setCorporateName($upplerCompany->corporate_name);
-            $avatar = !empty($upplerCompany->avatar) ? $this->upplerUrlSourceSellerImg . $upplerCompany->avatar : self::DEFAULT_IMG;
-            $company->setAvatar($avatar);
-            $description = !empty($upplerCompany->description->default) ? $upplerCompany->description->default : null;
-            $company->setDescription($description);
-
-            $item->set($company);
-            $item->expiresAfter(new \DateInterval('P1D')); // the item will be cached for 10 seconds
-            $this->cache->save($item);
-
-            return $item->get();
-        }
-
-        return null;
-    }
-
-    private function populateProduct($remoteProduct)
+    private function hydrateProduct($remoteProduct)
     {
 
         $product = new Product();
@@ -99,7 +76,7 @@ class UpplerProductService extends AbstractUpplerProductService
 
         $images = [];
         foreach ($remoteProduct->images as $image) {
-            $images[] = !empty($image->path) ? $this->upplerUrlSourceListProductImg . $image->path : self::DEFAULT_IMG ;
+            $images[] = !empty($image->path) ? $image->path : null ;
         }
         $product->setImages($images);
 
@@ -141,8 +118,8 @@ class UpplerProductService extends AbstractUpplerProductService
         }
 
         if (isset($remoteProduct->company->id)) {
-            $company = $this->getSeller($remoteProduct->company->id);
-            $product->setCompany($company);
+            $company = $this->upplerSellerService->getSeller($remoteProduct->company->id);
+            $product->setSeller($company);
         }
 
         #TODO A remplacer par les vraies données après concertation avec JM
@@ -150,5 +127,34 @@ class UpplerProductService extends AbstractUpplerProductService
         $product->setLivraisons(['Franco à partir de 50€ HT de commande - en dessous, 12€ HT de frais de port seront appliqués.']);
 
         return $product;
+    }
+
+    private function hydrateFilters($remoteFilters)
+    {
+        $filters = [];
+
+        foreach ($remoteFilters->property as $property) {
+            $child = [];
+            foreach ($property->child as $propChild) {
+                $newChild = new Property();
+                $newChild->setId($propChild->id);
+                $newChild->setName($propChild->name);
+                $newChild->setValue($propChild->value);
+                $newChild->setChecked($propChild->checked);
+                $child[] = $newChild;
+            }
+
+            $filters['properties'][] = [
+                'id' => $property->id,
+                'name'=> $property->name,
+                'count'=> $property->count,
+                'checked'=> $property->checked,
+                'type'=> $property->type,
+                'child'=> $child,
+            ];
+        }
+
+        return $filters;
+
     }
 }

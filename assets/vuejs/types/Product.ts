@@ -1,6 +1,6 @@
 import { Property } from '@/vuejs/types/Product/Property'
 import { Price } from '@/vuejs/types/Product/Price'
-import { Seller } from '@/vuejs/types/Product/Seller'
+import { Seller } from '@/vuejs/types/Seller'
 
 export interface Product {
   reference: string
@@ -17,5 +17,5 @@ export interface Product {
   percent?: number
   price?: Price
   basePrice?: Price
-  company?: Seller
+  seller?: Seller
 }

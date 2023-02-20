@@ -59,10 +59,10 @@ import HeartIcon from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
 import MenuAccount from '@/vuejs/modules/shared/header-component/MenuAccountComponent.vue'
 import { useUserStore } from '@/vuejs/stores/user'
 import { storeToRefs } from 'pinia'
-import {useCompanyStore} from '@/vuejs/stores/company'
+import {useBuyerCompanyStore} from '@/vuejs/stores/buyer_company'
 
 const userStore = useUserStore()
-const companyStore = useCompanyStore()
+const companyStore = useBuyerCompanyStore()
 const { user } = storeToRefs(userStore)
 
 const isMenuOpen = ref<boolean>(false)

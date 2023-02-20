@@ -5,3 +5,7 @@ export interface Seller {
   description?: string
   avatar?: string
 }
+
+export interface SellerStoreState {
+  sellers: Seller[]
+}

@@ -9,7 +9,7 @@
     </p>
 
     <RouterLink
-      :to="{ path: `/app/partner/${accord.id}` }"
+      :to="{ path: `${PartnersPageList.ACCORD_CADRE}/${accord.id}` }"
       class="button button-white button-white-primary flex justify-center"
     >
       <ArrowRightIconComponent />Découvrir l'accord cadre
@@ -21,6 +21,7 @@
 import { computed, PropType } from 'vue'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import { AccordCadre } from '@/vuejs/types/AccordCadre'
+import { PartnersPageList } from '@/vuejs/modules/partners/routerPartners'
 
 const props = defineProps({
   accord: {

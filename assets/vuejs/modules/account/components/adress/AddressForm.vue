@@ -79,7 +79,7 @@
 </template>
 <script lang="ts" setup>
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import { useCompanyStore } from '@/vuejs/stores/company'
+import { useBuyerCompanyStore } from '@/vuejs/stores/buyer_company'
 import { storeToRefs } from 'pinia'
 import InputField from '@/vuejs/modules/shared/formfields/InputField.vue'
 import LabelField from '@/vuejs/modules/shared/formfields/LabelField.vue'
@@ -91,8 +91,8 @@ import SelectField from '@/vuejs/modules/shared/formfields/SelectField.vue'
 import router, { PageList } from '@/vuejs/router'
 
 const route = useRoute()
-const companyStore = useCompanyStore()
-const { currentAddress, isloading } = storeToRefs(companyStore)
+const buyerCompanyStore = useBuyerCompanyStore()
+const { currentAddress, isloading } = storeToRefs(buyerCompanyStore)
 const isEditing = ref<boolean>(false)
 const isEditedLoaded = ref<boolean>(false)
 const countryStore = useCoutryStore()
@@ -113,11 +113,11 @@ watch(
   () => route.params.id as number,
   async (id: number) => {
     if (!id) {
-      companyStore.initNewAddress(props.type)
+      buyerCompanyStore.initNewAddress(props.type)
       isEditedLoaded.value = true
-    } else if (id && companyStore.currentAddress === null) {
+    } else if (id && buyerCompanyStore.currentAddress === null) {
       isEditing.value = true
-      await companyStore.getAddress(id)
+      await buyerCompanyStore.getAddress(id)
       isEditedLoaded.value = true
     } else {
       isEditing.value = true
@@ -128,14 +128,14 @@ watch(
 )
 
 const onAddressFormSubmit = async () => {
-  companyStore.isloading = true
+  buyerCompanyStore.isloading = true
   if (isEditing.value) {
-    await companyStore.updateAddress()
+    await buyerCompanyStore.updateAddress()
   } else {
-    await companyStore.createAddress()
+    await buyerCompanyStore.createAddress()
   }
 
-  companyStore.isloading = false
+  buyerCompanyStore.isloading = false
 }
 
 const onCancelClick = () => {

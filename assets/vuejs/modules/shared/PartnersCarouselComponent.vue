@@ -15,25 +15,36 @@
       }"
     >
       <SwiperSlide
-        v-for="(partenaire, key) in partenaires"
+        v-for="(seller, key) in sellers"
         :key="key"
         class="flex h-full items-center justify-center overflow-hidden rounded-lg bg-white"
       >
-        <RouterLink :to="{ path: '/app/products-partner/10586' }">
+        <RouterLink
+          v-if="seller.id"
+          :to="{ path: `${PartnersPageList.LISTE_PRODUITS_PARTENAIRE}/${seller.id}` }"
+          class="cursor-pointer pointer"
+        >
           <img
-            :src="partenaire.img"
-            :alt="partenaire.alt"
-            class="h-[107px] w-full object-contain"
+            :src="getUpplerImage(seller.avatar)"
+            :alt="seller.name"
+            class="h-[107px] w-full object-contain cursor-pointer pointer"
           />
         </RouterLink>
+        <img
+          v-else
+          :src="seller.avatar"
+          :alt="seller.name"
+          class="h-[107px] w-full object-contain"
+        />
+
       </SwiperSlide>
     </CarouselListSharedComponent>
   </div>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
-import { getImage } from '@/vuejs/services/utils'
+import { getImage, getUpplerImage } from '@/vuejs/services/utils'
 
 import { SwiperSlide } from 'swiper/vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
@@ -55,24 +66,38 @@ import imgSfr from '@/vuejs/assets/img/samples/sfr.png'
 import imgShell from '@/vuejs/assets/img/samples/shell.png'
 import imgBerner from '@/vuejs/assets/img/samples/berner.png'
 import imgSynergie from '@/vuejs/assets/img/samples/synergie.jpeg'
+import { useSellerStore } from '@/vuejs/stores/seller'
+import { useUserStore } from '@/vuejs/stores/user'
+import { PartnersPageList } from '@/vuejs/modules/partners/routerPartners'
 
-const partenaires = ref([
-  { img: getImage(imgPeugeot), alt: 'Peugeot' },
-  { img: getImage(imgRenault), alt: 'Renault' },
-  { img: getImage(imgLoxam), alt: 'Loxam' },
-  { img: getImage(imgKiloutou), alt: 'Kiloutou' },
-  { img: getImage(imgAlda), alt: 'Alda' },
-  { img: getImage(imgAdecco), alt: 'Adecco' },
-  { img: getImage(imgWurth), alt: 'Wurth' },
-  { img: getImage(imgLdlc), alt: 'LDLC Pro' },
-  { img: getImage(imgHertz), alt: 'Herts' },
-  { img: getImage(imgEuromaster), alt: 'Euromaster' },
-  { img: getImage(imgShell), alt: 'Shell' },
-  { img: getImage(imgSfr), alt: 'SFR' },
-  { img: getImage(imgFiducial), alt: 'Fiducial' },
-  { img: getImage(imgCrit), alt: 'Crit' },
-  { img: getImage(imgBerner), alt: 'Berner' },
-  { img: getImage(imgEdenred), alt: 'Edenred' },
-  { img: getImage(imgSynergie), alt: 'Synergie' },
-])
+const sellerStore = useSellerStore()
+const userStore = useUserStore()
+
+const sellers = ref([])
+
+onMounted(async () => {
+  if (userStore.getUser) {
+    sellers.value = await sellerStore.getSellers()
+  } else {
+    sellers.value = [
+      { avatar: getImage(imgPeugeot), name: 'Peugeot' },
+      { avatar: getImage(imgRenault), name: 'Renault' },
+      { avatar: getImage(imgLoxam), name: 'Loxam' },
+      { avatar: getImage(imgKiloutou), name: 'Kiloutou' },
+      { avatar: getImage(imgAlda), name: 'Alda' },
+      { avatar: getImage(imgAdecco), name: 'Adecco' },
+      { avatar: getImage(imgWurth), name: 'Wurth' },
+      { avatar: getImage(imgLdlc), name: 'LDLC Pro' },
+      { avatar: getImage(imgHertz), name: 'Herts' },
+      { avatar: getImage(imgEuromaster), name: 'Euromaster' },
+      { avatar: getImage(imgShell), name: 'Shell' },
+      { avatar: getImage(imgSfr), name: 'SFR' },
+      { avatar: getImage(imgFiducial), name: 'Fiducial' },
+      { avatar: getImage(imgCrit), name: 'Crit' },
+      { avatar: getImage(imgBerner), name: 'Berner' },
+      { avatar: getImage(imgEdenred), name: 'Edenred' },
+      { avatar: getImage(imgSynergie), name: 'Synergie' },
+    ]
+  }
+})
 </script>

@@ -42,18 +42,15 @@
 </template>
 
 <script lang="ts" setup>
-import { getImage, PRODUCT_ACCORD_PROPERTY } from '@/vuejs/services/utils'
-import { computed, onBeforeMount, ref } from 'vue'
+import { PRODUCT_ACCORD_PROPERTY } from '@/vuejs/services/utils'
+import { onBeforeMount, ref } from 'vue'
 import { SwiperSlide } from 'swiper/vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
 import { useAccordCadreStore } from '@/vuejs/stores/accord_cadre'
-import imgPeugeot from '@/vuejs/assets/img/samples/peugeot.png'
-import imgLoxam from '@/vuejs/assets/img/samples/loxam.png'
-import imgBusiness from '@/vuejs/assets/img/samples/business.png'
-import imgAdecco from '@/vuejs/assets/img/samples/adecco.png'
-import AccordCadreComponent from '@/vuejs/modules/home/component/AccordCadreComponent.vue';
+import AccordCadreComponent from '@/vuejs/modules/home/component/AccordCadreComponent.vue'
 
 const accordCadreStore = useAccordCadreStore()
+const accordsCadre = ref([])
 
 onBeforeMount(async () => {
   const params =  {
@@ -62,18 +59,8 @@ onBeforeMount(async () => {
     ],
   }
 
-  await accordCadreStore.findAccordsCadresByParams(params)
+  accordsCadre.value = await accordCadreStore.findAccordsCadresByParams(params)
 })
-const accordsCadre = computed(() => {
-  return accordCadreStore.getAccordsCadre
-})
-
-const accords = ref([
-  { img: getImage(imgPeugeot), alt: 'Peugeot' },
-  { img: getImage(imgLoxam), alt: 'Loxam' },
-  { img: getImage(imgBusiness), alt: 'Business' },
-  { img: getImage(imgAdecco), alt: 'Adecco' },
-])
 
 </script>
 

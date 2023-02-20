@@ -59,7 +59,14 @@ services:
   App\Service\UpplerAuthenticationService:
     parent: App\Service\HttpClientProvider
 
-  App\Service\UpplerCompanyService:
+  App\Service\UpplerSellerService:
+    parent: App\Service\HttpClientProvider
+    arguments:
+      $upplerUrlSourceProductImg: '%uppler_url_source_product_img%'
+      $upplerUrlSourceListProductImg: '%uppler_url_source_list_product_img%'
+      $upplerUrlSourceSellerImg: '%uppler_url_source_seller_img%'
+
+  App\Service\UpplerBuyerCompanyService:
     parent: App\Service\HttpClientProvider
 
   App\Service\UpplerRepositoryService:

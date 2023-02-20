@@ -17,6 +17,7 @@ Abstract class AbstractUpplerProductService extends HttpClientProvider
     protected string $upplerUrlSourceListProductImg;
     protected string $upplerUrlSourceSellerImg;
     protected AdapterInterface $cache;
+    protected UpplerSellerService $upplerSellerService;
     public function __construct(
         string $env,
         string $apiUrl,
@@ -27,7 +28,8 @@ Abstract class AbstractUpplerProductService extends HttpClientProvider
         string $upplerUrlSourceProductImg,
         string $upplerUrlSourceListProductImg,
         string $upplerUrlSourceSellerImg,
-        AdapterInterface $cache
+        AdapterInterface $cache,
+        UpplerSellerService $upplerSellerService
     )
     {
         parent::__construct($env, $apiUrl, $adminClientId, $adminClientSecret, $adminTokenFile, $httpCachePath);
@@ -35,6 +37,7 @@ Abstract class AbstractUpplerProductService extends HttpClientProvider
         $this->upplerUrlSourceListProductImg = $upplerUrlSourceListProductImg;
         $this->upplerUrlSourceSellerImg = $upplerUrlSourceSellerImg;
         $this->cache = $cache;
+        $this->upplerSellerService = $upplerSellerService;
     }
 
     #[Required]
@@ -43,7 +46,7 @@ Abstract class AbstractUpplerProductService extends HttpClientProvider
     #[Required]
     public EntityManagerInterface $em;
 
-    public function searchProductsByParams(array $options = [], array $filters = [], int $perPage = 5): \stdClass | null
+    public function searchProductsByParams(array $options = [], array $filters = [], int $perPage = 5, $page = 1): \stdClass | null
     {
         $session = $this->requestStack->getSession();
         $session->start();

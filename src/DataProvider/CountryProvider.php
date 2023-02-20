@@ -10,7 +10,7 @@ use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Dto\Address;
 use App\Dto\Country;
 use App\Entity\Account;
-use App\Service\UpplerCompanyService;
+use App\Service\UpplerBuyerCompanyService;
 use App\Service\UpplerRepositoryService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Service\Attribute\Required;

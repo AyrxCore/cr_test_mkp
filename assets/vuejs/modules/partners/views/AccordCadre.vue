@@ -12,7 +12,7 @@
         :categories="accord.categories"
       />
 
-      <PointsClesPartnerComponent
+      <PointsClesComponent
         :description="accord.description"
         :points-cles="pointsCles"
       />
@@ -21,7 +21,7 @@
         class="mt-10 mt-5 flex flex-col text-sm md:text-base lg:grid lg:grid-cols-9 lg:gap-4 lg:text-lg"
       >
 
-        <ConditionsNegocieesPartnerComponent :properties="accord.properties" />
+        <ConditionsNegocieesComponent :properties="accord.properties" />
 
         <div class="bloc-content col-span-4 mt-5 lg:mt-0">
           <h3
@@ -29,7 +29,7 @@
           >
             Comment bénéficier des conditions ?
           </h3>
-          <ConditionsNotActivatedPartnerComponent
+          <ConditionsNotActivatedComponent
             v-if="status.not_activated === currentStatus.status"
             :text="accord.properties.process_not_activated"
             :current-status="currentStatus"
@@ -51,16 +51,16 @@
         </div>
       </div>
 
-      <MiseEnAvantPartnerComponent :properties="accord.properties"/>
+      <MiseEnAvantComponent :properties="accord.properties"/>
 
-      <PointsClesRSEPartnerComponent
+      <PointsClesRSEComponent
         v-if="accord.properties.texte_rse"
         :description="accord.properties.texte_rse"
         :note="accord.properties.note_rse"
         :points-cles-rse="pointsClesRSE"
       />
 
-      <EnSavoirPlusPartnerComponent :properties="accord.properties" />
+      <EnSavoirPlusComponent :properties="accord.properties" />
 
       <div class="mt-11">
         <h3 class="home-subtitle text-primary">
@@ -87,23 +87,20 @@ import { AccordCadre } from '@/vuejs/types/AccordCadre'
 import { useRoute } from 'vue-router'
 import { useAccordCadreStore } from '@/vuejs/stores/accord_cadre'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
-import MiseEnAvantPartnerComponent from '@/vuejs/modules/partners/components/accord-cadre/CarouselMiseEnAvantComponent.vue'
-import ConditionsNegocieesPartnerComponent
+import MiseEnAvantComponent from '@/vuejs/modules/partners/components/accord-cadre/CarouselMiseEnAvantComponent.vue'
+import ConditionsNegocieesComponent
   from '@/vuejs/modules/partners/components/accord-cadre/ConditionsNegocieesComponent.vue'
 import { status } from '@/vuejs/modules/partners/partner'
-import ConditionsNotActivatedPartnerComponent
+import ConditionsNotActivatedComponent
   from '@/vuejs/modules/partners/components/accord-cadre/ConditionsNotActivatedComponent.vue'
 import ConditionsPendingOrActivated
   from '@/vuejs/modules/partners/components/accord-cadre/ConditionsPendingOrActivatedComponent.vue'
-import PointsClesPartnerComponent from '@/vuejs/modules/partners/components/accord-cadre/PointsClesComponent.vue'
-import PointsClesRSEPartnerComponent from '@/vuejs/modules/partners/components/accord-cadre/PointsClesRSEComponent.vue'
-import EnSavoirPlusPartnerComponent from '@/vuejs/modules/partners/components/accord-cadre/EnSavoirPlusComponent.vue'
-import { useUserStore } from '@/vuejs/stores/user'
+import PointsClesComponent from '@/vuejs/modules/partners/components/accord-cadre/PointsClesComponent.vue'
+import PointsClesRSEComponent from '@/vuejs/modules/partners/components/accord-cadre/PointsClesRSEComponent.vue'
+import EnSavoirPlusComponent from '@/vuejs/modules/partners/components/accord-cadre/EnSavoirPlusComponent.vue'
 
 const route = useRoute()
 const accordStore = useAccordCadreStore()
-
-const userStore = useUserStore()
 
 const accord = ref<AccordCadre>()
 

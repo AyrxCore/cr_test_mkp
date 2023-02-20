@@ -12,8 +12,8 @@ import { onMounted } from 'vue'
 import LoginForm from './modules/login/views/ExternalLoginForm.vue'
 import PartnersCarousel from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
 import StickyContactButtons from '@/vuejs/modules/shared/StickyContactButtonsComponent.vue'
-import {useCompanyStore} from '@/vuejs/stores/company'
-const companyStore = useCompanyStore()
+import {useBuyerCompanyStore} from '@/vuejs/stores/buyer_company'
+const companyStore = useBuyerCompanyStore()
 const props = defineProps({
   component: {
     required: false,

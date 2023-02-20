@@ -1,28 +1,28 @@
 import BaseClientService from '@/vuejs/services/BaseClientService'
-import {Address, AddressToUpdate} from '@/vuejs/types/Address'
+import { Address, AddressToCreate, AddressToUpdate } from '@/vuejs/types/Address'
 
-export default class CompanyHttpClient extends BaseClientService {
+export default class AddressHttpClient extends BaseClientService {
   public getAdressesAsBuyer<T extends []>(): Promise<T> {
     return this.apiClient
-      .get<T>('buyer/company/addresses')
+      .get<T>('buyer/addresses')
       .then((response) => response.data)
   }
 
   public getAdressAsAdmin<T extends []>(id: number): Promise<Address> {
     return this.apiClient
-        .get(`company/addresses/${id}`)
+        .get(`buyer/get-address/${id}`)
         .then((response) => response.data)
   }
 
-  public createAdressesAsAdmin<T extends []>(address: Address): Promise<T> {
+  public createAdressesAsAdmin<T extends []>(address: AddressToCreate): Promise<T> {
     return this.apiClient
-      .post<T>('company/addresses', address)
+      .post<T>('buyer/create-address', address)
       .then((response) => response.data)
   }
 
   public updateAdressesAsAdmin<T extends []>(address: AddressToUpdate): Promise<T> {
     return this.apiClient
-        .put<T>(`company/addresses/${address.id}`, address)
+        .put<T>(`buyer/update-address/${address.id}`, address)
         .then((response) => response.data)
   }
 }

@@ -8,7 +8,7 @@
         :list-url="breadcrumbUrl"
         :current-page="product.name"
       />
-      <div class="w-[100%] max-w-screen-2xl justify-end">
+      <div class="w-[100%] max-w-screen-2xl justify-end flex">
         <ContactUsButtonComponent />
       </div>
       <div
@@ -21,7 +21,7 @@
           >
 
             <template #name> {{ product.name }}</template>
-            <template #partner> {{ product.company.name }}</template>
+            <template #partner> {{ product.seller.name }}</template>
             <template #reference> {{ product.reference }}</template>
           </ProductTitleComponent>
 
@@ -42,12 +42,12 @@
               @on-slide-change="onSlideChange"
             >
               <swiperSlide
-                v-for="(image, key) in product.images"
+                v-for="(img, key) in product.images"
                 :key="key"
-                class="md:h-auto flex items-center justify-center"
+                class="md:h-auto flex items-center justify-center p-8"
               >
                 <img
-                  :src="image"
+                  :src="getUpplerImage(img)"
                   alt="Picture"
                   class="items-center sm:mx-auto h-auto"
                 />
@@ -72,9 +72,13 @@
               @on-slide-change="onSlideChange"
               @swiper="setThumbsSwiper"
             >
-              <swiperSlide v-for="(image, key) in product.images" :key="key">
+              <swiperSlide
+                v-for="(img, key) in product.images"
+                :key="key"
+                class="bg-white flex items-center rounded-xl"
+              >
                 <img
-                  :src="image"
+                  :src="getUpplerImage(img)"
                   alt="Picture"
                   class="items-center rounded bg-white rounded-xl"
                 />
@@ -92,7 +96,7 @@
 
             <ProductTitleComponent class="hidden lg:flex">
               <template #name> {{ product.name }}</template>
-              <template #partner> {{ product.company.name }}</template>
+              <template #partner> {{ product.seller.name }}</template>
               <template #reference> {{ product.reference }}</template>
             </ProductTitleComponent>
             <div class="mt-14 hidden flex-col lg:flex">
@@ -280,7 +284,7 @@
       </div> -->
       <!-- Fiin bloc produits similaire -->
     </div>
-    <div v-else class="w-full flex h-16 justify-center items-center">
+    <div v-else class="w-full flex h-20 justify-center items-center mt-5">
       <LoaderSharedComponent
         class="text-secondary"
         classes="loader-xl loader"
@@ -292,13 +296,12 @@
 <script lang="ts" setup>
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
-import { getImage } from '@/vuejs/services/utils'
+import { getImage, getUpplerImage } from '@/vuejs/services/utils'
 import helpImage from '@/vuejs/assets/img/samples/img-help-product.png'
 import { computed, ref, watch } from 'vue'
 import { SwiperSlide } from 'swiper/vue'
 import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
 import ArrowRigntIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
-import LeafIconComponent from '@/vuejs/modules/shared/icon/LeafIconComponent.vue'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import ButtonAddToCartComponent from '@/vuejs/modules/products/components/ButtonAddToCartComponent.vue'
@@ -306,7 +309,7 @@ import ProductTitleComponent from '@/vuejs/modules/products/components/ProductTi
 import { useRoute } from 'vue-router'
 import { useProductStore } from '@/vuejs/stores/product'
 import Product from '@/vuejs/modules/products/views/Product.vue'
-import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue';
+import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 
 
 const route = useRoute()

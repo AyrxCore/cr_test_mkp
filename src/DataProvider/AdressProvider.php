@@ -8,7 +8,7 @@ use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Dto\Address;
 use App\Entity\Account;
-use App\Service\UpplerCompanyService;
+use App\Service\UpplerBuyerCompanyService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
@@ -19,7 +19,7 @@ class AdressProvider implements RestrictedDataProviderInterface, ItemDataProvide
     public EntityManagerInterface $em;
 
     #[Required]
-    public UpplerCompanyService $upplerCompanyService;
+    public UpplerBuyerCompanyService $upplerCompanyService;
 
     public function getItem(string $resourceClass, $id, string $operationName = null, array $context = [])
     {

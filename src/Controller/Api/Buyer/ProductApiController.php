@@ -39,7 +39,9 @@ class ProductApiController extends AbstractController
 
         $products = $this->upplerProductService->getProductsByParams($options, ['price', 'properties']);
 
-        return new JsonResponse($products['results']);
+        dump($products);
+
+        return new JsonResponse($products);
     }
 
 }

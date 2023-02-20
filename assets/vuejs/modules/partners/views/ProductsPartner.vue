@@ -1,17 +1,31 @@
 <template>
   <BaseTemplate title="Qantis - MarketPlace">
     <div
-      v-if="accord"
+      v-if="seller"
       class="xs:w-[100%] m-auto my-4 max-w-screen-2xl px-5 sm:px-8"
     >
-
-      <HeaderPartnerComponent
-        :name="accord.name"
-        :note="accord.properties.note_rse"
-        :logo="accord.properties.logo_partenaire"
-        :barner="accord.properties.banniere_partenaire"
-        :categories="accord.categories"
+      <breadcrumb-shared-component
+        :list-url="breadcrumbUrl"
+        :current-page="seller.name"
       />
+      <ContactUsButtonComponent />
+      <div class="text-green mt-3.5 flex flex-col lg:flex-row lg:items-center">
+        <h3 class="text-title-35 text-primary">
+          {{ seller.name }}
+        </h3>
+      </div>
+
+      <div class="mt-10 flex flex-col md:flex-row">
+        <div class="flex items-center justify-center rounded-lg bg-white w-full lg:w-1/4 h-[338px] p-1 lg:mr-5">
+          <img
+            :src="getUpplerImage(seller.avatar)"
+            :alt="'Logo ' + seller.name"
+            class="items-center rounded-lg sm:mx-auto"
+          />
+        </div>
+        <div class="col-span-3 mt-5 hidden items-center rounded-lg bg-white md:mt-0 md:flex lg:w-3/4"></div>
+      </div>
+
 
       <div
         class="mt-10 mb-7.5 flex flex-row items-center justify-end text-[14px] text-gray-500"
@@ -25,7 +39,7 @@
               :stroke-color="'#A4A4A4'"
             />
           </button>
-          <span>1</span>
+          <span>{{ pageNumber }}</span>
           <button class="flex">
             <ChevronRightIconComponent
               class="ml-1 h-4"
@@ -33,7 +47,7 @@
             />
           </button>
         </div>
-        <div class="mr-2">{{ products.length }} produits</div>
+        <div class="mr-2">{{ count }} produits</div>
         <div class="h-[28px] rounded-md border bg-white">
           <select class="h-[28px] rounded-md py-0 text-[14px]">
             <option>Trier par produit</option>
@@ -43,63 +57,47 @@
       <div
         class="mt-10 mt-5 flex flex-col gap-4 text-gray-600 xl:grid xl:grid-cols-5"
       >
-        <DropdownListComponent>
-          <template #button-label> Filtres </template>
-          <template #content>
-            <div class="h-max rounded-lg bg-white px-7.5 pt-7.5 pb-4 text-lg">
-              <h3 class="text-[25px] text-primary">Catégorie</h3>
-
-              <div v-for="i in 3" :key="i" class="mt-5 mb-6">
-                <h3 class="mb-5 text-[25px] text-primary">Filtre n°{{ i }}</h3>
-                <CheckboxComponent
-                  v-for="j in 4"
-                  :key="j"
-                  :position-after="true"
-                  class="flex flex-row items-center"
-                >
-                  <template #label-after>
-                    <span class="text-lg text-gray-500">Filtre 0{{ j }}</span>
-                  </template>
-                </CheckboxComponent>
-              </div>
-            </div>
-          </template>
-        </DropdownListComponent>
-
+        <FiltersProductComponent
+          v-if="!isLoading"
+          :filters="filters"
+        />
         <div class="col-span-4 flex flex-col rounded-lg pb-4 text-gray-500">
           <div
-            class="flex flex-col text-gray-600 md:grid md:grid-cols-2 md:gap-8 lg:grid-cols-3"
+            class=""
           >
             <div
-              class="flex h-[516px] w-auto flex-col rounded-md bg-primary px-8 pt-8"
+              v-if="isLoading"
+              class="flex flex-col text-gray-600 md:grid md:grid-cols-2 md:gap-8 lg:grid-cols-4"
             >
               <div
-                class="mx-auto flex h-[273px] items-center justify-center bg-white"
+                v-for="number in 4"
+                :key="number"
               >
-                <img
-                  :src="accord.properties.logo_partenaire"
-                  alt="Image produit"
-                  class="flex h-[auto!important]"
+                <ProductLoadingComponent
+                  class="mt-5 h-[516px] !w-auto md:mt-0 md:w-[392px]"
                 />
               </div>
-              <p class="my-7 flex text-lg font-normal text-white">
-                Découvrez ou téléchargez les conditions négociées de ce
-                partenaire
-              </p>
-              <RouterLink
-                :to="{ path: `/app/partner/${accord.id}` }"
-                class="button button-white button-white-primary flex"
-              >
-                <ArrowRightIconComponent />Découvrir l'accord cadre
-              </RouterLink>
             </div>
 
-            <div v-for="(product, key) in products" :key="key">
-              <ProductComponent
-                :product="product"
-                class="mt-5 h-[516px] !w-auto md:mt-0 md:w-[392px]"
-              />
+            <div
+              v-else
+              class="flex flex-col text-gray-600 md:grid md:grid-cols-2 md:gap-8 lg:grid-cols-3"
+            >
+              <div
+                v-for="(accord, key) in accordsCadres"
+                :key="key"
+              >
+                <AccordCadreComponent :accord="accord" />
+              </div>
+
+              <div v-for="(product, key) in products" :key="key">
+                <ProductComponent
+                  :product="product"
+                  class="mt-5 h-[516px] !w-auto md:mt-0 md:w-[392px]"
+                />
+              </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -114,47 +112,82 @@
 </template>
 <script lang="ts" setup>
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
-import HeaderPartnerComponent from '@/vuejs/modules/partners/components/HeaderPartnerComponent.vue'
-import CheckboxComponent from '@/vuejs/modules/shared/CheckboxComponent.vue'
 import ProductComponent from '@/vuejs/modules/products/components/ProductComponent.vue'
-import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightIconComponent.vue'
 import ChevronLeftIconComponent from '@/vuejs/modules/shared/icon/ChevronLeftIconComponent.vue'
-import { HOME_TOP_VENTE_PROPERTY } from '@/vuejs/services/utils'
-import DropdownListComponent from '@/vuejs/modules/shared/DropdownListComponent.vue'
-import { AccordCadre } from '@/vuejs/types/AccordCadre'
+import { getUpplerImage, PRODUCT_ACCORD_PROPERTY, PRODUCT_WITHOUT_ACCORD_PROPERTY } from '@/vuejs/services/utils'
 import { useRoute } from 'vue-router'
-import { useAccordCadreStore } from '@/vuejs/stores/accord_cadre'
-import { computed, onBeforeMount, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useProductStore } from '@/vuejs/stores/product'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
+import { Seller } from '@/vuejs/types/Seller'
+import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
+import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
+import ProductLoadingComponent from '@/vuejs/modules/products/components/ProductLoadingComponent.vue'
+import { useSellerStore } from '@/vuejs/stores/seller'
+import FiltersProductComponent from '@/vuejs/modules/partners/components/FiltersProductComponent.vue'
+import { useAccordCadreStore } from '@/vuejs/stores/accord_cadre'
+import AccordCadreComponent from '@/vuejs/modules/home/component/AccordCadreComponent.vue'
 
 const route = useRoute()
-const accordStore = useAccordCadreStore()
+const sellerStore = useSellerStore()
 const productStore = useProductStore()
-const accord = ref<AccordCadre>()
+const accordCadreStore = useAccordCadreStore()
+const seller = ref<Seller>()
+const resultProducts = ref([])
+const accordsCadres = ref([])
+const isLoading = ref<boolean>(true)
 
 const breadcrumbUrl = computed(() => {
   return []
 })
 
-onBeforeMount(async () => {
-  const params =  {
-    properties: [
-      HOME_TOP_VENTE_PROPERTY
-    ]
-  }
+onMounted(async () => {
+  if (route.params.id) {
+    const paramsAccordCadre =  {
+      seller_id: route.params.id,
+      properties: [
+        PRODUCT_ACCORD_PROPERTY
+      ],
+    }
 
-  await productStore.findProductsTopVente(params)
+    accordsCadres.value = await accordCadreStore.findAccordsCadresByParams(paramsAccordCadre)
+
+    const paramsProducts =  {
+      seller_id: route.params.id,
+      with_filter: true,
+      properties: [
+        PRODUCT_WITHOUT_ACCORD_PROPERTY
+      ],
+    }
+
+    resultProducts.value = await productStore.getProductsByParams(paramsProducts)
+    isLoading.value = false
+  }
 })
+
+const count = computed(() => {
+  return resultProducts.value.results_count
+})
+
 const products = computed(() => {
-  return productStore.getProductsTopVente
+  return resultProducts.value.results
+})
+
+const filters = computed(() => {
+  return resultProducts.value.filters
+})
+
+const pageNumber = computed(() => {
+  return resultProducts.value.page
 })
 
 watch(
   () => route.params.id as string,
   async (id: string) => {
-    if (id) accord.value = await accordStore.findAccordCadreById(id)
+    if (id) {
+      seller.value = await sellerStore.getSellerById(id)
+    }
   },
   { immediate: true },
 )

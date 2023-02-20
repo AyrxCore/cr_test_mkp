@@ -6,12 +6,8 @@ namespace App\DataPersister;
 
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 use App\Dto\Address;
-use App\Dto\UserAccount;
-use App\Entity\Account;
-use App\Entity\User;
-use App\Service\UpplerCompanyService;
+use App\Service\UpplerBuyerCompanyService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
@@ -28,7 +24,7 @@ class AddressPersister implements ContextAwareDataPersisterInterface
     public NormalizerInterface $normalizer;
 
     #[Required]
-    public UpplerCompanyService $upplerCompanyService;
+    public UpplerBuyerCompanyService $upplerBuyerCompanyService;
 
     public function supports($data, array $context = []): bool
     {
@@ -60,9 +56,9 @@ class AddressPersister implements ContextAwareDataPersisterInterface
         $result = [];
 
         if (isset($context["item_operation_name"]) && 'update' === $context["item_operation_name"]) {
-            $result = $this->upplerCompanyService->updateAddress($address);
+            $result = $this->upplerBuyerCompanyService->updateAddress($address);
         } elseif (isset($context["collection_operation_name"]) && 'create' === $context["collection_operation_name"]) {
-            $result = $this->upplerCompanyService->createAddress($address);
+            $result = $this->upplerBuyerCompanyService->createAddress($address);
         }
 
         return $result;

@@ -30,10 +30,9 @@
 <script lang="ts" setup>
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 import {storeToRefs} from 'pinia'
-import {useCompanyStore} from '@/vuejs/stores/company'
+import {useBuyerCompanyStore} from '@/vuejs/stores/buyer_company'
 import AddressesListItem from '@/vuejs/modules/account/components/adresses/AddressesListItem.vue'
 import AddressesListHeader from '@/vuejs/modules/account/components/adresses/AddressesListHeader.vue'
-import {useUserStore} from '@/vuejs/stores/user'
 const props = defineProps({
   type: {
     required: true,
@@ -41,9 +40,8 @@ const props = defineProps({
   }
 })
 
-const companyStore = useCompanyStore()
-const userStore = useUserStore()
-const {adresses, isloading} = storeToRefs(companyStore)
+const buyerCompanyStore = useBuyerCompanyStore()
+const {adresses, isloading} = storeToRefs(buyerCompanyStore)
 
 </script>
 

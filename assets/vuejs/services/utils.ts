@@ -1,4 +1,5 @@
 import { ref } from 'vue'
+import imgDefault from '@/vuejs/assets/img/default-image.png'
 
 export function getImage(urlImage: string): string {
   return new URL(urlImage, import.meta.url).href
@@ -7,6 +8,19 @@ export function getImage(urlImage: string): string {
 export function openInNewTab(url) {
   window.open(url, '_blank', 'noreferrer')
 }
+
+export const IMG_PATH='https://uppler-platform-quantis.s3.eu-west-3.amazonaws.com/image/'
+
+export function getUpplerImage( path: string|null)
+{
+
+  if (path) {
+    return IMG_PATH + path
+  } else {
+    return getImage(imgDefault)
+  }
+}
+
 
 export const HOME_TOP_VENTE_PROPERTY = {
   property_id: '176',
@@ -19,6 +33,11 @@ export const HOME_SELECTION_PROPERTY = {
 export const PRODUCT_ACCORD_PROPERTY = {
   property_id: '169',
   value: 'Oui'
+}
+
+export const PRODUCT_WITHOUT_ACCORD_PROPERTY = {
+  property_id: '169',
+  value: ''
 }
 export const listCategories = ref<string[]>([
   'Avantages salariés',

@@ -3,8 +3,8 @@ import { useAlertStore } from '@/vuejs/stores/alert'
 import { AlertType } from '@/vuejs/types/Alert'
 import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
 import { getErrorMessage } from '@/vuejs/services/login'
-import CompanyHttpClient from '@/vuejs/services/httpclient/CompanyHttpClient'
-import { CompanyStoreState } from '@/vuejs/types/Company'
+import AddressHttpClient from '@/vuejs/services/httpclient/AddressHttpClient'
+import { BuyerCompanyStoreState } from '@/vuejs/types/BuyerCompany'
 import { Address } from '@/vuejs/types/Address'
 import {
   getEmptyAddress,
@@ -14,9 +14,9 @@ import {
 import { useUserStore } from '@/vuejs/stores/user'
 import router, { PageList } from '@/vuejs/router'
 
-export const useCompanyStore = defineStore({
+export const useBuyerCompanyStore = defineStore({
   id: 'company',
-  state: (): CompanyStoreState => ({
+  state: (): BuyerCompanyStoreState => ({
     adresses: [],
     currentAddress: null,
     isloading: false,
@@ -26,9 +26,8 @@ export const useCompanyStore = defineStore({
     async getAdresses(): Promise<void> {
       const alertStore = useAlertStore()
       try {
-        this.adresses = await CompanyHttpClient.get().getAdressesAsBuyer()
+        this.adresses = await AddressHttpClient.get().getAdressesAsBuyer()
       } catch (error) {
-        console.log(error)
         error.response.status === HttpStatusCodes.unauthorized &&
           alertStore.setShow(
             getErrorMessage(error.response.data.message),
@@ -46,14 +45,13 @@ export const useCompanyStore = defineStore({
         type,
       )
     },
-    async createAddress(): void {
+    async createAddress(): Promise<void> {
       const alertStore = useAlertStore()
       try {
-        await CompanyHttpClient.get().createAdressesAsAdmin(
-          setAdressForCreate(this.currentAddress),
-        )
+        const addressToCreate = setAdressForCreate(this.currentAddress)
+        await AddressHttpClient.get().createAdressesAsAdmin(addressToCreate)
         alertStore.setShow(
-          "L'adresse a été créée avec succès",
+          'L\'adresse a été créée avec succès',
           AlertType.success,
         )
         router.push({ name: PageList.ADDRESSES })
@@ -65,12 +63,12 @@ export const useCompanyStore = defineStore({
           )
       }
     },
-    async updateAddress(): void {
+    async updateAddress(): Promise<void> {
       const userStore = useUserStore()
       const alertStore = useAlertStore()
       try {
         this.currentAddress.companyId = userStore.user.account.buyer.id
-        await CompanyHttpClient.get().updateAdressesAsAdmin(
+        await AddressHttpClient.get().updateAdressesAsAdmin(
           setAdressForUpdate(this.currentAddress),
         )
         alertStore.setShow(
@@ -79,7 +77,6 @@ export const useCompanyStore = defineStore({
         )
         router.push({ name: PageList.ADDRESSES })
       } catch (error) {
-        console.log(error)
         error.response.status === HttpStatusCodes.unauthorized &&
           alertStore.setShow(
             getErrorMessage(error.response.data.message),
@@ -87,10 +84,10 @@ export const useCompanyStore = defineStore({
           )
       }
     },
-    async getAddress(id: number): void {
+    async getAddress(id: number): Promise<void> {
       const alertStore = useAlertStore()
       try {
-        this.currentAddress = await CompanyHttpClient.get().getAdressAsAdmin(id)
+        this.currentAddress = await AddressHttpClient.get().getAdressAsAdmin(id)
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
           alertStore.setShow(
