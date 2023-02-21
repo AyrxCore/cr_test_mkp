@@ -61,7 +61,7 @@ Abstract class AbstractUpplerProductService extends HttpClientProvider
 
         $res = $this->request(
             'POST',
-            $this->apiUrl . 'v1/buyer/search/product?perPage=' . $perPage . $urlFilters,
+            $this->apiUrl . 'v1/buyer/search/product?page='.$page.'&perPage=' . $perPage . $urlFilters,
             [
                 'json' => $options
             ]

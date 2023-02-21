@@ -33,17 +33,26 @@
           v-if="count"
           class="mr-2 flex h-[28px] w-[84px] flex-row items-center justify-between rounded-md border bg-white"
         >
-          <button class="flex">
+          <button
+            class="flex"
+            :class="{
+              'disable' : pageNumber > 2
+            }"
+            @click="pagePreview"
+          >
             <ChevronLeftIconComponent
-              class="ml-1 h-4"
-              :stroke-color="'#A4A4A4'"
+              class="ml-1 h-4 stroke-gray-500"
+              :stroke-color="'#626262'"
             />
           </button>
           <span>{{ pageNumber }}</span>
-          <button class="flex">
+          <button
+            class="flex"
+            @click="pageNext"
+          >
             <ChevronRightIconComponent
               class="ml-1 h-4"
-              :stroke-color="'#A4A4A4'"
+              :stroke-color="'#626262'"
             />
           </button>
         </div>
@@ -93,6 +102,9 @@ import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import AccordCadreComponent from '@/vuejs/modules/home/component/AccordCadreComponent.vue'
+import { toNumber } from '@vue/shared';
+import router from '@/vuejs/router';
+import { ProductPageList } from '@/vuejs/modules/products/routerProducts';
 
 const route = useRoute()
 const productStore = useProductStore()
@@ -100,7 +112,7 @@ const resultProducts = ref([])
 const isLoading = ref<boolean>()
 const term = ref<string>('')
 const currentPartenaire = ref<number>(null)
-
+const pageNumber = ref<number>(1)
 
 const breadcrumbUrl = computed(() => {
   return []
@@ -108,8 +120,10 @@ const breadcrumbUrl = computed(() => {
 
 const loadProducts = (async () => {
 
+  pageNumber.value = route.query.page ? toNumber(route.query.page) : 1
   const paramsProducts = {
     with_filter: true,
+    page: pageNumber.value
   }
 
   if (route.query.q) {
@@ -122,6 +136,7 @@ const loadProducts = (async () => {
     currentPartenaire.value = resultProducts.value.results[0].seller.id
   }
   isLoading.value = false
+  pageNumber.value = resultProducts.value.page
 })
 
 const count = computed(() => {
@@ -136,15 +151,47 @@ const filters = computed(() => {
   return resultProducts.value.filters
 })
 
-const pageNumber = computed(() => {
-  return resultProducts.value.page
+const pagePreview = (() => {
+  if (pageNumber.value > 1) {
+    pageNumber.value--
+  } else {
+    pageNumber.value
+  }
+
+  changePage()
 })
 
+const pageNext = (() => {
+  pageNumber.value++
+  changePage()
+})
 
+const changePage = (() => {
+  router.push({
+    name: ProductPageList.PRODUCTS,
+    query: {
+      q: term.value,
+      page:pageNumber.value,
+    }
+  })
+})
 watch(
   () => route.query.q,
   async (searchTerm: string) => {
     if (searchTerm) {
+      isLoading.value = true
+      currentPartenaire.value = null
+      pageNumber.value = 1
+      await loadProducts()
+    }
+  },
+  { immediate: true },
+)
+
+watch(
+  () => route.query.page,
+  async (page: string) => {
+    if (page) {
       isLoading.value = true
       currentPartenaire.value = null
       await loadProducts()

@@ -31,7 +31,10 @@ const { user } = storeToRefs(userStore)
 const search = ((event) => {
   router.push({
     name: ProductPageList.PRODUCTS,
-    query: {q: event.term}
+    query: {
+      q: event.term,
+      page: event.page,
+    }
   })
 })
 </script>

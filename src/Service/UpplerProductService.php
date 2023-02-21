@@ -4,18 +4,14 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Dto\AccordCadre;
 use App\Dto\Price;
 use App\Dto\Product;
 use App\Dto\Property;
-use App\Dto\Seller;
 use App\Entity\AccountAccordCadre;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 class UpplerProductService extends AbstractUpplerProductService
 {
-    public function getProductsByParams(array $options = [], array $filters = [], int $perPage = 5, $page = 1): array | null
+    public function getProductsByParams(array $options = [], array $filters = [],  $page = 1, int $perPage = 5): array | null
     {
         $showFilters = false;
 
@@ -23,6 +19,11 @@ class UpplerProductService extends AbstractUpplerProductService
             $showFilters = true;
             unset($options['with_filter']);
             $perPage = 12;
+        }
+
+        if (!empty($options['page'])) {
+            $page = $options['page'];
+            unset($options['page']);
         }
 
         $res = $this->searchProductsByParams($options, ['properties'], $perPage, $page);

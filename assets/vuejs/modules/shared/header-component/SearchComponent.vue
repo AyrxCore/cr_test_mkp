@@ -30,7 +30,7 @@ const wrapper = ref<HTMLElement>()
 const searchTerm = ref('')
 
 const searchProduct = (() => {
-  emit('searchProduct', {term: searchTerm.value})
+  emit('searchProduct', {term: searchTerm.value, page: 1})
 })
 
 onMounted(() => {
