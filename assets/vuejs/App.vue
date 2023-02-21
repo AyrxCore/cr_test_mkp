@@ -12,7 +12,7 @@ import { onMounted } from 'vue'
 import LoginForm from './modules/login/views/ExternalLoginForm.vue'
 import PartnersCarousel from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
 import StickyContactButtons from '@/vuejs/modules/shared/StickyContactButtonsComponent.vue'
-import {useBuyerCompanyStore} from '@/vuejs/stores/buyer_company'
+import { useBuyerCompanyStore } from '@/vuejs/stores/buyer_company'
 const companyStore = useBuyerCompanyStore()
 const props = defineProps({
   component: {
@@ -23,7 +23,9 @@ const props = defineProps({
 })
 
 onMounted(async () => {
-  await companyStore.getAdresses()
+  if (props.component === '') {
+    await companyStore.getAdresses()
+  }
 })
 </script>
 
