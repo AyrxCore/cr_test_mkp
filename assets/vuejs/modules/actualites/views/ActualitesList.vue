@@ -7,7 +7,7 @@
         <h3 class="text-[35px] text-primary">Nos contenus experts</h3>
         <!-- Bloc liste des actus -->
         <div class="m-auto my-2 flex">
-          <div class="w-3/4">
+          <div class="w-3/4 pr-5">
             <div class="m-auto md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-4">
               <div
                 v-for="contenu in expertsContents"

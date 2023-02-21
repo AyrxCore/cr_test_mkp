@@ -10,7 +10,7 @@
     </h3>
     <div class="flex flex-row">
       <LeafIconComponent class="mx-2" />
-      <span class="mr-2 flex text-sm font-bold md:text-lg">{{ note }}</span>
+      <span class="mr-2 flex text-sm font-bold md:text-lg text-green-qantis">{{ note }}</span>
       <span class="mt-1 flex text-xs text-gray-500 md:mt-2"
         >Selon notre référentiel RSE</span
       >

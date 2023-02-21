@@ -23,7 +23,7 @@
         </div>
         <div class="sr-only inline-flex items-center md:not-sr-only">
           <a
-              v-if="companyStore.getDefaultBillingAddress"
+              v-if="companyStore.getDefaultShippingAddress"
               href="#"
               class="text-xs"
           >

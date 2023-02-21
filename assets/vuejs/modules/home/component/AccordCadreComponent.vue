@@ -20,13 +20,13 @@
 <script lang="ts" setup>
 import { computed, PropType } from 'vue'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
-import { AccordCadre } from '@/vuejs/types/AccordCadre'
 import { PartnersPageList } from '@/vuejs/modules/partners/routerPartners'
+import { Product } from '@/vuejs/types/Product'
 
 const props = defineProps({
   accord: {
     required: true,
-    type: Object as PropType<AccordCadre>,
+    type: Object as PropType<Product>,
   },
 })
 

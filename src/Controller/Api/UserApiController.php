@@ -48,8 +48,10 @@ class UserApiController extends AbstractController
         }
         $buyerDatas = $this->upplerBuyerCompanyService->getUserBuyerDatas();
         $subAccountDatas = $this->upplerAccountService->getUserSubAccountDatas();
+        dump($subAccountDatas);
         $user = $normalizer->normalize($this->getUser(), 'json', ['groups' => 'simpleUser']);
         $account = $normalizer->normalize($session->get('account'), 'json', ['groups' => 'simpleUser']);
+        dump($account);
         $user["account"] = $account;
         $user["account"]["subaccount"] = $subAccountDatas;
         $user["account"]["buyer"] = $buyerDatas;

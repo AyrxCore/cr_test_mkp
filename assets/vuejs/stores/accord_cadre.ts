@@ -4,8 +4,8 @@ import { AlertType } from '@/vuejs/types/Alert'
 import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
 import { getErrorMessage } from '@/vuejs/services/login'
 import { Product } from '@/vuejs/types/Product'
-import AccordCadreHttpClient from '@/vuejs/services/httpclient/AccordCadreHttpClient'
-import { AccountAccordCadre } from '@/vuejs/types/AccordCadre';
+import { AccountAccordCadre } from '@/vuejs/types/AccordCadre'
+import ProductHttpClient from '@/vuejs/services/httpclient/ProductHttpClient';
 
 export interface AccordCadreStoreState {
   accords_cadre: [],
@@ -22,7 +22,7 @@ export const useAccordCadreStore = defineStore({
   actions: {
     async findAccordsCadresByParams(params): Promise<[]> {
       try {
-          return await AccordCadreHttpClient.get().findAccordsCadresByParams(params)
+          return await ProductHttpClient.get().findAccordsCadresByParams(params)
       } catch (error) {
         return []
       }
@@ -31,7 +31,7 @@ export const useAccordCadreStore = defineStore({
     async getAccordCadreById(id) {
       const alertStore = useAlertStore()
       try {
-        return await AccordCadreHttpClient.get().getAccordCadre(id)
+        return await ProductHttpClient.get().getAccordCadre(id)
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
         alertStore.setShow(

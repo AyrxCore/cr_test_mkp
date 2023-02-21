@@ -80,8 +80,7 @@ Abstract class AbstractUpplerProductService extends HttpClientProvider
         $session = $this->requestStack->getSession();
         $session->start();
 
-        $filters =  empty($filters) ? ['price', 'properties', 'variants'] : $filters;
-
+        $filters =  empty($filters) ? ['price', 'properties', 'variants', 'option_values', 'company'] : $filters;
         $urlFilters = null;
 
         if (!empty($filters)) {
@@ -92,7 +91,7 @@ Abstract class AbstractUpplerProductService extends HttpClientProvider
 
         $res = $this->request(
             'GET',
-            $this->apiUrl . 'v1/buyer/product/' . $productId . $urlFilters
+            $this->apiUrl . 'v1/product/' . $productId . $urlFilters
         );
 
         if (Response::HTTP_OK === $res->getStatusCode()) {

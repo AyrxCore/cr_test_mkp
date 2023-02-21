@@ -4,16 +4,17 @@ import CategoriesPage from '@/vuejs/modules/products/views/CategoriesList.vue'
 import ProductPage from '@/vuejs/modules/products/views/Product.vue'
 
 export enum ProductPageList {
-  PRODUCTS = 'products',
+  PRODUCTS = 'produits',
   CATEGORIES = 'categories',
-  PRODUCT = 'product',
+  PRODUCT = 'produit',
 }
 
 export const routes: RouteRecordRaw[] = [
   {
-    path: '/app/products',
+    path: '/app/produits',
     name: ProductPageList.PRODUCTS,
     component: ProductsPage,
+    props: route => ({ query: route.query })
   },
   {
     path: '/app/categories',
@@ -21,7 +22,7 @@ export const routes: RouteRecordRaw[] = [
     component: CategoriesPage,
   },
   {
-    path: '/app/product/:id',
+    path: '/app/produit/:id',
     component: ProductPage,
     name: ProductPageList.PRODUCT,
   },

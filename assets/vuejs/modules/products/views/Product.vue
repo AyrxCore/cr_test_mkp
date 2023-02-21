@@ -263,15 +263,15 @@
         <table class="w-full table-auto border bg-white p-8">
           <tbody>
             <tr
-              v-for="property in product.properties"
-              :key="property.id"
+              v-for="(property, key, index) in product.properties"
+              :key="index"
               class="border text-sm text-primary md:text-base lg:text-lg"
               :class="{
-                'hidden': property.value === 'home-top-vente' || property.value === 'home-selection'
+                'hidden': property === 'home-top-vente' || property === 'home-selection'
               }"
             >
-              <td class="w-[20%] border p-2">{{ property.name }}</td>
-              <td class="p-2">{{ property.value }}</td>
+              <td class="w-[20%] border p-2">{{ key }}</td>
+              <td class="p-2">{{ property }}</td>
             </tr>
           </tbody>
         </table>

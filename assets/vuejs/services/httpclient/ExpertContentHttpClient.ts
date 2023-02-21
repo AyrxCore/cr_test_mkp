@@ -37,13 +37,11 @@ export default class ExpertContentHttpClient extends BaseClientService {
   }
 
   public findExpertsContents<T extends []>(): Promise<T> {
-    console.log('findExpertsContents')
     return this.apiClient
       .get<T>(
         `experts_contents`,
       )
       .then((response) => {
-        console.log(response.data)
         return response.data
       })
   }

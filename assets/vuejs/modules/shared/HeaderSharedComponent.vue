@@ -7,11 +7,7 @@
         <AccountComponent class="lg:hidden" />
       </div>
       <div class="mt-4 mb-2 lg:my-4 lg:flex lg:w-[100%]">
-        <SearchComponent
-          placeholder="Recherchez un produit, un accord-cadre ou un fournisseur"
-        >
-          <i class="fa fa-search" />
-        </SearchComponent>
+        <SearchComponent @search-product="search"/>
       </div>
       <AccountComponent class="hidden lg:flex" />
     </div>
@@ -22,13 +18,22 @@
 <script lang="ts" setup>
 import { useUserStore } from '@/vuejs/stores/user'
 import { storeToRefs } from 'pinia'
-import SearchComponent from '@/vuejs/modules/shared/InputButtonComponent.vue'
 import MenuComponent from '@/vuejs/modules/shared/header-component/MenuComponent.vue'
 import AccountComponent from '@/vuejs/modules/shared/header-component/AccountComponent.vue'
 import LogoComponent from '@/vuejs/modules/shared/header-component/LogoComponent.vue'
+import SearchComponent from '@/vuejs/modules/shared/header-component/SearchComponent.vue'
+import router from '@/vuejs/router';
+import { ProductPageList } from '@/vuejs/modules/products/routerProducts';
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
+
+const search = ((event) => {
+  router.push({
+    name: ProductPageList.PRODUCTS,
+    query: {q: event.term}
+  })
+})
 </script>
 
 <style lang="scss">

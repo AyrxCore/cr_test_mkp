@@ -83,7 +83,7 @@ import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import HeaderPartnerComponent from '@/vuejs/modules/partners/components/HeaderPartnerComponent.vue'
 import { computed, ref, watch } from 'vue'
 import PartnersCarouselComponent from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
-import { AccordCadre } from '@/vuejs/types/AccordCadre'
+import { Product } from '@/vuejs/types/Product'
 import { useRoute } from 'vue-router'
 import { useAccordCadreStore } from '@/vuejs/stores/accord_cadre'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
@@ -102,7 +102,7 @@ import EnSavoirPlusComponent from '@/vuejs/modules/partners/components/accord-ca
 const route = useRoute()
 const accordStore = useAccordCadreStore()
 
-const accord = ref<AccordCadre>()
+const accord = ref<Product>()
 
 const breadcrumbUrl = computed(() => {
   return []

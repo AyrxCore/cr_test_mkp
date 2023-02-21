@@ -1,5 +1,5 @@
 <template>
-  <div class="relative">
+  <div v-if="showCarousel" class="relative">
     <CarouselListSharedComponent
       :slides-per-view="2"
       :space-between="5"
@@ -19,17 +19,13 @@
         :key="key"
         class="flex h-full items-center justify-center overflow-hidden rounded-lg bg-white"
       >
-        <RouterLink
-          v-if="seller.id"
-          :to="{ path: `${PartnersPageList.LISTE_PRODUITS_PARTENAIRE}/${seller.id}` }"
-          class="cursor-pointer pointer"
-        >
-          <img
-            :src="getUpplerImage(seller.avatar)"
-            :alt="seller.name"
-            class="h-[107px] w-full object-contain cursor-pointer pointer"
-          />
-        </RouterLink>
+
+        <img
+          v-if="showCarouselConnected"
+          :src="getUpplerImage(seller.avatar)"
+          :alt="seller.name"
+          class="h-[107px] w-full object-contain cursor-pointer pointer"
+        />
         <img
           v-else
           :src="seller.avatar"
@@ -68,36 +64,43 @@ import imgBerner from '@/vuejs/assets/img/samples/berner.png'
 import imgSynergie from '@/vuejs/assets/img/samples/synergie.jpeg'
 import { useSellerStore } from '@/vuejs/stores/seller'
 import { useUserStore } from '@/vuejs/stores/user'
-import { PartnersPageList } from '@/vuejs/modules/partners/routerPartners'
 
 const sellerStore = useSellerStore()
 const userStore = useUserStore()
-
+const showCarousel = ref(false)
+const showCarouselConnected = ref(false)
 const sellers = ref([])
 
 onMounted(async () => {
-  if (userStore.getUser) {
-    sellers.value = await sellerStore.getSellers()
-  } else {
-    sellers.value = [
-      { avatar: getImage(imgPeugeot), name: 'Peugeot' },
-      { avatar: getImage(imgRenault), name: 'Renault' },
-      { avatar: getImage(imgLoxam), name: 'Loxam' },
-      { avatar: getImage(imgKiloutou), name: 'Kiloutou' },
-      { avatar: getImage(imgAlda), name: 'Alda' },
-      { avatar: getImage(imgAdecco), name: 'Adecco' },
-      { avatar: getImage(imgWurth), name: 'Wurth' },
-      { avatar: getImage(imgLdlc), name: 'LDLC Pro' },
-      { avatar: getImage(imgHertz), name: 'Herts' },
-      { avatar: getImage(imgEuromaster), name: 'Euromaster' },
-      { avatar: getImage(imgShell), name: 'Shell' },
-      { avatar: getImage(imgSfr), name: 'SFR' },
-      { avatar: getImage(imgFiducial), name: 'Fiducial' },
-      { avatar: getImage(imgCrit), name: 'Crit' },
-      { avatar: getImage(imgBerner), name: 'Berner' },
-      { avatar: getImage(imgEdenred), name: 'Edenred' },
-      { avatar: getImage(imgSynergie), name: 'Synergie' },
-    ]
+  try {
+    if (userStore.getUser) {
+      sellers.value = await sellerStore.getSellers()
+      showCarouselConnected.value = true
+    } else {
+      sellers.value = [
+        { avatar: getImage(imgPeugeot), name: 'Peugeot' },
+        { avatar: getImage(imgRenault), name: 'Renault' },
+        { avatar: getImage(imgLoxam), name: 'Loxam' },
+        { avatar: getImage(imgKiloutou), name: 'Kiloutou' },
+        { avatar: getImage(imgAlda), name: 'Alda' },
+        { avatar: getImage(imgAdecco), name: 'Adecco' },
+        { avatar: getImage(imgWurth), name: 'Wurth' },
+        { avatar: getImage(imgLdlc), name: 'LDLC Pro' },
+        { avatar: getImage(imgHertz), name: 'Herts' },
+        { avatar: getImage(imgEuromaster), name: 'Euromaster' },
+        { avatar: getImage(imgShell), name: 'Shell' },
+        { avatar: getImage(imgSfr), name: 'SFR' },
+        { avatar: getImage(imgFiducial), name: 'Fiducial' },
+        { avatar: getImage(imgCrit), name: 'Crit' },
+        { avatar: getImage(imgBerner), name: 'Berner' },
+        { avatar: getImage(imgEdenred), name: 'Edenred' },
+        { avatar: getImage(imgSynergie), name: 'Synergie' },
+      ]
+    }
+    showCarousel.value = true
+  } catch (error) {
+
   }
+
 })
 </script>

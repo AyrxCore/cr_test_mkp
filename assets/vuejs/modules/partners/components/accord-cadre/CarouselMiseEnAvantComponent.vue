@@ -49,6 +49,7 @@
             />
 
             <ButtonComponent
+              v-if="miseEnAvant.buttonUrl"
               class="button-secondary mt-6 lg:w-1/2"
               @click="openInNewTab(miseEnAvant.buttonUrl)"
             >

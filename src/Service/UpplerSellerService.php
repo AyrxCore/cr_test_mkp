@@ -62,7 +62,6 @@ class UpplerSellerService extends HttpClientProvider
 
     public function getSeller(int $sellerId = null): Seller | null
     {
-        $this->cache->clear();
         $item = $this->cache->getItem('seller_' . $sellerId);
 
         if ($item->isHit()) {
@@ -95,7 +94,6 @@ class UpplerSellerService extends HttpClientProvider
         $seller = new Seller();
         $seller->setId($remoteSeller->id);
         $seller->setName($remoteSeller->name);
-        $seller->setCorporateName($remoteSeller->corporate_name);
         $avatar = !empty($remoteSeller->avatar) ? $remoteSeller->avatar : null;
         $seller->setAvatar($avatar);
         $description = !empty($remoteSeller->description->default) ? $remoteSeller->description->default : null;

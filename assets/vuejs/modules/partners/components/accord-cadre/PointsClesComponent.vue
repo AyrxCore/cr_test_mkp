@@ -20,10 +20,7 @@
                 <CheckIconComponent
                   class="mr-2 !inline h-[20px] h-[28px] w-[20px] md:w-[24px] lg:mr-3.5"
                 />
-                <span class="w-full">
-                  <span class="mr-1 font-bold"
-                  >Point clé n° {{ key + 1 }} : </span
-                  >{{ pointCle }}
+                <span class="w-full">{{ pointCle }}
                 </span>
               </span>
         </li>

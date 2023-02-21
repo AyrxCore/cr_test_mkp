@@ -6,8 +6,8 @@
     class="mb-8 flex items-center justify-between rounded-lg bg-white py-3 px-3 text-base text-gray-500 md:text-lg"
   >
     <div  class="truncate">
-      <span v-if="address" :title="addressLabel(address)">
-        {{ addressLabel(address) }}
+      <span v-if="address" :title="addressLabel">
+        {{ addressLabel }}
       </span>
       <span v-else>
         <LoaderSharedComponent class="text-secondary" />
@@ -17,7 +17,7 @@
 </template>
 <script lang="ts" setup>
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
-import { PropType } from 'vue'
+import { computed, PropType } from 'vue'
 import { Address } from '@/vuejs/types/Address'
 
 const props = defineProps({
@@ -27,7 +27,7 @@ const props = defineProps({
   },
 })
 
-const addressLabel = ((address) => {
-  return (!address.company ? '' : address.company + ', ') + address.street + ' ' + address.postcode + ' ' + address.city
+const addressLabel = computed(() => {
+  return (!props.address.company ? '' : props.address.company + ', ') + props.address.street + ' ' + props.address.postcode + ' ' + props.address.city
 })
 </script>

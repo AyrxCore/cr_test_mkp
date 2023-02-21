@@ -5,7 +5,6 @@ import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
 import { getErrorMessage } from '@/vuejs/services/login'
 import { Seller, SellerStoreState } from '@/vuejs/types/Seller'
 import SellerHttpClient from '@/vuejs/services/httpclient/SellerHttpClient'
-import AccordCadreHttpClient from '@/vuejs/services/httpclient/AccordCadreHttpClient';
 
 export const useSellerStore = defineStore({
   id: 'seller',

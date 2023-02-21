@@ -7,37 +7,28 @@ namespace App\Dto;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\Api\Buyer\ProductApiController;
+use App\Entity\AccountAccordCadre;
 
-#[ApiResource(
-    collectionOperations: [
-        'search_products' => [
-            "openapi_context" => [
-                'summary' => 'Liste des produits',
-                'description' => 'Permet de récupérer la liste des produits avec les paramètres de propriétés et de catégorie'
-            ],
-            'path' => '/products',
-            'controller' => ProductApiController::class,
-            'method' => 'post'
-        ]
-    ],
-    itemOperations: [
-        'get' => [
-            'path' => '/product/{id}',
-            'requirements' => ['id' => '\d+']
-        ],
-    ]
-)]
 final class Product implements \JsonSerializable
 {
-    #[ApiProperty(identifier: true)]
-    private ?int $id = null;
+    public const PROCESS_STATUS_NOT_ACTIVATED = 'NOT_ACTIVATED';
+    public const PROCESS_STATUS_PENDING = 'PENDING';
+    public const PROCESS_STATUS_ACTIVATED = 'ACTIVATED';
+    public const PROCESS_STATUS = [
+        self::PROCESS_STATUS_NOT_ACTIVATED,
+        self::PROCESS_STATUS_PENDING,
+        self::PROCESS_STATUS_ACTIVATED,
+    ];
 
+    private ?int $id = null;
     private ?string $name;
+
     private ?string $reference;
     private ?string $description;
     private ?string $conditionnement;
     private array $livraisons;
     private array $categories;
+    private ?int $imageId = null;
     private array $images;
     private array $options;
     private array $properties;
@@ -45,8 +36,10 @@ final class Product implements \JsonSerializable
     private ?float $priceReference;
     private ?float $percent = 0;
     private ?Price $price = null;
+    private bool $isAccordCadre = false;
     private ?Price $basePrice = null;
     private ?Seller $seller;
+    private ?AccountAccordCadre $accountAccordCadre;
 
     public function getId(): ?int
     {
@@ -123,6 +116,23 @@ final class Product implements \JsonSerializable
     {
         $this->categories = $categories;
     }
+
+    /**
+     * @return int|null
+     */
+    public function getImageId(): ?int
+    {
+        return $this->imageId;
+    }
+
+    /**
+     * @param int|null $imageId
+     */
+    public function setImageId(?int $imageId): void
+    {
+        $this->imageId = $imageId;
+    }
+
 
     /**
      * @return array
@@ -305,4 +315,36 @@ final class Product implements \JsonSerializable
         return  get_object_vars($this);
     }
 
+    /**
+     * @return bool
+     */
+    public function isAccordCadre(): bool
+    {
+        return $this->isAccordCadre;
+    }
+
+    /**
+     * @param bool $isAccordCadre
+     */
+    public function setIsAccordCadre(bool $isAccordCadre): void
+    {
+        $this->isAccordCadre = $isAccordCadre;
+    }
+
+
+    /**
+     * @return AccountAccordCadre|null
+     */
+    public function getAccountAccordCadre(): ?AccountAccordCadre
+    {
+        return $this->accountAccordCadre;
+    }
+
+    /**
+     * @param AccountAccordCadre|null $accountAccordCadre
+     */
+    public function setAccountAccordCadre(?AccountAccordCadre $accountAccordCadre): void
+    {
+        $this->accountAccordCadre = $accountAccordCadre;
+    }
 }

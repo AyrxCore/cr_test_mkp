@@ -30,14 +30,7 @@ use App\Entity\AccountAccordCadre;
 )]
 final class AccordCadre implements \JsonSerializable
 {
-    public const PROCESS_STATUS_NOT_ACTIVATED = 'NOT_ACTIVATED';
-    public const PROCESS_STATUS_PENDING = 'PENDING';
-    public const PROCESS_STATUS_ACTIVATED = 'ACTIVATED';
-    public const PROCESS_STATUS = [
-        self::PROCESS_STATUS_NOT_ACTIVATED,
-        self::PROCESS_STATUS_PENDING,
-        self::PROCESS_STATUS_ACTIVATED,
-    ];
+
     #[ApiProperty(identifier: true)]
     private ?int $id = null;
 
@@ -46,7 +39,7 @@ final class AccordCadre implements \JsonSerializable
     private ?string $description;
     private array $properties;
     private array $categories;
-    private ?AccountAccordCadre $accountAccordCadre;
+
 
     public function getId(): ?int
     {
@@ -138,22 +131,6 @@ final class AccordCadre implements \JsonSerializable
     public function setCategories(array $categories): void
     {
         $this->categories = $categories;
-    }
-
-    /**
-     * @return AccountAccordCadre|null
-     */
-    public function getAccountAccordCadre(): ?AccountAccordCadre
-    {
-        return $this->accountAccordCadre;
-    }
-
-    /**
-     * @param AccountAccordCadre|null $accountAccordCadre
-     */
-    public function setAccountAccordCadre(?AccountAccordCadre $accountAccordCadre): void
-    {
-        $this->accountAccordCadre = $accountAccordCadre;
     }
 
 

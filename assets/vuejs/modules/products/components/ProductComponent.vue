@@ -4,7 +4,7 @@
   >
     <!-- Bloc header -->
     <div class="flex items-center justify-between h-[50px] w-full">
-      <div class="flex w-[78px] h-[37px] items-center justify-start bg-white rounded-md">
+      <div class="flex w-[78px] h-[40px] items-center justify-start bg-white rounded-md">
         <img
           :src="getUpplerImage(props.product.seller.avatar)"
           :alt="props.product.seller.name"
@@ -26,7 +26,7 @@
       <img
         :src="getUpplerImage(props.product.images[0])"
         :alt="props.product.name"
-        class="flex items-center w-full h-full max-w-max"
+        class="flex items-center w-full h-[100%] max-w-max"
       />
     </div>
     <!-- Fin bloc image -->
@@ -34,13 +34,13 @@
     <!-- Bloc nom et description -->
     <div class="flex w-full flex-col justify-start">
       <h3
-        class="text-left text-sm font-bold text-gray-600 md:text-base lg:text-lg h-[40px]"
+        class="text-left text-sm font-bold text-gray-600 md:text-base lg:text-lg h-[55px] truncate-custom truncate-custom-2"
       >
-        <RouterLink :to="{ path: `/app/product/${props.product.id}` }">{{ props.product.name }}</RouterLink>
+        <RouterLink :to="{ name: ProductPageList.PRODUCT, params: {id: props.product.id} }">{{ props.product.name }}</RouterLink>
       </h3>
       <div class="h-[100px] mt-2">
         <p
-          class="mt-1 w-full justify-start text-left text-sm text-gray-400 md:text-base lg:text-lg"
+          class="mt-1 w-full justify-start text-left text-sm text-gray-400 md:text-base lg:text-lg truncate-custom truncate-custom-3"
           v-html="props.product.description"
         />
       </div>
@@ -93,6 +93,7 @@ import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.v
 import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
 import {Product } from '@/vuejs/types/Product'
 import { getUpplerImage } from '@/vuejs/services/utils'
+import { ProductPageList } from '@/vuejs/modules/products/routerProducts'
 
 const props = defineProps({
   product: {

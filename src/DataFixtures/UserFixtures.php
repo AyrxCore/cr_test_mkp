@@ -119,11 +119,11 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface, FixtureGr
             $user->setEnabled(true);
 
             $account = new Account();
-            $account->setUpplerUserId(23);
+            $account->setUpplerUserId(113);
             $account->setUpplerCompanyId(72);
             $account->setUpplerClientId('101_3l3ueqlt27eog4co400wo0g0kcswg80sk4wocwsgoww4c80ko4');
             $account->setUpplerClientSecret('67nfvkl6q84kck8g4oksww4gsokowgo4s8cw8ow0skk0okw48g');
-            $account->setUpplerSubAccountId(113);
+            $account->setUpplerSubAccountId(23);
             $account->setIsEnabled(true);
             $account->setUser($user);
             $manager->persist($account);

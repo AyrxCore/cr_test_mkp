@@ -96,8 +96,6 @@ export const useExpertContentStore = defineStore({
 
   getters: {
     getExpertsContents(): Array<ExpertContent> {
-      console.log('getExpertsContents')
-      console.log(this.expertsContents)
       return this.expertsContents
     },
     getExpertsContentsCategories() {

@@ -6,8 +6,7 @@ import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
 import { getErrorMessage } from '@/vuejs/services/login'
 import ProductHttpClient from '@/vuejs/services/httpclient/ProductHttpClient'
 import { Product } from '@/vuejs/types/Product'
-import { Address } from '@/vuejs/types/Address';
-import { Filter } from '@/vuejs/types/Filter';
+import { Filter } from '@/vuejs/types/Filter'
 
 export interface ProductStoreState {
   products: Product[],

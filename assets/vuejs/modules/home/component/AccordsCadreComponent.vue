@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts" setup>
-import { PRODUCT_ACCORD_PROPERTY } from '@/vuejs/services/utils'
+import { HOME_ACCORD_CADRE_PROPERTY } from '@/vuejs/services/utils'
 import { onBeforeMount, ref } from 'vue'
 import { SwiperSlide } from 'swiper/vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
@@ -55,7 +55,7 @@ const accordsCadre = ref([])
 onBeforeMount(async () => {
   const params =  {
     properties: [
-      PRODUCT_ACCORD_PROPERTY
+      HOME_ACCORD_CADRE_PROPERTY
     ],
   }
 

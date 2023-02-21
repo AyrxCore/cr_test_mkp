@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div
+    v-if="listButtons.length"
+  >
     <div class="mt-10 flex flex-col">
       <h3 class="home-subtitle text-primary">
         En savoir plus sur ce partenaire

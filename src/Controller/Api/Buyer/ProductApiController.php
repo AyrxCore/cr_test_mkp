@@ -39,9 +39,51 @@ class ProductApiController extends AbstractController
 
         $products = $this->upplerProductService->getProductsByParams($options, ['price', 'properties']);
 
-        dump($products);
-
         return new JsonResponse($products);
     }
 
+    #[Route('/api/accords-cadre', name: 'search_accords_cadre', methods: ['POST'])]
+    public function listAccord(Request $request, NormalizerInterface $normalizer): JsonResponse
+    {
+        $session= $this->requestStack->getSession();
+        $session->start();
+
+        $options = $request->request->all();
+
+        if (!$session->has('account') || empty($session->get('account'))) {
+            return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return new JsonResponse($this->upplerProductService->getProductsByParams($options, ['properties']));
+    }
+
+    #[Route('/api/product/{id}', name: 'get_product')]
+    public function product(int $id, NormalizerInterface $normalizer): JsonResponse
+    {
+        $session= $this->requestStack->getSession();
+        $session->start();
+
+        if (!$session->has('account') || empty($session->get('account'))) {
+            return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        $product = $this->upplerProductService->getProduct($id);
+
+        return new JsonResponse($product);
+    }
+
+    #[Route('/api/accord-cadre/{id}', name: 'get_accord_cadre')]
+    public function accordCadre(int $id, NormalizerInterface $normalizer): JsonResponse
+    {
+        $session= $this->requestStack->getSession();
+        $session->start();
+
+        if (!$session->has('account') || empty($session->get('account'))) {
+            return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        $accordCadre = $this->upplerProductService->getProduct($id, [], (string)$session->get('account')->getId());
+
+        return new JsonResponse($accordCadre);
+    }
 }

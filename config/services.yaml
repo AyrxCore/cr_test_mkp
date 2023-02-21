@@ -90,9 +90,6 @@ services:
   App\Service\UpplerProductService:
     parent: App\Service\AbstractUpplerProductService
 
-  App\Service\UpplerAccordCadreService:
-    parent: App\Service\AbstractUpplerProductService
-
   App\Service\UpplerDynamicEntityService:
     parent: App\Service\HttpClientProvider
     arguments:

@@ -23,22 +23,19 @@ export function getUpplerImage( path: string|null)
 
 
 export const HOME_TOP_VENTE_PROPERTY = {
-  property_id: '176',
-  value: '8389'
+  property_id: '217',
+  value: '5369'
 }
 export const HOME_SELECTION_PROPERTY = {
-  property_id: '176',
-  value: '8388'
-}
-export const PRODUCT_ACCORD_PROPERTY = {
-  property_id: '169',
-  value: 'Oui'
+  property_id: '217',
+  value: '5368'
 }
 
-export const PRODUCT_WITHOUT_ACCORD_PROPERTY = {
-  property_id: '169',
-  value: ''
+export const HOME_ACCORD_CADRE_PROPERTY = {
+  property_id: '217',
+  value: '5367'
 }
+
 export const listCategories = ref<string[]>([
   'Avantages salariés',
   'Certifications',

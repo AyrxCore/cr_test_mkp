@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from 'vue'
+import { onBeforeMount, onMounted } from 'vue'
 import LoginForm from './modules/login/views/ExternalLoginForm.vue'
 import PartnersCarousel from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
 import StickyContactButtons from '@/vuejs/modules/shared/StickyContactButtonsComponent.vue'
@@ -22,7 +22,7 @@ const props = defineProps({
   },
 })
 
-onMounted(async () => {
+onBeforeMount(async () => {
   if (props.component === '') {
     await companyStore.getAdresses()
   }

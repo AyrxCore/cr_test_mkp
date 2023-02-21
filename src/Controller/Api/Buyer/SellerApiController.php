@@ -42,7 +42,6 @@ class SellerApiController extends AbstractController
     #[Route('/api/seller/{id}', name: 'get_seller')]
     public function me(int $id, NormalizerInterface $normalizer): JsonResponse
     {
-        dump($id);
         $session= $this->requestStack->getSession();
         $session->start();
 
