@@ -26,7 +26,7 @@
           class="mr-2 flex p-2 w-2/3 flex-row items-start rounded-md border bg-white"
         >
           <span class="text-sm md:text-base lg:text-lg">
-            <span class="font-bold text-primary">{{ count }}</span> résultats trouvés pour votre recherche "<span class="font-bold text-primary">{{ term }}</span>"
+            résultats trouvés pour votre recherche "<span class="font-bold text-primary">{{ term }}</span>"
           </span>
         </div>
         <div
@@ -65,10 +65,10 @@
             <div class="flex flex-col text-gray-600 md:grid md:grid-cols-2 md:gap-8 lg:grid-cols-4">
               <div v-for="(product, key) in products" :key="key">
                 <AccordCadreComponent
-                  v-if="product.isAccordCadre"
+                  v-if="product.isAccordCadre && (currentPartenaire === null || currentPartenaire === product.seller.id)"
                   :accord="product" />
                 <ProductComponent
-                  v-else
+                  v-else-if="currentPartenaire === product.seller.id || currentPartenaire === null"
                   :product="product"
                   class="mt-5 h-[516px] !w-auto md:mt-0 md:w-[392px]"
                 />
@@ -87,7 +87,7 @@ import ProductComponent from '@/vuejs/modules/products/components/ProductCompone
 import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightIconComponent.vue'
 import ChevronLeftIconComponent from '@/vuejs/modules/shared/icon/ChevronLeftIconComponent.vue'
 import { useRoute } from 'vue-router'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useProductStore } from '@/vuejs/stores/product'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
@@ -99,14 +99,11 @@ const productStore = useProductStore()
 const resultProducts = ref([])
 const isLoading = ref<boolean>()
 const term = ref<string>('')
+const currentPartenaire = ref<number>(null)
 
 
 const breadcrumbUrl = computed(() => {
   return []
-})
-
-onMounted(async () => {
-  await loadProducts()
 })
 
 const loadProducts = (async () => {
@@ -121,6 +118,9 @@ const loadProducts = (async () => {
   }
 
   resultProducts.value = await productStore.getProductsByParams(paramsProducts)
+  if (resultProducts.value.results[0].isAccordCadre && currentPartenaire.value === null) {
+    currentPartenaire.value = resultProducts.value.results[0].seller.id
+  }
   isLoading.value = false
 })
 
@@ -146,6 +146,7 @@ watch(
   async (searchTerm: string) => {
     if (searchTerm) {
       isLoading.value = true
+      currentPartenaire.value = null
       await loadProducts()
     }
   },

@@ -45,8 +45,6 @@ class UpplerSellerService extends HttpClientProvider
             $this->apiUrl . 'v1/buyer/search/company?perPage=' . $perPage . '&page=' . $page
         );
 
-        dump($res);
-
         if (Response::HTTP_PARTIAL_CONTENT === $res->getStatusCode() || Response::HTTP_OK === $res->getStatusCode() ) {
             $upplerSellers = json_decode($res->getContent());
             $sellers = [];

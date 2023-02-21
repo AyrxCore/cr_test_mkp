@@ -32,7 +32,6 @@ class UpplerProductService extends AbstractUpplerProductService
 
         $products = [];
         foreach ($res->results as $result) {
-
                 $products[] = $this->getProduct($result->id);
         }
 
@@ -83,6 +82,17 @@ class UpplerProductService extends AbstractUpplerProductService
         }
         $product->setProperties($properties);
         $product->setIsAccordCadre($isAccordCadre);
+        if (isset($remoteProduct->company->id)) {
+            $item = $this->cache->getItem('seller_' . $remoteProduct->company->id);
+
+            if ($item->isHit()) {
+                $seller = $item->get();
+            } else {
+                $seller = $this->upplerSellerService->hydrateSeller($remoteProduct->company);
+            }
+
+            $product->setSeller($seller);
+        }
 
         if ($isAccordCadre) {
             if ($accountId) {
@@ -134,18 +144,6 @@ class UpplerProductService extends AbstractUpplerProductService
                 $priceDiff = $product->getPriceReference() - $product->getPrice()->getDisplayPrice();
                 $percent = round(($priceDiff * 100) / $product->getPriceReference() );
                 $product->setPercent($percent);
-            }
-
-            if (isset($remoteProduct->company->id)) {
-                $item = $this->cache->getItem('seller_' . $remoteProduct->company->id);
-
-                if ($item->isHit()) {
-                    $seller = $item->get();
-                } else {
-                    $seller = $this->upplerSellerService->hydrateSeller($remoteProduct->company);
-                }
-
-                $product->setSeller($seller);
             }
 
             #TODO A remplacer par les vraies données après concertation avec JM
