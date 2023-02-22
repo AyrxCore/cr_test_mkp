@@ -33,7 +33,7 @@ class UpplerProductService extends AbstractUpplerProductService
 
         $products = [];
         foreach ($res->results as $result) {
-                $products[] = $this->getProduct($result->id);
+            $products[] = $this->getProduct($result->id);
         }
 
         if ($showFilters) {
@@ -89,7 +89,7 @@ class UpplerProductService extends AbstractUpplerProductService
             if ($item->isHit()) {
                 $seller = $item->get();
             } else {
-                $seller = $this->upplerSellerService->hydrateSeller($remoteProduct->company);
+                $seller = $this->upplerSellerService->getSeller($remoteProduct->company->id);
             }
 
             $product->setSeller($seller);
