@@ -25,7 +25,11 @@ class ProductApiController extends AbstractController
     #[Required]
     public UpplerProductService $upplerProductService;
 
+    private const PAGE = 1;
+    private const PER_PAGE = 5;
+
     #[Route('/api/products', name: 'search_products', methods: ['POST'])]
+    #[Route('/api/accords-cadre', name: 'search_accords_cadre', methods: ['POST'])]
     public function list(Request $request, NormalizerInterface $normalizer): JsonResponse
     {
         $session= $this->requestStack->getSession();
@@ -37,24 +41,28 @@ class ProductApiController extends AbstractController
             return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        $products = $this->upplerProductService->getProductsByParams($options, ['price', 'properties']);
+        $showFilters = false;
+        $page = self::PAGE;
+        $perPage = self::PER_PAGE;
 
-        return new JsonResponse($products);
-    }
-
-    #[Route('/api/accords-cadre', name: 'search_accords_cadre', methods: ['POST'])]
-    public function listAccord(Request $request, NormalizerInterface $normalizer): JsonResponse
-    {
-        $session= $this->requestStack->getSession();
-        $session->start();
-
-        $options = $request->request->all();
-
-        if (!$session->has('account') || empty($session->get('account'))) {
-            return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
+        if (!empty($options['with_filter'])) {
+            $showFilters = true;
+            unset($options['with_filter']);
         }
 
-        return new JsonResponse($this->upplerProductService->getProductsByParams($options, ['properties']));
+        if (!empty($options['page'])) {
+            $page = $options['page'];
+            unset($options['page']);
+        }
+
+        if (!empty($options['perPage'])) {
+            $perPage = $options['perPage'];
+            unset($options['perPage']);
+        }
+
+        $products = $this->upplerProductService->getProductsByParams($page, $perPage, $options, $showFilters);
+
+        return new JsonResponse($products);
     }
 
     #[Route('/api/product/{id}', name: 'get_product')]

@@ -8,39 +8,75 @@ use App\Dto\Price;
 use App\Dto\Product;
 use App\Dto\Property;
 use App\Entity\AccountAccordCadre;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Contracts\Service\Attribute\Required;
 
-class UpplerProductService extends AbstractUpplerProductService
+class UpplerProductService extends HttpClientProvider
 {
-    public function getProductsByParams(array $options = [], array $filters = [],  $page = 1, int $perPage = 5): array | null
+    protected AdapterInterface $cache;
+    protected UpplerSellerService $upplerSellerService;
+    public function __construct(
+        string $env,
+        string $apiUrl,
+        string $adminClientId,
+        string $adminClientSecret,
+        string $adminTokenFile,
+        string $httpCachePath,
+        AdapterInterface $cache,
+        UpplerSellerService $upplerSellerService
+    )
     {
-        $showFilters = false;
+        parent::__construct($env, $apiUrl, $adminClientId, $adminClientSecret, $adminTokenFile, $httpCachePath);
+        $this->cache = $cache;
+        $this->upplerSellerService = $upplerSellerService;
+    }
 
-        if (!empty($options['with_filter'])) {
-            $showFilters = true;
-            unset($options['with_filter']);
-            $perPage = 12;
+    #[Required]
+    public RequestStack $requestStack;
+
+    #[Required]
+    public EntityManagerInterface $em;
+
+    public function getProductsByParams(int $page, int $perPage = 10, array $options = [], bool $showFilters = false): array | null
+    {
+        $session = $this->requestStack->getSession();
+        $session->start();
+
+        $urlFilters = null;
+
+        if (!empty($filters)) {
+            foreach ($filters as $filter) {
+                $urlFilters.= '&expand[]=' . $filter;
+            }
         }
 
-        if (!empty($options['page'])) {
-            $page = $options['page'];
-            unset($options['page']);
-        }
+        $res = $this->request(
+            'POST',
+            $this->apiUrl . 'v1/buyer/search/product?page='.$page.'&perPage=' . $perPage . $urlFilters,
+            [
+                'json' => $options
+            ]
+        );
 
-        $res = $this->searchProductsByParams($options, ['properties'], $perPage, $page);
-        if (null === $res) {
+        if (Response::HTTP_OK !== $res->getStatusCode()) {
             return null;
         }
+        $remoteProducts = json_decode($res->getContent());
 
         $products = [];
-        foreach ($res->results as $result) {
-            $products[] = $this->getProduct($result->id);
+        foreach ($remoteProducts->results as $remoteProduct) {
+            $products[] = $this->getProduct($remoteProduct->id);
         }
 
         if ($showFilters) {
             return [
-                'filters'=> $this->hydrateFilters($res->filters),
-                'results_count' => $res->results_count,
-                'page' => $res->page,
+                'filters'=> $this->hydrateFilters($remoteProducts->filters),
+                'results_count' => $remoteProducts->results_count,
+                'page' => $remoteProducts->page,
                 'results' => $products
             ];
         } else {
@@ -51,13 +87,30 @@ class UpplerProductService extends AbstractUpplerProductService
 
     public function getProduct(int $productId = null, array $filters = [], ?string $accountId = null): Product|null
     {
-        $res = $this->getObject($productId, $filters);
+        $session = $this->requestStack->getSession();
+        $session->start();
 
-        if (null === $res) {
-            return null;
+        $filters =  empty($filters) ? ['price', 'properties', 'variants'] : $filters;
+        $urlFilters = null;
+
+        if (!empty($filters)) {
+            foreach ($filters as $filter) {
+                $urlFilters.= null === $urlFilters ? '?expand[]=' . $filter : '&expand[]=' . $filter;
+            }
         }
 
-        return $this->hydrateProduct($res, $accountId);
+        $res = $this->request(
+            'GET',
+            $this->apiUrl . 'v1/buyer/product/' . $productId . $urlFilters
+        );
+
+        if (Response::HTTP_OK !== $res->getStatusCode()) {
+            throw new NotFoundHttpException('Produit avec l\'Id: '. $productId . ' n\' a pas été trouvé');
+        }
+
+        $product = json_decode($res->getContent());
+
+        return $this->hydrateProduct($product, $accountId);
     }
 
     private function hydrateProduct($remoteProduct, $accountId = null)
@@ -97,16 +150,7 @@ class UpplerProductService extends AbstractUpplerProductService
 
         if ($isAccordCadre) {
             if ($accountId) {
-                $accountAccordCadre = $this->em->getRepository(AccountAccordCadre::class)->findOneBy(['accordCadreId' => $remoteProduct->id, 'accountId' => $accountId]);
-                if (null === $accountAccordCadre) {
-                    $accountAccordCadre = new AccountAccordCadre();
-                    $accountAccordCadre->setAccountId($accountId);
-                    $accountAccordCadre->setStatus(Product::PROCESS_STATUS_NOT_ACTIVATED);
-                    $accountAccordCadre->setAccordCadreId($remoteProduct->id);
-                    $this->em->persist($accountAccordCadre);
-                    $this->em->flush();
-                }
-
+                $accountAccordCadre = $this->initAccordCadre($accountId, $remoteProduct);
                 $product->setAccountAccordCadre($accountAccordCadre);
             }
         } else {
@@ -155,7 +199,7 @@ class UpplerProductService extends AbstractUpplerProductService
         return $product;
     }
 
-    private function hydrateFilters($remoteFilters)
+    private function hydrateFilters($remoteFilters): array
     {
         $filters = [];
 
@@ -191,5 +235,20 @@ class UpplerProductService extends AbstractUpplerProductService
 
         return $filters;
 
+    }
+
+    private function initAccordCadre(string $accountId, $remoteProduct): AccountAccordCadre
+    {
+        $accountAccordCadre = $this->em->getRepository(AccountAccordCadre::class)->findOneBy(['accordCadreId' => $remoteProduct->id, 'accountId' => $accountId]);
+        if (null === $accountAccordCadre) {
+            $accountAccordCadre = new AccountAccordCadre();
+            $accountAccordCadre->setAccountId($accountId);
+            $accountAccordCadre->setStatus(Product::PROCESS_STATUS_NOT_ACTIVATED);
+            $accountAccordCadre->setAccordCadreId($remoteProduct->id);
+            $this->em->persist($accountAccordCadre);
+            $this->em->flush();
+        }
+
+        return $accountAccordCadre;
     }
 }

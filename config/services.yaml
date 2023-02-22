@@ -65,10 +65,6 @@ services:
 
   App\Service\UpplerSellerService:
     parent: App\Service\HttpClientProvider
-    arguments:
-      $upplerUrlSourceProductImg: '%uppler_url_source_product_img%'
-      $upplerUrlSourceListProductImg: '%uppler_url_source_list_product_img%'
-      $upplerUrlSourceSellerImg: '%uppler_url_source_seller_img%'
 
   App\Service\UpplerBuyerCompanyService:
     parent: App\Service\HttpClientProvider
@@ -79,16 +75,8 @@ services:
   App\Service\UpplerAccountService:
     parent: App\Service\HttpClientProvider
 
-  App\Service\AbstractUpplerProductService:
-    abstract: true
-    parent: App\Service\HttpClientProvider
-    arguments:
-      $upplerUrlSourceProductImg: '%uppler_url_source_product_img%'
-      $upplerUrlSourceListProductImg: '%uppler_url_source_list_product_img%'
-      $upplerUrlSourceSellerImg: '%uppler_url_source_seller_img%'
-
   App\Service\UpplerProductService:
-    parent: App\Service\AbstractUpplerProductService
+    parent: App\Service\HttpClientProvider
 
   App\Service\UpplerDynamicEntityService:
     parent: App\Service\HttpClientProvider

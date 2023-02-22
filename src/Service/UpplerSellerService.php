@@ -13,9 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UpplerSellerService extends HttpClientProvider
 {
-    protected string $upplerUrlSourceProductImg;
-    protected string $upplerUrlSourceListProductImg;
-    protected string $upplerUrlSourceSellerImg;
     protected AdapterInterface $cache;
 
     public function __construct(
@@ -25,16 +22,10 @@ class UpplerSellerService extends HttpClientProvider
         string $adminClientSecret,
         string $adminTokenFile,
         string $httpCachePath,
-        string $upplerUrlSourceProductImg,
-        string $upplerUrlSourceListProductImg,
-        string $upplerUrlSourceSellerImg,
         AdapterInterface $cache
     )
     {
         parent::__construct($env, $apiUrl, $adminClientId, $adminClientSecret, $adminTokenFile, $httpCachePath);
-        $this->upplerUrlSourceProductImg = $upplerUrlSourceProductImg;
-        $this->upplerUrlSourceListProductImg = $upplerUrlSourceListProductImg;
-        $this->upplerUrlSourceSellerImg = $upplerUrlSourceSellerImg;
         $this->cache = $cache;
     }
 
