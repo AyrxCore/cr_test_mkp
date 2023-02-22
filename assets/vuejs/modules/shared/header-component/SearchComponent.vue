@@ -6,7 +6,7 @@
       name="search"
       placeholder="Rechercher un produit, un accord cadre ou un fournisseur"
       type="search"
-      @keyup.enter="searchTerm"
+      @keyup.enter="searchProduct"
     />
     <button
       class="flex items-center rounded-r-md px-3 py-1 text-white hover:opacity-75 bg-secondary"
