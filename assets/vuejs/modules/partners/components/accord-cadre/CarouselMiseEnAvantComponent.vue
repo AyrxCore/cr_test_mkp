@@ -41,7 +41,7 @@
             <h3
               class="text-title-35 mb-[1.563rem] font-bold leading-9 text-primary lg:w-3/4"
             >
-              Mise en avant partenaire
+              {{ miseEnAvant.title }}
             </h3>
             <p
               class="mb-5 text-sm md:text-base xl:text-lg"
@@ -77,23 +77,17 @@ const props = defineProps({
 })
 
 const listMiseEnAvant = computed(() => {
-  const list = [
-    {
-      image: props.properties.mises_en_avant_1_img,
-      video: props.properties.mises_en_avant_1_video,
-      text: props.properties.mises_en_avant_1_txt,
-      buttonName: props.properties.mises_en_avant_1_cta_txt,
-      buttonUrl: props.properties.mises_en_avant_1_cta_link,
-    },
-    {
-      image: props.properties.mises_en_avant_2_img,
-      video: props.properties.mises_en_avant_2_video,
-      text: props.properties.mises_en_avant_2_txt,
-      buttonName: props.properties.mises_en_avant_2_cta_txt,
-      buttonUrl: props.properties.mises_en_avant_2_cta_link,
-    },
-  ]
-
+  const list = []
+  for (let i = 1; i < 4; i++) {
+    list.push({
+      title: props.properties['mises_en_avant_'+ i +'_titre'],
+      image: props.properties['mises_en_avant_'+ i +'_img'],
+      video: props.properties['mises_en_avant_'+ i +'_video'],
+      text: props.properties['mises_en_avant_'+ i +'_txt'],
+      buttonName: props.properties['mises_en_avant_'+ i +'_cta_txt'],
+      buttonUrl: props.properties['mises_en_avant_'+ i +'_cta_link'],
+    })
+  }
   return list.filter(function (el) {
     return (el.image != null || el.video) && el.text != null
   })
