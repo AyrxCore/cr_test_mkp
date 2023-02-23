@@ -56,7 +56,7 @@
       </div>
 
       <!-- Bloc Produits top ventes -->
-      <ProductHomeComponent :properties="HOME_TOP_VENTE_PROPERTY"/>
+      <ProductHomeComponent type="top-vente" title="Top vente"/>
       <!-- Fin bloc Produits top ventes -->
 
       <!-- Bloc accords cadre -->
@@ -64,7 +64,7 @@
       <!-- Fin Bloc accords cadre -->
 
       <!-- Bloc sélection de produits -->
-      <ProductHomeComponent class="mt-4" :properties="HOME_SELECTION_PROPERTY"/>
+      <ProductHomeComponent class="mt-4" type="selection" title="Sélection de produits"/>
       <!-- Fin bloc sélection de produits -->
 
       <div class="mt-10">

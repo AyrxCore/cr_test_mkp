@@ -41,7 +41,7 @@ class UpplerProductService extends HttpClientProvider
     #[Required]
     public EntityManagerInterface $em;
 
-    public function getProductsByParams(int $page, int $perPage = 10, array $options = [], bool $showFilters = false): array | null
+    public function getProductsByParams(array $options, int $page = 1, int $perPage = 10, bool $showFilters = false): array | null
     {
         $session = $this->requestStack->getSession();
         $session->start();
@@ -54,13 +54,18 @@ class UpplerProductService extends HttpClientProvider
             }
         }
 
+        dump($options);
+        dump(json_encode($options));
+
         $res = $this->request(
             'POST',
-            $this->apiUrl . 'v1/buyer/search/product?page='.$page.'&perPage=' . $perPage . $urlFilters,
+            $this->apiUrl . 'v1/search/product?page='.$page.'&perPage=' . $perPage . $urlFilters,
             [
                 'json' => $options
             ]
         );
+
+        dump($res);
 
         if (Response::HTTP_OK !== $res->getStatusCode()) {
             return null;

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="mt-10 sm:w-[45rem]">
-      <h3 class="home-subtitle text-primary">Top ventes</h3>
+      <h3 class="home-subtitle text-primary">{{ props.title }}</h3>
       <p class="text-sm text-gray-400 sm:text-lg">
         D'autres adhérents ont déjà acheté ces produits
       </p>
@@ -22,20 +22,18 @@ const products = ref([])
 const isLoading = ref<boolean>(true)
 
 const props = defineProps({
-  properties: {
+  type: {
     required: true,
-    type: Object,
+    type: String,
+  },
+  title: {
+    required: true,
+    type: String,
   },
 })
 
 onMounted(async () => {
-  const params =  {
-    properties: [
-      props.properties
-    ],
-  }
-
-  products.value = await productStore.getProductsTopVente(params)
+  products.value = await productStore.getHomeProducts(props.type)
   isLoading.value = false
 })
 

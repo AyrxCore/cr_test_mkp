@@ -11,6 +11,12 @@ export default class ProductHttpClient extends BaseClientService {
       .then((response) => response.data)
   }
 
+  public fetchHomeProducts<T extends []>(type): Promise<T> {
+    return this.apiClient
+      .get<T>(`home-products/${type}`)
+      .then((response) => response.data)
+  }
+
   public getProduct<T extends []>(id: number): Promise<Product> {
     return this.apiClient
         .get(`product/${id}`)

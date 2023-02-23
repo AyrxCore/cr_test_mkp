@@ -4,76 +4,23 @@ import prod2 from '@/vuejs/assets/img/demo/18061.jpg'
 import prod3 from '@/vuejs/assets/img/demo/jj03541.jpg'
 import prod4 from '@/vuejs/assets/img/demo/122021.jpg'
 
-import imgCheville from '@/vuejs/assets/img/samples/cheville.png'
-import imgAmpoules from '@/vuejs/assets/img/samples/ampoules.png'
-import imgTapis from '@/vuejs/assets/img/samples/tapis.png'
-import imgGomme from '@/vuejs/assets/img/samples/gomme.png'
 
 import prod5 from '@/vuejs/assets/img/demo/16275.jpg'
 import prod6 from '@/vuejs/assets/img/demo/80877.jpg'
 import prod7 from '@/vuejs/assets/img/demo/72821.jpg'
 import prod8 from '@/vuejs/assets/img/demo/02890.jpg'
-import defaultImage from '@/vuejs/assets/img/default-image.png'
 
 import imgFrn1 from '@/vuejs/assets/img/demo/alda.png'
 import imgFrn2 from '@/vuejs/assets/img/samples/berner.png'
 import imgFrn3 from '@/vuejs/assets/img/samples/mieko.png'
 import imgFrn4 from '@/vuejs/assets/img/demo/hedis.png'
-import imgFrn5 from '@/vuejs/assets/img/samples/sign.png'
-import imgFrn6 from '@/vuejs/assets/img/samples/jpg.png'
 
-import imgSouris from '@/vuejs/assets/img/demo/img-souris.png'
-import imgSouris1 from '@/vuejs/assets/img/demo/img-souris-1.png'
-import imgSouris2 from '@/vuejs/assets/img/demo/img-souris-2.png'
 import { ref } from 'vue'
 
-export const product = ref({
-  name: 'Souris optique filaire bleu',
-  description:
-    'Souris optique filaire bleu.\n' +
-    '- 5 boutons (latéraux pour la navigation internet, page suivante,précédente).\n' +
-    '- Résolution: 1000 dpi.\n' +
-    '- Désign ergonomique.\n' +
-    '- Câble USB : L. 1.50M.\n' +
-    '- Garantie 3 ans.',
-  reference: '07651',
-  partner: 'ALDA MAJUSCULE',
-  documentation: '-',
-  price: '6,32',
-  priceReduce: '9,72',
-  percent: '35',
-  conditionnement: '1',
-  livraison: [
-    {
-      label:
-        'Franco à partir de 50€ HT de commande - en dessous, 12€ HT de frais de port seront appliqués.',
-    },
-  ],
-  caracteristiques: [
-    {
-      name: 'Marque',
-      value: 'KEYWEST',
-    },
-    {
-      name: 'Garantie',
-      value: '3 ans',
-    },
-    {
-      name: "Pays d'origine",
-      value: 'CN',
-    },
-  ],
-  images: [
-    {
-      img: getImage(imgSouris),
-    },
-    {
-      img: getImage(imgSouris1),
-    },
-    {
-      img: getImage(imgSouris2),
-    },
-  ],
+export const status = ref({
+  not_activated: 'NOT_ACTIVATED',
+  pending: 'PENDING',
+  activated: 'ACTIVATED',
 })
 
 export const productsTopVenteHomepage = [
@@ -112,45 +59,6 @@ export const productsTopVenteHomepage = [
     price: '11,65',
     image: getImage(prod4),
     fournisseur_image: getImage(imgFrn4),
-  },
-]
-
-export const productsSelectionHomepage = [
-  {
-    name: 'BERA 4 CLASSICFIX 6X30',
-    description: 'BERA 4 CLASSICFIX 6X30 ...',
-    partner: '',
-    price_line_through: '51,64',
-    price: '30,03',
-    image: getImage(imgCheville),
-    fournisseur_image: getImage(imgFrn2),
-  },
-  {
-    name: 'Ampoule E27 5W 250ml',
-    description: 'Filament LED Vintage Gradable Sylvania',
-    partner: '',
-    price_line_through: '',
-    price: '12,75',
-    image: getImage(imgAmpoules),
-    fournisseur_image: getImage(imgFrn3),
-  },
-  {
-    name: 'Plaque aimantée - Taille S',
-    description: 'Plaque aimantée - Personnalisable…',
-    partner: '',
-    price_line_through: '174',
-    price: '147,90',
-    image: getImage(imgTapis),
-    fournisseur_image: getImage(imgFrn5),
-  },
-  {
-    name: 'Gomme plastique',
-    description: 'Gomme plastique pour la mine sur…',
-    partner: '',
-    price_line_through: '1,05',
-    price: '0,68',
-    image: getImage(imgGomme),
-    fournisseur_image: getImage(imgFrn1),
   },
 ]
 

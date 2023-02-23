@@ -42,24 +42,18 @@
 </template>
 
 <script lang="ts" setup>
-import { HOME_ACCORD_CADRE_PROPERTY } from '@/vuejs/services/utils'
-import { onBeforeMount, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { SwiperSlide } from 'swiper/vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
-import { useAccordCadreStore } from '@/vuejs/stores/accord_cadre'
 import AccordCadreComponent from '@/vuejs/modules/home/component/AccordCadreComponent.vue'
+import { useProductStore } from '@/vuejs/stores/product'
 
-const accordCadreStore = useAccordCadreStore()
+
+const productStore = useProductStore()
 const accordsCadre = ref([])
 
-onBeforeMount(async () => {
-  const params =  {
-    properties: [
-      HOME_ACCORD_CADRE_PROPERTY
-    ],
-  }
-
-  accordsCadre.value = await accordCadreStore.findAccordsCadresByParams(params)
+onMounted(async () => {
+  accordsCadre.value = await productStore.getHomeProducts('accord-cadre')
 })
 
 </script>

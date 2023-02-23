@@ -32,12 +32,11 @@ export const useProductStore = defineStore({
         return []
       }
     },
-    async getProductsTopVente(params) {
+    async getHomeProducts(type) {
       try {
-          return await this.getProductsByParams(params)
+          return await ProductHttpClient.get().fetchHomeProducts(type)
       } catch (error) {
         console.log(error)
-
       }
     },
     async getProductsWithFilterByParams(params) {
@@ -59,6 +58,19 @@ export const useProductStore = defineStore({
           AlertType.danger,
         )
       }
+    },
+    async getAccordCadreById(id) {
+      const alertStore = useAlertStore()
+      try {
+        return await ProductHttpClient.get().getAccordCadre(id)
+      } catch (error) {
+        error.response.status === HttpStatusCodes.unauthorized &&
+        alertStore.setShow(
+          getErrorMessage(error.response.data.message),
+          AlertType.danger,
+        )
+      }
+
     },
   },
 })

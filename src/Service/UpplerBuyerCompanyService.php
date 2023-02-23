@@ -40,6 +40,7 @@ class UpplerBuyerCompanyService extends HttpClientProvider
             [],
             true
         );
+        dump($res);
         if (Response::HTTP_OK === $res->getStatusCode()) {
             return json_decode($res->getContent());
         }

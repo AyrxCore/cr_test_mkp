@@ -16,6 +16,39 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 class ProductApiController extends AbstractController
 {
+    private const HOME_TOP_VENTE_PROPERTY = [
+        'dev' => [
+            'property_id' => '176',
+            'value' => '8389'
+        ],
+        'prod' => [
+            'property_id' => '217',
+            'value' => '5369'
+        ]
+    ];
+
+    private const HOME_SELECTION_PROPERTY = [
+        'dev' => [
+            'property_id' => '176',
+            'value' => '8388'
+        ],
+        'prod' => [
+            'property_id' => '217',
+            'value' => '5368'
+        ]
+    ];
+
+    private const HOME_ACCORD_CADRE_PROPERTY = [
+        'dev' => [
+            'property_id' => '176',
+            'value' => '8390'
+        ],
+        'prod' => [
+            'property_id' => '217',
+            'value' => '5367'
+        ]
+    ];
+
     #[Required]
     public RequestStack $requestStack;
 
@@ -60,7 +93,38 @@ class ProductApiController extends AbstractController
             unset($options['perPage']);
         }
 
-        $products = $this->upplerProductService->getProductsByParams($page, $perPage, $options, $showFilters);
+        $products = $this->upplerProductService->getProductsByParams($options, $page, $perPage, $showFilters);
+
+        return new JsonResponse($products);
+    }
+
+    #[Route('/api/home-products/{type}', name: 'search_home_products', methods: ['GET'])]
+    public function homeProduct(Request $request, string $type, NormalizerInterface $normalizer): JsonResponse
+    {
+        $session= $this->requestStack->getSession();
+        $session->start();
+
+
+        if (!$session->has('account') || empty($session->get('account'))) {
+            return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        $options = [];
+
+        $env = $this->getParameter('uppler_env');
+        switch ($type) {
+            case 'top-vente':
+                $options['properties'] = [self::HOME_TOP_VENTE_PROPERTY[$env]];
+                break;
+            case 'selection':
+                $options['properties'] = [self::HOME_SELECTION_PROPERTY[$env]];
+                break;
+            case 'accord-cadre':
+                $options['properties'] = [self::HOME_ACCORD_CADRE_PROPERTY[$env]];
+                break;
+        }
+
+        $products = $this->upplerProductService->getProductsByParams($options, self::PAGE, self::PER_PAGE);
 
         return new JsonResponse($products);
     }

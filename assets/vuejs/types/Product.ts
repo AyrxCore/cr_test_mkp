@@ -1,7 +1,7 @@
 import { Property } from '@/vuejs/types/Product/Property'
 import { Price } from '@/vuejs/types/Product/Price'
 import { Seller } from '@/vuejs/types/Seller'
-import { AccountAccordCadre } from '@/vuejs/types/AccordCadre';
+import { AccountAccordCadre } from '@/vuejs/types/AccountAccordCadre';
 
 export interface Product {
   reference: string
@@ -19,8 +19,6 @@ export interface Product {
   price?: Price
   basePrice?: Price
   seller?: Seller
-
   accountAccordCadre: AccountAccordCadre
-
   isAccordCadre?: boolean
 }

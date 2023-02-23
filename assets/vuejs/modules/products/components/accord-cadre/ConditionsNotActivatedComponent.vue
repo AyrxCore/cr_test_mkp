@@ -23,12 +23,12 @@
 <script lang="ts" setup>
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
-import AccordCadreHttpClient from '@/vuejs/services/httpclient/AccordCadreHttpClient'
 import ModalValidationBeneficePartnerModal
-  from '@/vuejs/modules/partners/components/accord-cadre/ValidationBeneficeModal.vue'
+  from '@/vuejs/modules/products/components/accord-cadre/ValidationBeneficeModal.vue'
 import { PropType, ref } from 'vue'
-import { AccountAccordCadre } from '@/vuejs/types/AccordCadre'
-import { status } from '@/vuejs/modules/partners/partner'
+import { AccountAccordCadre } from '@/vuejs/types/AccountAccordCadre'
+import { status } from '@/vuejs/modules/products'
+import ProductHttpClient from '@/vuejs/services/httpclient/ProductHttpClient'
 
 const showModal = ref<boolean>(false)
 const isLoading = ref<boolean>(false)
@@ -50,7 +50,7 @@ const props = defineProps({
 const sendSubmission = (async () => {
   isLoading.value = true
   try {
-    await AccordCadreHttpClient.get().updateAccountAccordsCadresByParams(
+    await ProductHttpClient.get().updateAccountAccordsCadresByParams(
       {
         id:props.currentStatus.id,
         accountId: props.currentStatus.accountId,
