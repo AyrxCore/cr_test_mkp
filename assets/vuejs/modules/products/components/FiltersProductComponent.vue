@@ -28,7 +28,6 @@
 </template>
 <script lang="ts" setup>
 import DropdownListComponent from '@/vuejs/modules/shared/DropdownListComponent.vue'
-import { computed } from 'vue';
 
 const props = defineProps({
   filters: {
