@@ -54,9 +54,6 @@ class UpplerProductService extends HttpClientProvider
             }
         }
 
-        dump($options);
-        dump(json_encode($options));
-
         $res = $this->request(
             'POST',
             $this->apiUrl . 'v1/search/product?page='.$page.'&perPage=' . $perPage . $urlFilters,
@@ -65,8 +62,6 @@ class UpplerProductService extends HttpClientProvider
             ]
         );
 
-        dump($res);
-
         if (Response::HTTP_OK !== $res->getStatusCode()) {
             return null;
         }
@@ -74,7 +69,7 @@ class UpplerProductService extends HttpClientProvider
 
         $products = [];
         foreach ($remoteProducts->results as $remoteProduct) {
-            $products[] = $this->getProduct($remoteProduct->id);
+            $products[] = $this->hydrateProductFromList($remoteProduct);
         }
 
         if ($showFilters) {
@@ -118,40 +113,45 @@ class UpplerProductService extends HttpClientProvider
         return $this->hydrateProduct($product, $accountId);
     }
 
-    private function hydrateProduct($remoteProduct, $accountId = null)
+    /**
+     * @param $remoteProduct
+     * @return Product
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    private function hydrateProductFromList($remoteProduct): Product
+    {
+        dump($remoteProduct);
+
+        $product = new Product();
+        $this->initHydrateProduct($remoteProduct, $product);
+
+        $isAccordCadre = $this->isAccordCadre($remoteProduct, $product);
+
+        if (!$isAccordCadre) {
+            $priceReference = round($remoteProduct->price_reference * 0.01, 2);
+            $product->setPriceReference($priceReference);
+            $images[] = !empty($remoteProduct->images[0]->url) ? $remoteProduct->images[0]->url : null ;
+            $product->setImages($images);
+
+            $this->getPrice($remoteProduct, $product);
+        }
+
+        return $product;
+    }
+
+    private function hydrateProduct($remoteProduct, $accountId = null): Product
     {
         $product = new Product();
-        $product->setId($remoteProduct->id);
-        $product->setName($remoteProduct->name->default);
-        $product->setDescription($remoteProduct->description->default ?? null);
-        $product->setReference($remoteProduct->reference);
+        $this->initHydrateProduct($remoteProduct, $product);
+
         $categories = [];
+
         foreach ($remoteProduct->categories as $category) {
             $categories[$category->id] = $category->name->default;
         }
         $product->setCategories($categories);
 
-        $properties = [];
-        $isAccordCadre = false;
-        foreach ($remoteProduct->properties as $property) {
-            if ('accord_cadre' === $property->property->name->default) {
-                $isAccordCadre = true;
-            }
-            $properties[$property->property->name->fr] = $property->value;
-        }
-        $product->setProperties($properties);
-        $product->setIsAccordCadre($isAccordCadre);
-        if (isset($remoteProduct->company->id)) {
-            $item = $this->cache->getItem('seller_' . $remoteProduct->company->id);
-
-            if ($item->isHit()) {
-                $seller = $item->get();
-            } else {
-                $seller = $this->upplerSellerService->getSeller($remoteProduct->company->id);
-            }
-
-            $product->setSeller($seller);
-        }
+        $isAccordCadre = $this->isAccordCadre($remoteProduct, $product);
 
         if ($isAccordCadre) {
             if ($accountId) {
@@ -164,7 +164,7 @@ class UpplerProductService extends HttpClientProvider
 
             $images = [];
             foreach ($remoteProduct->images as $image) {
-                $images[] = !empty($image->path) ? $image->path : null ;
+                $images[] = !empty($image->url) ? $image->url : null ;
             }
             $product->setImages($images);
 
@@ -178,17 +178,7 @@ class UpplerProductService extends HttpClientProvider
             }
             $product->setOptions($options);
 
-
-
-            if (null !== $remoteProduct->price) {
-                $price = new Price();
-                $price->setId($remoteProduct->price->id);
-                $price->setAmount($remoteProduct->price->amount);
-                $price->setDisplayPrice(round($remoteProduct->price->display_price * 0.01, 2));
-                $price->setFormattedDisplayPrice($remoteProduct->price->formatted_display_price);
-                $price->setFormattedDisplayUnitPrice($remoteProduct->price->formatted_display_unit_price);
-                $product->setPrice($price);
-            }
+            $this->getPrice($remoteProduct, $product);
 
             if ($product->getPriceReference() && $product->getPrice()) {
                 $priceDiff = $product->getPriceReference() - $product->getPrice()->getDisplayPrice();
@@ -255,5 +245,60 @@ class UpplerProductService extends HttpClientProvider
         }
 
         return $accountAccordCadre;
+    }
+
+    private function initHydrateProduct($remoteProduct, $product)
+    {
+        $product->setId($remoteProduct->id);
+        $product->setName($remoteProduct->name->default);
+        $product->setDescription($remoteProduct->description->default ?? null);
+        $product->setReference($remoteProduct->reference);
+    }
+
+    /**
+     * @param $remoteProduct
+     * @param Product $product
+     * @return bool
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    private function isAccordCadre($remoteProduct, Product $product): bool
+    {
+        $properties = [];
+        $isAccordCadre = false;
+        foreach ($remoteProduct->properties as $property) {
+            if ('accord_cadre' === $property->property->name->default) {
+                $isAccordCadre = true;
+            }
+            $properties[$property->property->name->fr] = $property->value;
+        }
+        $product->setProperties($properties);
+        $product->setIsAccordCadre($isAccordCadre);
+        if (isset($remoteProduct->company->id)) {
+            $item = $this->cache->getItem('seller_' . $remoteProduct->company->id);
+
+            if ($item->isHit()) {
+                $seller = $item->get();
+            } else {
+                $seller = $this->upplerSellerService->getSeller($remoteProduct->company->id);
+            }
+
+            $product->setSeller($seller);
+        }
+        return $isAccordCadre;
+    }
+
+    /**
+     * @param $remoteProduct
+     * @param Product $product
+     * @return void
+     */
+    private function getPrice($remoteProduct, Product $product): void
+    {
+        if (null !== $remoteProduct->price) {
+            $price = new Price();
+            $price->setDisplayPrice(round($remoteProduct->price->display_price * 0.01, 2));
+            $price->setFormattedDisplayPrice($remoteProduct->price->formatted_display_price);
+            $product->setPrice($price);
+        }
     }
 }

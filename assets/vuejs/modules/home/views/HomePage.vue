@@ -164,7 +164,7 @@
 <script lang="ts" setup>
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
-import { getImage, HOME_SELECTION_PROPERTY, HOME_TOP_VENTE_PROPERTY, listCategories } from '@/vuejs/services/utils'
+import { getImage, listCategories } from '@/vuejs/services/utils'
 import banniere1 from '@/vuejs/assets/img/demo/banniere-1-desktop.png'
 import banniere2 from '@/vuejs/assets/img/demo/banniere-2-desktop.png'
 import banniereMobile1 from '@/vuejs/assets/img/demo/banniere-1-mobile.png'

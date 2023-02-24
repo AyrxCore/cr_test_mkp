@@ -8,25 +8,10 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 
 final class Price implements \JsonSerializable
 {
-    #[ApiProperty(identifier: true)]
-    private int $id;
-
     private ?int $amount;
     private ?float $displayPrice;
     private ?string $formattedDisplayPrice;
     private ?string $formattedDisplayUnitPrice;
-
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
-    }
 
     /**
      * @return int|null

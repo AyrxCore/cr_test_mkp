@@ -9,31 +9,9 @@ export function openInNewTab(url) {
   window.open(url, '_blank', 'noreferrer')
 }
 
-export const IMG_PATH='https://uppler-platform-quantis.s3.eu-west-3.amazonaws.com/image/'
-
 export function getUpplerImage( path: string|null)
 {
-
-  if (path) {
-    return IMG_PATH + path
-  } else {
-    return getImage(imgDefault)
-  }
-}
-
-
-export const HOME_TOP_VENTE_PROPERTY = {
-  property_id: '217',
-  value: '5369'
-}
-export const HOME_SELECTION_PROPERTY = {
-  property_id: '217',
-  value: '5368'
-}
-
-export const HOME_ACCORD_CADRE_PROPERTY = {
-  property_id: '217',
-  value: '5367'
+    return path !== null ? path :  getImage(imgDefault)
 }
 
 export const listCategories = ref<string[]>([

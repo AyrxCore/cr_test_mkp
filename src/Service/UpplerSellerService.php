@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Dto\Seller;
-use App\Dto\Price;
-use App\Dto\Product;
-use App\Dto\Property;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class UpplerSellerService extends HttpClientProvider
 {
+    private const IMG_PATH='https://uppler-platform-quantis.s3.eu-west-3.amazonaws.com/image/';
+
     protected AdapterInterface $cache;
 
     public function __construct(
@@ -83,7 +82,7 @@ class UpplerSellerService extends HttpClientProvider
         $seller = new Seller();
         $seller->setId($remoteSeller->id);
         $seller->setName($remoteSeller->name);
-        $avatar = !empty($remoteSeller->avatar) ? $remoteSeller->avatar : null;
+        $avatar = !empty($remoteSeller->avatar) ? self::IMG_PATH . $remoteSeller->avatar : null;
         $seller->setAvatar($avatar);
         $description = !empty($remoteSeller->description->default) ? $remoteSeller->description->default : null;
         $seller->setDescription($description);
