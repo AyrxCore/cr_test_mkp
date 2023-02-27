@@ -26,7 +26,7 @@
           class="mr-2 flex p-2 w-2/3 flex-row items-start rounded-md border bg-white"
         >
           <span class="text-sm md:text-base lg:text-lg">
-            résultats trouvés pour votre recherche "<span class="font-bold text-primary">{{ term }}</span>"
+            Les résultats trouvés pour votre recherche "<span class="font-bold text-primary">{{ term }}</span>"
           </span>
         </div>
         <div
