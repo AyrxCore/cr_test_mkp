@@ -1,0 +1,30 @@
+<style>
+  li {
+    margin-left: 20px;
+  }
+  label {
+    font-weight: bold;
+  }
+</style>
+<div>
+  <h2>Bonjour,</h2>
+  <h3>Une nouvelle demande a été effectuée</h3>
+
+  <label>Motif: </label> {{ contact.motif }}
+  {% if contact.accordCadreName %}
+    <p>
+      <label>Partenaire / Accord cadre concerné: </label> {{ contact.accordCadreName }}
+    </p>
+  {% endif %}
+  <p>Informations utilisateur :</p>
+  <ul>
+    <li><label>Email: </label>{{ contact.email }}</li>
+    <li><label>Nom: </label>{{ contact.firstName }} {{ contact.lastName }}</li>
+    <li><label>Société: </label>{{ contact.companyName }}</li>
+    <li><label>Téléphone: </label>{{ contact.phone }}</li>
+    <li><label>Description: </label>{{ contact.description | raw }}</li>
+  </ul>
+
+
+</div>
+

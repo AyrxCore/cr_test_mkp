@@ -23,8 +23,8 @@
           />
         </svg>
       </div>
-      <div class="ml-3 text-sm font-medium">
-        {{ alertStore.message }}
+      <div class="ml-3 text-sm font-medium flex justify-start">
+        <p v-html="alertStore.message"/>
       </div>
     </div>
     <button

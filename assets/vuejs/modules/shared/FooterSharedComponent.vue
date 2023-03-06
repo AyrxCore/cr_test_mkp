@@ -8,12 +8,12 @@
           <div class="items-center">
             <div class="flex items-center">
               <PhoneIconComponent class="mr-4 h-[24px] w-[24px]" />
-              <div class="text-sm md:text-base lg:text-lg">04 37 65 06 61</div>
+              <div class="text-sm md:text-base lg:text-lg">{{ PHONE_ANIMATION }}</div>
             </div>
             <div class="mt-2 flex items-center">
               <MailIconComponent class="mr-4 h-[24px] w-[24px]" />
               <div class="text-sm md:text-base lg:text-lg">
-                animation@qantis.co
+                {{ MAIL_ANIMATION }}
               </div>
             </div>
             <div class="mt-2 flex">
@@ -197,6 +197,7 @@ import InputButtonComponent from '@/vuejs/modules/shared/InputButtonComponent.vu
 import MailIconComponent from '@/vuejs/modules/shared/icon/MailIconComponent.vue'
 import PhoneIconComponent from '@/vuejs/modules/shared/icon/PhoneIconComponent.vue'
 import CalendarCheckIconComponent from '@/vuejs/modules/shared/icon/CalendarCheckIconComponent.vue'
+import { MAIL_ANIMATION, PHONE_ANIMATION } from '../../services/const';
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)

@@ -1,7 +1,7 @@
 <template>
   <BaseTemplate title="Qantis - MarketPlace">
     <div class="m-auto my-4 max-w-screen-2xl flex-1 px-5 xl:p-8">
-      <div class="mt-7 flex sm:justify-between">
+      <div class="mt-7 flex sm:justify-between lg:mt-0">
         <div class="sm:w-[100%] sm:w-[52rem]">
           <h3 class="home-title text-primary">
             Bienvenue sur la
@@ -18,11 +18,7 @@
           </p>
         </div>
         <div class="hidden xl:block">
-          <ButtonComponent class="button-secondary">
-            <MailIconLightComponent/>
-            <PhoneLightIconComponent/>
-            Contactez-nous
-          </ButtonComponent>
+          <ContactUsButtonComponent />
         </div>
       </div>
       <div class="relative mt-2">
@@ -186,6 +182,7 @@ import AccordCadreComponent from '@/vuejs/modules/home/component/AccordsCadreCom
 
 import {useExpertContentStore} from '@/vuejs/stores/expertContent'
 import {storeToRefs} from 'pinia'
+import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue';
 
 const expertContentStore = useExpertContentStore()
 const {getExpertsContents} = storeToRefs(expertContentStore)

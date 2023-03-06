@@ -69,7 +69,7 @@
           </div>
           <div class="py-6 xl:pt-0">
             Ou appelez nous directement au <br />
-            <span class="text-secondary underline">04.37.65.06.21</span>
+            <span class="text-secondary underline">{{ PHONE_ANIMATION }}</span>
           </div>
         </div>
       </div>
@@ -108,6 +108,7 @@ import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.
 import ArrowRightIcon from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import MailIcon from '@/vuejs/modules/shared/icon/MailIconComponent.vue'
 import EyeIcon from '@/vuejs/modules/shared/icon/EyeIconComponent.vue'
+import { PHONE_ANIMATION } from '../../../services/const';
 
 const username = ref<string>('')
 const password = ref<string>('')

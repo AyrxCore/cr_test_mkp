@@ -21,7 +21,7 @@ import {
 } from '@/vuejs/modules/account/routerAccount'
 
 import Home from '@/vuejs/modules/home/views/HomePage.vue'
-import Contact from '@/vuejs/modules/ContactPage.vue'
+import Contact from '@/vuejs/modules/contact/views/ContactPage.vue'
 import { useUserStore } from '@/vuejs/stores/user'
 
 export enum MainPageList {
