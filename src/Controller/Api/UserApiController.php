@@ -70,7 +70,6 @@ class UserApiController extends AbstractController
                 continue;
             }
             $datas = $this->upplerBuyerCompanyService->getBuyerByCompanyId($account->getUpplerCompanyId());
-            dump($datas);
             $serializeAccount = $normalizer->normalize($account, 'json', ['groups' => 'simpleUser']);
             $serializeAccount["upplerDatas"] = $datas;
             $accounts[] = $serializeAccount;

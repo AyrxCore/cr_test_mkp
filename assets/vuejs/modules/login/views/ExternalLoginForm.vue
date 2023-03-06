@@ -26,16 +26,22 @@
       <div class="relative mb-3 mt-3">
         <input
           v-model="password"
-          type="password"
+          :type="showPassword ? 'text' : 'password'"
           placeholder="Mot de passe"
           class="input !pr-16"
           :disabled="isLoading"
           required
         />
         <span
-          class="absolute inset-y-0 right-0 flex items-center pr-8 text-gray-500"
+          class="absolute inset-y-0 right-0 flex items-center pr-8 text-gray-500 cursor-pointer"
+          @click="toggleShowPassword"
         >
-          <EyeIcon />
+          <EyeSlashIcon
+            v-if="showPassword"
+          />
+          <EyeIcon
+            v-else
+          />
         </span>
       </div>
       <div class="mb-3 mt-3 flex justify-between">
@@ -97,7 +103,7 @@
   </template>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 import { useUserStore } from '@/vuejs/stores/user'
 
@@ -108,7 +114,8 @@ import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.
 import ArrowRightIcon from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import MailIcon from '@/vuejs/modules/shared/icon/MailIconComponent.vue'
 import EyeIcon from '@/vuejs/modules/shared/icon/EyeIconComponent.vue'
-import { PHONE_ANIMATION } from '../../../services/const';
+import EyeSlashIcon from '@/vuejs/modules/shared/icon/EyeSlashIconComponent.vue'
+import { PHONE_ANIMATION } from '@/vuejs/services/const'
 
 const username = ref<string>('')
 const password = ref<string>('')
@@ -116,6 +123,7 @@ const userAccounts = ref<string[]>([])
 const isLoading = ref<boolean>(false)
 const userStore = useUserStore()
 const alertStore = useAlertStore()
+const showPassword = ref<boolean>(false)
 
 const loginSubmit = async () => {
   isLoading.value = true
@@ -137,6 +145,9 @@ const loginSubmit = async () => {
   }
 }
 
+const toggleShowPassword = (() => {
+  showPassword.value = !showPassword.value
+})
 const onAccountClick = async (account) => {
   isLoading.value = true
   const select = await userStore.selectUserAccount(account.id)

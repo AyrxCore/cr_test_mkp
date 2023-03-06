@@ -35,20 +35,13 @@
     {% endblock %}
 </head>
 <body>
-  <div class="vue-app" data-component="sticky-contact-buttons"></div>
-  {{ include('_partials/_header.html.twig') }}
-  {% set messages = app.flashes %}
-  {% if messages | length %}
-      <div class="m-auto w-1/2 mt-2">
-          {% for type, message in messages %}
-              <div class="p-4 mb-4 text-sm text-{{ type }}-700 bg-{{ type }}-100 rounded-lg" role="alert">
-                  {{ message[0] }}
-              </div>
-          {% endfor %}
-      </div>
-  {% endif %}
-    {% block body %}
-    {% endblock %}
+  {% block header %}
+    <div class="vue-app" data-component="sticky-contact-buttons"></div>
+    {% include '_partials/_header.html.twig' with {'back_url': false} %}
+  {% endblock %}
+
+  {% block body %}
+  {% endblock %}
 {{ include('_partials/_footer.html.twig') }}
 </body>
 </html>

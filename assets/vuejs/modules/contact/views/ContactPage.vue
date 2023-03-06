@@ -40,7 +40,9 @@
         <!-- Fin Bloc text actualité -->
 
         <!-- Bloc formulaire -->
-        <FormContact />
+        <div class="w-full lg:right-0 lg:w-2/3 rounded-lg lg:pl-[5.5rem] text-center mt-5 lg:mt-0">
+          <FormContact />
+        </div>
         <!-- Fin Bloc formulaire -->
       </div>
     </div>

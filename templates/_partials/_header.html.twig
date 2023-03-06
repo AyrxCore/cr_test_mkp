@@ -1,3 +1,4 @@
+
 <nav class="bg-primary px-8 lg:px-16">
   <div class="w-full flex justify-between z-100 items-center py-4">
     <svg id="open-menu-button" class="lg:hidden pointer" width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -8,15 +9,21 @@
       <path d="M22.5 7.5L7.5 22.5M7.5 7.5L22.5 22.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
     <img class="h-16 mr-[30px] md:0" src="/pre_home/qantis_marketplace_logo_blanc.png" alt="Logo Qantis">
+    <img
+      class="w-[114px] h-[39px] lg:hidden object-cover order-1"
+      src="/pre_home/coq_vert_footer_logo.png"
+      alt="Coq Vert">
     <div class="lg:hidden"></div>
     <div id="mobile-menu" class="z-50 hidden left-0 top-[96px] lg:static w-full lg:w-fit h-full items-start flex-col lg:flex lg:flex-row px-4 lg:px-0 py-7 bg-primary lg:bg-transparent">
-      <img
-        class="w-[114px] h-[39px] lg:hidden object-cover order-1"
-        src="/pre_home/coq_vert_footer_logo.png"
-        alt="Coq Vert">
-      <a href="/app/home" target="_blank" class="button button-gradient mt-4 lg:mt-0 order-4 lg:order-1">Se connecter</a>
-      <a href="https://qantis.co/contact" target="_blank" class="button button-primary mt-4 lg:mt-0 lg:ml-5 order-2 lg:order-2">Devenir partenaire</a>
-      <a href="https://qantis.co/contact" target="_blank" class="button button-primary mt-4 lg:mt-0 lg:ml-5 order-3 lg:order-3">Devenir adhérent</a>
+      {% if back_url %}
+        <a href="/" class="button button-primary mt-4 lg:mt-0 order-4 lg:order-1 !text-white">
+          <div class="vue-app" data-component="arrow-left-icon"></div>
+          Retour à la page d'accueil
+        </a>
+      {% else %}
+        <a href="https://qantis.co/contact" target="_blank" class="button button-primary mt-4 lg:mt-0 lg:ml-5 order-2 lg:order-2">Devenir partenaire</a>
+        <a href="https://qantis.co/contact" target="_blank" class="button button-primary mt-4 lg:mt-0 lg:ml-5 order-3 lg:order-3">Devenir adhérent</a>
+      {% endif %}
     </div>
   </div>
 </nav>

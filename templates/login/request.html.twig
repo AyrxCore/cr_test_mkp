@@ -1,23 +1,42 @@
 {% extends "base.html.twig" %}
 {% block title %}Mot de passe oublié{% endblock %}
+{% block header %}
+  {% include '_partials/_header.html.twig' with { 'back_url': true} %}
+{% endblock %}
 {% block body %}
-    <div class="container m-auto">
+  <div class="container mx-auto mt-[5%] px-5 lg:px-0">
+    <h1 class="text-2xl font-bold text-primary xl:text-4xl flex">
+      Bienvenue sur la marketplace QANTIS
+    </h1>
+    <div class="flex my-10 md:my-[7%] justify-center">
+      <div class="flex p-3 lg:p-8 bg-white rounded-lg xl:w-1/2">
         <form action="{{ path('resetting_request') }}" method="post" class="w-full">
-            <h1 >Vous avez oublié votre mot de passe ?</h1>
-            <div>
-                <label for="username">Veuillez saisir l'identifiant/email de votre compte</label>
-                <div class="input-group">
-                    <input type="email" id="username" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm
+          <h1 class="text-lg font-bold xl:text-2xl text-primary">
+            Vous avez <span class="text-gradient"> oublié votre mot de passe ?</span>
+          </h1>
+          <div class="mt-5">
+            <p class="text-gray-500">
+              Veuillez saisir votre adresse email professionnelle dans le cadre ci-dessous afin de recevoir un lien pour définir votre nouveau mot de passe
+            </p>
+
+            {% include '_partials/_alert.html.twig' %}
+
+            <div class="flex flex-col md:flex-row justify-between space-x-2 mt-5">
+              <input type="email" id="username" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm
                     text-gray-900 focus:border-blue-500 focus:ring-blue-500" name="_username" value="" autocomplete="username" required/>
-                </div>
+              <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+              <button
+                type="submit"
+                class="flex text-white button button-gradient mt-2 md:mt-0">
+                <div class="vue-app" data-component="arrow-right-icon"></div>
+                Valider
+              </button>
             </div>
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-            <div class="text-right mt-2">
-                <button type="submit" class="text-white bg-gradient-to-r from-purple-600 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4  focus:outline-none focus:ring-cyan-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2">
-                    Valider
-                </button>
-            </div>
+          </div>
+
         </form>
+      </div>
     </div>
+  </div>
 
 {% endblock %}

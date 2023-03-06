@@ -120,8 +120,6 @@ class UpplerProductService extends HttpClientProvider
      */
     private function hydrateProductFromList($remoteProduct): Product
     {
-        dump($remoteProduct);
-
         $product = new Product();
         $this->initHydrateProduct($remoteProduct, $product);
 

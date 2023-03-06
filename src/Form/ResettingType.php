@@ -33,7 +33,7 @@ class ResettingType extends AbstractType
                     'invalid_message' => $this->translator->trans('resetting.password.notmatch', [], 'prehome'),
                     'first_options' => [
                         'label' => 'resetting.form.first.label',
-                        'attr' => ['class' => 'block mt-2 w-full rounded-lg border border-gray-300 
+                        'attr' => ['class' => 'block mt-2 w-full rounded-lg border border-gray-300
                         bg-gray-50 p-2.5 text-sm text-gray-900']
                     ],
                     'second_options' => [

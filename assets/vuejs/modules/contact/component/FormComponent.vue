@@ -1,14 +1,11 @@
 <template>
   <!-- Bloc formulaire -->
-  <div
-    v-if="contact"
-    class="w-full lg:right-0 lg:w-2/3 rounded-lg lg:pl-[5.5rem] text-center mt-5 lg:mt-0"
-  >
+  <div v-if="contact">
     <MessageSquareIconComponent
       :stroke-color="'#9553FF'"
       class="mx-auto mb-2 w-full"
     />
-    <h4 class="primary mb-3 font-bold">
+    <h4 class="text-primary mb-3 font-bold text-center">
       Directement en nous laissant un message
     </h4>
     <div v-if="alertStore.show" class="text-left">
@@ -17,9 +14,10 @@
     <div class="app-advanced">
       <form class="mx-auto w-full" @submit.prevent="sendEmail">
         <div class="mb-3 pt-0">
+          <input type="hidden"  name="_token" :value="contact._token" />
           <select
             v-model="contact.motif"
-            class="relative h-[55px] w-full rounded-md border-0 text-gray-600 placeholder-gray-400"
+            class="relative h-[55px] w-full rounded-md border-1 border-gray-200 text-gray-600 placeholder-gray-400"
             required
           >
             <option disabled value="" class="text-gray-500">Votre demande concerne *</option>
@@ -37,7 +35,7 @@
                 v-model="contact.lastName"
                 type="text"
                 placeholder="Votre nom *"
-                class="relative h-[55px] w-full rounded-lg border-0 bg-white px-3 text-gray-600 placeholder-gray-400"
+                class="relative h-[55px] w-full rounded-lg bg-white px-3 text-gray-600 placeholder-gray-400 border-1 border-gray-200"
                 required
               />
             </div>
@@ -46,7 +44,7 @@
                 v-model="contact.firstName"
                 type="text"
                 placeholder="Votre prénom *"
-                class="relative h-[55px] w-full rounded-lg border-0 bg-white px-3 text-gray-600 placeholder-gray-400"
+                class="relative h-[55px] w-full rounded-lg bg-white px-3 text-gray-600 placeholder-gray-400 border-1 border-gray-200"
                 required
               />
             </div>
@@ -55,7 +53,7 @@
                 v-model="contact.email"
                 type="email"
                 placeholder="Votre email *"
-                class="relative h-[55px] w-full rounded-lg border-0 bg-white px-3 text-gray-600 placeholder-gray-400"
+                class="relative h-[55px] w-full rounded-lg bg-white px-3 text-gray-600 placeholder-gray-400 border-1 border-gray-200"
                 required
               />
             </div>
@@ -64,7 +62,7 @@
                 v-model="contact.phone"
                 type="tel"
                 placeholder="Votre téléphone (Optionnel)"
-                class="relative h-[55px] w-full rounded-lg border-0 bg-white px-3 text-gray-600 placeholder-gray-400"
+                class="relative h-[55px] w-full rounded-lg bg-white px-3 text-gray-600 placeholder-gray-400 border-1 border-gray-200"
                 @blur="checkPhoneNumber"
               />
               <span
@@ -81,15 +79,15 @@
                 v-model="contact.accordCadreName"
                 type="text"
                 placeholder="Nom partenaire / accord-cadre (Optionnel)"
-                class="relative h-[55px] w-full rounded-lg border-0 bg-white px-3 text-gray-600 placeholder-gray-400"
+                class="relative h-[55px] w-full rounded-lg bg-white px-3 text-gray-600 placeholder-gray-400 border-1 border-gray-200"
               />
             </div>
             <div class="pt-0">
               <textarea
                 v-model="contact.description"
                 placeholder="Votre message *"
-                class="relative h-full w-full resize-none rounded-lg border-0 bg-white px-3 py-3
-                 text-gray-600 placeholder-gray-400"
+                class="relative h-full w-full resize-none rounded-lg bg-white px-3 py-3
+                 text-gray-600 placeholder-gray-400 border-1 border-gray-200"
                 rows="7"
                 required
               />

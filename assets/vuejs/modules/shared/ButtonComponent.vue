@@ -53,6 +53,10 @@ const onClick = ($event: PointerEvent): void => {
   }
   &-primary {
     @apply border border-white bg-primary text-white;
+    svg,
+    path {
+      @apply stroke-white;
+    }
   }
   &-secondary {
     @apply bg-secondary;

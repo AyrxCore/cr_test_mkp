@@ -1,0 +1,8 @@
+{% set messages = app.flashes %}
+{% if messages | length %}
+  <div class="m-auto mt-2">
+    {% for type, message in messages %}
+      {% include '_partials/message-alert/_'~ type ~'.html.twig' with { 'message': message[0]} %}
+    {% endfor %}
+  </div>
+{% endif %}

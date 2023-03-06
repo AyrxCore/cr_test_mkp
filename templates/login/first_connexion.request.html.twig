@@ -1,23 +1,92 @@
 {% extends "base.html.twig" %}
-{% block title %}Première connexion{% endblock %}
+{% block title %}Première connexion - Marketplace{% endblock %}
+{% block header %}
+  {% include '_partials/_header.html.twig' with { 'back_url': true} %}
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  <script>
+    function openModal() {
+      document.getElementById('modal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('modal').style.display = 'none';
+    }
+  </script>
+{% endblock %}
 {% block body %}
-    <div class="container m-auto">
-        <form action="{{ path('first_connexion_request') }}" method="post" class="w-full">
-            <h1 >Activation de votre compte</h1>
-            <div>
-                <label for="username">Veuillez saisir l'identifiant/email de votre compte</label>
-                <div class="input-group">
-                    <input type="email" id="username" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm
-                    text-gray-900 focus:border-blue-500 focus:ring-blue-500" name="_username" value="" autocomplete="username" required/>
-                </div>
-            </div>
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-            <div class="text-right mt-2">
-                <button type="submit" class="text-white bg-gradient-to-r from-purple-600 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4  focus:outline-none focus:ring-cyan-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2">
-                    Valider
+    <div class="container mx-auto mt-[5%] px-5 lg:px-0">
+      <h1 class="text-2xl font-bold text-primary xl:text-4xl flex">
+        Bienvenue sur la marketplace QANTIS
+      </h1>
+      <div class="flex flex-col my-10 md:my-[5%] lg:space-x-2 lg:flex-row justify-center">
+        <div class="lg:w-1/2 flex p-3 lg:p-8 bg-white rounded-lg">
+          <form action="{{ path('first_connexion_request') }}" method="post" class="w-full">
+            <h1 class="text-lg font-bold xl:text-2xl text-primary">
+              Activation <span class="text-gradient">de votre compte</span>
+            </h1>
+            <div class="mt-5">
+              <p class="text-gray-500 xl:w-5/6">
+                Rentrez votre adresse email professionnelle dans le cadre ci-dessous afin de définir votre mot de passe
+              </p>
+
+              {% include '_partials/_alert.html.twig' %}
+
+              <div class="flex flex-col md:flex-row justify-between space-x-2 mt-5">
+                  <input
+                    type="email"
+                    id="username"
+                    class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm
+                    text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                    name="_username"
+                    value=""
+                    autocomplete="username"
+                    required
+                  />
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                <button
+                  type="submit"
+                  class="flex text-white button button-gradient mt-2 md:mt-0">
+                  <div class="vue-app" data-component="arrow-right-icon"></div>
+                  Valider
                 </button>
+              </div>
             </div>
-        </form>
+
+          </form>
+        </div>
+
+        <div class="lg:w-1/2 flex flex-col p-3 lg:p-8 bg-white rounded-lg mt-5 lg:mt-0">
+          <h1 class="text-xl font-bold xl:text-2xl text-primary">
+            Besoin d'aide <span class="text-gradient">pour vous connecter ?</span>
+          </h1>
+          <p class="2xl:w-3/4 mt-5 text-gray-500">
+            Notre service adhérents est à votre disposition du <br /> lundi au vendredi de <span class="font-bold">8h30 à 18h30.</span>
+          </p>
+          <div class="2xl:w-2/3 mt-5">
+            <button
+              id="btnModal"
+              type="button"
+              data-toggle="modal"
+              onclick="openModal()"
+              class="flex text-white button button-gradient w-full">
+              <div class="vue-app" data-component="arrow-right-icon"></div>
+              Contactez le service adhérents QANTIS
+            </button>
+            <div id="modal" class="modal-overlay" style="display:none; z-index: 99" role="dialog" aria-modal="true">
+              <div class="bg-white w-1/2 rounded shadow-lg p-6 h-fit mt-[5%] bg-white flex flex-col">
+                <div class="flex justify-end">
+                  <button class="bg-gray-300 p-2 rounded flex justify-end mb-2 w-auto" onclick="closeModal()">X</button>
+                </div>
+                <div class="vue-app bg-white" data-component="contact-form"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
 {% endblock %}
