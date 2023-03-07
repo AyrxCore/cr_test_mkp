@@ -9,6 +9,7 @@ use App\Dto\Product;
 use App\Dto\Property;
 use App\Entity\AccountAccordCadre;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,22 +42,23 @@ class UpplerProductService extends HttpClientProvider
     #[Required]
     public EntityManagerInterface $em;
 
-    public function getProductsByParams(array $options, int $page = 1, int $perPage = 10, bool $showFilters = false): array | null
+    public function findProductsByOptions(array $options, array $params = [], int $page = 1, int $perPage = 10, bool $showFilters = false): array | null
     {
         $session = $this->requestStack->getSession();
         $session->start();
 
-        $urlFilters = null;
+        $expandParams = null;
+        $params =  empty($params) ? ['price', 'properties', 'variants', 'company'] : $params;
 
-        if (!empty($filters)) {
-            foreach ($filters as $filter) {
-                $urlFilters.= '&expand[]=' . $filter;
+        if (!empty($params)) {
+            foreach ($params as $param) {
+                $expandParams.= '&expand[]=' . $param;
             }
         }
 
         $res = $this->request(
             'POST',
-            $this->apiUrl . 'v1/search/product?page='.$page.'&perPage=' . $perPage . $urlFilters,
+            $this->apiUrl . 'v1/buyer/search/product?page='.$page.'&perPage=' . $perPage . $expandParams,
             [
                 'json' => $options
             ]
@@ -69,7 +71,11 @@ class UpplerProductService extends HttpClientProvider
 
         $products = [];
         foreach ($remoteProducts->results as $remoteProduct) {
-            $products[] = $this->hydrateProductFromList($remoteProduct);
+            try {
+                $products[] = $this->hydrateProductFromList($remoteProduct);
+            } catch (InvalidArgumentException $e) {
+                $this->apiLogger->error($e->getMessage());
+            }
         }
 
         if ($showFilters) {
@@ -85,12 +91,12 @@ class UpplerProductService extends HttpClientProvider
 
     }
 
-    public function getProduct(int $productId = null, array $filters = [], ?string $accountId = null): Product|null
+    public function findProductById(int $productId = null, array $filters = [], ?string $accountId = null): Product|null
     {
         $session = $this->requestStack->getSession();
         $session->start();
 
-        $filters =  empty($filters) ? ['price', 'properties', 'variants'] : $filters;
+        $filters =  empty($filters) ? ['price', 'properties', 'variants', 'company'] : $filters;
         $urlFilters = null;
 
         if (!empty($filters)) {
@@ -131,7 +137,7 @@ class UpplerProductService extends HttpClientProvider
             $images[] = !empty($remoteProduct->images[0]->url) ? $remoteProduct->images[0]->url : null ;
             $product->setImages($images);
 
-            $this->getPrice($remoteProduct, $product);
+            $this->hydratePrice($remoteProduct, $product);
         }
 
         return $product;
@@ -176,7 +182,7 @@ class UpplerProductService extends HttpClientProvider
             }
             $product->setOptions($options);
 
-            $this->getPrice($remoteProduct, $product);
+            $this->hydratePrice($remoteProduct, $product);
 
             if ($product->getPriceReference() && $product->getPrice()) {
                 $priceDiff = $product->getPriceReference() - $product->getPrice()->getDisplayPrice();
@@ -251,6 +257,17 @@ class UpplerProductService extends HttpClientProvider
         $product->setName($remoteProduct->name->default);
         $product->setDescription($remoteProduct->description->default ?? null);
         $product->setReference($remoteProduct->reference);
+        if ($remoteProduct->company->id) {
+            $item = $this->cache->getItem('seller_' . $remoteProduct->company->id);
+
+            if ($item->isHit()) {
+                $seller = $item->get();
+            } else {
+                $seller = $this->upplerSellerService->hydrateSeller($remoteProduct->company);
+            }
+
+            $product->setSeller($seller);
+        }
     }
 
     /**
@@ -271,17 +288,7 @@ class UpplerProductService extends HttpClientProvider
         }
         $product->setProperties($properties);
         $product->setIsAccordCadre($isAccordCadre);
-        if (isset($remoteProduct->company->id)) {
-            $item = $this->cache->getItem('seller_' . $remoteProduct->company->id);
 
-            if ($item->isHit()) {
-                $seller = $item->get();
-            } else {
-                $seller = $this->upplerSellerService->getSeller($remoteProduct->company->id);
-            }
-
-            $product->setSeller($seller);
-        }
         return $isAccordCadre;
     }
 
@@ -290,7 +297,7 @@ class UpplerProductService extends HttpClientProvider
      * @param Product $product
      * @return void
      */
-    private function getPrice($remoteProduct, Product $product): void
+    private function hydratePrice($remoteProduct, Product $product): void
     {
         if (null !== $remoteProduct->price) {
             $price = new Price();

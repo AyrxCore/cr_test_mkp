@@ -142,7 +142,7 @@ const pointsClesRSE = computed(() => {
 watch(
   () => route.params.id as string,
   async (id: string) => {
-    if (id) accord.value = await accordStore.getAccordCadreById(id)
+    if (id) accord.value = await accordStore.findAccordCadreById(id)
   },
   { immediate: true },
 )

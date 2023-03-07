@@ -17,7 +17,7 @@ export default class ProductHttpClient extends BaseClientService {
       .then((response) => response.data)
   }
 
-  public getProduct<T extends []>(id: number): Promise<Product> {
+  public findProductById<T extends []>(id: number): Promise<Product> {
     return this.apiClient
         .get(`product/${id}`)
         .then((response) => response.data)
@@ -32,7 +32,7 @@ export default class ProductHttpClient extends BaseClientService {
       .then((response) => response.data)
   }
 
-  public getAccordCadre<T extends []>(id: number): Promise<Product> {
+  public findAccordCadreById<T extends []>(id: number): Promise<Product> {
     return this.apiClient
       .get(`accord-cadre/${id}`)
       .then((response) => response.data)

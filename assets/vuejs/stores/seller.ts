@@ -13,10 +13,12 @@ export const useSellerStore = defineStore({
   }),
 
   actions: {
-    async getSellers(): Promise<Seller[]> {
+    async init() {
       const alertStore = useAlertStore()
       try {
-        return await SellerHttpClient.get().fetchSellers()
+        if (this.sellers.length === 0) {
+          this.sellers = await SellerHttpClient.get().fetchSellers()
+        }
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
           alertStore.setShow(
@@ -25,18 +27,10 @@ export const useSellerStore = defineStore({
           )
       }
     },
-    async getSellerById(id) {
-      const alertStore = useAlertStore()
-      try {
-        return await SellerHttpClient.get().getSeller(id)
-      } catch (error) {
-        error.response.status === HttpStatusCodes.unauthorized &&
-        alertStore.setShow(
-          getErrorMessage(error.response.data.message),
-          AlertType.danger,
-        )
-      }
-
+  },
+  getters: {
+    getSellers(): Array<Seller> {
+      return this.sellers
     },
   }
 })

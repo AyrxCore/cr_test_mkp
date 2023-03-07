@@ -19,7 +19,6 @@
         :key="key"
         class="flex h-full items-center justify-center overflow-hidden rounded-lg bg-white"
       >
-
         <img
           v-if="showCarouselConnected"
           :src="getUpplerImage(seller.avatar)"
@@ -74,7 +73,8 @@ const sellers = ref([])
 onMounted(async () => {
   try {
     if (userStore.getUser) {
-      sellers.value = await sellerStore.getSellers()
+      await sellerStore.init()
+      sellers.value = sellerStore.getSellers
       showCarouselConnected.value = true
     } else {
       sellers.value = [

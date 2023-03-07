@@ -52,15 +52,15 @@
       </div>
 
       <!-- Bloc Produits top ventes -->
-      <ProductHomeComponent type="top-vente" title="Top vente"/>
+        <ProductHomeComponent type="top-vente" title="Top vente"/>
       <!-- Fin bloc Produits top ventes -->
 
       <!-- Bloc accords cadre -->
-      <AccordCadreComponent/>
+        <AccordCadreComponent/>
       <!-- Fin Bloc accords cadre -->
 
       <!-- Bloc sélection de produits -->
-      <ProductHomeComponent class="mt-4" type="selection" title="Sélection de produits"/>
+        <ProductHomeComponent class="mt-4" type="selection" title="Sélection de produits"/>
       <!-- Fin bloc sélection de produits -->
 
       <div class="mt-10">
@@ -166,23 +166,16 @@ import banniere2 from '@/vuejs/assets/img/demo/banniere-2-desktop.png'
 import banniereMobile1 from '@/vuejs/assets/img/demo/banniere-1-mobile.png'
 import banniereMobile2 from '@/vuejs/assets/img/demo/banniere-2-mobile.png'
 import {SwiperSlide} from 'swiper/vue'
-import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import PartnersCarousel from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
-
 import {onMounted, ref} from 'vue'
-
-import MailIconLightComponent from '@/vuejs/modules/shared/icon/MailIconLightComponent.vue'
-import PhoneLightIconComponent from '@/vuejs/modules/shared/icon/PhoneLightIconComponent.vue'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import ContenusExpertComponent from '@/vuejs/modules/home/component/ContenusExpertComponent.vue'
 import DropdownListComponent from '@/vuejs/modules/shared/DropdownListComponent.vue'
 import ProductHomeComponent from '@/vuejs/modules/home/component/ProductHomeComponent.vue'
 import AccordCadreComponent from '@/vuejs/modules/home/component/AccordsCadreComponent.vue'
-
-
 import {useExpertContentStore} from '@/vuejs/stores/expertContent'
 import {storeToRefs} from 'pinia'
-import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue';
+import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 
 const expertContentStore = useExpertContentStore()
 const {getExpertsContents} = storeToRefs(expertContentStore)

@@ -25,7 +25,7 @@ export const useProductStore = defineStore({
   }),
 
   actions: {
-    async getProductsByParams(params): Promise<[]> {
+    async fetchProductsByParams(params): Promise<[]> {
       try {
         return  await ProductHttpClient.get().fetchProductsByParams(params)
       } catch (error) {
@@ -39,18 +39,18 @@ export const useProductStore = defineStore({
         console.log(error)
       }
     },
-    async getProductsWithFilterByParams(params) {
+    async fetchProductsWithFilterByParams(params) {
       try {
-          return  await this.getProductsByParams(params)
+          return  await this.fetchProductsByParams(params)
       } catch (error) {
         console.log(error)
 
       }
     },
-    async getProductById(id) {
+    async findProductById(id) {
       const alertStore = useAlertStore()
       try {
-        return await ProductHttpClient.get().getProduct(id)
+        return await ProductHttpClient.get().findProductById(id)
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
         alertStore.setShow(
@@ -59,10 +59,10 @@ export const useProductStore = defineStore({
         )
       }
     },
-    async getAccordCadreById(id) {
+    async findAccordCadreById(id) {
       const alertStore = useAlertStore()
       try {
-        return await ProductHttpClient.get().getAccordCadre(id)
+        return await ProductHttpClient.get().findAccordCadreById(id)
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
         alertStore.setShow(

@@ -17,36 +17,18 @@ use Symfony\Contracts\Service\Attribute\Required;
 class ProductApiController extends AbstractController
 {
     private const HOME_TOP_VENTE_PROPERTY = [
-        'dev' => [
-            'property_id' => '176',
-            'value' => '8389'
-        ],
-        'prod' => [
-            'property_id' => '217',
-            'value' => '5369'
-        ]
+        'property_id' => '217',
+        'value' => '5369'
     ];
 
     private const HOME_SELECTION_PROPERTY = [
-        'dev' => [
-            'property_id' => '176',
-            'value' => '8388'
-        ],
-        'prod' => [
-            'property_id' => '217',
-            'value' => '5368'
-        ]
+        'property_id' => '217',
+        'value' => '5368'
     ];
 
     private const HOME_ACCORD_CADRE_PROPERTY = [
-        'dev' => [
-            'property_id' => '176',
-            'value' => '8390'
-        ],
-        'prod' => [
-            'property_id' => '217',
-            'value' => '5367'
-        ]
+        'property_id' => '217',
+        'value' => '5367'
     ];
 
     #[Required]
@@ -93,7 +75,7 @@ class ProductApiController extends AbstractController
             unset($options['perPage']);
         }
 
-        $products = $this->upplerProductService->getProductsByParams($options, $page, $perPage, $showFilters);
+        $products = $this->upplerProductService->findProductsByOptions($options, ['properties', 'price', 'company', 'images'], $page, $perPage, $showFilters);
 
         return new JsonResponse($products);
     }
@@ -110,21 +92,22 @@ class ProductApiController extends AbstractController
         }
 
         $options = [];
+        $params = ['properties', 'price', 'company', 'images'];
 
-        $env = $this->getParameter('uppler_env');
         switch ($type) {
             case 'top-vente':
-                $options['properties'] = [self::HOME_TOP_VENTE_PROPERTY[$env]];
+                $options['properties'] = [self::HOME_TOP_VENTE_PROPERTY];
                 break;
             case 'selection':
-                $options['properties'] = [self::HOME_SELECTION_PROPERTY[$env]];
+                $options['properties'] = [self::HOME_SELECTION_PROPERTY];
                 break;
             case 'accord-cadre':
-                $options['properties'] = [self::HOME_ACCORD_CADRE_PROPERTY[$env]];
+                $options['properties'] = [self::HOME_ACCORD_CADRE_PROPERTY];
+                $params = ['properties'];
                 break;
         }
 
-        $products = $this->upplerProductService->getProductsByParams($options, self::PAGE, self::PER_PAGE);
+        $products = $this->upplerProductService->findProductsByOptions($options, $params, self::PAGE, self::PER_PAGE);
 
         return new JsonResponse($products);
     }
@@ -139,7 +122,7 @@ class ProductApiController extends AbstractController
             return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        $product = $this->upplerProductService->getProduct($id);
+        $product = $this->upplerProductService->findProductById($id);
 
         return new JsonResponse($product);
     }
@@ -154,7 +137,7 @@ class ProductApiController extends AbstractController
             return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        $accordCadre = $this->upplerProductService->getProduct($id, [], (string)$session->get('account')->getId());
+        $accordCadre = $this->upplerProductService->findProductById($id, ['properties'], (string)$session->get('account')->getId());
 
         return new JsonResponse($accordCadre);
     }

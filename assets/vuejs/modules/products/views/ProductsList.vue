@@ -123,7 +123,8 @@ const loadProducts = (async () => {
   pageNumber.value = route.query.page ? toNumber(route.query.page) : 1
   const paramsProducts = {
     with_filter: true,
-    page: pageNumber.value
+    page: pageNumber.value,
+    perPage: 20
   }
 
   if (route.query.q) {
@@ -131,7 +132,7 @@ const loadProducts = (async () => {
     term.value = route.query.q
   }
 
-  resultProducts.value = await productStore.getProductsByParams(paramsProducts)
+  resultProducts.value = await productStore.fetchProductsByParams(paramsProducts)
   if (resultProducts.value.results[0].isAccordCadre && currentPartenaire.value === null) {
     currentPartenaire.value = resultProducts.value.results[0].seller.id
   }
