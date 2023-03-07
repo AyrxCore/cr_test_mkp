@@ -119,7 +119,7 @@ const breadcrumbUrl = computed(() => {
 })
 
 const loadProducts = (async () => {
-
+  isLoading.value = true
   pageNumber.value = route.query.page ? toNumber(route.query.page) : 1
   const paramsProducts = {
     with_filter: true,
@@ -167,34 +167,22 @@ const pageNext = (() => {
   changePage()
 })
 
-const changePage = (() => {
-  router.push({
+const changePage = (async () => {
+  await router.push({
     name: ProductPageList.PRODUCTS,
     query: {
       q: term.value,
       page:pageNumber.value,
     }
   })
+  await loadProducts()
 })
 watch(
   () => route.query.q,
   async (searchTerm: string) => {
     if (searchTerm) {
-      isLoading.value = true
       currentPartenaire.value = null
       pageNumber.value = 1
-      await loadProducts()
-    }
-  },
-  { immediate: true },
-)
-
-watch(
-  () => route.query.page,
-  async (page: string) => {
-    if (page) {
-      isLoading.value = true
-      currentPartenaire.value = null
       await loadProducts()
     }
   },
