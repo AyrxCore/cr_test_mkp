@@ -13,6 +13,7 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 class UpplerBuyerCompanyService extends HttpClientProvider
 {
+
     #[Required]
     public RequestStack $requestStack;
 
@@ -22,7 +23,7 @@ class UpplerBuyerCompanyService extends HttpClientProvider
     // filters : filtres disponibles pour étendre la quantité d'informations retournées
     // Valeurs possibles ("accounts","files","subscriptions","dynamicFields")
     // https://app.preprod-yousg3q-qbpekzlwwankw.fr-3.platformsh.site/api-documentation/operator#section-Company
-    public function getBuyerByCompanyId(int $id, array $filters = []): object | null
+    public function getBuyerByCompanyId(int $id, array $filters = []): object|null
     {
         $session = $this->requestStack->getSession();
         $session->start();
@@ -30,13 +31,13 @@ class UpplerBuyerCompanyService extends HttpClientProvider
 
         if (!empty($filters)) {
             foreach ($filters as $filter) {
-                $urlFilters.= null === $urlFilters ? '?expand[]=' . $filter : '&expand[]=' . $filter;
+                $urlFilters .= null === $urlFilters ? '?expand[]=' . $filter : '&expand[]=' . $filter;
             }
         }
 
         $res = $this->request(
             'GET',
-            $this->apiUrl . 'v1/administrator/buyer/' . $id. $urlFilters,
+            $this->apiUrl . 'v1/administrator/buyer/' . $id . $urlFilters,
             [],
             true
         );
@@ -47,7 +48,7 @@ class UpplerBuyerCompanyService extends HttpClientProvider
         return null;
     }
 
-    public function getAdresses(): array | null
+    public function getAdresses(): array|null
     {
         $session = $this->requestStack->getSession();
         $session->start();
@@ -67,7 +68,7 @@ class UpplerBuyerCompanyService extends HttpClientProvider
         return null;
     }
 
-    public function getAddress(?int $addressId = null, string $url = null): \stdClass | null
+    public function getAddress(?int $addressId = null, string $url = null): \stdClass|null
     {
         $session = $this->requestStack->getSession();
         $session->start();
@@ -111,18 +112,18 @@ class UpplerBuyerCompanyService extends HttpClientProvider
             $this->apiUrl . 'v1/administrator/company-address/',
             [
                 'json' => [
-                    'name' => $address->getName(),
-                    'type' => $address->getType(),
+                    'name'       => $address->getName(),
+                    'type'       => $address->getType(),
                     'first_name' => $address->getFirstName(),
-                    'last_name' => $address->getLastName(),
-                    'street' => $address->getStreet(),
-                    'postcode' => $address->getPostCode(),
-                    'city' => $address->getCity(),
-                    'country' => $address->getCountry(),
-                    'company' => $address->getCompany(),
-                    'companies' => [$address->getCompanyId()],
-                    'phone' => $address->getPhone()
-                ]
+                    'last_name'  => $address->getLastName(),
+                    'street'     => $address->getStreet(),
+                    'postcode'   => $address->getPostCode(),
+                    'city'       => $address->getCity(),
+                    'country'    => $address->getCountry(),
+                    'company'    => $address->getCompany(),
+                    'companies'  => [$address->getCompanyId()],
+                    'phone'      => $address->getPhone(),
+                ],
             ],
             true
         );
@@ -142,17 +143,17 @@ class UpplerBuyerCompanyService extends HttpClientProvider
             $this->apiUrl . 'v1/administrator/company-address/' . $address->getId(),
             [
                 'json' => [
-                    'name' => $address->getName(),
-                    'type' => $address->getType(),
+                    'name'       => $address->getName(),
+                    'type'       => $address->getType(),
                     'first_name' => $address->getFirstName(),
-                    'last_name' => $address->getLastName(),
-                    'street' => $address->getStreet(),
-                    'postcode' => $address->getPostCode(),
-                    'city' => $address->getCity(),
-                    'country' => $address->getCountry(),
-                    'company' => $address->getCompany(),
-                    'phone' => $address->getPhone()
-                ]
+                    'last_name'  => $address->getLastName(),
+                    'street'     => $address->getStreet(),
+                    'postcode'   => $address->getPostCode(),
+                    'city'       => $address->getCity(),
+                    'country'    => $address->getCountry(),
+                    'company'    => $address->getCompany(),
+                    'phone'      => $address->getPhone(),
+                ],
             ],
             true
         );
@@ -165,10 +166,10 @@ class UpplerBuyerCompanyService extends HttpClientProvider
         return null;
     }
 
-    public function getUserBuyerDatas(): object | null
+    public function getUserBuyerDatas(): object|null
     {
         $session = $this->requestStack->getSession();
-        /**@var Account $account*/
+        /**@var Account $account */
         $account = $session->get('account');
         $res = $this->request(
             'GET',

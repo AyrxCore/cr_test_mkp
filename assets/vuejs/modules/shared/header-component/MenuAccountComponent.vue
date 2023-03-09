@@ -1,53 +1,64 @@
 <template>
   <div
-    v-if="modelValue"
-    v-click-outside="closeMenu"
-    class="fixed top-0 left-0 z-50 h-screen w-full bg-white px-5 py-2.5 text-sm
+      v-if="modelValue"
+      v-click-outside="closeMenu"
+      class="fixed top-0 left-0 z-50 h-screen w-full bg-white px-5 py-2.5 text-sm
     text-primary shadow sm:absolute sm:h-fit sm:w-auto sm:rounded"
   >
     <div class="flex items-center">
       <RouterLink
-        :to="{ path: '/app/account' }"
-        class="flex items-center py-2.5 font-bold hover:text-secondary"
+          :to="{ path: '/app/account' }"
+          class="flex items-center py-2.5 font-bold hover:text-secondary"
       >
-        <UserIcon class="mr-3" />
+        <UserIcon class="mr-3"/>
         <span>Mon compte</span>
       </RouterLink>
       <CloseIcon
-        class="ml-auto cursor-pointer hover:text-secondary"
-        @click.stop="closeMenu"
+          class="ml-auto cursor-pointer hover:text-secondary"
+          @click.stop="closeMenu"
       />
     </div>
-    <hr class="my-2.5" />
+    <hr class="my-2.5"/>
     <RouterLink
-      v-for="(value, key) in listAccount"
-      :key="key"
-      :to="{ path: value.url }"
-      class="flex items-center py-2.5 hover:text-secondary"
+        v-for="(value, key) in listAccount"
+        :key="key"
+        :to="{ path: value.url }"
+        class="flex items-center py-2.5 hover:text-secondary"
     >
-      <ChevronRightIcon class="mr-4" />
+      <ChevronRightIcon class="mr-4"/>
       {{ value.label }}
     </RouterLink>
-    <a
-      href="#"
-      class="inline-flex pt-5 font-bold hover:text-secondary"
-      @click="onLogout($event)"
+
+
+    <div v-if="user.account.adherent.reducceCode"
+         class="flex items-center mt1 py-2.5"
     >
-      <DisconnectIcon class="mr-2" />
+      <!--      <ChevronRightIcon class="mr-4"/>-->
+      Code Bonuus {{ user.account.adherent.reducceCode }}
+    </div>
+
+
+    <a
+        href="#"
+        class="inline-flex pt-5 font-bold hover:text-secondary"
+        @click="onLogout($event)"
+    >
+      <DisconnectIcon class="mr-2"/>
       Se déconnecter
     </a>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import {ref} from 'vue'
 
 import CloseIcon from '@/vuejs/modules/shared/icon/CloseIconComponent.vue'
 import UserIcon from '@/vuejs/modules/shared/icon/UserIconComponent.vue'
 import DisconnectIcon from '@/vuejs/modules/shared/icon/DisconnectIconComponent.vue'
 import ChevronRightIcon from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
 
-import { useUserStore } from '@/vuejs/stores/user'
+import {useUserStore} from '@/vuejs/stores/user'
+import {storeToRefs} from 'pinia';
 
 const emit = defineEmits(['update:modelValue'])
 
@@ -86,6 +97,7 @@ const listAccount = ref<any[]>([
 ])
 
 const userStore = useUserStore()
+const {user} = storeToRefs(userStore)
 
 const closeMenu = (): void => {
   emit('update:modelValue', false)

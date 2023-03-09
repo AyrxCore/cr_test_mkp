@@ -2,6 +2,9 @@
 
 namespace App\Controller\Api\Buyer;
 
+use App\Dto\AccountAccordCadre;
+use App\Entity\AccordStatut;
+use App\Entity\Account;
 use App\Service\UpplerProductService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -11,25 +14,30 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\Service\Attribute\Required;
 
 
 class ProductApiController extends AbstractController
 {
-    private const HOME_TOP_VENTE_PROPERTY = [
-        'property_id' => '217',
-        'value' => '5369'
-    ];
 
-    private const HOME_SELECTION_PROPERTY = [
-        'property_id' => '217',
-        'value' => '5368'
-    ];
+    private const HOME_TOP_VENTE_PROPERTY
+        = [
+            'property_id' => '217',
+            'value'       => '5369',
+        ];
 
-    private const HOME_ACCORD_CADRE_PROPERTY = [
-        'property_id' => '217',
-        'value' => '5367'
-    ];
+    private const HOME_SELECTION_PROPERTY
+        = [
+            'property_id' => '217',
+            'value'       => '5368',
+        ];
+
+    private const HOME_ACCORD_CADRE_PROPERTY
+        = [
+            'property_id' => '217',
+            'value'       => '5367',
+        ];
 
     #[Required]
     public RequestStack $requestStack;
@@ -41,13 +49,14 @@ class ProductApiController extends AbstractController
     public UpplerProductService $upplerProductService;
 
     private const PAGE = 1;
+
     private const PER_PAGE = 5;
 
     #[Route('/api/products', name: 'search_products', methods: ['POST'])]
     #[Route('/api/accords-cadre', name: 'search_accords_cadre', methods: ['POST'])]
     public function list(Request $request, NormalizerInterface $normalizer): JsonResponse
     {
-        $session= $this->requestStack->getSession();
+        $session = $this->requestStack->getSession();
         $session->start();
 
         $options = $request->request->all();
@@ -75,7 +84,13 @@ class ProductApiController extends AbstractController
             unset($options['perPage']);
         }
 
-        $products = $this->upplerProductService->findProductsByOptions($options, ['properties', 'price', 'company', 'images'], $page, $perPage, $showFilters);
+        $products = $this->upplerProductService->findProductsByOptions(
+            $options,
+            ['properties', 'price', 'company', 'images'],
+            $page,
+            $perPage,
+            $showFilters
+        );
 
         return new JsonResponse($products);
     }
@@ -83,7 +98,7 @@ class ProductApiController extends AbstractController
     #[Route('/api/home-products/{type}', name: 'search_home_products', methods: ['GET'])]
     public function homeProduct(Request $request, string $type, NormalizerInterface $normalizer): JsonResponse
     {
-        $session= $this->requestStack->getSession();
+        $session = $this->requestStack->getSession();
         $session->start();
 
 
@@ -115,7 +130,7 @@ class ProductApiController extends AbstractController
     #[Route('/api/product/{id}', name: 'get_product')]
     public function product(int $id, NormalizerInterface $normalizer): JsonResponse
     {
-        $session= $this->requestStack->getSession();
+        $session = $this->requestStack->getSession();
         $session->start();
 
         if (!$session->has('account') || empty($session->get('account'))) {
@@ -130,15 +145,56 @@ class ProductApiController extends AbstractController
     #[Route('/api/accord-cadre/{id}', name: 'get_accord_cadre')]
     public function accordCadre(int $id, NormalizerInterface $normalizer): JsonResponse
     {
-        $session= $this->requestStack->getSession();
+        $session = $this->requestStack->getSession();
         $session->start();
 
         if (!$session->has('account') || empty($session->get('account'))) {
             return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        $accordCadre = $this->upplerProductService->findProductById($id, ['properties'], (string)$session->get('account')->getId());
+        $accordCadre = $this->upplerProductService->findProductById(
+            $id,
+            ['properties'],
+            (string)$session->get('account')->getId()
+        );
 
         return new JsonResponse($accordCadre);
     }
+
+
+    #[Route('/api/accord-cadre-subscription', name: 'accord_cadre_subscription', methods: ['POST'])]
+    public function subscription(Request $request, NormalizerInterface $normalizer): JsonResponse
+    {
+        $session = $this->requestStack->getSession();
+        $session->start();
+
+        $params = json_decode($request->getContent(), true);
+        $accountId = (string)$session->get('account')->getId();
+        $account = $this->em->getRepository(Account::class)->find($accountId);
+
+        $accordStatut = $this->em->getRepository(AccordStatut::class)->findOneBy([
+            'adherent' => $account->getAdherent()->getId(),
+            'accordId' => $params['accordId'],
+        ]);
+
+        if ($accordStatut) {
+            if (AccountAccordCadre::PROCESS_STATUS_NOT_ACTIVATED === $accordStatut->getStatus()) {
+                $accordStatut->setStatus(AccountAccordCadre::PROCESS_STATUS_PENDING);
+
+                $this->em->persist($accordStatut);
+                $this->em->flush();
+            }
+        } else {
+            $accordStatut = new AccordStatut();
+            $accordStatut->setAdherent($account->getAdherent());
+            $accordStatut->setAccordId(new Uuid($params['accordId']));
+            $accordStatut->setStatus(AccountAccordCadre::PROCESS_STATUS_PENDING);
+            $accordStatut->setAccordStatutRequestAt(new \DateTime('now'));
+            $this->em->persist($accordStatut);
+            $this->em->flush();
+        }
+
+        return new JsonResponse($accordStatut->getStatus());
+    }
+
 }

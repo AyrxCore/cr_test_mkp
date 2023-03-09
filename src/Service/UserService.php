@@ -15,7 +15,9 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 class UserService
 {
+
     private const URL_RESET_PASSWORD = '/reset-password/';
+
     private const MAX_DAYS_LIFE_REQUEST_PASSWORD = 2;
 
     #[Required]
@@ -37,6 +39,7 @@ class UserService
         $user->setUsername($email);
         $user->setEmail($email);
         $user->setEnabled(true);
+        $user->setAccesMarketPlace(true);
         $user->setPassword($this->passwordHasher->hashPassword($user, $password));
 
         $this->entityManager->persist($user);
@@ -49,7 +52,7 @@ class UserService
      */
     public function changePassword(string $email, string $password): void
     {
-        $user = $this->userRepository->getUserByEmail($email);
+        $user = $this->userRepository->findOneBy(['email' => $email]);
 
         if (!$user) {
             throw new Exception('User not found');
@@ -99,4 +102,5 @@ class UserService
 
         throw new \Exception("Cet utilisateur ne posséde pas ce rôle");
     }
+
 }

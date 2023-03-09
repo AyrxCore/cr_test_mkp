@@ -2,21 +2,22 @@
   <div>
     <div>
       <ButtonComponent
-        class="button-gradient mb-7"
-        :is-loading="isLoading"
-        @click="sendSubmission"
+          class="button-gradient mb-7"
+          :is-loading="isLoading"
+          @click="sendSubmission"
       >
-        <ArrowRightIconComponent /> Bénéficiez des conditions
+        <ArrowRightIconComponent/>
+        Bénéficiez des conditions
       </ButtonComponent>
       <ModalValidationBeneficePartnerModal
-        v-if="showModal"
-        class="modal"
-        @cancel="closeModal"
+          v-if="showModal"
+          class="modal"
+          @cancel="closeModal"
       />
     </div>
 
     <div class="condition-beneficiaire">
-      <p v-html="text" />
+      <p v-html="text"/>
     </div>
   </div>
 </template>
@@ -35,15 +36,15 @@ const isLoading = ref<boolean>(false)
 const props = defineProps({
   currentStatus: {
     type: Object as PropType<AccountAccordCadre>,
-    required: true
+    required: true,
   },
   text: {
     type: String,
-    default: null
+    default: null,
   },
   url: {
     type: String,
-    default: null
+    default: null,
   },
 })
 
@@ -52,12 +53,8 @@ const sendSubmission = (async () => {
   try {
     await ProductHttpClient.get().updateAccountAccordsCadresByParams(
       {
-        id:props.currentStatus.id,
-        accountId: props.currentStatus.accountId,
-        accordCadreId: props.currentStatus.accordCadreId,
-        updateAt: props.currentStatus.updatedAt.toDateString,
-        status: status.value.pending,
-    }
+        accordId: props.currentStatus.accordId,
+      },
   )
     showModal.value = true
   } catch (error) {

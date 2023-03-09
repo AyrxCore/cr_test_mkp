@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  php-fpm:
+  php-fpm-mkp:
     build:
       context: .
       target: php
@@ -13,14 +13,14 @@ services:
     extra_hosts:
       - 'host.docker.internal:host-gateway'
     networks:
-      - dev-marketplace
+      - dev-qantis
 
   php-cron:
     build:
       context: .
       target: php
     depends_on:
-      php-fpm:
+      php-fpm-mkp:
         condition: service_started
     command: sh -c "bin/console cron:start --blocking -n"
     volumes:
@@ -28,7 +28,7 @@ services:
     extra_hosts:
       - 'host.docker.internal:host-gateway'
     networks:
-      - dev-marketplace
+      - dev-qantis
 
   nodejs:
     build:
@@ -45,18 +45,18 @@ services:
     ports:
       - '3003:3003'
     depends_on:
-      - php-fpm
+      - php-fpm-mkp
     networks:
-      - dev-marketplace
+      - dev-qantis
 
   nginx:
     build:
       context: .
       target: nginx
     environment:
-      - PHP_URL=php-fpm
+      - PHP_URL=php-fpm-mkp
     depends_on:
-      php-fpm:
+      php-fpm-mkp:
         condition: service_started
       nodejs:
         condition: service_started
@@ -66,9 +66,9 @@ services:
     ports:
       - '8087:80'
     networks:
-      - dev-marketplace
+      - dev-qantis
 
-  db:
+  db-mkp:
     image: postgres:14
     restart: always
     environment:
@@ -80,6 +80,8 @@ services:
       - dev-marketplace
     volumes:
       - /var/lib/postgresql/data
+    networks:
+      - dev-qantis
 
   maildev:
     image: maildev/maildev
@@ -88,10 +90,11 @@ services:
       - '8086:80'
     restart: always
     networks:
-      - dev-marketplace
+      - dev-qantis
 
 networks:
-  dev-marketplace:
+  dev-qantis:
+    name: dev-qantis
 
 volumes:
   db-data-marketplace:

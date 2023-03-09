@@ -20,6 +20,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LoginController extends AbstractController
 {
+
     #[Required]
     public RequestStack $requestStack;
 
@@ -44,7 +45,7 @@ class LoginController extends AbstractController
         if ($request->getMethod() == 'POST') {
             $username = $request->request->get('_username');
             $user = $em->getRepository(User::class)->findUserByUsernameOrEmail($username);
-            if (!empty($user) && $user instanceof User) {
+            if (!empty($user) && $user instanceof User && $user->isAccesMarketPlace()) {
                 /**
                  * @var User $user
                  */
@@ -111,8 +112,8 @@ class LoginController extends AbstractController
     }
 
 
-    #[Route("/mot-de-passe-oublie/{token}", name:"resetting_action")]
-    #[Route("/premiere-connexion/{token}", name:"resetting_first_connexion_action")]
+    #[Route("/mot-de-passe-oublie/{token}", name: "resetting_action")]
+    #[Route("/premiere-connexion/{token}", name: "resetting_first_connexion_action")]
     public function resetPassword(
         Request $request,
         EntityManagerInterface $em,
@@ -147,8 +148,8 @@ class LoginController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $encodedPassword = $this->passwordHasher->hashPassword($user, $form->get('password')->getData());
 
-            if ($request->attributes->get('_route') === 'resetting_first_connexion_action' &&
-                null !== $user->getFirstConnexionRequestedAt()
+            if ($request->attributes->get('_route') === 'resetting_first_connexion_action'
+                && null !== $user->getFirstConnexionRequestedAt()
             ) {
                 $user->setFirstConnexionRequestedAt(null);
                 $user->setEnabled(true);
@@ -177,4 +178,5 @@ class LoginController extends AbstractController
 
         return $this->render('login/' . $tpl . '.html.twig', ['form' => $form->createView()]);
     }
+
 }

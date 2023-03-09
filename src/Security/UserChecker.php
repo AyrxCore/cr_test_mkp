@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Security;
 
 use App\Entity\Account;
@@ -12,6 +13,7 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 class UserChecker implements UserCheckerInterface
 {
+
     #[Required]
     public RequestStack $requestStack;
 
@@ -22,6 +24,23 @@ class UserChecker implements UserCheckerInterface
     {
         if (!$user instanceof User) {
             return;
+        }
+
+        //le compte n'est pas autorisé sur la marketplace
+        if (!$user->isAccesMarketPlace()) {
+            throw new CustomUserMessageAccountStatusException('user_disabled');
+        }
+
+        //le compte n'a pas d'account actif
+        $enable = false;
+        foreach ($user->getAccounts() as $account) {
+            if ($account->isEnabled()) {
+                $enable = true;
+                break;
+            }
+        }
+        if (!$user->hasRole('ROLE_API') && !$enable) {
+            throw new CustomUserMessageAccountStatusException('user_disabled');
         }
 
         //le compte n'est pas actif on refuse l'authentification,l'utilisateur doit passer par 'première connexion'
@@ -39,20 +58,30 @@ class UserChecker implements UserCheckerInterface
         //le user n'est lié à aucun compte, il ne peut pas entrer saufs'il s'agit d'un utilisteur api (bot Neo)
         if (!$user->hasRole('ROLE_API') && $user->getAccounts()->isEmpty()) {
             throw new CustomUserMessageAccountStatusException('user_empty_account');
-        } elseif (1 === $user->getAccounts()->count()) {
-            //le user est lié à un seul compte on l'identifie automatiquement dessus
-            $session = $this->requestStack->getSession();
-            $session->start();
+        } else {
+            $countEnable = 0;
+            foreach ($user->getAccounts() as $account) {
+                if ($account->isEnabled()) {
+                    $countEnable++;
+                    $accountEnable = $account;
+                }
+            }
+            if (1 === $countEnable) {
+                //le user est lié à un seul compte actif, on l'identifie automatiquement dessus
+                $session = $this->requestStack->getSession();
+                $session->start();
 
-            /**@var Account $account*/
-            $account = $user->getAccounts()->first();
-            $userAuth = $this->upplerAuthenticationService->authenticateUser(
-                $account
-            );
+                //                /**@var Account $account */
+                //                $account = $user->getAccounts()->first();
+                $userAuth = $this->upplerAuthenticationService->authenticateUser(
+                    $accountEnable
+                );
 
-            if ($userAuth && $session->has('access_token') && !empty($session->get('access_token'))) {
-                return;
+                if ($userAuth && $session->has('access_token') && !empty($session->get('access_token'))) {
+                    return;
+                }
             }
         }
     }
+
 }

@@ -19,35 +19,37 @@ use Symfony\Component\Validator\Constraints as Assert;
     collectionOperations: [
 
     ],
-    itemOperations: ['get' => [
-        'normalization_context' => ['groups' => ['account:get']]
-        ]
+    itemOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['account:get']],
+        ],
     ],
     normalizationContext: ['groups' => ['account:get']]
 )]
 class Account
 {
+
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    #[Groups(["simpleUser","account:list", "account:get"])]
+    #[Groups(["simpleUser", "account:list", "account:get"])]
     private ?Uuid $id = null;
 
     #[ORM\Column()]
-    #[Groups(["account:list","account:get"])]
+    #[Groups(["account:list", "account:get"])]
     private ?int $upplerUserId = null;
 
     #[ORM\Column()]
-    #[Groups(["account:list","account:get"])]
+    #[Groups(["account:list", "account:get"])]
     private ?int $upplerSubAccountId = null;
 
     #[ORM\Column]
-    #[Groups(["account:list","account:get"])]
+    #[Groups(["account:list", "account:get"])]
     private ?int $upplerCompanyId = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["account:list","account:get"])]
+    #[Groups(["account:list", "account:get"])]
     private ?string $upplerUsername = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -76,6 +78,11 @@ class Account
 
     #[ORM\Column]
     private ?bool $isEnabled = null;
+
+    #[ORM\ManyToOne(inversedBy: 'accounts')]
+    #[ORM\JoinColumn(nullable: true)]
+    #[Groups(["simpleUser"])]
+    private ?Adherent $adherent = null;
 
     #[ORM\PrePersist]
     public function onPrePersist()
@@ -238,4 +245,17 @@ class Account
 
         return $this;
     }
+
+    public function getAdherent(): ?Adherent
+    {
+        return $this->adherent;
+    }
+
+    public function setAdherent(?Adherent $adherent): self
+    {
+        $this->adherent = $adherent;
+
+        return $this;
+    }
+
 }

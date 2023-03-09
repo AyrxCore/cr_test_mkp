@@ -27,10 +27,15 @@ export interface SubAccount {
   phone: string | null
 }
 
+export interface Adherent {
+  reducceCode: string | null
+}
+
 export interface Account {
   id: string
   lastConnexion: Date
   buyer: AccountBuyer
+  adherent: Adherent
   subaccount: SubAccount
   editingSubAccount: SubAccount
 }

@@ -18,6 +18,7 @@ use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 #[ORM\HasLifecycleCallbacks]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
@@ -26,7 +27,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 180)]
-    #[Groups(["account:get","simpleUser"])]
+    #[Groups(["account:get", "simpleUser"])]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -40,15 +41,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255, unique: true)]
-    #[Groups(["account:get","simpleUser"])]
+    #[Groups(["account:get", "simpleUser"])]
     private ?string $username = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["account:get","simpleUser"])]
+    #[Groups(["account:get", "simpleUser"])]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["account:get","simpleUser"])]
+    #[Groups(["account:get", "simpleUser"])]
     private ?string $lastName = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
@@ -75,6 +76,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $first_connexion_requested_at = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $accesMarketPlace = null;
 
     public function __construct()
     {
@@ -118,7 +122,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->username;
+        return (string)$this->username;
     }
 
     /**
@@ -126,7 +130,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->username;
+        return (string)$this->username;
     }
 
     /**
@@ -355,4 +359,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function isAccesMarketPlace(): ?bool
+    {
+        return $this->accesMarketPlace;
+    }
+
+    public function setAccesMarketPlace(bool $accesMarketPlace): self
+    {
+        $this->accesMarketPlace = $accesMarketPlace;
+
+        return $this;
+    }
+
 }

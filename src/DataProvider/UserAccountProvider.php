@@ -14,6 +14,7 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 class UserAccountProvider implements RestrictedDataProviderInterface, ItemDataProviderInterface
 {
+
     #[Required]
     public EntityManagerInterface $em;
 
@@ -28,4 +29,5 @@ class UserAccountProvider implements RestrictedDataProviderInterface, ItemDataPr
     {
         return UserAccount::class === $resourceClass;
     }
+
 }

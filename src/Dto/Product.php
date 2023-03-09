@@ -7,38 +7,60 @@ namespace App\Dto;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\Api\Buyer\ProductApiController;
-use App\Entity\AccountAccordCadre;
+use App\Dto\AccountAccordCadre;
 
 final class Product implements \JsonSerializable
 {
+
     public const PROCESS_STATUS_NOT_ACTIVATED = 'NOT_ACTIVATED';
+
     public const PROCESS_STATUS_PENDING = 'PENDING';
+
     public const PROCESS_STATUS_ACTIVATED = 'ACTIVATED';
-    public const PROCESS_STATUS = [
-        self::PROCESS_STATUS_NOT_ACTIVATED,
-        self::PROCESS_STATUS_PENDING,
-        self::PROCESS_STATUS_ACTIVATED,
-    ];
+
+    public const PROCESS_STATUS
+        = [
+            self::PROCESS_STATUS_NOT_ACTIVATED,
+            self::PROCESS_STATUS_PENDING,
+            self::PROCESS_STATUS_ACTIVATED,
+        ];
 
     private ?int $id = null;
+
     private ?string $name;
 
     private ?string $reference;
+
     private ?string $description;
+
     private ?string $conditionnement;
+
     private array $livraisons;
+
     private array $categories;
+
     private ?int $imageId = null;
+
     private array $images;
+
     private array $options;
+
     private array $properties;
+
     private array $variants;
+
     private ?float $priceReference;
+
     private ?float $percent = 0;
+
     private ?Price $price = null;
+
     private bool $isAccordCadre = false;
+
     private ?Price $basePrice = null;
+
     private ?Seller $seller;
+
     private ?AccountAccordCadre $accountAccordCadre;
 
     public function getId(): ?int
@@ -62,7 +84,7 @@ final class Product implements \JsonSerializable
     }
 
     /**
-     * @param string|null $name
+     * @param  string|null  $name
      */
     public function setName(?string $name): void
     {
@@ -78,7 +100,7 @@ final class Product implements \JsonSerializable
     }
 
     /**
-     * @param string|null $reference
+     * @param  string|null  $reference
      */
     public function setReference(?string $reference): void
     {
@@ -94,7 +116,7 @@ final class Product implements \JsonSerializable
     }
 
     /**
-     * @param string|null $description
+     * @param  string|null  $description
      */
     public function setDescription(?string $description): void
     {
@@ -110,7 +132,7 @@ final class Product implements \JsonSerializable
     }
 
     /**
-     * @param array $categories
+     * @param  array  $categories
      */
     public function setCategories(array $categories): void
     {
@@ -126,7 +148,7 @@ final class Product implements \JsonSerializable
     }
 
     /**
-     * @param int|null $imageId
+     * @param  int|null  $imageId
      */
     public function setImageId(?int $imageId): void
     {
@@ -143,7 +165,7 @@ final class Product implements \JsonSerializable
     }
 
     /**
-     * @param array $images
+     * @param  array  $images
      */
     public function setImages(array $images): void
     {
@@ -159,7 +181,7 @@ final class Product implements \JsonSerializable
     }
 
     /**
-     * @param array $options
+     * @param  array  $options
      */
     public function setOptions(array $options): void
     {
@@ -175,7 +197,7 @@ final class Product implements \JsonSerializable
     }
 
     /**
-     * @param Property[]|array $properties
+     * @param  Property[]|array  $properties
      */
     public function setProperties(array $properties): void
     {
@@ -191,7 +213,7 @@ final class Product implements \JsonSerializable
     }
 
     /**
-     * @param array $variants
+     * @param  array  $variants
      */
     public function setVariants(array $variants): void
     {
@@ -207,7 +229,7 @@ final class Product implements \JsonSerializable
     }
 
     /**
-     * @param float|null $priceReference
+     * @param  float|null  $priceReference
      */
     public function setPriceReference(?float $priceReference): void
     {
@@ -223,7 +245,7 @@ final class Product implements \JsonSerializable
     }
 
     /**
-     * @param Price|null $price
+     * @param  Price|null  $price
      */
     public function setPrice(?Price $price): void
     {
@@ -239,7 +261,7 @@ final class Product implements \JsonSerializable
     }
 
     /**
-     * @param Price|null $basePrice
+     * @param  Price|null  $basePrice
      */
     public function setBasePrice(?Price $basePrice): void
     {
@@ -255,7 +277,7 @@ final class Product implements \JsonSerializable
     }
 
     /**
-     * @param Seller|null $seller
+     * @param  Seller|null  $seller
      */
     public function setSeller(?Seller $seller): void
     {
@@ -271,7 +293,7 @@ final class Product implements \JsonSerializable
     }
 
     /**
-     * @param string|null $conditionnement
+     * @param  string|null  $conditionnement
      */
     public function setConditionnement(?string $conditionnement): void
     {
@@ -287,7 +309,7 @@ final class Product implements \JsonSerializable
     }
 
     /**
-     * @param array $livraisons
+     * @param  array  $livraisons
      */
     public function setLivraisons(array $livraisons): void
     {
@@ -303,7 +325,7 @@ final class Product implements \JsonSerializable
     }
 
     /**
-     * @param float|null $percent
+     * @param  float|null  $percent
      */
     public function setPercent(?float $percent): void
     {
@@ -312,7 +334,7 @@ final class Product implements \JsonSerializable
 
     public function jsonSerialize()
     {
-        return  get_object_vars($this);
+        return get_object_vars($this);
     }
 
     /**
@@ -324,7 +346,7 @@ final class Product implements \JsonSerializable
     }
 
     /**
-     * @param bool $isAccordCadre
+     * @param  bool  $isAccordCadre
      */
     public function setIsAccordCadre(bool $isAccordCadre): void
     {
@@ -341,10 +363,11 @@ final class Product implements \JsonSerializable
     }
 
     /**
-     * @param AccountAccordCadre|null $accountAccordCadre
+     * @param  AccountAccordCadre|null  $accountAccordCadre
      */
     public function setAccountAccordCadre(?AccountAccordCadre $accountAccordCadre): void
     {
         $this->accountAccordCadre = $accountAccordCadre;
     }
+
 }

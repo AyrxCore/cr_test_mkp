@@ -10,7 +10,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UpplerSellerService extends HttpClientProvider
 {
-    private const IMG_PATH='https://uppler-platform-quantis.s3.eu-west-3.amazonaws.com/image/';
+
+    private const IMG_PATH = 'https://uppler-platform-quantis.s3.eu-west-3.amazonaws.com/image/';
 
     protected AdapterInterface $cache;
 
@@ -22,20 +23,19 @@ class UpplerSellerService extends HttpClientProvider
         string $adminTokenFile,
         string $httpCachePath,
         AdapterInterface $cache
-    )
-    {
+    ) {
         parent::__construct($env, $apiUrl, $adminClientId, $adminClientSecret, $adminTokenFile, $httpCachePath);
         $this->cache = $cache;
     }
 
-    public function getSellers($perPage = 16, $page = 1): array | null
+    public function getSellers($perPage = 16, $page = 1): array|null
     {
         $res = $this->request(
             'POST',
             $this->apiUrl . 'v1/buyer/search/company?perPage=' . $perPage . '&page=' . $page
         );
 
-        if (Response::HTTP_PARTIAL_CONTENT === $res->getStatusCode() || Response::HTTP_OK === $res->getStatusCode() ) {
+        if (Response::HTTP_PARTIAL_CONTENT === $res->getStatusCode() || Response::HTTP_OK === $res->getStatusCode()) {
             $upplerSellers = json_decode($res->getContent());
             $sellers = [];
             foreach ($upplerSellers->results as $upplerSeller) {
@@ -48,7 +48,7 @@ class UpplerSellerService extends HttpClientProvider
     }
 
 
-    public function getSeller(int $sellerId = null): Seller | null
+    public function getSeller(int $sellerId = null): Seller|null
     {
         $item = $this->cache->getItem('seller_' . $sellerId);
 
@@ -81,14 +81,16 @@ class UpplerSellerService extends HttpClientProvider
     {
         $seller = new Seller();
         $seller->setId($remoteSeller->id);
-        $seller->setName($remoteSeller->name);
+        //        $seller->setName($remoteSeller->name);
+        $seller->setName('sellerName');
         $avatar = null;
         if (!empty($remoteSeller->avatar_url)) {
-            $avatar =  $remoteSeller->avatar_url;
+            $avatar = $remoteSeller->avatar_url;
         } elseif (!empty($remoteSeller->avatar)) {
             $avatar = self::IMG_PATH . $remoteSeller->avatar;
         }
         $seller->setAvatar($avatar);
         return $seller;
     }
+
 }

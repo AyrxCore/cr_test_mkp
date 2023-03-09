@@ -16,6 +16,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class AddUserCommand extends Command
 {
+
     public function __construct(private UserService $userService)
     {
         parent::__construct();
@@ -25,8 +26,7 @@ class AddUserCommand extends Command
     {
         $this
             ->addArgument('login', InputArgument::REQUIRED, 'login')
-            ->addArgument('password', InputArgument::REQUIRED, 'password')
-        ;
+            ->addArgument('password', InputArgument::REQUIRED, 'password');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -35,9 +35,10 @@ class AddUserCommand extends Command
         $login = $input->getArgument('login');
         $password = $input->getArgument('password');
 
-        $this->userService->addUser($login,$password);
+        $this->userService->addUser($login, $password);
         $io->success('Votre utilisateur a bien été créé');
 
         return Command::SUCCESS;
     }
+
 }

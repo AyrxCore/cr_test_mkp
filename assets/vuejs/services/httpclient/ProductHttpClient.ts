@@ -1,5 +1,5 @@
 import BaseClientService from '@/vuejs/services/BaseClientService'
-import { Product } from '@/vuejs/types/Product'
+import {Product} from '@/vuejs/types/Product'
 
 export default class ProductHttpClient extends BaseClientService {
   public fetchProductsByParams<T extends []>(params): Promise<T> {
@@ -19,15 +19,15 @@ export default class ProductHttpClient extends BaseClientService {
 
   public findProductById<T extends []>(id: number): Promise<Product> {
     return this.apiClient
-        .get(`product/${id}`)
-        .then((response) => response.data)
+      .get(`product/${id}`)
+      .then((response) => response.data)
   }
 
   public findAccordsCadresByParams<T extends []>(params): Promise<T> {
     return this.apiClient
       .postForm<T>(
         'accords-cadre',
-        params
+        params,
       )
       .then((response) => response.data)
   }
@@ -40,7 +40,7 @@ export default class ProductHttpClient extends BaseClientService {
 
   public updateAccountAccordsCadresByParams<T extends []>(params): Promise<T> {
     return this.apiClient
-      .put<T>(`account_accord_cadres/${params.id}`,  params)
+      .post<T>(`accord-cadre-subscription`, params)
       .then((response) => response.data)
   }
 }

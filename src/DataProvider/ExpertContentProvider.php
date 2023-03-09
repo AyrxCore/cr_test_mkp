@@ -32,7 +32,7 @@ class ExpertContentProvider implements RestrictedDataProviderInterface
 
     public function getCollection(string $resourceClass, string $operationName = null, array $context = [])
     {
-        $filters = [];
+        $filters = ['enabled' => '1'];
         if (key_exists('filters', $context)) {
             foreach ($context['filters'] as $filter => $value) {
                 if ($filter === 'slug') {
@@ -45,10 +45,6 @@ class ExpertContentProvider implements RestrictedDataProviderInterface
         $expertsContents = [];
 
         foreach ($dynamicsEntities as $dynamicEntity) {
-            if ($dynamicEntity['is_enabled'] !== true) {
-                continue;
-            }
-
             $expertContent = new ExpertContent();
             $expertContent->hydrate($dynamicEntity);
             $expertsContents[] = $expertContent;

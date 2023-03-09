@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace App\DataPersister;
 
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
-use App\Entity\AccountAccordCadre;
+use App\Dto\AccountAccordCadre;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
 class AccountAccordCadrePersister implements ContextAwareDataPersisterInterface
 {
+
     #[Required]
     public EntityManagerInterface $em;
 
@@ -20,7 +21,7 @@ class AccountAccordCadrePersister implements ContextAwareDataPersisterInterface
     }
 
     /**
-     * @param AccountAccordCadre $data
+     * @param  AccountAccordCadre  $data
      */
     public function persist($data, array $context = [])
     {
@@ -41,4 +42,5 @@ class AccountAccordCadrePersister implements ContextAwareDataPersisterInterface
     {
         // TODO: Implement remove() method.
     }
+
 }

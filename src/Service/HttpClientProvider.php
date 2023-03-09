@@ -25,14 +25,16 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 abstract class HttpClientProvider
 {
+
     // Liste des codes retours http considérés comme success
-    private const HTTP_SUCCESS_RESPONSES = [
-      Response::HTTP_OK,
-      Response::HTTP_ACCEPTED,
-      Response::HTTP_CREATED,
-      Response::HTTP_NO_CONTENT,
-      Response::HTTP_PARTIAL_CONTENT
-    ];
+    private const HTTP_SUCCESS_RESPONSES
+        = [
+            Response::HTTP_OK,
+            Response::HTTP_ACCEPTED,
+            Response::HTTP_CREATED,
+            Response::HTTP_NO_CONTENT,
+            Response::HTTP_PARTIAL_CONTENT,
+        ];
 
     #[Required]
     public LoggerInterface $apiLogger;
@@ -81,7 +83,6 @@ abstract class HttpClientProvider
         $whithoutToken = false,
         $withCache = false
     ) {
-
         $client = HttpClient::create();
 
         if ($withCache) {
@@ -97,7 +98,7 @@ abstract class HttpClientProvider
             $this->apiLogger->info("Token utilisé  " . $this->adminToken . ' endpoint ' . $url);
             $res = $client->request($method, $url, $options);
             if (Response::HTTP_UNAUTHORIZED === $res->getStatusCode()) {
-                $this->apiLogger->critical('token ' . $this->adminToken  . ' retour 401 ');
+                $this->apiLogger->critical('token ' . $this->adminToken . ' retour 401 ');
                 $this->checkResponse($res, $method, $origUrl, $origOptions, $isAdmin);
                 $this->computeHeaders($origUrl, $origOptions, $isAdmin, $whithoutToken);
                 $res = $client->request($method, $origUrl, $origOptions);
@@ -109,11 +110,11 @@ abstract class HttpClientProvider
             $this->apiLogger->info($res->getStatusCode() . " requete OK url ==>  " . $url);
             return $res;
         } catch (ClientException $e) {
-            $this->apiLogger->critical("Client Error " . $url . " : " .$e->getResponse()->getContent());
+            $this->apiLogger->critical("Client Error " . $url . " : " . $e->getResponse()->getContent());
         } catch (ServerException $e) {
-            $this->apiLogger->critical("Server Error " . $url . " : " .$e->getResponse()->getContent());
+            $this->apiLogger->critical("Server Error " . $url . " : " . $e->getResponse()->getContent());
         } catch (\Exception $e) {
-            $this->apiLogger->critical("Error " . $url . " : " .$e->getMessage());
+            $this->apiLogger->critical("Error " . $url . " : " . $e->getMessage());
         }
         return false;
     }
@@ -125,7 +126,7 @@ abstract class HttpClientProvider
 
         // pas de token nécessaire et env de dév on ajoute juste le header http_basic
         if ('dev' === $this->env) {
-            $options["auth_basic"] = ["quantis","jj0tFWJulNYjDc"];
+            $options["auth_basic"] = ["quantis", "jj0tFWJulNYjDc"];
         }
 
         if ($wihthoutToken) {
@@ -143,12 +144,12 @@ abstract class HttpClientProvider
 
         if ('dev' === $this->env) {
             // ajoute token admin à l'url
-            $url .=  (preg_match('/([^?&=#]+)=([^&#]*)/', $url)) ?  '&' : '?' ;
+            $url .= (preg_match('/([^?&=#]+)=([^&#]*)/', $url)) ? '&' : '?';
             $url .= 'access_token=' . $accessToken;
         } else {
             //ajoute le Bearer token user dans le header
             $options["headers"] = [
-                'Authorization' => 'Bearer ' . $accessToken
+                'Authorization' => 'Bearer ' . $accessToken,
             ];
         }
     }
@@ -163,8 +164,8 @@ abstract class HttpClientProvider
     ): void {
         $errorDatas = json_decode($res->getContent(false));
         // le token a expiré
-        if (!is_object($errorDatas->error) &&
-            'invalid_grant' === $errorDatas->error
+        if (!is_object($errorDatas->error)
+            && 'invalid_grant' === $errorDatas->error
         ) {
             // il s'agit d'une requête admin donc on renégocie un token admin et on relance la requete
             if ($isAdmin) {
@@ -181,7 +182,7 @@ abstract class HttpClientProvider
                 $accessToken = $this->getUserToken($account);
                 // ici le remplacement du token user
                 $options["headers"] = [
-                    'Authorization' => 'Bearer ' . $accessToken
+                    'Authorization' => 'Bearer ' . $accessToken,
                 ];
                 $this->request($method, $url, $options);
             }
@@ -207,7 +208,7 @@ abstract class HttpClientProvider
                 }
             }
         } else {
-            $payload =  $this->getToken($this->adminClientId, $this->adminClientSecret);
+            $payload = $this->getToken($this->adminClientId, $this->adminClientSecret);
             if (null !== $payload) {
                 $fp = fopen($this->adminTokenFile . 'token.txt', 'w');
                 fwrite(
@@ -242,17 +243,17 @@ abstract class HttpClientProvider
 
 
     //Obtient un accesssToken depuis l'API Uppler pour le user propriétaire des clientId/clientSecret
-    public function getToken(string $clientId, string $clientSecret) : object | null
+    public function getToken(string $clientId, string $clientSecret): object|null
     {
         $res = $this->request(
             'POST',
             $this->apiUrl . 'oauth/v2/token',
             [
                 "body" => [
-                    "grant_type" => "client_credentials",
-                    "client_id" => $clientId,
-                    "client_secret" => $clientSecret
-                ]
+                    "grant_type"    => "client_credentials",
+                    "client_id"     => $clientId,
+                    "client_secret" => $clientSecret,
+                ],
             ],
             false,
             true

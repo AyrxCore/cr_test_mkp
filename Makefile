@@ -18,9 +18,9 @@ lint:
 build:
 	git pull origin master
 	cp .env.prod .env
-	docker exec marketplace-php-fpm-1 composer install
-	docker exec marketplace-php-fpm-1 php bin/console doctrine:migrations:migrate
-	docker  exec marketplace-php-fpm-1 php bin/console lexik:jwt:generate-keypair
+	docker exec marketplace-php-fpm-mkp-1 composer install
+	docker exec marketplace-php-fpm-mkp-1 php bin/console doctrine:migrations:migrate
+	docker  exec marketplace-php-fpm-mkp-1 php bin/console lexik:jwt:generate-keypair
 	docker exec marketplace-nodejs-1  yarn install
 	docker exec marketplace-nodejs-1  yarn build
 
