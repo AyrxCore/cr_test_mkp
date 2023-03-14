@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f239d3f9e9edda25886986d0b1ba54a5",
+    "content-hash": "794a5126fc77b66be535c9cf8da080f5",
     "packages": [
         {
             "name": "api-platform/core",
@@ -5193,6 +5193,72 @@
                 }
             ],
             "time": "2022-10-27T07:55:40+00:00"
+        },
+        {
+            "name": "symfony/mailchimp-mailer",
+            "version": "v5.4.19",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/mailchimp-mailer.git",
+                "reference": "7d11f4124c634f078e1bb2ec54d4e205b254ed87"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/mailchimp-mailer/zipball/7d11f4124c634f078e1bb2ec54d4e205b254ed87",
+                "reference": "7d11f4124c634f078e1bb2ec54d4e205b254ed87",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.5",
+                "psr/event-dispatcher": "^1",
+                "symfony/mailer": "^5.1|^6.0"
+            },
+            "require-dev": {
+                "symfony/http-client": "^4.4|^5.0|^6.0"
+            },
+            "type": "symfony-mailer-bridge",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Mailer\\Bridge\\Mailchimp\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Mailchimp Mailer Bridge",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/mailchimp-mailer/tree/v5.4.19"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-01-01T08:32:19+00:00"
         },
         {
             "name": "symfony/mailer",
