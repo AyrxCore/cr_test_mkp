@@ -1,6 +1,6 @@
 <template>
   <div
-    class="mx-auto flex h-[466px] w-[392px] flex-col items-center justify-start rounded-md bg-white px-6 py-2 lg:h-[516px]"
+    class="mx-auto flex h-[466px] w-[392px] flex-col items-center justify-start rounded-md bg-white px-6 py-4 lg:h-[516px]"
   >
     <!-- Bloc header -->
     <div class="flex h-[50px] w-full items-center justify-between">
@@ -10,7 +10,7 @@
         <img
           :src="getUpplerImage(props.product.seller.avatar)"
           :alt="props.product.seller.name"
-          class="w-full h-full object-contain"
+          class="h-full w-full object-contain"
         />
       </div>
       <!-- <div class="flex items-center justify-end">
@@ -29,7 +29,12 @@
         :src="getUpplerImage(props.product.images[0])"
         :alt="props.product.name"
         class="flex h-full w-full max-w-max cursor-pointer items-center"
-        @click="$router.push(`/app/product/${props.product.id}`)"
+        @click="
+          $router.push({
+            name: ProductPageList.PRODUCT,
+            params: { id: props.product.id },
+          })
+        "
       />
     </div>
     <!-- Fin bloc image -->
@@ -47,7 +52,7 @@
           >{{ props.product.name }}</RouterLink
         >
       </h3>
-      <div class="mt-2 h-[100px]">
+      <div class="h-[100px]">
         <p
           class="truncate-custom truncate-custom-3 mt-1 w-full justify-start text-left text-sm text-gray-400 md:text-base lg:text-lg"
           v-html="props.product.description"
@@ -66,37 +71,38 @@
       <span
         v-if="showLineThroughPrice"
         :class="{
-          'text-sm text-gray-500 line-through  md:text-base lg:text-lg':
+          'text-sm text-gray-500 line-through md:text-base lg:text-lg':
             product.price?.displayPrice,
           'text-sm font-bold text-primary md:text-base lg:text-lg':
             product.price === null,
         }"
       >
-        {{ props.product.priceReference }}€ HT
+        {{ formatPrice(props.product.priceReference) }}€ HT
       </span>
     </div>
     <!-- Fin bloc prix -->
 
     <!-- Bloc quantité -->
-    <div class="mt-5 flex w-full justify-between">
+    <div class="flex w-full justify-between">
       <div class="flex items-center justify-start">
-        <span class="text-sm text-gray-500">Qté: </span>
-        <select class="rounded-md border border-gray-300">
+        <span class="mr-2 text-sm text-gray-500">Qté :</span>
+        <select v-model="quantity" class="rounded-md border border-gray-300">
           <option v-for="i in 5" :key="i" value="{{i}}">
             {{ i }}
           </option>
         </select>
       </div>
-      <ButtonAddToCartComponent :product="props.product" />
+      <ButtonAddToCartComponent :product="props.product" :quantity="quantity" />
     </div>
     <!-- Bloc quantité -->
   </div>
 </template>
 <script lang="ts" setup>
-import { computed, PropType } from 'vue'
+import { computed, PropType, ref } from 'vue'
 
 import ButtonAddToCartComponent from '@/vuejs/modules/shared/ButtonAddToCartComponent.vue'
 
+import { formatPrice } from '@/vuejs/services/utils'
 import { Product } from '@/vuejs/types/Product'
 import { getUpplerImage } from '@/vuejs/services/utils'
 import { ProductPageList } from '@/vuejs/router/pages-list'
@@ -107,6 +113,8 @@ const props = defineProps({
     type: Object as PropType<Product>,
   },
 })
+
+const quantity = ref<number>(1)
 
 const showLineThroughPrice = computed(() => {
   return (

@@ -2,7 +2,8 @@
   <BaseTemplate title="Qantis - MarketPlace">
     <div
       v-if="isLoading"
-      class="w-full flex h-20 justify-center items-center mt-5">
+      class="mt-5 flex h-20 w-full items-center justify-center"
+    >
       <LoaderSharedComponent
         class="text-secondary"
         classes="loader-xl loader"
@@ -46,7 +47,6 @@
               :navigation="true"
               :show-nav="true"
               :thumbs="{ swiper: thumbsSwiper }"
-              @on-slide-change="onSlideChange"
             >
               <SwiperSlide
                 v-for="(img, key) in product.images"
@@ -76,7 +76,6 @@
                   spaceBetween: 20,
                 },
               }"
-              @on-slide-change="onSlideChange"
               @swiper="setThumbsSwiper"
             >
               <SwiperSlide
@@ -87,7 +86,7 @@
                 <img
                   :src="getUpplerImage(img)"
                   alt="Picture"
-                  class="items-center rounded rounded-xl bg-white"
+                  class="items-center rounded-xl bg-white"
                 />
               </SwiperSlide>
             </CarouselListSharedComponent>
@@ -300,7 +299,7 @@ const isLoading = ref<boolean>(false)
 const quantity = ref<number>(1)
 const product = ref<Product>()
 
-const breadcrumbUrl = ((product: Product|null) => {
+const breadcrumbUrl = (product: Product | null) => {
   const breadcrumb = []
   if (product) {
     Object.entries(product.categories).forEach(([key, value], index) => {
@@ -312,7 +311,7 @@ const breadcrumbUrl = ((product: Product|null) => {
   }
 
   return breadcrumb
-})
+}
 
 const setThumbsSwiper = (swiper) => {
   thumbsSwiper.value = swiper
@@ -321,12 +320,12 @@ const setThumbsSwiper = (swiper) => {
 watch(
   () => route.params.id as string,
   async (id: string) => {
-        isLoading.value = true
-        if (id) {
-          product.value = await productStore.getProductById(id)
-        }
-        isLoading.value = false
-      },
+    isLoading.value = true
+    if (id) {
+      product.value = await productStore.findProductById(id)
+    }
+    isLoading.value = false
+  },
 
   { immediate: true },
 )
