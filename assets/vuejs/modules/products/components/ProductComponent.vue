@@ -87,7 +87,7 @@
       <div class="flex items-center justify-start">
         <span class="mr-2 text-sm text-gray-500">Qté :</span>
         <select v-model="quantity" class="rounded-md border border-gray-300">
-          <option v-for="i in 5" :key="i" value="{{i}}">
+          <option v-for="i in 5" :key="i" :value="i">
             {{ i }}
           </option>
         </select>
