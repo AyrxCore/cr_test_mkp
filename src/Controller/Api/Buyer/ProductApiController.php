@@ -134,6 +134,27 @@ class ProductApiController extends AbstractController
         return new JsonResponse($products);
     }
 
+    #[Route('/api/categories-list', name: 'categories_list', methods: ['POST'])]
+    public function categoriesList(): JsonResponse
+    {
+        $session= $this->requestStack->getSession();
+        $session->start();
+
+        if (!$session->has('account') || empty($session->get('account'))) {
+            return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        $resultat = $this->upplerProductService->findAllCategories((string)$session->get('account')->getId());
+
+        $categories = (array)$resultat;
+        usort($categories, function($a, $b) {
+            return strcmp($a->name, $b->name);
+        });
+
+        $listMenu = array_slice($categories, 0, 6);
+        return new JsonResponse(['categories' => $categories, 'menu' => $listMenu]);
+    }
+
     #[Route('/api/product/{id}', name: 'get_product')]
     public function product(int $id, NormalizerInterface $normalizer): JsonResponse
     {

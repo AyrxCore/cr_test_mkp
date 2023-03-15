@@ -5,12 +5,12 @@
     <!-- Bloc header -->
     <div class="flex h-[50px] w-full items-center justify-between">
       <div
-        class="flex h-[40px] w-[78px] items-center justify-start rounded-md bg-white"
+        class="flex h-[50px] w-[78px] items-center justify-start rounded-md bg-white"
       >
         <img
           :src="getUpplerImage(props.product.seller.avatar)"
           :alt="props.product.seller.name"
-          class="flex"
+          class="w-full h-full object-contain"
         />
       </div>
       <!-- <div class="flex items-center justify-end">

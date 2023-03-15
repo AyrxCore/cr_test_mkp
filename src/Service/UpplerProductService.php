@@ -94,6 +94,7 @@ class UpplerProductService extends HttpClientProvider
                 'results_count' => $remoteProducts->results_count,
                 'page'          => $remoteProducts->page,
                 'results'       => $products,
+                'parameters'       => $remoteProducts->parameters,
             ];
         } else {
             return $products;
@@ -126,6 +127,32 @@ class UpplerProductService extends HttpClientProvider
         $product = json_decode($res->getContent());
 
         return $this->hydrateProduct($product, $accountId);
+    }
+
+    public function findAllCategories(string $accountId, int $page = 1, int $perPage = 1): \stdClass | null
+    {
+        $item = $this->cache->getItem('categories_' . $accountId);
+        if (!$item->isHit()) {
+            $session = $this->requestStack->getSession();
+            $session->start();
+
+            $res = $this->request(
+                'POST',
+                $this->apiUrl . 'v1/buyer/search/product?page='.$page.'&perPage=' . $perPage,
+            );
+
+            if (Response::HTTP_OK !== $res->getStatusCode()) {
+                throw new NotFoundHttpException('Aucune catégorie n\' a été trouvée');
+            }
+            $remoteResults = json_decode($res->getContent());
+
+            $item->set($remoteResults->filters->category);
+            $item->expiresAfter(new \DateInterval('P1D')); // the item will be cached for 1 day
+            $this->cache->save($item);
+        }
+
+        return $item->get();
+
     }
 
     /**
@@ -234,55 +261,42 @@ class UpplerProductService extends HttpClientProvider
     private function hydrateFilters($remoteFilters): array
     {
         $filters = [];
+        if(!empty($remoteFilters->company)) {
+            $filters['companies'] = $remoteFilters->company;
+        }
 
-        foreach ($remoteFilters->property as $property) {
-            if ($property->id === 217) {
-                continue;
-            }
-            $child = [];
-            $newChild = new Property();
-            $newChild->setId(0);
-            $newChild->setName('-- ' . $property->name . ' --');
-            $newChild->setValue('');
-            $newChild->setChecked(null);
-            $child[] = $newChild;
-            foreach ($property->child as $propChild) {
-                $newChild = new Property();
-                $newChild->setId($propChild->id);
-                $newChild->setName($propChild->name);
-                $newChild->setValue($propChild->value);
-                $newChild->setChecked($propChild->checked);
-                $child[] = $newChild;
-            }
+        if(!empty($remoteFilters->property)) {
+            foreach ($remoteFilters->property as $property) {
+                if ($property->id === 217) {
+                    continue;
+                }
+                $child = [];
+                foreach ($property->child as $propChild) {
+                    $newChild = new Property();
+                    $newChild->setId($propChild->id);
+                    $newChild->setName($propChild->name);
+                    $newChild->setValue($propChild->value);
+                    $newChild->setChecked($propChild->checked);
+                    $child[$propChild->value] = $newChild;
+                }
 
-            $filters['properties'][] = [
-                'id'      => $property->id,
-                'name'    => $property->name,
-                'count'   => $property->count,
-                'checked' => $property->checked,
-                'type'    => $property->type,
-                'child'   => $child,
-            ];
+                $filters['properties'][] = [
+                    'id'      => $property->id,
+                    'name'    => $property->name,
+                    'count'   => $property->count,
+                    'checked' => $property->checked,
+                    'type'    => $property->type,
+                    'child'   => $child,
+                ];
+            }
+        }
+
+
+        if(!empty($remoteFilters->category)) {
+            $filters['categories'] = $remoteFilters->category;
         }
 
         return $filters;
-    }
-
-    private function initAccordCadre(string $accountId, $remoteProduct): AccountAccordCadre
-    {
-        $accountAccordCadre = $this->em->getRepository(AccountAccordCadre::class)->findOneBy(
-            ['accordCadreId' => $remoteProduct->id, 'accountId' => $accountId]
-        );
-        if (null === $accountAccordCadre) {
-            $accountAccordCadre = new AccountAccordCadre();
-            $accountAccordCadre->setAccountId($accountId);
-            $accountAccordCadre->setStatus(Product::PROCESS_STATUS_NOT_ACTIVATED);
-            $accountAccordCadre->setAccordCadreId($remoteProduct->id);
-            $this->em->persist($accountAccordCadre);
-            $this->em->flush();
-        }
-
-        return $accountAccordCadre;
     }
 
     private function initHydrateProduct($remoteProduct, $product)

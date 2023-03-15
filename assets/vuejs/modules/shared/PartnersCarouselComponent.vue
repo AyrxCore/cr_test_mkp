@@ -19,12 +19,17 @@
         :key="key"
         class="flex h-full items-center justify-center overflow-hidden rounded-lg bg-white"
       >
-        <img
+        <RouterLink
           v-if="showCarouselConnected"
-          :src="getUpplerImage(seller.avatar)"
-          :alt="seller.name"
-          class="pointer h-[107px] w-full cursor-pointer object-contain"
-        />
+          :to="{name: ProductPageList.PRODUCTS, query: {company: seller.id, page: 1}}"
+          replace
+        >
+          <img
+            :src="getUpplerImage(seller.avatar)"
+            :alt="seller.name"
+            class="pointer h-[107px] w-full cursor-pointer object-contain"
+          />
+        </RouterLink>
         <img
           v-else
           :src="seller.avatar"
@@ -62,7 +67,7 @@ import imgBerner from '@/vuejs/assets/img/samples/berner.png'
 import imgSynergie from '@/vuejs/assets/img/samples/synergie.jpeg'
 import { useSellerStore } from '@/vuejs/stores/seller'
 import { useUserStore } from '@/vuejs/stores/user'
-import { PartnersPageList } from '@/vuejs/router/pages-list'
+import { ProductPageList } from '@/vuejs/router/pages-list'
 
 const sellerStore = useSellerStore()
 const userStore = useUserStore()

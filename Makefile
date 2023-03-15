@@ -1,5 +1,5 @@
 php-bash:
-	docker exec -it marketplace_php-fpm-mkp_1 bash
+	docker exec -it marketplace-php-fpm-mkp-1 bash
 
 node-bash:
 	docker exec -it marketplace-nodejs-1 sh

@@ -1,68 +1,58 @@
 <template>
-  <div class="mx-auto flex flex-col rounded-md bg-white px-6 py-2">
-    <div class="mx-auto items-center">
-      <a href="/app/actualite">
-        <img
-          :src="category.image"
-          alt="Image catégorie"
-          class="mx-auto h-[247px!important] w-[393px!important]"
-        />
-      </a>
-    </div>
     <h3
-      class="mt-6 inline items-center text-left text-sm font-bold text-primary md:text-base lg:text-lg xl:text-[22px]"
+      class="mt-6 inline items-center text-left text-primary flex"
+      :class="{
+              'text-sm font-bold md:text-base lg:text-lg xl:text-[22px]': props.category.parent === null,
+              'flex flex-row-reverse justify-end': props.category.parent !== null
+            }"
     >
-      <a href="#">{{ category.name }}</a>
-      <ChevronRightIconComponent
-        class="ml-1 inline cursor-pointer stroke-primary stroke-[3px] transition ease-in"
-        :class="{ 'mt-4 rotate-90 ease-in-out': showSection === category.id }"
-        @click="showSection = showSection === category.id ? -1 : category.id"
+      <RouterLink :to="{name: ProductPageList.PRODUCTS, query: { category: category.id, page: 1}}" replace>
+        {{ props.category.name }}
+      </RouterLink>
+      <Chevron2RightIconComponent
+        v-if="props.category.child"
+        :class="{
+                'w-10 font-bold h-5 ml-2': props.category.parent === null,
+                'mr-2': props.category.parent !== null,
+                'mt-4 rotate-90 ease-in-out': showChildren
+              }"
+        @click="toggleChildren"
       />
     </h3>
-    <span
-      v-if="category.child"
-      v-for="(children, keyChildren) in category.child"
-      v-show="showSection === category.id"
-      :key="keyChildren"
-      class="ml-3 text-sm text-primary lg:text-base xl:text-lg"
+    <div
+      v-if="showChildren"
+      class="ml-5"
     >
-      <span class="inline items-center">
-        <a href="#">{{ children.name }}</a>
-        <ChevronRightIconComponent
-          class="ml-5 inline cursor-pointer stroke-primary transition ease-in"
-          :class="{
-            'mt-3 rotate-90 ease-in-out': showSubSection === keyChildren,
-          }"
-          @click="
-            showSubSection = showSubSection === keyChildren ? -1 : keyChildren
-          "
-        />
-      </span>
-      <span
-        v-if="children.child"
-        v-for="(subChildren, keySubChildren) in children.child"
-        v-show="showSubSection === keyChildren"
-        :key="keySubChildren"
-        class="ml-3 flex items-center"
-      >
-        <a href="#">{{ subChildren.name }}</a>
-      </span>
-    </span>
-  </div>
+      <CategoryComponent
+        v-for="cat in props.category.child"
+        :key="cat.id"
+        :category="cat"
+      />
+    </div>
+
 </template>
 <script lang="ts" setup>
-import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightIconComponent.vue'
 import { ref } from 'vue'
+import Chevron2RightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
+import { ProductPageList } from '@/vuejs/router/pages-list'
 
 const props = defineProps({
   category: {
     required: true,
     type: Object,
   },
+  space: {
+    type: Number,
+    default: 0,
+  }
 })
 
-const showSection = ref<number>()
-const showSubSection = ref<number>()
+const showChildren = ref<boolean>(false)
+
+const toggleChildren = (() =>  {
+  showChildren.value = !showChildren.value
+})
+
 </script>
 
 <style scoped></style>

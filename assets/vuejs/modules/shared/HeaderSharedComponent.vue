@@ -22,15 +22,19 @@ import MenuComponent from '@/vuejs/modules/shared/header-component/MenuComponent
 import AccountComponent from '@/vuejs/modules/shared/header-component/AccountComponent.vue'
 import LogoComponent from '@/vuejs/modules/shared/header-component/LogoComponent.vue'
 import SearchComponent from '@/vuejs/modules/shared/header-component/SearchComponent.vue'
-
-import { useUserStore } from '@/vuejs/stores/user'
 import router from '@/vuejs/router'
+import { useUserStore } from '@/vuejs/stores/user'
 import { ProductPageList } from '@/vuejs/router/pages-list'
+import { useProductStore } from '@/vuejs/stores/product'
 
 const userStore = useUserStore()
+const productStore = useProductStore()
 const { user } = storeToRefs(userStore)
 
 const search = (event) => {
+  productStore.setSelectedProperty(null)
+  productStore.setSelectedCategory(null)
+  productStore.setSelectedCompany(null)
   router.push({
     name: ProductPageList.PRODUCTS,
     query: {

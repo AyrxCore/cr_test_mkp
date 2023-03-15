@@ -19,12 +19,13 @@ import StickyContactButtons from '@/vuejs/modules/shared/StickyContactButtonsCom
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import ArrowLeftIconComponent from '@/vuejs/modules/shared/icon/ArrowLeftIconComponent.vue'
 import FormComponent from '@/vuejs/modules/contact/component/FormComponent.vue'
-
+import { useCategoryStore } from '@/vuejs/stores/category'
 import { useBuyerCompanyStore } from '@/vuejs/stores/buyer_company'
 import { useCartStore } from '@/vuejs/stores/cart'
 
 const cartStore = useCartStore()
 const companyStore = useBuyerCompanyStore()
+const categoryStore = useCategoryStore()
 
 const props = defineProps({
   component: {
@@ -36,7 +37,8 @@ const props = defineProps({
 
 onBeforeMount(async () => {
   if (props.component === '') {
-    await companyStore.getAddresses()
+    await companyStore.getAddresses
+    await categoryStore.initAllCategories()
     await cartStore.getCart()
   }
 })

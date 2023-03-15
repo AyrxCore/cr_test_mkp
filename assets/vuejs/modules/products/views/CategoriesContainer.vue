@@ -14,13 +14,37 @@
           aux conditions négociées
         </p>
       </div>
-
       <div
-        class="m-auto grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        v-if="categories.length < 1"
+        class="w-full flex h-16 justify-center items-center"
       >
-        <div v-for="(category, key) in listItemsCategories" :key="key">
-          <CategoryComponent :category="category" />
+        <LoaderSharedComponent
+          class="text-secondary"
+          classes="loader-xl loader"
+        />
+      </div>
+      <div
+        v-else
+        class="m-auto grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-cols-max"
+      >
+        <div
+          v-for="category in categories"
+          :key="category.id"
+        >
+          <div class="bg-white p-5 rounded-xl">
+            <img
+              v-if="category.image"
+              :src="category.image"
+              :alt="category.name"
+              class="h-[210px]"
+            />
+            <CategoryComponent
+              :category="category"
+            />
+          </div>
+
         </div>
+
       </div>
     </div>
   </BaseTemplate>
@@ -29,38 +53,17 @@
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
-import { getImage, listCategories } from '@/vuejs/services/utils'
-import defaultImage from '@/vuejs/assets/img/default-image.png'
 import { computed } from 'vue'
+import { useCategoryStore } from '@/vuejs/stores/category'
 import CategoryComponent from '@/vuejs/modules/products/components/CategoryComponent.vue'
+import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 
-const listItemsCategories = computed(() => {
-  const categories = []
+const categoryStore = useCategoryStore()
 
-  listCategories.value.forEach((value, index) => {
-    const children = []
-    for (let i = 0; i < 3; i++) {
-      const subChildren = []
-      for (let i = 0; i < 3; i++) {
-        subChildren.push({
-          name: 'Sous-catégorie ' + i,
-        })
-      }
-      children.push({
-        name: 'Catégorie ' + i,
-        child: subChildren,
-      })
-    }
-    categories.push({
-      id: index,
-      name: value,
-      image: getImage(defaultImage),
-      child: children,
-    })
-  })
-  console.log(categories)
-  return categories
+const categories = computed(() => {
+  return categoryStore.categories
 })
+
 </script>
 
 <style scoped></style>

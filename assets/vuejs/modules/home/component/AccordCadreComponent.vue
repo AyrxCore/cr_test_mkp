@@ -3,8 +3,8 @@
     <div class="mx-auto">
       <img :src="properties.logo_partenaire" alt="Image produit" />
     </div>
-    <p class="my-8 text-sm font-normal text-white sm:text-lg">
-      Découvrez ou téléchargez les conditions négociées de ce partenaire
+    <p class="my-8 text-sm font-normal text-white sm:text-lg uppercase text-center">
+      {{ accord.name }}
     </p>
 
     <RouterLink

@@ -120,58 +120,15 @@
           </p>
         </div>
       </div>
-      <div class="md:col-span-2 md:row-span-2">
-        <div
-          class="m-auto my-2 flex flex-col pt-4 md:my-4 md:grid md:grid-cols-3 md:gap-4 md:px-6 lg:px-3"
-        >
-          <div class="px-2 md:px-0 lg:px-2">
-            <h3 class="mb-7 md:mb-4 lg:mb-7">Nos catégories d'achats</h3>
-            <ul>
-              <li><a href="#">Avantages salariés</a></li>
-              <li><a href="#">Certifications</a></li>
-              <li><a href="#">Chimie des batiments et des process</a></li>
-              <li><a href="#">Conseils</a></li>
-              <li><a href="#">Eclairage</a></li>
-              <li><a href="#">Energie</a></li>
-              <li><a href="#">Equipements ateliers</a></li>
-              <li>
-                <a href="#"
-                  >Equipements de protections <br />
-                  individuelle</a
-                >
-              </li>
-            </ul>
-          </div>
-          <div class="px-2 md:px-0 lg:px-2">
-            <ul class="mt-0 md:mb-7 md:mb-4 md:mt-[4rem] lg:mb-7 lg:mt-[3rem]">
-              <li><a href="#">Formation</a></li>
-              <li><a href="#">Fourniture de bureaux</a></li>
-              <li><a href="#">Gestion des déchets</a></li>
-              <li><a href="#">Hygiène et produits d'entretien</a></li>
-              <li><a href="#">Informatique et bureautique</a></li>
-              <li><a href="#">Interim</a></li>
-              <li><a href="#">Location de matériels</a></li>
-              <li><a href="#">Matériaux</a></li>
-              <li><a href="#">Mobilier et agencement</a></li>
-            </ul>
-          </div>
-          <div class="px-2 md:px-0 lg:px-2">
-            <ul class="mt-0 mb-7 md:mb-4 md:mt-[4rem] lg:mb-7 lg:mt-[3rem]">
-              <li><a href="#">Outillage</a></li>
-              <li><a href="#">Peinture</a></li>
-              <li><a href="#">Quincaillerie</a></li>
-              <li><a href="#">Rubans et adhésifs</a></li>
-              <li>
-                <a href="#"
-                  >Sécurité, maintenance et <br />entretien des locaux</a
-                >
-              </li>
-              <li><a href="#">Services généraux</a></li>
-              <li><a href="#">Téléphonie</a></li>
-              <li><a href="#">Véhicules</a></li>
-            </ul>
-          </div>
-        </div>
+      <div class="md:col-span-2 md:row-span-2 mt-4">
+        <h3 class="mb-5 md:mb-4 lg:mb-7 px-2">Nos catégories d'achats</h3>
+        <ul class="three-column-list">
+          <li v-for="category in categories" :key="category.id" class="px-2">
+            <RouterLink :to="{name: ProductPageList.PRODUCTS, query: { category: category.id, page: 1}}" replace>
+              {{ category.name }}
+            </RouterLink>
+          </li>
+        </ul>
       </div>
     </div>
     <hr class="m-auto w-11/12 border md:max-w-screen-2xl" />
@@ -185,8 +142,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useUserStore } from '@/vuejs/stores/user'
-import { storeToRefs } from 'pinia'
 import { getImage } from '@/vuejs/services/utils'
 import qantisLogo from '@/vuejs/assets/img/logo_qantis_footer.png'
 import ecologieLogo from '@/vuejs/assets/img/coq_vert_footer_logo.png'
@@ -200,9 +155,10 @@ import MailIconComponent from '@/vuejs/modules/shared/icon/MailIconComponent.vue
 import PhoneIconComponent from '@/vuejs/modules/shared/icon/PhoneIconComponent.vue'
 import CalendarCheckIconComponent from '@/vuejs/modules/shared/icon/CalendarCheckIconComponent.vue'
 import { MAIL_ANIMATION, PHONE_ANIMATION } from '../../services/const'
+import { useCategoryStore } from '@/vuejs/stores/category'
+import { computed } from 'vue'
+import { ProductPageList } from '@/vuejs/router/pages-list'
 
-const userStore = useUserStore()
-const { user } = storeToRefs(userStore)
 const qantisLogoImg = getImage(qantisLogo)
 const ecologieLogoImg = getImage(ecologieLogo)
 const lemonwayLogoImg = getImage(lemonwayLogo)
@@ -211,9 +167,20 @@ const linkedInLogoImg = getImage(linkedInLogo)
 const twitterLogoImg = getImage(twitterLogo)
 const youtubeLogoImg = getImage(youtubeLogo)
 const facebookLogoImg = getImage(facebookLogo)
+
+const categoryStore = useCategoryStore()
+
+const categories = computed(() => {
+  return categoryStore.categories
+})
 </script>
 
 <style lang="scss">
+
+.three-column-list {
+  @apply columns-1 md:columns-2 lg:columns-3 p-0 m-0;
+}
+
 @import 'assets/style/_variables.scss';
 .footer {
   background-color: $primary;

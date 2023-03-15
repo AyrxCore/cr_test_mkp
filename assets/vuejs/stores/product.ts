@@ -12,6 +12,9 @@ export interface ProductStoreState {
   filters: Filter[]
   productsSelection: Product[]
   cart: []
+  selectedCategoryId?: string
+  selectedProperties?: object
+  selectedCompanyId?: string
 }
 
 export const useProductStore = defineStore({
@@ -21,6 +24,9 @@ export const useProductStore = defineStore({
     filters: [],
     productsSelection: [],
     cart: [],
+    selectedCategoryId: null,
+    selectedProperties: null,
+    selectedCompanyId: null,
   }),
 
   actions: {
@@ -38,13 +44,7 @@ export const useProductStore = defineStore({
         console.log(error)
       }
     },
-    async fetchProductsWithFilterByParams(params) {
-      try {
-        return await this.fetchProductsByParams(params)
-      } catch (error) {
-        console.log(error)
-      }
-    },
+
     async findProductById(id) {
       const alertStore = useAlertStore()
       try {
@@ -69,5 +69,15 @@ export const useProductStore = defineStore({
           )
       }
     },
+    setSelectedCategory(categoryId) {
+      this.selectedCategoryId = categoryId
+    },
+    setSelectedProperty(property) {
+      this.selectedProperties = property
+    },
+    setSelectedCompany(companyId) {
+      this.selectedCompanyId = companyId
+    },
+
   },
 })

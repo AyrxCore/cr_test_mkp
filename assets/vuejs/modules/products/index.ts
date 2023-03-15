@@ -23,6 +23,13 @@ export const status = ref({
   activated: 'ACTIVATED',
 })
 
+export const filterType = {
+  category: 'CATEGORY',
+  property: 'PROPERTY',
+  company: 'COMPANY',
+  name: 'NAME',
+}
+
 export const productsTopVenteHomepage = [
   {
     name: 'Souris optique filaire bleu',

@@ -79,30 +79,7 @@
       </div>
 
       <PartnersCarousel class="mt-5" />
-
-      <div class="mt-16 text-center">
-        <h3 class="home-subtitle font-bold text-primary">
-          Nos catégories de produits et d'accords-cadres
-        </h3>
-      </div>
-      <div class="mt-5 flex w-full text-lg sm:flex">
-        <DropdownListComponent>
-          <template #button-label> Toutes les catégories</template>
-          <template #content>
-            <div class="list-categories">
-              <div
-                v-for="(categorie, id) in listCategories"
-                :key="id"
-                class="list-categories-items"
-              >
-                <a href="#">
-                  {{ categorie }}
-                </a>
-              </div>
-            </div>
-          </template>
-        </DropdownListComponent>
-      </div>
+      <OurCategoriesComponent />
     </div>
 
     <div
@@ -178,6 +155,7 @@ import AccordCadreComponent from '@/vuejs/modules/home/component/AccordsCadreCom
 import { useExpertContentStore } from '@/vuejs/stores/expertContent'
 import { storeToRefs } from 'pinia'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
+import OurCategoriesComponent from '@/vuejs/modules/home/component/OurCategoriesComponent.vue';
 
 const expertContentStore = useExpertContentStore()
 const { getExpertsContents } = storeToRefs(expertContentStore)
