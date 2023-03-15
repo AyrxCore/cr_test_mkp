@@ -57,16 +57,14 @@
     </div>
     <div class="flex justify-between md:justify-end">
       <ButtonComponent
-        class="default-button mr-2 mb-2 flex items-center rounded-full border border-purple-600 bg-transparent
-        px-4 py-5 text-sm font-medium !text-purple-500 hover:!text-white"
+        class="default-button mr-2 mb-2 flex items-center rounded-full border border-purple-600 bg-transparent px-4 py-5 text-sm font-medium !text-purple-500 hover:!text-white"
         type="button"
         @click="onCancelClick"
       >
         Annuler
       </ButtonComponent>
       <ButtonComponent
-        class="default-button mr-2 mb-2 flex items-center rounded-full border border-purple-600 bg-transparent
-        px-4 py-5 text-sm font-medium !text-purple-500 hover:!text-white"
+        class="default-button mr-2 mb-2 flex items-center rounded-full border border-purple-600 bg-transparent px-4 py-5 text-sm font-medium !text-purple-500 hover:!text-white"
         :is-loading="isloading"
       >
         Enregistrer
@@ -78,17 +76,19 @@
   </div>
 </template>
 <script lang="ts" setup>
-import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import { useBuyerCompanyStore } from '@/vuejs/stores/buyer_company'
+import { onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
+
+import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import InputField from '@/vuejs/modules/shared/formfields/InputField.vue'
 import LabelField from '@/vuejs/modules/shared/formfields/LabelField.vue'
-import { onMounted, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
-import { useCoutryStore } from '@/vuejs/stores/country'
 import SelectField from '@/vuejs/modules/shared/formfields/SelectField.vue'
+
 import router, { PageList } from '@/vuejs/router'
+import { useBuyerCompanyStore } from '@/vuejs/stores/buyer_company'
+import { useRoute } from 'vue-router'
+import { useCoutryStore } from '@/vuejs/stores/country'
 
 const route = useRoute()
 const buyerCompanyStore = useBuyerCompanyStore()

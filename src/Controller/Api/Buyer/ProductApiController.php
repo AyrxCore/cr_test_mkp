@@ -22,22 +22,22 @@ class ProductApiController extends AbstractController
 {
 
     private const HOME_TOP_VENTE_PROPERTY
-        = [
-            'property_id' => '217',
-            'value'       => '5369',
-        ];
+    = [
+        'property_id' => '217',
+        'value'       => '5369',
+    ];
 
     private const HOME_SELECTION_PROPERTY
-        = [
-            'property_id' => '217',
-            'value'       => '5368',
-        ];
+    = [
+        'property_id' => '217',
+        'value'       => '5368',
+    ];
 
     private const HOME_ACCORD_CADRE_PROPERTY
-        = [
-            'property_id' => '217',
-            'value'       => '5367',
-        ];
+    = [
+        'property_id' => '217',
+        'value'       => '5367',
+    ];
 
     #[Required]
     public RequestStack $requestStack;
@@ -196,5 +196,4 @@ class ProductApiController extends AbstractController
 
         return new JsonResponse($accordStatut->getStatus());
     }
-
 }

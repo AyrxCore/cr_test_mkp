@@ -4,6 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+  app_domain: '%env(APP_DOMAIN)%'
   uppler_env: '%env(UPPLER_ENV)%'
   uppler_api_url: '%env(UPPLER_API_URL)%'
   uppler_admin_client_id: '%env(UPPLER_ADMIN_CLIENT_ID)%'
@@ -42,7 +43,7 @@ services:
   # please note that last definitions always *replace* previous ones
   App\Tests\Resources\DataFixtures\:
     resource: '../tests/Resources/DataFixtures'
-    tags: [ 'doctrine.fixture.orm' ]
+    tags: ['doctrine.fixture.orm']
   app.uppler_authenticator:
     class: App\Security\UpplerAuthenticator
     parent: lexik_jwt_authentication.security.jwt_authenticator
@@ -75,6 +76,11 @@ services:
 
   App\Service\UpplerAccountService:
     parent: App\Service\HttpClientProvider
+
+  App\Service\UpplerCartService:
+    parent: App\Service\HttpClientProvider
+    arguments:
+      $appDomain: '%app_domain%'
 
   App\Service\UpplerProductService:
     parent: App\Service\HttpClientProvider

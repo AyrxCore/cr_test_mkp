@@ -14,6 +14,9 @@ export function getErrorMessage(errorCode: string): string {
     case LoginResponse.InvalidCredentials:
       message = 'Identifiants incorrects'
       break
+    default:
+      message = 'Une erreur est survenue'
+      break
   }
   return message
 }

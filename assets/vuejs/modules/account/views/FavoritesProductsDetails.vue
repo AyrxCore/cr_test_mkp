@@ -1,8 +1,8 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <div class="flex justify-between mt-2 md:mt-0">
-        <h3 class="text-primary mb-2 text-title-35">Nom de la liste</h3>
+      <div class="mt-2 flex justify-between md:mt-0">
+        <h3 class="mb-2 text-title-35 text-primary">Nom de la liste</h3>
         <DefaultButtonComponent
           :btn-text-color="'text-purple-500'"
           :btn-color="'bg-transparent'"
@@ -13,7 +13,9 @@
         </DefaultButtonComponent>
       </div>
 
-      <div class="mb-2.5 items-center text-sm lg:text-base text-gray-500 hidden md:flex">
+      <div
+        class="mb-2.5 hidden items-center text-sm text-gray-500 md:flex lg:text-base"
+      >
         <div class="md:w-9/12 lg:w-10/12">Description des articles</div>
         <div class="w-1/12">Qté</div>
         <div class="flex justify-end md:w-2/12 lg:w-1/12">Sous-total</div>
@@ -34,7 +36,7 @@
         </DefaultButtonComponent>
         <GradientButtonComponent
           type="submit"
-          class="justify-center py-1.5 text-center !px-2 md:!px-5"
+          class="justify-center py-1.5 !px-2 text-center md:!px-5"
         >
           <ShoppingCartIconComponent
             :stroke-color="'#FFFFFF'"
@@ -52,7 +54,7 @@ import { computed } from 'vue'
 import productImage from '@/vuejs/assets/img/default-image.png'
 import { getImage } from '@/vuejs/services/utils'
 import FavoritesProductsDetailsComponent from '@/vuejs/modules/account/components/FavoriteProductDetailsComponent.vue'
-import { AccountPageList } from '@/vuejs/modules/account/routerAccount'
+import { AccountPageList } from '@/vuejs/router/pages-list'
 import DefaultButtonComponent from '@/vuejs/modules/shared/DefaultButtonComponent.vue'
 import GradientButtonComponent from '@/vuejs/modules/shared/GradientButtonComponent.vue'
 import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'

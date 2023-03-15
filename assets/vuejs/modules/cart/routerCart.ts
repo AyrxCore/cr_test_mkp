@@ -1,36 +1,37 @@
 import { RouteRecordRaw } from 'vue-router'
 import RecapPage from '@/vuejs/modules/cart/views/Recap.vue'
-import AdressPage from '@/vuejs/modules/cart/views/Addresses.vue'
+import AddressPage from '@/vuejs/modules/cart/views/Addresses.vue'
+import CartPage from '@/vuejs/modules/cart/pages/CartPage.vue'
 import ConfirmationPage from '@/vuejs/modules/cart/views/Confirmation.vue'
+import PaymentPage from '@/vuejs/modules/cart/views/Payment.vue'
 
-export enum CartPageList {
-  CART = 'cart',
-  RECAP = 'recap',
-  ADDRESSES = 'adresses',
-  CONFIRMATION = 'confirmation',
-}
+import { CartPageList } from '@/vuejs/router/pages-list'
 
 export const routes: RouteRecordRaw[] = [
   {
     path: '/app/cart',
-    name: CartPageList.CART,
-    redirect: '/app/cart/' + CartPageList.RECAP,
+    component: CartPage,
     children: [
       {
-        path: CartPageList.RECAP,
+        path: '',
         component: RecapPage,
         name: CartPageList.RECAP,
       },
       {
-        path: CartPageList.ADDRESSES,
-        component: AdressPage,
+        path: 'addresses',
+        component: AddressPage,
         name: CartPageList.ADDRESSES,
       },
       {
-        path: CartPageList.CONFIRMATION,
-        component: ConfirmationPage,
-        name: CartPageList.CONFIRMATION,
+        path: 'payment',
+        component: PaymentPage,
+        name: CartPageList.PAYMENT,
       },
-    ]
-  }
+      {
+        path: 'confirmed',
+        component: ConfirmationPage,
+        name: CartPageList.CONFIRMED,
+      },
+    ],
+  },
 ]

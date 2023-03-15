@@ -11,7 +11,7 @@ export const useAlertStore = defineStore({
   }),
 
   actions: {
-    setShow(message: string, type: alertType): void {
+    setShow(message: string, type: AlertType): void {
       this.message = message
       this.type = type
       this.show = true

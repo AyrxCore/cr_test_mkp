@@ -4,19 +4,14 @@ import CategoriesPage from '@/vuejs/modules/products/views/CategoriesList.vue'
 import ProductPage from '@/vuejs/modules/products/views/Product.vue'
 import AccordCadrePage from '@/vuejs/modules/products/views/AccordCadre.vue'
 
-export enum ProductPageList {
-  PRODUCTS = 'produits',
-  CATEGORIES = 'categories',
-  PRODUCT = 'produit',
-  ACCORD_CADRE = 'accord-cadre',
-}
+import { ProductPageList } from '@/vuejs/router/pages-list'
 
 export const routes: RouteRecordRaw[] = [
   {
-    path: '/app/produits',
+    path: '/app/products',
     name: ProductPageList.PRODUCTS,
     component: ProductsPage,
-    props: route => ({ query: route.query })
+    props: (route) => ({ query: route.query }),
   },
   {
     path: '/app/categories',
@@ -24,12 +19,12 @@ export const routes: RouteRecordRaw[] = [
     component: CategoriesPage,
   },
   {
-    path: '/app/produit/:id',
+    path: '/app/product/:id',
     component: ProductPage,
     name: ProductPageList.PRODUCT,
   },
   {
-    path: `/app/${ ProductPageList.ACCORD_CADRE }/:id`,
+    path: `/app/${ProductPageList.ACCORD_CADRE}/:id`,
     name: ProductPageList.ACCORD_CADRE,
     component: AccordCadrePage,
   },

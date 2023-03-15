@@ -26,7 +26,7 @@ class AddressApiController extends AbstractController
     #[Route('/api/buyer/addresses', name: 'get_addresses')]
     public function list(NormalizerInterface $normalizer): JsonResponse
     {
-        $session= $this->requestStack->getSession();
+        $session = $this->requestStack->getSession();
         $session->start();
 
         if (!$session->has('account') || empty($session->get('account'))) {

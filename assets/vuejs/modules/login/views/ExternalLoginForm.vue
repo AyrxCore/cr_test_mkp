@@ -1,5 +1,5 @@
 <template>
-  <div v-if="alertStore.show">
+  <div v-if="showAlert">
     <AlertSharedComponent />
   </div>
   <template v-if="!userAccounts.length">
@@ -33,15 +33,11 @@
           required
         />
         <span
-          class="absolute inset-y-0 right-0 flex items-center pr-8 text-gray-500 cursor-pointer"
+          class="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-8 text-gray-500"
           @click="toggleShowPassword"
         >
-          <EyeSlashIcon
-            v-if="showPassword"
-          />
-          <EyeIcon
-            v-else
-          />
+          <EyeSlashIcon v-if="showPassword" />
+          <EyeIcon v-else />
         </span>
       </div>
       <div class="mb-3 mt-3 flex justify-between">
@@ -103,7 +99,8 @@
   </template>
 </template>
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
+import { storeToRefs } from 'pinia'
 
 import { useUserStore } from '@/vuejs/stores/user'
 
@@ -125,7 +122,11 @@ const userStore = useUserStore()
 const alertStore = useAlertStore()
 const showPassword = ref<boolean>(false)
 
+const { show: showAlert } = storeToRefs(alertStore)
+
 const loginSubmit = async () => {
+  if (isLoading.value) return
+  alertStore.setClose()
   isLoading.value = true
   const accounts = await userStore.authenticate({
     username: username.value,
@@ -137,17 +138,17 @@ const loginSubmit = async () => {
     return false
   }
 
-  if(accounts.length > 1) {
-    userAccounts.value =  accounts
+  if (accounts.length > 1) {
+    userAccounts.value = accounts
     isLoading.value = false
   } else {
-     document.location.href = '/app/home'
+    document.location.href = '/app/home'
   }
 }
 
-const toggleShowPassword = (() => {
+const toggleShowPassword = () => {
   showPassword.value = !showPassword.value
-})
+}
 const onAccountClick = async (account) => {
   isLoading.value = true
   const select = await userStore.selectUserAccount(account.id)

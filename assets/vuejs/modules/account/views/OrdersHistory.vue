@@ -1,27 +1,31 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="primary text-title-35 my-2 lg:mb-2">Historique de commandes</h3>
-      <span
-        class="flex text-sm md:text-base text-gray-500"
-        >
+      <h3 class="primary my-2 text-title-35 lg:mb-2">
+        Historique de commandes
+      </h3>
+      <span class="flex text-sm text-gray-500 md:text-base">
         La commande la plus récente apparaît en premier
       </span>
-      <span class="mt-3 lg:mt-7 mb-2 flex text-sm md:text-base text-gray-500">Trier par</span>
+      <span class="mt-3 mb-2 flex text-sm text-gray-500 md:text-base lg:mt-7"
+        >Trier par</span
+      >
       <div class="flex flex-col md:flex-row">
         <select
-          class="md:mr-2 h-[28px] w-full md:w-2/5 lg:w-3/12 rounded-md py-0 text-center text-sm text-gray-600 placeholder-gray-400"
+          class="h-[28px] w-full rounded-md py-0 text-center text-sm text-gray-600 placeholder-gray-400 md:mr-2 md:w-2/5 lg:w-3/12"
         >
           <option>Date par ordre décroissant</option>
         </select>
         <input-button-component
           placeholder="Numéro de commande / Nom de l'acheteur"
-          class="h-[28px] w-full mt-3 mb-3 md:mb-0 md:mt-0 md:w-3/5 lg:w-7/12"
+          class="mt-3 mb-3 h-[28px] w-full md:mb-0 md:mt-0 md:w-3/5 lg:w-7/12"
         >
           <SearchIconComponent />
         </input-button-component>
       </div>
-      <div class="mt-5 lg:mt-10 py-2.5 px-2.5 text-sm lg:text-base text-gray-500 hidden md:flex">
+      <div
+        class="mt-5 hidden py-2.5 px-2.5 text-sm text-gray-500 md:flex lg:mt-10 lg:text-base"
+      >
         <div class="md:w-2/12 lg:w-3/12">Date de la commande</div>
         <div class="md:w-5/12 lg:w-4/12">Détails de la commande</div>
         <div class="w-2/12">Etat</div>
@@ -40,7 +44,7 @@
 <script lang="ts" setup>
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import { computed } from 'vue'
-import { AccountPageList } from '@/vuejs/modules/account/routerAccount'
+import { AccountPageList } from '@/vuejs/router/pages-list'
 import OrderHistoryComponent from '@/vuejs/modules/account/components/OrderHistoryComponent.vue'
 import InputButtonComponent from '@/vuejs/modules/shared/InputButtonComponent.vue'
 import SearchIconComponent from '@/vuejs/modules/shared/icon/SearchIconComponent.vue'

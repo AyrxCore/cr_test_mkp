@@ -1,18 +1,12 @@
 <template>
   <BaseTemplate title="Qantis - MarketPlace">
-    <div
-      v-if="isLoading"
-      class="w-full flex h-16 justify-center items-center"
-    >
+    <div v-if="isLoading" class="flex h-16 w-full items-center justify-center">
       <LoaderSharedComponent
         class="text-secondary"
         classes="loader-xl loader"
       />
     </div>
-    <div
-      v-else
-      class="xs:w-[100%] m-auto my-4 max-w-screen-2xl px-5 sm:px-8"
-    >
+    <div v-else class="xs:w-[100%] m-auto my-4 max-w-screen-2xl px-5 sm:px-8">
       <breadcrumb-shared-component
         :list-url="breadcrumbUrl"
         :current-page="`Recherche: ${term}`"
@@ -20,13 +14,16 @@
       <ContactUsButtonComponent />
 
       <div
-        class="mt-10 mb-7.5 w-full pt-5 flex flex-row items-center justify-between text-[14px] text-gray-500"
+        class="mt-10 mb-7.5 flex w-full flex-row items-center justify-between pt-5 text-[14px] text-gray-500"
       >
         <div
-          class="mr-2 flex p-2 w-2/3 flex-row items-start rounded-md border bg-white"
+          class="mr-2 flex w-2/3 flex-row items-start rounded-md border bg-white p-2"
         >
           <span class="text-sm md:text-base lg:text-lg">
-            Les résultats trouvés pour votre recherche "<span class="font-bold text-primary">{{ term }}</span>"
+            Les résultats trouvés pour votre recherche "<span
+              class="font-bold text-primary"
+              >{{ term }}</span
+            >"
           </span>
         </div>
         <div
@@ -36,7 +33,7 @@
           <button
             class="flex"
             :class="{
-              'disable' : pageNumber > 2
+              disable: pageNumber > 2,
             }"
             @click="pagePreview"
           >
@@ -46,10 +43,7 @@
             />
           </button>
           <span>{{ pageNumber }}</span>
-          <button
-            class="flex"
-            @click="pageNext"
-          >
+          <button class="flex" @click="pageNext">
             <ChevronRightIconComponent
               class="ml-1 h-4"
               :stroke-color="'#626262'"
@@ -71,19 +65,28 @@
         />-->
         <div class="col-span-4 flex flex-col rounded-lg pb-4 text-gray-500">
           <div class="">
-            <div class="flex flex-col text-gray-600 md:grid md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+            <div
+              class="flex flex-col text-gray-600 md:grid md:grid-cols-2 md:gap-8 lg:grid-cols-4"
+            >
               <div v-for="(product, key) in products" :key="key">
                 <AccordCadreComponent
-                  v-if="product.isAccordCadre && (currentPartenaire === null || currentPartenaire === product.seller.id)"
-                  :accord="product" />
+                  v-if="
+                    product.isAccordCadre &&
+                    (currentPartenaire === null ||
+                      currentPartenaire === product.seller.id)
+                  "
+                  :accord="product"
+                />
                 <ProductComponent
-                  v-else-if="currentPartenaire === product.seller.id || currentPartenaire === null"
+                  v-else-if="
+                    currentPartenaire === product.seller.id ||
+                    currentPartenaire === null
+                  "
                   :product="product"
                   class="mt-5 h-[516px] !w-auto md:mt-0 md:w-[392px]"
                 />
               </div>
             </div>
-
           </div>
         </div>
       </div>
@@ -102,9 +105,9 @@ import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import AccordCadreComponent from '@/vuejs/modules/home/component/AccordCadreComponent.vue'
-import { toNumber } from '@vue/shared';
-import router from '@/vuejs/router';
-import { ProductPageList } from '@/vuejs/modules/products/routerProducts';
+import { toNumber } from '@vue/shared'
+import router from '@/vuejs/router'
+import { ProductPageList } from '@/vuejs/router/pages-list'
 
 const route = useRoute()
 const productStore = useProductStore()
@@ -118,13 +121,13 @@ const breadcrumbUrl = computed(() => {
   return []
 })
 
-const loadProducts = (async () => {
+const loadProducts = async () => {
   isLoading.value = true
   pageNumber.value = route.query.page ? toNumber(route.query.page) : 1
   const paramsProducts = {
     with_filter: true,
     page: pageNumber.value,
-    perPage: 20
+    perPage: 20,
   }
 
   if (route.query.q) {
@@ -132,13 +135,18 @@ const loadProducts = (async () => {
     term.value = route.query.q
   }
 
-  resultProducts.value = await productStore.fetchProductsByParams(paramsProducts)
-  if (resultProducts.value.results[0].isAccordCadre && currentPartenaire.value === null) {
+  resultProducts.value = await productStore.fetchProductsByParams(
+    paramsProducts,
+  )
+  if (
+    resultProducts.value.results[0].isAccordCadre &&
+    currentPartenaire.value === null
+  ) {
     currentPartenaire.value = resultProducts.value.results[0].seller.id
   }
   isLoading.value = false
   pageNumber.value = resultProducts.value.page
-})
+}
 
 const count = computed(() => {
   return resultProducts.value.results_count
@@ -152,7 +160,7 @@ const filters = computed(() => {
   return resultProducts.value.filters
 })
 
-const pagePreview = (() => {
+const pagePreview = () => {
   if (pageNumber.value > 1) {
     pageNumber.value--
   } else {
@@ -160,23 +168,23 @@ const pagePreview = (() => {
   }
 
   changePage()
-})
+}
 
-const pageNext = (() => {
+const pageNext = () => {
   pageNumber.value++
   changePage()
-})
+}
 
-const changePage = (async () => {
+const changePage = async () => {
   await router.push({
     name: ProductPageList.PRODUCTS,
     query: {
       q: term.value,
-      page:pageNumber.value,
-    }
+      page: pageNumber.value,
+    },
   })
   await loadProducts()
-})
+}
 watch(
   () => route.query.q,
   async (searchTerm: string) => {
@@ -188,7 +196,6 @@ watch(
   },
   { immediate: true },
 )
-
 </script>
 
 <style scoped>

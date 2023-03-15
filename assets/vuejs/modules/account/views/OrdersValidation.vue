@@ -1,7 +1,7 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="text-title-35 mb-2 mt-2 text-primary md:mt-0">
+      <h3 class="mb-2 mt-2 text-title-35 text-primary md:mt-0">
         Validations de commandes
       </h3>
       <span class="flex text-sm text-gray-500 md:text-base lg:text-lg"
@@ -53,7 +53,7 @@
 <script lang="ts" setup>
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import { computed } from 'vue'
-import { AccountPageList } from '@/vuejs/modules/account/routerAccount'
+import { AccountPageList } from '@/vuejs/router/pages-list'
 import OrderHistoryComponent from '@/vuejs/modules/account/components/OrderHistoryComponent.vue'
 import InputButtonComponent from '@/vuejs/modules/shared/InputButtonComponent.vue'
 import CalendarCheckIconComponent from '@/vuejs/modules/shared/icon/CalendarCheckIconComponent.vue'

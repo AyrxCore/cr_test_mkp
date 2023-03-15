@@ -6,7 +6,7 @@
   >
     {{ props.address.company ? props.address.company : 'Non renseignée' }}
   </td>
-  <td class="p-3 max-w-xs">
+  <td class="max-w-xs p-3">
     <span class="flex">{{ props.address.street }}</span>
     <span class="flex">{{ props.address.postcode }}</span>
     <span class="flex">{{ props.address.city }}</span>
@@ -34,11 +34,12 @@
     </div>
   </td>
 </template>
+
 <script lang="ts" setup>
 import EditIconComponent from '@/vuejs/modules/shared/icon/EditIconComponent.vue'
 import { useBuyerCompanyStore } from '@/vuejs/stores/buyer_company'
 import router from '@/vuejs/router'
-import { AccountPageList } from '@/vuejs/modules/account/routerAccount'
+import { AccountPageList } from '@/vuejs/router/pages-list'
 import StarIconComponent from '@/vuejs/modules/shared/icon/StarIconComponent.vue'
 import { useUserStore } from '@/vuejs/stores/user'
 import { computed, ref } from 'vue'

@@ -1,5 +1,4 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios'
-import { useUserStore } from '@/vuejs/stores/user'
+import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios'
 
 class BaseClientService {
   public apiClient: AxiosInstance

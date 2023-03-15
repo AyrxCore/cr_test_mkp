@@ -4,6 +4,7 @@ import { Seller } from '@/vuejs/types/Seller'
 import { AccountAccordCadre } from '@/vuejs/types/AccountAccordCadre';
 
 export interface Product {
+  id: number
   reference: string
   name: string
   description?: string

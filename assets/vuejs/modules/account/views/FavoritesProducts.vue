@@ -1,7 +1,7 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="text-title-35 mb-2 mt-2 text-primary md:mt-0">
+      <h3 class="mb-2 mt-2 text-title-35 text-primary md:mt-0">
         Mes produits favoris
       </h3>
       <div
@@ -27,7 +27,7 @@
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import { computed, ref } from 'vue'
 import FavoritesProductsComponent from '@/vuejs/modules/account/components/FavoriteProductComponent.vue'
-import { AccountPageList } from '@/vuejs/modules/account/routerAccount'
+import { AccountPageList } from '@/vuejs/router/pages-list'
 
 const tab = computed(() => {
   return AccountPageList.FAVORIS_LIST

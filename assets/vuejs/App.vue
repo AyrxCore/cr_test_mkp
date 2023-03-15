@@ -12,14 +12,20 @@
 
 <script lang="ts" setup>
 import { onBeforeMount } from 'vue'
+
 import LoginForm from './modules/login/views/ExternalLoginForm.vue'
 import PartnersCarousel from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
 import StickyContactButtons from '@/vuejs/modules/shared/StickyContactButtonsComponent.vue'
-import { useBuyerCompanyStore } from '@/vuejs/stores/buyer_company'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import ArrowLeftIconComponent from '@/vuejs/modules/shared/icon/ArrowLeftIconComponent.vue'
 import FormComponent from '@/vuejs/modules/contact/component/FormComponent.vue'
+
+import { useBuyerCompanyStore } from '@/vuejs/stores/buyer_company'
+import { useCartStore } from '@/vuejs/stores/cart'
+
+const cartStore = useCartStore()
 const companyStore = useBuyerCompanyStore()
+
 const props = defineProps({
   component: {
     required: false,
@@ -30,7 +36,8 @@ const props = defineProps({
 
 onBeforeMount(async () => {
   if (props.component === '') {
-    await companyStore.getAdresses()
+    await companyStore.getAddresses()
+    await cartStore.getCart()
   }
 })
 </script>

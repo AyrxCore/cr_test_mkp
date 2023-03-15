@@ -1,6 +1,6 @@
 <template>
   <div
-    class="absolute sticky bottom-1 flex w-full items-center border bg-white p-4 lg:relative lg:bottom-0 lg:border-0 lg:bg-transparent"
+    class="sticky bottom-1 flex w-full items-center border bg-white p-4 lg:relative lg:bottom-0 lg:border-0 lg:bg-transparent"
   >
     <div class="flex w-full flex-col">
       <div
@@ -9,7 +9,8 @@
       >
         <div
           v-if="props.product.priceReference"
-          class="flex items-center justify-center text-center">
+          class="flex items-center justify-center text-center"
+        >
           <span class="text-lg text-gray-500 line-through"
             >{{ props.product.priceReference }}€ HT
           </span>
@@ -20,8 +21,7 @@
         >
           {{ props.product.price?.displayPrice }}€ HT
         </div>
-        <div
-          class="mt-3 ml-2 flex">
+        <div class="mt-3 ml-2 flex">
           <span
             v-if="props.product.percent > 0"
             class="ml-2 rounded-lg bg-purple-600 px-2.5 py-1.5 text-sm text-white md:text-lg"
@@ -30,32 +30,38 @@
         </div>
       </div>
       <div class="flex flex-row">
-        <ButtonComponent class="button-gradient w-full lg:mt-14">
-          <ShoppingCartIconComponent class="mr-2 w-4" /> Ajouter
-        </ButtonComponent>
-        <button class="ml-5 items-center rounded-lg border lg:hidden">
+        <ButtonAddToCartComponent
+          :product="props.product"
+          :quantity="props.quantity"
+          class="w-full lg:mt-14"
+        />
+        <!-- <button class="ml-5 items-center rounded-lg border lg:hidden">
           <HeartIconComponent
             class="m-2 flex h-8 w-8 lg:hidden"
             :stroke-color="'#5E6875'"
           />
-        </button>
+        </button> -->
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
+import ButtonAddToCartComponent from '@/vuejs/modules/shared/ButtonAddToCartComponent.vue'
 import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
-import { PropType } from 'vue'
+import { PropType, computed, ref } from 'vue'
+
 import { Product } from '@/vuejs/types/Product'
 
 const props = defineProps({
   product: {
-    required: false,
+    required: true,
     type: Object as PropType<Product>,
-    default: null,
+  },
+  quantity: {
+    required: false,
+    type: Number,
+    default: 1,
   },
 })
 </script>

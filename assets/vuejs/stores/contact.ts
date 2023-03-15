@@ -1,12 +1,11 @@
-
 import { defineStore } from 'pinia'
 import { useUserStore } from '@/vuejs/stores/user'
 import { Contact } from '@/vuejs/types/Contact'
 import ContactHttpClient from '@/vuejs/services/httpclient/ContactHttpClient'
 
 export interface ContactStoreState {
-  contact?: Contact,
-  motifs?: [],
+  contact?: Contact
+  motifs?: []
 }
 
 export const useContactStore = defineStore({
@@ -34,11 +33,11 @@ export const useContactStore = defineStore({
         }
         this.contact._token = await ContactHttpClient.get().getToken()
         const userStore = useUserStore()
-        if (userStore.getUser) {
-          this.contact.lastName = userStore.getUser.lastName
-          this.contact.firstName = userStore.getUser.firstName
-          this.contact.email = userStore.getUser.email
-          this.contact.companyName = userStore.getUser.account.buyer.name
+        if (userStore.user) {
+          this.contact.lastName = userStore.user.lastName
+          this.contact.firstName = userStore.user.firstName
+          this.contact.email = userStore.user.email
+          this.contact.companyName = userStore.user.account.buyer.name
         }
         this.contact.motif = ''
         this.contact.description = ''

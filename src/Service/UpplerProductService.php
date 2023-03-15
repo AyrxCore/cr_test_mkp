@@ -291,6 +291,7 @@ class UpplerProductService extends HttpClientProvider
         $product->setName($remoteProduct->name->default);
         $product->setDescription($remoteProduct->description->default ?? null);
         $product->setReference($remoteProduct->reference);
+        $product->setVariants($remoteProduct->variants);
         if ($remoteProduct->company->id) {
             $item = $this->cache->getItem('seller_' . $remoteProduct->company->id);
 
@@ -342,5 +343,4 @@ class UpplerProductService extends HttpClientProvider
             $product->setPrice($price);
         }
     }
-
 }

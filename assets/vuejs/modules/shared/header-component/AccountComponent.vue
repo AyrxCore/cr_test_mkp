@@ -22,27 +22,28 @@
           </div>
         </div>
         <div class="sr-only inline-flex items-center md:not-sr-only">
-          <a
-              v-if="companyStore.getDefaultShippingAddress"
-              href="#"
-              class="text-xs"
-          >
+          <a v-if="companyStore.defaultBillingAddress" href="#" class="text-xs">
             Livré à
-            {{ companyStore.getDefaultShippingAddress.company }},
-            {{ companyStore.getDefaultShippingAddress.street }}
-            {{ companyStore.getDefaultShippingAddress.postcode }}
-            {{ companyStore.getDefaultShippingAddress.city }}
+            {{ companyStore.defaultShippingAddress.company }},
+            {{ companyStore.defaultShippingAddress.street }}
+            {{ companyStore.defaultShippingAddress.postcode }}
+            {{ companyStore.defaultShippingAddress.city }}
           </a>
         </div>
       </div>
-      <a class="ml-4 self-center md:ml-0" href="#">
+      <!-- <a class="ml-4 self-center md:ml-0" href="#">
         <HeartIcon />
-      </a>
+      </a> -->
       <RouterLink
-        :to="{ name: CartPageList.CART }"
+        :to="{ name: CartPageList.RECAP }"
         class="relative ml-4 self-center"
       >
-        <div class="badge badge-sticked badge-red">3</div>
+        <div
+          v-if="cartStore.nbProducts > 0"
+          class="badge badge-sticked badge-red"
+        >
+          {{ cartStore.nbProducts }}
+        </div>
         <ShoppingCartIcon />
       </RouterLink>
     </div>
@@ -51,18 +52,21 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { CartPageList } from '@/vuejs/modules/cart/routerCart'
+import { CartPageList } from '@/vuejs/router/pages-list'
 import UserCheckIcon from '@/vuejs/modules/shared/icon/UserCheckIconComponent.vue'
 import MapInIcon from '@/vuejs/modules/shared/icon/MapInIconComponent.vue'
 import ShoppingCartIcon from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
 import HeartIcon from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
 import MenuAccount from '@/vuejs/modules/shared/header-component/MenuAccountComponent.vue'
 import { useUserStore } from '@/vuejs/stores/user'
+import { useCartStore } from '@/vuejs/stores/cart'
 import { storeToRefs } from 'pinia'
-import {useBuyerCompanyStore} from '@/vuejs/stores/buyer_company'
+import { useBuyerCompanyStore } from '@/vuejs/stores/buyer_company'
 
 const userStore = useUserStore()
+const cartStore = useCartStore()
 const companyStore = useBuyerCompanyStore()
+
 const { user } = storeToRefs(userStore)
 
 const isMenuOpen = ref<boolean>(false)

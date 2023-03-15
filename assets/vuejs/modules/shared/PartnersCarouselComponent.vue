@@ -23,7 +23,7 @@
           v-if="showCarouselConnected"
           :src="getUpplerImage(seller.avatar)"
           :alt="seller.name"
-          class="h-[107px] w-full object-contain cursor-pointer pointer"
+          class="pointer h-[107px] w-full cursor-pointer object-contain"
         />
         <img
           v-else
@@ -31,7 +31,6 @@
           :alt="seller.name"
           class="h-[107px] w-full object-contain"
         />
-
       </SwiperSlide>
     </CarouselListSharedComponent>
   </div>
@@ -63,6 +62,7 @@ import imgBerner from '@/vuejs/assets/img/samples/berner.png'
 import imgSynergie from '@/vuejs/assets/img/samples/synergie.jpeg'
 import { useSellerStore } from '@/vuejs/stores/seller'
 import { useUserStore } from '@/vuejs/stores/user'
+import { PartnersPageList } from '@/vuejs/router/pages-list'
 
 const sellerStore = useSellerStore()
 const userStore = useUserStore()
@@ -72,7 +72,7 @@ const sellers = ref([])
 
 onMounted(async () => {
   try {
-    if (userStore.getUser) {
+    if (userStore.user) {
       await sellerStore.init()
       sellers.value = sellerStore.getSellers
       showCarouselConnected.value = true
@@ -98,9 +98,6 @@ onMounted(async () => {
       ]
     }
     showCarousel.value = true
-  } catch (error) {
-
-  }
-
+  } catch (error) {}
 })
 </script>

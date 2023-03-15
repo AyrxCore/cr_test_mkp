@@ -5,7 +5,7 @@
         Les accords-cadres incontournables
       </h3>
       <p class="text-sm text-gray-400 sm:text-lg">
-        Etes-vous certains de profiter des touts les économies incluses dans
+        Êtes-vous certains de profiter des touts les économies incluses dans
         votre adhésion ?
       </p>
     </div>
@@ -14,19 +14,19 @@
         :slides-per-view="1"
         :space-between="20"
         :breakpoints="{
-            1280: {
-              slidesPerView: 4,
-              spaceBetween: 20,
-            },
-            1024: {
-              slidesPerView: 3,
-              spaceBetween: 20,
-            },
-            640: {
-              slidesPerView: 2,
-              spaceBetween: 20,
-            },
-          }"
+          1280: {
+            slidesPerView: 4,
+            spaceBetween: 20,
+          },
+          1024: {
+            slidesPerView: 3,
+            spaceBetween: 20,
+          },
+          640: {
+            slidesPerView: 2,
+            spaceBetween: 20,
+          },
+        }"
       >
         <SwiperSlide
           v-for="accord in accordsCadre"
@@ -38,7 +38,6 @@
       </CarouselListSharedComponent>
     </div>
   </div>
-
 </template>
 
 <script lang="ts" setup>
@@ -48,14 +47,12 @@ import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListShar
 import AccordCadreComponent from '@/vuejs/modules/home/component/AccordCadreComponent.vue'
 import { useProductStore } from '@/vuejs/stores/product'
 
-
 const productStore = useProductStore()
 const accordsCadre = ref([])
 
 onMounted(async () => {
   accordsCadre.value = await productStore.getHomeProducts('accord-cadre')
 })
-
 </script>
 
 <style scoped></style>

@@ -27,8 +27,8 @@ const props = defineProps({
   type: {
     required: false,
     type: String,
-    default: 'submit'
-  }
+    default: 'submit',
+  },
 })
 
 const emit = defineEmits(['click'])

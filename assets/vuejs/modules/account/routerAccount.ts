@@ -1,8 +1,8 @@
 import { RouteRecordRaw } from 'vue-router'
 import MyAccountPage from '@/vuejs/modules/account/views/MyAccount.vue'
-import AddressesPage from '@/vuejs/modules/account/views/adresses/AddressesContainer.vue'
-import AddressCreate from '@/vuejs/modules/account/views/adress/AddressCreate.vue'
-import AddressEdit from '@/vuejs/modules/account/views/adress/AddressEdit.vue'
+import AddressesPage from '@/vuejs/modules/account/views/addresses/AddressesContainer.vue'
+import AddressCreate from '@/vuejs/modules/account/views/address/AddressCreate.vue'
+import AddressEdit from '@/vuejs/modules/account/views/address/AddressEdit.vue'
 import ProfileInformationsReadonly from '@/vuejs/modules/account/views/ProfileInformations/ProfileInformationsReadonly.vue'
 import ProfilePasswordChangeForm from '@/vuejs/modules/account/views/ProfileInformations/ProfilePasswordChangeForm.vue'
 import ProfileEmailEditForm from '@/vuejs/modules/account/views/ProfileInformations/ProfileEmailEditForm.vue'
@@ -13,21 +13,7 @@ import OrdersHistoryPage from '@/vuejs/modules/account/views/OrdersHistory.vue'
 import SavedCartsPage from '@/vuejs/modules/account/views/SavedCarts.vue'
 import OrdersValidationPage from '@/vuejs/modules/account/views/OrdersValidation.vue'
 
-export enum AccountPageList {
-  ACCOUNT = 'account',
-  CONTACT_INFORMATION = 'contact-information',
-  CONTACT_INFORMATION_PASSWORD_CHANGE = 'contact-information-password-change',
-  CONTACT_INFORMATION_EMAIL_EDIT = 'contact-information-email-edit',
-  CONTACT_INFORMATION_DETAILS_EDIT = 'contact-information-details-edit',
-  ADDRESSES = 'addresses',
-  ADDRESS_EDIT = 'address-edit',
-  ADDRESS_CREATE = 'address-create',
-  FAVORIS_LIST = 'favoris-list',
-  FAVORIS_DETAILS = 'favoris-details',
-  ORDERS_HISTORY = 'orders-history',
-  SAVED_CARTS = 'saved-carts',
-  ORDERS_VALIDATION = 'orders-validation',
-}
+import { AccountPageList } from '@/vuejs/router/pages-list'
 
 export const accountUrl = '/app/' + AccountPageList.ACCOUNT
 export const baseUrl = accountUrl + '/'

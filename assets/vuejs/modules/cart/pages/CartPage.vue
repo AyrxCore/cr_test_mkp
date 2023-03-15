@@ -1,80 +1,79 @@
 <template>
   <BaseTemplate title="Qantis - MarketPlace">
     <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 px-5 sm:px-8">
-      <breadcrumb-shared-component :current-page="'Panier'" />
+      <BreadcrumbSharedComponent :current-page="'Panier'" />
       <div class="w-[100%] max-w-screen-2xl">
         <ContactUsButtonComponent />
       </div>
       <div class="m-auto my-2 w-[100%] max-w-screen-2xl">
         <div class="tabs clearfix flex w-max" data-tabgroup="first-tab-group">
           <div
-            v-for="(tab, key) in tabs"
-            :key="key"
-            class="border-b-2 border-gray-300 px-3 text-sm md:text-base lg:text-lg text-gray-500 hover:border-b-2 hover:border-secondary"
+            class="border-b-2 border-gray-300 px-6 text-sm text-gray-500 md:text-base lg:text-lg"
             :class="{
-              'border-b-2 border-secondary': tab.id === selectedTab.value,
+              'border-secondary': CartPageList.RECAP === currentRouteName,
+              'text-secondary': CartPageList.RECAP === currentRouteName,
             }"
           >
-            <a
-              :href="tab.url"
-              :class="{ 'text-secondary': tab.id === selectedTab.value }"
-              >{{ tab.name }}</a
-            >
+            Panier
+          </div>
+          <div
+            class="border-b-2 border-gray-300 px-6 text-sm text-gray-500 md:text-base lg:text-lg"
+            :class="{
+              'border-secondary': CartPageList.ADDRESSES === currentRouteName,
+              'text-secondary': CartPageList.ADDRESSES === currentRouteName,
+            }"
+          >
+            Adresses
+          </div>
+          <div
+            class="border-b-2 border-gray-300 px-6 text-sm text-gray-500 md:text-base lg:text-lg"
+            :class="{
+              'border-secondary': CartPageList.PAYMENT === currentRouteName,
+              'text-secondary': CartPageList.PAYMENT === currentRouteName,
+            }"
+          >
+            Paiement
+          </div>
+          <div
+            v-if="CartPageList.CONFIRMED === currentRouteName"
+            class="border-b-2 border-gray-300 px-6 text-sm text-gray-500 md:text-base lg:text-lg"
+            :class="{
+              'border-secondary': CartPageList.CONFIRMED === currentRouteName,
+              'text-secondary': CartPageList.CONFIRMED === currentRouteName,
+            }"
+          >
+            Confirmation
           </div>
         </div>
-        <div
-          class="mt-10 flex flex-col-reverse lg:grid lg:grid-cols-4 lg:gap-4 lg:px-0"
-        >
-          <div class="col-span-3 mt-10 lg:mt-0 rounded-lg">
-            <slot name="left-side" />
-          </div>
-          <div class="rounded-lg">
-            <slot name="right-side" />
-          </div>
-        </div>
+        <template v-if="cart || CartPageList.CONFIRMED === currentRouteName">
+          <RouterView />
+        </template>
+        <LoaderSharedComponent v-else class="loader-xl mt-6" />
       </div>
     </div>
   </BaseTemplate>
 </template>
+
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
+import { computed } from 'vue'
+import { useRouter, RouteRecordName } from 'vue-router'
+
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
-import { ref } from 'vue'
-import { CartPageList } from '@/vuejs/modules/cart/routerCart'
-import {
-  TAB_ADRESSES,
-  TAB_BON_COMMANDE,
-  TAB_CONFIRMATION,
-  TAB_PAIEMENT,
-  TAB_PANIER,
-} from '@/vuejs/modules/cart'
+import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 
-const props = defineProps({
-  selectedTab: {
-    required: true,
-    type: String,
-    default: TAB_PANIER,
-  },
-})
+import { CartPageList } from '@/vuejs/router/pages-list'
+import { useCartStore } from '@/vuejs/stores/cart'
 
-const tabs = ref([
-  {
-    id: TAB_PANIER,
-    name: 'Panier',
-    url: '/app/cart/' + CartPageList.RECAP,
-  },
-  {
-    id: TAB_ADRESSES,
-    name: 'Adresses',
-    url: '/app/cart/' + CartPageList.ADDRESSES,
-  },
-  {
-    id: TAB_PAIEMENT,
-    name: 'Paiement',
-    url: '/app/cart/' + CartPageList.RECAP,
-  },
-])
+const router = useRouter()
+const cartStore = useCartStore()
+const { cart } = storeToRefs(cartStore)
+
+const currentRouteName = computed(
+  (): RouteRecordName => router.currentRoute.value.name,
+)
 </script>
 
 <style scoped></style>

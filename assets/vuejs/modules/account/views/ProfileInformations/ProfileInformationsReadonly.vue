@@ -1,19 +1,16 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="primary text-title-35 mb-2 mt-2 md:mt-0">
-        Les coordonnées
-      </h3>
+      <h3 class="primary mb-2 mt-2 text-title-35 md:mt-0">Les coordonnées</h3>
       <!-- Bloc email -->
       <div class="bloc-contact-information">
         <div class="">
           <h3 class="primary mb-2 text-[20px]">E-mail</h3>
           <p class="mb-2.5">E-mail: {{ user.account.subaccount.email }}</p>
-
         </div>
         <div class="">
           <div class="float-right w-fit px-2 py-1 text-white">
-            <RouterLink :to="{name: PageList.CONTACT_INFORMATION_EMAIL_EDIT}">
+            <RouterLink :to="{ name: PageList.CONTACT_INFORMATION_EMAIL_EDIT }">
               <EditIconComponent />
             </RouterLink>
           </div>
@@ -29,7 +26,9 @@
         </div>
         <div class="">
           <div class="float-right w-fit px-2 py-1 text-white">
-            <RouterLink :to="{name: PageList.CONTACT_INFORMATION_PASSWORD_CHANGE}">
+            <RouterLink
+              :to="{ name: PageList.CONTACT_INFORMATION_PASSWORD_CHANGE }"
+            >
               <EditIconComponent />
             </RouterLink>
           </div>
@@ -43,11 +42,15 @@
           <h3 class="primary mb-2 text-[20px]">Coordonnées</h3>
           <p class="mb-2.5">Nom : {{ user.account.subaccount.lastname }}</p>
           <p class="mb-2.5">Prénom : {{ user.account.subaccount.firstname }}</p>
-          <p class="mb-2.5">Téléphone fixe : {{ user.account.subaccount.phone }}</p>
+          <p class="mb-2.5">
+            Téléphone fixe : {{ user.account.subaccount.phone }}
+          </p>
         </div>
         <div class="">
           <div class="float-right w-fit px-2 py-1 text-white">
-            <RouterLink :to="{name: PageList.CONTACT_INFORMATION_DETAILS_EDIT}">
+            <RouterLink
+              :to="{ name: PageList.CONTACT_INFORMATION_DETAILS_EDIT }"
+            >
               <EditIconComponent />
             </RouterLink>
           </div>
@@ -60,11 +63,11 @@
 <script lang="ts" setup>
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import EditIconComponent from '@/vuejs/modules/shared/icon/EditIconComponent.vue'
-import { AccountPageList } from '@/vuejs/modules/account/routerAccount'
+import { AccountPageList } from '@/vuejs/router/pages-list'
 import { computed } from 'vue'
 import { useUserStore } from '@/vuejs/stores/user'
 import { storeToRefs } from 'pinia'
-import {PageList} from '@/vuejs/router'
+import { PageList } from '@/vuejs/router'
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)

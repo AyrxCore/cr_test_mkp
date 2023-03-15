@@ -1,8 +1,12 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="text-primary mb-2 text-title-35 mt-2 md:mt-0">Paniers sauvegardés</h3>
-      <div class="mb-2.5 items-center text-sm lg:text-base text-gray-500 hidden md:flex">
+      <h3 class="mb-2 mt-2 text-title-35 text-primary md:mt-0">
+        Paniers sauvegardés
+      </h3>
+      <div
+        class="mb-2.5 hidden items-center text-sm text-gray-500 md:flex lg:text-base"
+      >
         <div class="w-3/12">Nom du panier</div>
         <div class="w-2/12">Créé le</div>
         <div class="w-3/12">Nombre d'articles</div>
@@ -16,7 +20,6 @@
           :cart="cart"
         />
       </div>
-
     </template>
   </AccountPage>
 </template>
@@ -24,7 +27,7 @@
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import { computed, ref } from 'vue'
 import FavoritesProductsComponent from '@/vuejs/modules/account/components/FavoriteProductComponent.vue'
-import { AccountPageList } from '@/vuejs/modules/account/routerAccount'
+import { AccountPageList } from '@/vuejs/router/pages-list'
 import SavedCartComponent from '@/vuejs/modules/account/components/SavedCartComponent.vue'
 
 const tab = computed(() => {

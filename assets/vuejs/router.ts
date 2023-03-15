@@ -1,33 +1,25 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
-import {
-  ProductPageList,
-  routes as productsRoutes,
-} from '@/vuejs/modules/products/routerProducts'
+import { routes as productsRoutes } from '@/vuejs/modules/products/routerProducts'
 
-import {
-  ActualitesPageList,
-  routes as actualitesRoutes,
-} from '@/vuejs/modules/actualites/routerActualites'
+import { routes as actualitesRoutes } from '@/vuejs/modules/actualites/routerActualites'
 
-import {
-  CartPageList,
-  routes as cartRoutes,
-} from '@/vuejs/modules/cart/routerCart'
+import { routes as cartRoutes } from '@/vuejs/modules/cart/routerCart'
 
-import {
-  AccountPageList,
-  routes as accountRoutes,
-} from '@/vuejs/modules/account/routerAccount'
+import { routes as accountRoutes } from '@/vuejs/modules/account/routerAccount'
 
 import Home from '@/vuejs/modules/home/views/HomePage.vue'
 import Contact from '@/vuejs/modules/contact/views/ContactPage.vue'
 import { useUserStore } from '@/vuejs/stores/user'
+import { useCartStore } from '@/vuejs/stores/cart'
 
-export enum MainPageList {
-  HOME_PAGE = 'home-page',
-  CONTACT_PAGE = 'contact-page',
-}
+import {
+  MainPageList,
+  ProductPageList,
+  ActualitesPageList,
+  CartPageList,
+  AccountPageList,
+} from '@/vuejs/router/pages-list'
 
 export const PageList = {
   ...MainPageList,
@@ -65,12 +57,20 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore()
+  const cartStore = useCartStore()
 
   if (!userStore.isLogged) {
     await userStore.getCurrentUserDatas()
     const host = window.location.protocol + '//' + window.location.host
     if (!userStore.isLogged) {
       window.location.href = host
+    }
+
+    if (
+      [CartPageList.ADDRESSES, CartPageList.PAYMENT].includes(to.name) &&
+      !cartStore.hasAllTermsChecked
+    ) {
+      router.push({ name: CartPageList.RECAP })
     }
   }
 

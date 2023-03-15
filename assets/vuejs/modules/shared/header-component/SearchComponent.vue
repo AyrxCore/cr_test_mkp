@@ -2,14 +2,14 @@
   <div ref="wrapper" class="flex w-full">
     <input
       v-model="searchTerm"
-      class="input !rounded-r-none !p-2 !text-sm md:!text-base md:!text-lg lg:!px-8 lg:!py-4 truncate md:text-clip"
+      class="input truncate !rounded-r-none !p-2 !text-sm md:text-clip md:!text-base md:!text-lg lg:!px-8 lg:!py-4"
       name="search"
       placeholder="Rechercher un produit, un accord cadre ou un fournisseur"
       type="search"
       @keyup.enter="searchProduct"
     />
     <button
-      class="flex items-center rounded-r-md px-3 py-1 text-white hover:opacity-75 bg-secondary"
+      class="flex items-center rounded-r-md bg-secondary px-3 py-1 text-white hover:opacity-75"
       @click="searchProduct"
     >
       <SearchIconComponent />
@@ -21,7 +21,7 @@
 import { onMounted, ref } from 'vue'
 import SearchIconComponent from '@/vuejs/modules/shared/icon/SearchIconComponent.vue'
 import { useRoute } from 'vue-router'
-import { ProductPageList } from '@/vuejs/modules/products/routerProducts'
+import { ProductPageList } from '@/vuejs/router/pages-list'
 
 const route = useRoute()
 const emit = defineEmits(['searchProduct'])
@@ -29,9 +29,9 @@ const wrapper = ref<HTMLElement>()
 
 const searchTerm = ref('')
 
-const searchProduct = (() => {
-  emit('searchProduct', {term: searchTerm.value, page: 1})
-})
+const searchProduct = () => {
+  emit('searchProduct', { term: searchTerm.value, page: 1 })
+}
 
 onMounted(() => {
   if (route.query.q && route.name === ProductPageList.PRODUCTS) {

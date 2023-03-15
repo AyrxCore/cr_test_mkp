@@ -61,7 +61,7 @@ class UpplerBuyerCompanyService extends HttpClientProvider
         );
         if (Response::HTTP_OK === $res->getStatusCode()) {
             $addresses = json_decode($res->getContent());
-            $this->computeAdresses($addresses);
+            $this->computeAddresses($addresses);
             return $addresses;
         }
 
@@ -89,7 +89,7 @@ class UpplerBuyerCompanyService extends HttpClientProvider
         return null;
     }
 
-    private function computeAdresses(array &$addresses): void
+    private function computeAddresses(array &$addresses): void
     {
         foreach ($addresses as $address) {
             $this->computeAddress($address);
@@ -159,7 +159,7 @@ class UpplerBuyerCompanyService extends HttpClientProvider
         );
         if (Response::HTTP_OK === $res->getStatusCode()) {
             $addresses = json_decode($res->getContent());
-            $this->computeAdresses($addresses);
+            $this->computeAddresses($addresses);
             return $addresses;
         }
 
@@ -181,5 +181,4 @@ class UpplerBuyerCompanyService extends HttpClientProvider
 
         return null;
     }
-
 }

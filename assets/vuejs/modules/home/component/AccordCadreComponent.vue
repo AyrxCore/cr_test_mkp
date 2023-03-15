@@ -4,8 +4,7 @@
       <img :src="properties.logo_partenaire" alt="Image produit" />
     </div>
     <p class="my-8 text-sm font-normal text-white sm:text-lg">
-      Découvrez ou téléchargez les conditions négociées de ce
-      partenaire
+      Découvrez ou téléchargez les conditions négociées de ce partenaire
     </p>
 
     <RouterLink
@@ -20,7 +19,7 @@
 <script lang="ts" setup>
 import { computed, PropType } from 'vue'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
-import { ProductPageList } from '@/vuejs/modules/products/routerProducts'
+import { ProductPageList } from '@/vuejs/router/pages-list'
 import { Product } from '@/vuejs/types/Product'
 
 const props = defineProps({

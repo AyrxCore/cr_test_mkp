@@ -1,7 +1,7 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="text-title-35 mt-2 mb-2 text-primary lg:mt-0">
+      <h3 class="mt-2 mb-2 text-title-35 text-primary lg:mt-0">
         Editer une adresse
       </h3>
       <AddressForm />
@@ -9,8 +9,9 @@
   </AccountPage>
 </template>
 <script lang="ts" setup>
-import AddressForm from '@/vuejs/modules/account/components/adress/AddressForm.vue'
 import { useHead } from '@vueuse/head'
+
+import AddressForm from '@/vuejs/modules/account/components/address/AddressForm.vue'
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 
 const title = 'Éditer une adresse'

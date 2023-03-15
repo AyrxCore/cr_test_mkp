@@ -40,7 +40,7 @@ class UserApiController extends AbstractController
     #[Route('/me', name: 'get_me')]
     public function me(NormalizerInterface $normalizer): JsonResponse
     {
-        $session= $this->requestStack->getSession();
+        $session = $this->requestStack->getSession();
         $session->start();
 
         if (!$session->has('account') || empty($session->get('account'))) {
@@ -50,10 +50,9 @@ class UserApiController extends AbstractController
         $subAccountDatas = $this->upplerAccountService->getUserSubAccountDatas();
         $user = $normalizer->normalize($this->getUser(), 'json', ['groups' => 'simpleUser']);
         $account = $normalizer->normalize($session->get('account'), 'json', ['groups' => 'simpleUser']);
-
-        $user["account"] = $account;
-        $user["account"]["subaccount"] = $subAccountDatas;
-        $user["account"]["buyer"] = $buyerDatas;
+        $user['account'] = $account;
+        $user['account']['subaccount'] = $subAccountDatas;
+        $user['account']['buyer'] = $buyerDatas;
         return new JsonResponse($user);
     }
 
@@ -81,7 +80,7 @@ class UserApiController extends AbstractController
     #[ParamConverter("id", Account::class)]
     public function selectAccount(NormalizerInterface $normalizer, Account $account): JsonResponse
     {
-        $session= $this->requestStack->getSession();
+        $session = $this->requestStack->getSession();
         $session->start();
 
         $userAuth = $this->upplerAuthenticationService->authenticateUser(
@@ -126,5 +125,4 @@ class UserApiController extends AbstractController
         $em->flush();
         return new JsonResponse(['password changed'], Response::HTTP_OK);
     }
-
 }
