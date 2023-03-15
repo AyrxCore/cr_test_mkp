@@ -14,12 +14,6 @@ import NotFoundPage from '@/vuejs/modules/PageNotFound.vue'
 import { useUserStore } from '@/vuejs/stores/user'
 import { useCartStore } from '@/vuejs/stores/cart'
 
-export enum MainPageList {
-  HOME_PAGE = 'home',
-  CONTACT_PAGE = 'contact',
-  PAGE_NOT_FOUND = 'page-non-trouvee',
-}
-
 import {
   MainPageList,
   ProductPageList,
