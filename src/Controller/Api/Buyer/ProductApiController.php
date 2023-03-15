@@ -5,8 +5,11 @@ namespace App\Controller\Api\Buyer;
 use App\Dto\AccountAccordCadre;
 use App\Entity\AccordStatut;
 use App\Entity\Account;
+use App\Service\MailerProvider;
 use App\Service\UpplerProductService;
 use Doctrine\ORM\EntityManagerInterface;
+use mysql_xdevapi\Exception;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\Service\Attribute\Required;
+use Twig\Environment;
 
 
 class ProductApiController extends AbstractController
@@ -47,6 +51,9 @@ class ProductApiController extends AbstractController
 
     #[Required]
     public UpplerProductService $upplerProductService;
+
+    #[Required]
+    public Environment $twig;
 
     private const PAGE = 1;
 
@@ -161,10 +168,12 @@ class ProductApiController extends AbstractController
         return new JsonResponse($accordCadre);
     }
 
-
     #[Route('/api/accord-cadre-subscription', name: 'accord_cadre_subscription', methods: ['POST'])]
-    public function subscription(Request $request, NormalizerInterface $normalizer): JsonResponse
-    {
+    public function subscription(
+        Request $request,
+        MailerProvider $mailerProvider,
+        LoggerInterface $logger,
+    ): JsonResponse {
         $session = $this->requestStack->getSession();
         $session->start();
 
@@ -177,7 +186,40 @@ class ProductApiController extends AbstractController
             'accordId' => $params['accordId'],
         ]);
 
-        if ($accordStatut) {
+        $error = false;
+        try {
+            $sugarLink = $this->getParameter('SUBSCRIPTION_MAIL_SUGAR_LINK');
+            $from = $this->getParameter('SUBSCRIPTION_MAIL_FROM');
+            $to = $this->getParameter('SUBSCRIPTION_MAIL_TO');
+
+            $mailerProvider->send(
+                $from,
+                $to,
+                'Qantis Achats signalé par e-mail',
+                $this->twig->render('mails/request.accord.subscription.html.twig', [
+                    'fat'       => $params['accordName'],
+                    'email'     => $account->getUser()->getemail(),
+                    'nom'       => $account->getUser()->getFirstName() . ' ' . $account->getUser()->getLastName(),
+                    'societe'   => $account->getAdherent()->getName(),
+                    'sugarLink' => $sugarLink . $account->getAdherent()->getId(),
+                ])
+            );
+        } catch (\Exception $exception) {
+            $error = true;
+            $logger->critical(
+                "Erreur d'envoi de demande de subscription "
+                . $account->getUser()->getemail() . ' ' . $account->getAdherent()->getName() . " : " .
+                $exception->getMessage()
+            );
+        }
+
+        if ($error) {
+            $accordStatut = new AccordStatut();
+            $accordStatut->setAdherent($account->getAdherent());
+            $accordStatut->setAccordId(new Uuid($params['accordId']));
+            $accordStatut->setStatus(AccountAccordCadre::PROCESS_STATUS_NOT_ACTIVATED);
+            $accordStatut->setAccordStatutRequestAt(new \DateTime('now'));
+        } elseif ($accordStatut) {
             if (AccountAccordCadre::PROCESS_STATUS_NOT_ACTIVATED === $accordStatut->getStatus()) {
                 $accordStatut->setStatus(AccountAccordCadre::PROCESS_STATUS_PENDING);
 

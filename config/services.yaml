@@ -20,6 +20,9 @@ parameters:
   uppler_url_source_product_img: '%env(UPPLER_URL_SOURCE_PRODUCT_IMG)%'
   uppler_url_source_list_product_img: '%env(UPPLER_URL_SOURCE_LIST_PRODUCT_IMG)%'
   uppler_url_source_seller_img: '%env(UPPLER_URL_SOURCE_SELLER_IMG)%'
+  SUBSCRIPTION_MAIL_SUGAR_LINK: '%env(SUGAR_LINK)%'
+  SUBSCRIPTION_MAIL_FROM: '%env(MAIL_FROM)%'
+  SUBSCRIPTION_MAIL_TO: '%env(MAIL_TO)%'
 services:
   # default configuration for services in *this* file
   _defaults:

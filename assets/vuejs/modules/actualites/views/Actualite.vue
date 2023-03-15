@@ -27,23 +27,33 @@
               {{ currentExpertContent.articleContent }}
             </p>
           </div>
-          <a
-              href="#"
-              class="default-button-gradient mt-4 inline-flex justify-center px-3.5 py-3 text-center font-bold text-white"
-          >
-            <ArrowRigntIconComponent
-                class="mt-1 mr-2 w-4 items-center"
-                :stroke-color="'#FFFFFF'"
-            />
-            Découvrir ce partenaire
-          </a>
+          <div v-if="currentExpertContent.ctaTxt !== '' && currentExpertContent.ctaLink !== ''">
+            <a
+                :href="'//' + currentExpertContent.ctaLink"
+                target="_blank"
+                class="default-button-gradient mt-4 inline-flex justify-center px-3.5 py-3 text-center font-bold text-white"
+            >
+              <ArrowRigntIconComponent
+                  class="mt-1 mr-2 w-4 items-center"
+                  :stroke-color="'#FFFFFF'"
+              />
+              {{ currentExpertContent.ctaTxt }}
+            </a>
+          </div>
         </div>
         <!-- Fin Bloc text actualité -->
 
         <!-- Bloc image -->
-        <div class="mt-[7rem] h-[421px] rounded-lg bg-white">
+        <div class="mt-[7rem] h-[421px] rounded-lg bg-white hidden md:flex">
           <img
               :src="currentExpertContent.article_img_desktop"
+              alt="Picture"
+              class="m-auto h-[inherit] items-center"
+          />
+        </div>
+        <div class="mt-[7rem] h-[421px] rounded-lg bg-white md:hidden">
+          <img
+              :src="currentExpertContent.article_img_mobile"
               alt="Picture"
               class="m-auto h-[inherit] items-center"
           />

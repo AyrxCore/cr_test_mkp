@@ -10,7 +10,12 @@
         Bénéficiez des conditions
       </ButtonComponent>
       <ModalValidationBeneficePartnerModal
-          v-if="showModal"
+          v-if="showSuccesModal"
+          class="modal"
+          @cancel="closeModal"
+      />
+      <ModalValidationBeneficeErrorModal
+          v-if="showErrorModal"
           class="modal"
           @cancel="closeModal"
       />
@@ -26,12 +31,16 @@ import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import ModalValidationBeneficePartnerModal
   from '@/vuejs/modules/products/components/accord-cadre/ValidationBeneficeModal.vue'
-import { PropType, ref } from 'vue'
-import { AccountAccordCadre } from '@/vuejs/types/AccountAccordCadre'
-import { status } from '@/vuejs/modules/products'
+import ModalValidationBeneficeErrorModal
+  from '@/vuejs/modules/products/components/accord-cadre/ValidationBeneficeErrorModal.vue'
+
+import {PropType, ref} from 'vue'
+import {AccountAccordCadre} from '@/vuejs/types/AccountAccordCadre'
+import {status} from '@/vuejs/modules/products'
 import ProductHttpClient from '@/vuejs/services/httpclient/ProductHttpClient'
 
-const showModal = ref<boolean>(false)
+const showSuccesModal = ref<boolean>(false)
+const showErrorModal = ref<boolean>(false)
 const isLoading = ref<boolean>(false)
 const props = defineProps({
   currentStatus: {
@@ -46,17 +55,32 @@ const props = defineProps({
     type: String,
     default: null,
   },
+  accordName: {
+    type: String,
+    default: null,
+  },
 })
 
 const sendSubmission = (async () => {
   isLoading.value = true
   try {
-    await ProductHttpClient.get().updateAccountAccordsCadresByParams(
-      {
-        accordId: props.currentStatus.accordId,
-      },
-  )
-    showModal.value = true
+    const response = await ProductHttpClient.get().updateAccountAccordsCadresByParams(
+        {
+          accordId: props.currentStatus.accordId,
+          accordName: props.accordName,
+        },
+    )
+    if (status.value.pending === response) {
+      // eslint-disable-next-line no-console
+      console.log('ok')
+      showSuccesModal.value = true
+      props.currentStatus.status = status.value.pending
+    } else {
+      // eslint-disable-next-line no-console
+      console.log('pas ok')
+      showErrorModal.value = true
+    }
+
   } catch (error) {
     isLoading.value = false
   }
@@ -64,9 +88,9 @@ const sendSubmission = (async () => {
 })
 
 const closeModal = (() => {
-  props.currentStatus.status = status.value.pending
   isLoading.value = false
-  showModal.value = false
+  showSuccesModal.value = false
+  showErrorModal.value = false
 })
 
 </script>

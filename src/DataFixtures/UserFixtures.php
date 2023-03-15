@@ -60,6 +60,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface, FixtureGr
         $adh = new Adherent();
         $adh->setId(new Uuid('ce7ed022-5789-11ec-b3a5-0af08f946010'));
         $adh->setName('GROUPE QANTIS');
+        $adh->setReducceCode('KKT26DIB');
         $manager->persist($adh);
         $manager->flush();
 
