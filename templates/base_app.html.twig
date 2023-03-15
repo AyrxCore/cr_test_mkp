@@ -9,8 +9,10 @@
     {% block javascripts %}
         {{ vite_asset('main.ts', ['vuejs']) }}
     {% endblock %}
+    {% include '_partials/_gtm-header.html.twig' %}
 </head>
 <body>
+{% include '_partials/_gtm-body.html.twig' %}
 {% block body %}
 
 {% endblock %}

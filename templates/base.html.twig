@@ -33,8 +33,11 @@
           document.addEventListener('DOMContentLoaded', initApp)
         </script>
     {% endblock %}
+
+    {% include '_partials/_gtm-header.html.twig' %}
 </head>
 <body>
+  {% include '_partials/_gtm-body.html.twig' %}
   {% block header %}
     <div class="vue-app" data-component="sticky-contact-buttons"></div>
     {% include '_partials/_header.html.twig' with {'back_url': false} %}

@@ -8,7 +8,7 @@ nginx-bash:
 	docker exec -it marketplace-nginx-1 sh
 
 db-bash:
-	docker exec -it marketplace-db-1 sh
+	docker exec -it marketplace-db-mkp-1 sh
 
 lint:
 	php vendor/bin/php-cs-fixer fix
