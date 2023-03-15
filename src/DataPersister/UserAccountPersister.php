@@ -110,7 +110,7 @@ class UserAccountPersister implements ContextAwareDataPersisterInterface
         $account->setUpplerUserId($data->getUpplerUserId());
         $account->setUpplerCompanyId($data->getUpplerCompanyId());
         $account->setUser($user);
-        $account->setIsEnabled(false);
+        $account->setIsEnabled(true);
 
         $account->setAdherent($adh);
         $this->em->persist($account);
