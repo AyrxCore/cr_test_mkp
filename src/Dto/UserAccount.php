@@ -97,6 +97,13 @@ final class UserAccount
     #[Assert\Type("array", message: "(accordStatuts) array required")]
     private array $accordStatuts = [];
 
+    #[Assert\Type("bool", message: "(isMarketplace) bool required")]
+    private bool $isMarketplace = true;
+
+    #[Assert\Type("string", message: "(reducceCode) string required")]
+    private string $reducceCode = '';
+
+
     public function getAccountId(): ?Uuid
     {
         return $this->accountId;
