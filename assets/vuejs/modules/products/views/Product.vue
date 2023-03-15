@@ -358,7 +358,7 @@ const setThumbsSwiper = (swiper) => {
 watch(
   () => route.params.id as string,
   async (id: string) => {
-    if (id) product.value = await productStore.getProductById(id)
+    if (id) product.value = await productStore.findProductById(id)
   },
   { immediate: true },
 )

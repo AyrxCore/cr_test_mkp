@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\CartSavings;
+use App\Repository\AccountRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use stdClass;
-use Symfony\Component\HttpClient\Response\CurlResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Service\Attribute\Required;
@@ -21,6 +22,9 @@ class UpplerCartService extends HttpClientProvider
 
     #[Required]
     public UpplerAccountService $upplerAccountService;
+
+    #[Required]
+    public AccountRepository $accountRepository;
 
     protected string $appDomain;
 
@@ -123,6 +127,22 @@ class UpplerCartService extends HttpClientProvider
             }
         }
 
+        return null;
+    }
+
+    public function getCartById(int $cartId): array | null
+    {
+        $session = $this->requestStack->getSession();
+        $session->start();
+
+        $res = $this->request(
+            'GET',
+            $this->apiUrl . 'v1/buyer/cart/' . $cartId . '?expand[]=orders&expand[]=orderItems',
+        );
+
+        if (Response::HTTP_OK === $res->getStatusCode()) {
+            return json_decode($res->getContent(), true);
+        }
         return null;
     }
 
@@ -289,5 +309,31 @@ class UpplerCartService extends HttpClientProvider
         );
 
         return $res && Response::HTTP_NO_CONTENT === $res->getStatusCode();
+    }
+
+    public function processCartSavings(array $cart): void
+    {
+        $session = $this->requestStack->getSession();
+        $session->start();
+
+        $account = $this->accountRepository->findOneBy([
+            'upplerUserId' => $cart['user']['id']
+        ]);
+
+        foreach ($cart['orders'] as $order) {
+            $cartSaving = new CartSavings();
+            $cartSaving->setCartId($cart['id']);
+            $cartSaving->setAccount($account);
+            $cartSaving->setOrderId($order['id']);
+            $cartSaving->setSellerId($order['seller']['id']);
+            $priceReferenceByOrder = 0;
+            foreach ($order['items'] as $item) {
+                $priceReferenceByOrder += $item['variant']['product']['price_reference'] * $item['quantity'];
+            }
+            $cartSaving->setAmount($priceReferenceByOrder - $order['items_total']);
+            $this->em->persist($cartSaving);
+        }
+
+        $this->em->flush();
     }
 }

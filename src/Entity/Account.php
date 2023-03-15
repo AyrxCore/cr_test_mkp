@@ -6,6 +6,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Dto\UserAccountInputDto;
 use App\Repository\AccountRepository;
 use App\State\UserAccountProcessor;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -16,9 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: AccountRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ApiResource(
-    collectionOperations: [
-
-    ],
+    collectionOperations: [],
     itemOperations: [
         'get' => [
             'normalization_context' => ['groups' => ['account:get']],
@@ -83,6 +83,14 @@ class Account
     #[ORM\JoinColumn(nullable: true)]
     #[Groups(["simpleUser"])]
     private ?Adherent $adherent = null;
+
+    #[ORM\OneToMany(mappedBy: 'account', targetEntity: CartSavings::class)]
+    private Collection $cartSavings;
+
+    public function __construct()
+    {
+        $this->cartSavings = new ArrayCollection();
+    }
 
     #[ORM\PrePersist]
     public function onPrePersist()
@@ -258,4 +266,33 @@ class Account
         return $this;
     }
 
+    /**
+     * @return Collection<int, CartSavings>
+     */
+    public function getCartSavings(): Collection
+    {
+        return $this->cartSavings;
+    }
+
+    public function addCartSaving(CartSavings $cartSaving): self
+    {
+        if (!$this->cartSavings->contains($cartSaving)) {
+            $this->cartSavings->add($cartSaving);
+            $cartSaving->setAccount($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCartSaving(CartSavings $cartSaving): self
+    {
+        if ($this->cartSavings->removeElement($cartSaving)) {
+            // set the owning side to null (unless already changed)
+            if ($cartSaving->getAccount() === $this) {
+                $cartSaving->setAccount(null);
+            }
+        }
+
+        return $this;
+    }
 }

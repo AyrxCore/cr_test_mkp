@@ -49,13 +49,17 @@ class CartApiController extends AbstractController
             return $this->redirectToRoute('app');
         }
 
-        $confirmed = $this->upplerCartService->isPaymentConfirmed($cartId);
+        $cart = $this->upplerCartService->getCartById($cartId);
+        if ($cart['state'] !== 'confirmed') {
+            $confirmed = $this->upplerCartService->isPaymentConfirmed($cartId);
 
-        $acceptedStatus = ['processing', 'completed'];
+            $acceptedStatus = ['processing', 'completed'];
 
-        if ($confirmed && in_array($confirmed->status, $acceptedStatus)) {
-            $this->upplerCartService->confirmCart($cartId);
-            return $this->redirect('/app/cart/confirmed');
+            if ($confirmed && in_array($confirmed->status, $acceptedStatus)) {
+                $this->upplerCartService->confirmCart($cartId);
+                $this->upplerCartService->processCartSavings($cart);
+                return $this->redirect('/app/cart/confirmed');
+            }
         }
 
         return $this->redirect('/app/home');

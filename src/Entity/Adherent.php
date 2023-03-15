@@ -30,7 +30,6 @@ class Adherent
     #[Groups(["simpleUser"])]
     private ?string $reducceCode = null;
 
-
     public function __construct()
     {
         $this->accordStatuts = new ArrayCollection();
@@ -117,6 +116,4 @@ class Adherent
 
         return $this;
     }
-
-
 }
