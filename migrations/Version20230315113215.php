@@ -20,7 +20,6 @@ final class Version20230315113215 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP SEQUENCE cart_savings_id_seq CASCADE');
         $this->addSql('CREATE TABLE cart_savings (id UUID NOT NULL, account_id UUID NOT NULL, cart_id INT NOT NULL, order_id INT NOT NULL, seller_id INT NOT NULL, amount INT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_E9DB971A9B6B5FBA ON cart_savings (account_id)');
         $this->addSql('COMMENT ON COLUMN cart_savings.id IS \'(DC2Type:uuid)\'');
@@ -33,7 +32,6 @@ final class Version20230315113215 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
-        $this->addSql('CREATE SEQUENCE cart_savings_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('ALTER TABLE cart_savings DROP CONSTRAINT FK_E9DB971A9B6B5FBA');
         $this->addSql('DROP TABLE cart_savings');
     }
