@@ -11,7 +11,7 @@
   </p>
   <RouterLink
     class="button button-gradient mt-10 w-full md:w-auto"
-    :to="{ path: '/app/home' }"
+    :to="{ name: PageList.HOME_PAGE }"
   >
     <ArrowRightIconComponent :stroke-color="'#FFFFFF'" class="mr-2 w-4" />
     Continuer vos achats
@@ -84,6 +84,7 @@ import LeafIconComponent from '@/vuejs/modules/shared/icon/LeafIconComponent.vue
 import ExpandIconComponent from '@/vuejs/modules/shared/icon/ExpandIconComponent.vue'
 
 import { useUserStore } from '@/vuejs/stores/user'
+import { PageList } from '@/vuejs/router';
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)

@@ -2,7 +2,7 @@
   <nav class="bg-grey-light w-full rounded-md text-xs">
     <ol class="list-reset text-xs hidden lg:flex">
       <li>
-        <RouterLink :to="{ path: '/app/home' }" class="text-gray-400">
+        <RouterLink :to="{ name: PageList.HOME_PAGE }" class="text-gray-400">
           Accueil
         </RouterLink>
       </li>
@@ -40,6 +40,7 @@
 <script lang="ts" setup>
 import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightIconComponent.vue'
 import { computed, PropType } from 'vue'
+import { PageList } from '@/vuejs/router';
 
 const props = defineProps({
   listUrl: {
