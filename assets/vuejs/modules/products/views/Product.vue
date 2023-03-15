@@ -1,11 +1,19 @@
 <template>
   <BaseTemplate title="Qantis - MarketPlace">
     <div
-      v-if="product"
+      v-if="isLoading"
+      class="w-full flex h-20 justify-center items-center mt-5">
+      <LoaderSharedComponent
+        class="text-secondary"
+        classes="loader-xl loader"
+      />
+    </div>
+    <div
+      v-else
       class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 px-5 sm:px-8"
     >
       <breadcrumb-shared-component
-        :list-url="breadcrumbUrl"
+        :list-url="breadcrumbUrl(product)"
         :current-page="product.name"
       />
       <div class="flex w-[100%] max-w-screen-2xl justify-end">
@@ -224,39 +232,6 @@
           class="whitespace-pre-line text-sm text-gray-500 md:text-base lg:text-lg"
           v-html="product.description"
         />
-        <!--        <div class="flex flex-col md:mt-[60px] md:flex-row">-->
-        <!--          <div-->
-        <!--            class="mt-5 rounded-lg bg-white p-5 md:mt-0 md:mr-2 lg:h-[180px] lg:p-7"-->
-        <!--          >-->
-        <!--            <h3 class="inline-flex text-[19px] text-primary md:text-[25px]">-->
-        <!--              Certifications et éco-label-->
-        <!--              <LeafIconComponent class="ml-2 items-center" />-->
-        <!--            </h3>-->
-        <!--            <ul class="list-disc text-gray-500">-->
-        <!--              <li-->
-        <!--                v-for="i in 3"-->
-        <!--                :key="i"-->
-        <!--                class="mt-1 ml-7 text-sm md:text-base lg:text-lg"-->
-        <!--              >-->
-        <!--                Curabitur ac sem at enim convallis consectetur-->
-        <!--              </li>-->
-        <!--            </ul>-->
-        <!--          </div>-->
-        <!--          <div class="mt-5 rounded-lg bg-white p-7 md:mt-0 lg:h-[180px]">-->
-        <!--            <h3 class="text-[19px] text-primary md:text-[25px]">-->
-        <!--              Documentation-->
-        <!--            </h3>-->
-        <!--            <ul class="list-disc text-gray-500">-->
-        <!--              <li-->
-        <!--                v-for="(documentation, key) in documentations"-->
-        <!--                :key="key"-->
-        <!--                class="mt-1 ml-7 text-sm md:text-base lg:text-lg"-->
-        <!--              >-->
-        <!--                <a href="#" class="underline">{{ documentation }}</a>-->
-        <!--              </li>-->
-        <!--            </ul>-->
-        <!--          </div>-->
-        <!--        </div>-->
       </div>
       <!-- Fin Bloc description -->
 
@@ -291,12 +266,6 @@
       </div> -->
       <!-- Fin bloc produits similaire -->
     </div>
-    <div v-else class="mt-5 flex h-20 w-full items-center justify-center">
-      <LoaderSharedComponent
-        class="text-secondary"
-        classes="loader-xl loader"
-      />
-    </div>
   </BaseTemplate>
   <ProductAddToCartComponent
     class="z-10 flex lg:hidden"
@@ -327,14 +296,14 @@ const productStore = useProductStore()
 const helpImageFile = getImage(helpImage)
 const thumbsSwiper = ref(null)
 
+const isLoading = ref<boolean>(false)
 const quantity = ref<number>(1)
-
 const product = ref<Product>()
 
-const breadcrumbUrl = computed(() => {
+const breadcrumbUrl = ((product: Product|null) => {
   const breadcrumb = []
-  if (product.value) {
-    Object.entries(product.value.categories).forEach(([key, value], index) => {
+  if (product) {
+    Object.entries(product.categories).forEach(([key, value], index) => {
       breadcrumb.push({
         id: key,
         name: value,
@@ -345,12 +314,6 @@ const breadcrumbUrl = computed(() => {
   return breadcrumb
 })
 
-const documentations = ref([
-  'Fiche produit',
-  'Fiche technique',
-  "Guide d'utilisation",
-])
-
 const setThumbsSwiper = (swiper) => {
   thumbsSwiper.value = swiper
 }
@@ -358,8 +321,13 @@ const setThumbsSwiper = (swiper) => {
 watch(
   () => route.params.id as string,
   async (id: string) => {
-    if (id) product.value = await productStore.findProductById(id)
-  },
+        isLoading.value = true
+        if (id) {
+          product.value = await productStore.getProductById(id)
+        }
+        isLoading.value = false
+      },
+
   { immediate: true },
 )
 </script>

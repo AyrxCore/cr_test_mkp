@@ -10,8 +10,15 @@ import { routes as accountRoutes } from '@/vuejs/modules/account/routerAccount'
 
 import Home from '@/vuejs/modules/home/views/HomePage.vue'
 import Contact from '@/vuejs/modules/contact/views/ContactPage.vue'
+import NotFoundPage from '@/vuejs/modules/PageNotFound.vue'
 import { useUserStore } from '@/vuejs/stores/user'
 import { useCartStore } from '@/vuejs/stores/cart'
+
+export enum MainPageList {
+  HOME_PAGE = 'home',
+  CONTACT_PAGE = 'contact',
+  PAGE_NOT_FOUND = 'page-non-trouvee',
+}
 
 import {
   MainPageList,
@@ -31,14 +38,23 @@ export const PageList = {
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/app/home',
+    path: `/app/${PageList.HOME_PAGE}`,
     name: PageList.HOME_PAGE,
     component: Home,
   },
   {
-    path: '/app/contact',
+    path: `/app/${PageList.CONTACT_PAGE}`,
     name: PageList.CONTACT_PAGE,
     component: Contact,
+  },
+  {
+    path: `/app/${PageList.PAGE_NOT_FOUND}`,
+    name: PageList.PAGE_NOT_FOUND,
+    component: NotFoundPage,
+  },
+  {
+    path: '/app/:pathMatch(.*)*',
+    redirect: `/app/${PageList.PAGE_NOT_FOUND}`,
   },
   ...productsRoutes,
   ...actualitesRoutes,

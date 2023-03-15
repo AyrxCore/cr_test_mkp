@@ -42,6 +42,7 @@ export const useProductStore = defineStore({
         return await ProductHttpClient.get().fetchHomeProducts(type)
       } catch (error) {
         console.log(error)
+
       }
     },
 
