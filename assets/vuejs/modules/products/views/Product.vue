@@ -246,9 +246,9 @@
               :key="index"
               class="border text-sm text-primary md:text-base lg:text-lg"
               :class="{
-                hidden:
-                  property.value === 'home-top-vente' ||
-                  property.value === 'home-selection',
+                'hidden':
+                  property === 'home-top-vente' ||
+                  property === 'home-selection',
               }"
             >
               <td class="w-[20%] border p-2">{{ key }}</td>
