@@ -17,7 +17,7 @@
       <SwiperSlide
         v-for="(seller, key) in sellers"
         :key="key"
-        class="flex h-full items-center justify-center overflow-hidden rounded-lg bg-white"
+        class="flex h-full items-center justify-center overflow-hidden rounded-lg bg-white p-1.5"
       >
         <RouterLink
           v-if="showCarouselConnected"
