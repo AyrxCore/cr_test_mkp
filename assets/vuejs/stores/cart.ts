@@ -20,6 +20,7 @@ export const useCartStore = defineStore({
     cart: null,
     termsOfSales: [],
     newlyAddedProduct: 0,
+    modifyingCart: false,
   }),
 
   actions: {

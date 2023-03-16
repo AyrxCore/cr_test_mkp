@@ -38,6 +38,7 @@
         >
           <div class="text-center lg:w-2/12">
             <select
+              v-if="!cartStore.modifyingCart"
               :value="item.quantity"
               class="w-20 rounded-lg border border-gray-300 text-center"
               @change="modifyQuantity"
@@ -53,12 +54,7 @@
               <option>9</option>
               <option>10</option>
             </select>
-            <!-- <input
-              type="number"
-              min="1"
-              name="qte"
-              class="w-10 rounded-lg border border-gray-300 text-center lg:w-14"
-            /> -->
+            <LoaderSharedComponent v-else class="text-primary" />
           </div>
           <div class="text-center lg:w-4/12">
             <span class="mt-2 text-sm text-gray-400 line-through lg:text-lg">
@@ -74,9 +70,14 @@
             <!-- <button class="flex text-gray-500">
               <HeartIconComponent class="mr-2 stroke-gray-500" />
             </button> -->
-            <button class="flex text-gray-500" @click="deleteProduct">
+            <button
+              v-if="!cartStore.modifyingCart"
+              class="flex text-gray-500"
+              @click="deleteProduct"
+            >
               <TrashIconComponent :stroke-color="'#5E6875'" />
             </button>
+            <LoaderSharedComponent v-else class="text-primary" />
           </div>
         </div>
       </div>
@@ -94,12 +95,9 @@ import { useCartStore } from '@/vuejs/stores/cart'
 import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
 import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
 import CheckboxComponent from '@/vuejs/modules/shared/CheckboxComponent.vue'
-import ProductRecapPriceComponent from '@/vuejs/modules/cart/components/ProductRecapPriceComponent.vue'
-import sampleProductBlank from '@/vuejs/assets/img/sample_product_img.png'
+import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 
 const cartStore = useCartStore()
-
-const sampleProductImg = getImage(sampleProductBlank)
 
 const props = defineProps({
   item: {
@@ -131,15 +129,20 @@ const referencePriceDisplayed = computed((): string => {
 })
 
 const modifyQuantity = async (event: InputEvent): Promise<void> => {
+  cartStore.modifyingCart = true
   await cartStore.updateProductQuantity({
     id: props.item.id,
     quantity: parseInt(event.target.value),
   })
-  cartStore.getCart()
+  await cartStore.getCart()
+  cartStore.modifyingCart = false
 }
 
 const deleteProduct = async (): Promise<void> => {
+  if (cartStore.modifyingCart) return
+  cartStore.modifyingCart = true
   await cartStore.deleteProduct(props.item.id)
-  cartStore.getCart()
+  await cartStore.getCart()
+  cartStore.modifyingCart = false
 }
 </script>

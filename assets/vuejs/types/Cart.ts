@@ -19,6 +19,7 @@ export interface CartStoreState {
   cart?: Cart
   termsOfSales: number[]
   newlyAddedProduct: number
+  modifyingCart: boolean
 }
 
 interface LanguageVariation {

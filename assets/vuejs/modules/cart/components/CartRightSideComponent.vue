@@ -24,12 +24,12 @@
         <div>TOTAL HT :</div>
         <div class="float-right">{{ totalWithoutTaxesDisplayed }}€</div>
       </div>
-      <div
+      <!-- <div
         class="mb-2 inline-flex w-full justify-between text-sm text-gray-500 md:text-base xl:text-lg"
       >
         <div>TVA :</div>
         <div class="float-right">{{ tvaDisplayed }}€</div>
-      </div>
+      </div> -->
       <div
         class="inline-flex w-full justify-between text-sm text-gray-500 md:text-base xl:text-lg"
       >
@@ -106,7 +106,9 @@ const shipmentPrice = computed((): string => {
 })
 
 const tvaDisplayed = computed((): string => {
-  return formatPrice((subTotalWithoutTaxes.value * 20) / 100 / 100)
+  return formatPrice(
+    (cart.value.total - cart.value.total_excluding_taxes) / 100,
+  )
 })
 
 const totalDisplayed = computed((): string => {

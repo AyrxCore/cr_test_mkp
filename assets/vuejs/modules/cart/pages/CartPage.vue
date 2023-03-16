@@ -28,7 +28,7 @@
         >
           <RouterView />
         </template>
-        <LoaderSharedComponent v-else class="loader-xl mt-6" />
+        <LoaderSharedComponent v-else class="loader-xl mt-6 text-primary" />
       </div>
     </div>
   </BaseTemplate>

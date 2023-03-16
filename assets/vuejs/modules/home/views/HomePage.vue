@@ -9,7 +9,7 @@
             à nos 30 000 entreprises adhérentes
           </h3>
           <p
-              class="mt-2.5 text-sm text-gray-400 sm:mt-5 sm:text-base xl:text-lg"
+            class="mt-2.5 text-sm text-gray-400 sm:mt-5 sm:text-base xl:text-lg"
           >
             Cher adhérent, ce nouvel espace dédié vous permet d'acheter
             directement en ligne et de trouver vos accords-cadres, en quelques
@@ -18,25 +18,25 @@
           </p>
         </div>
         <div class="hidden xl:block">
-          <ContactUsButtonComponent/>
+          <ContactUsButtonComponent />
         </div>
       </div>
 
-      <CarouselActualitesComponent/>
+      <CarouselActualitesComponent />
 
       <!-- Bloc Produits top ventes -->
-      <ProductHomeComponent type="top-vente" title="Top vente"/>
+      <ProductHomeComponent type="top-vente" title="Top vente" />
       <!-- Fin bloc Produits top ventes -->
 
       <!-- Bloc accords cadre -->
-      <AccordCadreComponent/>
+      <AccordCadreComponent />
       <!-- Fin Bloc accords cadre -->
 
       <!-- Bloc sélection de produits -->
       <ProductHomeComponent
-          class="mt-4"
-          type="selection"
-          title="Sélection de produits"
+        class="mt-4"
+        type="selection"
+        title="Sélection de produits"
       />
       <!-- Fin bloc sélection de produits -->
 
@@ -46,25 +46,26 @@
           Plus de 200 partenaires fournisseurs, repartis en 26 catégories, sont
           référencés pour vos achats.
           <RouterLink
-            :to="{name: ProductPageList.CATEGORIES}"
-            class="font-normal text-secondary underline">
+            :to="{ name: ProductPageList.CATEGORIES }"
+            class="font-normal text-secondary underline"
+          >
             Découvrir toutes les catégories d'achats
           </RouterLink>
         </p>
       </div>
 
-      <PartnersCarousel class="mt-5"/>
-      <OurCategoriesComponent/>
+      <PartnersCarousel class="mt-5" />
+      <OurCategoriesComponent />
     </div>
 
     <div
-        class="home-bloc-economie text-cotext m-auto mt-16 flex-1 py-4 text-white"
+      class="home-bloc-economie text-cotext m-auto mt-16 flex-1 py-4 text-white"
     >
       <div class="px-5 text-left sm:text-center">
         <h3
-            class="text-[23px] font-bold leading-[27px] sm:text-[35px] sm:leading-[38.11px]"
+          class="text-[23px] font-bold leading-[27px] sm:text-[35px] sm:leading-[38.11px]"
         >
-          Vous faites des économies tout en <br/>
+          Vous faites des économies tout en <br />
           contribuant à votre démarche RSE
         </h3>
         <p class="mt-2 text-sm sm:mx-auto sm:text-base xl:w-[45%] xl:text-lg">
@@ -74,19 +75,20 @@
           aussi de contribuer à la démarche RSE de votre entreprise.
         </p>
         <p class="mt-10 flex justify-center">
-            <RouterLink
-              :to="{name: ProductPageList.CATEGORIES}"
-              class="button button-gradient">
-            <ArrowRightIconComponent :stroke-color="'#FFFFFF'"/>
-              Toutes nos catégories d'achats
-            </RouterLink>
+          <RouterLink
+            :to="{ name: ProductPageList.CATEGORIES }"
+            class="button button-gradient"
+          >
+            <ArrowRightIconComponent :stroke-color="'#FFFFFF'" />
+            Toutes nos catégories d'achats
+          </RouterLink>
         </p>
       </div>
     </div>
 
     <template v-if="getExpertsContents.length">
       <div
-          class="my-6 mx-4 mt-10 max-w-screen-2xl flex-1 rounded-md bg-white pb-4 shadow-md xl:mx-auto"
+        class="my-6 mx-4 mt-10 max-w-screen-2xl flex-1 rounded-md bg-white pb-4 shadow-md xl:mx-auto"
       >
         <div class="flex flex-col pt-1 text-center">
           <h3 class="primary home-subtitle mt-10 flex flex-col pl-8 font-bold">
@@ -96,14 +98,14 @@
               <span class="text-gradient ml-2"> communauté QANTIS </span>
             </p>
           </h3>
-          <ContenusExpertComponent/>
+          <ContenusExpertComponent />
           <div class="flex justify-center">
             <p class="mt-10">
               <RouterLink
-                  :to="{ path: '/app/actualites' }"
-                  class="button button-gradient"
+                :to="{ path: '/app/actualites' }"
+                class="button button-gradient"
               >
-                <ArrowRightIconComponent :stroke-color="'#FFFFFF'"/>
+                <ArrowRightIconComponent :stroke-color="'#FFFFFF'" />
                 Tous les contenus experts
               </RouterLink>
             </p>
@@ -116,21 +118,21 @@
 <script lang="ts" setup>
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import PartnersCarousel from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
-import {onMounted, ref} from 'vue'
+import { onMounted, ref } from 'vue'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import ContenusExpertComponent from '@/vuejs/modules/home/component/ContenusExpertComponent.vue'
 import DropdownListComponent from '@/vuejs/modules/shared/DropdownListComponent.vue'
 import ProductHomeComponent from '@/vuejs/modules/home/component/ProductHomeComponent.vue'
 import AccordCadreComponent from '@/vuejs/modules/home/component/AccordsCadreComponent.vue'
-import {useExpertContentStore} from '@/vuejs/stores/expertContent'
-import {storeToRefs} from 'pinia'
+import { useExpertContentStore } from '@/vuejs/stores/expertContent'
+import { storeToRefs } from 'pinia'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import OurCategoriesComponent from '@/vuejs/modules/home/component/OurCategoriesComponent.vue'
 import CarouselActualitesComponent from '@/vuejs/modules/home/component/CarouselActualitesComponent.vue'
-import { ProductPageList } from '@/vuejs/router/pages-list';
+import { ProductPageList } from '@/vuejs/router/pages-list'
 
 const expertContentStore = useExpertContentStore()
-const {getExpertsContents} = storeToRefs(expertContentStore)
+const { getExpertsContents } = storeToRefs(expertContentStore)
 
 const expertsContentsLoaded = ref<boolean>(false)
 
@@ -138,7 +140,6 @@ onMounted(async () => {
   await expertContentStore.init()
   expertsContentsLoaded.value = true
 })
-
 </script>
 
 <style lang="scss">
