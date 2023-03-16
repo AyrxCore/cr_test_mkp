@@ -66,8 +66,9 @@
       <span
         v-if="props.product.price?.displayPrice"
         class="mr-2 text-sm font-bold text-primary md:text-base lg:text-lg"
-        >{{ props.product.price?.displayPrice }}€</span
       >
+        {{ formatPrice(props.product.price?.displayPrice) }}€
+      </span>
       <span
         v-if="showLineThroughPrice"
         :class="{

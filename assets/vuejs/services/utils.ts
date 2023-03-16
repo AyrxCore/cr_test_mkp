@@ -19,6 +19,7 @@ export const URL_HOME_BANDEAU = '/app/actualite/guide-cybersecurite'
 export function formatPrice(price: number): string {
   return price.toLocaleString('fr', {
     minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   })
 }
 
