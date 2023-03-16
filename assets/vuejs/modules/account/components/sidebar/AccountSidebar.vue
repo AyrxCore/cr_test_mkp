@@ -1,5 +1,5 @@
 <template>
-  <AccountSidebarBlock
+  <!-- <AccountSidebarBlock
     :items="[
       {
         name: 'Historiques de commandes',
@@ -24,7 +24,7 @@
       },
     ]"
     :title="'Mes Commandes'"
-  />
+  /> -->
   <AccountSidebarBlock
     :items="[
       {
@@ -32,32 +32,32 @@
         id: AccountPageList.ACCOUNT,
         url: AccountPageList.ACCOUNT,
       },
-      {
-        name: 'Liste de produits favoris',
-        id: AccountPageList.FAVORIS_LIST,
-        url: AccountPageList.FAVORIS_LIST,
-      },
+      // {
+      //   name: 'Liste de produits favoris',
+      //   id: AccountPageList.FAVORIS_LIST,
+      //   url: AccountPageList.FAVORIS_LIST,
+      // },
     ]"
     title="Mon profil"
   />
   <AccountSidebarBlock
     :items="[
-      { name: 'Utilisateurs', id: '', url: AccountPageList.ACCOUNT },
+      // { name: 'Utilisateurs', id: '', url: AccountPageList.ACCOUNT },
       {
         name: 'Adresses',
         id: AccountPageList.ADDRESSES,
         url: AccountPageList.ADDRESSES,
       },
-      {
-        name: 'Directions - circuits de validation',
-        id: '',
-        url: AccountPageList.ACCOUNT,
-      },
-      { name: 'Statuts', id: '', url: AccountPageList.ACCOUNT },
+      // {
+      //   name: 'Directions - circuits de validation',
+      //   id: '',
+      //   url: AccountPageList.ACCOUNT,
+      // },
+      // { name: 'Statuts', id: '', url: AccountPageList.ACCOUNT },
     ]"
     title="Mon organisation"
   />
-  <AccountSidebarBlock
+  <!-- <AccountSidebarBlock
     :items="[
       {
         name: 'Statistiques de consommation',
@@ -66,7 +66,7 @@
       },
     ]"
     title="Statistiques"
-  />
+  /> -->
 </template>
 <script lang="ts" setup>
 import { AccountPageList } from '@/vuejs/router/pages-list'

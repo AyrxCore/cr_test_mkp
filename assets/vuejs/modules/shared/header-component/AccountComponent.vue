@@ -21,14 +21,15 @@
             <MenuAccount v-model="isMenuOpen" class="hidden sm:block" />
           </div>
         </div>
-        <div class="sr-only inline-flex items-center md:not-sr-only">
-          <a v-if="companyStore.defaultBillingAddress" href="#" class="text-xs">
-            Livré à
-            {{ companyStore.defaultShippingAddress.company }},
-            {{ companyStore.defaultShippingAddress.street }}
-            {{ companyStore.defaultShippingAddress.postcode }}
-            {{ companyStore.defaultShippingAddress.city }}
-          </a>
+        <div
+          v-if="companyStore.defaultBillingAddress"
+          class="sr-only inline-flex items-center text-xs md:not-sr-only"
+        >
+          Livré à
+          {{ companyStore.defaultShippingAddress.company }},
+          {{ companyStore.defaultShippingAddress.street }}
+          {{ companyStore.defaultShippingAddress.postcode }}
+          {{ companyStore.defaultShippingAddress.city }}
         </div>
       </div>
       <!-- <a class="ml-4 self-center md:ml-0" href="#">
