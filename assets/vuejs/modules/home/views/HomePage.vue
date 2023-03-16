@@ -45,9 +45,11 @@
         <p class="text-sm text-gray-400 sm:text-lg">
           Plus de 200 partenaires fournisseurs, repartis en 26 catégories, sont
           référencés pour vos achats.
-          <a href="#" class="font-normal text-secondary underline"
-          >Découvrir toutes les catégories d'achats</a
-          >
+          <RouterLink
+            :to="{name: ProductPageList.CATEGORIES}"
+            class="font-normal text-secondary underline">
+            Découvrir toutes les catégories d'achats
+          </RouterLink>
         </p>
       </div>
 
@@ -123,6 +125,7 @@ import {storeToRefs} from 'pinia'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import OurCategoriesComponent from '@/vuejs/modules/home/component/OurCategoriesComponent.vue'
 import CarouselActualitesComponent from '@/vuejs/modules/home/component/CarouselActualitesComponent.vue'
+import { ProductPageList } from '@/vuejs/router/pages-list';
 
 const expertContentStore = useExpertContentStore()
 const {getExpertsContents} = storeToRefs(expertContentStore)

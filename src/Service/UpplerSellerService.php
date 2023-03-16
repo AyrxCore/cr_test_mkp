@@ -81,8 +81,7 @@ class UpplerSellerService extends HttpClientProvider
     {
         $seller = new Seller();
         $seller->setId($remoteSeller->id);
-        //        $seller->setName($remoteSeller->name);
-        $seller->setName('sellerName');
+        $seller->setName($remoteSeller->name);
         $avatar = null;
         if (!empty($remoteSeller->avatar_url)) {
             $avatar = $remoteSeller->avatar_url;
