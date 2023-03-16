@@ -1,6 +1,9 @@
 <template>
   <BaseTemplate title="Qantis - MarketPlace">
-    <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 px-5 sm:px-8" v-if="currentExpertContent">
+    <div
+      v-if="currentExpertContent"
+      class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 px-5 sm:px-8"
+    >
       <breadcrumb-shared-component
           :list-url="listUrl"
           :current-page="'Actualité'"
@@ -23,13 +26,14 @@
           >
           <span class="text-gray-500">{{ moment(String(currentExpertContent.date)).format('MM/DD/YYYY') }}</span>
           <div class="mt-5 h-[auto] rounded-lg">
-            <p class="whitespace-pre-line text-gray-500">
-              {{ currentExpertContent.articleContent }}
-            </p>
+            <p
+              class="whitespace-pre-line text-gray-500"
+              v-html="currentExpertContent.articleContent"
+            />
           </div>
           <div v-if="currentExpertContent.ctaTxt !== '' && currentExpertContent.ctaLink !== ''">
             <a
-                :href="'//' + currentExpertContent.ctaLink"
+                :href="currentExpertContent.ctaLink"
                 target="_blank"
                 class="default-button-gradient mt-4 inline-flex justify-center px-3.5 py-3 text-center font-bold text-white"
             >
@@ -68,6 +72,15 @@
       </div>
       <!-- Fin Bloc articles recommandés -->
     </div>
+    <div
+      v-else
+      class="mt-5 flex h-20 w-full items-center justify-center"
+    >
+      <LoaderSharedComponent
+        class="text-secondary"
+        classes="loader-xl loader"
+      />
+    </div>
   </BaseTemplate>
 </template>
 <script lang="ts" setup>
@@ -82,6 +95,7 @@ import {useExpertContentStore} from '@/vuejs/stores/expertContent'
 import {useRoute} from 'vue-router'
 import {ExpertContent} from '@/vuejs/types/ExpertContent'
 import moment from 'moment'
+import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue';
 
 const route = useRoute()
 const expertContentStore = useExpertContentStore()
