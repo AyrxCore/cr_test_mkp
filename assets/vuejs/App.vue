@@ -37,7 +37,7 @@ const props = defineProps({
 
 onBeforeMount(async () => {
   if (props.component === '') {
-    await companyStore.getAddresses
+    await companyStore.getAddresses()
     await categoryStore.initAllCategories()
     await cartStore.getCart()
   }
