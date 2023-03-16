@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\AdherentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -9,12 +10,26 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
+#[ApiResource(
+    itemOperations: [
+        'get',
+        'update' => [
+            "openapi_context"        => [
+                'summary'     => 'Modifier un adherent',
+                'description' => "Permet de mettre a jour le code bonuus et les rattachements",
+            ],
+            "method"                 => "PATCH",
+            "validate"               => true,
+            "denormalizationContext" => ['groups' => 'update'],
+        ],
+    ])]
 #[ORM\Entity(repositoryClass: AdherentRepository::class)]
 class Adherent
 {
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
+    #[Groups(["update"])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
@@ -27,8 +42,11 @@ class Adherent
     private Collection $accounts;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["simpleUser"])]
+    #[Groups(["simpleUser", "update"])]
     private ?string $reducceCode = null;
+
+    #[Groups(["update"])]
+    private array $attachments = [];
 
     public function __construct()
     {
@@ -116,4 +134,21 @@ class Adherent
 
         return $this;
     }
+
+    /**
+     * @return array
+     */
+    public function getAttachments(): array
+    {
+        return $this->attachments;
+    }
+
+    /**
+     * @param  array  $attachments
+     */
+    public function setAttachments(array $attachments): void
+    {
+        $this->attachments = $attachments;
+    }
+
 }

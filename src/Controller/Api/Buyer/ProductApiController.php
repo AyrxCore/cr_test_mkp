@@ -5,6 +5,7 @@ namespace App\Controller\Api\Buyer;
 use App\Dto\AccountAccordCadre;
 use App\Entity\AccordStatut;
 use App\Entity\Account;
+use App\Entity\LogAccordStatutRequest;
 use App\Service\MailerProvider;
 use App\Service\UpplerProductService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,22 +27,22 @@ class ProductApiController extends AbstractController
 {
 
     private const HOME_TOP_VENTE_PROPERTY
-    = [
-        'property_id' => '217',
-        'value'       => '5369',
-    ];
+        = [
+            'property_id' => '217',
+            'value'       => '5369',
+        ];
 
     private const HOME_SELECTION_PROPERTY
-    = [
-        'property_id' => '217',
-        'value'       => '5368',
-    ];
+        = [
+            'property_id' => '217',
+            'value'       => '5368',
+        ];
 
     private const HOME_ACCORD_CADRE_PROPERTY
-    = [
-        'property_id' => '217',
-        'value'       => '5367',
-    ];
+        = [
+            'property_id' => '217',
+            'value'       => '5367',
+        ];
 
     #[Required]
     public RequestStack $requestStack;
@@ -137,7 +138,7 @@ class ProductApiController extends AbstractController
     #[Route('/api/categories-list', name: 'categories_list', methods: ['POST'])]
     public function categoriesList(): JsonResponse
     {
-        $session= $this->requestStack->getSession();
+        $session = $this->requestStack->getSession();
         $session->start();
 
         if (!$session->has('account') || empty($session->get('account'))) {
@@ -147,7 +148,7 @@ class ProductApiController extends AbstractController
         $resultat = $this->upplerProductService->findAllCategories((string)$session->get('account')->getId());
 
         $categories = (array)$resultat;
-        usort($categories, function($a, $b) {
+        usort($categories, function ($a, $b) {
             return strcmp($a->name, $b->name);
         });
 
@@ -254,9 +255,17 @@ class ProductApiController extends AbstractController
             $accordStatut->setStatus(AccountAccordCadre::PROCESS_STATUS_PENDING);
             $accordStatut->setAccordStatutRequestAt(new \DateTime('now'));
             $this->em->persist($accordStatut);
+
+            $log = new LogAccordStatutRequest();
+            $log->setAccordId(new Uuid($params['accordId']));
+            $log->setAccount($account);
+            $log->setCreatedAt(new \DateTimeImmutable('now'));
+            $this->em->persist($log);
+
             $this->em->flush();
         }
 
         return new JsonResponse($accordStatut->getStatus());
     }
+
 }
