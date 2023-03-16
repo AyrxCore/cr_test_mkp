@@ -6,7 +6,7 @@
   >
     <div class="flex items-center">
       <RouterLink
-        :to="{ path: '/app/account' }"
+        :to="{ name: AccountPageList.ACCOUNT }"
         class="flex items-center py-2.5 font-bold hover:text-secondary"
       >
         <UserIcon class="mr-3" />
@@ -21,7 +21,7 @@
     <RouterLink
       v-for="(value, key) in listAccount"
       :key="key"
-      :to="{ path: value.url }"
+      :to="{ name: value.routeName }"
       class="flex items-center py-2.5 hover:text-secondary"
     >
       <ChevronRightIcon class="mr-4" />
@@ -57,6 +57,7 @@ import ChevronRightIcon from '@/vuejs/modules/shared/icon/Chevron2RightIconCompo
 
 import { useUserStore } from '@/vuejs/stores/user'
 import { storeToRefs } from 'pinia'
+import { AccountPageList } from '@/vuejs/router/pages-list'
 
 const emit = defineEmits(['update:modelValue'])
 
@@ -86,7 +87,7 @@ const listAccount = ref<any[]>([
   // },
   {
     label: 'Mes coordonnées',
-    url: '/app/account/contact-information',
+    routeName: AccountPageList.ACCOUNT,
   },
   // {
   //   label: 'Changer de SIRET',

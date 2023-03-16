@@ -90,16 +90,20 @@
         <div class="px-2 md:px-0 lg:px-2">
           <h3 class="mb-7 md:mb-4 lg:mb-7">Votre espace adhérents</h3>
           <ul>
-            <li><a href="/app/account">Mon compte</a></li>
-            <li><a href="#">Mes économies</a></li>
+            <li>
+              <RouterLink :to="{ name: AccountPageList.ACCOUNT }">
+                Mon compte
+              </RouterLink>
+            </li>
+            <!-- <li><a href="#">Mes économies</a></li>
             <li>
               <a href="/app/account/orders-history">Historique de commandes</a>
             </li>
-            <li><a href="#">Factures</a></li>
+            <li><a href="#">Factures</a></li> -->
           </ul>
         </div>
         <div class="mt-6 px-2 md:mt-0 md:px-0 lg:px-2">
-          <h3 class="mb-7 md:mb-10 lg:mb-7">A propos</h3>
+          <h3 class="mb-7 md:mb-10 lg:mb-7">À propos</h3>
           <ul>
             <li><a href="#">Nous contacter</a></li>
             <li><a href="#">Conditions d'utilisation</a></li>
@@ -120,11 +124,17 @@
           </p>
         </div>
       </div>
-      <div class="md:col-span-2 md:row-span-2 mt-4">
-        <h3 class="mb-5 md:mb-4 lg:mb-7 px-2">Nos catégories d'achats</h3>
+      <div class="mt-4 md:col-span-2 md:row-span-2">
+        <h3 class="mb-5 px-2 md:mb-4 lg:mb-7">Nos catégories d'achats</h3>
         <ul class="three-column-list">
           <li v-for="category in categories" :key="category.id" class="px-2">
-            <RouterLink :to="{name: ProductPageList.PRODUCTS, query: { category: category.id, page: 1}}" replace>
+            <RouterLink
+              :to="{
+                name: ProductPageList.PRODUCTS,
+                query: { category: category.id, page: 1 },
+              }"
+              replace
+            >
               {{ category.name }}
             </RouterLink>
           </li>
@@ -157,7 +167,7 @@ import CalendarCheckIconComponent from '@/vuejs/modules/shared/icon/CalendarChec
 import { MAIL_ANIMATION, PHONE_ANIMATION } from '../../services/const'
 import { useCategoryStore } from '@/vuejs/stores/category'
 import { computed } from 'vue'
-import { ProductPageList } from '@/vuejs/router/pages-list'
+import { AccountPageList, ProductPageList } from '@/vuejs/router/pages-list'
 
 const qantisLogoImg = getImage(qantisLogo)
 const ecologieLogoImg = getImage(ecologieLogo)
@@ -176,9 +186,8 @@ const categories = computed(() => {
 </script>
 
 <style lang="scss">
-
 .three-column-list {
-  @apply columns-1 md:columns-2 lg:columns-3 p-0 m-0;
+  @apply m-0 columns-1 p-0 md:columns-2 lg:columns-3;
 }
 
 @import 'assets/style/_variables.scss';
