@@ -6,13 +6,18 @@
       class="bg-gradient flex h-[59px] flex-row items-center justify-center py-4 text-white"
     >
       <p class="mr-0 w-[305px] text-sm md:mr-2 md:w-auto md:text-base lg:text-lg">
-        Pneumatiques : êtes-vous concernés par la Loi Montagne ?
-        <a href="#" class="underline">Découvrir</a>
+        Cybersécurité : protégez votre entreprise et vos salariés. Téléchargez notre guide.
+        <RouterLink
+          to="/app/actualite/guide-cybersecurite"
+          class="underline"
+        >
+          Découvrir
+        </RouterLink>
       </p>
 
-      <button class="absolute right-2 text-white">
+      <!--<button class="absolute right-2 text-white">
         <CloseIconComponent />
-      </button>
+      </button>-->
     </div>
     <main class="">
       <slot />
@@ -35,6 +40,7 @@ import CloseIconComponent from '@/vuejs/modules/shared/icon/CloseIconComponent.v
 import {useUserStore} from "@/vuejs/stores/user";
 import {storeToRefs} from "pinia";
 import ChevronDownIconComponent from '@/vuejs/modules/shared/icon/ChevronDownIconComponent.vue';
+import { URL_HOME_BANDEAU } from '@/vuejs/services/utils';
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
 const props = defineProps({

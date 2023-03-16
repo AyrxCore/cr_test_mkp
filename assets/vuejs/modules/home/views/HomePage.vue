@@ -74,10 +74,12 @@
           aussi de contribuer à la démarche RSE de votre entreprise.
         </p>
         <p class="mt-10 flex justify-center">
-          <a href="#" class="button button-gradient">
+            <RouterLink
+              :to="{name: ProductPageList.CATEGORIES}"
+              class="button button-gradient">
             <ArrowRightIconComponent :stroke-color="'#FFFFFF'"/>
-            Toutes nos catégories d'achats
-          </a>
+              Toutes nos catégories d'achats
+            </RouterLink>
         </p>
       </div>
     </div>

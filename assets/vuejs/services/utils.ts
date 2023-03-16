@@ -14,33 +14,7 @@ export function getUpplerImage(path: string | null) {
   return path !== null ? path : getImage(imgDefault)
 }
 
-export const listCategories = ref<string[]>([
-  'Avantages salariés',
-  'Certifications',
-  'Chimie des bâtiments et des process',
-  'Conseils',
-  'Eclairage',
-  'Emballages et expédition',
-  'Energie',
-  'Equipements atelier',
-  'Equipements de protection individuelle (EPI)',
-  'Formation',
-  'Fournitures de bureau',
-  'Gestion des déchets',
-  "Hygiène et produits d'entretien",
-  'Informatique et burautique',
-  'Location de matériels',
-  'Matériaux',
-  'Mobilier et agencement',
-  'Outillage',
-  'Peinture',
-  'Quincaillerie',
-  'Rubans et adhésifs',
-  'Sécurité, maintenance et entretien des locaux',
-  'Services généraux',
-  'Téléphonie',
-  'Véhicules',
-])
+export const URL_HOME_BANDEAU = '/app/actualite/guide-cybersecurite'
 
 export function formatPrice(price: number): string {
   return price.toLocaleString('fr', {
