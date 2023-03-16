@@ -112,8 +112,8 @@ const props = defineProps({
 
 const termsOfSales = ref<boolean>(false)
 const selectedShippingMethod = ref<number>(
-  props.order.shippingMethodsAvailable.find((e) => e.selected).shipping_method
-    ?.id,
+  props.order.shippingMethodsAvailable.find((e) => e.selected)?.shipping_method
+    ?.id || 0,
 )
 const totalPriceDisplayed = computed((): string => {
   return formatPrice(props.order.total_excluding_taxes / 100)

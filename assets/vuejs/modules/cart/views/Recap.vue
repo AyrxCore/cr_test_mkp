@@ -56,10 +56,12 @@ const error = ref<string>(null)
 
 const goToAdress = (): void => {
   error.value = ''
-  if (cartStore.hasAllTermsChecked) {
-    router.push({ name: CartPageList.ADDRESSES })
-  } else {
+  if (!cartStore.hasAllTermsChecked) {
     error.value = 'Veuillez accepter les conditions générales'
+  } else if (!cartStore.hasAllShippingMethodsSelected) {
+    error.value = 'Une ou plusieurs méthodes de livraisons sont incorrectes'
+  } else {
+    router.push({ name: CartPageList.ADDRESSES })
   }
 }
 </script>

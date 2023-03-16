@@ -5,13 +5,11 @@ import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
 import { getErrorMessage } from '@/vuejs/services/login'
 import CartHttpClient from '@/vuejs/services/httpclient/CartHttpClient'
 import {
-  AddOrderItem,
   CartAddressesUpdate,
   CartStoreState,
   Order,
   OrderItemQuantityUpdate,
   OrderShippingUpdate,
-  CartPaymentMethodUpdate,
   PaymentMethod,
   CartPaymentMethodUpdated,
 } from '@/vuejs/types/Cart'
@@ -130,18 +128,19 @@ export const useCartStore = defineStore({
 
   getters: {
     nbProducts(): number {
-      if (!this.cart || !this.cart.orders) return 0
       let nbProducts = 0
-      this.cart.orders.forEach((order: Order) => {
+      this.cart?.orders?.forEach((order: Order) => {
         nbProducts += order.items.length
       })
       return nbProducts
     },
-    shippingPrice(): number {
-      return 0
-    },
     hasAllTermsChecked(): boolean {
       return this.termsOfSales.length === this.cart?.orders.length
+    },
+    hasAllShippingMethodsSelected(): boolean {
+      return this.cart?.orders.forEach((e: Order) => {
+        if (e.shipments.length === 0) return false
+      })
     },
     CBPaymentMethod(): PaymentMethod {
       return this.cart?.paymentMethods.find(

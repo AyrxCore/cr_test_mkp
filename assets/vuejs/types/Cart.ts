@@ -118,6 +118,7 @@ export interface Order {
   currency: Currency
   note: string | null
   shippingMethodsAvailable: ShippingMethod[]
+  shipments: EntityId[]
 }
 
 export interface Cart {
