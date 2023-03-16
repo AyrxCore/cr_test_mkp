@@ -8,7 +8,10 @@
     <h3 class="text-title-35 text-primary">
       {{ name }}
     </h3>
-    <div class="flex flex-row">
+    <div
+      v-if="note"
+      class="flex flex-row"
+    >
       <LeafIconComponent class="mx-2" />
       <span class="mr-2 flex text-sm font-bold md:text-lg text-green-qantis">{{ note }}</span>
       <span class="mt-1 flex text-xs text-gray-500 md:mt-2"

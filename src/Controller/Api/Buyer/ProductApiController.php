@@ -183,7 +183,7 @@ class ProductApiController extends AbstractController
 
         $accordCadre = $this->upplerProductService->findProductById(
             $id,
-            ['properties'],
+            ['properties', 'company'],
             (string)$session->get('account')->getId()
         );
 
