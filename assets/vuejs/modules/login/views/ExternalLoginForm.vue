@@ -142,7 +142,7 @@ const loginSubmit = async () => {
     userAccounts.value = accounts
     isLoading.value = false
   } else {
-    document.location.href = '/app/home'
+    document.location.href = '/app/home-page'
   }
 }
 
@@ -152,7 +152,7 @@ const toggleShowPassword = () => {
 const onAccountClick = async (account) => {
   isLoading.value = true
   const select = await userStore.selectUserAccount(account.id)
-  select && (document.location.href = '/app/home')
+  select && (document.location.href = '/app/home-page')
   isLoading.value = false
 }
 </script>
