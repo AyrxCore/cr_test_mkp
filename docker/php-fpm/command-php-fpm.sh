@@ -13,8 +13,8 @@ if [ "$APP_ENV" = "dev" ]; then
     composer i -o
 fi
 
-echo "Generate keys..."
-bin/console lexik:jwt:generate-keypair --overwrite -n
+# echo "Generate keys..."
+# bin/console lexik:jwt:generate-keypair --overwrite -n
 
 echo "Start PHP-FPM..."
 php-fpm

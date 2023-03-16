@@ -30,6 +30,6 @@ node_modules
 ###< symfony/phpunit-bridge ###
 
 ###> lexik/jwt-authentication-bundle ###
-/config/jwt/*.pem
+# /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
 aws-docker-creds
