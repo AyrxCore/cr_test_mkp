@@ -22,6 +22,8 @@ import FormComponent from '@/vuejs/modules/contact/component/FormComponent.vue'
 import { useCategoryStore } from '@/vuejs/stores/category'
 import { useBuyerCompanyStore } from '@/vuejs/stores/buyer_company'
 import { useCartStore } from '@/vuejs/stores/cart'
+import router from './router'
+import { CartPageList } from './router/pages-list'
 
 const cartStore = useCartStore()
 const companyStore = useBuyerCompanyStore()
@@ -37,9 +39,13 @@ const props = defineProps({
 
 onBeforeMount(async () => {
   if (props.component === '') {
-    await companyStore.getAddresses()
-    await categoryStore.initAllCategories()
-    await cartStore.getCart()
+    await Promise.all([
+      companyStore.getAddresses(),
+      categoryStore.initAllCategories(),
+    ])
+    if (router.currentRoute.value.name !== CartPageList.RECAP) {
+      await cartStore.getCart()
+    }
   }
 })
 </script>

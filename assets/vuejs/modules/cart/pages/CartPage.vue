@@ -23,7 +23,9 @@
             Confirmation
           </CartBreadcrumbItemComponent>
         </div>
-        <template v-if="cart || CartPageList.CONFIRMED === currentRouteName">
+        <template
+          v-if="!loadingCart || CartPageList.CONFIRMED === currentRouteName"
+        >
           <RouterView />
         </template>
         <LoaderSharedComponent v-else class="loader-xl mt-6" />
@@ -34,7 +36,7 @@
 
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter, RouteRecordName } from 'vue-router'
 
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
@@ -50,9 +52,16 @@ const router = useRouter()
 const cartStore = useCartStore()
 const { cart } = storeToRefs(cartStore)
 
+const loadingCart = ref<boolean>(true)
+
 const currentRouteName = computed(
   (): RouteRecordName => router.currentRoute.value.name,
 )
+
+onMounted(async () => {
+  await cartStore.getCart()
+  loadingCart.value = false
+})
 </script>
 
 <style scoped></style>

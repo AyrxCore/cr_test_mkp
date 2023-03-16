@@ -40,7 +40,6 @@ const addProductToCart = async (): Promise<void> => {
   if (!cartStore.cart) return
   isLoading.value = true
   await cartStore.addProductToCart(variant.value.id, props.quantity)
-  await cartStore.getCart()
   isLoading.value = false
 }
 </script>

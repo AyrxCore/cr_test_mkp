@@ -18,6 +18,7 @@ interface Seller {
 export interface CartStoreState {
   cart?: Cart
   termsOfSales: number[]
+  newlyAddedProduct: number
 }
 
 interface LanguageVariation {

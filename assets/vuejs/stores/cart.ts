@@ -19,6 +19,7 @@ export const useCartStore = defineStore({
   state: (): CartStoreState => ({
     cart: null,
     termsOfSales: [],
+    newlyAddedProduct: 0,
   }),
 
   actions: {
@@ -26,6 +27,7 @@ export const useCartStore = defineStore({
       const alertStore = useAlertStore()
       try {
         this.cart = await CartHttpClient.get().getCartAsBuyer()
+        this.newlyAddedProduct = 0
       } catch (error) {
         console.log(error)
         error.response.status === HttpStatusCodes.unauthorized &&
@@ -43,6 +45,7 @@ export const useCartStore = defineStore({
           variantId,
           quantity,
         })
+        this.newlyAddedProduct++
       } catch (error) {
         console.log(error)
         error.response.status === HttpStatusCodes.unauthorized &&
@@ -132,7 +135,7 @@ export const useCartStore = defineStore({
       this.cart?.orders?.forEach((order: Order) => {
         nbProducts += order.items.length
       })
-      return nbProducts
+      return nbProducts + this.newlyAddedProduct
     },
     hasAllTermsChecked(): boolean {
       return this.termsOfSales.length === this.cart?.orders.length
