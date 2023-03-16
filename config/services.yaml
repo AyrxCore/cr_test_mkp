@@ -42,6 +42,11 @@ services:
       $env: '%env(APP_ENV)%'
       $manifest: '%kernel.project_dir%/public/assets/manifest.json'
       $cache: '@vite_cache_pool'
+
+  Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
+    arguments:
+      - '%env(DATABASE_URL)%'
+
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones
   App\Tests\Resources\DataFixtures\:
