@@ -54,6 +54,8 @@ const { cart } = storeToRefs(cartStore)
 
 const error = ref<string>(null)
 
+cartStore.termsOfSales = []
+
 const goToAdress = (): void => {
   error.value = ''
   if (!cartStore.hasAllTermsChecked) {

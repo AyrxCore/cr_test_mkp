@@ -129,6 +129,7 @@ const referencePriceDisplayed = computed((): string => {
 })
 
 const modifyQuantity = async (event: InputEvent): Promise<void> => {
+  if (cartStore.modifyingCart) return
   cartStore.modifyingCart = true
   await cartStore.updateProductQuantity({
     id: props.item.id,
