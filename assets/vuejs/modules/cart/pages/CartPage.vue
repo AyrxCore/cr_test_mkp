@@ -7,43 +7,21 @@
       </div>
       <div class="m-auto my-2 w-[100%] max-w-screen-2xl">
         <div class="tabs clearfix flex w-max" data-tabgroup="first-tab-group">
-          <div
-            class="border-b-2 border-gray-300 px-6 text-sm text-gray-500 md:text-base lg:text-lg"
-            :class="{
-              'border-secondary': CartPageList.RECAP === currentRouteName,
-              'text-secondary': CartPageList.RECAP === currentRouteName,
-            }"
-          >
+          <CartBreadcrumbItemComponent :route-name="CartPageList.RECAP">
             Panier
-          </div>
-          <div
-            class="border-b-2 border-gray-300 px-6 text-sm text-gray-500 md:text-base lg:text-lg"
-            :class="{
-              'border-secondary': CartPageList.ADDRESSES === currentRouteName,
-              'text-secondary': CartPageList.ADDRESSES === currentRouteName,
-            }"
-          >
+          </CartBreadcrumbItemComponent>
+          <CartBreadcrumbItemComponent :route-name="CartPageList.ADDRESSES">
             Adresses
-          </div>
-          <div
-            class="border-b-2 border-gray-300 px-6 text-sm text-gray-500 md:text-base lg:text-lg"
-            :class="{
-              'border-secondary': CartPageList.PAYMENT === currentRouteName,
-              'text-secondary': CartPageList.PAYMENT === currentRouteName,
-            }"
-          >
+          </CartBreadcrumbItemComponent>
+          <CartBreadcrumbItemComponent :route-name="CartPageList.PAYMENT">
             Paiement
-          </div>
-          <div
+          </CartBreadcrumbItemComponent>
+          <CartBreadcrumbItemComponent
+            :route-name="CartPageList.CONFIRMED"
             v-if="CartPageList.CONFIRMED === currentRouteName"
-            class="border-b-2 border-gray-300 px-6 text-sm text-gray-500 md:text-base lg:text-lg"
-            :class="{
-              'border-secondary': CartPageList.CONFIRMED === currentRouteName,
-              'text-secondary': CartPageList.CONFIRMED === currentRouteName,
-            }"
           >
             Confirmation
-          </div>
+          </CartBreadcrumbItemComponent>
         </div>
         <template v-if="cart || CartPageList.CONFIRMED === currentRouteName">
           <RouterView />
@@ -60,6 +38,7 @@ import { computed } from 'vue'
 import { useRouter, RouteRecordName } from 'vue-router'
 
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
+import CartBreadcrumbItemComponent from '@/vuejs/modules/cart/components/CartBreadcrumbItemComponent.vue'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
