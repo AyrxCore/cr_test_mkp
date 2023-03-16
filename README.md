@@ -86,7 +86,7 @@ services:
     build:
       context: .
       target: php
-    command: sh -c "composer i -o ; wait-for-it db:5432 -- bin/console doctrine:migrations:migrate -n; bin/console d:f:l --group=dev -q;  bin/console lexik:jwt:generate-keypair --overwrite -n; php-fpm"
+    command: sh -c "composer i -o ; bin/console doctrine:migrations:migrate -n; bin/console d:f:l --group=dev -q;  bin/console lexik:jwt:generate-keypair --overwrite -n; php-fpm"
     volumes:
       - ./:/var/www
       - ./docker/php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini

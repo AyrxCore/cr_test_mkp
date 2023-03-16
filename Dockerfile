@@ -13,17 +13,6 @@ CMD ["yarn"]
 
 FROM php:8.0-fpm AS php
 
-COPY docker/php-fpm/wait-for-it.sh /usr/bin/wait-for-it
-RUN chmod +x /usr/bin/wait-for-it
-
-# ENTRYPOINT SCRIPT FOR PHP-FPM
-COPY docker/php-fpm/entrypoint-php-fpm.sh /usr/local/bin/entrypoint-php-fpm.sh
-RUN chmod +x /usr/local/bin/entrypoint-php-fpm.sh
-# ENTRYPOINT SCRIPT FOR CRON
-COPY docker/php-cron/entrypoint-php-cron.sh /usr/local/bin/entrypoint-php-cron.sh
-RUN chmod +x /usr/local/bin/entrypoint-php-cron.sh
-
-
 RUN apt-get update && \
     apt-get install -y --no-install-recommends libssl-dev zlib1g-dev curl git unzip netcat libxml2-dev libpq-dev libzip-dev && \
     pecl install apcu xdebug && \
@@ -37,11 +26,32 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 COPY docker/php-fpm/php.ini /usr/local/etc/php/php.ini
 
+# ENTRYPOINT SCRIPT FOR PHP-FPM
+COPY docker/php-fpm/entrypoint-php-fpm.sh /usr/local/bin/entrypoint-php-fpm.sh
+COPY docker/php-fpm/command-php-fpm.sh /usr/local/bin/command-php-fpm.sh
+RUN chmod +x /usr/local/bin/entrypoint-php-fpm.sh
+RUN chmod +x /usr/local/bin/command-php-fpm.sh
+
+# ENTRYPOINT SCRIPT FOR CRON
+COPY docker/php-cron/entrypoint-php-cron.sh /usr/local/bin/entrypoint-php-cron.sh
+RUN chmod +x /usr/local/bin/entrypoint-php-cron.sh
+
 WORKDIR /var/www
 
-COPY . ./
+RUN chown -R www-data:www-data /var/www
 
-COPY --from=node /var/www/public public/
+USER www-data
+
+COPY --chown=www-data:www-data . ./
+
+RUN composer i -o
+
+# RUN chown -R www-data:www-data /var/www
+
+COPY --from=node --chown=www-data:www-data /var/www/public public/
+
+ENTRYPOINT [ "/usr/local/bin/entrypoint-php-fpm.sh" ]
+CMD [ "/usr/local/bin/command-php-fpm.sh" ]
 
 FROM nginx:alpine AS nginx
 

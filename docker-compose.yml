@@ -2,29 +2,37 @@ version: '3.8'
 
 services:
   php-fpm-mkp:
+    image: 211737105908.dkr.ecr.eu-west-3.amazonaws.com/marketplace-php:local
     build:
       context: .
       target: php
-    command: sh -c "composer i -o ; wait-for-it db:5432 -- bin/console doctrine:migrations:migrate -n; bin/console d:f:l --group=dev -q;  bin/console lexik:jwt:generate-keypair --overwrite -n; php-fpm"
+    # Run as root to avoid permission issues locally
+    # In prod www-data is used to run container
+    user: root
     volumes:
-      - ./:/var/www
+      - ./:/var/www/
       - ./docker/php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
       - ./docker/php-fpm/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
     extra_hosts:
       - 'host.docker.internal:host-gateway'
     networks:
       - dev-qantis
+    environment:
+      APP_ENV: dev
+    depends_on:
+      db-mkp:
+        condition: service_healthy
 
   php-cron:
-    build:
-      context: .
-      target: php
+    image: 211737105908.dkr.ecr.eu-west-3.amazonaws.com/marketplace-php:local
     depends_on:
       php-fpm-mkp:
         condition: service_started
     command: sh -c "bin/console cron:start --blocking -n"
     volumes:
-      - ./:/var/www
+      - ./:/var/www/
+    environment:
+      APP_ENV: dev
     extra_hosts:
       - 'host.docker.internal:host-gateway'
     networks:
@@ -41,7 +49,7 @@ services:
     environment:
       - NODE_ENV=dev
     volumes:
-      - ./:/var/www
+      - ./:/var/www/
     ports:
       - '3003:3003'
     depends_on:
@@ -50,6 +58,7 @@ services:
       - dev-qantis
 
   nginx:
+    image: 211737105908.dkr.ecr.eu-west-3.amazonaws.com/marketplace-nginx:refacto-Dockerfile5
     build:
       context: .
       target: nginx
@@ -76,12 +85,16 @@ services:
       POSTGRES_DB: mkp_db
     ports:
       - '15436:5432'
-    networks:
-      - dev-marketplace
     volumes:
       - /var/lib/postgresql/data
     networks:
       - dev-qantis
+    healthcheck:
+      test: ["CMD-SHELL", "psql -U postgres -c 'select 1' || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 12
+      start_period: 3s
 
   maildev:
     image: maildev/maildev

@@ -4,7 +4,9 @@ docker-compose.yml
 docker-compose.override.yml
 Makefile
 .git
+.gitignore
 var/
 node_modules/
 vendor/
 translations/
+aws-docker-creds
