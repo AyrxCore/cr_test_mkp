@@ -2,8 +2,8 @@
 
   <template v-if="!userAccounts.length">
     <div class="flex flex-col md:flex-row justify-between md:space-x-8">
-      <div class="w-full md:w-1/2 flex">
-        <div v-if="showAlert">
+      <div class="w-full md:w-1/2 flex flex-col">
+        <div v-if="showAlert" class="lg:w-5/6">
           <AlertSharedComponent />
         </div>
         <form
