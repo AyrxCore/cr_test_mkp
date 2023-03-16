@@ -33,7 +33,7 @@
               v-if="status.not_activated === currentStatus.status"
               :text="accord.properties.process_not_activated"
               :current-status="currentStatus"
-              :accordName="accord.name"
+              :accord-name="accord.name"
           />
           <ConditionsPendingOrActivated
               v-else-if="status.pending === currentStatus.status"

@@ -28,7 +28,6 @@
           'md:w-1/2': btnLink.url,
         }"
       >
-        <PhoneLightIconComponent/>
         <span>
           {{ btnContact }}
         </span>
