@@ -21,10 +21,12 @@
           <SepaIconComponent class="m-auto" />
         </template>
       </PaymentMethodComponent> -->
+      <template v-if="!CBPaymentMethod">
+        Aucune méthode de paiement disponible
+      </template>
     </div>
     <CartRightSideComponent :has-payment-methods="false">
       <template #title>Récapitulatif</template>
-      <template #button-label>Aller au paiement</template>
     </CartRightSideComponent>
   </div>
 </template>

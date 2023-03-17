@@ -142,10 +142,11 @@ export const useCartStore = defineStore({
       return this.termsOfSales.length === this.cart?.orders.length
     },
     hasAllShippingMethodsSelected(): boolean {
+      let hasAll = true
       this.cart?.orders.forEach((e: Order) => {
-        if (e.shipments.length === 0) return false
+        if (e.shipments.length === 0) hasAll = false
       })
-      return true
+      return hasAll
     },
     CBPaymentMethod(): PaymentMethod {
       return this.cart?.paymentMethods.find(
