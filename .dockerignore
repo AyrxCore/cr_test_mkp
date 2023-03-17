@@ -8,5 +8,4 @@ Makefile
 var/
 node_modules/
 vendor/
-translations/
 aws-docker-creds
