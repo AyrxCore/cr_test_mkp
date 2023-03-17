@@ -217,7 +217,7 @@ class ProductApiController extends AbstractController
             $mailerProvider->send(
                 $from,
                 $to,
-                'Qantis Achats signalé par e-mail',
+                'MARKETPLACE - Bénéficier des conditions pour la FAT ' . $params['accordName'],
                 $this->twig->render('mails/request.accord.subscription.html.twig', [
                     'fat'       => $params['accordName'],
                     'email'     => $account->getUser()->getemail(),

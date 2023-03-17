@@ -47,32 +47,7 @@ class UserAccountPersister implements ContextAwareDataPersisterInterface
             $adh->setId(new Uuid($data->getAdherentId()));
             $adh->setName($data->getAdherentName());
         }
-        $adh->setReducceCode($data->getReducceCode());
         $this->em->persist($adh);
-
-        //        foreach ($data->getAccordStatuts() as $dataAccordStatut) {
-        //            $accordStatut = $this->em->getRepository(AccordStatut::class)->findOneBy([
-        //                'adherent' => $data->getAdherentId(),
-        //                'accordId' => $dataAccordStatut['accordId'],
-        //            ]);
-        //            if ($accordStatut) {
-        //                if (
-        //                    !(
-        //                        $dataAccordStatut['status'] === 'Pas intéressé, pas utilisateur'
-        //                        and $accordStatut->getStatus() === AccountAccordCadre::PROCESS_STATUS_PENDING
-        //                    )
-        //                ) {
-        //                    $accordStatut->setStatus($dataAccordStatut['status']);
-        //                    $this->em->persist($accordStatut);
-        //                }
-        //            } else {
-        //                $accordStatut = new AccordStatut();
-        //                $accordStatut->setAdherent($adh);
-        //                $accordStatut->setAccordId(new Uuid($dataAccordStatut['accordId']));
-        //                $accordStatut->setStatus($dataAccordStatut['status']);
-        //                $this->em->persist($accordStatut);
-        //            }
-        //        }
 
         if ($data->getAccountId()) {
             /** @var \App\Entity\Account $account */

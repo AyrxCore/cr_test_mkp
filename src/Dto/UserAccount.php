@@ -100,10 +100,6 @@ final class UserAccount
     #[Assert\Type("bool", message: "(isMarketplace) bool required")]
     private bool $isMarketplace = true;
 
-    #[Assert\Type("string", message: "(reducceCode) string required")]
-    private string $reducceCode = '';
-
-
     public function getAccountId(): ?Uuid
     {
         return $this->accountId;
@@ -262,22 +258,6 @@ final class UserAccount
     }
 
     /**
-     * @return array
-     */
-    public function getAccordStatuts(): array
-    {
-        return $this->accordStatuts;
-    }
-
-    /**
-     * @param  array  $accordStatuts
-     */
-    public function setAccordStatuts(array $accordStatuts): void
-    {
-        $this->accordStatuts = $accordStatuts;
-    }
-
-    /**
      * @return bool
      */
     public function isMarketplace(): bool
@@ -292,22 +272,5 @@ final class UserAccount
     {
         $this->isMarketplace = $isMarketplace;
     }
-
-    /**
-     * @return string
-     */
-    public function getReducceCode(): string
-    {
-        return $this->reducceCode;
-    }
-
-    /**
-     * @param  string  $reducceCode
-     */
-    public function setReducceCode(string $reducceCode): void
-    {
-        $this->reducceCode = $reducceCode;
-    }
-
 
 }
