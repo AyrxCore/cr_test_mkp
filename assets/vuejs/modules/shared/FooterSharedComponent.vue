@@ -1,6 +1,6 @@
 <template>
   <div class="footer mt-16">
-    <div class="bloc-contact-footer flex w-full flex-row">
+    <!-- <div class="bloc-contact-footer flex w-full flex-row">
       <div
         class="flex w-[100%] max-w-screen-2xl flex-col pt-5 lg:m-auto lg:my-4 lg:grid lg:grid-cols-3 lg:gap-4"
       >
@@ -46,7 +46,7 @@
           </p>
         </div>
       </div>
-    </div>
+    </div> -->
     <div
       class="second-part mx-5 my-2 flex max-w-screen-2xl flex-col pt-10 md:m-auto lg:my-4 lg:grid lg:grid-flow-col lg:grid-rows-3 lg:gap-4"
     >
@@ -75,11 +75,25 @@
             réseaux :
           </p>
           <div class="social-network-logo mb-2 inline">
-            <div><img :src="linkedInLogoImg" alt="Linkedin" /></div>
-            <div><img :src="facebookLogoImg" alt="Facebook" /></div>
-            <div><img :src="twitterLogoImg" alt="Twitter" /></div>
             <div>
-              <img :src="youtubeLogoImg" alt="Youtube" class="mt-0.5" />
+              <a href="https://www.linkedin.com/company/qantis-co/" target="_blank">
+                <img :src="linkedInLogoImg" alt="Linkedin" />
+              </a>
+            </div>
+            <div>
+              <a href="https://www.facebook.com/QANTIS.co" target="_blank">
+                <img :src="facebookLogoImg" alt="Facebook" />
+              </a>
+            </div>
+            <div>
+              <a href="https://twitter.com/QANTIS_co" target="_blank">
+                <img :src="twitterLogoImg" alt="Twitter" />
+              </a>
+            </div>
+            <div>
+              <a href="https://www.youtube.com/channel/UCP-ZzEGFZ4rtW0Yx8u1ZDMQ" target="_blank">
+                <img :src="youtubeLogoImg" alt="Youtube" class="mt-0.5" />
+              </a>
             </div>
           </div>
         </div>
