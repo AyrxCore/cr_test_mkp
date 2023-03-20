@@ -75,14 +75,7 @@
               <div class="vue-app" data-component="arrow-right-icon"></div>
               Contactez le service adhérents QANTIS
             </button>
-            <div id="modal" class="modal-overlay" style="display:none; z-index: 99" role="dialog" aria-modal="true">
-              <div class="bg-white w-1/2 rounded shadow-lg p-6 h-fit mt-[5%] bg-white flex flex-col">
-                <div class="flex justify-end">
-                  <button class="bg-gray-300 p-2 rounded flex justify-end mb-2 w-auto" onclick="closeModal()">X</button>
-                </div>
-                <div class="vue-app bg-white" data-component="contact-form"></div>
-              </div>
-            </div>
+            {% include '_partials/_contact-modal.html.twig' %}
           </div>
         </div>
       </div>

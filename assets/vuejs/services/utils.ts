@@ -25,7 +25,5 @@ export function formatPrice(price: number): string {
 
 export function formatAddress(address: Address): string {
   if (!address) return null
-  return `${!address.company ? '' : address.company + ', '} ${address.street} ${
-    address.postcode
-  } ${address.city}`
+  return `${!address.company ? '' : address.company + ', '} ${address.street} ${address.postcode} ${address.city}`
 }

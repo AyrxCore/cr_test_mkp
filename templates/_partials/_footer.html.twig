@@ -1,3 +1,14 @@
+
+  <script>
+    function openModal() {
+      document.getElementById('modal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('modal').style.display = 'none';
+    }
+  </script>
+
 <div class="bg-primary text-white py-8 xl:py-16 px-4">
   <div class="container xl:flex mx-auto">
     <div class="min-w-[300px]">
@@ -32,7 +43,13 @@
       </div>
       <ul class="mt-3 xl:mt-6">
         <li>
-          <a href="#">Nous contacter</a>
+          <a
+            href="#"
+            id="btnModal"
+            data-toggle="modal"
+            onclick="openModal()"
+          >Nous contacter</a>
+          {% include '_partials/_contact-modal.html.twig' %}
         </li>
         <li>
           <a href="#">Mentions légales</a>
