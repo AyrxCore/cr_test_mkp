@@ -100,7 +100,7 @@
           </div>
           <div class="mb-5">
             <h1 class="home-subtitle text-gradient">
-              Bonjour {{ userAccounts[0].upplerDatas.master_user.firstname}}
+              Bonjour {{ userAccounts[0].upplerDatas ? userAccounts[0].upplerDatas.master_user.firstname : ''}}
             </h1>
             <h3 class="text-gray-500">
               Veuillez sélectionner le compte acheteur avec lequel vous souhaitez être
@@ -110,27 +110,31 @@
           <div
             v-for="(account, id) in userAccounts"
             :key="id"
-            class="bg-white rounded-md mb-3 p-2 flex flex-col h-[60px]"
           >
-            <div>
-              <input
-                v-model="accountRadio"
-                name="accountRadio"
-                type="radio"
-                :value="account.id"
-                class="mr-1"
-              />
-              <label class="text-primary font-bold uppercase">
-                {{ account.upplerDatas.name }}
+            <div
+              v-if="account.upplerDatas"
+              class="bg-white rounded-md mb-3 p-2 flex flex-col h-[60px]"
+            >
+              <div>
+                <input
+                  v-model="accountRadio"
+                  name="accountRadio"
+                  type="radio"
+                  :value="account.id"
+                  class="mr-1"
+                />
+                <label class="text-primary font-bold uppercase">
+                  {{ account.upplerDatas.name }}
+                </label>
+              </div>
+
+              <label
+                v-if="account.upplerDatas.number"
+                class="text-gray-500 ml-5 font-bold"
+              >
+                SIRET: {{ account.upplerDatas.number }}
               </label>
             </div>
-
-            <label
-              v-if="account.upplerDatas.number"
-              class="text-gray-500 ml-5 font-bold"
-            >
-              SIRET: {{ account.upplerDatas.number }}
-            </label>
           </div>
           <div class="flex justify-end">
             <button
@@ -195,7 +199,7 @@ const loginSubmit = async () => {
     isLoading.value = false
     return false
   }
-
+  console.log(accounts)
   if (accounts.length > 1) {
     userAccounts.value = accounts
     isLoading.value = false
