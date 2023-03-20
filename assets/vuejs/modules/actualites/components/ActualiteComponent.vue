@@ -21,7 +21,7 @@
         {{ contenu.categoryName }}
       </p>
       <span class="text-gray-500">
-        {{ moment(String(contenu.date)).format('MM/DD/YYYY') }}
+        {{ moment(String(contenu.date)).format('DD/MM/YYYY') }}
 
       </span>
     </div>

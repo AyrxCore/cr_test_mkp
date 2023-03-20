@@ -24,7 +24,7 @@
               :style="{'background': currentExpertContent.categoryColor}"
           >{{ currentExpertContent.categoryName }}</span
           >
-          <span class="text-gray-500">{{ moment(String(currentExpertContent.date)).format('MM/DD/YYYY') }}</span>
+          <span class="text-gray-500">{{ moment(String(currentExpertContent.date)).format('DD/MM/YYYY') }}</span>
           <div class="mt-5 h-[auto] rounded-lg">
             <p
               class="whitespace-pre-line text-gray-500"
