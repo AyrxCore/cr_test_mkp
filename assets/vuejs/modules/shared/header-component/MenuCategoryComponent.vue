@@ -2,13 +2,13 @@
   <div
     v-if="modelValue"
     v-click-outside="closeMenu"
-    class="fixed top-0 left-0 z-50 h-screen w-full bg-white px-5 py-2.5 text-sm
-    text-primary shadow sm:absolute sm:h-fit sm:w-auto sm:rounded"
+    class="flex absolute left-0 z-10 w-full bg-white px-5 py-2.5 text-sm
+    text-primary shadow flex-wrap h-[80vh] overflow-auto sm:w-auto sm:rounded !lg:h-auto c-scrollbar"
   >
     <div class="flex items-center">
       <router-link
         :to="{name: ProductPageList.CATEGORIES}"
-        class="font-bold hover:bg-gray-200">
+        class="font-bold hover:bg-gray-200 uppercase">
         Voir toutes les catégories
       </router-link>
       <CloseIcon
@@ -22,8 +22,9 @@
       :key="category.id"
       class="w-[100%] items-center py-1 !text-sm"
     >
-      <CategoryComponent
+      <MenuCategoryChildComponent
         :category="category"
+        :is-menu="true"
         class="!text-sm"
       />
     </div>
@@ -34,9 +35,9 @@
 import { computed } from 'vue'
 
 import CloseIcon from '@/vuejs/modules/shared/icon/CloseIconComponent.vue'
-import { ProductPageList } from '@/vuejs/router/pages-list';
+import { ProductPageList } from '@/vuejs/router/pages-list'
 import { useCategoryStore } from '@/vuejs/stores/category'
-import CategoryComponent from '@/vuejs/modules/products/components/CategoryComponent.vue'
+import MenuCategoryChildComponent from '@/vuejs/modules/shared/header-component/MenuCategoryChildComponent.vue'
 
 const emit = defineEmits(['update:modelValue'])
 
@@ -57,3 +58,21 @@ const closeMenu = (): void => {
   emit('update:modelValue', false)
 }
 </script>
+
+<style scoped>
+.c-scrollbar::-webkit-scrollbar {
+  width: 12px;
+}
+
+.c-scrollbar::-webkit-scrollbar-track {
+  @apply bg-white;
+}
+
+.c-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-primary;
+}
+
+.c-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #9f9f9f;
+}
+</style>
