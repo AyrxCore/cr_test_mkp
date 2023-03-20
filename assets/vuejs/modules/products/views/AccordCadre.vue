@@ -6,7 +6,7 @@
     >
       <HeaderPartnerComponent
           :name="accord.name"
-          :note="accord.properties.note_rse"
+          :note="accord.properties.note_rse ?? null"
           :logo="accord.properties.logo_partenaire"
           :barner="accord.properties.banniere_partenaire"
           :categories="accord.categories"
@@ -40,14 +40,14 @@
               :current-status="currentStatus"
               :text="accord.properties.process_pending"
               :btn-contact="accord.properties.cta1_text_pending"
-              :btn-link="{name: accord.properties.cta2_text_pending, url: cta2_link_pending}"
+              :btn-link="{name: accord.properties.cta2_text_pending, url: accord.properties.cta2_link_pending}"
           />
           <ConditionsPendingOrActivated
               v-else
               :current-status="currentStatus"
               :text="accord.properties.process_activated"
               :btn-contact="accord.properties.cta1_text_activated"
-              :btn-link="{name: accord.properties.cta2_text_activated, url: cta2_activated}"
+              :btn-link="{name: accord.properties.cta2_text_activated, url: accord.properties.cta2_activated}"
           />
         </div>
       </div>

@@ -119,7 +119,11 @@
         <div class="mt-6 px-2 md:mt-0 md:px-0 lg:px-2">
           <h3 class="mb-7 md:mb-10 lg:mb-7">À propos</h3>
           <ul>
-            <li><a href="#">Nous contacter</a></li>
+            <li>
+              <RouterLink :to="{ name: PageList.CONTACT_PAGE }">
+                Nous contacter
+              </RouterLink>
+            </li>
             <li><a href="#">Conditions d'utilisation</a></li>
             <li>
               <a href="#">Conditions générales <br />d'utilisation Lemon Way</a>
@@ -174,14 +178,10 @@ import linkedInLogo from '@/vuejs/assets/img/Pictos/linkedin_logo.png'
 import twitterLogo from '@/vuejs/assets/img/Pictos/twitter_logo.png'
 import youtubeLogo from '@/vuejs/assets/img/Pictos/youtube_logo.png'
 import facebookLogo from '@/vuejs/assets/img/Pictos/facebook_social_logo.png'
-import InputButtonComponent from '@/vuejs/modules/shared/InputButtonComponent.vue'
-import MailIconComponent from '@/vuejs/modules/shared/icon/MailIconComponent.vue'
-import PhoneIconComponent from '@/vuejs/modules/shared/icon/PhoneIconComponent.vue'
-import CalendarCheckIconComponent from '@/vuejs/modules/shared/icon/CalendarCheckIconComponent.vue'
-import { MAIL_ANIMATION, PHONE_ANIMATION } from '../../services/const'
 import { useCategoryStore } from '@/vuejs/stores/category'
 import { computed } from 'vue'
 import { AccountPageList, ProductPageList } from '@/vuejs/router/pages-list'
+import { PageList } from '@/vuejs/router';
 
 const qantisLogoImg = getImage(qantisLogo)
 const ecologieLogoImg = getImage(ecologieLogo)

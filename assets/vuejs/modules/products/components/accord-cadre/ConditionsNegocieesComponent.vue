@@ -27,9 +27,9 @@
           }"
         >
           <SwiperSlide v-for="(image, key) in images" :key="key">
-                <img :src="image" alt="Picture" class="items-center" />
-        </SwiperSlide>
-        </CarouselListSharedComponent>
+            <img :src="image" alt="Picture" class="items-center" />
+          </SwiperSlide>
+          </CarouselListSharedComponent>
       </div>
       <div v-else>
         <ul class="mx-7 flex list-disc flex-col">
@@ -50,7 +50,6 @@
           class="button-gradient md:mr-5 mb-5 !whitespace-normal lg:whitespace-nowrap h-auto lg:h-12"
           @click="openInNewTab(button.url)"
         >
-          <DownloadIconComponent class="h-[20px] h-[28px] w-[20px] md:w-[24px]"/>
           <span class="w-full">{{ button.name }}</span>
         </ButtonComponent>
       </div>
@@ -60,7 +59,6 @@
 </template>
 <script lang="ts" setup>
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import DownloadIconComponent from '@/vuejs/modules/shared/icon/DownloadIconComponent.vue'
 import { computed } from 'vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
 import { SwiperSlide } from 'swiper/vue'

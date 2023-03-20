@@ -4,7 +4,7 @@
     >
       <div
         class="fixed bg-secondary px-2 py-3 rounded-xl text-white flex flex-col justify-center items-center
-      text-center top-[50%] left-[45%] w-[500px] ml-[-150px] !opacity-100 z-9999">
+      text-center top-[45%] left-[45%] w-[500px] ml-[-150px] !opacity-100 z-9999">
         <div class="flex justify-end relative w-full mb-3">
           <button class="button-secondary text-lg right-2 text-white" @click="emit('cancel')">
             X

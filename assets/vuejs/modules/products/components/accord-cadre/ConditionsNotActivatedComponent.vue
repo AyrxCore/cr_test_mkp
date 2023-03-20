@@ -72,11 +72,8 @@ const sendSubmission = (async () => {
     )
 
     if (status.value.pending === response) {
-      props.currentStatus.status = status.value.pending
       showSuccesModal.value = true
     } else {
-      // eslint-disable-next-line no-console
-      console.log('pas ok')
       showErrorModal.value = true
     }
 
@@ -87,6 +84,9 @@ const sendSubmission = (async () => {
 })
 
 const closeModal = (() => {
+  if (showSuccesModal.value) {
+    props.currentStatus.status = status.value.pending
+  }
   isLoading.value = false
   showSuccesModal.value = false
   showErrorModal.value = false

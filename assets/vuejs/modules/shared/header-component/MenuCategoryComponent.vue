@@ -24,7 +24,6 @@
     >
       <MenuCategoryChildComponent
         :category="category"
-        :is-menu="true"
         class="!text-sm"
       />
     </div>

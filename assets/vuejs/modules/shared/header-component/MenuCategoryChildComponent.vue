@@ -23,7 +23,6 @@
         v-for="cat in props.category.child"
         :key="cat.id"
         :category="cat"
-        :is-menu="isMenu"
       />
     </div>
 
@@ -42,10 +41,6 @@ const props = defineProps({
     type: Number,
     default: 0,
   },
-  isMenu: {
-    type: Boolean,
-    default: false,
-  }
 })
 
 const showChildren = ref<boolean>(false)

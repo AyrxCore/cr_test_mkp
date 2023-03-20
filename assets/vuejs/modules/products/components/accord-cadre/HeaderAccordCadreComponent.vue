@@ -48,6 +48,7 @@ import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComp
 import { computed, ref } from 'vue'
 import LeafIconComponent from '@/vuejs/modules/shared/icon/LeafIconComponent.vue'
 import InformationIconComponent from '@/vuejs/modules/shared/icon/InformationIconComponent.vue'
+import { PageList } from '@/vuejs/router';
 
 const props = defineProps({
   name: {
@@ -55,8 +56,9 @@ const props = defineProps({
     type: String,
   },
   note: {
-    required: true,
+    required: false,
     type: String,
+    default: null
   },
   logo: {
     required: true,
@@ -68,7 +70,7 @@ const props = defineProps({
   },
   categories: {
     required: true,
-    type: Array,
+    type: Object,
   },
 })
 
@@ -76,26 +78,17 @@ const breadcrumbUrl = computed(() => {
   const breadcrumb = []
   if (props.categories) {
     Object.entries(props.categories).forEach(([key, value], index) => {
+      const url = `/app/${PageList.PRODUCTS}?category=${key}&page=1`
       breadcrumb.push({
         id: key,
         name: value,
+        url: url
       })
     })
   }
 
   return breadcrumb
 })
-
-const listUrl = ref([
-  {
-    name: 'Catégories',
-    url: '',
-  },
-  {
-    name: 'Outillage',
-    url: '',
-  },
-])
 </script>
 
 <style scoped></style>

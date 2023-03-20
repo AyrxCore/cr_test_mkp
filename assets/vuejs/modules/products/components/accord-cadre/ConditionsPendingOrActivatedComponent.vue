@@ -47,7 +47,6 @@
 </template>
 <script lang="ts" setup>
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import PhoneLightIconComponent from '@/vuejs/modules/shared/icon/PhoneLightIconComponent.vue'
 import { openInNewTab } from '@/vuejs/services/utils'
 import { status } from '@/vuejs/modules/products'
 import CheckIconComponent from '@/vuejs/modules/shared/icon/CheckIconComponent.vue'
@@ -75,8 +74,6 @@ const props = defineProps({
   },
 
 })
-
-
 </script>
 
 <style scoped></style>
