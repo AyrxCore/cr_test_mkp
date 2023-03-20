@@ -71,7 +71,7 @@
           class="mt-[3.5rem] flex w-[241px] flex-col md:w-full md:flex-row md:items-center lg:w-[241px] lg:flex-col lg:items-start"
         >
           <p class="mb-5 w-full md:w-3/6 lg:w-full">
-            Retrouvez l'actualité économique de la Communauté QANTIS sur nos
+            Retrouvez l'actualité économique de la communauté QANTIS sur nos
             réseaux :
           </p>
           <div class="social-network-logo mb-2 inline">
@@ -126,7 +126,7 @@
             </li>
             <li><a href="#">Conditions d'utilisation</a></li>
             <li>
-              <a href="#">Conditions générales <br />d'utilisation Lemon Way</a>
+              <a href="#">Conditions générales <br />d'utilisation Lemonway</a>
             </li>
             <li><a href="#">Mentions légales</a></li>
             <li><a href="#">Cookies</a></li>
@@ -136,7 +136,7 @@
           <h3 class="mb-7 md:mb-4 lg:mb-7">La marketplace QANTIS</h3>
           <p>
             Depuis 21 ans, QANTIS accompagne les entreprises françaises dans
-            leurs performances et leur croissance durable en s'appuyant sur 3
+            leur performance et leur croissance durable en s'appuyant sur 3
             moteurs : la centrale d'achat, l'expertise humaine et la
             marketplace.
           </p>

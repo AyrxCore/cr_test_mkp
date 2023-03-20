@@ -4,7 +4,7 @@
       v-model="searchTerm"
       class="input truncate !rounded-r-none !p-2 !text-sm md:text-clip md:!text-base md:!text-lg lg:!px-8 lg:!py-4"
       name="search"
-      placeholder="Rechercher un produit, un accord cadre ou un fournisseur"
+      placeholder="Rechercher un produit, un accord-cadre ou un fournisseur"
       type="search"
       @keyup.enter="searchProduct"
     />

@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount } from 'vue'
+import { onBeforeMount, onMounted } from 'vue'
 
 import LoginForm from './modules/login/views/ExternalLoginForm.vue'
 import PartnersCarousel from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
@@ -43,9 +43,12 @@ onBeforeMount(async () => {
       companyStore.getAddresses(),
       categoryStore.initAllCategories(),
     ])
-    if (router.currentRoute.value.name !== CartPageList.RECAP) {
-      await cartStore.getCart()
-    }
+  }
+})
+
+onMounted(async () => {
+  if (router.currentRoute.value.name !== CartPageList.RECAP) {
+    await cartStore.getCart()
   }
 })
 </script>

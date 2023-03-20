@@ -30,7 +30,7 @@
             class="mt-1 mb-3 w-full !py-2"
             @click="showMoreFilters(filterType.company)"
           >
-            Voir plus +
+            Voir +
           </button>
         </div>
         <div
@@ -55,7 +55,7 @@
             class="mt-1 mb-3 w-full !py-2"
             @click="showMoreFilters(filterType.category)"
           >
-            Voir plus +
+            Voir +
           </button>
         </div>
         <div
@@ -65,7 +65,7 @@
           <h3 class="text-primary  text-base md:text-lg uppercase font-bold">Propriétés</h3>
           <div
             v-for="(filter, index) in filters.properties"
-            v-show="index < visibleCategoryFilters"
+            v-show="index < visiblePropertyFilter"
             :key="index"
             class="h-max bg-white pt-3 pb-2"
           >
@@ -94,7 +94,7 @@
             class="mt-1 mb-3 w-full !py-2"
             @click="showMoreFilters(filterType.property)"
           >
-            Voir plus +
+            Voir +
           </button>
         </div>
       </div>
@@ -131,7 +131,7 @@ const showMoreFilters = ((type) => {
       visibleCompanyFilter.value +=5
       break
     case filterType.property:
-      visibleCompanyFilter.value +=10
+      visiblePropertyFilter.value +=10
       break
   }
 })

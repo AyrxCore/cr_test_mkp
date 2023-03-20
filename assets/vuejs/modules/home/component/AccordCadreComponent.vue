@@ -11,7 +11,7 @@
       :to="{ path: `${ProductPageList.ACCORD_CADRE}/${accord.id}` }"
       class="button button-white button-white-primary flex justify-center"
     >
-      <ArrowRightIconComponent />Découvrir l'accord cadre
+      <ArrowRightIconComponent />Découvrir l'accord-cadre
     </RouterLink>
   </div>
 </template>

@@ -135,15 +135,17 @@ import { ProductPageList } from '@/vuejs/router/pages-list'
 import { useProductStore } from '@/vuejs/stores/product'
 
 const productStore = useProductStore()
+const { productsTopVente, productsSelection } = storeToRefs(productStore)
 const expertContentStore = useExpertContentStore()
 const { getExpertsContents } = storeToRefs(expertContentStore)
-const { productsTopVente, productsSelection } = storeToRefs(productStore)
 
 const expertsContentsLoaded = ref<boolean>(false)
 
 onBeforeMount(async () => {
-  await expertContentStore.init()
-  await productStore.initHomeProducts()
+  await Promise.all([
+    productStore.initHomeProducts(),
+    expertContentStore.init()
+  ])
 })
 
 onMounted(async () => {
