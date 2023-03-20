@@ -49,14 +49,14 @@
             </div>
             <div class="mb-3 mt-3 flex justify-between">
               <a
-                href="/mot-de-passe-oublie"
-                class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-300"
-              >Mot de passe oublié ?</a
-              >
-              <a
                 href="/premiere-connexion"
                 class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-300"
               >Première connexion</a
+              >
+              <a
+                href="/mot-de-passe-oublie"
+                class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-300"
+              >Mot de passe oublié ?</a
               >
             </div>
             <div class="mt-3 lg:items-center flex flex-col lg:mt-6 lg:grid lg:grid-cols-3 lg:justify-items-stretch w-full mb-6 space-y-5 lg:space-y-0 ">
