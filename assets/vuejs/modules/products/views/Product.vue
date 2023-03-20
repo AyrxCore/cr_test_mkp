@@ -143,7 +143,7 @@
                   </option>
                 </select>
                 <div class="hidden lg:flex">
-                  <HeartIconComponent class="ml-5" :stroke-color="'#5E6875'" />
+<!--                  <HeartIconComponent class="ml-5" :stroke-color="'#5E6875'" />-->
                   <a href="#" class="ml-5 font-bold underline"
                     >Ajouter ce produit à mes favoris</a
                   >

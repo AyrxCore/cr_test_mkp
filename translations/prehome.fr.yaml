@@ -15,5 +15,5 @@ resetting:
     second.label: "Confirmation"
 
 emails:
-  request.resetting.subject: "Réinitialisation de mot de passe"
+  request.resetting.subject: "Création du mot de passe de votre Marketplace QANTIS"
   request.first_connexion.subject: "Première connexion"

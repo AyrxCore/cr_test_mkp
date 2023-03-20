@@ -5,7 +5,7 @@
         Les accords-cadres incontournables
       </h3>
       <p class="text-sm text-gray-400 sm:text-lg">
-        Êtes-vous certains de profiter des touts les économies incluses dans
+        Êtes-vous certains de profiter de toutes les économies incluses dans
         votre adhésion ?
       </p>
     </div>
