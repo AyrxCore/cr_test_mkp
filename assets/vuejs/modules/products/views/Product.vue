@@ -142,12 +142,12 @@
                     {{ i }}
                   </option>
                 </select>
-                <div class="hidden lg:flex">
-<!--                  <HeartIconComponent class="ml-5" :stroke-color="'#5E6875'" />-->
+                <!--     <div class="hidden lg:flex">
+             <HeartIconComponent class="ml-5" :stroke-color="'#5E6875'" />
                   <a href="#" class="ml-5 font-bold underline"
                     >Ajouter ce produit à mes favoris</a
                   >
-                </div>
+                </div>-->
               </div>
               <p class="mt-1">
                 <span class="text-sm text-gray-500 md:text-base lg:text-lg"
