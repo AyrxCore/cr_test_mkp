@@ -62,6 +62,6 @@ class CartApiController extends AbstractController
             }
         }
 
-        return $this->redirect('/app/home');
+        return $this->redirect('/app/payment-error');
     }
 }

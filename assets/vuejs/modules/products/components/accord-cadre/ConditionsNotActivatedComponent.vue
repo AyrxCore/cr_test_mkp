@@ -70,11 +70,10 @@ const sendSubmission = (async () => {
           accordName: props.accordName,
         },
     )
+
     if (status.value.pending === response) {
-      // eslint-disable-next-line no-console
-      console.log('ok')
-      showSuccesModal.value = true
       props.currentStatus.status = status.value.pending
+      showSuccesModal.value = true
     } else {
       // eslint-disable-next-line no-console
       console.log('pas ok')

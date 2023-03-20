@@ -24,6 +24,7 @@ export enum CartPageList {
   ADDRESSES = 'CART_ADRESS',
   PAYMENT = 'CART_PAYMENT',
   CONFIRMED = 'CART_CONFIRMED',
+  PAYMENT_ERROR = 'PAYMENT_ERROR',
 }
 
 export enum MainPageList {
