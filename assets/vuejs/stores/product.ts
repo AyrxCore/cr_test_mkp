@@ -10,6 +10,8 @@ import { Filter } from '@/vuejs/types/Filter'
 export interface ProductStoreState {
   products: Product[]
   filters: Filter[]
+  productsTopVente: Product[]
+  productsAccordsCadre: Product[]
   productsSelection: Product[]
   cart: []
   selectedCategoryId?: string
@@ -22,6 +24,8 @@ export const useProductStore = defineStore({
   state: (): ProductStoreState => ({
     products: [],
     filters: [],
+    productsTopVente: [],
+    productsAccordsCadre: [],
     productsSelection: [],
     cart: [],
     selectedCategoryId: null,
@@ -37,9 +41,12 @@ export const useProductStore = defineStore({
         return []
       }
     },
-    async getHomeProducts(type) {
+    async initHomeProducts() {
       try {
-        return await ProductHttpClient.get().fetchHomeProducts(type)
+        const products = await ProductHttpClient.get().fetchHomeProducts()
+        this.productsTopVente = products.topVente
+        this.productsAccordsCadre = products.accordsCadre
+        this.productsSelection = products.selection
       } catch (error) {
         console.log(error)
 

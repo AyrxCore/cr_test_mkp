@@ -1,5 +1,5 @@
 <template>
-  <div v-if="accordsCadre.length">
+  <div v-if="productsAccordsCadre.length">
     <div class="mt-10">
       <h3 class="home-subtitle text-primary">
         Les accords-cadres incontournables
@@ -29,7 +29,7 @@
         }"
       >
         <SwiperSlide
-          v-for="accord in accordsCadre"
+          v-for="accord in productsAccordsCadre"
           :key="accord.id"
           class="flex h-full items-center justify-center overflow-hidden rounded-lg bg-white"
         >
@@ -41,18 +41,15 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
 import { SwiperSlide } from 'swiper/vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
 import AccordCadreComponent from '@/vuejs/modules/home/component/AccordCadreComponent.vue'
 import { useProductStore } from '@/vuejs/stores/product'
+import { storeToRefs } from 'pinia'
 
 const productStore = useProductStore()
-const accordsCadre = ref([])
+const { productsAccordsCadre } = storeToRefs(productStore)
 
-onMounted(async () => {
-  accordsCadre.value = await productStore.getHomeProducts('accord-cadre')
-})
 </script>
 
 <style scoped></style>

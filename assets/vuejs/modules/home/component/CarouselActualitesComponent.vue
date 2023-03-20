@@ -12,17 +12,17 @@
             }"
       >
         <SwiperSlide
-            v-for="expertContent in getExpertsContents"
-            :key="expertContent.id"
+            v-for="content in getExpertsContents"
+            :key="content.id"
             class="flex h-[303px] items-center justify-center overflow-hidden rounded-lg bg-white xl:h-full"
         >
           <img
-              :src="expertContent.slider_img_mobile"
+              :src="content.slider_img_mobile"
               alt="Picture"
               class="flex w-full items-center md:hidden"
           />
           <img
-              :src="expertContent.slider_img_desktop"
+              :src="content.slider_img_desktop"
               alt="Picture"
               class="mx-auto hidden items-center md:flex"
           />

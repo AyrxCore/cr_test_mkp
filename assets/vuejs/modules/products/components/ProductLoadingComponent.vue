@@ -5,11 +5,6 @@
     <!-- Bloc header -->
     <div class="flex items-center justify-between h-[50px]">
       <div class="flex h-[40px] w-[40px] items-center justify-start loading rounded-md"></div>
-      <div class="flex items-center justify-end">
-        <button class="flex text-gray-500">
-          <HeartIconComponent class="... stroke-gray-500" />
-        </button>
-      </div>
     </div>
     <!-- Fin bloc header -->
 

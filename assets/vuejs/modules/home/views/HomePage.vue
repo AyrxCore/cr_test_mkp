@@ -25,7 +25,10 @@
       <CarouselActualitesComponent />
 
       <!-- Bloc Produits top ventes -->
-      <ProductHomeComponent type="top-vente" title="Top vente" />
+      <ProductHomeComponent
+        :products="productsTopVente"
+        title="Top vente"
+      />
       <!-- Fin bloc Produits top ventes -->
 
       <!-- Bloc accords cadre -->
@@ -35,7 +38,7 @@
       <!-- Bloc sélection de produits -->
       <ProductHomeComponent
         class="mt-4"
-        type="selection"
+        :products="productsSelection"
         title="Sélection de produits"
       />
       <!-- Fin bloc sélection de produits -->
@@ -118,10 +121,9 @@
 <script lang="ts" setup>
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import PartnersCarousel from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
-import { onMounted, ref } from 'vue'
+import { computed, onBeforeMount, onMounted, ref } from 'vue'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import ContenusExpertComponent from '@/vuejs/modules/home/component/ContenusExpertComponent.vue'
-import DropdownListComponent from '@/vuejs/modules/shared/DropdownListComponent.vue'
 import ProductHomeComponent from '@/vuejs/modules/home/component/ProductHomeComponent.vue'
 import AccordCadreComponent from '@/vuejs/modules/home/component/AccordsCadreComponent.vue'
 import { useExpertContentStore } from '@/vuejs/stores/expertContent'
@@ -130,14 +132,21 @@ import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComp
 import OurCategoriesComponent from '@/vuejs/modules/home/component/OurCategoriesComponent.vue'
 import CarouselActualitesComponent from '@/vuejs/modules/home/component/CarouselActualitesComponent.vue'
 import { ProductPageList } from '@/vuejs/router/pages-list'
+import { useProductStore } from '@/vuejs/stores/product'
 
+const productStore = useProductStore()
 const expertContentStore = useExpertContentStore()
 const { getExpertsContents } = storeToRefs(expertContentStore)
+const { productsTopVente, productsSelection } = storeToRefs(productStore)
 
 const expertsContentsLoaded = ref<boolean>(false)
 
-onMounted(async () => {
+onBeforeMount(async () => {
   await expertContentStore.init()
+  await productStore.initHomeProducts()
+})
+
+onMounted(async () => {
   expertsContentsLoaded.value = true
 })
 </script>

@@ -42,11 +42,11 @@ export const useExpertContentStore = defineStore({
       return this.currentExpertContent
     },
     async init() {
-      if (!this.expertsContentsCategories.length) {
-        await this.findExpertsContentsCategories()
-      }
       if (!this.expertsContents.length) {
         await this.findExpertsContents()
+      }
+      if (!this.expertsContentsCategories.length) {
+        await this.findExpertsContentsCategories()
       }
       this.expertsContents.forEach((expertContent) => {
         const category = this.getCategoryColorByName(expertContent.categoryName)
@@ -57,7 +57,6 @@ export const useExpertContentStore = defineStore({
     async findExpertsContentsCategories(): Promise<[]> {
       try {
         this.expertsContentsCategories = await ExpertContentHttpClient.get().findExpertsContentsCategories()
-        // return this.expertsContentsCategories
       } catch (error) {
         return []
       }

@@ -6,35 +6,24 @@
         D'autres adhérents ont déjà acheté ces produits
       </p>
     </div>
-      <ProductsLoadingCarouselComponent v-if="isLoading"/>
-      <ProductsCarouselComponent v-else :products="products" />
+      <ProductsLoadingCarouselComponent v-if="props.products.length === 0"/>
+      <ProductsCarouselComponent v-else :products="props.products" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
-import { onMounted, ref } from 'vue'
-import { useProductStore } from '@/vuejs/stores/product'
 import ProductsLoadingCarouselComponent from '@/vuejs/modules/shared/ProductsLoadingCarouselComponent.vue'
 
-const productStore = useProductStore()
-const products = ref([])
-const isLoading = ref<boolean>(true)
-
 const props = defineProps({
-  type: {
-    required: true,
-    type: String,
+  products: {
+    type: Array,
+    default: null
   },
   title: {
     required: true,
     type: String,
   },
-})
-
-onMounted(async () => {
-  products.value = await productStore.getHomeProducts(props.type)
-  isLoading.value = false
 })
 
 
