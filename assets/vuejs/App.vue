@@ -47,7 +47,7 @@ onBeforeMount(async () => {
 })
 
 onMounted(async () => {
-  if (router.currentRoute.value.name !== CartPageList.RECAP) {
+  if (props.component === '' && router.currentRoute.value.name !== CartPageList.RECAP) {
     await cartStore.getCart()
   }
 })
