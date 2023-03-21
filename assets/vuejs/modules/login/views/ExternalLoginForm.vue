@@ -213,10 +213,10 @@ const loginSubmit = async () => {
     userAccounts.value = accounts
   } else {
     accountSelectedId.value = accounts[0].id
-    if (!accounts[0].acceptCGU) {
-      showCGUModal.value = true
-    } else {
+    if (accounts[0].acceptCGU) {
       await selectAccount(accountSelectedId.value)
+    } else {
+      showCGUModal.value = true
     }
   }
   isLoading.value = false

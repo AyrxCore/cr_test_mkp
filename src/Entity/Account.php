@@ -89,7 +89,7 @@ class Account
 
     #[ORM\Column(nullable: true)]
     #[Groups("simpleUser")]
-    private ?bool $acceptCGU = null;
+    private ?bool $acceptCGU = false;
 
     public function __construct()
     {

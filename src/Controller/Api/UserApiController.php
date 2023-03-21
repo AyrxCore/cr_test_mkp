@@ -88,7 +88,7 @@ class UserApiController extends AbstractController
         );
 
         if ($userAuth && $session->has('access_token') && !empty($session->get('access_token'))) {
-            if (!$account->isAcceptCGU()) {
+            if (empty($account->isAcceptCGU())) {
                 $account->setAcceptCGU(true);
                 $this->em->persist($account);
                 $this->em->flush();
