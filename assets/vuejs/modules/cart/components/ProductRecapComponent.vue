@@ -6,11 +6,11 @@
           <!-- <div class="lg:ml-2">
             <CheckboxComponent />
           </div> -->
-          <div class="h-[116px] w-5/12 lg:w-4/12">
+          <div class="flex h-[116px] w-5/12 lg:w-4/12">
             <img
-              :src="product.image"
+              :src="productImage"
               :alt="`Image ${product.name.default}`"
-              class="m-auto block h-full"
+              class="m-auto block max-h-full max-w-full"
             />
           </div>
           <div class="ml-4 w-6/12 lg:w-7/12">
@@ -85,19 +85,23 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, computed, PropType } from 'vue'
+import { ref, computed, PropType, onMounted } from 'vue'
 
 import { getImage, formatPrice } from '@/vuejs/services/utils'
 
 import { OrderItem, OrderProduct } from '@/vuejs/types/Cart'
 import { useCartStore } from '@/vuejs/stores/cart'
+import { useProductStore } from '@/vuejs/stores/product'
+import { Product } from '@/vuejs/types/Product'
 
 import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
 import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
 import CheckboxComponent from '@/vuejs/modules/shared/CheckboxComponent.vue'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
+import sampleImg from '@/vuejs/assets/img/sample_product_img.png'
 
 const cartStore = useCartStore()
+const productStore = useProductStore()
 
 const props = defineProps({
   item: {
@@ -107,6 +111,16 @@ const props = defineProps({
 })
 
 const product = ref<OrderProduct>(props.item.variant.product)
+const productData = ref<Product>()
+
+onMounted(async (): Promise<void> => {
+  productData.value = await productStore.findProductById(product.value.id)
+})
+
+const productImage = computed((): string => {
+  if (productData.value) return productData.value.images[0]
+  return getImage(sampleImg)
+})
 
 const referencePrice = computed((): number => {
   return product.value.price_reference / 100

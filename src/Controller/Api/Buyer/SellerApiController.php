@@ -27,7 +27,7 @@ class SellerApiController extends AbstractController
     #[Route('/api/sellers', name: 'get_sellers')]
     public function list(NormalizerInterface $normalizer): JsonResponse
     {
-        $session= $this->requestStack->getSession();
+        $session = $this->requestStack->getSession();
         $session->start();
 
         if (!$session->has('account') || empty($session->get('account'))) {
@@ -39,10 +39,10 @@ class SellerApiController extends AbstractController
         return new JsonResponse($sellers);
     }
 
-    #[Route('/api/seller/{id}', name: 'get_seller')]
-    public function me(int $id, NormalizerInterface $normalizer): JsonResponse
+    #[Route('/api/sellers/{id}', name: 'get_seller')]
+    public function getSeller(int $id, NormalizerInterface $normalizer): JsonResponse
     {
-        $session= $this->requestStack->getSession();
+        $session = $this->requestStack->getSession();
         $session->start();
 
         if (!$session->has('account') || empty($session->get('account'))) {

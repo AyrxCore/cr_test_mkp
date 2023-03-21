@@ -2804,6 +2804,11 @@ vue-router@^4.1.6:
   dependencies:
     "@vue/devtools-api" "^6.4.5"
 
+vue-universal-modal@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/vue-universal-modal/-/vue-universal-modal-1.1.4.tgz#f6c2ba7a40d5911b4a5391650856ee1ace4fb3eb"
+  integrity sha512-MCSVz5bS614LfbDzo2/VDu0DWVUAQws00aPourSduGTzhbm0SpvmRJX/mUI/a+2LkJdcchHd2jpH0JK5Mh0rHg==
+
 vue@^3.2.41:
   version "3.2.41"
   resolved "https://registry.npmjs.org/vue/-/vue-3.2.41.tgz"

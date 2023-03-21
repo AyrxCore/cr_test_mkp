@@ -21,7 +21,10 @@
       >
         <RouterLink
           v-if="showCarouselConnected"
-          :to="{name: ProductPageList.PRODUCTS, query: {company: seller.id, page: 1}}"
+          :to="{
+            name: ProductPageList.PRODUCTS,
+            query: { company: seller.id, page: 1 },
+          }"
           replace
         >
           <img
@@ -79,7 +82,7 @@ onMounted(async () => {
   try {
     if (userStore.user) {
       await sellerStore.init()
-      sellers.value = sellerStore.getSellers
+      sellers.value = sellerStore.sellers
       showCarouselConnected.value = true
     } else {
       sellers.value = [

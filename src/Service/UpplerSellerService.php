@@ -89,7 +89,9 @@ class UpplerSellerService extends HttpClientProvider
             $avatar = self::IMG_PATH . $remoteSeller->avatar;
         }
         $seller->setAvatar($avatar);
+        if (isset($remoteSeller->tos)) {
+            $seller->setTos(json_decode(json_encode($remoteSeller->tos), true));
+        }
         return $seller;
     }
-
 }

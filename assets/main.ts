@@ -1,9 +1,11 @@
 import '@/style/main.scss'
+import 'vue-universal-modal/dist/index.css'
 import { createHead } from '@vueuse/head'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './vuejs/App.vue'
 import router from '@/vuejs/router'
+import VueUniversalModal from 'vue-universal-modal'
 
 import clickOutside from '@/vuejs/directives/click-outside'
 
@@ -30,5 +32,8 @@ if (document.getElementById('app')) {
   app.use(router)
   app.use(head)
   app.use(createPinia()).directive('click-outside', clickOutside)
+  app.use(VueUniversalModal, {
+    teleportTarget: '#modals',
+  })
   app.mount('#app')
 }

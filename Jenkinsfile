@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'BRANCH',  defaultValue: "master", description: 'Git ref (branch or tag) to build')
+        string(name: 'BRANCH',  defaultValue: "main", description: 'Git ref (branch or tag) to build')
         //gitParameter (branchFilter: 'origin/(.*)', defaultValue: 'main', name: 'MY_BRANCH', type: 'PT_BRANCH_TAG')
     }
 

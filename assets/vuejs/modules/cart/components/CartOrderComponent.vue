@@ -78,15 +78,21 @@
         <p
           class="mt-7 inline-flex items-start text-sm text-gray-500 lg:items-center lg:text-lg"
         >
-          <label class="cursor-pointer">
-            <input
-              v-model="termsOfSales"
-              type="checkbox"
-              class="mr-2 mt-1 lg:mt-0"
-              @change="onTermsChange"
-            />
-            J'accepte les Conditions Générales de Vente du fournisseur
-          </label>
+          <input
+            v-model="termsOfSales"
+            type="checkbox"
+            class="mr-2 mt-1 cursor-pointer lg:mt-0"
+            @change="onTermsChange"
+          />
+          J'accepte les&nbsp;
+          <span class="cursor-pointer underline" @click="showTos = true">
+            Conditions Générales de Vente du fournisseur
+          </span>
+          <TosOrderComponent
+            :seller-id="props.order.seller.id"
+            v-if="showTos"
+            @close="showTos = false"
+          />
         </p>
       </div>
     </div>
@@ -98,6 +104,7 @@ import { Order } from '@/vuejs/types/Cart'
 
 import { formatPrice } from '@/vuejs/services/utils'
 
+import TosOrderComponent from '@/vuejs/modules/cart/components/TosOrderComponent.vue'
 import ProductRecapComponent from '@/vuejs/modules/cart/components/ProductRecapComponent.vue'
 import { useCartStore } from '@/vuejs/stores/cart'
 
@@ -111,6 +118,8 @@ const props = defineProps({
 })
 
 const termsOfSales = ref<boolean>(false)
+const showTos = ref<boolean>(false)
+
 const selectedShippingMethod = ref<number>(
   props.order.shippingMethodsAvailable.find((e) => e.selected)?.shipping_method
     ?.id || 0,

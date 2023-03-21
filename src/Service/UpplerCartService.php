@@ -109,14 +109,6 @@ class UpplerCartService extends HttpClientProvider
                             $this->setShippingMethod($cart['id'], $order['id'], $shippingMethodsAvailable[0]->shipping_method->id);
                             return $this->getCart();
                         }
-                        foreach ($order['items'] as $keyItem => $item) {
-                            $res = $this->request(
-                                'GET',
-                                $this->apiUrl . 'v1/buyer/product/' . $item['variant']['product']['id'],
-                            );
-                            $product = json_decode($res->getContent());
-                            $cart['orders'][$keyOrder]['items'][$keyItem]['variant']['product']['image'] = $product->images[0]->url;
-                        }
                     }
                 }
                 return $cart;

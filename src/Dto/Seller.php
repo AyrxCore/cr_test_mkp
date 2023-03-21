@@ -16,6 +16,7 @@ final class Seller implements \JsonSerializable
     private ?string $corporateName;
     private ?string $description;
     private ?string $avatar;
+    private ?array $tos;
 
     public function getId(): ?int
     {
@@ -91,6 +92,22 @@ final class Seller implements \JsonSerializable
     public function setAvatar(?string $avatar): void
     {
         $this->avatar = $avatar;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getTos(): ?array
+    {
+        return $this->tos;
+    }
+
+    /**
+     * @param array|null $avatar
+     */
+    public function setTos(?array $tos): void
+    {
+        $this->tos = $tos;
     }
 
     public function jsonSerialize()

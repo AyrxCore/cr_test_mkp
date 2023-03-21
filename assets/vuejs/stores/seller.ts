@@ -27,10 +27,9 @@ export const useSellerStore = defineStore({
           )
       }
     },
-  },
-  getters: {
-    getSellers(): Array<Seller> {
-      return this.sellers
+    async getSeller(id: number): Promise<Seller> {
+      return await SellerHttpClient.get().getSeller(id)
     },
-  }
+  },
+  getters: {},
 })
