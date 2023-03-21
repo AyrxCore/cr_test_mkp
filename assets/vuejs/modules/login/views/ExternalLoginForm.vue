@@ -95,7 +95,7 @@
     <div class="flex flex-col md:flex-row justify-between md:space-x-8">
       <div class="w-full md:w-1/2 flex flex-col">
         <div class="lg:w-5/6">
-          <div v-if="showAlert">
+          <div v-if="showAlert && !showCGUModal">
             <AlertSharedComponent />
           </div>
           <div class="mb-5">
@@ -117,11 +117,12 @@
             >
               <div>
                 <input
-                  v-model="accountRadio"
+                  v-model="accountSelectedId"
                   name="accountRadio"
                   type="radio"
                   :value="account.id"
                   class="mr-1"
+                  @change="onChangeBuyer(account.acceptCGU)"
                 />
                 <label class="text-primary font-bold uppercase">
                   {{ account.upplerDatas.name }}
@@ -156,6 +157,11 @@
       </div>
     </div>
   </template>
+  <CGUModal
+    v-if="showCGUModal"
+    class="modal"
+    @valid-cgu="valideCGU"
+  />
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue'
@@ -174,6 +180,7 @@ import EyeSlashIcon from '@/vuejs/modules/shared/icon/EyeSlashIconComponent.vue'
 import { PHONE_ANIMATION } from '@/vuejs/services/const'
 import AchetonsEnsembleComponent from '@/vuejs/modules/shared/AchetonsEnsembleComponent.vue'
 import { AlertType } from '@/vuejs/types/Alert'
+import CGUModal from '@/vuejs/modules/login/component/CGUModal.vue'
 
 const username = ref<string>('')
 const password = ref<string>('')
@@ -182,7 +189,9 @@ const isLoading = ref<boolean>(false)
 const userStore = useUserStore()
 const alertStore = useAlertStore()
 const showPassword = ref<boolean>(false)
-const accountRadio = ref<string>(null)
+const accountSelectedId = ref<string>(null)
+const accountAcceptCGU = ref(null)
+const showCGUModal = ref<boolean>(false)
 
 const { show: showAlert } = storeToRefs(alertStore)
 
@@ -199,22 +208,28 @@ const loginSubmit = async () => {
     isLoading.value = false
     return false
   }
-  console.log(accounts)
+
   if (accounts.length > 1) {
     userAccounts.value = accounts
-    isLoading.value = false
   } else {
-    document.location.href = '/app/home-page'
+    accountSelectedId.value = accounts[0].id
+    if (!accounts[0].acceptCGU) {
+      showCGUModal.value = true
+    } else {
+      await selectAccount(accountSelectedId.value)
+    }
   }
+  isLoading.value = false
 }
 
 const toggleShowPassword = () => {
   showPassword.value = !showPassword.value
 }
-const onAccountClick = async () => {
+
+const selectAccount = async (accountId) => {
   isLoading.value = true
-  if (accountRadio.value) {
-    const select = await userStore.selectUserAccount(accountRadio.value)
+  if (accountId) {
+    const select = await userStore.selectUserAccount(accountId)
     select && (document.location.href = '/app/home-page')
     isLoading.value = false
   } else {
@@ -226,4 +241,21 @@ const onAccountClick = async () => {
 
   }
 }
+const onAccountClick = async () => {
+  if (!accountAcceptCGU.value && accountSelectedId.value) {
+    showCGUModal.value = true
+  } else {
+    await selectAccount(accountSelectedId.value)
+  }
+}
+
+const onChangeBuyer = (acceptCgu) => {
+  accountAcceptCGU.value = acceptCgu
+}
+
+const valideCGU = () => {
+  showCGUModal.value = false
+  selectAccount(accountSelectedId.value)
+}
+
 </script>

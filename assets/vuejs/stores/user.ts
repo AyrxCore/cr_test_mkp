@@ -22,7 +22,6 @@ export const useUserStore = defineStore({
   actions: {
     async authenticate(userDatas: AuthenticateUserDatas): Promise<[]> {
       const alertStore = useAlertStore()
-      const categoryStore = useCategoryStore()
       try {
         await UserHttpClient.get().getUserToken(userDatas)
         return await UserHttpClient.get().getUserAccounts()
@@ -165,7 +164,6 @@ export const useUserStore = defineStore({
           name: PageList.ACCOUNT,
         })
       } catch (error) {
-        console.log(error)
         error.response.status === HttpStatusCodes.unauthorized &&
           alertStore.setShow('Erreur technique', AlertType.danger)
       }

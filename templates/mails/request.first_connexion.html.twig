@@ -1,8 +1,28 @@
-<h2>Bonjour {{ username }} !</h2>
-<p>Vous souhaitez initialiser votre compte et choisir un mot de passe pour accéder à la marketPlace Qantis</p>
-<p>Veuillez utiliser le lien suivant : </p>
-<a class="btn btn-primary" href="{{ confirmation_url }}" target="_blank">
-    Choisir mon mot de passe
-</a>
-<p>Cordialement.</p>
+<!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="UTF-8">
+      <style>
+        .flex {
+          display: flex;
+        }
+      </style>
+    </head>
+    <body>
 
+      <h2>Bonjour {{ username }} !</h2>
+      <p>Vous souhaitez initialiser votre compte et choisir un mot de passe pour accéder à la marketPlace Qantis</p>
+      <p>Veuillez utiliser le lien suivant : </p>
+      <a class="btn btn-primary" href="{{ confirmation_url }}" target="_blank">
+          Choisir mon mot de passe
+      </a>
+      <p>Cordialement.</p>
+      <div class="flex">
+        <div class="w-1/4 flex flex-col text-primary">
+          <span>L'équipe QANTIS</span>
+          <span>T : 04.37.65.06.21</span>
+          <span>L'équipe QANTIS</span>
+        </div>
+      </div>
+  </body>
+</html>

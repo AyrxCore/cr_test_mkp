@@ -5,8 +5,10 @@
     <div
       class="bg-gradient flex h-[59px] flex-row items-center justify-center py-4 text-white"
     >
-      <p class="mr-0 w-[305px] text-sm md:mr-2 md:w-auto md:text-base lg:text-lg">
-        Cybersécurité : protégez votre entreprise et vos salariés. Téléchargez notre guide.
+      <p class="w-[305px] text-sm md:w-auto md:text-base lg:text-lg flex flex-col items-center lg:flex-row py-2">
+        <span class="mr-0 lg:mr-2">
+          Cybersécurité : protégez votre entreprise et vos salariés. Téléchargez notre guide.
+        </span>
         <RouterLink
           to="/app/actualite/guide-cybersecurite"
           class="underline"

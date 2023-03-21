@@ -19,8 +19,8 @@
         <template #title>Récapitulatif panier</template>
         <template #button-next>
           <ButtonComponent
-            @click="goToAdress"
             class="button button-gradient mt-3 w-full"
+            @click="goToAdress"
           >
             <ArrowRightIconComponent :stroke-color="'#FFFFFF'" />
             Passer la commande

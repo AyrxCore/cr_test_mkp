@@ -87,6 +87,10 @@ class Account
     #[ORM\OneToMany(mappedBy: 'account', targetEntity: CartSavings::class)]
     private Collection $cartSavings;
 
+    #[ORM\Column(nullable: true)]
+    #[Groups("simpleUser")]
+    private ?bool $acceptCGU = null;
+
     public function __construct()
     {
         $this->cartSavings = new ArrayCollection();
@@ -292,6 +296,18 @@ class Account
                 $cartSaving->setAccount(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isAcceptCGU(): ?bool
+    {
+        return $this->acceptCGU;
+    }
+
+    public function setAcceptCGU(?bool $acceptCGU): self
+    {
+        $this->acceptCGU = $acceptCGU;
 
         return $this;
     }

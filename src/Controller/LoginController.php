@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Account;
 use App\Entity\User;
 use App\Events\FirstConnexionEvent;
 use App\Events\ResettingPasswordEvent;
@@ -178,5 +179,4 @@ class LoginController extends AbstractController
 
         return $this->render('login/' . $tpl . '.html.twig', ['form' => $form->createView()]);
     }
-
 }

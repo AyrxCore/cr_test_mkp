@@ -20,7 +20,7 @@
             <span class="">Qté</span>
           </div>
           <div class="w-4/12 text-center">
-            <span class="">Prix barré</span>
+            <span class="">Prix public</span>
           </div>
           <div class="w-4/12 text-center">
             <span class="">Sous-total HT</span>

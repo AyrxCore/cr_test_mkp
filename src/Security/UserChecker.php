@@ -58,30 +58,29 @@ class UserChecker implements UserCheckerInterface
         //le user n'est lié à aucun compte, il ne peut pas entrer saufs'il s'agit d'un utilisteur api (bot Neo)
         if (!$user->hasRole('ROLE_API') && $user->getAccounts()->isEmpty()) {
             throw new CustomUserMessageAccountStatusException('user_empty_account');
-        } else {
-            $countEnable = 0;
-            foreach ($user->getAccounts() as $account) {
-                if ($account->isEnabled()) {
-                    $countEnable++;
-                    $accountEnable = $account;
-                }
-            }
-            if (1 === $countEnable) {
-                //le user est lié à un seul compte actif, on l'identifie automatiquement dessus
-                $session = $this->requestStack->getSession();
-                $session->start();
-
-                //                /**@var Account $account */
-                //                $account = $user->getAccounts()->first();
-                $userAuth = $this->upplerAuthenticationService->authenticateUser(
-                    $accountEnable
-                );
-
-                if ($userAuth && $session->has('access_token') && !empty($session->get('access_token'))) {
-                    return;
-                }
-            }
         }
+//        } else {
+//            $countEnable = 0;
+//            foreach ($user->getAccounts() as $account) {
+//                if ($account->isEnabled()) {
+//                    $countEnable++;
+//                    $accountEnable = $account;
+//                }
+//            }
+//            if (1 === $countEnable) {
+//                //le user est lié à un seul compte actif, on l'identifie automatiquement dessus
+//                $session = $this->requestStack->getSession();
+//                $session->start();
+//
+//                $userAuth = $this->upplerAuthenticationService->authenticateUser(
+//                    $accountEnable
+//                );
+//
+//                if ($userAuth && $session->has('access_token') && !empty($session->get('access_token'))) {
+//                    return;
+//                }
+//            }
+//        }
     }
 
 }

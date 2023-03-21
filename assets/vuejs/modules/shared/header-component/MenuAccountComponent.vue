@@ -29,7 +29,7 @@
     </RouterLink>
 
     <div
-      v-if="user.account.adherent.reducceCode"
+      v-if="user.account.adherent && user.account.adherent.reducceCode"
       class="mt1 flex items-center py-2.5"
     >
       <!--      <ChevronRightIcon class="mr-4"/>-->

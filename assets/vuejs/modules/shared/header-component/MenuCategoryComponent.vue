@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="modelValue"
+    v-if="props.modelValue"
     v-click-outside="closeMenu"
     class="flex absolute left-0 z-10 w-full bg-white px-5 py-2.5 text-sm
     text-primary shadow flex-wrap h-[80vh] overflow-auto sm:w-auto sm:rounded !lg:h-auto c-scrollbar"
@@ -22,10 +22,7 @@
       :key="category.id"
       class="w-[100%] items-center py-1 !text-sm"
     >
-      <MenuCategoryChildComponent
-        :category="category"
-        class="!text-sm"
-      />
+      <MenuCategoryChildComponent :category="category" />
     </div>
   </div>
 </template>
