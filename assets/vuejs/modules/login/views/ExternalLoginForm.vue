@@ -91,7 +91,7 @@
     </div>
 
   </template>
-  <template v-else>
+  <template v-else-if="userAccounts.length > 1">
     <div class="flex flex-col md:flex-row justify-between md:space-x-8">
       <div class="w-full md:w-1/2 flex flex-col">
         <div class="lg:w-5/6">
@@ -253,9 +253,9 @@ const onChangeBuyer = (acceptCgu) => {
   accountAcceptCGU.value = acceptCgu
 }
 
-const valideCGU = () => {
+const valideCGU = async () => {
   showCGUModal.value = false
-  selectAccount(accountSelectedId.value)
+  await selectAccount(accountSelectedId.value)
 }
 
 </script>
