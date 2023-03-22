@@ -145,11 +145,12 @@ class ProductApiController extends AbstractController
         $resultat = $this->upplerProductService->findAllCategories((string)$session->get('account')->getId());
 
         $categories = (array)$resultat;
+        $listMenu = array_slice($categories, 0, 6);
+
         usort($categories, function ($a, $b) {
             return strcmp($a->name, $b->name);
         });
 
-        $listMenu = array_slice($categories, 0, 6);
         return new JsonResponse(['categories' => $categories, 'menu' => $listMenu]);
     }
 
