@@ -1,7 +1,7 @@
 <template>
   <Modal>
     <div
-      class="max-h-96 min-w-[600px] max-w-[300px] overflow-scroll rounded bg-white p-4"
+      class="my-4 mx-4 overflow-scroll rounded bg-white p-4 md:max-h-[800px] md:w-[600px]"
     >
       <template v-if="seller">
         <div class="mb-4 underline">
