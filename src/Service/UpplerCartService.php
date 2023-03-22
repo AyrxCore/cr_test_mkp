@@ -320,9 +320,16 @@ class UpplerCartService extends HttpClientProvider
             $cartSaving->setSellerId($order['seller']['id']);
             $priceReferenceByOrder = 0;
             foreach ($order['items'] as $item) {
-                $priceReferenceByOrder += $item['variant']['product']['price_reference'] * $item['quantity'];
+                $pricePaid = $item['variant']['product']['price_reference'] * $item['quantity'];
+
+                // Si le price_reference = null alors pricePaid = 0
+                if ($pricePaid === 0) {
+                    $pricePaid = $item['total_excluding_taxes'];
+                }
+
+                $priceReferenceByOrder += $pricePaid;
             }
-            $cartSaving->setAmount($priceReferenceByOrder - $order['items_total']);
+            $cartSaving->setAmount($priceReferenceByOrder - $order['items_total_excluding_taxes']);
             $this->em->persist($cartSaving);
         }
 
