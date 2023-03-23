@@ -20,8 +20,10 @@
       <span
         class="flex cursor-pointer md:mt-1"
         title="Message explicatif du référentiel RSE"
-        ><InformationIconComponent
-      /></span>
+        @click.prevent="scrollTo"
+        >
+        <InformationIconComponent />
+      </span>
     </div>
   </div>
 
@@ -45,10 +47,12 @@
 <script lang="ts" setup>
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import LeafIconComponent from '@/vuejs/modules/shared/icon/LeafIconComponent.vue'
 import InformationIconComponent from '@/vuejs/modules/shared/icon/InformationIconComponent.vue'
-import { PageList } from '@/vuejs/router';
+import { PageList } from '@/vuejs/router'
+
+const emit = defineEmits(['scroll-to'])
 
 const props = defineProps({
   name: {
@@ -89,6 +93,10 @@ const breadcrumbUrl = computed(() => {
 
   return breadcrumb
 })
+
+const scrollTo = () => {
+  emit('scroll-to')
+}
 </script>
 
 <style scoped></style>

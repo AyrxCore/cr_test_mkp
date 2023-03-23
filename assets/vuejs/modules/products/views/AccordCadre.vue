@@ -10,6 +10,7 @@
           :logo="accord.properties.logo_partenaire"
           :barner="accord.properties.banniere_partenaire"
           :categories="accord.categories"
+          @scroll-to="scrollTo('#sectionRse')"
       />
 
       <PointsClesComponent
@@ -51,18 +52,15 @@
           />
         </div>
       </div>
-
+      <div id="sectionRse"></div>
       <MiseEnAvantComponent :properties="accord.properties"/>
-
       <PointsClesRSEComponent
           v-if="accord.properties.texte_rse"
           :description="accord.properties.texte_rse"
           :note="accord.properties.note_rse"
           :points-cles-rse="pointsClesRSE"
       />
-
       <EnSavoirPlusComponent :properties="accord.properties"/>
-
       <div class="mt-11">
         <h3 class="home-subtitle text-primary">
           Ces partenaires peuvent aussi
@@ -99,6 +97,7 @@ import PointsClesComponent from '@/vuejs/modules/products/components/accord-cadr
 import PointsClesRSEComponent from '@/vuejs/modules/products/components/accord-cadre/PointsClesRSEComponent.vue'
 import EnSavoirPlusComponent from '@/vuejs/modules/products/components/accord-cadre/EnSavoirPlusComponent.vue'
 import {useProductStore} from '@/vuejs/stores/product'
+import { el } from 'date-fns/locale';
 
 const route = useRoute()
 const accordStore = useProductStore()
@@ -139,6 +138,13 @@ const pointsClesRSE = computed(() => {
 
 })
 
+const scrollTo = (selector) => {
+  const element = document.querySelector(selector)
+  console.log(element)
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth' })
+  }
+}
 
 watch(
     () => route.params.id as string,
