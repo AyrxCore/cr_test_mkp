@@ -72,9 +72,9 @@
               </div>
               <div class="text-gray-500 lg:justify-self-center">
                 Vous n'êtes pas encore adhérent ?<br />
-                <span class="text-secondary underline">
-                    Et si on se rencontrait ?
-                  </span>
+                <a href="https://qantis.co/contact" class="text-secondary underline">
+                  Et si on se rencontrait ?
+                </a>
               </div>
 
               <div class="flex flex-col text-gray-500 lg:justify-self-end">
