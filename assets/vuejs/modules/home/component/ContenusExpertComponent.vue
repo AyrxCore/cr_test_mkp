@@ -22,14 +22,14 @@
           class="flex h-full items-center justify-center overflow-hidden rounded-lg"
       >
         <div class="grid lg:grid-cols-2">
-          <div class="flex rounded-lg border-[#F3EDFE] w-[207px] h-[259px]">
+          <div class="flex rounded-lg border-[#F3EDFE] md:w-[207px] md:h-[259px]">
             <img
                 :src="contenu.mise_en_avant_homepage_img_desktop"
                 alt="Picture"
-                class="items-center sm:mx-auto"
+                class="items-center sm:mx-auto w-full"
             />
           </div>
-          <div class="mt-5 text-left md:mt-0 md:px-6 h-[259px]">
+          <div class="mt-5 text-left md:mt-0 md:px-6 h-[250px]">
             <h3 class="text-[23px] font-bold text-primary truncate-custom truncate-custom-2">
               {{ contenu.articleTitle }}
             </h3>

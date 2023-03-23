@@ -43,7 +43,7 @@
             <a
               :href="currentExpertContent.ctaLink"
               target="_blank"
-              class="default-button-gradient mt-4 inline-flex justify-center px-3.5 py-3 text-center font-bold text-white"
+              class="button button-gradient mt-4 font-bold text-white"
             >
               <ArrowRigntIconComponent
                 class="mt-1 mr-2 w-4 items-center"
@@ -63,7 +63,7 @@
             class="m-auto h-[inherit] items-center"
           />
         </div>
-        <div class="mt-[7rem] h-[421px] rounded-lg bg-white md:hidden">
+        <div class="mt-5 h-[421px] rounded-lg bg-white md:hidden">
           <img
             :src="currentExpertContent.article_img_mobile"
             alt="Picture"
@@ -75,8 +75,8 @@
 
       <!-- Bloc articles recommandés -->
       <div class="mt-10 justify-center">
-        <h3 class="primary home-subtitle mb-5">Articles recommandés</h3>
-        <ContenusExpertComponent :contenus="contenusExpert" />
+        <h3 class="text-primary home-subtitle mb-5">Articles recommandés</h3>
+        <ContenusExpertComponent />
       </div>
       <!-- Fin Bloc articles recommandés -->
     </div>
@@ -91,7 +91,7 @@
 
 <script lang="ts" setup>
 import { format } from 'date-fns'
-import { computed, ref, watch } from 'vue'
+import { computed, onBeforeMount, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 import ArrowRigntIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
@@ -100,8 +100,6 @@ import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedCo
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import ContenusExpertComponent from '@/vuejs/modules/home/component/ContenusExpertComponent.vue'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
-
-import { contenusExpert } from '@/vuejs/modules/actualites'
 import { useExpertContentStore } from '@/vuejs/stores/expertContent'
 import { ExpertContent } from '@/vuejs/types/ExpertContent'
 
@@ -118,6 +116,10 @@ const listUrl = ref([
 
 const formattedDate = computed((): string => {
   return format(new Date(currentExpertContent.value.date), 'dd/MM/yyyy')
+})
+
+onBeforeMount(async () => {
+    await expertContentStore.init()
 })
 
 watch(
