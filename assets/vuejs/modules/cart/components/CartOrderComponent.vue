@@ -4,7 +4,7 @@
       <h3
         class="mb-4 flex items-center justify-between text-[19px] text-primary md:justify-start md:text-[25px]"
       >
-        <span>{{ order.seller.name }}</span>
+        <span>{{ seller?.name || '-' }}</span>
         <span class="ml-2 text-sm font-bold text-gray-500">
           {{ order.items.length }} produit(s)
         </span>
@@ -12,19 +12,11 @@
       <div
         class="hidden justify-between text-sm text-gray-400 lg:flex lg:w-full"
       >
-        <div class="flex lg:w-7/12">
-          <span class=""> Description de l'article </span>
-        </div>
+        <div class="flex lg:w-7/12">Description de l'article</div>
         <div class="flex justify-between lg:w-5/12">
-          <div class="w-2/12 text-center">
-            <span class="">Qté</span>
-          </div>
-          <div class="w-4/12 text-center">
-            <span class="">Prix public</span>
-          </div>
-          <div class="w-4/12 text-center">
-            <span class="">Sous-total HT</span>
-          </div>
+          <div class="w-2/12 text-center">Qté</div>
+          <div class="w-4/12 text-center">Prix public</div>
+          <div class="w-4/12 text-center">Sous-total HT</div>
           <div class="w-1/12"></div>
         </div>
       </div>
@@ -89,7 +81,7 @@
             Conditions Générales de Vente du fournisseur
           </span>
           <TosOrderComponent
-            :seller-id="props.order.seller.id"
+            :seller="seller"
             v-if="showTos"
             @close="showTos = false"
           />
@@ -99,7 +91,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { PropType, computed, ref } from 'vue'
+import { PropType, computed, ref, onMounted } from 'vue'
 import { Order } from '@/vuejs/types/Cart'
 
 import { formatPrice } from '@/vuejs/services/utils'
@@ -107,8 +99,11 @@ import { formatPrice } from '@/vuejs/services/utils'
 import TosOrderComponent from '@/vuejs/modules/cart/components/TosOrderComponent.vue'
 import ProductRecapComponent from '@/vuejs/modules/cart/components/ProductRecapComponent.vue'
 import { useCartStore } from '@/vuejs/stores/cart'
+import { useSellerStore } from '@/vuejs/stores/seller'
+import { Seller } from '@/vuejs/types/Seller'
 
 const cartStore = useCartStore()
+const sellerStore = useSellerStore()
 
 const props = defineProps({
   order: {
@@ -124,6 +119,13 @@ const selectedShippingMethod = ref<number>(
   props.order.shippingMethodsAvailable.find((e) => e.selected)?.shipping_method
     ?.id || 0,
 )
+
+const seller = ref<Seller>()
+
+onMounted(async (): Promise<void> => {
+  seller.value = await sellerStore.getSeller(props.order.seller.id)
+})
+
 const totalPriceDisplayed = computed((): string => {
   return formatPrice(props.order.total_excluding_taxes / 100)
 })

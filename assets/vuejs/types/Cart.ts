@@ -10,11 +10,6 @@ interface Currency {
   code: string
 }
 
-interface Seller {
-  id: number
-  name: string
-}
-
 export interface CartStoreState {
   cart?: Cart
   termsOfSales: number[]
@@ -108,7 +103,7 @@ export interface Order {
   state: string
   buyer: EntityId
   buyer_user: EntityId
-  seller: Seller
+  seller: EntityId
   seller_user: EntityId
   items: OrderItem[]
   promotion: null

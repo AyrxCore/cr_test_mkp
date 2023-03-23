@@ -43,9 +43,6 @@ class UpplerCartService extends HttpClientProvider
 
     public function createCart(): string | null
     {
-        $session = $this->requestStack->getSession();
-        $session->start();
-
         $res = $this->request(
             'POST',
             $this->apiUrl . 'v1/buyer/cart/',
@@ -61,9 +58,6 @@ class UpplerCartService extends HttpClientProvider
 
     public function getCart(): array | null
     {
-        $session = $this->requestStack->getSession();
-        $session->start();
-
         $res = $this->request(
             'GET',
             $this->apiUrl . 'v1/buyer/cart?&expand[]=orders&expand[]=orderItems&criteria[state][]=new&criteria[state][]=address&criteria[state][]=shipping_method&criteria[state][]=payment',
@@ -90,15 +84,6 @@ class UpplerCartService extends HttpClientProvider
                     );
                     $shippingMethods = json_decode($res->getContent());
                     foreach ($cart['orders'] as $keyOrder => $order) {
-                        $res = $this->request(
-                            'GET',
-                            $this->apiUrl . 'v1/buyer/seller/' . $order['seller']['id'],
-                        );
-                        $seller = json_decode($res->getContent());
-                        $cart['orders'][$keyOrder]['seller'] = [
-                            'id' => $seller->id,
-                            'name' => $seller->name,
-                        ];
                         $shippingMethodsAvailable = $this->getShippingMethodsForOrder(
                             $shippingMethods->shipment_proposal->method_proposals,
                             $order['id']
@@ -124,9 +109,6 @@ class UpplerCartService extends HttpClientProvider
 
     public function getCartById(int $cartId): array | null
     {
-        $session = $this->requestStack->getSession();
-        $session->start();
-
         $res = $this->request(
             'GET',
             $this->apiUrl . 'v1/buyer/cart/' . $cartId . '?expand[]=orders&expand[]=orderItems',
@@ -140,9 +122,6 @@ class UpplerCartService extends HttpClientProvider
 
     public function addItemToCart(int $cartId, int $variantId, int $quantity): bool
     {
-        $session = $this->requestStack->getSession();
-        $session->start();
-
         $res = $this->request(
             'POST',
             $this->apiUrl . 'v1/buyer/cart/' . $cartId . '/items',
@@ -162,9 +141,6 @@ class UpplerCartService extends HttpClientProvider
 
     public function updateCartAddress(int|string $cartReference, int $shippingId, int $billingId): bool
     {
-        $session = $this->requestStack->getSession();
-        $session->start();
-
         $res = $this->request(
             'PATCH',
             is_string($cartReference) ? $cartReference : $this->apiUrl . 'v1/buyer/cart/' . $cartReference,
@@ -180,9 +156,6 @@ class UpplerCartService extends HttpClientProvider
 
     public function updateOrderItemQuantity(int $id, int $quantity): bool
     {
-        $session = $this->requestStack->getSession();
-        $session->start();
-
         $res = $this->request(
             'PATCH',
             $this->apiUrl . 'v1/buyer/order-item/' . $id,
@@ -195,9 +168,6 @@ class UpplerCartService extends HttpClientProvider
 
     public function deleteOrderItem(int $id): bool
     {
-        $session = $this->requestStack->getSession();
-        $session->start();
-
         $res = $this->request(
             'DELETE',
             $this->apiUrl . 'v1/buyer/order-item/' . $id,
@@ -218,9 +188,6 @@ class UpplerCartService extends HttpClientProvider
 
     public function setShippingMethod(int $cartId, int $orderId, int $shippingMethodId): bool
     {
-        $session = $this->requestStack->getSession();
-        $session->start();
-
         $res = $this->request(
             'PATCH',
             $this->apiUrl . 'v1/buyer/cart/' . $cartId . '/shipping-method',
@@ -242,8 +209,6 @@ class UpplerCartService extends HttpClientProvider
 
     public function getPaymentMethods(int $cartId): array
     {
-        $session = $this->requestStack->getSession();
-        $session->start();
         $res = $this->request(
             'GET',
             $this->apiUrl . 'v1/buyer/cart/' . $cartId . '/payment-method',
@@ -256,9 +221,6 @@ class UpplerCartService extends HttpClientProvider
 
     public function setPaymentMethod(int $cartId, int $paymentMethodId): stdClass
     {
-        $session = $this->requestStack->getSession();
-        $session->start();
-
         $res = $this->request(
             'PATCH',
             $this->apiUrl . 'v1/buyer/cart/' . $cartId . '/payment-method',
@@ -277,9 +239,6 @@ class UpplerCartService extends HttpClientProvider
 
     public function isPaymentConfirmed(int $cartId): stdClass | bool
     {
-        $session = $this->requestStack->getSession();
-        $session->start();
-
         $res = $this->request(
             'GET',
             $this->apiUrl . 'v1/buyer/cart/' . $cartId . '/transaction/confirm',
@@ -292,9 +251,6 @@ class UpplerCartService extends HttpClientProvider
 
     public function confirmCart(int $cartId): bool
     {
-        $session = $this->requestStack->getSession();
-        $session->start();
-
         $res = $this->request(
             'PATCH',
             $this->apiUrl . 'v1/buyer/cart/' . $cartId . '/confirm',
@@ -305,9 +261,6 @@ class UpplerCartService extends HttpClientProvider
 
     public function processCartSavings(array $cart): void
     {
-        $session = $this->requestStack->getSession();
-        $session->start();
-
         $account = $this->accountRepository->findOneBy([
             'upplerUserId' => $cart['user']['id']
         ]);

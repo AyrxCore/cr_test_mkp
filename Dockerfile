@@ -4,8 +4,8 @@ WORKDIR /var/www
 
 COPY . ./
 RUN set -eux; \
-    yarn install; \
-    yarn cache clean;
+  yarn install; \
+  yarn cache clean;
 
 RUN yarn build
 
@@ -14,17 +14,18 @@ CMD ["yarn"]
 FROM php:8.0-fpm AS php
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends libssl-dev zlib1g-dev curl git unzip netcat libxml2-dev libpq-dev libzip-dev && \
-    pecl install apcu xdebug && \
-    docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql && \
-    docker-php-ext-install -j$(nproc) zip opcache intl pdo_pgsql pgsql pcntl && \
-    docker-php-ext-enable apcu pdo_pgsql sodium xdebug && \
-    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+  apt-get install -y --no-install-recommends libssl-dev zlib1g-dev curl git unzip netcat libxml2-dev libpq-dev libzip-dev && \
+  pecl install apcu xdebug && \
+  docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql && \
+  docker-php-ext-install -j$(nproc) zip opcache intl pdo_pgsql pgsql pcntl && \
+  docker-php-ext-enable apcu pdo_pgsql sodium xdebug && \
+  apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # INSTALL COMPOSER
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 COPY docker/php-fpm/php.ini /usr/local/etc/php/php.ini
+COPY docker/php-fpm/mkp.conf /usr/local/etc/php-fpm.d/www.conf
 
 # ENTRYPOINT SCRIPT FOR PHP-FPM
 COPY docker/php-fpm/entrypoint-php-fpm.sh /usr/local/bin/entrypoint-php-fpm.sh
