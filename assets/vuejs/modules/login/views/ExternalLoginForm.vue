@@ -4,7 +4,7 @@
     <div class="flex flex-col md:flex-row justify-between md:space-x-8">
       <div class="w-full md:w-1/2 flex flex-col">
         <div v-if="showAlert" class="lg:w-5/6">
-          <AlertSharedComponent />
+          <AlertSharedComponent/>
         </div>
         <form
           class="w-full"
@@ -27,7 +27,7 @@
               <span
                 class="absolute inset-y-0 right-0 flex items-center pr-8 text-gray-500"
               >
-              <MailIcon />
+              <MailIcon/>
             </span>
             </div>
             <div class="relative mb-3 mt-3">
@@ -43,8 +43,8 @@
                 class="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-8 text-gray-500"
                 @click="toggleShowPassword"
               >
-                <EyeSlashIcon v-if="showPassword" />
-                <EyeIcon v-else />
+                <EyeSlashIcon v-if="showPassword"/>
+                <EyeIcon v-else/>
               </span>
             </div>
             <div class="mb-3 mt-3 flex justify-between">
@@ -59,19 +59,20 @@
               >Mot de passe oublié ?</a
               >
             </div>
-            <div class="mt-3 lg:items-center flex flex-col lg:mt-6 lg:grid lg:grid-cols-3 lg:justify-items-stretch w-full mb-6 space-y-5 lg:space-y-0 ">
+            <div
+              class="mt-3 lg:items-center flex flex-col lg:mt-6 lg:grid lg:grid-cols-3 lg:justify-items-stretch w-full mb-6 space-y-5 lg:space-y-0 ">
               <div class="w-full lg:justify-self-start">
                 <ButtonComponent
                   :is-loading="isLoading"
                   type="submit"
                   class="button-gradient min-w-[180px] w-full lg:w-auto"
                 >
-                  <ArrowRightIcon />
+                  <ArrowRightIcon/>
                   Me connecter
                 </ButtonComponent>
               </div>
               <div class="text-gray-500 lg:justify-self-center">
-                Vous n'êtes pas encore adhérent ?<br />
+                Vous n'êtes pas encore adhérent ?<br/>
                 <a href="https://qantis.co/contact" class="text-secondary underline">
                   Et si on se rencontrait ?
                 </a>
@@ -86,7 +87,7 @@
         </form>
       </div>
       <div class="sm:w-1/2 flex">
-        <AchetonsEnsembleComponent />
+        <AchetonsEnsembleComponent/>
       </div>
     </div>
 
@@ -96,11 +97,11 @@
       <div class="w-full md:w-1/2 flex flex-col">
         <div class="lg:w-5/6">
           <div v-if="showAlert && !showCGUModal">
-            <AlertSharedComponent />
+            <AlertSharedComponent/>
           </div>
           <div class="mb-5">
             <h1 class="home-subtitle text-gradient">
-              Bonjour {{ userAccounts[0].upplerDatas ? userAccounts[0].upplerDatas.master_user.firstname : ''}}
+              Bonjour {{ userAccounts[0]._user.firstName ? userAccounts[0]._user.firstName : '' }}
             </h1>
             <h3 class="text-gray-500">
               Veuillez sélectionner le compte acheteur avec lequel vous souhaitez être
@@ -144,16 +145,16 @@
               @click="onAccountClick"
             >
               <div v-show="isLoading">
-                <LoaderSharedComponent />
+                <LoaderSharedComponent/>
               </div>
-              <ArrowRightIcon />
+              <ArrowRightIcon/>
               Valider
             </button>
           </div>
         </div>
-    </div>
+      </div>
       <div class="sm:w-1/2 flex">
-        <AchetonsEnsembleComponent />
+        <AchetonsEnsembleComponent/>
       </div>
     </div>
   </template>

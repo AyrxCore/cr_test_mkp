@@ -4,16 +4,19 @@ namespace App\Controller\Api;
 
 use App\Entity\Account;
 use App\Entity\User;
+use App\Events\UserAcceptCGUEvent;
 use App\Service\UpplerAccountService;
 use App\Service\UpplerAuthenticationService;
 use App\Service\UpplerBuyerCompanyService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -36,6 +39,9 @@ class UserApiController extends AbstractController
 
     #[Required]
     public UpplerAccountService $upplerAccountService;
+
+    #[Required]
+    public EventDispatcherInterface $eventDispatcher;
 
     #[Route('/me', name: 'get_me')]
     public function me(NormalizerInterface $normalizer): JsonResponse
@@ -89,12 +95,13 @@ class UserApiController extends AbstractController
 
         if ($userAuth && $session->has('access_token') && !empty($session->get('access_token'))) {
             if (empty($account->isAcceptCGU())) {
-                $account->setAcceptCGU(true);
-                $this->em->persist($account);
-                $this->em->flush();
+                $event = new UserAcceptCGUEvent($account);
+                $this->eventDispatcher->dispatch($event);
             }
             return new JsonResponse(['status' => 'ok']);
         }
+
+        throw new \Exception('Vous n\'avez pas accès à ce compte');
     }
 
     #[Route("/logout")]

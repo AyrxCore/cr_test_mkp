@@ -40,7 +40,6 @@ export const useUserStore = defineStore({
         await UserHttpClient.get().selectUserAccount(id)
         return true
       } catch (error) {
-        error.response.status === HttpStatusCodes.unauthorized &&
           alertStore.setShow(
             getErrorMessage(error.response.data.message),
             AlertType.danger,
