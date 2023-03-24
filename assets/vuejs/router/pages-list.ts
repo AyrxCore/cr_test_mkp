@@ -30,7 +30,7 @@ export enum CartPageList {
 export enum MainPageList {
   HOME_PAGE = 'home-page',
   CONTACT_PAGE = 'contact-page',
-  PAGE_NOT_FOUND = 'page-not-fonud',
+  PAGE_NOT_FOUND = 'page-not-found',
 }
 
 export enum PartnersPageList {
