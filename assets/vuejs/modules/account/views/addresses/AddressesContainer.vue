@@ -24,7 +24,7 @@
         </div>
         <div>
           <ButtonComponent
-            class="default-button btn-address"
+            class="button-secondary-outline"
             @click="onCreateAddressClick('shipping')"
           >
             <AddIconComponent
@@ -45,7 +45,7 @@
         </div>
         <div>
           <ButtonComponent
-            class="default-button btn-address"
+            class="button-secondary-outline"
             @click="onCreateAddressClick('billing')"
           >
             <AddIconComponent
@@ -88,9 +88,3 @@ const onCreateAddressClick = (type: string) => {
   })
 }
 </script>
-
-<style scoped lang="postcss">
-.btn-address {
-  @apply mr-2 mb-2 flex !h-8 items-center rounded-full border border-purple-600 bg-transparent !px-1.5 !py-1 text-sm font-medium !text-purple-500 hover:!text-white md:!h-12 md:px-4 md:py-5;
-}
-</style>

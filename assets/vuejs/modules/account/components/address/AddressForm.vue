@@ -3,11 +3,11 @@
     <div class="md:grid-rows flex flex-col md:grid md:grid-flow-col md:gap-6">
       <div class="mb-6">
         <LabelField title="Nom *" />
-        <InputField v-model="currentAddress.name" required="true" />
+        <InputField v-model="currentAddress.name" required />
       </div>
       <div class="mb-6">
         <LabelField title="Entreprise *" />
-        <InputField v-model="currentAddress.company" required="true" />
+        <InputField v-model="currentAddress.company" required />
       </div>
     </div>
     <div class="md:grid-rows flex flex-col md:grid md:grid-flow-col md:gap-6">
@@ -23,7 +23,7 @@
     <div class="md:grid-rows flex flex-col md:grid md:grid-flow-col md:gap-12">
       <div class="mb-6">
         <LabelField title="Adresse *" />
-        <InputField v-model="currentAddress.street" required="true" />
+        <InputField v-model="currentAddress.street" required />
       </div>
     </div>
     <div class="md:grid-rows flex flex-col md:grid md:grid-flow-col md:gap-6">
@@ -31,13 +31,13 @@
         <LabelField title="Code postal *" />
         <InputField
           v-model="currentAddress.postcode"
-          required="true"
+          required
           pattern="(?:0[1-9]|[1-8]\d|9[0-8])\d{3}$"
         />
       </div>
       <div class="mb-6">
         <LabelField title="Ville *" />
-        <InputField v-model="currentAddress.city" required="true" />
+        <InputField v-model="currentAddress.city" required />
       </div>
     </div>
     <div class="md:grid-rows flex flex-col md:grid md:grid-flow-col md:gap-6">
@@ -47,7 +47,7 @@
           v-model="currentAddress.country"
           :options="countryStore.getCountriesForSelect()"
           placeholder="Sélectionner un pays"
-          required="true"
+          required
         />
       </div>
       <div class="mb-6">
@@ -57,16 +57,13 @@
     </div>
     <div class="flex justify-between md:justify-end">
       <ButtonComponent
-        class="default-button mr-2 mb-2 flex items-center rounded-full border border-purple-600 bg-transparent px-4 py-5 text-sm font-medium !text-purple-500 hover:!text-white"
+        class="button-secondary-outline mr-2"
         type="button"
         @click="onCancelClick"
       >
         Annuler
       </ButtonComponent>
-      <ButtonComponent
-        class="default-button mr-2 mb-2 flex items-center rounded-full border border-purple-600 bg-transparent px-4 py-5 text-sm font-medium !text-purple-500 hover:!text-white"
-        :is-loading="isloading"
-      >
+      <ButtonComponent class="button-secondary-outline" :is-loading="isloading">
         Enregistrer
       </ButtonComponent>
     </div>

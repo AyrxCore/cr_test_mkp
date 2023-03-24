@@ -7,7 +7,6 @@
       </div>
       <RouterLink
         :to="{ name: MainPageList.HOME_PAGE }"
-        href="/app/home"
         class="my-4 flex items-center text-[14px] text-secondary lg:my-7"
       >
         <ArrowLeftIconComponent class="mr-2" />
@@ -17,7 +16,7 @@
         <slot name="header" />
         <div class="mt-10 gap-11 xl:grid xl:grid-cols-4">
           <DropdownListComponent>
-            <template #button-label> Mon compte</template>
+            <template #button-label>Mon compte</template>
             <template #content>
               <div class="flex flex-col-reverse gap-4 xl:grid">
                 <div class="rounded-lg bg-white pt-2 xl:p-7">
@@ -56,25 +55,24 @@
                     >
                       Mes contacts
                     </h3>
-                    <p class="items-center text-sm text-gray-500 md:text-base">
+                    <div
+                      class="items-center text-sm text-gray-500 md:text-base"
+                    >
                       <span class="flex">
                         <ChevronRightIconComponent :stroke-color="'#5E6875'" />
                         Service adhérents
                       </span>
-                      <span class="ml-6 font-bold">04 37 65 06 21</span>
-                    </p>
-                    <p
-                      class="mt-4 items-center text-sm text-gray-500 md:text-base"
-                    >
-                      <span class="flex">
+                      <a class="ml-6" :href="`tel:${PHONE_ANIMATION}`">
+                        {{ PHONE_ANIMATION }}
+                      </a>
+                      <span class="mt-2 flex">
                         <ChevronRightIconComponent :stroke-color="'#5E6875'" />
-                        Votre animateur:
+                        Contactez-nous
                       </span>
-                      <span class="ml-6 flex"> Nom Animateur</span>
-                      <span class="ml-6 flex font-bold"
-                        >animation@qantis.co</span
-                      >
-                    </p>
+                      <a class="ml-6" :href="`mailto:${MAIL_ANIMATION}`">
+                        {{ MAIL_ANIMATION }}
+                      </a>
+                    </div>
                   </div>
                   <AccountSidebar />
                 </div>
@@ -99,17 +97,21 @@
     </div>
   </BaseTemplate>
 </template>
+
 <script lang="ts" setup>
-import BaseTemplate from '@/vuejs/BaseTemplate.vue'
-import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
-import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
-import ArrowLeftIconComponent from '@/vuejs/modules/shared/icon/ArrowLeftIconComponent.vue'
-import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightIconComponent.vue'
 import { useUserStore } from '@/vuejs/stores/user'
 import { storeToRefs } from 'pinia'
+
 import AccountSidebar from '@/vuejs/modules/account/components/sidebar/AccountSidebar.vue'
+import ArrowLeftIconComponent from '@/vuejs/modules/shared/icon/ArrowLeftIconComponent.vue'
+import BaseTemplate from '@/vuejs/BaseTemplate.vue'
+import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
+import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightIconComponent.vue'
+import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import DisconnectIconComponent from '@/vuejs/modules/shared/icon/DisconnectIconComponent.vue'
 import DropdownListComponent from '@/vuejs/modules/shared/DropdownListComponent.vue'
+
+import { MAIL_ANIMATION, PHONE_ANIMATION } from '@/vuejs/services/const'
 import { MainPageList } from '@/vuejs/router/pages-list'
 
 const userStore = useUserStore()
@@ -119,7 +121,8 @@ const onLogout = async (e: Event): Promise<void> => {
   ;(await userStore.logout()) && location.reload()
 }
 </script>
-<style>
+
+<style lang="postcss">
 .text-title-35 {
   @apply text-[23px] md:text-[29px] lg:text-[35px];
 }

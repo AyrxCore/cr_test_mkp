@@ -1,33 +1,31 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="primary mb-4 text-title-35 mt-2 md:mt-0">Modifier mon email de contact</h3>
-      <form
-          @submit.prevent="onEmailFormSubmit"
-      >
-        <div class="grid grid-rows grid-flow-col gap-6">
-          <div  class="mb-6">
-            <LabelField title="Email"/>
+      <h3 class="primary mb-4 mt-2 text-title-35 md:mt-0">
+        Modifier mon email de contact
+      </h3>
+      <form @submit.prevent="onEmailFormSubmit">
+        <div class="grid-rows grid grid-flow-col gap-6">
+          <div class="mb-6">
+            <LabelField title="Email" />
             <InputField
-                v-model="userStore.user.account.editingSubAccount.email"
-                type="email"
-                required="true"
+              v-model="userStore.user.account.editingSubAccount.email"
+              type="email"
+              required
             />
           </div>
         </div>
         <div class="flex justify-end">
           <ButtonComponent
-              class="default-button mr-2 mb-2 flex items-center px-4 py-5 text-sm font-medium bg-transparent
-             !text-purple-500 rounded-full border border-purple-600"
-              type="button"
-              @click="onCancelClick"
+            class="button-secondary-outline mr-2"
+            type="button"
+            @click="onCancelClick"
           >
             Annuler
           </ButtonComponent>
           <ButtonComponent
-              class="default-button mr-2 mb-2 flex items-center px-4 py-5 text-sm font-medium bg-transparent
-             !text-purple-500 rounded-full border border-purple-600"
-              :is-loading="isLoading"
+            class="button-secondary-outline"
+            :is-loading="isLoading"
           >
             Enregistrer
           </ButtonComponent>
@@ -35,16 +33,18 @@
       </form>
     </template>
   </AccountPage>
-
 </template>
+
 <script lang="ts" setup>
+import { onBeforeMount, ref } from 'vue'
+import router, { PageList } from '@/vuejs/router'
+
+import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import InputField from '@/vuejs/modules/shared/formfields/InputField.vue'
 import LabelField from '@/vuejs/modules/shared/formfields/LabelField.vue'
-import {onBeforeMount, ref} from 'vue'
-import router, {PageList} from '@/vuejs/router'
-import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
-import {useUserStore} from '@/vuejs/stores/user'
+
+import { useUserStore } from '@/vuejs/stores/user'
 
 const isLoading = ref<boolean>(false)
 const userStore = useUserStore()
@@ -61,7 +61,7 @@ const onEmailFormSubmit = async () => {
 
 const onCancelClick = () => {
   router.push({
-    name: PageList.ACCOUNT
+    name: PageList.ACCOUNT,
   })
 }
 </script>

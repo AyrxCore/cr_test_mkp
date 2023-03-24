@@ -31,11 +31,11 @@ const toggle = ref<boolean>(false)
   @apply flex w-full flex-row items-center justify-between rounded-lg bg-white p-2.5 text-primary lg:w-1/2 xl:hidden;
 }
 .dropdown-select .dropdown-menu {
-  @apply absolute z-10 mt-1 hidden h-[428px]
+  @apply absolute z-10 mt-1 hidden
   flex-wrap overflow-auto
   rounded-lg
   bg-white
-  px-5 text-left
+  p-5 text-left
   shadow-xl
   xl:relative
   xl:mt-0 xl:flex xl:h-auto

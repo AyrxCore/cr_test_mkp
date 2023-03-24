@@ -61,6 +61,15 @@ const onClick = ($event: PointerEvent): void => {
   &-secondary {
     @apply bg-secondary;
   }
+  &-secondary-outline {
+    @apply border border-secondary bg-transparent text-secondary;
+    &:focus:not(:disabled) {
+      @apply border-primary text-white;
+    }
+    &:hover:not(:disabled):not(:focus) {
+      @apply text-white;
+    }
+  }
   &-gradient {
     @apply bg-gradient-to-r from-secondary via-gradient-1 to-gradient-2 box-decoration-clone;
     svg,
