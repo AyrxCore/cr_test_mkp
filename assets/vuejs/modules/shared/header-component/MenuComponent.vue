@@ -9,13 +9,12 @@
           class="flex items-center rounded border-b-2 border-b-transparent py-1 hover:opacity-75 lg:px-3"
           @click.stop="toggleMenu"
         >
-          <MenuIconComponent class="mr-0.5 text-xl lg:w-auto" />
+          <MenuIconComponent class="mr-0.5 text-xl lg:w-auto"/>
           <span class="ml-4 hidden lg:block">Toutes les catégories</span>
         </button>
 
-        <MenuCategoryComponent v-model="isMenuOpen" class="hidden sm:block" />
+        <MenuCategoryComponent v-model="isMenuOpen" class="xs:flex md:block"/>
       </div>
-
     </div>
     <div
       v-for="category in listMenu"

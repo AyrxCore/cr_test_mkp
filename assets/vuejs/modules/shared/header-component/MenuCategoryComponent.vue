@@ -16,13 +16,13 @@
         @click.stop="closeMenu"
       />
     </div>
-    <hr class="my-2.5" />
+    <hr class="my-2.5"/>
     <div
       v-for="category in categories"
       :key="category.id"
       class="w-[100%] items-center py-1 !text-sm"
     >
-      <MenuCategoryChildComponent :category="category" />
+      <MenuCategoryChildComponent :category="category"/>
     </div>
   </div>
 </template>
