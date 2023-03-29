@@ -102,6 +102,7 @@ import ContenusExpertComponent from '@/vuejs/modules/home/component/ContenusExpe
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 import { useExpertContentStore } from '@/vuejs/stores/expertContent'
 import { ExpertContent } from '@/vuejs/types/ExpertContent'
+import { ActualitesPageList, ProductPageList } from '@/vuejs/router/pages-list';
 
 const route = useRoute()
 const expertContentStore = useExpertContentStore()
@@ -110,7 +111,7 @@ const currentExpertContent = ref<ExpertContent>()
 const listUrl = ref([
   {
     name: 'Actualités',
-    url: '/app/actualites',
+    url: { name: ActualitesPageList.ACTUALITES },
   },
 ])
 
@@ -119,7 +120,7 @@ const formattedDate = computed((): string => {
 })
 
 onBeforeMount(async () => {
-    await expertContentStore.init()
+  await expertContentStore.init()
 })
 
 watch(

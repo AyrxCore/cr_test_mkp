@@ -129,6 +129,32 @@ class UpplerProductService extends HttpClientProvider
         return $this->hydrateProduct($product, $accountId);
     }
 
+    public function findVariantById(int $variantId = null)
+    {
+        $session = $this->requestStack->getSession();
+        $session->start();
+
+        $filters = ['price'];
+        $urlFilters = null;
+
+        if (!empty($filters)) {
+            foreach ($filters as $filter) {
+                $urlFilters .= null === $urlFilters ? '?expand[]=' . $filter : '&expand[]=' . $filter;
+            }
+        }
+
+        $res = $this->request(
+            'GET',
+            $this->apiUrl . 'v1/buyer/variant/' . $variantId . $urlFilters
+        );
+
+        if (Response::HTTP_OK !== $res->getStatusCode()) {
+            throw new NotFoundHttpException('L\'option avec l\'Id: ' . $variantId . ' n\' a pas été trouvé');
+        }
+
+        return json_decode($res->getContent());
+    }
+
     public function findAllCategories(string $accountId, int $page = 1, int $perPage = 1): \stdClass | null
     {
         $item = $this->cache->getItem('categories_' . $accountId);
@@ -165,6 +191,7 @@ class UpplerProductService extends HttpClientProvider
     {
         $product = new Product();
         $this->initHydrateProduct($remoteProduct, $product);
+        $product->setVariants($remoteProduct->variants);
 
         $isAccordCadre = $this->isAccordCadre($remoteProduct, $product);
 
@@ -240,6 +267,20 @@ class UpplerProductService extends HttpClientProvider
             }
             $product->setOptions($options);
 
+            $variants = [];
+            foreach ($remoteProduct->variants as $variant) {
+                $variantOptions = [];
+                if (!empty($variant->option_values)) {
+                    foreach ($variant->option_values as $option_value) {
+                        $variantOptions[] = $option_value->id;
+                    }
+                    $variants[$variant->id] = $variantOptions;
+                }
+            }
+            if (!empty($variants)) {
+                $product->setVariants($variants);
+            }
+
             $this->hydratePrice($remoteProduct, $product);
 
             if ($product->getPriceReference() && $product->getPrice()) {
@@ -305,7 +346,6 @@ class UpplerProductService extends HttpClientProvider
         $product->setName($remoteProduct->name->default);
         $product->setDescription($remoteProduct->description->default ?? null);
         $product->setReference($remoteProduct->reference);
-        $product->setVariants($remoteProduct->variants);
         if ($remoteProduct->company->id) {
             $item = $this->cache->getItem('seller_' . $remoteProduct->company->id);
 

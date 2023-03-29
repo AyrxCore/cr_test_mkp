@@ -59,10 +59,22 @@ export const useProductStore = defineStore({
         return await ProductHttpClient.get().findProductById(id)
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow(
-            getErrorMessage(error.response.data.message),
-            AlertType.danger,
-          )
+        alertStore.setShow(
+          getErrorMessage(error.response.data.message),
+          AlertType.danger,
+        )
+      }
+    },
+    async findVariantById(id) {
+      const alertStore = useAlertStore()
+      try {
+        return await ProductHttpClient.get().findVariantById(id)
+      } catch (error) {
+        error.response.status === HttpStatusCodes.unauthorized &&
+        alertStore.setShow(
+          getErrorMessage(error.response.data.message),
+          AlertType.danger,
+        )
       }
     },
     async findAccordCadreById(id) {
@@ -71,10 +83,10 @@ export const useProductStore = defineStore({
         return await ProductHttpClient.get().findAccordCadreById(id)
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow(
-            getErrorMessage(error.response.data.message),
-            AlertType.danger,
-          )
+        alertStore.setShow(
+          getErrorMessage(error.response.data.message),
+          AlertType.danger,
+        )
       }
     },
     setSelectedCategory(categoryId) {

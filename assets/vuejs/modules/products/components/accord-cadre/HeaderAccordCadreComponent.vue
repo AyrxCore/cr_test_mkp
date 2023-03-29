@@ -3,7 +3,7 @@
     :list-url="breadcrumbUrl"
     :current-page="name"
   />
-  <ContactUsButtonComponent />
+  <ContactUsButtonComponent/>
   <div class="text-green mt-3.5 flex flex-col lg:flex-row lg:items-center">
     <h3 class="text-title-35 text-primary">
       {{ name }}
@@ -12,17 +12,17 @@
       v-if="note"
       class="flex flex-row"
     >
-      <LeafIconComponent class="mx-2" />
+      <LeafIconComponent class="mx-2"/>
       <span class="mr-2 flex text-sm font-bold md:text-lg text-green-qantis">{{ note }}</span>
       <span class="mt-1 flex text-xs text-gray-500 md:mt-2"
-        >Selon notre référentiel RSE</span
+      >Selon notre référentiel RSE</span
       >
       <span
         class="flex cursor-pointer md:mt-1"
         title="Message explicatif du référentiel RSE"
         @click.prevent="scrollTo"
-        >
-        <InformationIconComponent />
+      >
+        <InformationIconComponent/>
       </span>
     </div>
   </div>
@@ -51,6 +51,7 @@ import { computed } from 'vue'
 import LeafIconComponent from '@/vuejs/modules/shared/icon/LeafIconComponent.vue'
 import InformationIconComponent from '@/vuejs/modules/shared/icon/InformationIconComponent.vue'
 import { PageList } from '@/vuejs/router'
+import { ProductPageList } from '@/vuejs/router/pages-list';
 
 const emit = defineEmits(['scroll-to'])
 
@@ -62,7 +63,7 @@ const props = defineProps({
   note: {
     required: false,
     type: String,
-    default: null
+    default: null,
   },
   logo: {
     required: true,
@@ -82,11 +83,10 @@ const breadcrumbUrl = computed(() => {
   const breadcrumb = []
   if (props.categories) {
     Object.entries(props.categories).forEach(([key, value], index) => {
-      const url = `/app/${PageList.PRODUCTS}?category=${key}&page=1`
       breadcrumb.push({
         id: key,
         name: value,
-        url: url
+        url: { name: ProductPageList.PRODUCTS, query: { category: key, page: 1 } },
       })
     })
   }

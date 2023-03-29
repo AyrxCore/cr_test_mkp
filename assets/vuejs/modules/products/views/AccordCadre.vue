@@ -1,78 +1,78 @@
 <template>
   <BaseTemplate title="Qantis - MarketPlace">
     <div
-        v-if="accord"
-        class="xs:w-[100%] m-auto my-4 max-w-screen-2xl px-5 sm:px-8"
+      v-if="accord"
+      class="xs:w-[100%] m-auto my-4 max-w-screen-2xl px-5 sm:px-8"
     >
       <HeaderPartnerComponent
-          :name="accord.name"
-          :note="accord.properties.note_rse ?? null"
-          :logo="accord.properties.logo_partenaire"
-          :barner="accord.properties.banniere_partenaire"
-          :categories="accord.categories"
-          @scroll-to="scrollTo('#sectionRse')"
+        :name="accord.name"
+        :note="accord.properties.note_rse ?? null"
+        :logo="accord.properties.logo_partenaire"
+        :barner="accord.properties.banniere_partenaire"
+        :categories="accord.categories"
+        @scroll-to="scrollTo('#sectionRse')"
       />
 
       <PointsClesComponent
-          :description="accord.description"
-          :points-cles="pointsCles"
+        :description="accord.description"
+        :points-cles="pointsCles"
       />
 
       <div
-          class="mt-10 mt-5 flex flex-col text-sm md:text-base lg:grid lg:grid-cols-9 lg:gap-4 lg:text-lg"
+        class="mt-10 mt-5 flex flex-col text-sm md:text-base lg:grid lg:grid-cols-9 lg:gap-4 lg:text-lg"
       >
 
-        <ConditionsNegocieesComponent :properties="accord.properties"/>
+        <ConditionsNegocieesComponent :properties="accord.properties" />
 
         <div class="bloc-content col-span-4 mt-5 lg:mt-0">
           <h3
-              class="text-title-35 mb-[1.563rem] mt-5 font-bold leading-9 text-primary xl:w-3/4"
+            class="text-title-35 mb-[1.563rem] mt-5 font-bold leading-9 text-primary xl:w-3/4"
           >
             Comment bénéficier des conditions ?
           </h3>
           <ConditionsNotActivatedComponent
-              v-if="status.not_activated === currentStatus.status"
-              :text="accord.properties.process_not_activated"
-              :current-status="currentStatus"
-              :accord-name="accord.name"
+            v-if="status.not_activated === currentStatus.status"
+            :text="accord.properties.process_not_activated"
+            :current-status="currentStatus"
+            :accord-name="accord.name"
           />
           <ConditionsPendingOrActivated
-              v-else-if="status.pending === currentStatus.status"
-              :current-status="currentStatus"
-              :text="accord.properties.process_pending"
-              :btn-contact="accord.properties.cta1_text_pending"
-              :btn-link="{name: accord.properties.cta2_text_pending, url: accord.properties.cta2_link_pending}"
+            v-else-if="status.pending === currentStatus.status"
+            :current-status="currentStatus"
+            :text="accord.properties.process_pending"
+            :btn-contact="accord.properties.cta1_text_pending"
+            :btn-link="{name: accord.properties.cta2_text_pending, url: accord.properties.cta2_link_pending}"
           />
           <ConditionsPendingOrActivated
-              v-else
-              :current-status="currentStatus"
-              :text="accord.properties.process_activated"
-              :btn-contact="accord.properties.cta1_text_activated"
-              :btn-link="{name: accord.properties.cta2_text_activated, url: accord.properties.cta2_activated}"
+            v-else
+            :current-status="currentStatus"
+            :text="accord.properties.process_activated"
+            :btn-contact="accord.properties.cta1_text_activated"
+            :btn-link="{name: accord.properties.cta2_text_activated, url: accord.properties.cta2_activated}"
           />
         </div>
       </div>
       <div id="sectionRse"></div>
-      <MiseEnAvantComponent :properties="accord.properties"/>
+      <MiseEnAvantComponent :properties="accord.properties" />
       <PointsClesRSEComponent
-          v-if="accord.properties.texte_rse"
-          :description="accord.properties.texte_rse"
-          :note="accord.properties.note_rse"
-          :points-cles-rse="pointsClesRSE"
+        v-if="accord.properties.texte_rse"
+        :description="accord.properties.texte_rse"
+        :note="accord.properties.note_rse"
+        :points-cles-rse="pointsClesRSE"
       />
-      <EnSavoirPlusComponent :properties="accord.properties"/>
+      <EnSavoirPlusComponent :properties="accord.properties" />
       <div class="mt-11">
         <h3 class="home-subtitle text-primary">
           Ces partenaires peuvent aussi
           <span class="text-gradient">vous intéresser</span>
         </h3>
       </div>
-      <PartnersCarouselComponent class="mt-5"/>
+      <PartnersCarouselComponent class="mt-5" />
     </div>
     <div v-else class="w-full flex h-16 justify-center items-center">
       <LoaderSharedComponent
-          class="text-secondary"
-          classes="loader-xl loader"
+        class="text-secondary"
+        classes="loader-xl loader"
       />
     </div>
   </BaseTemplate>
@@ -80,15 +80,15 @@
 <script lang="ts" setup>
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import HeaderPartnerComponent from '@/vuejs/modules/products/components/accord-cadre/HeaderAccordCadreComponent.vue'
-import {computed, ref, watch} from 'vue'
+import { computed, ref, watch } from 'vue'
 import PartnersCarouselComponent from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
-import {Product} from '@/vuejs/types/Product'
-import {useRoute} from 'vue-router'
+import { Product } from '@/vuejs/types/Product'
+import { useRoute } from 'vue-router'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 import MiseEnAvantComponent from '@/vuejs/modules/products/components/accord-cadre/CarouselMiseEnAvantComponent.vue'
 import ConditionsNegocieesComponent
   from '@/vuejs/modules/products/components/accord-cadre/ConditionsNegocieesComponent.vue'
-import {status} from '@/vuejs/modules/products'
+import { status } from '@/vuejs/modules/products'
 import ConditionsNotActivatedComponent
   from '@/vuejs/modules/products/components/accord-cadre/ConditionsNotActivatedComponent.vue'
 import ConditionsPendingOrActivated
@@ -96,7 +96,7 @@ import ConditionsPendingOrActivated
 import PointsClesComponent from '@/vuejs/modules/products/components/accord-cadre/PointsClesComponent.vue'
 import PointsClesRSEComponent from '@/vuejs/modules/products/components/accord-cadre/PointsClesRSEComponent.vue'
 import EnSavoirPlusComponent from '@/vuejs/modules/products/components/accord-cadre/EnSavoirPlusComponent.vue'
-import {useProductStore} from '@/vuejs/stores/product'
+import { useProductStore } from '@/vuejs/stores/product'
 import { el } from 'date-fns/locale';
 
 const route = useRoute()
@@ -147,11 +147,11 @@ const scrollTo = (selector) => {
 }
 
 watch(
-    () => route.params.id as string,
-    async (id: string) => {
-      if (id) accord.value = await accordStore.findAccordCadreById(id)
-    },
-    {immediate: true},
+  () => route.params.id as string,
+  async (id: string) => {
+    if (id) accord.value = await accordStore.findAccordCadreById(id)
+  },
+  { immediate: true },
 )
 </script>
 

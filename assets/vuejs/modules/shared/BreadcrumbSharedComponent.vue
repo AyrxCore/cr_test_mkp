@@ -11,9 +11,10 @@
         :stroke-color="'#A4A4A4'"
       />
       <li v-for="(list, key) in listUrl" :key="key" class="inline-flex">
-        <RouterLink :to="{ path: list.url ?? '#' }" class="text-gray-400">{{
-          list.name
-        }}</RouterLink>
+        <RouterLink :to="list.url ?? '#'" class="text-gray-400">{{
+            list.name
+          }}
+        </RouterLink>
         <ChevronRightIconComponent
           class="ml-1 h-4 text-gray-500"
           :stroke-color="'#A4A4A4'"
@@ -29,9 +30,10 @@
         class="mr-1 h-4 text-gray-500 rotate-180"
         :stroke-color="'#A4A4A4'"
       />
-      <RouterLink :to="{ path: lastBreadcrumbUrl.url ?? '#' }" class="text-gray-400">{{
+      <RouterLink :to="lastBreadcrumbUrl.url ?? '#'" class="text-gray-400">{{
           lastBreadcrumbUrl.name
-        }}</RouterLink>
+        }}
+      </RouterLink>
     </div>
 
   </nav>

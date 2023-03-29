@@ -49,7 +49,8 @@
             name: ProductPageList.PRODUCT,
             params: { id: props.product.id },
           }"
-          >{{ props.product.name }}</RouterLink
+        >{{ props.product.name }}
+        </RouterLink
         >
       </h3>
       <div class="h-[100px]">
@@ -62,7 +63,9 @@
     <!-- Fin bloc nom et description -->
 
     <!-- Bloc prix -->
-    <div class="flex w-full items-center justify-start xl:mt-1">
+    <div
+      class="flex w-full items-center justify-start xl:mt-1"
+    >
       <span
         v-if="props.product.price?.displayPrice"
         class="mr-2 text-sm font-bold text-primary md:text-base lg:text-lg"
@@ -84,29 +87,49 @@
     <!-- Fin bloc prix -->
 
     <!-- Bloc quantité -->
-    <div class="flex w-full justify-between">
-      <div class="flex items-center justify-start">
-        <span class="mr-2 text-sm text-gray-500">Qté :</span>
-        <select v-model="quantity" class="rounded-md border border-gray-300">
-          <option v-for="i in 5" :key="i" :value="i">
-            {{ i }}
-          </option>
-        </select>
+    <div class="flex w-full justify-between mt-1">
+      <div
+        v-if="props.product.variants.length > 2"
+        class="mx-auto items-center"
+      >
+        <RouterLink
+
+          :to="{
+              name: ProductPageList.PRODUCT,
+              params: { id: props.product.id },
+            }"
+          class="button !text-secondary border-2 border-secondary hover:!bg-white"
+        >
+          Voir les options
+          <ArrowRightIconComponent class="ml-2 w-4 stroke-secondary" />
+        </RouterLink>
       </div>
-      <ButtonAddToCartComponent :product="props.product" :quantity="quantity" />
+      <div v-else class="flex justify-between w-full">
+        <div class="flex items-center justify-start">
+          <span class="mr-2 text-sm text-gray-500">Qté :</span>
+          <select v-model="quantity" class="rounded-md border border-gray-300">
+            <option v-for="i in 5" :key="i" :value="i">
+              {{ i }}
+            </option>
+          </select>
+        </div>
+        <ButtonAddToCartComponent
+          :product="product"
+          :quantity="quantity"
+          :variant-id="variantId"
+        />
+      </div>
     </div>
     <!-- Bloc quantité -->
   </div>
 </template>
 <script lang="ts" setup>
 import { computed, PropType, ref } from 'vue'
-
-import ButtonAddToCartComponent from '@/vuejs/modules/shared/ButtonAddToCartComponent.vue'
-
-import { formatPrice } from '@/vuejs/services/utils'
+import { formatPrice, getUpplerImage } from '@/vuejs/services/utils'
 import { Product } from '@/vuejs/types/Product'
-import { getUpplerImage } from '@/vuejs/services/utils'
 import { ProductPageList } from '@/vuejs/router/pages-list'
+import ButtonAddToCartComponent from '@/vuejs/modules/shared/ButtonAddToCartComponent.vue'
+import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 
 const props = defineProps({
   product: {
@@ -122,6 +145,13 @@ const showLineThroughPrice = computed(() => {
     props.product.priceReference &&
     props.product.priceReference !== props.product.price?.displayPrice
   )
+})
+
+const variantId = computed(() => {
+  if (props.product.variants.length > 0) {
+    return props.product.variants[0].id
+  }
+  return null
 })
 </script>
 

@@ -13,7 +13,7 @@
       v-else
       class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 px-5 sm:px-8"
     >
-      <breadcrumb-shared-component
+      <BreadcrumbSharedComponent
         :list-url="breadcrumbUrl(product)"
         :current-page="product.name"
       />
@@ -104,29 +104,41 @@
               <template #partner> {{ product.seller.name }}</template>
               <template #reference> {{ product.reference }}</template>
             </ProductTitleComponent>
-            <div class="mt-14 hidden flex-col lg:flex">
+            <div
+              v-if="isLoadingPrice"
+              class="mt-5 flex h-10 w-full items-center justify-start"
+            >
+              <LoaderSharedComponent
+                class="text-secondary"
+                classes="loader-lg loader"
+              />
+            </div>
+            <div
+              v-else
+              class="mt-14 hidden flex-col lg:flex"
+            >
               <div>
                 <span
-                  v-if="product.priceReference"
+                  v-if="priceReference"
                   :class="{
                     'text-sm text-gray-500 line-through  md:text-base lg:text-lg':
-                      product.price?.displayPrice,
+                      price,
                     'text-[25px] font-bold text-primary':
                       product.price === null,
                   }"
-                  >{{ product.priceReference }}€ HT
+                >{{ priceReference }}€ HT
                 </span>
                 <span
-                  v-if="product.percent > 0"
+                  v-if="percent > 0"
                   class="ml-2 rounded-lg bg-secondary px-2.5 py-1.5 text-white"
-                  >{{ product.percent }}%</span
+                >{{ percent }}%</span
                 >
               </div>
               <div
-                v-if="product.price?.displayPrice"
+                v-if="price"
                 class="mt-3 text-[25px] font-bold text-primary"
               >
-                {{ product.price?.displayPrice }}€ HT
+                {{ price }}€ HT
               </div>
             </div>
             <div class="lg:mt-12">
@@ -151,12 +163,12 @@
               </div>
               <p class="mt-1">
                 <span class="text-sm text-gray-500 md:text-base lg:text-lg"
-                  >Conditionnement conseillé : {{ product.conditionnement }}
+                >Conditionnement conseillé : {{ product.conditionnement }}
                 </span>
               </p>
               <div class="mt-12">
                 <div
-                  v-for="(children, key) in product.options"
+                  v-for="(children, key, index) in product.options"
                   :key="key"
                   class="mt-2 w-full items-center text-gray-500"
                 >
@@ -165,9 +177,15 @@
                   </span>
                   <select
                     v-if="children.length > 1"
+                    v-model="optionVariant[index]"
                     class="right-0 float-right ml-2 h-[1.75rem] w-1/2 rounded-md border border-[#5E6875] pt-0"
+                    @change="updateProductPrice"
                   >
-                    <option v-for="child in children" :key="child.id">
+                    <option
+                      v-for="child in children"
+                      :key="child.id"
+                      :value="child.id"
+                    >
                       {{ child.value }}
                     </option>
                   </select>
@@ -176,8 +194,8 @@
             </div>
             <ProductAddToCartComponent
               class="hidden lg:flex"
-              :product="product"
               :quantity="quantity"
+              :variant-id="variantId"
             />
           </div>
           <div class="mt-[25px] h-[auto] rounded-lg bg-white p-5 md:p-7">
@@ -208,16 +226,16 @@
               <h3 class="text-[19px] text-primary md:text-[25px]">
                 Besoin d'aide pour votre commande ?
               </h3>
-              <a
-                href="#"
-                class="default-button-gradient mt-2 inline-flex justify-center px-3.5 py-3 text-center text-sm font-bold text-white md:text-base lg:text-lg"
+              <RouterLink
+                :to="{ name: PageList.CONTACT_PAGE}"
+                class="button button-gradient"
               >
                 <ArrowRigntIconComponent
                   class="mt-1 mr-2 w-4 items-center"
                   :stroke-color="'#FFFFFF'"
                 />
                 Contactez notre Service Adhérents
-              </a>
+              </RouterLink>
             </div>
           </div>
         </div>
@@ -241,19 +259,19 @@
         </h3>
         <table class="w-full table-auto border bg-white p-8">
           <tbody>
-            <tr
-              v-for="(property, key, index) in product.properties"
-              :key="index"
-              class="border text-sm text-primary md:text-base lg:text-lg"
-              :class="{
+          <tr
+            v-for="(property, key, index) in product.properties"
+            :key="index"
+            class="border text-sm text-primary md:text-base lg:text-lg"
+            :class="{
                 'hidden':
                   property === 'home-top-vente' ||
                   property === 'home-selection',
               }"
-            >
-              <td class="w-[20%] border p-2">{{ key }}</td>
-              <td class="p-2">{{ property }}</td>
-            </tr>
+          >
+            <td class="w-[20%] border p-2">{{ key }}</td>
+            <td class="p-2">{{ property }}</td>
+          </tr>
           </tbody>
         </table>
       </div>
@@ -269,17 +287,21 @@
   <ProductAddToCartComponent
     class="z-10 flex lg:hidden"
     :product="product"
+    :show-price="true"
     :quantity="quantity"
+    :variant-id="variantId"
+    :price="price"
+    :price-reference="priceReference"
+    :percent="percent"
   />
 </template>
 <script lang="ts" setup>
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
-import { getImage, getUpplerImage } from '@/vuejs/services/utils'
+import { formatPrice, getImage, getUpplerImage } from '@/vuejs/services/utils'
 import helpImage from '@/vuejs/assets/img/samples/img-help-product.png'
-import { computed, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { SwiperSlide } from 'swiper/vue'
-import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
 import ArrowRigntIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
@@ -289,6 +311,8 @@ import { useRoute } from 'vue-router'
 import { useProductStore } from '@/vuejs/stores/product'
 import { Product } from '@/vuejs/types/Product'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
+import { PageList } from '@/vuejs/router'
+import { ProductPageList } from '@/vuejs/router/pages-list'
 
 const route = useRoute()
 const productStore = useProductStore()
@@ -298,6 +322,13 @@ const thumbsSwiper = ref(null)
 const isLoading = ref<boolean>(false)
 const quantity = ref<number>(1)
 const product = ref<Product>()
+const optionVariant = ref([])
+const variants = ref([])
+const priceReference = ref()
+const price = ref()
+const percent = ref()
+const variantId = ref()
+const isLoadingPrice = ref<boolean>(false)
 
 const breadcrumbUrl = (product: Product | null) => {
   const breadcrumb = []
@@ -306,6 +337,7 @@ const breadcrumbUrl = (product: Product | null) => {
       breadcrumb.push({
         id: key,
         name: value,
+        url: { name: ProductPageList.PRODUCTS, query: { category: key, page: 1 } },
       })
     })
   }
@@ -317,12 +349,64 @@ const setThumbsSwiper = (swiper) => {
   thumbsSwiper.value = swiper
 }
 
+const updateProductPrice = async () => {
+  let variantSelected = null
+  Object.entries(product.value.variants).find(([key, value], index) => {
+    if (arrayEqual(value, optionVariant.value)) {
+      variantSelected = key
+    }
+  })
+
+  isLoadingPrice.value = true
+  if (variantSelected) {
+    variantId.value = parseInt(variantSelected)
+    let variant = await variants.value.find(v => {
+      if (v.id === variantId.value) {
+        return v
+      }
+      return null
+    })
+    if (!variant) {
+      variant = await productStore.findVariantById(variantId.value)
+      variants.value.push(variant)
+    }
+
+    price.value = formatPrice(variant.price.display_price * 0.01)
+    const priceDiff = priceReference.value - parseFloat(price.value)
+    percent.value = Math.round((priceDiff * 100) / priceReference.value)
+  } else {
+    variantId.value = null
+  }
+  isLoadingPrice.value = false
+}
+
+const arrayEqual = (arr1, arr2) => {
+  if (arr1.length !== arr2.length) {
+    return false
+  }
+
+  for (let i = 0; i < arr1.length; i++) {
+    if (arr1[i] !== arr2[i]) {
+      return false
+    }
+  }
+
+  return true
+}
 watch(
   () => route.params.id as string,
   async (id: string) => {
     isLoading.value = true
     if (id) {
       product.value = await productStore.findProductById(id)
+      priceReference.value = product.value.priceReference
+      price.value = product.value.price?.displayPrice
+      percent.value = product.value.percent
+      optionVariant.value = Object.values(Object.values(product.value.variants)[0])
+      variantId.value = parseInt(Object.keys(product.value.variants)[0])
+      if (Object.keys(product.value.variants).length > 2) {
+        variants.value.push(await productStore.findVariantById(variantId.value))
+      }
     }
     isLoading.value = false
   },

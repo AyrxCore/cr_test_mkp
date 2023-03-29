@@ -23,6 +23,12 @@ export default class ProductHttpClient extends BaseClientService {
       .then((response) => response.data)
   }
 
+  public findVariantById<T extends []>(id: number): Promise<Product> {
+    return this.apiClient
+      .get(`variant/${id}`)
+      .then((response) => response.data)
+  }
+
   public findAccordsCadresByParams<T extends []>(params): Promise<T> {
     return this.apiClient
       .postForm<T>(

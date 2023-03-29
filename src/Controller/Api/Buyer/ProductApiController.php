@@ -169,6 +169,21 @@ class ProductApiController extends AbstractController
         return new JsonResponse($product);
     }
 
+    #[Route('/api/variant/{id}', name: 'get_variant')]
+    public function variant(int $id, NormalizerInterface $normalizer): JsonResponse
+    {
+        $session = $this->requestStack->getSession();
+        $session->start();
+
+        if (!$session->has('account') || empty($session->get('account'))) {
+            return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        $variant = $this->upplerProductService->findVariantById($id);
+
+        return new JsonResponse($variant);
+    }
+
     #[Route('/api/accord-cadre/{id}', name: 'get_accord_cadre')]
     public function accordCadre(int $id, NormalizerInterface $normalizer): JsonResponse
     {

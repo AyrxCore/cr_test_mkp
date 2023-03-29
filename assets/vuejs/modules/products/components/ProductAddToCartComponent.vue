@@ -4,28 +4,28 @@
   >
     <div class="flex w-full flex-col">
       <div
-        v-if="props.product"
+        v-if="props.showPrice"
         class="mb-2 flex flex-row items-center justify-between md:justify-evenly lg:hidden"
       >
         <div
-          v-if="props.product.priceReference"
+          v-if="props.priceReference"
           class="flex items-center justify-center text-center"
         >
           <span class="text-lg text-gray-500 line-through"
-            >{{ props.product.priceReference }}€ HT
+          >{{ props.priceReference }}€ HT
           </span>
         </div>
         <div
-          v-if="props.product.price?.displayPrice"
+          v-if="props.price"
           class="flex items-center justify-center text-[22px] font-bold text-primary md:text-[25px]"
         >
-          {{ props.product.price?.displayPrice }}€ HT
+          {{ props.price }}€ HT
         </div>
         <div class="mt-3 ml-2 flex">
           <span
-            v-if="props.product.percent > 0"
+            v-if="props.percent > 0"
             class="ml-2 rounded-lg bg-purple-600 px-2.5 py-1.5 text-sm text-white md:text-lg"
-            >{{ props.product.percent }} %</span
+          >{{ props.percent }} %</span
           >
         </div>
       </div>
@@ -33,6 +33,7 @@
         <ButtonAddToCartComponent
           :product="props.product"
           :quantity="props.quantity"
+          :variant-id="props.variantId"
           class="w-full lg:mt-14"
         />
         <!-- <button class="ml-5 items-center rounded-lg border lg:hidden">
@@ -48,9 +49,7 @@
 
 <script lang="ts" setup>
 import ButtonAddToCartComponent from '@/vuejs/modules/shared/ButtonAddToCartComponent.vue'
-import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
-import { PropType, computed, ref } from 'vue'
-
+import { PropType } from 'vue'
 import { Product } from '@/vuejs/types/Product'
 
 const props = defineProps({
@@ -58,10 +57,35 @@ const props = defineProps({
     required: true,
     type: Object as PropType<Product>,
   },
+  showPrice: {
+    required: false,
+    type: Boolean,
+    default: false,
+  },
   quantity: {
     required: false,
     type: Number,
     default: 1,
+  },
+  variantId: {
+    required: false,
+    type: Number,
+    default: null,
+  },
+  price: {
+    required: false,
+    type: Number,
+    default: null,
+  },
+  priceReference: {
+    required: false,
+    type: Number,
+    default: null,
+  },
+  percent: {
+    required: false,
+    type: Number,
+    default: null,
   },
 })
 </script>

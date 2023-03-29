@@ -14,8 +14,15 @@
             />
           </div>
           <div class="ml-4 w-6/12 lg:w-7/12">
-            <h3 class="text-lg font-bold text-primary lg:text-[22px]">
+            <h3 class="text-lg font-bold text-primary lg:text-[22px] flex items-center">
               {{ product.name.default }}
+              <span
+                v-if="product && productNotFound"
+                class="text-white"
+                title="Ce produit n'est plus disponible"
+              >
+                <WarningIconComponent class=" fill-orange-500 text-primary h-[24px] ml-2"/>
+              </span>
             </h3>
             <!-- <span
             class="flex flex-col text-sm text-gray-500 md:flex-row lg:text-lg"
@@ -28,6 +35,43 @@
             >
               Référence : {{ product.reference }}
             </span>
+            <span
+              class="text-gray-500 cursor-pointer items-center flex text-sm text-gray-500 lg:text-lg"
+              @click="variantOptions"
+            >
+              Détails
+              <Chevron2RightIconComponent
+                class="ml-1 text-sm lg:text-lg"
+                :class="{
+                  'mt-4 rotate-90 ease-in-out': isOpen
+                }"
+              />
+            </span>
+            <div
+              v-if="isLoadingOptions"
+              class="mt-1 flex h-10 w-full items-center justify-start"
+            >
+              <LoaderSharedComponent
+                class="text-gray-500"
+                classes="loader-lg loader"
+              />
+            </div>
+            <div v-else>
+              <ul v-if="isOpen && options.length > 0">
+                <li
+                  v-for="option in options"
+                  :key="option.id"
+                  class="ml-3 text-gray-500 text-sm lg:text-base"
+                >
+                  <span
+                    v-if="option.option.name.default"
+                    class="font-bold"
+                  >{{ option.option.name.default }} : </span>
+                  <span class="italic">{{ option.value.default }}</span>
+                </li>
+              </ul>
+            </div>
+
             <!-- <span class="flex text-sm text-green-400 lg:text-lg">
               En stock
             </span> -->
@@ -36,7 +80,8 @@
         <div
           class="mb-4 flex w-full items-center justify-between md:float-right lg:float-none lg:mb-0 lg:w-5/12"
         >
-          <div class="text-center lg:w-2/12">
+          <div
+            class="text-center lg:w-2/12">
             <select
               v-if="!cartStore.modifyingCart"
               :value="item.quantity"
@@ -54,7 +99,7 @@
               <option>9</option>
               <option>10</option>
             </select>
-            <LoaderSharedComponent v-else class="text-primary" />
+            <LoaderSharedComponent v-else class="text-primary"/>
           </div>
           <div class="text-center lg:w-4/12">
             <span class="mt-2 text-sm text-gray-400 line-through lg:text-lg">
@@ -75,9 +120,10 @@
               class="flex text-gray-500"
               @click="deleteProduct"
             >
-              <TrashIconComponent :stroke-color="'#5E6875'" />
+              <TrashIconComponent
+                :stroke-color="'#5E6875'"/>
             </button>
-            <LoaderSharedComponent v-else class="text-primary" />
+            <LoaderSharedComponent v-else class="text-primary"/>
           </div>
         </div>
       </div>
@@ -94,11 +140,11 @@ import { useCartStore } from '@/vuejs/stores/cart'
 import { useProductStore } from '@/vuejs/stores/product'
 import { Product } from '@/vuejs/types/Product'
 
-import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
 import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
-import CheckboxComponent from '@/vuejs/modules/shared/CheckboxComponent.vue'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 import sampleImg from '@/vuejs/assets/img/sample_product_img.png'
+import Chevron2RightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
+import WarningIconComponent from '@/vuejs/modules/shared/icon/WarningIconComponent.vue'
 
 const cartStore = useCartStore()
 const productStore = useProductStore()
@@ -112,15 +158,32 @@ const props = defineProps({
 
 const product = ref<OrderProduct>(props.item.variant.product)
 const productData = ref<Product>()
+const options = ref([])
+const isOpen = ref(false)
+const productNotFound = ref(false)
+const isLoadingOptions = ref<boolean>(false)
 
 onMounted(async (): Promise<void> => {
   productData.value = await productStore.findProductById(product.value.id)
+  if (!productData.value) {
+    productNotFound.value = true
+  }
 })
 
 const productImage = computed((): string => {
   if (productData.value) return productData.value.images[0]
   return getImage(sampleImg)
 })
+
+const variantOptions = async () => {
+  if (options.value.length === 0) {
+    isLoadingOptions.value = true
+    const variant = await productStore.findVariantById(props.item.variant.id)
+    options.value = variant.option_values
+    isLoadingOptions.value = false
+  }
+  isOpen.value = !isOpen.value
+}
 
 const referencePrice = computed((): number => {
   return product.value.price_reference / 100

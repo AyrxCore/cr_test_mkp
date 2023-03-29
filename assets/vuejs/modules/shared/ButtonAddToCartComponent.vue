@@ -4,17 +4,17 @@
     :is-loading="isLoading"
     @click="addProductToCart"
   >
-    <ShoppingCartIconComponent class="mr-2 w-4" />Ajouter
+    <ShoppingCartIconComponent class="mr-2 w-4" />
+    Ajouter
   </ButtonComponent>
 </template>
 
 <script lang="ts" setup>
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
-import { PropType, computed, ref } from 'vue'
-
-import { Product } from '@/vuejs/types/Product'
+import { PropType, ref } from 'vue'
 import { useCartStore } from '@/vuejs/stores/cart'
+import { Product } from '@/vuejs/types/Product'
 
 const cartStore = useCartStore()
 
@@ -28,18 +28,19 @@ const props = defineProps({
     type: Number,
     default: 1,
   },
+  variantId: {
+    required: false,
+    type: Number,
+    default: null,
+  },
 })
 
 const isLoading = ref<boolean>(false)
 
-const variant = computed(() => {
-  return props.product.variants.find((v) => !v.is_master)
-})
-
 const addProductToCart = async (): Promise<void> => {
   if (!cartStore.cart) return
   isLoading.value = true
-  await cartStore.addProductToCart(variant.value.id, props.quantity)
+  await cartStore.addProductToCart(props.variantId, props.quantity)
   isLoading.value = false
 }
 </script>
