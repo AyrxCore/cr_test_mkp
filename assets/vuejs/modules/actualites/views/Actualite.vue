@@ -75,7 +75,7 @@
 
       <!-- Bloc articles recommandés -->
       <div class="mt-10 justify-center">
-        <h3 class="text-primary home-subtitle mb-5">Articles recommandés</h3>
+        <h3 class="home-subtitle mb-5 text-primary">Articles recommandés</h3>
         <ContenusExpertComponent />
       </div>
       <!-- Fin Bloc articles recommandés -->
@@ -102,7 +102,7 @@ import ContenusExpertComponent from '@/vuejs/modules/home/component/ContenusExpe
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 import { useExpertContentStore } from '@/vuejs/stores/expertContent'
 import { ExpertContent } from '@/vuejs/types/ExpertContent'
-import { ActualitesPageList, ProductPageList } from '@/vuejs/router/pages-list';
+import { NewsPageList } from '@/vuejs/router/pages-list'
 
 const route = useRoute()
 const expertContentStore = useExpertContentStore()
@@ -111,7 +111,7 @@ const currentExpertContent = ref<ExpertContent>()
 const listUrl = ref([
   {
     name: 'Actualités',
-    url: { name: ActualitesPageList.ACTUALITES },
+    url: { name: NewsPageList.NEWS },
   },
 ])
 
