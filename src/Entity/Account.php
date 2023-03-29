@@ -73,7 +73,7 @@ class Account
 
     #[ORM\ManyToOne(inversedBy: 'accounts', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['account:get'])]
+    #[Groups(['account:get', 'simpleUser'])]
     private ?User $_user = null;
 
     #[ORM\Column]

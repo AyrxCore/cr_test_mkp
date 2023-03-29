@@ -112,11 +112,7 @@
           <div class="mb-5">
             <h1 class="home-subtitle text-gradient">
               Bonjour
-              {{
-                userAccounts[0]._user.firstName
-                  ? userAccounts[0]._user.firstName
-                  : ''
-              }}
+              {{ userAccounts[0]._user?.firstName || '' }}
             </h1>
             <h3 class="text-gray-500">
               Veuillez sélectionner le compte acheteur avec lequel vous

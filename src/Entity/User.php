@@ -23,15 +23,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    #[Groups(["account:get"])]
+    #[Groups(['account:get'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 180)]
-    #[Groups(["account:get", "simpleUser"])]
+    #[Groups(['account:get', 'simpleUser'])]
     private ?string $email = null;
 
     #[ORM\Column]
-    #[Groups("simpleUser")]
+    #[Groups('simpleUser')]
     private array $roles = [];
 
     /**
@@ -41,15 +41,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255, unique: true)]
-    #[Groups(["account:get", "simpleUser"])]
+    #[Groups(['account:get', 'simpleUser'])]
     private ?string $username = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["account:get", "simpleUser"])]
+    #[Groups(['account:get', 'simpleUser'])]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["account:get", "simpleUser"])]
+    #[Groups(['account:get', 'simpleUser'])]
     private ?string $lastName = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
@@ -65,7 +65,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $accounts;
 
     #[ORM\Column]
-    #[Groups(["account:get"])]
+    #[Groups(['account:get'])]
     private ?bool $isEnabled = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -371,5 +371,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
 }
