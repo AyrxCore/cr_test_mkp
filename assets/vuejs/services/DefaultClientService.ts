@@ -7,11 +7,11 @@ class DefaultClientService {
   public constructor() {
     const headers = {
       accept: 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     }
 
     this.client = axios.create({
-      baseURL: '/',
+      baseURL: '/api',
       withCredentials: true,
       headers,
     })

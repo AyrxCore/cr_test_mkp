@@ -31,13 +31,13 @@ class LoginController extends AbstractController
     #[Required]
     public UserPasswordHasherInterface $passwordHasher;
 
-    #[Route('/mot-de-passe-oublie', name: 'resetting_request')]
-    #[Route('/premiere-connexion', name: 'first_connexion_request')]
+    #[Route('/login/reset-password', name: 'reset_password')]
+    #[Route('/login/first-signin', name: 'first_signin')]
     public function request(Request $request, EntityManagerInterface $em, TranslatorInterface $translator): Response
     {
         $session = $this->requestStack->getSession();
 
-        if ($request->attributes->get('_route') === 'resetting_request') {
+        if ($request->attributes->get('_route') === 'reset_password') {
             $tpl = 'request';
         } else {
             $tpl = 'first_connexion.request';
@@ -64,7 +64,7 @@ class LoginController extends AbstractController
                     }
                 }
 
-                if ($request->attributes->get('_route') === 'resetting_request' && !$user->isEnabled()) {
+                if ($request->attributes->get('_route') === 'reset_password' && !$user->isEnabled()) {
                     $session->getFlashBag()->add(
                         'warning',
                         $translator->trans(
@@ -80,13 +80,13 @@ class LoginController extends AbstractController
                 $token = md5(random_bytes(100));
                 $user->setConfirmationToken($token);
 
-                if ($request->attributes->get('_route') === 'resetting_request') {
+                if ($request->attributes->get('_route') === 'reset_password') {
                     $event = new ResettingPasswordEvent($user);
                     $session->getFlashBag()->add(
                         'success',
                         $translator->trans('resetting.request.success', [], 'prehome')
                     );
-                } elseif ($request->attributes->get('_route') == 'first_connexion_request') {
+                } elseif ($request->attributes->get('_route') == 'first_signin') {
                     $user->setFirstConnexionRequestedAt(new \DateTime('now'));
                     $event = new FirstConnexionEvent($user);
                     $session->getFlashBag()->add(
@@ -113,15 +113,15 @@ class LoginController extends AbstractController
     }
 
 
-    #[Route("/mot-de-passe-oublie/{token}", name: "resetting_action")]
-    #[Route("/premiere-connexion/{token}", name: "resetting_first_connexion_action")]
+    #[Route('/login/reset-password/{token}', name: 'reset_password_action')]
+    #[Route('/login/first-signin/{token}', name: 'first_signin_action')]
     public function resetPassword(
         Request $request,
         EntityManagerInterface $em,
         TranslatorInterface $translator,
         string $token
     ) {
-        if ($request->attributes->get('_route') === 'resetting_action') {
+        if ($request->attributes->get('_route') === 'reset_password_action') {
             $tpl = 'reset';
         } else {
             $tpl = 'first_connexion.reset';
@@ -136,10 +136,10 @@ class LoginController extends AbstractController
                 $translator->trans('resetting.token.error', [], 'prehome')
             );
 
-            if ($request->attributes->get('_route') === 'resetting_action') {
-                return $this->redirectToRoute('resetting_request');
+            if ($request->attributes->get('_route') === 'reset_password_action') {
+                return $this->redirectToRoute('reset_password');
             } else {
-                return $this->redirectToRoute('first_connexion_request');
+                return $this->redirectToRoute('first_signin');
             }
         }
 
@@ -149,7 +149,8 @@ class LoginController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $encodedPassword = $this->passwordHasher->hashPassword($user, $form->get('password')->getData());
 
-            if ($request->attributes->get('_route') === 'resetting_first_connexion_action'
+            if (
+                $request->attributes->get('_route') === 'first_signin_action'
                 && null !== $user->getFirstConnexionRequestedAt()
             ) {
                 $user->setFirstConnexionRequestedAt(null);
@@ -162,7 +163,7 @@ class LoginController extends AbstractController
             $em->persist($user);
             $em->flush();
 
-            if ($request->attributes->get('_route') === 'resetting_action') {
+            if ($request->attributes->get('_route') === 'reset_password_action') {
                 $session->getFlashBag()->add('success', $translator->trans('resetting.success', [], 'prehome'));
             } else {
                 $session->getFlashBag()->add(
@@ -174,7 +175,7 @@ class LoginController extends AbstractController
                     )
                 );
             }
-            return $this->redirectToRoute('app');
+            return $this->redirect('/');
         }
 
         return $this->render('login/' . $tpl . '.html.twig', ['form' => $form->createView()]);

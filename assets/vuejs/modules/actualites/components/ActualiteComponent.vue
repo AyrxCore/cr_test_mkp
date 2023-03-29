@@ -2,7 +2,7 @@
   <div class="mx-auto flex h-[524px] flex-col rounded-md bg-white px-6 py-4">
     <div class="mx-auto items-center">
       <RouterLink
-        :to="{ name: PageList.ACTUALITE, params: { slug: contenu.slug } }"
+        :to="{ name: PageList.NEWS_ITEM, params: { slug: contenu.slug } }"
       >
         <img
           :src="contenu.page_actus_img_desktop"
@@ -24,7 +24,7 @@
     </div>
     <h3 class="mt-2 text-[25px] font-bold text-primary">
       <RouterLink
-        :to="{ name: PageList.ACTUALITE, params: { slug: contenu.slug } }"
+        :to="{ name: PageList.NEWS_ITEM, params: { slug: contenu.slug } }"
         class="truncate-custom truncate-custom-2 text-primary"
       >
         {{ contenu.articleTitle }}
@@ -34,7 +34,7 @@
       {{ contenu.articleTeaser }}
     </p>
     <RouterLink
-      :to="{ name: PageList.ACTUALITE, params: { slug: contenu.slug } }"
+      :to="{ name: PageList.NEWS_ITEM, params: { slug: contenu.slug } }"
       class="text-sm font-medium text-primary underline"
     >
       Lire l'article

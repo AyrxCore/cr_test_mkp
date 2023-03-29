@@ -3,12 +3,14 @@
     <div class="mx-auto">
       <img :src="properties.logo_partenaire" alt="Image produit" />
     </div>
-    <p class="my-8 text-sm font-normal text-white sm:text-lg uppercase text-center">
+    <p
+      class="my-8 text-center text-sm font-normal uppercase text-white sm:text-lg"
+    >
       {{ accord.name }}
     </p>
 
     <RouterLink
-      :to="{ path: `${ProductPageList.ACCORD_CADRE}/${accord.id}` }"
+      :to="{ name: ProductPageList.ACCORD_CADRE, params: { id: accord.id } }"
       class="button button-white button-white-primary flex justify-center"
     >
       <ArrowRightIconComponent />Découvrir l'accord-cadre

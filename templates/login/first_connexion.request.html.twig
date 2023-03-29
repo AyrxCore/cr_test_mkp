@@ -4,18 +4,6 @@
   {% include '_partials/_header.html.twig' with { 'back_url': true} %}
 {% endblock %}
 
-{% block javascripts %}
-  {{ parent() }}
-  <script>
-    function openModal() {
-      document.getElementById('modal').style.display = 'flex';
-    }
-
-    function closeModal() {
-      document.getElementById('modal').style.display = 'none';
-    }
-  </script>
-{% endblock %}
 {% block body %}
     <div class="container mx-auto mt-[5%] px-5 lg:px-0">
       <h1 class="text-2xl font-bold text-primary xl:text-4xl flex">
@@ -23,7 +11,7 @@
       </h1>
       <div class="flex flex-col my-10 md:my-[5%] lg:space-x-2 lg:flex-row justify-center">
         <div class="lg:w-1/2 flex p-3 lg:p-8 bg-white rounded-lg">
-          <form action="{{ path('first_connexion_request') }}" method="post" class="w-full">
+          <form action="{{ path('first_signin') }}" method="post" class="w-full">
             <h1 class="text-lg font-bold xl:text-2xl text-primary">
               Activation <span class="text-gradient">de votre compte</span>
             </h1>

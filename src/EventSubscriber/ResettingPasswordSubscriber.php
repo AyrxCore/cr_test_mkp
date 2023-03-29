@@ -45,7 +45,7 @@ class ResettingPasswordSubscriber implements EventSubscriberInterface
     {
         $user = $event->getUser();
         $confirmation_url = $this->router->generate(
-            'resetting_action',
+            'reset_password_action',
             ['token' => $user->getConfirmationToken()],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
@@ -59,5 +59,4 @@ class ResettingPasswordSubscriber implements EventSubscriberInterface
             ])
         );
     }
-
 }

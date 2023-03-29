@@ -17,7 +17,7 @@ import { useCartStore } from '@/vuejs/stores/cart'
 import {
   MainPageList,
   ProductPageList,
-  ActualitesPageList,
+  NewsPageList,
   CartPageList,
   AccountPageList,
 } from '@/vuejs/router/pages-list'
@@ -25,35 +25,35 @@ import {
 export const PageList = {
   ...MainPageList,
   ...ProductPageList,
-  ...ActualitesPageList,
+  ...NewsPageList,
   ...CartPageList,
   ...AccountPageList,
 }
 
 const routes: RouteRecordRaw[] = [
   {
-    path: `/app/${PageList.HOME_PAGE}`,
+    path: `/`,
     name: PageList.HOME_PAGE,
     component: Home,
   },
   {
-    path: `/app/${PageList.CONTACT_PAGE}`,
+    path: `/contact`,
     name: PageList.CONTACT_PAGE,
     component: Contact,
   },
   {
-    path: `/app/${PageList.PAGE_NOT_FOUND}`,
+    path: `/page-not-found`,
     name: PageList.PAGE_NOT_FOUND,
     component: NotFoundPage,
-  },
-  {
-    path: '/app/:pathMatch(.*)*',
-    redirect: `/app/${PageList.PAGE_NOT_FOUND}`,
   },
   ...productsRoutes,
   ...actualitesRoutes,
   ...cartRoutes,
   ...accountRoutes,
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: { name: `${PageList.PAGE_NOT_FOUND}` },
+  },
 ]
 
 const router = createRouter({

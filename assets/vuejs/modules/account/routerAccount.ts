@@ -15,12 +15,9 @@ import OrdersValidationPage from '@/vuejs/modules/account/views/OrdersValidation
 
 import { AccountPageList } from '@/vuejs/router/pages-list'
 
-export const accountUrl = '/app/' + AccountPageList.ACCOUNT
-export const baseUrl = accountUrl + '/'
-
 export const routes: RouteRecordRaw[] = [
   {
-    path: accountUrl,
+    path: '/account',
     children: [
       {
         path: '',
@@ -28,63 +25,63 @@ export const routes: RouteRecordRaw[] = [
         name: AccountPageList.CONTACT_INFORMATION,
       },
       {
-        path: baseUrl + AccountPageList.CONTACT_INFORMATION,
+        path: 'details',
         component: ProfileInformationsReadonly,
         name: AccountPageList.ACCOUNT,
       },
       {
-        path: baseUrl + AccountPageList.CONTACT_INFORMATION_PASSWORD_CHANGE,
+        path: 'password',
         component: ProfilePasswordChangeForm,
         name: AccountPageList.CONTACT_INFORMATION_PASSWORD_CHANGE,
       },
       {
-        path: baseUrl + AccountPageList.CONTACT_INFORMATION_EMAIL_EDIT,
+        path: 'email',
         component: ProfileEmailEditForm,
         name: AccountPageList.CONTACT_INFORMATION_EMAIL_EDIT,
       },
       {
-        path: baseUrl + AccountPageList.CONTACT_INFORMATION_DETAILS_EDIT,
+        path: 'details/edit',
         component: ProfileDetailsEditForm,
         name: AccountPageList.CONTACT_INFORMATION_DETAILS_EDIT,
       },
       {
-        path: baseUrl + AccountPageList.ADDRESSES,
+        path: 'addresses',
         component: AddressesPage,
         name: AccountPageList.ADDRESSES,
       },
       {
-        path: baseUrl + AccountPageList.ADDRESS_CREATE + '/:type',
+        path: 'addresses/create/:type',
         component: AddressCreate,
         name: AccountPageList.ADDRESS_CREATE,
         props: true,
       },
       {
-        path: baseUrl + AccountPageList.ADDRESS_EDIT + '/:id',
+        path: 'addresses/:id',
         component: AddressEdit,
         name: AccountPageList.ADDRESS_EDIT,
       },
       {
-        path: baseUrl + AccountPageList.FAVORIS_LIST,
+        path: 'favorites',
         component: FavoritesProductsPage,
-        name: AccountPageList.FAVORIS_LIST,
+        name: AccountPageList.FAVORITES_LIST,
       },
       {
-        path: baseUrl + AccountPageList.FAVORIS_DETAILS,
+        path: 'favorites/details',
         component: FavoritesProductsDetailsPage,
-        name: AccountPageList.FAVORIS_DETAILS,
+        name: AccountPageList.FAVORITES_DETAILS,
       },
       {
-        path: baseUrl + AccountPageList.ORDERS_HISTORY,
+        path: 'orders',
         component: OrdersHistoryPage,
         name: AccountPageList.ORDERS_HISTORY,
       },
       {
-        path: baseUrl + AccountPageList.SAVED_CARTS,
+        path: 'carts',
         component: SavedCartsPage,
         name: AccountPageList.SAVED_CARTS,
       },
       {
-        path: baseUrl + AccountPageList.ORDERS_VALIDATION,
+        path: 'orders/validation',
         component: OrdersValidationPage,
         name: AccountPageList.ORDERS_VALIDATION,
       },

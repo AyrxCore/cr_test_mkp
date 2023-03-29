@@ -34,8 +34,8 @@
       },
       // {
       //   name: 'Liste de produits favoris',
-      //   id: AccountPageList.FAVORIS_LIST,
-      //   url: AccountPageList.FAVORIS_LIST,
+      //   id: AccountPageList.FAVORITES_LIST,
+      //   url: AccountPageList.FAVORITES_LIST,
       // },
     ]"
     title="Mon profil"

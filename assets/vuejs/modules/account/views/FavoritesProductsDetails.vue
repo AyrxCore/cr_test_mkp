@@ -60,7 +60,7 @@ import GradientButtonComponent from '@/vuejs/modules/shared/GradientButtonCompon
 import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
 
 const tab = computed(() => {
-  return AccountPageList.FAVORIS_LIST
+  return AccountPageList.FAVORITES_LIST
 })
 
 const productImageFile = getImage(productImage)

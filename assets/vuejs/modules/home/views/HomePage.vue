@@ -25,10 +25,7 @@
       <CarouselActualitesComponent />
 
       <!-- Bloc Produits top ventes -->
-      <ProductHomeComponent
-        :products="productsTopVente"
-        title="Top vente"
-      />
+      <ProductHomeComponent :products="productsTopVente" title="Top vente" />
       <!-- Fin bloc Produits top ventes -->
 
       <!-- Bloc accords cadre -->
@@ -105,7 +102,7 @@
           <div class="flex justify-center">
             <p class="mt-10">
               <RouterLink
-                :to="{ path: '/app/actualites' }"
+                :to="{ name: NewsPageList.NEWS }"
                 class="button button-gradient"
               >
                 <ArrowRightIconComponent :stroke-color="'#FFFFFF'" />
@@ -131,7 +128,7 @@ import { storeToRefs } from 'pinia'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import OurCategoriesComponent from '@/vuejs/modules/home/component/OurCategoriesComponent.vue'
 import CarouselActualitesComponent from '@/vuejs/modules/home/component/CarouselActualitesComponent.vue'
-import { ProductPageList } from '@/vuejs/router/pages-list'
+import { NewsPageList, ProductPageList } from '@/vuejs/router/pages-list'
 import { useProductStore } from '@/vuejs/stores/product'
 
 const productStore = useProductStore()
@@ -144,7 +141,7 @@ const expertsContentsLoaded = ref<boolean>(false)
 onBeforeMount(async () => {
   await Promise.all([
     productStore.initHomeProducts(),
-    expertContentStore.init()
+    expertContentStore.init(),
   ])
 })
 

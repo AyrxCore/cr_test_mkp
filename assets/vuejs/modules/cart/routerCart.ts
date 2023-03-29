@@ -10,7 +10,7 @@ import { CartPageList } from '@/vuejs/router/pages-list'
 
 export const routes: RouteRecordRaw[] = [
   {
-    path: '/app/cart',
+    path: '/cart',
     component: CartPage,
     children: [
       {

@@ -14,8 +14,6 @@ export function getUpplerImage(path: string | null) {
   return path !== null ? path : getImage(imgDefault)
 }
 
-export const URL_HOME_BANDEAU = '/app/actualite/guide-cybersecurite'
-
 export function formatPrice(price: number): string {
   return price.toLocaleString('fr', {
     minimumFractionDigits: 2,
@@ -25,5 +23,7 @@ export function formatPrice(price: number): string {
 
 export function formatAddress(address: Address): string {
   if (!address) return null
-  return `${!address.company ? '' : address.company + ', '} ${address.street} ${address.postcode} ${address.city}`
+  return `${!address.company ? '' : address.company + ', '} ${address.street} ${
+    address.postcode
+  } ${address.city}`
 }

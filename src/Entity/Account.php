@@ -33,30 +33,30 @@ class Account
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    #[Groups(["simpleUser", "account:list", "account:get"])]
+    #[Groups(['simpleUser', 'account:list', 'account:get'])]
     private ?Uuid $id = null;
 
     #[ORM\Column()]
-    #[Groups(["account:list", "account:get"])]
+    #[Groups(['account:list', 'account:get'])]
     private ?int $upplerUserId = null;
 
     #[ORM\Column()]
-    #[Groups(["account:list", "account:get"])]
+    #[Groups(['account:list', 'account:get'])]
     private ?int $upplerSubAccountId = null;
 
     #[ORM\Column]
-    #[Groups(["account:list", "account:get"])]
+    #[Groups(['account:list', 'account:get'])]
     private ?int $upplerCompanyId = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["account:list", "account:get"])]
+    #[Groups(['account:list', 'account:get'])]
     private ?string $upplerUsername = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $upplerPassword = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups("simpleUser")]
+    #[Groups('simpleUser')]
     private ?\DateTimeInterface $lastConnexion = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -73,22 +73,22 @@ class Account
 
     #[ORM\ManyToOne(inversedBy: 'accounts', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(["account:get"])]
+    #[Groups(['account:get'])]
     private ?User $_user = null;
 
     #[ORM\Column]
     private ?bool $isEnabled = null;
 
-    #[ORM\ManyToOne(inversedBy: 'accounts')]
+    #[ORM\ManyToOne(inversedBy: 'accounts', fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups(["simpleUser"])]
+    #[Groups(['simpleUser'])]
     private ?Adherent $adherent = null;
 
     #[ORM\OneToMany(mappedBy: 'account', targetEntity: CartSavings::class)]
     private Collection $cartSavings;
 
     #[ORM\Column(nullable: true)]
-    #[Groups("simpleUser")]
+    #[Groups('simpleUser')]
     private ?bool $acceptCGU = false;
 
     public function __construct()

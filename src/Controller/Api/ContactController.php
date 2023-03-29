@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
 use App\Service\MailerProvider;
 use Psr\Log\LoggerInterface;
@@ -15,6 +15,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 use Twig\Environment;
 
+#[Route('/api/contact')]
 class ContactController extends AbstractController
 {
     public const LIST_MOTIFS = [
@@ -46,7 +47,7 @@ class ContactController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route('contact/send-email', name: 'send_contact_email', methods: ['POST'])]
+    #[Route('/send-email', name: 'send_contact_email', methods: ['POST'])]
     public function sendContact(Request $request): JsonResponse
     {
         $session = $this->requestStack->getSession();
@@ -98,13 +99,13 @@ class ContactController extends AbstractController
         return new JsonResponse(['error' => $error, 'message' => $message]);
     }
 
-    #[Route('contact/list-motifs', name: 'list_motifs', methods: ['GET'])]
+    #[Route('/list-motifs', name: 'list_motifs', methods: ['GET'])]
     public function getListMotifs(): JsonResponse
     {
         return new JsonResponse(self::LIST_MOTIFS);
     }
 
-    #[Route('contact/token', name: 'contact_token', methods: ['GET'])]
+    #[Route('/token', name: 'contact_token', methods: ['GET'])]
     public function getToken(): JsonResponse
     {
         $token = $this->csrfTokenManager->getToken('contact_form');

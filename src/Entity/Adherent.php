@@ -22,7 +22,8 @@ use Symfony\Component\Uid\Uuid;
             "validate"               => true,
             "denormalizationContext" => ['groups' => 'update'],
         ],
-    ])]
+    ]
+)]
 #[ORM\Entity(repositoryClass: AdherentRepository::class)]
 class Adherent
 {
@@ -150,5 +151,4 @@ class Adherent
     {
         $this->attachments = $attachments;
     }
-
 }

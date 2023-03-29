@@ -46,7 +46,7 @@ class CartApiController extends AbstractController
         $session->start();
 
         if (!$session->has('account') || empty($session->get('account'))) {
-            return $this->redirectToRoute('app');
+            return $this->redirectToRoute('prehome');
         }
 
         $cart = $this->upplerCartService->getCartById($cartId);
@@ -58,10 +58,10 @@ class CartApiController extends AbstractController
             if ($confirmed && in_array($confirmed->status, $acceptedStatus)) {
                 $this->upplerCartService->confirmCart($cartId);
                 $this->upplerCartService->processCartSavings($cart);
-                return $this->redirect('/app/cart/confirmed');
+                return $this->redirect('/cart/confirmed');
             }
         }
 
-        return $this->redirect('/app/cart/payment-error');
+        return $this->redirect('/cart/payment-error');
     }
 }

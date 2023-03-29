@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
-#[Route("/api/user")]
+#[Route('/api/user')]
 class UserApiController extends AbstractController
 {
     #[Required]
@@ -76,14 +76,14 @@ class UserApiController extends AbstractController
             }
             $datas = $this->upplerBuyerCompanyService->getBuyerByCompanyId($account->getUpplerCompanyId());
             $serializeAccount = $normalizer->normalize($account, 'json', ['groups' => 'simpleUser']);
-            $serializeAccount["upplerDatas"] = $datas;
+            $serializeAccount['upplerDatas'] = $datas;
             $accounts[] = $serializeAccount;
         }
         return new JsonResponse($accounts);
     }
 
-    #[Route("/account/{id}/select")]
-    #[ParamConverter("id", Account::class)]
+    #[Route('/account/{id}/select')]
+    #[ParamConverter('id', Account::class)]
     public function selectAccount(NormalizerInterface $normalizer, Account $account): JsonResponse
     {
         $session = $this->requestStack->getSession();
@@ -104,16 +104,17 @@ class UserApiController extends AbstractController
         throw new \Exception('Vous n\'avez pas accès à ce compte');
     }
 
-    #[Route("/logout")]
-    public function logout()
+    #[Route('/logout')]
+    public function logout(Request $request)
     {
+        $request->getSession()->invalidate();
         $response = new Response();
         $response->headers->clearCookie('BEARER', '/');
         $response->headers->clearCookie('refresh_token', '/');
         return $response;
     }
 
-    #[Route("/change-password")]
+    #[Route('/change-password')]
     public function changePassword(
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher,

@@ -24,10 +24,12 @@
                     <h3
                       class="tex-primary text-md mb-2 font-bold xl:text-[20px]"
                     >
-                      {{ user.firstName }} test
+                      {{ user.firstName }}
                       <span class="uppercase">{{ user.lastName }}</span>
                     </h3>
-                    <p class="font-bold text-gray-500">Qantis</p>
+                    <p class="font-bold text-gray-500">
+                      {{ user.account.buyer.name }}
+                    </p>
                     <!-- <p class="mb-4 text-gray-500">Statut:</p> -->
 
                     <p

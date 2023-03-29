@@ -1,15 +1,11 @@
 <template>
-
   <template v-if="!userAccounts.length">
-    <div class="flex flex-col md:flex-row justify-between md:space-x-8">
-      <div class="w-full md:w-1/2 flex flex-col">
+    <div class="flex flex-col justify-between md:flex-row md:space-x-8">
+      <div class="flex w-full flex-col md:w-1/2">
         <div v-if="showAlert" class="lg:w-5/6">
-          <AlertSharedComponent/>
+          <AlertSharedComponent />
         </div>
-        <form
-          class="w-full"
-          @submit.prevent="loginSubmit"
-        >
+        <form class="w-full" @submit.prevent="loginSubmit">
           <h1 class="text-2xl font-bold text-primary xl:text-4xl">Bonjour</h1>
           <div class="mt-3 text-lg text-gray-500">
             Déjà adhérent ? Connectez-vous ici
@@ -20,6 +16,7 @@
                 v-model="username"
                 type="email"
                 class="input !pr-16"
+                id="login-email"
                 placeholder="Adresse e-mail"
                 :disabled="isLoading"
                 required
@@ -27,8 +24,8 @@
               <span
                 class="absolute inset-y-0 right-0 flex items-center pr-8 text-gray-500"
               >
-              <MailIcon/>
-            </span>
+                <MailIcon />
+              </span>
             </div>
             <div class="relative mb-3 mt-3">
               <input
@@ -43,78 +40,93 @@
                 class="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-8 text-gray-500"
                 @click="toggleShowPassword"
               >
-                <EyeSlashIcon v-if="showPassword"/>
-                <EyeIcon v-else/>
+                <EyeSlashIcon v-if="showPassword" />
+                <EyeIcon v-else />
               </span>
             </div>
             <div class="mb-3 mt-3 flex justify-between">
               <a
-                href="/premiere-connexion"
+                href="/login/first-signin"
                 class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-300"
-              >Première connexion</a
               >
+                Première connexion
+              </a>
               <a
-                href="/mot-de-passe-oublie"
+                href="/login/reset-password"
                 class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-300"
-              >Mot de passe oublié ?</a
               >
+                Mot de passe oublié ?
+              </a>
             </div>
             <div
-              class="mt-3 lg:items-center flex flex-col lg:mt-6 lg:grid lg:grid-cols-3 lg:justify-items-stretch w-full mb-6 space-y-5 lg:space-y-0 ">
+              class="mt-3 mb-6 flex w-full flex-col space-y-5 lg:mt-6 lg:grid lg:grid-cols-3 lg:items-center lg:justify-items-stretch lg:space-y-0"
+            >
               <div class="w-full lg:justify-self-start">
                 <ButtonComponent
                   :is-loading="isLoading"
                   type="submit"
-                  class="button-gradient min-w-[180px] w-full lg:w-auto"
+                  class="button-gradient w-full min-w-[180px] lg:w-auto"
                 >
-                  <ArrowRightIcon/>
+                  <ArrowRightIcon />
                   Me connecter
                 </ButtonComponent>
               </div>
               <div class="text-gray-500 lg:justify-self-center">
-                Vous n'êtes pas encore adhérent ?<br/>
-                <a href="https://qantis.co/contact" class="text-secondary underline">
+                Vous n'êtes pas encore adhérent ?<br />
+                <a
+                  href="https://qantis.co/contact"
+                  class="text-secondary underline"
+                  target="_blank"
+                >
                   Et si on se rencontrait ?
                 </a>
               </div>
 
               <div class="flex flex-col text-gray-500 lg:justify-self-end">
-                <span class="lg:text-right">Ou appelez nous directement au </span>
-                <span class="text-secondary underline lg:text-right">{{ PHONE_ANIMATION }}</span>
+                <span class="lg:text-right">
+                  Ou appelez nous directement au
+                </span>
+                <a
+                  :href="`tel:${PHONE_ANIMATION}`"
+                  class="text-secondary underline lg:text-right"
+                >
+                  {{ PHONE_ANIMATION }}
+                </a>
               </div>
             </div>
           </div>
         </form>
       </div>
-      <div class="sm:w-1/2 flex">
-        <AchetonsEnsembleComponent/>
+      <div class="flex sm:w-1/2">
+        <AchetonsEnsembleComponent />
       </div>
     </div>
-
   </template>
   <template v-else-if="userAccounts.length > 1">
-    <div class="flex flex-col md:flex-row justify-between md:space-x-8">
-      <div class="w-full md:w-1/2 flex flex-col">
+    <div class="flex flex-col justify-between md:flex-row md:space-x-8">
+      <div class="flex w-full flex-col md:w-1/2">
         <div class="lg:w-5/6">
           <div v-if="showAlert && !showCGUModal">
-            <AlertSharedComponent/>
+            <AlertSharedComponent />
           </div>
           <div class="mb-5">
             <h1 class="home-subtitle text-gradient">
-              Bonjour {{ userAccounts[0]._user.firstName ? userAccounts[0]._user.firstName : '' }}
+              Bonjour
+              {{
+                userAccounts[0]._user.firstName
+                  ? userAccounts[0]._user.firstName
+                  : ''
+              }}
             </h1>
             <h3 class="text-gray-500">
-              Veuillez sélectionner le compte acheteur avec lequel vous souhaitez être
-              connecté
+              Veuillez sélectionner le compte acheteur avec lequel vous
+              souhaitez être connecté
             </h3>
           </div>
-          <div
-            v-for="(account, id) in userAccounts"
-            :key="id"
-          >
+          <div v-for="(account, id) in userAccounts" :key="id">
             <div
               v-if="account.upplerDatas"
-              class="bg-white rounded-md mb-3 p-2 flex flex-col h-[60px]"
+              class="mb-3 flex h-[60px] flex-col rounded-md bg-white p-2"
             >
               <div>
                 <input
@@ -125,14 +137,14 @@
                   class="mr-1"
                   @change="onChangeBuyer(account.acceptCGU)"
                 />
-                <label class="text-primary font-bold uppercase">
+                <label class="font-bold uppercase text-primary">
                   {{ account.upplerDatas.name }}
                 </label>
               </div>
 
               <label
                 v-if="account.upplerDatas.number"
-                class="text-gray-500 ml-5 font-bold"
+                class="ml-5 font-bold text-gray-500"
               >
                 SIRET: {{ account.upplerDatas.number }}
               </label>
@@ -145,24 +157,20 @@
               @click="onAccountClick"
             >
               <div v-show="isLoading">
-                <LoaderSharedComponent/>
+                <LoaderSharedComponent />
               </div>
-              <ArrowRightIcon/>
+              <ArrowRightIcon />
               Valider
             </button>
           </div>
         </div>
       </div>
-      <div class="sm:w-1/2 flex">
-        <AchetonsEnsembleComponent/>
+      <div class="flex sm:w-1/2">
+        <AchetonsEnsembleComponent />
       </div>
     </div>
   </template>
-  <CGUModal
-    v-if="showCGUModal"
-    class="modal"
-    @valid-cgu="valideCGU"
-  />
+  <CGUModal v-if="showCGUModal" class="modal" @valid-cgu="valideCGU" />
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue'
@@ -231,7 +239,7 @@ const selectAccount = async (accountId) => {
   isLoading.value = true
   if (accountId) {
     const select = await userStore.selectUserAccount(accountId)
-    select && (document.location.href = '/app/home-page')
+    select && (document.location.href = '/')
     isLoading.value = false
   } else {
     isLoading.value = false
@@ -239,7 +247,6 @@ const selectAccount = async (accountId) => {
       'Vous devez sélectionner un compte acheteur pour vous connecter',
       AlertType.danger,
     )
-
   }
 }
 const onAccountClick = async () => {
@@ -258,5 +265,4 @@ const valideCGU = async () => {
   showCGUModal.value = false
   await selectAccount(accountSelectedId.value)
 }
-
 </script>

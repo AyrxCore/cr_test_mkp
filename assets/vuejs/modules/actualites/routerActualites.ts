@@ -2,17 +2,17 @@ import { RouteRecordRaw } from 'vue-router'
 import ActualitesPage from '@/vuejs/modules/actualites/views/ActualitesList.vue'
 import ActualitePage from '@/vuejs/modules/actualites/views/Actualite.vue'
 
-import { ActualitesPageList } from '@/vuejs/router/pages-list'
+import { NewsPageList } from '@/vuejs/router/pages-list'
 
 export const routes: RouteRecordRaw[] = [
   {
-    path: '/app/' + ActualitesPageList.ACTUALITES,
-    name: ActualitesPageList.ACTUALITES,
+    path: '/news',
+    name: NewsPageList.NEWS,
     component: ActualitesPage,
   },
   {
-    path: '/app/' + ActualitesPageList.ACTUALITE + '/:slug',
+    path: '/news/:slug',
     component: ActualitePage,
-    name: ActualitesPageList.ACTUALITE,
+    name: NewsPageList.NEWS_ITEM,
   },
 ]

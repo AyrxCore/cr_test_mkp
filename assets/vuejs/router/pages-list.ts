@@ -1,22 +1,22 @@
 export enum AccountPageList {
-  ACCOUNT = 'account',
-  CONTACT_INFORMATION = 'contact-information',
-  CONTACT_INFORMATION_PASSWORD_CHANGE = 'contact-information-password-change',
-  CONTACT_INFORMATION_EMAIL_EDIT = 'contact-information-email-edit',
-  CONTACT_INFORMATION_DETAILS_EDIT = 'contact-information-details-edit',
-  ADDRESSES = 'addresses',
-  ADDRESS_EDIT = 'address-edit',
-  ADDRESS_CREATE = 'address-create',
-  FAVORIS_LIST = 'favoris-list',
-  FAVORIS_DETAILS = 'favoris-details',
-  ORDERS_HISTORY = 'orders-history',
-  SAVED_CARTS = 'saved-carts',
-  ORDERS_VALIDATION = 'orders-validation',
+  ACCOUNT = 'ACCOUNT',
+  CONTACT_INFORMATION = 'CONTACT_INFORMATION',
+  CONTACT_INFORMATION_PASSWORD_CHANGE = 'CONTACT_INFORMATION_PASSWORD_CHANGE',
+  CONTACT_INFORMATION_EMAIL_EDIT = 'CONTACT_INFORMATION_EMAIL_EDIT',
+  CONTACT_INFORMATION_DETAILS_EDIT = 'CONTACT_INFORMATION_DETAILS_EDIT',
+  ADDRESSES = 'ADDRESSES',
+  ADDRESS_EDIT = 'ADDRESS_EDIT',
+  ADDRESS_CREATE = 'ADDRESS_CREATE',
+  FAVORITES_LIST = 'FAVORITES_LIST',
+  FAVORITES_DETAILS = 'FAVORITES_DETAILS',
+  ORDERS_HISTORY = 'ORDERS_HISTORY',
+  SAVED_CARTS = 'SAVED_CARTS',
+  ORDERS_VALIDATION = 'ORDERS_VALIDATION',
 }
 
-export enum ActualitesPageList {
-  ACTUALITES = 'actualites',
-  ACTUALITE = 'actualite',
+export enum NewsPageList {
+  NEWS = 'NEWS',
+  NEWS_ITEM = 'NEWS_ITEM',
 }
 
 export enum CartPageList {
@@ -28,19 +28,14 @@ export enum CartPageList {
 }
 
 export enum MainPageList {
-  HOME_PAGE = 'home-page',
-  CONTACT_PAGE = 'contact-page',
-  PAGE_NOT_FOUND = 'page-not-found',
-}
-
-export enum PartnersPageList {
-  ACCORD_CADRE = 'accord-cadre',
-  PARTNER = 'partner',
+  HOME_PAGE = 'HOME_PAGE',
+  CONTACT_PAGE = 'CONTACT_PAGE',
+  PAGE_NOT_FOUND = 'PAGE_NOT_FOUND',
 }
 
 export enum ProductPageList {
-  PRODUCTS = 'products',
-  CATEGORIES = 'categories',
-  PRODUCT = 'product',
-  ACCORD_CADRE = 'accord-cadre',
+  PRODUCTS = 'PRODUCTS',
+  CATEGORIES = 'CATEGORIES',
+  PRODUCT = 'PRODUCT',
+  ACCORD_CADRE = 'ACCORD_CADRE',
 }

@@ -30,7 +30,7 @@ import FavoritesProductsComponent from '@/vuejs/modules/account/components/Favor
 import { AccountPageList } from '@/vuejs/router/pages-list'
 
 const tab = computed(() => {
-  return AccountPageList.FAVORIS_LIST
+  return AccountPageList.FAVORITES_LIST
 })
 
 const listFavorites = computed(() => {

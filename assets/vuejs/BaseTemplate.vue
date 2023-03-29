@@ -5,12 +5,18 @@
     <div
       class="bg-gradient flex h-[59px] flex-row items-center justify-center py-4 text-white"
     >
-      <p class="w-[305px] text-sm md:w-auto md:text-base lg:text-lg flex flex-col items-center lg:flex-row py-2">
+      <p
+        class="flex w-[305px] flex-col items-center py-2 text-sm md:w-auto md:text-base lg:flex-row lg:text-lg"
+      >
         <span class="mr-0 lg:mr-2">
-          Cybersécurité : protégez votre entreprise et vos salariés. Téléchargez notre guide.
+          Cybersécurité : protégez votre entreprise et vos salariés. Téléchargez
+          notre guide.
         </span>
         <RouterLink
-          to="/app/actualite/guide-cybersecurite"
+          :to="{
+            name: NewsPageList.NEWS_ITEM,
+            params: { slug: 'guide-cybersecurite' },
+          }"
           class="underline"
         >
           Découvrir
@@ -25,8 +31,13 @@
       <slot />
     </main>
 
-    <div v-show="scY.value > 500" id="pagetop" class="fixed right-1 bottom-10 p-1 bg-secondary rounded cursor-pointer z-10" @click="toTop">
-      <ChevronDownIconComponent class="stroke-white rotate-180" />
+    <div
+      v-show="scY.value > 500"
+      id="pagetop"
+      class="fixed right-1 bottom-10 z-10 cursor-pointer rounded bg-secondary p-1"
+      @click="toTop"
+    >
+      <ChevronDownIconComponent class="rotate-180 stroke-white" />
     </div>
     <FooterSharedComponent />
   </div>
@@ -39,10 +50,10 @@ import HeaderSharedComponent from '@/vuejs/modules/shared/HeaderSharedComponent.
 import FooterSharedComponent from '@/vuejs/modules/shared/FooterSharedComponent.vue'
 import StickyContactButtons from '@/vuejs/modules/shared/StickyContactButtonsComponent.vue'
 import CloseIconComponent from '@/vuejs/modules/shared/icon/CloseIconComponent.vue'
-import {useUserStore} from "@/vuejs/stores/user";
-import {storeToRefs} from "pinia";
-import ChevronDownIconComponent from '@/vuejs/modules/shared/icon/ChevronDownIconComponent.vue';
-import { URL_HOME_BANDEAU } from '@/vuejs/services/utils';
+import { useUserStore } from '@/vuejs/stores/user'
+import { storeToRefs } from 'pinia'
+import ChevronDownIconComponent from '@/vuejs/modules/shared/icon/ChevronDownIconComponent.vue'
+import { NewsPageList } from './router/pages-list'
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
 const props = defineProps({
@@ -59,22 +70,21 @@ onMounted(() => {
 const scTimer = reactive({ value: 0 })
 const scY = reactive({ value: 0 })
 
-
-const handleScroll = (() => {
+const handleScroll = () => {
   if (scTimer.value) return
   scTimer.value = setTimeout(() => {
     scY.value = window.scrollY
     clearTimeout(scTimer.value)
     scTimer.value = 0
   }, 100)
-})
+}
 
-const toTop = (() => {
+const toTop = () => {
   window.scrollTo({
     top: 0,
-    behavior: 'smooth'
+    behavior: 'smooth',
   })
-})
+}
 useHead({
   title: computed(() => props.title),
   meta: [

@@ -45,7 +45,7 @@ class FirstConnexionSubscriber implements EventSubscriberInterface
     {
         $user = $event->getUser();
         $confirmation_url = $this->router->generate(
-            'resetting_first_connexion_action',
+            'first_signin_action',
             ['token' => $user->getConfirmationToken()],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
@@ -59,5 +59,4 @@ class FirstConnexionSubscriber implements EventSubscriberInterface
             ])
         );
     }
-
 }

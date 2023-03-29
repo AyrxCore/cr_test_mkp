@@ -8,23 +8,23 @@ import { ProductPageList } from '@/vuejs/router/pages-list'
 
 export const routes: RouteRecordRaw[] = [
   {
-    path: `/app/${ ProductPageList.PRODUCTS }`,
+    path: '/products',
     name: ProductPageList.PRODUCTS,
     component: ProductsPage,
     props: (route) => ({ query: route.query }),
   },
   {
-    path: `/app/${ ProductPageList.CATEGORIES }`,
+    path: '/categories',
     name: ProductPageList.CATEGORIES,
     component: CategoriesPage,
   },
   {
-    path: `/app/${ ProductPageList.PRODUCT }/:id`,
+    path: '/products/:id',
     component: ProductPage,
     name: ProductPageList.PRODUCT,
   },
   {
-    path: `/app/${ProductPageList.ACCORD_CADRE}/:id`,
+    path: '/accord-cadres/:id',
     name: ProductPageList.ACCORD_CADRE,
     component: AccordCadrePage,
   },
