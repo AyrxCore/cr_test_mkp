@@ -60,6 +60,7 @@ class UserAccountPersister implements ContextAwareDataPersisterInterface
             if (!$user) {
                 $user = new User();
                 $user->setEnabled(false);
+                $user->setPassword($this->userPasswordHasher->hashPassword($user, uniqid()));
             }
             $account = $this->em->getRepository(Account::class)->findOneBy(
                 ['upplerClientId' => $data->getUpplerSubAccountClientId()]
@@ -75,7 +76,6 @@ class UserAccountPersister implements ContextAwareDataPersisterInterface
         $user->setFirstName($data->getFirstname());
         $user->setLastName($data->getLastname());
         $user->setEmail($data->getEmail());
-        $user->setPassword($this->userPasswordHasher->hashPassword($user, uniqid()));
         $this->em->persist($user);
 
 
