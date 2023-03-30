@@ -13,10 +13,10 @@
           <div class="lg:w-5/6">
             <div class="relative mb-3 mt-3">
               <input
+                id="login-email"
                 v-model="username"
                 type="email"
                 class="input !pr-16"
-                id="login-email"
                 placeholder="Adresse e-mail"
                 :disabled="isLoading"
                 required
@@ -61,11 +61,11 @@
             <div
               class="mt-3 mb-6 flex w-full flex-col space-y-5 lg:mt-6 lg:grid lg:grid-cols-3 lg:items-center lg:justify-items-stretch lg:space-y-0"
             >
-              <div class="w-full lg:justify-self-start">
+              <div class="flex">
                 <ButtonComponent
                   :is-loading="isLoading"
                   type="submit"
-                  class="button-gradient w-full min-w-[180px] lg:w-auto"
+                  class="button-gradient w-full lg:w-auto !px-4"
                 >
                   <ArrowRightIcon />
                   Me connecter
