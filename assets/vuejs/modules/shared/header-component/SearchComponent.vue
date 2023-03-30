@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import SearchIconComponent from '@/vuejs/modules/shared/icon/SearchIconComponent.vue'
 import { useRoute } from 'vue-router'
 import { ProductPageList } from '@/vuejs/router/pages-list'
@@ -34,8 +34,23 @@ const searchProduct = () => {
 }
 
 onMounted(() => {
-  if (route.query.q && route.name === ProductPageList.PRODUCTS) {
-    searchTerm.value = route.query.q
-  }
+  updateSearchTerm(route.query.q)
 })
+
+const updateSearchTerm = (query) => {
+  if (query && route.name === ProductPageList.PRODUCTS) {
+    searchTerm.value = query
+  } else {
+    searchTerm.value = null
+  }
+}
+
+watch(
+  () => route.query,
+  async (routeObject) => {
+    updateSearchTerm(routeObject.q)
+  },
+
+  { immediate: true },
+)
 </script>

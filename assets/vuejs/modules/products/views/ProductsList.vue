@@ -211,7 +211,7 @@ const count = computed(() => {
 })
 
 const products = computed(() => {
-  return resultProducts.value.results
+  return resultProducts.value.results ?? []
 })
 
 const filters = computed(() => {
@@ -230,6 +230,13 @@ const hasParameters = computed(() => {
     resultProducts.value.parameters.properties.length
   )
 })
+
+const removeFilterAll = async () => {
+  term.value = null
+  selectedCategoryId.value = null
+  selectedCompanyId.value = null
+  selectedProperties.value = null
+}
 
 const removeFilter = async (type) => {
   switch (type) {
@@ -332,6 +339,8 @@ watch(
       perPage: perPage.value,
       sort: null,
     }
+
+    await removeFilterAll()
 
     if (routeObject.q) {
       term.value = routeObject.q
