@@ -20,7 +20,7 @@
   <h3 class="mt-24 text-[19px] text-primary md:text-[25px]">
     <span class="text-gradient"> Depuis plus de 20 ans, </span>
     <br />
-    <span> nous achetons mieux ensembles </span>
+    <span> nous achetons mieux ensemble </span>
   </h3>
   <div class="container mx-auto">
     <div

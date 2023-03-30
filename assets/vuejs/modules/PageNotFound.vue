@@ -15,7 +15,8 @@
               <span class="font-bold flex">Page introuvable</span>
             </h3>
             <p class="text-sm text-gray-500 md:text-lg w-1/2">
-              Nous sommes désolés, la page que vous cherchez n'a pas été trouvée. Nous vous proposons de retourner à la page d'accueil ou bien de découvrir toutes nos catégories d'achats.
+              Nous sommes désolés, la page que vous cherchez n'a pas été trouvée. Nous vous proposons de retourner à la
+              page d'accueil ou bien de découvrir toutes nos catégories d'achats.
             </p>
             <RouterLink
               class="button button-gradient mt-10 w-full md:w-auto"
@@ -28,7 +29,7 @@
             <h3 class="mt-24 text-[19px] text-primary md:text-[25px]">
               <span class="text-gradient"> Depuis plus de 20 ans, </span>
               <br />
-              <span> nous achetons mieux ensembles </span>
+              <span> nous achetons mieux ensemble </span>
             </h3>
             <div class="container mx-auto">
               <div
