@@ -140,7 +140,6 @@ const pointsClesRSE = computed(() => {
 
 const scrollTo = (selector) => {
   const element = document.querySelector(selector)
-  console.log(element)
   if (element) {
     element.scrollIntoView({ behavior: 'smooth' })
   }

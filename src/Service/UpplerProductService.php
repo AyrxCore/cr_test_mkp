@@ -157,6 +157,7 @@ class UpplerProductService extends HttpClientProvider
 
     public function findAllCategories(string $accountId, int $page = 1, int $perPage = 1): \stdClass | null
     {
+        $this->cache->clear();
         $item = $this->cache->getItem('categories_' . $accountId);
         if (!$item->isHit()) {
             $session = $this->requestStack->getSession();
@@ -211,13 +212,6 @@ class UpplerProductService extends HttpClientProvider
     {
         $product = new Product();
         $this->initHydrateProduct($remoteProduct, $product);
-
-        $categories = [];
-
-        foreach ($remoteProduct->categories as $category) {
-            $categories[$category->id] = $category->name->default;
-        }
-        $product->setCategories($categories);
 
         $isAccordCadre = $this->isAccordCadre($remoteProduct, $product);
 
@@ -346,6 +340,13 @@ class UpplerProductService extends HttpClientProvider
         $product->setName($remoteProduct->name->default);
         $product->setDescription($remoteProduct->description->default ?? null);
         $product->setReference($remoteProduct->reference);
+        $product->setVariants($remoteProduct->variants);
+        $categories = [];
+
+        foreach ($remoteProduct->categories as $category) {
+            $categories[$category->id] = $category->name->default;
+        }
+        $product->setCategories($categories);
         if ($remoteProduct->company->id) {
             $item = $this->cache->getItem('seller_' . $remoteProduct->company->id);
 

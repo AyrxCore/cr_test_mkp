@@ -125,15 +125,15 @@
               class="mb-3 flex h-[60px] flex-col rounded-md bg-white p-2"
             >
               <div>
-                <input
-                  v-model="accountSelectedId"
-                  name="accountRadio"
-                  type="radio"
-                  :value="account.id"
-                  class="mr-1"
-                  @change="onChangeBuyer(account.acceptCGU)"
-                />
-                <label class="font-bold uppercase text-primary">
+                <label class="text-primary font-bold uppercase">
+                  <input
+                    v-model="accountSelectedId"
+                    name="accountRadio"
+                    type="radio"
+                    :value="account.id"
+                    class="mr-1"
+                    @change="onChangeBuyer(account.acceptCGU)"
+                  />
                   {{ account.upplerDatas.name }}
                 </label>
               </div>
@@ -235,6 +235,10 @@ const selectAccount = async (accountId) => {
   isLoading.value = true
   if (accountId) {
     const select = await userStore.selectUserAccount(accountId)
+    window.dataLayer?.push({
+      event: 'login',
+    })
+
     select && (document.location.href = '/')
     isLoading.value = false
   } else {

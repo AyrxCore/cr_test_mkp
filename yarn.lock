@@ -105,7 +105,7 @@
 
 "@esbuild/linux-x64@0.16.17":
   version "0.16.17"
-  resolved "https://registry.yarnpkg.com/@esbuild/linux-x64/-/linux-x64-0.16.17.tgz#e4ba18e8b149a89c982351443a377c723762b85f"
+  resolved "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.16.17.tgz"
   integrity sha512-mdPjPxfnmoqhgpiEArqi4egmBAMYvaObgn4poorpUaqmvzzbvqbowRllQ+ZgzGVMGKaPkqUmPDOOFQRUFDmeUw==
 
 "@esbuild/netbsd-x64@0.16.17":
@@ -404,7 +404,7 @@
 
 "@vitejs/plugin-vue@^4.0.0":
   version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@vitejs/plugin-vue/-/plugin-vue-4.0.0.tgz#93815beffd23db46288c787352a8ea31a0c03e5e"
+  resolved "https://registry.npmjs.org/@vitejs/plugin-vue/-/plugin-vue-4.0.0.tgz"
   integrity sha512-e0X4jErIxAB5oLtDqbHvHpJe/uWNkdpYV83AOG2xo2tEVSzCzewgJMtREZM30wXnM5ls90hxiOtAuVU6H5JgbA==
 
 "@vue/compiler-core@3.2.41":
@@ -914,7 +914,7 @@ csstype@^2.6.8:
 
 date-fns@^2.29.3:
   version "2.29.3"
-  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.29.3.tgz#27402d2fc67eb442b511b70bbdf98e6411cd68a8"
+  resolved "https://registry.npmjs.org/date-fns/-/date-fns-2.29.3.tgz"
   integrity sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==
 
 debug@^2.6.9:
@@ -1068,7 +1068,7 @@ es-to-primitive@^1.2.1:
 
 esbuild@^0.16.14:
   version "0.16.17"
-  resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.16.17.tgz#fc2c3914c57ee750635fee71b89f615f25065259"
+  resolved "https://registry.npmjs.org/esbuild/-/esbuild-0.16.17.tgz"
   integrity sha512-G8LEkV0XzDMNwXKgM0Jwu3nY3lSTwSGY6XbxM9cr9+s0T/qSV1q1JVPBGzm3dcjhCic9+emZDmMffkwgPeOeLg==
   optionalDependencies:
     "@esbuild/android-arm" "0.16.17"
@@ -2304,7 +2304,7 @@ postcss@^8.1.10, postcss@^8.3.5, postcss@^8.4.17, postcss@^8.4.18:
 
 postcss@^8.4.21:
   version "8.4.21"
-  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.21.tgz#c639b719a57efc3187b13a1d765675485f4134f4"
+  resolved "https://registry.npmjs.org/postcss/-/postcss-8.4.21.tgz"
   integrity sha512-tP7u/Sn/dVxK2NnruI4H9BG+x+Wxz6oeZ1cJ8P6G/PZY0IKk4k/63TDsQf2kQq3+qoJeLm2kIBUNlZe3zgb4Zg==
   dependencies:
     nanoid "^3.3.4"
@@ -2325,7 +2325,7 @@ prettier-linter-helpers@^1.0.0:
 
 prettier-plugin-tailwindcss@^0.2.3:
   version "0.2.3"
-  resolved "https://registry.yarnpkg.com/prettier-plugin-tailwindcss/-/prettier-plugin-tailwindcss-0.2.3.tgz#b68a1de10056fc84055426af132c2697bea0955c"
+  resolved "https://registry.npmjs.org/prettier-plugin-tailwindcss/-/prettier-plugin-tailwindcss-0.2.3.tgz"
   integrity sha512-s2N5Dh7Ao5KTV1mao5ZBnn8EKtUcDPJEkGViZIjI0Ij9TTI5zgTz4IHOxW33jOdjHKa8CSjM88scelUiC5TNRQ==
 
 prettier@^2.7.1:
@@ -2442,7 +2442,7 @@ rimraf@^3.0.0, rimraf@^3.0.2:
 
 rollup@^3.10.0:
   version "3.15.0"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-3.15.0.tgz#6f4105e8c4b8145229657b74ad660b02fbfacc05"
+  resolved "https://registry.npmjs.org/rollup/-/rollup-3.15.0.tgz"
   integrity sha512-F9hrCAhnp5/zx/7HYmftvsNBkMfLfk/dXUh73hPSM2E3CRgap65orDNJbLetoiUFwSAk6iHPLvBrZ5iHYvzqsg==
   optionalDependencies:
     fsevents "~2.3.2"
@@ -2756,7 +2756,7 @@ uuidv4@^6.2.13:
 
 vite@^4.1.1:
   version "4.1.1"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-4.1.1.tgz#3b18b81a4e85ce3df5cbdbf4c687d93ebf402e6b"
+  resolved "https://registry.npmjs.org/vite/-/vite-4.1.1.tgz"
   integrity sha512-LM9WWea8vsxhr782r9ntg+bhSFS06FJgCvvB0+8hf8UWtvaiDagKYWXndjfX6kGl74keHJUcpzrQliDXZlF5yg==
   dependencies:
     esbuild "^0.16.14"
@@ -2793,7 +2793,7 @@ vue-router@^4.1.6:
 
 vue-universal-modal@^1.1.4:
   version "1.1.4"
-  resolved "https://registry.yarnpkg.com/vue-universal-modal/-/vue-universal-modal-1.1.4.tgz#f6c2ba7a40d5911b4a5391650856ee1ace4fb3eb"
+  resolved "https://registry.npmjs.org/vue-universal-modal/-/vue-universal-modal-1.1.4.tgz"
   integrity sha512-MCSVz5bS614LfbDzo2/VDu0DWVUAQws00aPourSduGTzhbm0SpvmRJX/mUI/a+2LkJdcchHd2jpH0JK5Mh0rHg==
 
 vue@^3.2.41:

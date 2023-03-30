@@ -71,4 +71,10 @@ export default class CartHttpClient extends BaseClientService {
       })
       .then((response) => response.data)
   }
+
+  public findCartById<T extends []>(id: number): Promise<Cart> {
+    return this.apiClient
+      .get(`buyer/cart/${id}`)
+      .then((response) => response.data)
+  }
 }

@@ -1,5 +1,5 @@
 <template>
-  <BaseTemplate title="Qantis - MarketPlace">
+  <BaseTemplate :title="`${pageTitle} | Qantis - Marketplace`">
     <div
       v-if="currentExpertContent"
       class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 px-5 sm:px-8"
@@ -121,6 +121,10 @@ const formattedDate = computed((): string => {
 
 onBeforeMount(async () => {
   await expertContentStore.init()
+})
+
+const pageTitle = computed(() => {
+  return currentExpertContent.value ? currentExpertContent.value.articleTitle : ''
 })
 
 watch(

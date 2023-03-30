@@ -194,6 +194,8 @@
             </div>
             <ProductAddToCartComponent
               class="hidden lg:flex"
+              :product="product"
+              :price="price"
               :quantity="quantity"
               :variant-id="variantId"
             />
@@ -371,7 +373,7 @@ const updateProductPrice = async () => {
       variants.value.push(variant)
     }
 
-    price.value = formatPrice(variant.price.display_price * 0.01)
+    price.value = (variant.price.display_price / 100)
     const priceDiff = priceReference.value - parseFloat(price.value)
     percent.value = Math.round((priceDiff * 100) / priceReference.value)
   } else {

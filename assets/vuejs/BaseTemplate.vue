@@ -45,15 +45,15 @@
 
 <script lang="ts" setup>
 import { useHead } from '@vueuse/head'
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, reactive } from 'vue'
 import HeaderSharedComponent from '@/vuejs/modules/shared/HeaderSharedComponent.vue'
 import FooterSharedComponent from '@/vuejs/modules/shared/FooterSharedComponent.vue'
 import StickyContactButtons from '@/vuejs/modules/shared/StickyContactButtonsComponent.vue'
-import CloseIconComponent from '@/vuejs/modules/shared/icon/CloseIconComponent.vue'
 import { useUserStore } from '@/vuejs/stores/user'
 import { storeToRefs } from 'pinia'
 import ChevronDownIconComponent from '@/vuejs/modules/shared/icon/ChevronDownIconComponent.vue'
 import { NewsPageList } from './router/pages-list'
+
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
 const props = defineProps({
@@ -63,6 +63,7 @@ const props = defineProps({
     default: '',
   },
 })
+
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
 })

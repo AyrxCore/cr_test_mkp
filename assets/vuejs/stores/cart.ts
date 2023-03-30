@@ -11,7 +11,7 @@ import {
   OrderItemQuantityUpdate,
   OrderShippingUpdate,
   PaymentMethod,
-  CartPaymentMethodUpdated,
+  CartPaymentMethodUpdated, Cart,
 } from '@/vuejs/types/Cart'
 
 export const useCartStore = defineStore({
@@ -126,6 +126,19 @@ export const useCartStore = defineStore({
             getErrorMessage(error.response.data.message),
             AlertType.danger,
           )
+      }
+    },
+    async findCartById(id: number): Promise<Cart> {
+      const alertStore = useAlertStore()
+      try {
+        return await CartHttpClient.get().findCartById(id)
+      } catch (error) {
+        console.log(error)
+        error.response.status === HttpStatusCodes.unauthorized &&
+        alertStore.setShow(
+          getErrorMessage(error.response.data.message),
+          AlertType.danger,
+        )
       }
     },
   },

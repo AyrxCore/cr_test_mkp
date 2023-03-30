@@ -17,8 +17,8 @@
             Paiement
           </CartBreadcrumbItemComponent>
           <CartBreadcrumbItemComponent
-            :route-name="CartPageList.CONFIRMED"
             v-if="CartPageList.CONFIRMED === currentRouteName"
+            :route-name="CartPageList.CONFIRMED"
           >
             Confirmation
           </CartBreadcrumbItemComponent>

@@ -29,7 +29,7 @@ export const routes: RouteRecordRaw[] = [
         name: CartPageList.PAYMENT,
       },
       {
-        path: 'confirmed',
+        path: 'confirmed/:id',
         component: ConfirmationPage,
         name: CartPageList.CONFIRMED,
       },

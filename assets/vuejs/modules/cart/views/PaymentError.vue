@@ -72,19 +72,26 @@
 </template>
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-
-import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import FolderSearchIconComponent from '@/vuejs/modules/shared/icon/FolderSearchIconComponent.vue'
 import LayersIconComponent from '@/vuejs/modules/shared/icon/LayersIconComponent.vue'
 import LeafIconComponent from '@/vuejs/modules/shared/icon/LeafIconComponent.vue'
 import ExpandIconComponent from '@/vuejs/modules/shared/icon/ExpandIconComponent.vue'
 
 import { useUserStore } from '@/vuejs/stores/user'
-import { PageList } from '@/vuejs/router';
+import { PageList } from '@/vuejs/router'
 import MailIconLightComponent from '@/vuejs/modules/shared/icon/MailIconLightComponent.vue';
+import { onMounted } from 'vue';
+import { gtmCartTrackingEvent } from '@/vuejs/modules/cart';
+import { useCartStore } from '@/vuejs/stores/cart';
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
+const cartStore = useCartStore()
+
+const { cart } = storeToRefs(cartStore)
+onMounted(async () => {
+  await gtmCartTrackingEvent('payment_error', cart.value)
+})
 </script>
 
 <style scoped></style>

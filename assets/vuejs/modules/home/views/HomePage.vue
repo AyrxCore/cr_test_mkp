@@ -1,5 +1,5 @@
 <template>
-  <BaseTemplate title="Qantis - MarketPlace">
+  <BaseTemplate title="Page d'accueil | Qantis - MarketPlace">
     <div class="m-auto my-4 max-w-screen-2xl flex-1 px-5 xl:p-8">
       <div class="mt-7 flex sm:justify-between lg:mt-0">
         <div class="sm:w-[100%] md:w-[52rem]">

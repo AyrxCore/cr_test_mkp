@@ -69,9 +69,6 @@
         </p>
       </div>
     </div>
-    <CartRightSideComponent>
-      <template #title>Récapitulatif</template>
-    </CartRightSideComponent>
   </div>
 </template>
 <script lang="ts" setup>
@@ -84,10 +81,30 @@ import LeafIconComponent from '@/vuejs/modules/shared/icon/LeafIconComponent.vue
 import ExpandIconComponent from '@/vuejs/modules/shared/icon/ExpandIconComponent.vue'
 
 import { useUserStore } from '@/vuejs/stores/user'
-import { PageList } from '@/vuejs/router';
+import { PageList } from '@/vuejs/router'
+import { useCartStore } from '@/vuejs/stores/cart'
+import { ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { gtmCartTrackingEvent } from '@/vuejs/modules/cart'
 
+const route = useRoute()
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
+const cartStore = useCartStore()
+
+const cartResume = ref()
+
+watch(
+  () => route.params.id as string,
+  async (id: string) => {
+    if (id) {
+      cartResume.value = await cartStore.findCartById(parseInt(id))
+      await gtmCartTrackingEvent('purchase', cartResume.value.cart, cartResume.value.confirmation)
+    }
+  },
+
+  { immediate: true },
+)
 </script>
 
 <style scoped></style>

@@ -196,10 +196,16 @@ const loadProducts = async (paramsProducts) => {
   isLoading.value = true
 
   try {
-    resultProducts.value = await productStore.fetchProductsByParams(
-      paramsProducts,
-    )
+    resultProducts.value = await productStore.fetchProductsByParams(paramsProducts)
     pageNumber.value = resultProducts.value.page
+    if (route.query.q) {
+      const eventLabel = resultProducts.value.results_count > 0 ? 'view_search_results' : 'no_search_results'
+      await window.dataLayer?.push({
+        event: eventLabel,
+        search_term: route.query.q,
+      })
+    }
+
   } catch (e) {
     resultNotFound.value = true
   }

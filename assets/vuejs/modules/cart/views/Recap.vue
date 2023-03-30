@@ -35,7 +35,7 @@
 </template>
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
@@ -46,6 +46,7 @@ import CartRightSideComponent from '@/vuejs/modules/cart/components/CartRightSid
 import { CartPageList } from '@/vuejs/router/pages-list'
 
 import { useCartStore } from '@/vuejs/stores/cart'
+import { gtmCartTrackingEvent } from '@/vuejs/modules/cart';
 
 const router = useRouter()
 const cartStore = useCartStore()
@@ -56,16 +57,21 @@ const error = ref<string>(null)
 
 cartStore.termsOfSales = []
 
-const goToAdress = (): void => {
+const goToAdress = async (): Promise<void> => {
   error.value = ''
   if (!cartStore.hasAllTermsChecked) {
     error.value = 'Veuillez accepter les conditions générales'
   } else if (!cartStore.hasAllShippingMethodsSelected) {
     error.value = 'Une ou plusieurs méthodes de livraisons sont incorrectes'
   } else {
-    router.push({ name: CartPageList.ADDRESSES })
+    await gtmCartTrackingEvent('begin_checkout', cart.value)
+    await router.push({ name: CartPageList.ADDRESSES })
   }
 }
+
+onMounted(async () => {
+  await gtmCartTrackingEvent('view_cart', cart.value)
+})
 </script>
 
 <style lang="postcss"></style>

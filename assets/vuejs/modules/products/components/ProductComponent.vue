@@ -114,7 +114,7 @@
           </select>
         </div>
         <ButtonAddToCartComponent
-          :product="product"
+          :product="props.product"
           :quantity="quantity"
           :variant-id="variantId"
         />

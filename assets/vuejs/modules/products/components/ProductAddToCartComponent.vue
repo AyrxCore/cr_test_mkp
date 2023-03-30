@@ -34,6 +34,7 @@
           :product="props.product"
           :quantity="props.quantity"
           :variant-id="props.variantId"
+          :price="props.price"
           class="w-full lg:mt-14"
         />
         <!-- <button class="ml-5 items-center rounded-lg border lg:hidden">
