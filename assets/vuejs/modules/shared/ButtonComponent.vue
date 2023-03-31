@@ -1,11 +1,11 @@
 <template>
   <button
-    :class="{ 'button-no-click': isLoading }"
+    :class="{ 'pointer-events-none': isLoading }"
     class="button"
     :type="props.type"
     @click="onClick"
   >
-    <LoaderSharedComponent v-if="isLoading" class="mr-2" />
+    <LoaderSharedComponent v-if="isLoading" />
     <slot v-else name="default" />
   </button>
 </template>
@@ -107,7 +107,7 @@ const onClick = ($event: PointerEvent): void => {
   }
 
   svg {
-    &:last-of-type {
+    &:last-of-type:not(.loader) {
       @apply mr-1.5;
     }
     &:not(:last-of-type) {

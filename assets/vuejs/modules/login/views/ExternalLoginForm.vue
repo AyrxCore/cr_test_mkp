@@ -61,11 +61,11 @@
             <div
               class="mt-3 mb-6 flex w-full flex-col space-y-5 lg:mt-6 lg:grid lg:grid-cols-3 lg:items-center lg:justify-items-stretch lg:space-y-0"
             >
-              <div class="flex">
+              <div class="lg:pr-4">
                 <ButtonComponent
                   :is-loading="isLoading"
                   type="submit"
-                  class="button-gradient w-full lg:w-auto !px-4"
+                  class="button-gradient w-full"
                 >
                   <ArrowRightIcon />
                   Me connecter
@@ -120,44 +120,42 @@
             </h3>
           </div>
           <div v-for="(account, id) in userAccounts" :key="id">
-            <div
+            <label
               v-if="account.upplerDatas"
-              class="mb-3 flex h-[60px] flex-col rounded-md bg-white p-2"
+              for="account-radio"
+              class="mb-3 flex cursor-pointer items-center rounded-md bg-white px-4 py-2"
             >
+              <input
+                v-model="accountSelectedId"
+                :value="account.id"
+                id="account-radio"
+                type="radio"
+                class="mr-4"
+                @change="onChangeBuyer(account.acceptCGU)"
+              />
               <div>
-                <label class="text-primary font-bold uppercase">
-                  <input
-                    v-model="accountSelectedId"
-                    name="accountRadio"
-                    type="radio"
-                    :value="account.id"
-                    class="mr-1"
-                    @change="onChangeBuyer(account.acceptCGU)"
-                  />
-                  {{ account.upplerDatas.name }}
-                </label>
+                <div class="font-bold uppercase text-primary">
+                  {{ account.upplerDatas?.name }}
+                </div>
+                <div
+                  v-if="account.upplerDatas?.number"
+                  class="font-bold text-gray-500"
+                >
+                  SIRET : {{ account.upplerDatas?.number }}
+                </div>
               </div>
-
-              <label
-                v-if="account.upplerDatas.number"
-                class="ml-5 font-bold text-gray-500"
-              >
-                SIRET: {{ account.upplerDatas.number }}
-              </label>
-            </div>
+            </label>
           </div>
           <div class="flex justify-end">
-            <button
-              class="button button-gradient w-full lg:w-auto"
-              :disabled="isLoading"
+            <ButtonComponent
+              :is-loading="isLoading"
+              type="button"
+              class="button-gradient w-full lg:w-auto"
               @click="onAccountClick"
             >
-              <div v-show="isLoading">
-                <LoaderSharedComponent />
-              </div>
               <ArrowRightIcon />
               Valider
-            </button>
+            </ButtonComponent>
           </div>
         </div>
       </div>
@@ -177,7 +175,6 @@ import { useUserStore } from '@/vuejs/stores/user'
 import { useAlertStore } from '@/vuejs/stores/alert'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
-import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 import ArrowRightIcon from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import MailIcon from '@/vuejs/modules/shared/icon/MailIconComponent.vue'
 import EyeIcon from '@/vuejs/modules/shared/icon/EyeIconComponent.vue'
@@ -189,7 +186,7 @@ import CGUModal from '@/vuejs/modules/login/component/CGUModal.vue'
 
 const username = ref<string>('')
 const password = ref<string>('')
-const userAccounts = ref<string[]>([])
+const userAccounts = ref<any[]>([])
 const isLoading = ref<boolean>(false)
 const userStore = useUserStore()
 const alertStore = useAlertStore()
