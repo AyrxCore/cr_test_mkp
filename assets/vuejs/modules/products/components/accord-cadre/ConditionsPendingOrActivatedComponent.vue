@@ -97,7 +97,6 @@ const text = computed(() => {
 
 const cta1 = computed(() => {
   if (props.currentStatus.status === status.value.pending) {
-    console.log(props.properties)
     return {
       name: props.properties.cta1_text_pending,
       url: props.properties.cta1_link_pending,
@@ -117,7 +116,7 @@ const cta2 = computed(() => {
     return {
       name: props.properties.cta2_text_pending,
       url: props.properties.cta2_link_pending,
-      mailto: props.properties.cta1_mailto_pending,
+      mailto: props.properties.cta2_mailto_pending,
     }
   } else {
     return {
