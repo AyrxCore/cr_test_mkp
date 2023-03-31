@@ -5,14 +5,14 @@
       class="border border-orange-500 text-orange-500 p-2 flex justify-center lg:w-2/3"
     >
       Votre rattachement est en cours
-      <PendingIconComponent class="text-orange-700 w-5 stroke-gray-500 fill-orange-400 ml-1"/>
+      <PendingIconComponent class="text-orange-700 w-5 stroke-gray-500 fill-orange-400 ml-1" />
     </div>
     <div
       v-else
       class="border border-green-qantis text-green-qantis p-2 flex justify-around lg:w-2/3"
     >
       Vous bénéficiez des conditions
-      <CheckIconComponent class="stroke-green-qantis"/>
+      <CheckIconComponent class="stroke-green-qantis" />
     </div>
     <div class="condition-beneficiaire mt-4">
       <p v-html="text" />
@@ -22,26 +22,51 @@
       class="mt-6 flex flex-col justify-center md:flex-row md:justify-between"
     >
       <ButtonComponent
-        v-if="btnContact"
+        v-if="cta1.name && cta1.url"
         class="button-secondary md:mr-5"
         :class="{
-          'md:w-1/2': btnLink.url,
+          'md:w-1/2': cta2.name && (cta2.url || cta2.mailto),
         }"
+        @click="openInNewTab(cta1.url)"
       >
         <span>
-          {{ btnContact }}
+          {{ cta1.name }}
         </span>
       </ButtonComponent>
+      <a
+        v-else-if="cta1.name && cta1.mailto"
+        class="button button-secondary md:mr-5"
+        :class="{
+          'md:w-1/2': cta2.name && (cta2.url || cta2.mailto),
+        }"
+        :href="cta1.mailto"
+      >
+        <span>
+          {{ cta1.name }}
+        </span>
+      </a>
       <ButtonComponent
-        v-if="btnLink.url"
+        v-if="cta2.name && cta2.url"
         class="button-secondary md:mr-5"
         :class="{
-          'md:w-1/2': btnContact,
+          'md:w-1/2': cta1.name && (cta1.url || cta1.mailto),
         }"
-        @click="openInNewTab(btnLink.url)"
+        @click="openInNewTab(cta2.url)"
       >
-        {{ btnLink.name }}
+        {{ cta2.name }}
       </ButtonComponent>
+      <a
+        v-else-if="cta2.name && cta2.mailto"
+        class="button button-secondary md:mr-5"
+        :class="{
+          'md:w-1/2': cta1.name && (cta1.url || cta1.mailto),
+        }"
+        :href="cta2.mailto"
+      >
+        <span>
+          {{ cta2.name }}
+        </span>
+      </a>
     </div>
   </div>
 </template>
@@ -50,7 +75,7 @@ import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import { openInNewTab } from '@/vuejs/services/utils'
 import { status } from '@/vuejs/modules/products'
 import CheckIconComponent from '@/vuejs/modules/shared/icon/CheckIconComponent.vue'
-import { PropType } from 'vue'
+import { computed, PropType } from 'vue'
 import { AccountAccordCadre } from '@/vuejs/types/AccountAccordCadre'
 import PendingIconComponent from '@/vuejs/modules/shared/icon/PendingIconComponent.vue'
 
@@ -58,21 +83,49 @@ import PendingIconComponent from '@/vuejs/modules/shared/icon/PendingIconCompone
 const props = defineProps({
   currentStatus: {
     type: Object as PropType<AccountAccordCadre>,
-    required: true
+    required: true,
   },
-  text: {
-    type: String,
-    default: null
-  },
-  btnContact: {
-    type: String,
-    default: null
-  },
-  btnLink: {
+  properties: {
     type: Object,
-    default: null
+    default: null,
   },
+})
 
+const text = computed(() => {
+  return props.currentStatus.status === status.value.pending ? props.properties.process_pending : props.properties.process_activated
+})
+
+const cta1 = computed(() => {
+  if (props.currentStatus.status === status.value.pending) {
+    console.log(props.properties)
+    return {
+      name: props.properties.cta1_text_pending,
+      url: props.properties.cta1_link_pending,
+      mailto: props.properties.cta1_mailto_pending,
+    }
+  } else {
+    return {
+      name: props.properties.cta1_text_activated,
+      url: props.properties.cta1_link_activated,
+      mailto: props.properties.cta1_mailto_activated,
+    }
+  }
+})
+
+const cta2 = computed(() => {
+  if (props.currentStatus.status === status.value.pending) {
+    return {
+      name: props.properties.cta2_text_pending,
+      url: props.properties.cta2_link_pending,
+      mailto: props.properties.cta1_mailto_pending,
+    }
+  } else {
+    return {
+      name: props.properties.cta2_text_activated,
+      url: props.properties.cta2_link_activated,
+      mailto: props.properties.cta2_mailto_activated,
+    }
+  }
 })
 </script>
 

@@ -37,18 +37,9 @@
             :accord-name="accord.name"
           />
           <ConditionsPendingOrActivated
-            v-else-if="status.pending === currentStatus.status"
-            :current-status="currentStatus"
-            :text="accord.properties.process_pending"
-            :btn-contact="accord.properties.cta1_text_pending"
-            :btn-link="{name: accord.properties.cta2_text_pending, url: accord.properties.cta2_link_pending}"
-          />
-          <ConditionsPendingOrActivated
             v-else
             :current-status="currentStatus"
-            :text="accord.properties.process_activated"
-            :btn-contact="accord.properties.cta1_text_activated"
-            :btn-link="{name: accord.properties.cta2_text_activated, url: accord.properties.cta2_activated}"
+            :properties="accord.properties"
           />
         </div>
       </div>
