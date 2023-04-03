@@ -55,6 +55,15 @@
             >
               {{ miseEnAvant.buttonName }}
             </ButtonComponent>
+            <a
+              v-else-if="miseEnAvant.buttonMailto"
+              class="button-secondary mt-6 lg:w-1/2"
+              :href="miseEnAvant.buttonMailto"
+            >
+            <span>
+              {{ miseEnAvant.buttonName }}
+            </span>
+            </a>
 
           </div>
         </div>
@@ -72,7 +81,7 @@ import { computed } from 'vue'
 const props = defineProps({
   properties: {
     type: Object,
-    default: null
+    default: null,
   },
 })
 
@@ -80,12 +89,13 @@ const listMiseEnAvant = computed(() => {
   const list = []
   for (let i = 1; i < 4; i++) {
     list.push({
-      title: props.properties['mises_en_avant_'+ i +'_titre'],
-      image: props.properties['mises_en_avant_'+ i +'_img'],
-      video: props.properties['mises_en_avant_'+ i +'_video'],
-      text: props.properties['mises_en_avant_'+ i +'_txt'],
-      buttonName: props.properties['mises_en_avant_'+ i +'_cta_txt'],
-      buttonUrl: props.properties['mises_en_avant_'+ i +'_cta_link'],
+      title: props.properties['mises_en_avant_' + i + '_titre'],
+      image: props.properties['mises_en_avant_' + i + '_img'],
+      video: props.properties['mises_en_avant_' + i + '_video'],
+      text: props.properties['mises_en_avant_' + i + '_txt'],
+      buttonName: props.properties['mises_en_avant_' + i + '_cta_txt'],
+      buttonUrl: props.properties['mises_en_avant_' + i + '_cta_link'],
+      buttonMailto: props.properties['mises_en_avant_' + i + '_cta_mailto'],
     })
   }
   return list.filter(function (el) {
