@@ -57,7 +57,7 @@
             </ButtonComponent>
             <a
               v-else-if="miseEnAvant.buttonMailto"
-              class="button-secondary mt-6 lg:w-1/2"
+              class="button button-secondary mt-6 lg:w-1/2"
               :href="miseEnAvant.buttonMailto"
             >
             <span>
