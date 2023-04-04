@@ -1,5 +1,5 @@
 <template>
-  <BaseTemplate title="Qantis - MarketPlace">
+  <BaseTemplate title="Résultat de recherche de produits | Qantis - MarketPlace">
     <div v-if="isLoading" class="flex h-16 w-full items-center justify-center">
       <LoaderSharedComponent
         class="text-secondary"

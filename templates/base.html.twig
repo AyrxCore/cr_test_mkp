@@ -1,59 +1,60 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}{% endblock %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    {% block javascripts %}
-        {{ vite_asset('main.ts', []) }}
+  <meta charset="UTF-8">
+  <title>{% block title %}{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/pre_home/favicon.svg" sizes="32x32" />
+  {% block javascripts %}
+    {{ vite_asset('main.ts', []) }}
 
-        {# Hamburger menu logic #}
-        <script type="text/javascript">
-          const initApp = () => {
-              const openMenuBtn = document.getElementById('open-menu-button')
-              const closeMenuBtn = document.getElementById('close-menu-button')
-              const mobileMenu = document.getElementById('mobile-menu')
+    {# Hamburger menu logic #}
+    <script type="text/javascript">
+      const initApp = () => {
+        const openMenuBtn = document.getElementById('open-menu-button')
+        const closeMenuBtn = document.getElementById('close-menu-button')
+        const mobileMenu = document.getElementById('mobile-menu')
 
-              const toggleMenu = () => {
-                  openMenuBtn.classList.toggle('hidden')
-                  openMenuBtn.classList.toggle('flex')
-                  closeMenuBtn.classList.toggle('hidden')
-                  closeMenuBtn.classList.toggle('flex')
-                  mobileMenu.classList.toggle('hidden')
-                  mobileMenu.classList.toggle('fixed')
-                  mobileMenu.classList.toggle('flex')
-                  document.body.classList.toggle('overflow-hidden')
-                  document.body.classList.toggle('fixed')
-              }
+        const toggleMenu = () => {
+          openMenuBtn.classList.toggle('hidden')
+          openMenuBtn.classList.toggle('flex')
+          closeMenuBtn.classList.toggle('hidden')
+          closeMenuBtn.classList.toggle('flex')
+          mobileMenu.classList.toggle('hidden')
+          mobileMenu.classList.toggle('fixed')
+          mobileMenu.classList.toggle('flex')
+          document.body.classList.toggle('overflow-hidden')
+          document.body.classList.toggle('fixed')
+        }
 
-              openMenuBtn.addEventListener('click', toggleMenu)
-              closeMenuBtn.addEventListener('click', toggleMenu)
-          }
+        openMenuBtn.addEventListener('click', toggleMenu)
+        closeMenuBtn.addEventListener('click', toggleMenu)
+      }
 
-          document.addEventListener('DOMContentLoaded', initApp)
+      document.addEventListener('DOMContentLoaded', initApp)
 
-          function openModal() {
-            document.getElementById('modal').style.display = 'block';
-          }
+      function openModal() {
+        document.getElementById('modal').style.display = 'block';
+      }
 
-          function closeModal() {
-            document.getElementById('modal').style.display = 'none';
-          }
+      function closeModal() {
+        document.getElementById('modal').style.display = 'none';
+      }
 
-        </script>
-    {% endblock %}
+    </script>
+  {% endblock %}
 
-    {% include '_partials/_gtm-header.html.twig' %}
+  {% include '_partials/_gtm-header.html.twig' %}
 </head>
 <body>
-  {% include '_partials/_gtm-body.html.twig' %}
-  {% block header %}
-    <div class="vue-app" data-component="sticky-contact-buttons"></div>
-    {% include '_partials/_header.html.twig' with {'back_url': false} %}
-  {% endblock %}
+{% include '_partials/_gtm-body.html.twig' %}
+{% block header %}
+  <div class="vue-app" data-component="sticky-contact-buttons"></div>
+  {% include '_partials/_header.html.twig' with {'back_url': false} %}
+{% endblock %}
 
-  {% block body %}
-  {% endblock %}
-  {{ include('_partials/_footer.html.twig') }}
+{% block body %}
+{% endblock %}
+{{ include('_partials/_footer.html.twig') }}
 </body>
 </html>
