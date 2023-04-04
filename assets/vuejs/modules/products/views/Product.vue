@@ -176,7 +176,7 @@
                     {{ key }}
                   </span>
                   <select
-                    v-if="children.length > 1"
+                    v-if="key && children.length > 0"
                     v-model="optionVariant[index]"
                     class="right-0 float-right ml-2 h-[1.75rem] w-1/2 rounded-md border border-[#5E6875] pt-0"
                     @change="updateProductPrice"
