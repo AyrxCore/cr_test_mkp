@@ -148,8 +148,11 @@ const showLineThroughPrice = computed(() => {
 })
 
 const variantId = computed(() => {
-  if (props.product.variants.length > 0) {
-    return props.product.variants[0].id
+  if (props.product.variants.length === 2) {
+    const variant = props.product.variants.filter(function (el) {
+      return el.sku != null
+    })
+    return variant[0].id
   }
   return null
 })

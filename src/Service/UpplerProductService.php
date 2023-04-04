@@ -340,7 +340,6 @@ class UpplerProductService extends HttpClientProvider
         $product->setName($remoteProduct->name->default);
         $product->setDescription($remoteProduct->description->default ?? null);
         $product->setReference($remoteProduct->reference);
-        $product->setVariants($remoteProduct->variants);
         $categories = [];
 
         foreach ($remoteProduct->categories as $category) {
