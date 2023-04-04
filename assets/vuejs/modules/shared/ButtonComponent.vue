@@ -89,6 +89,9 @@ const onClick = ($event: PointerEvent): void => {
     }
     &-primary {
       @apply bg-white text-primary;
+      &:focus:not(:disabled) {
+         @apply bg-white bg-none !text-primary;
+       }
       svg,
       path {
         @apply stroke-primary;

@@ -98,7 +98,7 @@
               name: ProductPageList.PRODUCT,
               params: { id: props.product.id },
             }"
-          class="button !text-secondary border-2 border-secondary hover:!bg-white"
+          class="button !text-secondary border-2 border-secondary hover:!bg-white focus:!bg-white"
         >
           Voir les options
           <ArrowRightIconComponent class="ml-2 w-4 stroke-secondary" />

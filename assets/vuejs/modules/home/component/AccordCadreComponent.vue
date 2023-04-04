@@ -11,9 +11,10 @@
 
     <RouterLink
       :to="{ name: ProductPageList.ACCORD_CADRE, params: { id: accord.id } }"
-      class="button button-white button-white-primary flex justify-center"
+      class="button button-white button-white-primary flex justify-center hover:!text-white"
     >
-      <ArrowRightIconComponent />Découvrir l'accord-cadre
+      <ArrowRightIconComponent />
+      Découvrir l'accord-cadre
     </RouterLink>
   </div>
 </template>
