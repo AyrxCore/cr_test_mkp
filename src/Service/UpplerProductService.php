@@ -191,7 +191,7 @@ class UpplerProductService extends HttpClientProvider
     private function hydrateProductFromList($remoteProduct): Product
     {
         $product = new Product();
-        $this->initHydrateProduct($remoteProduct, $product);
+        $this->initHydrateProduct($remoteProduct, $product, true);
         $product->setVariants($remoteProduct->variants);
 
         $isAccordCadre = $this->isAccordCadre($remoteProduct, $product);
@@ -334,7 +334,7 @@ class UpplerProductService extends HttpClientProvider
         return $filters;
     }
 
-    private function initHydrateProduct($remoteProduct, $product)
+    private function initHydrateProduct($remoteProduct, $product, $fromList = false)
     {
         $product->setId($remoteProduct->id);
         $product->setName($remoteProduct->name->default);
@@ -353,7 +353,9 @@ class UpplerProductService extends HttpClientProvider
             if ($item->isHit()) {
                 $seller = $item->get();
             } else {
-                $seller = $this->upplerSellerService->hydrateSeller($remoteProduct->company);
+                $seller = $fromList ?
+                    $this->upplerSellerService->hydrateSeller($remoteProduct->company) :
+                    $this->upplerSellerService->getSeller($remoteProduct->company->id);
             }
 
             $product->setSeller($seller);

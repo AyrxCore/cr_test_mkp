@@ -200,17 +200,20 @@
               :variant-id="variantId"
             />
           </div>
-          <div class="mt-[25px] h-[auto] rounded-lg bg-white p-5 md:p-7">
+          <div
+            v-if="product.seller.description"
+            class="mt-[25px] h-[auto] rounded-lg bg-white p-5 md:p-7"
+          >
             <h3 class="text-[19px] text-primary md:text-[25px] xl:text-[35px]">
               Livraison et retour
             </h3>
-            <ul class="list-disc text-gray-500">
+            <ul
+              class="list-disc text-gray-500"
+            >
               <li
-                v-for="(livraison, key) in product.livraisons"
-                :key="key"
                 class="mt-1 ml-7 text-sm md:text-base lg:text-lg"
               >
-                {{ livraison }}
+                {{ product.seller.description }}
               </li>
             </ul>
           </div>
