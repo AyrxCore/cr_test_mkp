@@ -89,6 +89,9 @@ class UpplerProductService extends HttpClientProvider
         }
 
         if ($showFilters) {
+            usort($products, function ($a, $b) {
+                return $b->isAccordCadre() - $a->isAccordCadre();
+            });
             return [
                 'filters'       => $this->hydrateFilters($remoteProducts->filters),
                 'results_count' => $remoteProducts->results_count,
