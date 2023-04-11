@@ -33,7 +33,7 @@ class BaseClientService {
         const originalConfig = error.config
         if (error.response?.status === 401 && !originalConfig._retry) {
           if (error.config.url !== 'authentication/token') {
-            document.location.href = '/'
+            location.reload()
           } else {
             console.log(error.config.url)
           }

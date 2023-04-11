@@ -27,3 +27,8 @@ export function formatAddress(address: Address): string {
     address.postcode
   } ${address.city}`
 }
+
+export function getUrlParam(name: string): string | null {
+  let params = new URLSearchParams(document.location.search)
+  return params.get(name)
+}

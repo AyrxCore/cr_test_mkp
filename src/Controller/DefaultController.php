@@ -19,11 +19,14 @@ class DefaultController extends AbstractController
     public function index(Request $request): Response
     {
         $session = $this->requestStack->getSession();
-        $session->start();
 
-        if (!$session->has('account') || empty($session->get('account'))) {
+        if (
+            !$session->has('account') || empty($session->get('account'))
+            || !$session->has('access_token') || empty($session->get('access_token'))
+        ) {
             if ($request->attributes->get('_route') !== 'prehome') {
-                return $this->redirectToRoute('prehome');
+                $path = substr($request->getRequestUri(), 1);
+                return $this->redirectToRoute('prehome', ['target' => $path]);
             }
             return $this->render('index.html.twig');
         }

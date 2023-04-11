@@ -41,7 +41,10 @@ class CartApiController extends AbstractController
         $session = $this->requestStack->getSession();
         $session->start();
 
-        if (!$session->has('account') || empty($session->get('account'))) {
+        if (
+            !$session->has('account') || empty($session->get('account'))
+            || !$session->has('access_token') || empty($session->get('access_token'))
+        ) {
             return $this->redirectToRoute('prehome');
         }
 

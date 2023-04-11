@@ -76,7 +76,7 @@ router.beforeEach(async (to, from, next) => {
   if (!userStore.isLogged) {
     await userStore.getCurrentUserDatas()
     if (!userStore.isLogged) {
-      document.location.href = '/'
+      location.reload()
     }
 
     if (

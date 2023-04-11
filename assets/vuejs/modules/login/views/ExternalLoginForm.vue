@@ -170,19 +170,20 @@
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
-import { useUserStore } from '@/vuejs/stores/user'
-
-import { useAlertStore } from '@/vuejs/stores/alert'
-import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
+import AchetonsEnsembleComponent from '@/vuejs/modules/shared/AchetonsEnsembleComponent.vue'
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
 import ArrowRightIcon from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
-import MailIcon from '@/vuejs/modules/shared/icon/MailIconComponent.vue'
+import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
+import CGUModal from '@/vuejs/modules/login/component/CGUModal.vue'
 import EyeIcon from '@/vuejs/modules/shared/icon/EyeIconComponent.vue'
 import EyeSlashIcon from '@/vuejs/modules/shared/icon/EyeSlashIconComponent.vue'
+import MailIcon from '@/vuejs/modules/shared/icon/MailIconComponent.vue'
+
+import { getUrlParam } from '@/vuejs/services/utils'
 import { PHONE_ANIMATION } from '@/vuejs/services/const'
-import AchetonsEnsembleComponent from '@/vuejs/modules/shared/AchetonsEnsembleComponent.vue'
 import { AlertType } from '@/vuejs/types/Alert'
-import CGUModal from '@/vuejs/modules/login/component/CGUModal.vue'
+import { useAlertStore } from '@/vuejs/stores/alert'
+import { useUserStore } from '@/vuejs/stores/user'
 
 const username = ref<string>('')
 const password = ref<string>('')
@@ -236,7 +237,9 @@ const selectAccount = async (accountId) => {
       event: 'login',
     })
 
-    select && (document.location.href = '/')
+    const target = getUrlParam('target')
+    select && (document.location.href = target ? `/${target}` : '/')
+
     isLoading.value = false
   } else {
     isLoading.value = false
