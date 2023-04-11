@@ -32,7 +32,11 @@ export const PageList = {
 
 const routes: RouteRecordRaw[] = [
   {
-    path: `/`,
+    path: '/',
+    redirect: { name: PageList.HOME_PAGE },
+  },
+  {
+    path: `/home`,
     name: PageList.HOME_PAGE,
     component: Home,
   },
@@ -71,9 +75,8 @@ router.beforeEach(async (to, from, next) => {
 
   if (!userStore.isLogged) {
     await userStore.getCurrentUserDatas()
-    const host = window.location.protocol + '//' + window.location.host
     if (!userStore.isLogged) {
-      window.location.href = host
+      document.location.href = '/'
     }
 
     if (
