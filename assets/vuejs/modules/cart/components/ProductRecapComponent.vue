@@ -3,9 +3,6 @@
     <div class="flex w-full flex-col lg:flex-row">
       <div class="flex w-full flex-col lg:flex-row">
         <div class="my-5 flex lg:w-7/12">
-          <!-- <div class="lg:ml-2">
-            <CheckboxComponent />
-          </div> -->
           <div class="flex h-[116px] w-5/12 lg:w-4/12">
             <img
               :src="productImage"
@@ -14,14 +11,18 @@
             />
           </div>
           <div class="ml-4 w-6/12 lg:w-7/12">
-            <h3 class="text-lg font-bold text-primary lg:text-[22px] flex items-center">
+            <h3
+              class="flex items-center text-lg font-bold text-primary lg:text-[22px]"
+            >
               {{ product.name.default }}
               <span
                 v-if="product && productNotFound"
                 class="text-white"
                 title="Ce produit n'est plus disponible"
               >
-                <WarningIconComponent class=" fill-orange-500 text-primary h-[24px] ml-2"/>
+                <WarningIconComponent
+                  class="ml-2 h-[24px] fill-orange-500 text-primary"
+                />
               </span>
             </h3>
             <!-- <span
@@ -36,14 +37,14 @@
               Référence : {{ product.reference }}
             </span>
             <span
-              class="text-gray-500 cursor-pointer items-center flex text-sm text-gray-500 lg:text-lg"
+              class="flex cursor-pointer items-center text-sm text-gray-500 lg:text-lg"
               @click="variantOptions"
             >
               Détails
               <Chevron2RightIconComponent
                 class="ml-1 text-sm lg:text-lg"
                 :class="{
-                  'mt-4 rotate-90 ease-in-out': isOpen
+                  'mt-4 rotate-90 ease-in-out': isOpen,
                 }"
               />
             </span>
@@ -61,12 +62,11 @@
                 <li
                   v-for="option in options"
                   :key="option.id"
-                  class="ml-3 text-gray-500 text-sm lg:text-base"
+                  class="ml-3 text-sm text-gray-500 lg:text-base"
                 >
-                  <span
-                    v-if="option.option.name.default"
-                    class="font-bold"
-                  >{{ option.option.name.default }} : </span>
+                  <span v-if="option.option.name.default" class="font-bold"
+                    >{{ option.option.name.default }} :
+                  </span>
                   <span class="italic">{{ option.value.default }}</span>
                 </li>
               </ul>
@@ -80,8 +80,7 @@
         <div
           class="mb-4 flex w-full items-center justify-between md:float-right lg:float-none lg:mb-0 lg:w-5/12"
         >
-          <div
-            class="text-center lg:w-2/12">
+          <div class="text-center lg:w-2/12">
             <select
               v-if="!cartStore.modifyingCart"
               :value="item.quantity"
@@ -99,7 +98,7 @@
               <option>9</option>
               <option>10</option>
             </select>
-            <LoaderSharedComponent v-else class="text-primary"/>
+            <LoaderSharedComponent v-else class="text-primary" />
           </div>
           <div class="text-center lg:w-4/12">
             <span class="mt-2 text-sm text-gray-400 line-through lg:text-lg">
@@ -120,10 +119,9 @@
               class="flex text-gray-500"
               @click="deleteProduct"
             >
-              <TrashIconComponent
-                :stroke-color="'#5E6875'"/>
+              <TrashIconComponent :stroke-color="'#5E6875'" />
             </button>
-            <LoaderSharedComponent v-else class="text-primary"/>
+            <LoaderSharedComponent v-else class="text-primary" />
           </div>
         </div>
       </div>
@@ -140,11 +138,12 @@ import { useCartStore } from '@/vuejs/stores/cart'
 import { useProductStore } from '@/vuejs/stores/product'
 import { Product } from '@/vuejs/types/Product'
 
+import Chevron2RightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
 import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
-import sampleImg from '@/vuejs/assets/img/sample_product_img.png'
-import Chevron2RightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
 import WarningIconComponent from '@/vuejs/modules/shared/icon/WarningIconComponent.vue'
+
+import sampleImg from '@/vuejs/assets/img/sample_product_img.png'
 
 const cartStore = useCartStore()
 const productStore = useProductStore()

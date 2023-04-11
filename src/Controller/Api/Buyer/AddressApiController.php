@@ -29,10 +29,6 @@ class AddressApiController extends AbstractController
         $session = $this->requestStack->getSession();
         $session->start();
 
-        if (!$session->has('account') || empty($session->get('account'))) {
-            return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
         $addresses = $this->upplerBuyerCompanyService->getAdresses();
 
         return new JsonResponse($addresses);

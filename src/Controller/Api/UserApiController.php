@@ -49,9 +49,6 @@ class UserApiController extends AbstractController
         $session = $this->requestStack->getSession();
         $session->start();
 
-        if (!$session->has('account') || empty($session->get('account'))) {
-            return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
         $buyerDatas = $this->upplerBuyerCompanyService->getUserBuyerDatas();
         $subAccountDatas = $this->upplerAccountService->getUserSubAccountDatas();
         $user = $normalizer->normalize($this->getUser(), 'json', ['groups' => 'simpleUser']);
@@ -110,7 +107,6 @@ class UserApiController extends AbstractController
         $request->getSession()->invalidate();
         $response = new Response();
         $response->headers->clearCookie('BEARER', '/');
-        $response->headers->clearCookie('refresh_token', '/');
         return $response;
     }
 

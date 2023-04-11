@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Service\Attribute\Required;
 
-#[Route("/api/buyer/cart")]
+#[Route('/api/buyer/cart')]
 class CartApiController extends AbstractController
 {
     #[Required]
@@ -29,10 +29,6 @@ class CartApiController extends AbstractController
     {
         $session = $this->requestStack->getSession();
         $session->start();
-
-        if (!$session->has('account') || empty($session->get('account'))) {
-            return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
 
         $cart = $this->upplerCartService->getCart();
 
@@ -71,10 +67,6 @@ class CartApiController extends AbstractController
     {
         $session = $this->requestStack->getSession();
         $session->start();
-
-        if (!$session->has('account') || empty($session->get('account'))) {
-            return $this->redirectToRoute('prehome');
-        }
 
         $cartResume = new \stdClass();
         $cartResume->cart = $this->upplerCartService->getCartById($cartId);

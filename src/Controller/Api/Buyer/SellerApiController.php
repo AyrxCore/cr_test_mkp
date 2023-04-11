@@ -30,10 +30,6 @@ class SellerApiController extends AbstractController
         $session = $this->requestStack->getSession();
         $session->start();
 
-        if (!$session->has('account') || empty($session->get('account'))) {
-            return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
         $sellers = $this->upplerSellerService->getSellers(16, 3);
 
         return new JsonResponse($sellers);
@@ -44,10 +40,6 @@ class SellerApiController extends AbstractController
     {
         $session = $this->requestStack->getSession();
         $session->start();
-
-        if (!$session->has('account') || empty($session->get('account'))) {
-            return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
 
         $seller = $this->upplerSellerService->getSeller($id);
 

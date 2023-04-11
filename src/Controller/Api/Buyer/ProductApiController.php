@@ -27,22 +27,22 @@ class ProductApiController extends AbstractController
 {
 
     private const HOME_TOP_VENTE_PROPERTY
-        = [
-            'property_id' => '217',
-            'value'       => '5369',
-        ];
+    = [
+        'property_id' => '217',
+        'value'       => '5369',
+    ];
 
     private const HOME_SELECTION_PROPERTY
-        = [
-            'property_id' => '217',
-            'value'       => '5368',
-        ];
+    = [
+        'property_id' => '217',
+        'value'       => '5368',
+    ];
 
     private const HOME_ACCORD_CADRE_PROPERTY
-        = [
-            'property_id' => '217',
-            'value'       => '5367',
-        ];
+    = [
+        'property_id' => '217',
+        'value'       => '5367',
+    ];
 
     #[Required]
     public RequestStack $requestStack;
@@ -68,10 +68,6 @@ class ProductApiController extends AbstractController
         $session->start();
 
         $options = $request->request->all();
-
-        if (!$session->has('account') || empty($session->get('account'))) {
-            return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
 
         $showFilters = false;
         $page = self::PAGE;
@@ -109,20 +105,25 @@ class ProductApiController extends AbstractController
         $session = $this->requestStack->getSession();
         $session->start();
 
-        if (!$session->has('account') || empty($session->get('account'))) {
-            return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
         $params = ['properties', 'price', 'company', 'images'];
 
         $productsTopVente = $this->upplerProductService->findProductsByOptions(
-            ['properties' => [self::HOME_TOP_VENTE_PROPERTY]], $params, self::PAGE, self::PER_PAGE
+            ['properties' => [self::HOME_TOP_VENTE_PROPERTY]],
+            $params,
+            self::PAGE,
+            self::PER_PAGE
         );
         $accordsCadre = $this->upplerProductService->findProductsByOptions(
-            ['properties' => [self::HOME_ACCORD_CADRE_PROPERTY]], ['properties'], self::PAGE, self::PER_PAGE
+            ['properties' => [self::HOME_ACCORD_CADRE_PROPERTY]],
+            ['properties'],
+            self::PAGE,
+            self::PER_PAGE
         );
         $productsSelection = $this->upplerProductService->findProductsByOptions(
-            ['properties' => [self::HOME_SELECTION_PROPERTY]], $params, self::PAGE, self::PER_PAGE
+            ['properties' => [self::HOME_SELECTION_PROPERTY]],
+            $params,
+            self::PAGE,
+            self::PER_PAGE
         );
         $products = new \stdClass();
         $products->topVente = $productsTopVente;
@@ -137,10 +138,6 @@ class ProductApiController extends AbstractController
     {
         $session = $this->requestStack->getSession();
         $session->start();
-
-        if (!$session->has('account') || empty($session->get('account'))) {
-            return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
 
         $resultat = $this->upplerProductService->findAllCategories((string)$session->get('account')->getId());
 
@@ -160,10 +157,6 @@ class ProductApiController extends AbstractController
         $session = $this->requestStack->getSession();
         $session->start();
 
-        if (!$session->has('account') || empty($session->get('account'))) {
-            return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
         $product = $this->upplerProductService->findProductById($id);
 
         return new JsonResponse($product);
@@ -175,10 +168,6 @@ class ProductApiController extends AbstractController
         $session = $this->requestStack->getSession();
         $session->start();
 
-        if (!$session->has('account') || empty($session->get('account'))) {
-            return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
         $variant = $this->upplerProductService->findVariantById($id);
 
         return new JsonResponse($variant);
@@ -189,10 +178,6 @@ class ProductApiController extends AbstractController
     {
         $session = $this->requestStack->getSession();
         $session->start();
-
-        if (!$session->has('account') || empty($session->get('account'))) {
-            return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
 
         $accordCadre = $this->upplerProductService->findProductById(
             $id,
@@ -243,8 +228,8 @@ class ProductApiController extends AbstractController
             $error = true;
             $logger->critical(
                 "Erreur d'envoi de demande de subscription "
-                . $account->getUser()->getemail() . ' ' . $account->getAdherent()->getName() . " : " .
-                $exception->getMessage()
+                    . $account->getUser()->getemail() . ' ' . $account->getAdherent()->getName() . " : " .
+                    $exception->getMessage()
             );
         }
 
@@ -280,5 +265,4 @@ class ProductApiController extends AbstractController
 
         return new JsonResponse($accordStatut->getStatus());
     }
-
 }

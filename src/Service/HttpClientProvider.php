@@ -13,13 +13,8 @@ use Symfony\Component\HttpClient\Exception\ServerException;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\HttpCache\Store;
-use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
@@ -28,13 +23,13 @@ abstract class HttpClientProvider
 
     // Liste des codes retours http considérés comme success
     private const HTTP_SUCCESS_RESPONSES
-        = [
-            Response::HTTP_OK,
-            Response::HTTP_ACCEPTED,
-            Response::HTTP_CREATED,
-            Response::HTTP_NO_CONTENT,
-            Response::HTTP_PARTIAL_CONTENT,
-        ];
+    = [
+        Response::HTTP_OK,
+        Response::HTTP_ACCEPTED,
+        Response::HTTP_CREATED,
+        Response::HTTP_NO_CONTENT,
+        Response::HTTP_PARTIAL_CONTENT,
+    ];
 
     #[Required]
     public LoggerInterface $apiLogger;
@@ -138,6 +133,13 @@ abstract class HttpClientProvider
             $this->getAdminToken();
             $accessToken = $this->adminToken;
         } else {
+            if (
+                !$session->has('account') || empty($session->get('account'))
+                || !$session->has('access_token') || empty($session->get('access_token'))
+            ) {
+                throw new AuthenticationException();
+            }
+
             $accessToken = $session->get('access_token')->access_token;
         }
 
@@ -164,7 +166,8 @@ abstract class HttpClientProvider
     ): void {
         $errorDatas = json_decode($res->getContent(false));
         // le token a expiré
-        if (!is_object($errorDatas->error)
+        if (
+            !is_object($errorDatas->error)
             && 'invalid_grant' === $errorDatas->error
         ) {
             // il s'agit d'une requête admin donc on renégocie un token admin et on relance la requete
@@ -266,5 +269,4 @@ abstract class HttpClientProvider
 
         return null;
     }
-
 }

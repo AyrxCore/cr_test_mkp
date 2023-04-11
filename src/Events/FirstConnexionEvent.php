@@ -2,8 +2,6 @@
 
 namespace App\Events;
 
-
-
 use App\Entity\User;
 use Symfony\Contracts\EventDispatcher\Event;
 
@@ -26,6 +24,4 @@ class FirstConnexionEvent extends Event
         $this->user = $user;
         return $this;
     }
-
-
 }

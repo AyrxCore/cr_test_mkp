@@ -32,18 +32,8 @@ class BaseClientService {
       async (error: AxiosError) => {
         const originalConfig = error.config
         if (error.response?.status === 401 && !originalConfig._retry) {
-          if (
-            error.config.url !== 'token/refresh' &&
-            error.config.url !== 'user/me' &&
-            error.config.url !== 'authentication/token'
-          ) {
-            return await this.refreshToken().then(() => {
-              console.log('error 401 refresh the token ')
-              originalConfig.headers = JSON.parse(
-                JSON.stringify(originalConfig.headers),
-              )
-              return Promise.resolve(this.apiClient(originalConfig))
-            })
+          if (error.config.url !== 'authentication/token') {
+            document.location.href = '/'
           } else {
             console.log(error.config.url)
           }
@@ -64,10 +54,6 @@ class BaseClientService {
     const instance = new this(isPatch)
     this.self = instance
     return instance as InstanceType<T>
-  }
-
-  private async refreshToken() {
-    await this.apiClient.post('token/refresh')
   }
 }
 
