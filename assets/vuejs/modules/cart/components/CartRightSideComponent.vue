@@ -24,12 +24,6 @@
         <div>TOTAL HT :</div>
         <div class="float-right">{{ totalWithoutTaxesDisplayed }}€</div>
       </div>
-      <!-- <div
-        class="mb-2 inline-flex w-full justify-between text-sm text-gray-500 md:text-base xl:text-lg"
-      >
-        <div>TVA :</div>
-        <div class="float-right">{{ tvaDisplayed }}€</div>
-      </div> -->
       <div
         class="inline-flex w-full justify-between text-sm text-gray-500 md:text-base xl:text-lg"
       >
@@ -42,11 +36,8 @@
     </div>
   </div>
   <div v-if="hasPaymentMethods" class="mt-5 flex justify-start">
-    <div
-      v-if="!!CBPaymentMethod"
-      class="mr-4 h-14 items-center rounded-lg bg-white p-5"
-    >
-      <CbIconComponent />
+    <div v-if="!!CBPaymentMethod" class="items-center rounded-lg bg-white p-5">
+      <img class="h-14" :src="cbLogosImg" alt="CB Icons" />
     </div>
     <div
       v-if="!!SEPAPaymentMethod"
@@ -59,16 +50,18 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
-import { formatPrice } from '@/vuejs/services/utils'
 
-import CbIconComponent from '@/vuejs/modules/shared/icon/CbIconComponent.vue'
+import cbLogos from '@/vuejs/assets/img/cb-icons.png'
 import SepaIconComponent from '@/vuejs/modules/shared/icon/SepaIconComponent.vue'
 
+import { formatPrice, getImage } from '@/vuejs/services/utils'
 import { useCartStore } from '@/vuejs/stores/cart'
 
 const cartStore = useCartStore()
 
 const { cart, CBPaymentMethod, SEPAPaymentMethod } = storeToRefs(cartStore)
+
+const cbLogosImg = getImage(cbLogos)
 
 const props = defineProps({
   showNextButton: {
@@ -102,12 +95,6 @@ const totalWithoutTaxesDisplayed = computed((): string => {
 const shipmentPrice = computed((): string => {
   return formatPrice(
     (cart.value.total_excluding_taxes - subTotalWithoutTaxes.value) / 100,
-  )
-})
-
-const tvaDisplayed = computed((): string => {
-  return formatPrice(
-    (cart.value.total - cart.value.total_excluding_taxes) / 100,
   )
 })
 

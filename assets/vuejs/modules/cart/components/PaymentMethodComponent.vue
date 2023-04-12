@@ -3,7 +3,7 @@
     <slot name="method-icon" />
     <ButtonComponent
       :is-loading="isLoading"
-      class="button-gradient mt-4"
+      class="button-gradient mt-4 !whitespace-normal"
       @click="chosePaymentMethod"
     >
       Choisir le paiement par {{ method.name.default }}
@@ -32,8 +32,11 @@ const isLoading = ref<boolean>(false)
 const chosePaymentMethod = async () => {
   isLoading.value = true
   const payment = await cartStore.updateCartPaymentMethod(props.method.id)
-  // isLoading.value = false
-  window.location.replace(payment.payment_url)
+  if (payment.payment_url) {
+    window.location.replace(payment.payment_url)
+  } else {
+    isLoading.value = false
+  }
 }
 </script>
 

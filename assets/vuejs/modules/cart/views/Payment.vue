@@ -10,7 +10,7 @@
         class="lg:mr-4"
       >
         <template #method-icon>
-          <CbIconComponent class="m-auto" />
+          <img class="m-auto h-20" :src="cbLogosImg" alt="CB Icons" />
         </template>
       </PaymentMethodComponent>
       <!-- <PaymentMethodComponent
@@ -35,15 +35,18 @@ import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import CartRightSideComponent from '@/vuejs/modules/cart/components/CartRightSideComponent.vue'
-import CbIconComponent from '@/vuejs/modules/shared/icon/CbIconComponent.vue'
 import PaymentMethodComponent from '@/vuejs/modules/cart/components/PaymentMethodComponent.vue'
 import SepaIconComponent from '@/vuejs/modules/shared/icon/SepaIconComponent.vue'
+import cbLogos from '@/vuejs/assets/img/cb-icons.png'
 
+import { formatPrice, getImage } from '@/vuejs/services/utils'
 import { useCartStore } from '@/vuejs/stores/cart'
 
 const cartStore = useCartStore()
 
 const { CBPaymentMethod, SEPAPaymentMethod } = storeToRefs(cartStore)
+
+const cbLogosImg = getImage(cbLogos)
 </script>
 
 <style scoped></style>
