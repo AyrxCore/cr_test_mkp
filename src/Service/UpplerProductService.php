@@ -97,7 +97,7 @@ class UpplerProductService extends HttpClientProvider
                 'results_count' => $remoteProducts->results_count,
                 'page'          => $remoteProducts->page,
                 'results'       => $products,
-                'parameters'       => $remoteProducts->parameters,
+                'parameters'    => $remoteProducts->parameters,
             ];
         } else {
             return $products;
@@ -158,7 +158,7 @@ class UpplerProductService extends HttpClientProvider
         return json_decode($res->getContent());
     }
 
-    public function findAllCategories(string $accountId, int $page = 1, int $perPage = 1): \stdClass | null
+    public function findAllCategories(string $accountId, int $page = 1, int $perPage = 1): \stdClass|null
     {
         $this->cache->clear();
         $item = $this->cache->getItem('categories_' . $accountId);
@@ -168,7 +168,7 @@ class UpplerProductService extends HttpClientProvider
 
             $res = $this->request(
                 'POST',
-                $this->apiUrl . 'v1/buyer/search/product?page='.$page.'&perPage=' . $perPage,
+                $this->apiUrl . 'v1/buyer/search/product?page=' . $page . '&perPage=' . $perPage,
             );
 
             if (Response::HTTP_OK !== $res->getStatusCode()) {
@@ -182,7 +182,6 @@ class UpplerProductService extends HttpClientProvider
         }
 
         return $item->get();
-
     }
 
     /**
@@ -299,11 +298,11 @@ class UpplerProductService extends HttpClientProvider
     private function hydrateFilters($remoteFilters): array
     {
         $filters = [];
-        if(!empty($remoteFilters->company)) {
+        if (!empty($remoteFilters->company)) {
             $filters['companies'] = $remoteFilters->company;
         }
 
-        if(!empty($remoteFilters->property)) {
+        if (!empty($remoteFilters->property)) {
             foreach ($remoteFilters->property as $property) {
                 if ($property->id === 217) {
                     continue;
@@ -313,7 +312,7 @@ class UpplerProductService extends HttpClientProvider
                     $newChild = new Property();
                     $newChild->setId($propChild->id);
                     $newChild->setName($propChild->name);
-                    $newChild->setValue($propChild->value);
+                    $newChild->setValue((string)$propChild->value);
                     $newChild->setChecked($propChild->checked);
                     $child[$propChild->value] = $newChild;
                 }
@@ -330,7 +329,7 @@ class UpplerProductService extends HttpClientProvider
         }
 
 
-        if(!empty($remoteFilters->category)) {
+        if (!empty($remoteFilters->category)) {
             $filters['categories'] = $remoteFilters->category;
         }
 
@@ -355,8 +354,10 @@ class UpplerProductService extends HttpClientProvider
             if ($item->isHit()) {
                 $seller = $item->get();
             } else {
-                $seller = $fromList ?
-                    $this->upplerSellerService->hydrateSeller($remoteProduct->company) :
+                $seller = $fromList
+                    ?
+                    $this->upplerSellerService->hydrateSeller($remoteProduct->company)
+                    :
                     $this->upplerSellerService->getSeller($remoteProduct->company->id);
             }
 
@@ -402,4 +403,5 @@ class UpplerProductService extends HttpClientProvider
             $product->setPrice($price);
         }
     }
+
 }
