@@ -102,5 +102,4 @@ class UserAccountPersister implements ContextAwareDataPersisterInterface
     {
         // TODO: Implement remove() method.
     }
-
 }

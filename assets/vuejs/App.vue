@@ -1,5 +1,8 @@
 <template>
-  <RouterView v-if="props.component === ''" />
+  <template v-if="props.component === ''">
+    <RouterView />
+    <NotifComponent />
+  </template>
   <LoginForm v-else-if="props.component === 'login'" />
   <PartnersCarousel v-else-if="props.component === 'partners-carousel'" />
   <ArrowRightIconComponent v-else-if="props.component === 'arrow-right-icon'" />
@@ -19,6 +22,8 @@ import StickyContactButtons from '@/vuejs/modules/shared/StickyContactButtonsCom
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import ArrowLeftIconComponent from '@/vuejs/modules/shared/icon/ArrowLeftIconComponent.vue'
 import FormComponent from '@/vuejs/modules/contact/component/FormComponent.vue'
+import NotifComponent from '@/vuejs/modules/shared/NotifComponent.vue'
+
 import { useCategoryStore } from '@/vuejs/stores/category'
 import { useBuyerCompanyStore } from '@/vuejs/stores/buyer_company'
 import { useCartStore } from '@/vuejs/stores/cart'

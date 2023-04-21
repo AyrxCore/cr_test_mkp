@@ -1,8 +1,5 @@
 import { defineStore } from 'pinia'
-import { useAlertStore } from '@/vuejs/stores/alert'
-import { AlertType } from '@/vuejs/types/Alert'
-import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
-import { getErrorMessage } from '@/vuejs/services/login'
+
 import CartHttpClient from '@/vuejs/services/httpclient/CartHttpClient'
 import {
   CartAddressesUpdate,
@@ -11,133 +8,108 @@ import {
   OrderItemQuantityUpdate,
   OrderShippingUpdate,
   PaymentMethod,
-  CartPaymentMethodUpdated, Cart,
+  CartPaymentMethodUpdated,
+  Cart,
 } from '@/vuejs/types/Cart'
+
+import { notifyError } from '@/vuejs/services/utils'
 
 export const useCartStore = defineStore({
   id: 'cart',
   state: (): CartStoreState => ({
     cart: null,
     termsOfSales: [],
-    newlyAddedProduct: 0,
+    newlyAddedProducts: [],
     modifyingCart: false,
   }),
 
   actions: {
     async getCart(): Promise<void> {
-      const alertStore = useAlertStore()
       try {
         this.cart = await CartHttpClient.get().getCartAsBuyer()
-        this.newlyAddedProduct = 0
+        this.newlyAddedProducts = []
       } catch (error) {
-        console.log(error)
-        error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow(
-            getErrorMessage(error.response.data.message),
-            AlertType.danger,
-          )
+        notifyError(
+          `Une erreur est survenue lors du chargement du panier, merci de contacter un administrateur.`,
+        )
       }
     },
     async addProductToCart(variantId: number, quantity: number): Promise<void> {
-      const alertStore = useAlertStore()
       try {
         await CartHttpClient.get().addProductToCartAsBuyer({
           cartId: this.cart.id,
           variantId,
           quantity,
         })
-        this.newlyAddedProduct++
+        this.newlyAddedProducts.indexOf(variantId) === -1 &&
+          this.newlyAddedProducts.push(variantId)
       } catch (error) {
-        console.log(error)
-        error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow(
-            getErrorMessage(error.response.data.message),
-            AlertType.danger,
-          )
+        notifyError(
+          `L'ajout au panier est impossible, merci de contacter un administrateur.`,
+        )
+        throw new Error()
       }
     },
     async updateProductQuantity(data: OrderItemQuantityUpdate): Promise<void> {
-      const alertStore = useAlertStore()
       try {
         await CartHttpClient.get(true).updateCartAsBuyer(data)
       } catch (error) {
-        console.log(error)
-        error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow(
-            getErrorMessage(error.response.data.message),
-            AlertType.danger,
-          )
+        notifyError(
+          `Une erreur est survenue lors de la modification du panier, merci de contacter un administrateur.`,
+        )
+        throw new Error()
       }
     },
     async deleteProduct(id: number): Promise<void> {
-      const alertStore = useAlertStore()
       try {
         await CartHttpClient.get().deleteProductFromCartAsBuyer(id)
       } catch (error) {
-        console.log(error)
-        error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow(
-            getErrorMessage(error.response.data.message),
-            AlertType.danger,
-          )
+        notifyError(
+          `Une erreur est survenue lors de la modification du panier, merci de contacter un administrateur.`,
+        )
+        throw new Error()
       }
     },
     async updateCartAddress(data: CartAddressesUpdate): Promise<void> {
-      const alertStore = useAlertStore()
       try {
         await CartHttpClient.get(true).updateCartAdresses(data)
         this.cart.shipping_address = { id: data.shippingAddressId }
         this.cart.billing_address = { id: data.billingAddressId }
       } catch (error) {
-        console.log(error)
-        error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow(
-            getErrorMessage(error.response.data.message),
-            AlertType.danger,
-          )
+        notifyError(
+          `Une erreur est survenue lors du choix de l'adresse, merci de contacter un administrateur.`,
+        )
       }
     },
     async updateOrderShipping(data: OrderShippingUpdate): Promise<void> {
-      const alertStore = useAlertStore()
       try {
         await CartHttpClient.get(true).updateOrderShipping(data)
       } catch (error) {
-        console.log(error)
-        error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow(
-            getErrorMessage(error.response.data.message),
-            AlertType.danger,
-          )
+        notifyError(
+          `Une erreur est survenue lors du choix de l'adresse, merci de contacter un administrateur.`,
+        )
       }
     },
     async updateCartPaymentMethod(
       paymentMethodId: number,
     ): Promise<CartPaymentMethodUpdated> {
-      const alertStore = useAlertStore()
       try {
         return await CartHttpClient.get(true).updateCartPaymentMethod({
           cartId: this.cart.id,
           paymentMethodId: paymentMethodId,
         })
       } catch (error) {
-        console.log(error)
-        error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow(
-            getErrorMessage(error.response.data.message),
-            AlertType.danger,
-          )
+        notifyError(
+          `Une erreur est survenue lors du choix du paiement, merci de contacter un administrateur.`,
+        )
       }
     },
     async findCartById(id: number): Promise<Cart> {
-      const alertStore = useAlertStore()
       try {
         return await CartHttpClient.get().findCartById(id)
       } catch (error) {
-        console.log(error)
-        error.response.status === HttpStatusCodes.unauthorized &&
-        alertStore.setShow(
-          getErrorMessage(error.response.data.message),
-          AlertType.danger,
+        notifyError(
+          `Une erreur est survenue, merci de contacter un administrateur.`,
         )
       }
     },
@@ -149,7 +121,7 @@ export const useCartStore = defineStore({
       this.cart?.orders?.forEach((order: Order) => {
         nbProducts += order.items.length
       })
-      return nbProducts + this.newlyAddedProduct
+      return nbProducts + this.newlyAddedProducts.length
     },
     hasAllTermsChecked(): boolean {
       return this.termsOfSales.length === this.cart?.orders.length

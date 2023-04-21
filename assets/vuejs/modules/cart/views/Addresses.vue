@@ -88,15 +88,15 @@ import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
-import CartRightSideComponent from '@/vuejs/modules/cart/components/CartRightSideComponent.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
+import CartRightSideComponent from '@/vuejs/modules/cart/components/CartRightSideComponent.vue'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 
-import { formatAddress } from '@/vuejs/services/utils'
-import { useCartStore } from '@/vuejs/stores/cart'
-import { useBuyerCompanyStore } from '@/vuejs/stores/buyer_company'
-import { Address } from '@/vuejs/types/Address'
 import { CartPageList } from '@/vuejs/router/pages-list'
+import { formatAddress, notifyError } from '@/vuejs/services/utils'
+import { useBuyerCompanyStore } from '@/vuejs/stores/buyer_company'
+import { useCartStore } from '@/vuejs/stores/cart'
+import { Address } from '@/vuejs/types/Address'
 
 const router = useRouter()
 const cartStore = useCartStore()
@@ -148,13 +148,21 @@ const selectedBillingAddressId = ref<number>(0)
 const isLoading = ref<boolean>(false)
 
 const goToPayment = (): void => {
+  if (!selectedBillingAddress.value || !selectedShippingAddress.value) {
+    notifyError(
+      'Veuillez sélectionner une adresse de facturation et de livraison pour continuer.',
+    )
+    return
+  }
   router.push({ name: CartPageList.PAYMENT })
 }
 
 const selectAddress = async (type: string): Promise<void> => {
   const data = {
-    shippingAddressId: selectedShippingAddress.value.id,
-    billingAddressId: selectedBillingAddress.value.id,
+    shippingAddressId:
+      selectedShippingAddress.value?.id || cartStore.cart.shipping_address?.id,
+    billingAddressId:
+      selectedBillingAddress.value?.id || cartStore.cart.billing_address?.id,
   }
   if (type === 'shipping') {
     data.shippingAddressId = selectedShippingAddressId.value

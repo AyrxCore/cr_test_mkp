@@ -207,19 +207,27 @@ const referencePriceDisplayed = computed((): string => {
 const modifyQuantity = async (event: InputEvent): Promise<void> => {
   if (cartStore.modifyingCart) return
   cartStore.modifyingCart = true
-  await cartStore.updateProductQuantity({
-    id: props.item.id,
-    quantity: parseInt(event.target.value),
-  })
-  await cartStore.getCart()
-  cartStore.modifyingCart = false
+  try {
+    await cartStore.updateProductQuantity({
+      id: props.item.id,
+      quantity: parseInt(event.target.value),
+    })
+    await cartStore.getCart()
+  } catch (e) {
+  } finally {
+    cartStore.modifyingCart = false
+  }
 }
 
 const deleteProduct = async (): Promise<void> => {
   if (cartStore.modifyingCart) return
-  cartStore.modifyingCart = true
-  await cartStore.deleteProduct(props.item.id)
-  await cartStore.getCart()
-  cartStore.modifyingCart = false
+  try {
+    cartStore.modifyingCart = true
+    await cartStore.deleteProduct(props.item.id)
+    await cartStore.getCart()
+  } catch (e) {
+  } finally {
+    cartStore.modifyingCart = false
+  }
 }
 </script>

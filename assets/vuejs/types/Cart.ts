@@ -13,7 +13,7 @@ interface Currency {
 export interface CartStoreState {
   cart?: Cart
   termsOfSales: number[]
-  newlyAddedProduct: number
+  newlyAddedProducts: number[]
   modifyingCart: boolean
 }
 

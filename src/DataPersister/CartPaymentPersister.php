@@ -7,15 +7,18 @@ namespace App\DataPersister;
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 use App\Dto\CartPayment;
 use App\Service\UpplerCartService;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Service\Attribute\Required;
 
 class CartPaymentPersister implements ContextAwareDataPersisterInterface
 {
     #[Required]
     public UpplerCartService $upplerCartService;
+
+    #[Required]
+    public Security $security;
 
     public function supports($data, array $context = []): bool
     {
@@ -33,6 +36,13 @@ class CartPaymentPersister implements ContextAwareDataPersisterInterface
                 $data->getPaymentMethodId(),
             );
             if ($result) {
+                if (is_null($result->payment_url)) {
+                    $user = $this->security->getUser();
+                    \Sentry\withScope(function (\Sentry\State\Scope $scope) use ($user): void {
+                        $scope->setUser(['email' => $user->getEmail()]);
+                        \Sentry\captureMessage('URL de paiement non présente');
+                    });
+                }
                 return new JsonResponse($result);
             }
 

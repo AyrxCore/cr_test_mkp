@@ -1,4 +1,6 @@
 import { ref } from 'vue'
+import { notify } from 'notiwind'
+
 import { Address } from '../types/Address'
 import imgDefault from '@/vuejs/assets/img/default-image.png'
 
@@ -31,4 +33,16 @@ export function formatAddress(address: Address): string {
 export function getUrlParam(name: string): string | null {
   let params = new URLSearchParams(document.location.search)
   return params.get(name)
+}
+
+export function notifyError(text: string, time: number = 5000): void {
+  notify(
+    {
+      group: 'notif',
+      type: 'error',
+      title: 'Une erreur est survenue',
+      text: text,
+    },
+    5000,
+  )
 }

@@ -7,7 +7,9 @@
       <PaymentMethodComponent
         v-if="CBPaymentMethod"
         :method="CBPaymentMethod"
+        :is-loading="isCBLoading"
         class="lg:mr-4"
+        @selectMethod="selectCB"
       >
         <template #method-icon>
           <img class="m-auto h-20" :src="cbLogosImg" alt="CB Icons" />
@@ -39,14 +41,31 @@ import PaymentMethodComponent from '@/vuejs/modules/cart/components/PaymentMetho
 import SepaIconComponent from '@/vuejs/modules/shared/icon/SepaIconComponent.vue'
 import cbLogos from '@/vuejs/assets/img/cb-icons.png'
 
-import { formatPrice, getImage } from '@/vuejs/services/utils'
+import { notifyError } from '@/vuejs/services/utils'
+import { getImage } from '@/vuejs/services/utils'
 import { useCartStore } from '@/vuejs/stores/cart'
 
 const cartStore = useCartStore()
 
 const { CBPaymentMethod, SEPAPaymentMethod } = storeToRefs(cartStore)
+const isCBLoading = ref<boolean>(false)
 
 const cbLogosImg = getImage(cbLogos)
+
+const selectCB = async () => {
+  isCBLoading.value = true
+  const payment = await cartStore.updateCartPaymentMethod(
+    CBPaymentMethod.value.id,
+  )
+  if (payment.payment_url) {
+    window.location.replace(payment.payment_url)
+  } else {
+    notifyError(
+      `Le paiement est impossible, merci de contacter un administrateur.`,
+    )
+    isCBLoading.value = false
+  }
+}
 </script>
 
 <style scoped></style>

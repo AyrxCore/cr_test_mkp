@@ -73,7 +73,7 @@ class CartApiController extends AbstractController
 
         $cartResume = new \stdClass();
         $cartResume->cart = $this->upplerCartService->getCartById($cartId);
-        $cartResume->confirmation = $this->upplerCartService->isPaymentConfirmed($cartId);
+        // $cartResume->confirmation = $this->upplerCartService->isPaymentConfirmed($cartId);
 
         return new JsonResponse($cartResume);
     }

@@ -46,33 +46,35 @@ const addProductToCart = async (): Promise<void> => {
   const priceValue = props.price ?? props.product.price?.displayPrice
   if (!cartStore.cart) return
   isLoading.value = true
-  await cartStore.addProductToCart(props.variantId, props.quantity)
-  isLoading.value = false
-  window.dataLayer.push({ ecommerce: null })
-  const itemObject = {
-    item_id: props.product.id,
-    item_name: props.product.name,
-    affiliation: props.product.seller.name, // Nom du partenaire
-    item_variant: props.variantId,
-    price: priceValue,
-    quantity: props.quantity,
-    item_category: null,
-  }
-  const categories = Object.entries(props.product.categories)
-  if (categories.length > 0) {
-    itemObject.item_category = categories[0][1]
-  }
+  try {
+    await cartStore.addProductToCart(props.variantId, props.quantity)
+    window.dataLayer.push({ ecommerce: null })
+    const itemObject = {
+      item_id: props.product.id,
+      item_name: props.product.name,
+      affiliation: props.product.seller.name, // Nom du partenaire
+      item_variant: props.variantId,
+      price: priceValue,
+      quantity: props.quantity,
+      item_category: null,
+    }
+    const categories = Object.entries(props.product.categories)
+    if (categories.length > 0) {
+      itemObject.item_category = categories[0][1]
+    }
 
-  await window.dataLayer?.push({
-    event: 'add_to_cart',
-    ecommerce: {
-      currency: 'EUR',
-      value: priceValue,
-      items: [
-        itemObject,
-      ],
-    },
-  })
+    await window.dataLayer?.push({
+      event: 'add_to_cart',
+      ecommerce: {
+        currency: 'EUR',
+        value: priceValue,
+        items: [itemObject],
+      },
+    })
+  } catch (e) {
+  } finally {
+    isLoading.value = false
+  }
 }
 </script>
 
