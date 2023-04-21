@@ -9,16 +9,12 @@ use App\Dto\CartPayment;
 use App\Service\UpplerCartService;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Service\Attribute\Required;
 
 class CartPaymentPersister implements ContextAwareDataPersisterInterface
 {
     #[Required]
     public UpplerCartService $upplerCartService;
-
-    #[Required]
-    public Security $security;
 
     public function supports($data, array $context = []): bool
     {
@@ -37,11 +33,7 @@ class CartPaymentPersister implements ContextAwareDataPersisterInterface
             );
             if ($result) {
                 if (is_null($result->payment_url)) {
-                    $user = $this->security->getUser();
-                    \Sentry\withScope(function (\Sentry\State\Scope $scope) use ($user): void {
-                        $scope->setUser(['email' => $user->getEmail()]);
-                        \Sentry\captureMessage('URL de paiement non présente');
-                    });
+                    \Sentry\captureMessage('URL de paiement non présente');
                 }
                 return new JsonResponse($result);
             }
