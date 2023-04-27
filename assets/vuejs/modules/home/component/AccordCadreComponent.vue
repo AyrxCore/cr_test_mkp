@@ -10,7 +10,10 @@
     </p>
 
     <RouterLink
-      :to="{ name: ProductPageList.ACCORD_CADRE, params: { id: accord.id } }"
+      :to="{
+        name: ProductPageList.ACCORD_CADRE,
+        params: { id: accord.reference + '-' + accord.id },
+      }"
       class="button button-white button-white-primary flex justify-center hover:!text-white"
     >
       <ArrowRightIconComponent />
