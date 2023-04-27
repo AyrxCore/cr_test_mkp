@@ -1,9 +1,30 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="mb-2 mt-2 text-title-35 text-primary md:mt-0">
-        Mes produits favoris
-      </h3>
+      <div
+        class="mt-2 flex flex-col md:mt-5 md:flex-row md:justify-between lg:mt-0"
+      >
+        <h3 class="mb-2 mt-2 text-title-35 text-primary md:mt-0">
+          Mes produits favoris
+        </h3>
+        <ButtonComponent
+          class="button-white button-white-secondary mb-2 md:mb-0"
+          @click="openFavoriteForm"
+        >
+          Nouvelle liste
+        </ButtonComponent>
+      </div>
+
+      <FavoriteFormModal
+        v-if="showFormFavorite"
+        class="modal"
+        :is-loading="isLoading"
+        @cancel="showFormFavorite = false"
+        @submit-favorite="onSubmitFavorite"
+      />
+      <div v-if="showAlert" class="lg:w-5/6">
+        <AlertSharedComponent />
+      </div>
       <div
         class="mt-10 mb-2.5 hidden items-center px-2.5 text-sm text-gray-500 md:flex lg:text-base"
       >
@@ -13,44 +34,104 @@
         <div class="w-2/12">Nombre d'articles</div>
         <div class="w-1/12"></div>
       </div>
-      <div class="flex flex-row flex-wrap justify-between">
-        <FavoritesProductsComponent
-          v-for="(favorite, key) in listFavorites"
-          :key="key"
-          :favorite="favorite"
+      <div
+        v-if="isLoading"
+        class="mt-5 flex h-20 w-full items-center justify-center"
+      >
+        <LoaderSharedComponent
+          class="text-secondary"
+          classes="loader-xl loader"
         />
+      </div>
+      <div v-else>
+        <div
+          v-if="favorites.length === 0"
+          class="mt-5 flex flex-row flex-wrap justify-center rounded-lg bg-white py-2 text-sm text-gray-600 md:text-base lg:text-lg"
+        >
+          Aucune liste de favori n'a été créée
+        </div>
+        <div v-else class="flex flex-row flex-wrap justify-between">
+          <FavoritesProductsComponent
+            v-for="(favorite, key) in favorites"
+            :key="key"
+            :favorite="favorite"
+            :can-delete="favorite.accountId === user.account.id"
+            @submit-favorite="onSubmitFavorite"
+            @delete-favorite="onDeleteFavorite"
+            @cancel="showFormFavorite = false"
+          />
+        </div>
       </div>
     </template>
   </AccountPage>
 </template>
 <script lang="ts" setup>
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import FavoritesProductsComponent from '@/vuejs/modules/account/components/FavoriteProductComponent.vue'
-import { AccountPageList } from '@/vuejs/router/pages-list'
+import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
+import FavoriteFormModal from '@/vuejs/modules/account/components/Favorite/FavoriteAddEditModal.vue'
+import { useFavoriteStore } from '@/vuejs/stores/favorite'
+import { storeToRefs } from 'pinia'
+import { useAlertStore } from '@/vuejs/stores/alert'
+import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
+import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
+import { useUserStore } from '@/vuejs/stores/user'
 
-const tab = computed(() => {
-  return AccountPageList.FAVORITES_LIST
+const userStore = useUserStore()
+const { user } = storeToRefs(userStore)
+const alertStore = useAlertStore()
+const showFormFavorite = ref<boolean>(false)
+const deleteFavorite = ref<boolean>(false)
+const favoriteStore = useFavoriteStore()
+const isLoading = ref<boolean>(false)
+const { show: showAlert } = storeToRefs(alertStore)
+
+onMounted(async () => {
+  isLoading.value = true
+  await favoriteStore.fetchFavorites()
+  isLoading.value = false
 })
+const openFavoriteForm = () => {
+  showFormFavorite.value = true
+}
 
-const listFavorites = computed(() => {
-  const articles = []
-  const nomListe = ['Bureau', 'Véhicules', 'Autres']
-  const dateCreate = ['01/01/2022', '07/04/2022', '19/08/2022']
-  const dateUpdate = ['09/01/2022', '22/04/2022', '04/09/2022']
+const onSubmitFavorite = async (event) => {
+  isLoading.value = true
+  try {
+    if (event.isEditing) {
+      await favoriteStore.update(event.favorite)
+    } else {
+      await favoriteStore.create(event.favorite)
+    }
+    await favoriteStore.fetchFavorites()
+    showFormFavorite.value = false
+  } catch (error) {}
 
-  for (let i = 0; i < 3; i++) {
-    const rndNb = Math.floor(Math.random() * 6) + 1
+  isLoading.value = false
+}
 
-    articles.push({
-      name: nomListe[i],
-      dateCreate: dateCreate[i],
-      dateUpdate: dateUpdate[i],
-      numberArticle: rndNb,
-    })
-  }
+const onDeleteFavorite = async (event) => {
+  isLoading.value = true
+  try {
+    if (event.selectedFavoriteId) {
+      await favoriteStore.deleteFavoriteAndMoveProductToOtherFavorite(
+        event.favoriteId,
+        event.selectedFavoriteId,
+      )
+    } else {
+      await favoriteStore.delete(event.favoriteId)
+    }
 
-  return articles
+    await favoriteStore.fetchFavorites()
+    deleteFavorite.value = false
+  } catch (error) {}
+
+  isLoading.value = false
+}
+
+const favorites = computed(() => {
+  return favoriteStore.favorites
 })
 </script>
 

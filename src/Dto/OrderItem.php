@@ -6,10 +6,21 @@ namespace App\Dto;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\Api\Buyer\OrderApiController;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    collectionOperations: ['POST'],
+    collectionOperations: [
+        'POST',
+        'post_multiple_item_to_cart' => [
+            'openapi_context' => [
+                'summary' => 'Add multiple item to cart',
+            ],
+            'method' => 'POST',
+            'path' => '/order_items/multiple',
+            'controller' => OrderApiController::class,
+        ]
+    ],
     itemOperations: [
         'get',
         'update' => [

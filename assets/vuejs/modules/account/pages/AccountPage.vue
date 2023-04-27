@@ -5,13 +5,6 @@
       <div class="w-[100%] max-w-screen-2xl">
         <ContactUsButtonComponent />
       </div>
-      <RouterLink
-        :to="{ name: MainPageList.HOME_PAGE }"
-        class="my-4 flex items-center text-[14px] text-secondary lg:my-7"
-      >
-        <ArrowLeftIconComponent class="mr-2" />
-        Retour sur la page d'accueil
-      </RouterLink>
       <div class="m-auto max-w-screen-2xl">
         <slot name="header" />
         <div class="mt-10 gap-11 xl:grid xl:grid-cols-4">
@@ -30,8 +23,6 @@
                     <p class="font-bold text-gray-500">
                       {{ user.account.buyer.name }}
                     </p>
-                    <!-- <p class="mb-4 text-gray-500">Statut:</p> -->
-
                     <p
                       v-if="user.account.adherent.reducceCode"
                       class="font-bold text-gray-500"
@@ -105,7 +96,6 @@ import { useUserStore } from '@/vuejs/stores/user'
 import { storeToRefs } from 'pinia'
 
 import AccountSidebar from '@/vuejs/modules/account/components/sidebar/AccountSidebar.vue'
-import ArrowLeftIconComponent from '@/vuejs/modules/shared/icon/ArrowLeftIconComponent.vue'
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightIconComponent.vue'
@@ -114,7 +104,6 @@ import DisconnectIconComponent from '@/vuejs/modules/shared/icon/DisconnectIconC
 import DropdownListComponent from '@/vuejs/modules/shared/DropdownListComponent.vue'
 
 import { MAIL_ANIMATION, PHONE_ANIMATION } from '@/vuejs/services/const'
-import { MainPageList } from '@/vuejs/router/pages-list'
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)

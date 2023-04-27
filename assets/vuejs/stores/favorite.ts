@@ -1,0 +1,138 @@
+import { defineStore } from 'pinia'
+import { Favorite } from '@/vuejs/types/Favorite'
+import { useAlertStore } from '@/vuejs/stores/alert'
+import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
+import { getErrorMessage } from '@/vuejs/services/login'
+import { AlertType } from '@/vuejs/types/Alert'
+import FavoriteHttpClient from '@/vuejs/services/httpclient/FavoriteHttpClient'
+
+export interface FavoriteStoreState {
+  favorites?: Favorite[]
+  favorite: Favorite
+}
+
+export const useFavoriteStore = defineStore({
+  id: 'favorite',
+  state: (): FavoriteStoreState => ({
+    favorites: [],
+    favorite: null,
+  }),
+
+  actions: {
+    async fetchFavorites() {
+      const alertStore = useAlertStore()
+      try {
+        this.favorites = await FavoriteHttpClient.get().fetchList()
+      } catch (error) {
+        error.response.status === HttpStatusCodes.unauthorized &&
+          alertStore.setShow(
+            getErrorMessage(error.response.data.message),
+            AlertType.danger,
+          )
+      }
+    },
+    async create(favorite: Favorite) {
+      const alertStore = useAlertStore()
+      try {
+        await FavoriteHttpClient.get().create(favorite)
+        alertStore.setShow('Votre liste a été créée', AlertType.success)
+      } catch (error) {
+        alertStore.setShow(
+          `Il existe déjà un favori avec le libellé <strong>${favorite.name}</strong>`,
+          AlertType.danger,
+        )
+      }
+    },
+    async findFavoriteById(id) {
+      return await FavoriteHttpClient.get().findFavoriteById(id)
+    },
+
+    async update(favorite: Favorite) {
+      const alertStore = useAlertStore()
+      try {
+        await FavoriteHttpClient.get(true).update(favorite)
+        alertStore.setShow(
+          `La liste <strong>${favorite.name}</strong> a été mise à jour`,
+          AlertType.success,
+        )
+      } catch (error) {
+        alertStore.setShow(
+          `La liste  <strong>${favorite.name}</strong> n'a pas pu être mise à jour`,
+          AlertType.danger,
+        )
+      }
+    },
+    async delete(id): Promise<void> {
+      const alertStore = useAlertStore()
+      try {
+        await FavoriteHttpClient.get().delete(id)
+        alertStore.setShow('La liste a bien été supprimée', AlertType.success)
+      } catch (error) {
+        alertStore.setShow(
+          getErrorMessage(error.response.data.message),
+          AlertType.danger,
+        )
+      }
+    },
+    async addItem(data) {
+      const alertStore = useAlertStore()
+      try {
+        await FavoriteHttpClient.get().addItem(data)
+        alertStore.setShow('Le produit a été ajouté', AlertType.success)
+      } catch (error) {
+        alertStore.setShow(
+          "Une erreur est survenue lors de l'ajout",
+          AlertType.danger,
+        )
+      }
+    },
+    async removeItem(favoriteId, itemId) {
+      const alertStore = useAlertStore()
+      try {
+        await FavoriteHttpClient.get().removeItem(favoriteId, itemId)
+        alertStore.setShow(
+          'Le produit a été retiré de la liste',
+          AlertType.success,
+        )
+      } catch (error) {
+        alertStore.setShow(
+          "Une erreur est survenue lors de l'ajout",
+          AlertType.danger,
+        )
+      }
+    },
+    async moveItem(data) {
+      const alertStore = useAlertStore()
+      try {
+        await FavoriteHttpClient.get().moveItem(data)
+        alertStore.setShow(
+          'Le produit a été retiré de la liste',
+          AlertType.success,
+        )
+      } catch (error) {
+        alertStore.setShow(
+          "Une erreur est survenue lors de l'ajout",
+          AlertType.danger,
+        )
+      }
+    },
+    async deleteFavoriteAndMoveProductToOtherFavorite(id, idToReceive) {
+      const alertStore = useAlertStore()
+      try {
+        await FavoriteHttpClient.get().deleteFavoriteAndMoveProductToOtherFavorite(
+          id,
+          idToReceive,
+        )
+        alertStore.setShow(
+          'La liste a bien été supprimée et les produits déplacés',
+          AlertType.success,
+        )
+      } catch (error) {
+        alertStore.setShow(
+          "Une erreur est survenue lors de l'ajout",
+          AlertType.danger,
+        )
+      }
+    },
+  },
+})

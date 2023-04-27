@@ -12,7 +12,7 @@
           class="flex items-center justify-center text-center"
         >
           <span class="text-lg text-gray-500 line-through"
-          >{{ props.priceReference }}€ HT
+            >{{ props.priceReference }}€ HT
           </span>
         </div>
         <div
@@ -25,7 +25,7 @@
           <span
             v-if="props.percent > 0"
             class="ml-2 rounded-lg bg-purple-600 px-2.5 py-1.5 text-sm text-white md:text-lg"
-          >{{ props.percent }} %</span
+            >{{ props.percent }} %</span
           >
         </div>
       </div>
@@ -37,12 +37,12 @@
           :price="props.price"
           class="w-full lg:mt-14"
         />
-        <!-- <button class="ml-5 items-center rounded-lg border lg:hidden">
-          <HeartIconComponent
-            class="m-2 flex h-8 w-8 lg:hidden"
-            :stroke-color="'#5E6875'"
-          />
-        </button> -->
+        <AddFavoriteComponent
+          class="lg:hidden"
+          :product-id="props.product.id"
+          :product-name="props.product.name"
+          :variant-id="props.variantId"
+        />
       </div>
     </div>
   </div>
@@ -52,6 +52,7 @@
 import ButtonAddToCartComponent from '@/vuejs/modules/shared/ButtonAddToCartComponent.vue'
 import { PropType } from 'vue'
 import { Product } from '@/vuejs/types/Product'
+import AddFavoriteComponent from '@/vuejs/modules/products/components/AddFavoriteComponent.vue'
 
 const props = defineProps({
   product: {

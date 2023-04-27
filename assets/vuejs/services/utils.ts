@@ -1,4 +1,3 @@
-import { ref } from 'vue'
 import { notify } from 'notiwind'
 
 import { Address } from '../types/Address'
@@ -41,6 +40,18 @@ export function notifyError(text: string, time: number = 5000): void {
       group: 'notif',
       type: 'error',
       title: 'Une erreur est survenue',
+      text: text,
+    },
+    5000,
+  )
+}
+
+export function notifySuccess(text: string): void {
+  notify(
+    {
+      group: 'notif',
+      type: 'success',
+      title: 'Succès!',
       text: text,
     },
     5000,

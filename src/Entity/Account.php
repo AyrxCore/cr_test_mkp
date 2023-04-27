@@ -91,9 +91,13 @@ class Account
     #[Groups('simpleUser')]
     private ?bool $acceptCGU = false;
 
+    #[ORM\OneToMany(mappedBy: 'account', targetEntity: Favorite::class)]
+    private Collection $favorites;
+
     public function __construct()
     {
         $this->cartSavings = new ArrayCollection();
+        $this->favorites = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -107,6 +111,11 @@ class Account
     public function onPreUpdate()
     {
         $this->updatedAt = new \DateTime('now');
+    }
+
+    public function __toString(): string
+    {
+        return $this->upplerClientId;
     }
 
     public function getId(): ?Uuid
@@ -308,6 +317,36 @@ class Account
     public function setAcceptCGU(?bool $acceptCGU): self
     {
         $this->acceptCGU = $acceptCGU;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Favorite>
+     */
+    public function getFavorites(): Collection
+    {
+        return $this->favorites;
+    }
+
+    public function addFavorite(Favorite $favorite): self
+    {
+        if (!$this->favorites->contains($favorite)) {
+            $this->favorites->add($favorite);
+            $favorite->setAccount($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavorite(Favorite $favorite): self
+    {
+        if ($this->favorites->removeElement($favorite)) {
+            // set the owning side to null (unless already changed)
+            if ($favorite->getAccount() === $this) {
+                $favorite->setAccount(null);
+            }
+        }
 
         return $this;
     }

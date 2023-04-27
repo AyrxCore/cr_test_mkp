@@ -6,8 +6,8 @@
         D'autres adhérents ont déjà acheté ces produits
       </p>
     </div>
-      <ProductsLoadingCarouselComponent v-if="props.products.length === 0"/>
-      <ProductsCarouselComponent v-else :products="props.products" />
+    <ProductsLoadingCarouselComponent v-if="props.products.length === 0" />
+    <ProductsCarouselComponent v-else :products="props.products" />
   </div>
 </template>
 
@@ -18,15 +18,13 @@ import ProductsLoadingCarouselComponent from '@/vuejs/modules/shared/ProductsLoa
 const props = defineProps({
   products: {
     type: Array,
-    default: null
+    default: null,
   },
   title: {
     required: true,
     type: String,
   },
 })
-
-
 </script>
 
 <style scoped></style>

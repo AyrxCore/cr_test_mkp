@@ -1,64 +1,197 @@
 <template>
-  <div class="mb-2.5 flex rounded-lg bg-white p-2.5 text-lg text-gray-500 flex-col md:flex-row">
-    <div class="flex md:w-9/12 lg:w-10/12">
-      <div>
-        <CheckboxComponent />
+  <div
+    class="mb-2.5 flex flex-col rounded-lg bg-white p-2.5 text-lg text-gray-500 md:flex-row"
+  >
+    <div class="flex md:w-8/12 lg:w-9/12">
+      <div class="mr-2">
+        <input
+          v-if="productData"
+          v-model="selectedItem"
+          type="checkbox"
+          class="appearance-none border border-gray-400 text-secondary checked:bg-secondary focus:ring-secondary"
+          @change="onSelectItem"
+        />
       </div>
-      <div class="mx-auto w-5/12 md:w-2/12">
-        <img :src="product.image" alt="Image produit" class="ml-2 w-full lg:ml-2 lg:h-[116px] lg:w-[190px]" />
+      <div class="flex w-6/12 md:w-3/12">
+        <img
+          :src="productImage"
+          alt="Image produit"
+          class="flex h-full w-full max-w-max cursor-pointer items-center"
+        />
       </div>
-      <div class="w-6/12 md:w-8/12">
-        <h3 class="text-lg font-bold text-primary lg:text-[22px]">{{ product.name }}</h3>
-        <span
-          class="flex flex-col text-sm text-gray-500 lg:text-lg"
+      <div class="flex w-6/12 flex-col md:ml-5 md:w-7/12">
+        <RouterLink
+          :to="{ name: PageList.PRODUCT, params: { id: productId } }"
+          class="text-lg font-bold text-primary lg:text-[22px]"
         >
-          <span>Vendu par: {{ product.seller }}</span>
-          <span>Référence: {{ product.reference }}</span>
+          {{ productName }}
+        </RouterLink>
+        <span class="flex flex-col text-sm text-gray-500 lg:text-lg">
+          <span>Vendu par: {{ productSeller }}</span>
+          <span>Référence: {{ productReference }}</span>
         </span>
-        <span class="mt-2 flex text-sm text-green-400 lg:text-lg">En stock</span>
+        <span class="mt-2 flex text-sm text-green-400 lg:text-lg"
+          >En stock</span
+        >
       </div>
     </div>
-    <div class="flex md:w-3/12 lg:w-2/12">
-      <div class="flex justify-center w-1/2 md:w-1/3 lg:w-1/2">
-        <div class="flex items-center md:items-start ">
-          <label class="md:hidden">Qté: </label>
-          <input
-            :value="product.qte"
-            type="text"
-            name="qte"
-            class="w-12 lg:w-14 input-qte"
-          />
-        </div>
-      </div>
-      <div class="flex w-1/2 md:w-2/3 lg:w-1/2 md:justify-end ">
-        <div class="flex flex-row items-center justify-between w-full md:w-auto md:flex-col">
+    <div class="md:w-4/12 lg:w-3/12">
+      <div class="md:justify-end">
+        <div
+          class="flex w-full flex-row flex-wrap items-center items-center justify-between md:w-auto"
+        >
           <span
-            class="flex items-start text-primary text-sm md:text-base lg:text-lg font-bold"
+            class="flex items-start items-center text-sm font-bold text-primary md:text-base lg:text-lg"
           >
-            {{ product.price_ht }}€ HT
+            {{ productPrice }}€ HT
           </span>
-          <div class="flex items-start bottom-0 justify-between">
-            <button><EditIconComponent class="mr-2" /></button>
-            <button><TrashIconComponent :stroke-color="'#9866ff'" /></button>
+          <div class="bottom-0 flex items-start justify-between space-x-3">
+            <button @click="openMoveItemForm">
+              <ChangeIconComponent :stroke-color="'#9866ff'" />
+            </button>
+            <button @click="openRemoveForm">
+              <TrashIconComponent :stroke-color="'#9866ff'" />
+            </button>
           </div>
+          <ItemDeleteModal
+            v-if="removeItem"
+            class="modal"
+            :product="product"
+            :favorite-id="favoriteId"
+            @cancel="removeItem = false"
+            @remove-item="onRemoveItem"
+          />
+
+          <ItemMoveModal
+            v-if="moveItem"
+            class="modal"
+            :product="product"
+            :favorite-id="favoriteId"
+            @cancel="moveItem = false"
+            @move-item="onMoveItem"
+          />
         </div>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import EditIconComponent from '@/vuejs/modules/shared/icon/EditIconComponent.vue'
 import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
-import CheckboxComponent from '@/vuejs/modules/shared/CheckboxComponent.vue'
+import { computed, onMounted, ref } from 'vue'
+import { getImage } from '@/vuejs/services/utils'
+import sampleImg from '@/vuejs/assets/img/sample_product_img.png'
+import { Product } from '@/vuejs/types/Product'
+import { useProductStore } from '@/vuejs/stores/product'
+import { PageList } from '@/vuejs/router'
+import ChangeIconComponent from '@/vuejs/modules/shared/icon/ChangeIconComponent.vue'
+import ItemDeleteModal from '@/vuejs/modules/account/components/Favorite/ItemRemoveModal.vue'
+import ItemMoveModal from '@/vuejs/modules/account/components/Favorite/ItemMoveModal.vue'
+
+const emit = defineEmits([
+  'removeItem',
+  'moveItem',
+  'selectedItem',
+  'removeSelectedItem',
+])
+const productStore = useProductStore()
+const productData = ref<Product>()
+const productNotFound = ref(false)
+const selectedItem = ref(null)
+const priceReference = ref()
+const price = ref()
+const percent = ref()
 const props = defineProps({
   product: {
     required: true,
     type: Object,
   },
+  favoriteId: {
+    type: String,
+    required: false,
+    default: null,
+  },
+})
+const removeItem = ref<boolean>(false)
+const moveItem = ref<boolean>(false)
+
+const openRemoveForm = () => {
+  removeItem.value = true
+}
+
+const openMoveItemForm = () => {
+  moveItem.value = true
+}
+
+const onSelectItem = async () => {
+  if (selectedItem.value) {
+    await emit('selectedItem', {
+      selectedItem: props.product,
+      product: productData.value,
+    })
+  } else {
+    await emit('removeSelectedItem', {
+      selectedItem: props.product,
+    })
+  }
+}
+
+const onRemoveItem = async (event) => {
+  await emit('removeItem', {
+    favoriteId: event.favoriteId,
+    productId: event.productId,
+  })
+  removeItem.value = false
+}
+
+const onMoveItem = async (event) => {
+  await emit('moveItem', {
+    favoriteId: event.favoriteId,
+    favoriteIdToReceive: event.favoriteIdToReceive,
+    upplerProductId: event.upplerProductId,
+  })
+  moveItem.value = false
+}
+
+onMounted(async (): Promise<void> => {
+  productData.value = await productStore.findProductById(
+    props.product.upplerProductId,
+  )
+  if (!productData.value) {
+    productNotFound.value = true
+  } else {
+    priceReference.value = productData.value.priceReference
+    price.value = productData.value.price?.displayPrice
+    percent.value = productData.value.percent
+  }
+})
+
+const productImage = computed((): string => {
+  if (productData.value) return productData.value.images[0]
+  return getImage(sampleImg)
+})
+
+const productId = computed((): string => {
+  return props.product.upplerProductId
+})
+
+const productName = computed((): string => {
+  return productData.value ? productData.value.name : props.product.name
+})
+
+const productReference = computed((): string => {
+  return productData.value ? productData.value.reference : ''
+})
+
+const productPrice = computed((): number | string => {
+  return productData.value ? productData.value.price?.displayPrice : ''
+})
+
+const productSeller = computed((): string => {
+  return productData.value ? productData.value.seller.name : ''
 })
 </script>
 <style scoped>
-  .input-qte {
-    @apply  rounded-lg border border-gray-300 text-center px-0 text-sm md:text-base lg:text-lg;
-  }
+.input-qte {
+  @apply rounded-lg border border-gray-300 px-0 text-center text-sm md:text-base lg:text-lg;
+}
 </style>

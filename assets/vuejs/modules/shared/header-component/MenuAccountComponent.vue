@@ -81,13 +81,13 @@ const listAccount = ref<any[]>([
   //   label: 'Bons de livraison',
   //   url: '/app/account/orders-history',
   // },
-  // {
-  //   label: 'Validation de commande',
-  //   url: '/app/account/orders-validation',
-  // },
   {
     label: 'Mes coordonnées',
     routeName: AccountPageList.ACCOUNT,
+  },
+  {
+    label: 'Listes de produits favoris',
+    routeName: AccountPageList.FAVORITES_LIST,
   },
   // {
   //   label: 'Changer de SIRET',

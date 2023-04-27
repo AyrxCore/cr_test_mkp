@@ -66,7 +66,7 @@ export const routes: RouteRecordRaw[] = [
         name: AccountPageList.FAVORITES_LIST,
       },
       {
-        path: 'favorites/details',
+        path: 'favorites/:id',
         component: FavoritesProductsDetailsPage,
         name: AccountPageList.FAVORITES_DETAILS,
       },

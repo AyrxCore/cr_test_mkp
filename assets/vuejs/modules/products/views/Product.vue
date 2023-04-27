@@ -148,12 +148,14 @@
                     {{ i }}
                   </option>
                 </select>
-                <!--     <div class="hidden lg:flex">
-             <HeartIconComponent class="ml-5" :stroke-color="'#5E6875'" />
-                  <a href="#" class="ml-5 font-bold underline"
-                    >Ajouter ce produit à mes favoris</a
-                  >
-                </div>-->
+                <div class="relative ml-5 hidden lg:flex">
+                  <AddFavoriteComponent
+                    :product-id="product.id"
+                    :product-name="product.name"
+                    :variant-id="variantId"
+                  />
+                  Ajouter ce produit à mes favoris
+                </div>
               </div>
               <p class="mt-1">
                 <span class="text-sm text-gray-500 md:text-base lg:text-lg"
@@ -302,7 +304,7 @@ import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
 import { getImage, getUpplerImage } from '@/vuejs/services/utils'
 import helpImage from '@/vuejs/assets/img/samples/img-help-product.png'
-import { ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { SwiperSlide } from 'swiper/vue'
 import ArrowRigntIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
@@ -315,6 +317,8 @@ import { Product } from '@/vuejs/types/Product'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 import { PageList } from '@/vuejs/router'
 import { ProductPageList } from '@/vuejs/router/pages-list'
+import AddFavoriteComponent from '@/vuejs/modules/products/components/AddFavoriteComponent.vue'
+import { useFavoriteStore } from '@/vuejs/stores/favorite'
 
 const route = useRoute()
 const productStore = useProductStore()
@@ -331,6 +335,11 @@ const price = ref()
 const percent = ref()
 const variantId = ref()
 const isLoadingPrice = ref<boolean>(false)
+const favoriteStore = useFavoriteStore()
+
+onMounted(async () => {
+  await favoriteStore.fetchFavorites()
+})
 
 const breadcrumbUrl = (product: Product | null) => {
   const breadcrumb = []

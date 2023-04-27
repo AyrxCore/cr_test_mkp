@@ -3,7 +3,7 @@
     class="mx-auto flex h-[466px] w-[392px] flex-col items-center justify-start rounded-md bg-white px-6 py-4 lg:h-[516px]"
   >
     <!-- Bloc header -->
-    <div class="flex h-[50px] w-full items-center justify-between">
+    <div class="relative flex h-[50px] w-full items-center justify-between">
       <div
         class="flex h-[50px] w-[78px] items-center justify-start rounded-md bg-white"
       >
@@ -13,11 +13,12 @@
           class="h-full w-full object-contain"
         />
       </div>
-      <!-- <div class="flex items-center justify-end">
-        <button class="flex text-gray-500">
-          <HeartIconComponent class="... stroke-gray-500" />
-        </button>
-      </div> -->
+      <AddFavoriteComponent
+        v-if="props.product.variants.length === 2"
+        :product-id="props.product.id"
+        :product-name="props.product.name"
+        :variant-id="variantId"
+      />
     </div>
     <!-- Fin bloc header -->
 
@@ -126,6 +127,7 @@ import { Product } from '@/vuejs/types/Product'
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import ButtonAddToCartComponent from '@/vuejs/modules/shared/ButtonAddToCartComponent.vue'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
+import AddFavoriteComponent from '@/vuejs/modules/products/components/AddFavoriteComponent.vue'
 
 const props = defineProps({
   product: {

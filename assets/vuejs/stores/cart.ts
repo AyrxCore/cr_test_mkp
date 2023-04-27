@@ -12,7 +12,7 @@ import {
   Cart,
 } from '@/vuejs/types/Cart'
 
-import { notifyError } from '@/vuejs/services/utils'
+import { notifyError, notifySuccess } from '@/vuejs/services/utils'
 
 export const useCartStore = defineStore({
   id: 'cart',
@@ -43,6 +43,26 @@ export const useCartStore = defineStore({
         })
         this.newlyAddedProducts.indexOf(variantId) === -1 &&
           this.newlyAddedProducts.push(variantId)
+      } catch (error) {
+        notifyError(
+          `L'ajout au panier est impossible, merci de contacter un administrateur.`,
+        )
+        throw new Error()
+      }
+    },
+    async addProductsToCart(products): Promise<void> {
+      try {
+        await CartHttpClient.get().addProductsToCartAsBuyer({
+          cartId: this.cart.id,
+          products: products,
+        })
+        await products.forEach((product) => {
+          this.newlyAddedProducts.indexOf(product.variantId) === -1 &&
+            this.newlyAddedProducts.push(product.variantId)
+        })
+        notifySuccess(
+          `Vos ${products.length} produit(s) ont été ajouté(s) au panier avec succès`,
+        )
       } catch (error) {
         notifyError(
           `L'ajout au panier est impossible, merci de contacter un administrateur.`,

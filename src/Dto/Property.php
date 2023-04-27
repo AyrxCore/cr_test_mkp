@@ -11,7 +11,7 @@ final class Property implements \JsonSerializable
     #[ApiProperty(identifier: true)]
     private int $id;
     private ?string $name;
-    private ?string $value;
+    private mixed $value;
     private ?bool $checked = null;
 
     public function getId(): int
@@ -51,9 +51,9 @@ final class Property implements \JsonSerializable
     }
 
     /**
-     * @param string|null $value
+     * @param mixed|null $value
      */
-    public function setValue(?string $value): void
+    public function setValue(mixed $value): void
     {
         $this->value = $value;
     }

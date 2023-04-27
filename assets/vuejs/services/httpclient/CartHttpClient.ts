@@ -17,7 +17,13 @@ export default class CartHttpClient extends BaseClientService {
 
   public addProductToCartAsBuyer<T extends []>(data: AddOrderItem): Promise<T> {
     return this.apiClient
-      .post(`order_items`, data)
+      .post('order_items', data)
+      .then((response) => response.data)
+  }
+
+  public addProductsToCartAsBuyer<T extends []>(data): Promise<T> {
+    return this.apiClient
+      .postForm('order_items/multiple', data)
       .then((response) => response.data)
   }
 

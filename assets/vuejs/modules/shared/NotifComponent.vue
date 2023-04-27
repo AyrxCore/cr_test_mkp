@@ -37,7 +37,25 @@
                 </div>
               </div>
             </div>
+            <div
+              v-if="notification.type === 'success'"
+              class="mx-auto mt-4 flex w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-md"
+            >
+              <div
+                class="flex w-12 items-center justify-center bg-green-qantis"
+              >
+                <CheckCircleIconComponent class="fill-white text-white" />
+              </div>
 
+              <div class="-mx-3 px-4 py-2">
+                <div class="mx-3">
+                  <span class="font-semibold text-green-qantis">
+                    {{ notification.title }}
+                  </span>
+                  <p class="text-sm text-gray-600">{{ notification.text }}</p>
+                </div>
+              </div>
+            </div>
             <div
               v-if="notification.type === 'error'"
               class="mx-auto mt-4 flex w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-md"
@@ -67,4 +85,6 @@ import { Notification, NotificationGroup } from 'notiwind'
 
 import InformationIconComponent from '@/vuejs/modules/shared/icon/InformationIconComponent.vue'
 import WarningIconComponent from '@/vuejs/modules/shared/icon/WarningIconComponent.vue'
+import CheckIconComponent from '@/vuejs/modules/shared/icon/CheckIconComponent.vue'
+import CheckCircleIconComponent from '@/vuejs/modules/shared/icon/CheckCircleIconComponent.vue'
 </script>

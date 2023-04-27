@@ -1,5 +1,7 @@
 <template>
-  <BaseTemplate title="Résultat de recherche de produits | Qantis - MarketPlace">
+  <BaseTemplate
+    title="Résultat de recherche de produits | Qantis - MarketPlace"
+  >
     <div v-if="isLoading" class="flex h-16 w-full items-center justify-center">
       <LoaderSharedComponent
         class="text-secondary"
@@ -175,6 +177,7 @@ import FiltersComponent from '@/vuejs/modules/products/components/FiltersCompone
 import SelectedFilterComponent from '@/vuejs/modules/products/components/filters/SelectedFilterComponent.vue'
 import { storeToRefs } from 'pinia'
 import { filterType } from '@/vuejs/modules/products'
+import { useFavoriteStore } from '@/vuejs/stores/favorite'
 
 const route = useRoute()
 const productStore = useProductStore()
@@ -187,25 +190,33 @@ const currentPartenaire = ref<number>(null)
 const perPage = ref<number>(42)
 const pageNumber = ref<number>(1)
 const resultNotFound = ref<boolean>(false)
-
+const favoriteStore = useFavoriteStore()
 const breadcrumbUrl = computed(() => {
   return []
+})
+
+onBeforeMount(async () => {
+  await favoriteStore.fetchFavorites()
 })
 
 const loadProducts = async (paramsProducts) => {
   isLoading.value = true
 
   try {
-    resultProducts.value = await productStore.fetchProductsByParams(paramsProducts)
+    resultProducts.value = await productStore.fetchProductsByParams(
+      paramsProducts,
+    )
     pageNumber.value = resultProducts.value.page
     if (route.query.q) {
-      const eventLabel = resultProducts.value.results_count > 0 ? 'view_search_results' : 'no_search_results'
+      const eventLabel =
+        resultProducts.value.results_count > 0
+          ? 'view_search_results'
+          : 'no_search_results'
       await window.dataLayer?.push({
         event: eventLabel,
         search_term: route.query.q,
       })
     }
-
   } catch (e) {
     resultNotFound.value = true
   }

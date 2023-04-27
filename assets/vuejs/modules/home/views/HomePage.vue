@@ -130,6 +130,9 @@ import OurCategoriesComponent from '@/vuejs/modules/home/component/OurCategories
 import CarouselActualitesComponent from '@/vuejs/modules/home/component/CarouselActualitesComponent.vue'
 import { NewsPageList, ProductPageList } from '@/vuejs/router/pages-list'
 import { useProductStore } from '@/vuejs/stores/product'
+import { useFavoriteStore } from '@/vuejs/stores/favorite'
+
+const favoriteStore = useFavoriteStore()
 
 const productStore = useProductStore()
 const { productsTopVente, productsSelection } = storeToRefs(productStore)
@@ -142,6 +145,7 @@ onBeforeMount(async () => {
   await Promise.all([
     productStore.initHomeProducts(),
     expertContentStore.init(),
+    favoriteStore.fetchFavorites(),
   ])
 })
 
