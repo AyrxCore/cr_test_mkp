@@ -10,7 +10,7 @@
       />
     </div>
     <div
-      v-else
+      v-else-if="product && !isLoading"
       class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 px-5 sm:px-8"
     >
       <BreadcrumbSharedComponent
@@ -113,10 +113,7 @@
                 classes="loader-lg loader"
               />
             </div>
-            <div
-              v-else
-              class="mt-14 hidden flex-col lg:flex"
-            >
+            <div v-else class="mt-14 hidden flex-col lg:flex">
               <div>
                 <span
                   v-if="priceReference"
@@ -126,18 +123,15 @@
                     'text-[25px] font-bold text-primary':
                       product.price === null,
                   }"
-                >{{ priceReference }}€ HT
+                  >{{ priceReference }}€ HT
                 </span>
                 <span
                   v-if="percent > 0"
                   class="ml-2 rounded-lg bg-secondary px-2.5 py-1.5 text-white"
-                >{{ percent }}%</span
+                  >{{ percent }}%</span
                 >
               </div>
-              <div
-                v-if="price"
-                class="mt-3 text-[25px] font-bold text-primary"
-              >
+              <div v-if="price" class="mt-3 text-[25px] font-bold text-primary">
                 {{ price }}€ HT
               </div>
             </div>
@@ -163,7 +157,7 @@
               </div>
               <p class="mt-1">
                 <span class="text-sm text-gray-500 md:text-base lg:text-lg"
-                >Conditionnement conseillé : {{ product.conditionnement }}
+                  >Conditionnement conseillé : {{ product.conditionnement }}
                 </span>
               </p>
               <div class="mt-12">
@@ -207,12 +201,8 @@
             <h3 class="text-[19px] text-primary md:text-[25px] xl:text-[35px]">
               Livraison et retour
             </h3>
-            <ul
-              class="list-disc text-gray-500"
-            >
-              <li
-                class="mt-1 ml-7 text-sm md:text-base lg:text-lg"
-              >
+            <ul class="list-disc text-gray-500">
+              <li class="mt-1 ml-7 text-sm md:text-base lg:text-lg">
                 {{ product.seller.description }}
               </li>
             </ul>
@@ -232,7 +222,7 @@
                 Besoin d'aide pour votre commande ?
               </h3>
               <RouterLink
-                :to="{ name: PageList.CONTACT_PAGE}"
+                :to="{ name: PageList.CONTACT_PAGE }"
                 class="button button-gradient"
               >
                 <ArrowRigntIconComponent
@@ -264,19 +254,19 @@
         </h3>
         <table class="w-full table-auto border bg-white p-8">
           <tbody>
-          <tr
-            v-for="(property, key, index) in product.properties"
-            :key="index"
-            class="border text-sm text-primary md:text-base lg:text-lg"
-            :class="{
-                'hidden':
+            <tr
+              v-for="(property, key, index) in product.properties"
+              :key="index"
+              class="border text-sm text-primary md:text-base lg:text-lg"
+              :class="{
+                hidden:
                   property === 'home-top-vente' ||
                   property === 'home-selection',
               }"
-          >
-            <td class="w-[20%] border p-2">{{ key }}</td>
-            <td class="p-2">{{ property }}</td>
-          </tr>
+            >
+              <td class="w-[20%] border p-2">{{ key }}</td>
+              <td class="p-2">{{ property }}</td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -287,6 +277,13 @@
         <h3 class="home-subtitle text-primary">Produits similaires</h3>
       </div> -->
       <!-- Fin bloc produits similaire -->
+    </div>
+
+    <div
+      v-else
+      class="xs:w-[100%] m-auto my-4 flex max-w-screen-2xl justify-center px-5 sm:px-8"
+    >
+      Aucun produit n'a été trouvé avec cette référence
     </div>
   </BaseTemplate>
   <ProductAddToCartComponent
@@ -303,7 +300,7 @@
 <script lang="ts" setup>
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
-import { formatPrice, getImage, getUpplerImage } from '@/vuejs/services/utils'
+import { getImage, getUpplerImage } from '@/vuejs/services/utils'
 import helpImage from '@/vuejs/assets/img/samples/img-help-product.png'
 import { ref, watch } from 'vue'
 import { SwiperSlide } from 'swiper/vue'
@@ -342,7 +339,10 @@ const breadcrumbUrl = (product: Product | null) => {
       breadcrumb.push({
         id: key,
         name: value,
-        url: { name: ProductPageList.PRODUCTS, query: { category: key, page: 1 } },
+        url: {
+          name: ProductPageList.PRODUCTS,
+          query: { category: key, page: 1 },
+        },
       })
     })
   }
@@ -365,7 +365,7 @@ const updateProductPrice = async () => {
   isLoadingPrice.value = true
   if (variantSelected) {
     variantId.value = parseInt(variantSelected)
-    let variant = await variants.value.find(v => {
+    let variant = await variants.value.find((v) => {
       if (v.id === variantId.value) {
         return v
       }
@@ -376,7 +376,7 @@ const updateProductPrice = async () => {
       variants.value.push(variant)
     }
 
-    price.value = (variant.price.display_price / 100)
+    price.value = variant.price.display_price / 100
     const priceDiff = priceReference.value - parseFloat(price.value)
     percent.value = Math.round((priceDiff * 100) / priceReference.value)
   } else {
@@ -402,18 +402,24 @@ watch(
   () => route.params.id as string,
   async (id: string) => {
     isLoading.value = true
-    if (id) {
-      product.value = await productStore.findProductById(id)
+    try {
+      const productId = id.split('-')
+      const formattedId = productId[productId.length - 1]
+      product.value = await productStore.findProductById(formattedId)
       priceReference.value = product.value.priceReference
       price.value = product.value.price?.displayPrice
       percent.value = product.value.percent
-      optionVariant.value = Object.values(Object.values(product.value.variants)[0])
+      optionVariant.value = Object.values(
+        Object.values(product.value.variants)[0],
+      )
       variantId.value = parseInt(Object.keys(product.value.variants)[0])
       if (Object.keys(product.value.variants).length > 2) {
         variants.value.push(await productStore.findVariantById(variantId.value))
       }
+    } catch (error) {
+    } finally {
+      isLoading.value = false
     }
-    isLoading.value = false
   },
 
   { immediate: true },

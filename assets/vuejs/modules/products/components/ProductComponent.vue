@@ -32,7 +32,7 @@
         @click="
           $router.push({
             name: ProductPageList.PRODUCT,
-            params: { id: props.product.id },
+            params: { id: productId },
           })
         "
       />
@@ -47,11 +47,10 @@
         <RouterLink
           :to="{
             name: ProductPageList.PRODUCT,
-            params: { id: props.product.id },
+            params: { id: productId },
           }"
-        >{{ props.product.name }}
-        </RouterLink
-        >
+          >{{ props.product.name }}
+        </RouterLink>
       </h3>
       <div class="h-[100px]">
         <p
@@ -63,9 +62,7 @@
     <!-- Fin bloc nom et description -->
 
     <!-- Bloc prix -->
-    <div
-      class="flex w-full items-center justify-start xl:mt-1"
-    >
+    <div class="flex w-full items-center justify-start xl:mt-1">
       <span
         v-if="props.product.price?.displayPrice"
         class="mr-2 text-sm font-bold text-primary md:text-base lg:text-lg"
@@ -87,24 +84,23 @@
     <!-- Fin bloc prix -->
 
     <!-- Bloc quantité -->
-    <div class="flex w-full justify-between mt-1">
+    <div class="mt-1 flex w-full justify-between">
       <div
         v-if="props.product.variants.length > 2"
         class="mx-auto items-center"
       >
         <RouterLink
-
           :to="{
-              name: ProductPageList.PRODUCT,
-              params: { id: props.product.id },
-            }"
-          class="button !text-secondary border-2 border-secondary hover:!bg-white focus:!bg-white"
+            name: ProductPageList.PRODUCT,
+            params: { id: productId },
+          }"
+          class="button border-2 border-secondary !text-secondary hover:!bg-white focus:!bg-white"
         >
           Voir les options
           <ArrowRightIconComponent class="ml-2 w-4 stroke-secondary" />
         </RouterLink>
       </div>
-      <div v-else class="flex justify-between w-full">
+      <div v-else class="flex w-full justify-between">
         <div class="flex items-center justify-start">
           <span class="mr-2 text-sm text-gray-500">Qté :</span>
           <select v-model="quantity" class="rounded-md border border-gray-300">
@@ -155,6 +151,10 @@ const variantId = computed(() => {
     return variant[0].id
   }
   return null
+})
+
+const productId = computed(() => {
+  return props.product.slug + '-' + props.product.id
 })
 </script>
 

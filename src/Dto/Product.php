@@ -31,6 +31,8 @@ final class Product implements \JsonSerializable
 
     private ?string $reference;
 
+    private ?string $slug;
+
     private ?string $description;
 
     private ?string $conditionnement;
@@ -106,6 +108,23 @@ final class Product implements \JsonSerializable
     {
         $this->reference = $reference;
     }
+
+    /**
+     * @return string|null
+     */
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param string|null $slug
+     */
+    public function setSlug(?string $slug): void
+    {
+        $this->slug = $slug;
+    }
+
 
     /**
      * @return string|null
