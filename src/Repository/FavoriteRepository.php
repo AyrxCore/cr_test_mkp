@@ -81,11 +81,11 @@ class FavoriteRepository extends ServiceEntityRepository
     public function getFavoritesByAccountAndProducId(Account $account, int $productId): array|float|int|string
     {
         $qb =  $this->createQueryBuilder('f')
-            ->select('up.id, f.id');
+            ->select('fp.id, f.id');
 
         $qb
             ->innerJoin('f.account', 'a')
-            ->leftJoin('f.upplerProducts', 'up')
+            ->leftJoin('f.favoriteProducts', 'fp')
             ->where(
                 $qb->expr()->orX(
                     $qb->expr()->andX(
@@ -98,13 +98,13 @@ class FavoriteRepository extends ServiceEntityRepository
                     )
                 )
             )
-            ->andWhere('up.upplerProductId = :upplerProductId')
+            ->andWhere('fp.upplerProductId = :upplerProductId')
             ->setParameter('accountId', $account->getId())
             ->setParameter('isPublicFalse', false)
             ->setParameter('adherentId', $account->getAdherent())
             ->setParameter('isPublicTrue', true)
             ->setParameter('upplerProductId', $productId)
-            ->groupBy('up.id, f.id');
+            ->groupBy('fp.id, f.id');
 
         return $qb
             ->getQuery()
