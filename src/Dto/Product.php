@@ -65,6 +65,8 @@ final class Product implements \JsonSerializable
 
     private ?AccountAccordCadre $accountAccordCadre;
 
+    private array $favorites = [];
+
     public function getId(): ?int
     {
         return $this->id;
@@ -389,4 +391,19 @@ final class Product implements \JsonSerializable
         $this->accountAccordCadre = $accountAccordCadre;
     }
 
+    /**
+     * @return array
+     */
+    public function getFavorites(): array
+    {
+        return $this->favorites;
+    }
+
+    /**
+     * @param array $favorites
+     */
+    public function setFavorites(array $favorites): void
+    {
+        $this->favorites = $favorites;
+    }
 }

@@ -42,6 +42,7 @@
           :product-id="props.product.id"
           :product-name="props.product.name"
           :variant-id="props.variantId"
+          :favorites-selected="props.product.favorites"
         />
       </div>
     </div>

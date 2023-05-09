@@ -10,6 +10,7 @@ use App\Dto\Property;
 use App\Entity\Account;
 use App\Entity\AccordStatut;
 use App\Dto\AccountAccordCadre;
+use App\Entity\Favorite;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
@@ -80,9 +81,11 @@ class UpplerProductService extends HttpClientProvider
         $remoteProducts = json_decode($res->getContent());
 
         $products = [];
+        $session = $this->requestStack->getSession();
+
         foreach ($remoteProducts->results as $remoteProduct) {
             try {
-                $products[] = $this->hydrateProductFromList($remoteProduct);
+                $products[] = $this->hydrateProductFromList($remoteProduct, $session->get('account'));
             } catch (InvalidArgumentException $e) {
                 $this->apiLogger->error($e->getMessage());
             }
@@ -190,10 +193,10 @@ class UpplerProductService extends HttpClientProvider
      * @return Product
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    private function hydrateProductFromList($remoteProduct): Product
+    private function hydrateProductFromList($remoteProduct, Account $account): Product
     {
         $product = new Product();
-        $this->initHydrateProduct($remoteProduct, $product, true);
+        $this->initHydrateProduct($remoteProduct, $product, $account, true);
         $product->setVariants($remoteProduct->variants);
 
         $isAccordCadre = $this->isAccordCadre($remoteProduct, $product);
@@ -212,8 +215,9 @@ class UpplerProductService extends HttpClientProvider
 
     private function hydrateProduct($remoteProduct, $accountId = null): Product
     {
+        $session = $this->requestStack->getSession();
         $product = new Product();
-        $this->initHydrateProduct($remoteProduct, $product);
+        $this->initHydrateProduct($remoteProduct, $product, $session->get('account'));
 
         $isAccordCadre = $this->isAccordCadre($remoteProduct, $product);
 
@@ -336,13 +340,16 @@ class UpplerProductService extends HttpClientProvider
         return $filters;
     }
 
-    private function initHydrateProduct($remoteProduct, $product, $fromList = false)
+    private function initHydrateProduct($remoteProduct,Product $product,Account $account, $fromList = false)
     {
+
         $product->setId($remoteProduct->id);
         $product->setName($remoteProduct->name->default);
         $product->setDescription($remoteProduct->description->default ?? null);
         $product->setReference($remoteProduct->reference);
         $product->setSlug($remoteProduct->slug->default);
+        $favorites = $this->em->getRepository(Favorite::class)->getFavoritesByAccountAndProducId($account, $remoteProduct->id);
+        $product->setFavorites($favorites);
         $categories = [];
 
         foreach ($remoteProduct->categories as $category) {

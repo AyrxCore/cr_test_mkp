@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Account;
 use App\Entity\Favorite;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use function Doctrine\ORM\QueryBuilder;
 
@@ -75,5 +76,39 @@ class FavoriteRepository extends ServiceEntityRepository
             ->getQuery()
             ->getScalarResult()
         ;
+    }
+
+    public function getFavoritesByAccountAndProducId(Account $account, int $productId): array|float|int|string
+    {
+        $qb =  $this->createQueryBuilder('f')
+            ->select('up.id, f.id');
+
+        $qb
+            ->innerJoin('f.account', 'a')
+            ->leftJoin('f.upplerProducts', 'up')
+            ->where(
+                $qb->expr()->orX(
+                    $qb->expr()->andX(
+                        $qb->expr()->eq('f.account', ':accountId'),
+                        $qb->expr()->eq('f.public', ':isPublicFalse')
+                    ),
+                    $qb->expr()->andX(
+                        $qb->expr()->eq('a.adherent', ':adherentId'),
+                        $qb->expr()->eq('f.public', ':isPublicTrue')
+                    )
+                )
+            )
+            ->andWhere('up.upplerProductId = :upplerProductId')
+            ->setParameter('accountId', $account->getId())
+            ->setParameter('isPublicFalse', false)
+            ->setParameter('adherentId', $account->getAdherent())
+            ->setParameter('isPublicTrue', true)
+            ->setParameter('upplerProductId', $productId)
+            ->groupBy('up.id, f.id');
+
+        return $qb
+            ->getQuery()
+            ->getScalarResult()
+            ;
     }
 }

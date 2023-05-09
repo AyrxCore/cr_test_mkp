@@ -22,4 +22,5 @@ export interface Product {
   seller?: Seller
   accountAccordCadre: AccountAccordCadre
   isAccordCadre?: boolean
+  favorites?: Array<any>
 }

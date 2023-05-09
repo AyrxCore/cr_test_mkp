@@ -1,12 +1,17 @@
 <template>
   <div v-click-outside="onOutsideBlock" class="flex items-center justify-end">
     <button class="flex text-gray-500" @click="showTooltip = true">
-      <HeartIconComponent class="... stroke-gray-500" />
+      <HeartIconComponent
+        class="... stroke-gray-500"
+        :class="{
+          'fill-secondary stroke-secondary': favoritesSelected.length > 0,
+        }"
+      />
     </button>
     <div v-if="showTooltip" class="tooltip">
       <form
         v-if="showList"
-        class="flex flex-col space-y-2"
+        class="flex w-full flex-col space-y-2"
         @submit.prevent="addProductToFavorite"
       >
         <span
@@ -15,22 +20,24 @@
         >
           Veuillez sélectionner une liste de favori</span
         >
+
         <div
           v-if="favorites"
           class="c-scrollbar flex max-h-[250px] flex-col overflow-y-auto px-1"
         >
-          <label
-            v-for="favoriteItem in favorites"
-            :key="favoriteItem.id"
-            class="text-base text-gray-600"
-            :class="{ 'bg-blue-200': favorite.name === favoriteItem.name }"
-          >
-            <input
-              v-model="selectedFavorite[favoriteItem.id]"
-              type="checkbox"
-            />
-            {{ favoriteItem.name }}
-          </label>
+          <div v-for="favoriteItem in favorites" :key="favoriteItem.id">
+            <label
+              class="text-base text-gray-600"
+              :class="{ 'bg-blue-200': favorite.name === favoriteItem.name }"
+            >
+              <input
+                v-model="selectedFavorite[favoriteItem.id]"
+                type="checkbox"
+                :checked="isInArray(favoriteItem.id)"
+              />
+              {{ favoriteItem.name }}
+            </label>
+          </div>
         </div>
 
         <ButtonComponent
@@ -91,6 +98,10 @@ const props = defineProps({
     required: true,
     type: String,
   },
+  favoritesSelected: {
+    type: Array,
+    default: null,
+  },
 })
 
 const favorite = ref<Favorite>({
@@ -139,6 +150,14 @@ const onSubmitFavorite = async () => {
   isLoading.value = false
 }
 
+const isInArray = (favoriteId) => {
+  const selected = props.favoritesSelected.filter(function (el) {
+    return el.id === favoriteId
+  })
+
+  return selected.length > 0
+}
+
 const addProductToFavorite = async () => {
   const selectedFavorites = Object.keys(selectedFavorite.value)
 
@@ -151,6 +170,9 @@ const addProductToFavorite = async () => {
         productId: props.productId,
         productName: props.productName,
         variantId: props.variantId,
+      })
+      selectedFavorites.forEach((favoriteId) => {
+        props.favoritesSelected.push({ id: favoriteId })
       })
       onOutsideBlock()
       selectedFavorite.value = []

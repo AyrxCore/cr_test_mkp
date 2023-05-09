@@ -153,6 +153,7 @@
                     :product-id="product.id"
                     :product-name="product.name"
                     :variant-id="variantId"
+                    :favorites-selected="product.favorites"
                   />
                   Ajouter ce produit à mes favoris
                 </div>
@@ -189,6 +190,7 @@
               </div>
             </div>
             <ProductAddToCartComponent
+              v-if="product"
               class="hidden lg:flex"
               :product="product"
               :price="price"
