@@ -1,5 +1,5 @@
 <template>
-  <FavoriteModal>
+  <FavoriteModal @cancel="onCancelClick">
     <template #title> Déplacer vers une autre liste</template>
     <template #content>
       <div class="px-5">
@@ -51,7 +51,7 @@
 
 <script lang="ts" setup>
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import FavoriteModal from '@/vuejs/modules/account/pages/FavoriteModalPage.vue'
+import FavoriteModal from '@/vuejs/modules/account/pages/DefaultModalPage.vue'
 import { computed, onMounted, ref } from 'vue'
 import { Favorite } from '@/vuejs/types/Favorite'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'

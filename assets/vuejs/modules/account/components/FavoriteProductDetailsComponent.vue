@@ -84,8 +84,8 @@ import { Product } from '@/vuejs/types/Product'
 import { useProductStore } from '@/vuejs/stores/product'
 import { PageList } from '@/vuejs/router'
 import ChangeIconComponent from '@/vuejs/modules/shared/icon/ChangeIconComponent.vue'
-import ItemDeleteModal from '@/vuejs/modules/account/components/Favorite/ItemRemoveModal.vue'
-import ItemMoveModal from '@/vuejs/modules/account/components/Favorite/ItemMoveModal.vue'
+import ItemDeleteModal from '@/vuejs/modules/account/components/favorite/ItemRemoveModal.vue'
+import ItemMoveModal from '@/vuejs/modules/account/components/favorite/ItemMoveModal.vue'
 
 const emit = defineEmits([
   'removeItem',
@@ -175,7 +175,9 @@ const productId = computed((): string => {
 })
 
 const productName = computed((): string => {
-  return productData.value ? productData.value.name : props.product.name
+  return productData.value
+    ? productData.value.name
+    : props.product.upplerProductName
 })
 
 const productReference = computed((): string => {

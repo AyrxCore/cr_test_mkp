@@ -1,5 +1,5 @@
 <template>
-  <FavoriteModal>
+  <FavoriteModal @cancel="onCancelClick">
     <template #title> Supprimer une liste de produits favoris</template>
     <template #content>
       <div class="px-5">
@@ -8,7 +8,7 @@
             Voulez-vous vraiment supprimer cette liste:
             <strong>{{ favorite.name }}</strong>
           </h4>
-          <div v-if="favorite.nbUpplerProducts > 0">
+          <div v-if="favorite.nbFavoriteProducts > 0">
             <label class="mt-2 flex items-center text-white">
               <input
                 v-model="moveItem"
@@ -70,7 +70,7 @@ import { computed, onMounted, ref } from 'vue'
 import { Favorite } from '@/vuejs/types/Favorite'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import { storeToRefs } from 'pinia'
-import FavoriteModal from '@/vuejs/modules/account/pages/FavoriteModalPage.vue'
+import FavoriteModal from '@/vuejs/modules/account/pages/DefaultModalPage.vue'
 
 const props = defineProps({
   favoriteId: {

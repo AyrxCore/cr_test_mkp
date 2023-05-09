@@ -42,16 +42,16 @@ class FavoriteRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Favorite[] Returns an array of Favorite objects
+     * @return Favorite[] Returns an array of favorite objects
      */
     public function findFavorites(Account $account): array
     {
         $qb =  $this->createQueryBuilder('f')
-        ->select('f.id AS id, f.name AS name, f.createdAt AS createdAt, f.updatedAt AS updatedAt, a.id as accountId, f.public AS public, COUNT(up.id) AS nbUpplerProducts');
+        ->select('f.id AS id, f.name AS name, f.createdAt AS createdAt, f.updatedAt AS updatedAt, a.id as accountId, f.public AS public, COUNT(fp.id) AS nbFavoriteProducts');
 
         $qb
             ->innerJoin('f.account', 'a')
-            ->leftJoin('f.upplerProducts', 'up')
+            ->leftJoin('f.favoriteProducts', 'fp')
             ->where(
                 $qb->expr()->orX(
                     $qb->expr()->andX(

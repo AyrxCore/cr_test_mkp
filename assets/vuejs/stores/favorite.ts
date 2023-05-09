@@ -5,6 +5,7 @@ import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
 import { getErrorMessage } from '@/vuejs/services/login'
 import { AlertType } from '@/vuejs/types/Alert'
 import FavoriteHttpClient from '@/vuejs/services/httpclient/FavoriteHttpClient'
+import { notifyError, notifySuccess } from '@/vuejs/services/utils'
 
 export interface FavoriteStoreState {
   favorites?: Favorite[]
@@ -19,7 +20,7 @@ export const useFavoriteStore = defineStore({
   }),
 
   actions: {
-    async fetchFavorites() {
+    async fetchFavorites(): Promise<void> {
       const alertStore = useAlertStore()
       try {
         this.favorites = await FavoriteHttpClient.get().fetchList()
@@ -38,7 +39,7 @@ export const useFavoriteStore = defineStore({
         alertStore.setShow('Votre liste a été créée', AlertType.success)
       } catch (error) {
         alertStore.setShow(
-          `Il existe déjà un favori avec le libellé <strong>${favorite.name}</strong>`,
+          'Une erreur est survenue lors de la création de votre liste, veuillez essayer ultérieurement ou contacter le service client',
           AlertType.danger,
         )
       }
@@ -75,14 +76,12 @@ export const useFavoriteStore = defineStore({
       }
     },
     async addItem(data) {
-      const alertStore = useAlertStore()
       try {
         await FavoriteHttpClient.get().addItem(data)
-        alertStore.setShow('Le produit a été ajouté', AlertType.success)
+        notifySuccess(`Le produit ${data.productName} a été ajouté`)
       } catch (error) {
-        alertStore.setShow(
-          "Une erreur est survenue lors de l'ajout",
-          AlertType.danger,
+        notifyError(
+          "Impossible d'ajouter ce produit à cette liste car elle n'existe plus",
         )
       }
     },

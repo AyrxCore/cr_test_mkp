@@ -89,10 +89,6 @@ class Favorite
     #[Groups(['update', 'favorite:get'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\ManyToMany(targetEntity: UpplerProduct::class, inversedBy: 'favorites', fetch: 'EAGER')]
-    #[Groups(['favorite:get'])]
-    private Collection $upplerProducts;
-
     #[ORM\ManyToOne(inversedBy: 'favorites')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Account $account = null;
@@ -101,9 +97,13 @@ class Favorite
     #[Groups(['update', 'favorite:get'])]
     private ?bool $public = true;
 
+    #[ORM\OneToMany(mappedBy: 'favorite', targetEntity: FavoriteProduct::class, cascade: ['persist'], orphanRemoval: true)]
+    #[Groups(['favorite:get'])]
+    private Collection $favoriteProducts;
+
     public function __construct()
     {
-        $this->upplerProducts = new ArrayCollection();
+        $this->favoriteProducts = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -163,30 +163,6 @@ class Favorite
         return $this;
     }
 
-    /**
-     * @return Collection<int, UpplerProduct>
-     */
-    public function getUpplerProducts(): Collection
-    {
-        return $this->upplerProducts;
-    }
-
-    public function addUpplerProduct(UpplerProduct $upplerProducts): self
-    {
-        if (!$this->upplerProducts->contains($upplerProducts)) {
-            $this->upplerProducts->add($upplerProducts);
-        }
-
-        return $this;
-    }
-
-    public function removeUpplerProduct(UpplerProduct $upplerProduct): self
-    {
-        $this->upplerProducts->removeElement($upplerProduct);
-
-        return $this;
-    }
-
     public function getAccount(): ?Account
     {
         return $this->account;
@@ -207,6 +183,36 @@ class Favorite
     public function setPublic(bool $public): self
     {
         $this->public = $public;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FavoriteProduct>
+     */
+    public function getFavoriteProducts(): Collection
+    {
+        return $this->favoriteProducts;
+    }
+
+    public function addFavoriteProduct(FavoriteProduct $favoriteProduct): self
+    {
+        if (!$this->favoriteProducts->contains($favoriteProduct)) {
+            $this->favoriteProducts->add($favoriteProduct);
+            $favoriteProduct->setFavorite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavoriteProduct(FavoriteProduct $favoriteProduct): self
+    {
+        if ($this->favoriteProducts->removeElement($favoriteProduct)) {
+            // set the owning side to null (unless already changed)
+            if ($favoriteProduct->getFavorite() === $this) {
+                $favoriteProduct->setFavorite(null);
+            }
+        }
 
         return $this;
     }

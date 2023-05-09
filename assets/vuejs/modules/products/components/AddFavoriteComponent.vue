@@ -76,7 +76,7 @@ import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { Favorite } from '@/vuejs/types/Favorite'
-import FavoriteForm from '@/vuejs/modules/account/components/Favorite/FavoriteForm.vue'
+import FavoriteForm from '@/vuejs/modules/account/components/favorite/FavoriteForm.vue'
 
 const props = defineProps({
   productId: {

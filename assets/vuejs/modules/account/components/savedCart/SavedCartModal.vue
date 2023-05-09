@@ -1,12 +1,10 @@
 <template>
-  <FavoriteModal>
-    <template #title>
-      {{ isEditing ? 'Renommer la liste' : 'Ajouter une liste' }}
-    </template>
+  <DefaultModal @cancel="onCancelClick">
+    <template #title> Sauvegarder et commencer un nouveau panier</template>
     <template #content>
-      <form v-if="favorite" class="w-full" @submit.prevent="onSubmitFavorite">
+      <form v-if="savedCart" class="w-full" @submit.prevent="onSubmit">
         <div class="px-3 md:px-8">
-          <FavoriteForm :favorite="favorite" />
+          <SavedCartForm :saved-cart="savedCart" />
           <div class="flex justify-between md:justify-end">
             <ButtonComponent
               class="button-secondary mr-2 !border"
@@ -25,19 +23,19 @@
         </div>
       </form>
     </template>
-  </FavoriteModal>
+  </DefaultModal>
 </template>
 
 <script lang="ts" setup>
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import { onMounted, ref } from 'vue'
-import { Favorite } from '@/vuejs/types/Favorite'
-import { useFavoriteStore } from '@/vuejs/stores/favorite'
-import FavoriteForm from '@/vuejs/modules/account/components/Favorite/FavoriteForm.vue'
-import FavoriteModal from '@/vuejs/modules/account/pages/FavoriteModalPage.vue'
+import DefaultModal from '@/vuejs/modules/account/pages/DefaultModalPage.vue'
+import SavedCartForm from '@/vuejs/modules/account/components/savedCart/SavedCartForm.vue'
+import { SavedCart } from '@/vuejs/types/SavedCart'
+import { useSavedCartStore } from '@/vuejs/stores/savedCart'
 
 const props = defineProps({
-  favoriteId: {
+  savedCartId: {
     type: String,
     required: false,
     default: null,
@@ -53,19 +51,19 @@ const props = defineProps({
     default: false,
   },
 })
-const favorite = ref<Favorite>()
-const favoriteStore = useFavoriteStore()
-const emit = defineEmits(['cancel', 'submitFavorite'])
+const savedCart = ref<SavedCart>()
+const savedCartStore = useSavedCartStore()
+const emit = defineEmits(['cancel', 'submitSavedCart'])
 
 onMounted(async () => {
-  if (props.favoriteId) {
-    favorite.value = favoriteStore.favorites.find(
-      (fav) => fav.id === props.favoriteId,
+  console.log(savedCartStore.savedCarts)
+  if (props.savedCartId) {
+    savedCart.value = savedCartStore.savedCarts.find(
+      (sc) => sc.id === props.savedCartId,
     )
   } else {
-    favorite.value = {
+    savedCart.value = {
       name: null,
-      public: false,
     }
   }
 })
@@ -74,9 +72,9 @@ const onCancelClick = () => {
   emit('cancel')
 }
 
-const onSubmitFavorite = async () => {
-  await emit('submitFavorite', {
-    favorite: favorite.value,
+const onSubmit = async () => {
+  await emit('submitSavedCart', {
+    savedCart: savedCart.value,
     isEditing: props.isEditing,
   })
 }

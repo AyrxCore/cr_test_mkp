@@ -1,9 +1,8 @@
-export interface Favorite {
+export interface SavedCart {
   id?: string
   accountId?: string
   name?: string
-  public?: boolean
   createdAt?: Date
   updatedAt?: Date
-  favoriteProducts?: Array<object>
+  savedCartProducts?: Array<object>
 }

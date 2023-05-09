@@ -4,20 +4,36 @@
       <h3 class="mb-2 mt-2 text-title-35 text-primary md:mt-0">
         Paniers sauvegardés
       </h3>
+      <div v-if="showAlert" class="lg:w-5/6">
+        <AlertSharedComponent />
+      </div>
       <div
         class="mb-2.5 hidden items-center text-sm text-gray-500 md:flex lg:text-base"
       >
-        <div class="w-3/12">Nom du panier</div>
+        <div class="w-5/12">Nom du panier</div>
         <div class="w-2/12">Créé le</div>
         <div class="w-3/12">Nombre d'articles</div>
-        <div class="w-2/12">Total</div>
+        <!--        <div class="w-2/12"></div>-->
         <div class="w-2/12"></div>
       </div>
-      <div class="flex flex-row flex-wrap justify-between">
+      <div
+        v-if="isLoading"
+        class="mt-5 flex h-20 w-full items-center justify-center"
+      >
+        <LoaderSharedComponent
+          class="text-secondary"
+          classes="loader-xl loader"
+        />
+      </div>
+      <div v-else class="flex flex-row flex-wrap justify-between">
         <SavedCartComponent
-          v-for="(cart, key) in listSavedCarts"
+          v-for="(savedCart, key) in savedCarts"
           :key="key"
-          :cart="cart"
+          :saved-cart="savedCart"
+          @cancel="showFormSavedCart = false"
+          @submit="onSubmit"
+          @delete="onDelete"
+          @add-to-cart="onAddToCart"
         />
       </div>
     </template>
@@ -25,30 +41,76 @@
 </template>
 <script lang="ts" setup>
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
-import { computed, ref } from 'vue'
-import FavoritesProductsComponent from '@/vuejs/modules/account/components/FavoriteProductComponent.vue'
-import { AccountPageList } from '@/vuejs/router/pages-list'
+import { computed, onMounted, ref } from 'vue'
 import SavedCartComponent from '@/vuejs/modules/account/components/SavedCartComponent.vue'
+import { useAlertStore } from '@/vuejs/stores/alert'
+import { storeToRefs } from 'pinia'
+import { useSavedCartStore } from '@/vuejs/stores/savedCart'
+import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
+import { useCartStore } from '@/vuejs/stores/cart'
+import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 
-const tab = computed(() => {
-  return AccountPageList.SAVED_CARTS
+const cartStore = useCartStore()
+const alertStore = useAlertStore()
+const showFormSavedCart = ref<boolean>(false)
+const deleteFavorite = ref<boolean>(false)
+const savedCartStore = useSavedCartStore()
+const isLoading = ref<boolean>(false)
+const { show: showAlert } = storeToRefs(alertStore)
+
+onMounted(async () => {
+  isLoading.value = true
+  await savedCartStore.fetchSavedCarts()
+  isLoading.value = false
 })
 
-const listSavedCarts = computed(() => {
-  const carts = []
-  const dateCreate = ['01/01/2022', '07/04/2022', '19/08/2022']
+const onSubmit = async (event) => {
+  isLoading.value = true
+  try {
+    if (event.isEditing) {
+      await savedCartStore.update(event.savedCart)
+    }
+    await savedCartStore.fetchSavedCarts()
+    showFormSavedCart.value = false
+  } catch (error) {}
 
-  for (let i = 0; i < 3; i++) {
-    const rndNb = Math.floor(Math.random() * 6) + 1
-    carts.push({
-      name: 'Panier N° ' + (i + 1),
-      dateCreate: dateCreate[i],
-      total: 'XX,XX',
-      numberArticle: rndNb,
-    })
-  }
+  isLoading.value = false
+}
 
-  return carts
+const onDelete = async (event) => {
+  isLoading.value = true
+  try {
+    await savedCartStore.delete(event.savedCartId)
+
+    await savedCartStore.fetchSavedCarts()
+    deleteFavorite.value = false
+  } catch (error) {}
+
+  isLoading.value = false
+}
+
+const onAddToCart = async (event) => {
+  isLoading.value = true
+  try {
+    const cartProducts = []
+    const cart = await savedCartStore.findSavedCartById(event.savedCartId)
+    for (const [, value] of Object.entries(cart.savedCartProducts)) {
+      cartProducts.push({
+        variantId: value.upplerVariantId,
+        quantity: value.quantity,
+      })
+    }
+    await cartStore.addProductsToCart(cartProducts)
+
+    await savedCartStore.fetchSavedCarts()
+    deleteFavorite.value = false
+  } catch (error) {}
+
+  isLoading.value = false
+}
+
+const savedCarts = computed(() => {
+  return savedCartStore.savedCarts
 })
 </script>
 

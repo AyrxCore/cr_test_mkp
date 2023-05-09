@@ -18,16 +18,6 @@ use Symfony\Contracts\Service\Attribute\Required;
 #[Route("/api/favorites")]
 class FavoriteApiController extends AbstractController
 {
-    /**
-     * @Route("/{id}/products", name="get_favorite_products", methods={"GET"})
-     */
-    public function __invoke(Favorite $favorite, NormalizerInterface $normalizer)
-    {
-        $jsonFavorite = $normalizer->normalize($favorite, 'json', ['groups' => 'favorite:get']);
-
-        return new JsonResponse($jsonFavorite);
-    }
-
     #[Required]
     public RequestStack $requestStack;
 
@@ -40,7 +30,15 @@ class FavoriteApiController extends AbstractController
     #[Required]
     public FavoriteService $favoriteService;
 
+    /**
+     * @Route("/{id}/products", name="get_favorite_products", methods={"GET"})
+     */
+    public function __invoke(Favorite $favorite, NormalizerInterface $normalizer)
+    {
+        $jsonFavorite = $normalizer->normalize($favorite, 'json', ['groups' => 'favorite:get']);
 
+        return new JsonResponse($jsonFavorite);
+    }
 
     #[Route('/item/add', name: 'add_favorite_item', methods: ['POST'])]
     public function addItemFavorites(Request $request): JsonResponse
@@ -58,9 +56,8 @@ class FavoriteApiController extends AbstractController
         $productName = $options['productName'] ?? null;
         $selectedFavorites = !empty($options['selectedFavorites']) ? $options['selectedFavorites'] : null;
         if (isset($productId, $productName, $variantId, $selectedFavorites)){
-            $product = $this->favoriteService->getUpplerProductByProductIdAndVariantId($productId, $variantId, $productName);
-            $this->favoriteService->addItemToFavorites($selectedFavorites, $product);
-            return new JsonResponse($product);
+            $this->favoriteService->addItemToFavorites($selectedFavorites, $productId, $variantId, $productName);
+            return new JsonResponse('Ajout du produit à toutes les listes sélectionnées effectué');
         } else {
             throw new Exception('Impossible d\'ajouter le produit à un ou plusieurs favoris');
         }
@@ -98,14 +95,10 @@ class FavoriteApiController extends AbstractController
         }
 
         $options = $request->request->all();
-
-        $favoriteId = $options['favoriteId'] ?? null;
         $favoriteIdToReceive= $options['favoriteIdToReceive'] ?? null;
         $upplerProductId= $options['upplerProductId'] ?? null;
-        if (isset($favoriteId, $favoriteIdToReceive)){
-            $this->favoriteService->removeItemFromFavorites($favoriteId, $upplerProductId);
-            $product = $this->favoriteService->getUpplerProductById($upplerProductId);
-            $this->favoriteService->addItemToFavorite($favoriteIdToReceive, $product);
+        if (isset($favoriteIdToReceive, $favoriteIdToReceive)){
+            $this->favoriteService->moveItemToFavorite($favoriteIdToReceive, $upplerProductId);
             return new JsonResponse(true);
         } else {
             throw new Exception('Impossible de déplacer ce Item');
@@ -131,6 +124,7 @@ class FavoriteApiController extends AbstractController
         $favoriteIdToReceive= $options['favoriteIdToReceive'] ?? null;
         if (isset($favoriteId, $favoriteIdToReceive)){
             $favorite = $this->favoriteService->moveItemsToOtherFavorite($favoriteId, $favoriteIdToReceive);
+            $this->favoriteService->removeFavorite($favoriteId);
             return new JsonResponse($favorite);
         } else {
             throw new Exception('Impossible de supprimer ce favori favoris');

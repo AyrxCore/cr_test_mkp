@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace App\DataPersister;
 
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
-use App\Entity\Account;
-use App\Entity\Favorite;
-use App\Service\FavoriteService;
+use App\Entity\SavedCart;
+use App\Service\SavedCartService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -15,7 +14,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
-class FavoritePersister implements ContextAwareDataPersisterInterface
+class SavedCartPersister implements ContextAwareDataPersisterInterface
 {
     #[Required]
     public EntityManagerInterface $em;
@@ -30,36 +29,37 @@ class FavoritePersister implements ContextAwareDataPersisterInterface
     public RequestStack $requestStack;
 
     #[Required]
-    public FavoriteService $favoriteService;
+    public SavedCartService $savedCartService;
 
     public function supports($data, array $context = []): bool
     {
-        return $data instanceof Favorite;
+        return $data instanceof SavedCart;
     }
 
     /**
-     * @param Favorite $data
+     * @param SavedCart $data
      * @throws Exception
      */
     public function persist($data, array $context = [])
     {
         try {
             if (isset($context["collection_operation_name"]) && ('create' === $context["collection_operation_name"])) {
-                return $this->favoriteService->createFavorite($data);
+                $savedCart = $this->savedCartService->create($data);
             } else  {
-                return $this->favoriteService->updateFavorite($data);
+                $savedCart = $this->savedCartService->update($data);
             }
+            return $savedCart;
         } catch (Exception $exception) {
             throw  new Exception($exception->getMessage());
         }
-
     }
 
     /**
+     * @param SavedCart $data
      * @throws Exception
      */
     public function remove($data, array $context = []): bool
     {
-        return $this->favoriteService->removeFavorite($data->getId());
+        return $this->savedCartService->removeSavedCart($data);
     }
 }

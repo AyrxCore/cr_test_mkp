@@ -40,7 +40,7 @@
           <div class="flex justify-start md:w-4/12 lg:w-3/12">Sous-total</div>
         </div>
         <FavoritesProductsDetailsComponent
-          v-for="(product, key) in favorite.upplerProducts"
+          v-for="(product, key) in favorite.favoriteProducts"
           :key="key"
           :product="product"
           :favorite-id="favorite.id"
@@ -82,7 +82,7 @@ import { useRoute } from 'vue-router'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import { Favorite } from '@/vuejs/types/Favorite'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
-import FavoriteFormModal from '@/vuejs/modules/account/components/Favorite/FavoriteAddEditModal.vue'
+import FavoriteFormModal from '@/vuejs/modules/account/components/favorite/FavoriteAddEditModal.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import { useAlertStore } from '@/vuejs/stores/alert'
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'

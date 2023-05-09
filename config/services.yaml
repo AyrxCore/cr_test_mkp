@@ -106,9 +106,15 @@ services:
     arguments:
       $em: '@doctrine.orm.entity_manager'
 
+  App\Service\SavedCartService:
+    arguments:
+      $em: '@doctrine.orm.entity_manager'
 
 # Voter
   App\Security\Voter\FavoriteVoter:
+    tags: [ { name: security.voter } ]
+
+  App\Security\Voter\SavedCartVoter:
     tags: [ { name: security.voter } ]
 
   Sentry\Integration\IgnoreErrorsIntegration:

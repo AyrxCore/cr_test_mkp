@@ -1,9 +1,7 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <div
-        class="mt-2 flex flex-col md:mt-5 md:flex-row md:justify-between lg:mt-0"
-      >
+      <div class="mt-2 flex flex-col md:mt-5 md:flex-row md:justify-between">
         <h3 class="mb-2 mt-2 text-title-35 text-primary md:mt-0">
           Mes produits favoris
         </h3>
@@ -45,7 +43,7 @@
       </div>
       <div v-else>
         <div
-          v-if="favorites.length === 0"
+          v-if="favorites && favorites.length === 0"
           class="mt-5 flex flex-row flex-wrap justify-center rounded-lg bg-white py-2 text-sm text-gray-600 md:text-base lg:text-lg"
         >
           Aucune liste de favori n'a été créée
@@ -70,7 +68,7 @@ import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import { computed, onMounted, ref } from 'vue'
 import FavoritesProductsComponent from '@/vuejs/modules/account/components/FavoriteProductComponent.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import FavoriteFormModal from '@/vuejs/modules/account/components/Favorite/FavoriteAddEditModal.vue'
+import FavoriteFormModal from '@/vuejs/modules/account/components/favorite/FavoriteAddEditModal.vue'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import { storeToRefs } from 'pinia'
 import { useAlertStore } from '@/vuejs/stores/alert'

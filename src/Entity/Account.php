@@ -94,10 +94,14 @@ class Account
     #[ORM\OneToMany(mappedBy: 'account', targetEntity: Favorite::class)]
     private Collection $favorites;
 
+    #[ORM\OneToMany(mappedBy: 'account', targetEntity: SavedCart::class, orphanRemoval: true)]
+    private Collection $savedCarts;
+
     public function __construct()
     {
         $this->cartSavings = new ArrayCollection();
         $this->favorites = new ArrayCollection();
+        $this->savedCarts = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -345,6 +349,36 @@ class Account
             // set the owning side to null (unless already changed)
             if ($favorite->getAccount() === $this) {
                 $favorite->setAccount(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SavedCart>
+     */
+    public function getSavedCarts(): Collection
+    {
+        return $this->savedCarts;
+    }
+
+    public function addSavedCart(SavedCart $savedCart): self
+    {
+        if (!$this->savedCarts->contains($savedCart)) {
+            $this->savedCarts->add($savedCart);
+            $savedCart->setAccount($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSavedCart(SavedCart $savedCart): self
+    {
+        if ($this->savedCarts->removeElement($savedCart)) {
+            // set the owning side to null (unless already changed)
+            if ($savedCart->getAccount() === $this) {
+                $savedCart->setAccount(null);
             }
         }
 

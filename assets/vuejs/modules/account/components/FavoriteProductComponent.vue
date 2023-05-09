@@ -21,8 +21,8 @@
       {{ updatedAt }}
     </div>
     <div class="md:w-2/12">
-      {{ favorite.nbUpplerProducts }}
-      {{ favorite.nbUpplerProducts > 1 ? 'articles' : 'article' }}
+      {{ favorite.nbFavoriteProducts }}
+      {{ favorite.nbFavoriteProducts > 1 ? 'articles' : 'article' }}
     </div>
     <div class="flex justify-end md:w-1/12">
       <button
@@ -72,8 +72,8 @@ import { computed, PropType, ref } from 'vue'
 import { Favorite } from '@/vuejs/types/Favorite'
 import { format } from 'date-fns'
 import { PageList } from '@/vuejs/router'
-import FavoriteFormModal from '@/vuejs/modules/account/components/Favorite/FavoriteAddEditModal.vue'
-import FavoriteDeleteModal from '@/vuejs/modules/account/components/Favorite/FavoriteDeleteModal.vue'
+import FavoriteFormModal from '@/vuejs/modules/account/components/favorite/FavoriteAddEditModal.vue'
+import FavoriteDeleteModal from '@/vuejs/modules/account/components/favorite/FavoriteDeleteModal.vue'
 import { useAlertStore } from '@/vuejs/stores/alert'
 import { AlertType } from '@/vuejs/types/Alert'
 import MultipleUserComponent from '@/vuejs/modules/shared/icon/MultipleUserComponent.vue'

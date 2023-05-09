@@ -89,6 +89,10 @@ const listAccount = ref<any[]>([
     label: 'Listes de produits favoris',
     routeName: AccountPageList.FAVORITES_LIST,
   },
+  {
+    label: 'Paniers sauvegardés',
+    routeName: AccountPageList.SAVED_CARTS,
+  },
   // {
   //   label: 'Changer de SIRET',
   //   url: '/app/account/orders-history',
