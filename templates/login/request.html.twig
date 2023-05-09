@@ -1,5 +1,8 @@
 {% extends "base.html.twig" %}
 {% block title %}Mot de passe oublié{% endblock %}
+{% block metas %}
+  <meta name="robots" content="noindex">
+{% endblock %}
 {% block header %}
   {% include '_partials/_header.html.twig' with { 'back_url': true} %}
 {% endblock %}
@@ -16,14 +19,16 @@
           </h1>
           <div class="mt-5">
             <p class="text-gray-500">
-              Veuillez saisir votre adresse email professionnelle dans le cadre ci-dessous afin de recevoir un lien pour définir votre nouveau mot de passe
+              Veuillez saisir votre adresse email professionnelle dans le cadre ci-dessous afin de recevoir un lien pour
+              définir votre nouveau mot de passe
             </p>
 
             {% include '_partials/_alert.html.twig' %}
 
             <div class="flex flex-col md:flex-row justify-between space-x-2 mt-5">
               <input type="email" id="username" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm
-                    text-gray-900 focus:border-blue-500 focus:ring-blue-500" name="_username" value="" autocomplete="username" required/>
+                    text-gray-900 focus:border-blue-500 focus:ring-blue-500" name="_username" value=""
+                     autocomplete="username" required />
               <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
               <button
                 type="submit"
