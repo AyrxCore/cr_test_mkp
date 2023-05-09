@@ -20,10 +20,10 @@ final class Version20230502152045 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE favorite_product (id UUID NOT NULL, favorite_id UUID NOT NULL, uppler_product_id INT NOT NULL, uppler_variant_id INT NOT NULL, uppler_product_name VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE favorite_product (id UUID NOT NULL , favorite_id UUID NOT NULL, uppler_product_id INT NOT NULL, uppler_variant_id INT NOT NULL, uppler_product_name VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_8E1EAAC3AA17481D ON favorite_product (favorite_id)');
         $this->addSql('INSERT INTO favorite_product (id, favorite_id, uppler_product_id, uppler_variant_id, uppler_product_name)
-           SELECT up.id, fup.favorite_id, up.uppler_product_id, up.uppler_variant_id, up.name FROM uppler_product up
+           SELECT gen_random_uuid(), fup.favorite_id, up.uppler_product_id, up.uppler_variant_id, up.name FROM uppler_product up
             INNER JOIN favorite_uppler_product fup on up.id = fup.uppler_product_id
             ');
         $this->addSql('COMMENT ON COLUMN favorite_product.id IS \'(DC2Type:uuid)\'');
