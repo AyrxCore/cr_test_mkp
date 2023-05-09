@@ -267,7 +267,12 @@
               }"
             >
               <td class="w-[20%] border p-2">{{ key }}</td>
-              <td class="p-2">{{ property }}</td>
+              <td class="p-2">
+                <a v-if="isUrl(property)" :href="property" target="_blank">
+                  Cliquez-ici</a
+                >
+                <span v-else>{{ property }}</span>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -289,6 +294,7 @@
     </div>
   </BaseTemplate>
   <ProductAddToCartComponent
+    v-if="product"
     class="z-10 flex lg:hidden"
     :product="product"
     :show-price="true"
@@ -406,6 +412,14 @@ const arrayEqual = (arr1, arr2) => {
   }
 
   return true
+}
+
+const isUrl = (str) => {
+  try {
+    return new URL(str)
+  } catch (e) {
+    return false
+  }
 }
 watch(
   () => route.params.id as string,
