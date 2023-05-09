@@ -80,52 +80,26 @@
               </div>
             </div>
           </div>
-          <div
+          <ProductPaginationComponent
             v-if="count"
-            class="mt-5 flex w-full items-center justify-start rounded-md p-2 lg:mt-0 lg:justify-end"
-          >
-            <div
-              class="mr-2 flex h-[28px] w-auto flex-row items-center justify-between rounded-md border bg-white"
-            >
-              <button
-                class="flex"
-                :class="{
-                  'disable cursor-not-allowed': pageNumber === 1,
-                }"
-                @click="pagePreview"
-              >
-                <ChevronLeftIconComponent
-                  class="ml-1 h-4 stroke-gray-500"
-                  :stroke-color="'#626262'"
-                />
-              </button>
-              <span>{{ pageNumber }} / {{ numberPageTotal() }}</span>
-              <button
-                class="flex"
-                :class="{
-                  'disable cursor-not-allowed':
-                    pageNumber === numberPageTotal(),
-                }"
-                @click="pageNext"
-              >
-                <ChevronRightIconComponent
-                  class="ml-1 h-4"
-                  :stroke-color="'#626262'"
-                />
-              </button>
-            </div>
-            <div class="mr-2 items-center">{{ count }} produit(s)</div>
-          </div>
+            :number-page-total="numberPageTotal()"
+            :count="count"
+            :page-number="pageNumber"
+            @page-preview="pagePreview"
+            @page-next="pageNext"
+          />
         </div>
         <div
-          class="mt-5 flex h-[50%] flex-col gap-4 text-gray-600 xl:grid xl:grid-cols-4"
+          class="flex h-[50%] flex-col gap-4 text-gray-600 xl:grid xl:grid-cols-4"
         >
           <FiltersComponent
             v-if="filters"
             :filters="filters"
             @filter-product="filterProduct"
           />
-          <div class="col-span-3 flex flex-col rounded-lg pb-4 text-gray-500">
+          <div
+            class="col-span-3 flex flex-col rounded-lg pb-4 text-gray-500 md:mt-5"
+          >
             <div class="">
               <div
                 class="flex flex-col text-gray-600 md:grid md:grid-cols-2 md:gap-8 lg:grid-cols-3"
@@ -152,6 +126,14 @@
                 </div>
               </div>
             </div>
+            <ProductPaginationComponent
+              class="!md:mt-10"
+              :number-page-total="numberPageTotal()"
+              :count="count"
+              :page-number="pageNumber"
+              @page-preview="pagePreview"
+              @page-next="pageNext"
+            />
           </div>
         </div>
       </div>
@@ -161,10 +143,8 @@
 <script lang="ts" setup>
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import ProductComponent from '@/vuejs/modules/products/components/ProductComponent.vue'
-import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightIconComponent.vue'
-import ChevronLeftIconComponent from '@/vuejs/modules/shared/icon/ChevronLeftIconComponent.vue'
 import { useRoute } from 'vue-router'
-import { computed, onBeforeMount, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeMount, ref, watch } from 'vue'
 import { useProductStore } from '@/vuejs/stores/product'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
@@ -178,6 +158,7 @@ import SelectedFilterComponent from '@/vuejs/modules/products/components/filters
 import { storeToRefs } from 'pinia'
 import { filterType } from '@/vuejs/modules/products'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
+import ProductPaginationComponent from '@/vuejs/modules/products/components/ProductPaginationComponent.vue'
 
 const route = useRoute()
 const productStore = useProductStore()
