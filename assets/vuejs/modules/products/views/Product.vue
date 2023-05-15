@@ -436,7 +436,11 @@ watch(
       )
       variantId.value = parseInt(Object.keys(product.value.variants)[0])
       if (Object.keys(product.value.variants).length > 2) {
-        variants.value.push(await productStore.findVariantById(variantId.value))
+        const variant = await productStore.findVariantById(variantId.value)
+        variants.value.push(variant)
+        price.value = variant.price?.display_price / 100
+        const priceDiff = priceReference.value - price.value
+        percent.value = Math.round((priceDiff * 100) / priceReference.value)
       }
     } catch (error) {
     } finally {
