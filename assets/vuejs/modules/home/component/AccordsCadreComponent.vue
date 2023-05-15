@@ -47,7 +47,6 @@ import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListShar
 import AccordCadreComponent from '@/vuejs/modules/home/component/AccordCadreComponent.vue'
 import { useProductStore } from '@/vuejs/stores/product'
 import { storeToRefs } from 'pinia'
-import ProductsLoadingCarouselComponent from '@/vuejs/modules/shared/ProductsLoadingCarouselComponent.vue'
 import AccordsCadresLoadingCarouselComponent from '@/vuejs/modules/shared/AccordsCadresLoadingCarouselComponent.vue'
 
 const productStore = useProductStore()
