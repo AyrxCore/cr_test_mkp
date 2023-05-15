@@ -1,5 +1,5 @@
 <template>
-  <BaseTemplate title="Qantis - MarketPlace">
+  <BaseTemplate :title="`${productTitle} Qantis - MarketPlace`">
     <div
       v-if="isLoading"
       class="mt-5 flex h-20 w-full items-center justify-center"
@@ -304,7 +304,7 @@ import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
 import { getImage, getUpplerImage } from '@/vuejs/services/utils'
 import helpImage from '@/vuejs/assets/img/samples/img-help-product.png'
-import { onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { SwiperSlide } from 'swiper/vue'
 import ArrowRigntIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
@@ -415,6 +415,11 @@ const isUrl = (str) => {
     return false
   }
 }
+
+const productTitle = computed(() => {
+  return product.value ? product.value.name + ' | ' : ''
+})
+
 watch(
   () => route.params.id as string,
   async (id: string) => {

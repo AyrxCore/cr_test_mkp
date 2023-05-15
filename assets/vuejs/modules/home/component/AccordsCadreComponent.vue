@@ -1,5 +1,5 @@
 <template>
-  <div v-if="productsAccordsCadre.length">
+  <div>
     <div class="mt-10">
       <h3 class="home-subtitle text-primary">
         Les accords-cadres incontournables
@@ -9,7 +9,7 @@
         votre adhésion ?
       </p>
     </div>
-    <div class="relative mt-5">
+    <div v-if="productsAccordsCadre.length" class="relative mt-5">
       <CarouselListSharedComponent
         :slides-per-view="1"
         :space-between="20"
@@ -37,6 +37,7 @@
         </SwiperSlide>
       </CarouselListSharedComponent>
     </div>
+    <AccordsCadresLoadingCarouselComponent v-else />
   </div>
 </template>
 
@@ -46,10 +47,11 @@ import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListShar
 import AccordCadreComponent from '@/vuejs/modules/home/component/AccordCadreComponent.vue'
 import { useProductStore } from '@/vuejs/stores/product'
 import { storeToRefs } from 'pinia'
+import ProductsLoadingCarouselComponent from '@/vuejs/modules/shared/ProductsLoadingCarouselComponent.vue'
+import AccordsCadresLoadingCarouselComponent from '@/vuejs/modules/shared/AccordsCadresLoadingCarouselComponent.vue'
 
 const productStore = useProductStore()
 const { productsAccordsCadre } = storeToRefs(productStore)
-
 </script>
 
 <style scoped></style>

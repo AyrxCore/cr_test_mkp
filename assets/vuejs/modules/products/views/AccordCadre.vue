@@ -1,5 +1,5 @@
 <template>
-  <BaseTemplate title="Qantis - MarketPlace">
+  <BaseTemplate :title="`${accordTitle} Qantis - MarketPlace`">
     <div v-if="isLoading" class="flex h-16 w-full items-center justify-center">
       <LoaderSharedComponent
         class="text-secondary"
@@ -130,6 +130,10 @@ const scrollTo = (selector) => {
     element.scrollIntoView({ behavior: 'smooth' })
   }
 }
+
+const accordTitle = computed(() => {
+  return accord.value ? accord.value.name + ' | ' : ''
+})
 
 watch(
   () => route.params.id as string,
