@@ -6,7 +6,7 @@
       >
         <span>{{ seller?.name || '-' }}</span>
         <span class="ml-2 text-sm font-bold text-gray-500">
-          {{ order.items.length }} produit(s)
+          {{ order.items.length }} référence(s)
         </span>
       </h3>
       <div
