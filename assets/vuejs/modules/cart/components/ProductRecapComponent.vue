@@ -4,17 +4,32 @@
       <div class="flex w-full flex-col lg:flex-row">
         <div class="my-5 flex lg:w-7/12">
           <div class="flex h-[116px] w-5/12 lg:w-4/12">
-            <img
-              :src="productImage"
-              :alt="`Image ${product.name.default}`"
-              class="m-auto block max-h-full max-w-full"
-            />
+            <RouterLink
+              :to="{
+                name: PageList.PRODUCT,
+                params: { id: product.id },
+              }"
+            >
+              <img
+                :src="productImage"
+                :alt="`Image ${product.name.default}`"
+                class="m-auto block max-h-full max-w-full"
+              />
+            </RouterLink>
           </div>
           <div class="ml-4 w-6/12 lg:w-7/12">
             <h3
               class="flex items-center text-lg font-bold text-primary lg:text-[22px]"
             >
-              {{ product.name.default }}
+              <RouterLink
+                :to="{
+                  name: PageList.PRODUCT,
+                  params: { id: product.id },
+                }"
+              >
+                {{ product.name.default }}
+              </RouterLink>
+
               <span
                 v-if="product && productNotFound"
                 class="text-white"
@@ -144,6 +159,7 @@ import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.
 import WarningIconComponent from '@/vuejs/modules/shared/icon/WarningIconComponent.vue'
 
 import sampleImg from '@/vuejs/assets/img/sample_product_img.png'
+import { PageList } from '@/vuejs/router'
 
 const cartStore = useCartStore()
 const productStore = useProductStore()
