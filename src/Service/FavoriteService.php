@@ -31,7 +31,7 @@ class FavoriteService
     /**
      * @throws Exception
      */
-    public function createFavorite(Favorite $favorite): bool
+    public function createFavorite(Favorite $favorite): Favorite
     {
         try {
             $session = $this->requestStack->getSession();
@@ -40,13 +40,13 @@ class FavoriteService
             $this->em->persist($favorite);
             $this->em->flush();
 
-            return true;
+            return $favorite;
         } catch (Exception $exception) {
             throw  new Exception($exception->getMessage());
         }
     }
 
-    public function updateFavorite(Favorite $favorite): bool
+    public function updateFavorite(Favorite $favorite): Favorite
     {
         try {
             $session = $this->requestStack->getSession();
@@ -57,7 +57,7 @@ class FavoriteService
             $this->em->flush();
             $this->em->clear();
 
-            return true;
+            return $favorite;
         } catch (Exception $exception) {
             throw  new Exception($exception->getMessage());
         }

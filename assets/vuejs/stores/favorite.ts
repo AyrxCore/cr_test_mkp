@@ -35,8 +35,9 @@ export const useFavoriteStore = defineStore({
     async create(favorite: Favorite) {
       const alertStore = useAlertStore()
       try {
-        await FavoriteHttpClient.get().create(favorite)
+        const newFavorite = await FavoriteHttpClient.get().create(favorite)
         alertStore.setShow('Votre liste a été créée', AlertType.success)
+        return newFavorite
       } catch (error) {
         alertStore.setShow(
           'Une erreur est survenue lors de la création de votre liste, veuillez essayer ultérieurement ou contacter le service client',
@@ -51,11 +52,14 @@ export const useFavoriteStore = defineStore({
     async update(favorite: Favorite) {
       const alertStore = useAlertStore()
       try {
-        await FavoriteHttpClient.get(true).update(favorite)
+        const updatedFavorite = await FavoriteHttpClient.get(true).update(
+          favorite,
+        )
         alertStore.setShow(
           `La liste <strong>${favorite.name}</strong> a été mise à jour`,
           AlertType.success,
         )
+        return updatedFavorite
       } catch (error) {
         alertStore.setShow(
           `La liste  <strong>${favorite.name}</strong> n'a pas pu être mise à jour`,

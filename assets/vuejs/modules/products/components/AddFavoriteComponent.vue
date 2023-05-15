@@ -1,76 +1,84 @@
 <template>
   <div v-click-outside="onOutsideBlock" class="flex items-center justify-end">
-    <button class="flex text-gray-500" @click="showTooltip = true">
+    <button class="flex text-gray-500" @click="onOpenFavorite">
       <HeartIconComponent
-        class="... stroke-gray-500"
+        class="... h-[40px] w-[40px] stroke-gray-500 lg:h-auto lg:w-auto"
         :class="{
           'fill-secondary stroke-secondary': favoritesSelected.length > 0,
         }"
       />
     </button>
-    <div v-if="showTooltip" class="tooltip">
-      <form
-        v-if="showList"
-        class="flex w-full flex-col space-y-2"
-        @submit.prevent="addProductToFavorite"
-      >
-        <span
-          v-if="showErrorNotSelected"
-          class="bg-orange-200 p-3 text-base text-gray-600"
-        >
-          Veuillez sélectionner une liste de favori</span
-        >
 
-        <div
-          v-if="favorites"
-          class="c-scrollbar flex max-h-[250px] flex-col overflow-y-auto px-1"
-        >
-          <div v-for="favoriteItem in favorites" :key="favoriteItem.id">
-            <label
-              class="text-base text-gray-600"
-              :class="{ 'bg-blue-200': favorite.name === favoriteItem.name }"
+    <div v-if="showTooltip" class="modal-overlay !absolute">
+      <div class="z-[9] mx-3 rounded p-3 md:p-0 lg:mx-0">
+        <div v-if="showTooltip" class="flex w-full">
+          <div class="tooltip">
+            <form
+              v-if="showList"
+              class="flex w-full flex-col space-y-2"
+              @submit.prevent="addProductToFavorite"
             >
-              <input
-                v-model="selectedFavorite[favoriteItem.id]"
-                type="checkbox"
-                :checked="isInArray(favoriteItem.id)"
-              />
-              {{ favoriteItem.name }}
-            </label>
-          </div>
-        </div>
+              <h3 class="font-bold text-primary">
+                Ajouter à une liste de produits préférés
+              </h3>
+              <hr />
+              <span
+                v-if="showErrorNotSelected"
+                class="bg-orange-200 p-3 text-base text-gray-600"
+              >
+                Veuillez sélectionner une liste de favori</span
+              >
 
-        <ButtonComponent
-          class="button-secondary flex !h-6 justify-end !px-0 !py-2"
-          :is-loading="addProductToFavoriteLoading"
-          >Ajouter à la liste
-        </ButtonComponent>
-      </form>
-      <ButtonComponent
-        v-if="showAddButton"
-        type="button"
-        class="button-white-secondary mt-2 flex !h-6 justify-end !px-2 !py-2 !text-secondary hover:!bg-white focus:!bg-white"
-        @click.stop="openFavoriteForm"
-        >+ Créer une nouvelle liste
-      </ButtonComponent>
-      <div v-show="showFormFavorite" class="mt-2">
-        <h3 class="mb-2 text-primary">Ajouter une nouvelle liste</h3>
-        <FavoriteForm :favorite="favorite" :form-col="true" />
-        <div class="flex justify-between">
-          <button
-            class="button button-white-secondary !h-6 !px-2 !py-2 !text-secondary hover:!bg-white focus:!bg-white"
-            type="button"
-            @click="closeFavoriteForm"
-          >
-            Annuler
-          </button>
-          <button
-            class="button button-secondary !h-6 !px-2 !py-2"
-            type="button"
-            @click="onSubmitFavorite"
-          >
-            Créer
-          </button>
+              <div
+                v-if="favorites"
+                class="c-scrollbar flex max-h-[250px] flex-col overflow-y-auto px-1"
+              >
+                <div v-for="favoriteItem in favorites" :key="favoriteItem.id">
+                  <label class="text-base text-gray-600">
+                    <input
+                      v-model="selectedFavorite[favoriteItem.id]"
+                      type="checkbox"
+                      :checked="isInArray(favoriteItem.id)"
+                    />
+                    {{ favoriteItem.name }}
+                  </label>
+                </div>
+              </div>
+              <div class="flex px-1">
+                <label class="text-base text-gray-600">
+                  <input
+                    v-model="selectedNewFavorite"
+                    type="checkbox"
+                    :checked="newFavorite !== null || newFavorite !== ''"
+                  />
+                </label>
+                <input
+                  v-model.trim="newFavorite"
+                  class="ml-1 w-full rounded py-0"
+                  type="text"
+                  placeholder="Ajouter une nouvelle liste"
+                />
+              </div>
+
+              <div class="!mt-5 flex justify-end">
+                <ButtonComponent
+                  class="button-gradient flex !h-10 justify-end !py-2"
+                  :disabled="
+                    selectedNewFavorite &&
+                    (newFavorite === null || newFavorite === '')
+                  "
+                  :is-loading="addProductToFavoriteLoading"
+                  >Ajouter
+                </ButtonComponent>
+                <ButtonComponent
+                  type="button"
+                  class="button-white-secondary flex !h-10 justify-end !py-2 !text-secondary hover:!bg-white focus:!bg-white"
+                  @click="onOutsideBlock"
+                  >Annuler
+                </ButtonComponent>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
@@ -82,8 +90,6 @@ import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
-import { Favorite } from '@/vuejs/types/Favorite'
-import FavoriteForm from '@/vuejs/modules/account/components/favorite/FavoriteForm.vue'
 
 const props = defineProps({
   productId: {
@@ -104,50 +110,30 @@ const props = defineProps({
   },
 })
 
-const favorite = ref<Favorite>({
-  name: null,
-  public: false,
-})
-
 const favoriteStore = useFavoriteStore()
 const { favorites } = storeToRefs(favoriteStore)
 const showTooltip = ref<boolean>(false)
 const showList = ref<boolean>(true)
 const selectedFavorite = ref([])
+const selectedNewFavorite = ref(null)
+const newFavorite = ref(null)
 const addProductToFavoriteLoading = ref<boolean>(false)
-const showFormFavorite = ref<boolean>(false)
 const isLoading = ref<boolean>(false)
-const showAddButton = ref<boolean>(true)
 const showErrorNotSelected = ref<boolean>(false)
+
+const emit = defineEmits(['openFavorite'])
+
+const onOpenFavorite = () => {
+  showTooltip.value = true
+  emit('openFavorite', { showTooltip: showTooltip.value })
+}
 const onOutsideBlock = () => {
   showTooltip.value = false
   selectedFavorite.value = []
   showErrorNotSelected.value = false
-}
-
-const openFavoriteForm = () => {
-  showFormFavorite.value = true
-  showAddButton.value = false
-  showTooltip.value = true
-  showList.value = false
-}
-
-const closeFavoriteForm = () => {
-  showFormFavorite.value = false
-  showAddButton.value = true
-  showList.value = true
-  showTooltip.value = true
-}
-
-const onSubmitFavorite = async () => {
-  isLoading.value = true
-  try {
-    await favoriteStore.create(favorite.value)
-    await favoriteStore.fetchFavorites()
-    closeFavoriteForm()
-  } catch (error) {}
-
-  isLoading.value = false
+  selectedNewFavorite.value = false
+  newFavorite.value = null
+  emit('openFavorite', { showTooltip: showTooltip.value })
 }
 
 const isInArray = (favoriteId) => {
@@ -159,14 +145,29 @@ const isInArray = (favoriteId) => {
 }
 
 const addProductToFavorite = async () => {
+  if (
+    selectedNewFavorite.value &&
+    (newFavorite.value === null || newFavorite.value === '')
+  ) {
+    return false
+  }
+  isLoading.value = true
   const selectedFavorites = Object.keys(selectedFavorite.value)
 
-  if (selectedFavorites.length > 0) {
+  if (selectedNewFavorite.value || selectedFavorites.length > 0) {
     showErrorNotSelected.value = false
     addProductToFavoriteLoading.value = true
     try {
+      if (selectedNewFavorite.value) {
+        const favorite = await favoriteStore.create({
+          name: newFavorite.value,
+          public: false,
+        })
+        const favoriteId = favorite.id
+        selectedFavorites.push(favoriteId)
+      }
       await favoriteStore.addItem({
-        selectedFavorites: Object.keys(selectedFavorite.value),
+        selectedFavorites,
         productId: props.productId,
         productName: props.productName,
         variantId: props.variantId,
@@ -175,6 +176,7 @@ const addProductToFavorite = async () => {
         props.favoritesSelected.push({ id: favoriteId })
       })
       onOutsideBlock()
+      await favoriteStore.fetchFavorites()
       selectedFavorite.value = []
     } catch (error) {}
 
@@ -182,12 +184,13 @@ const addProductToFavorite = async () => {
   } else {
     showErrorNotSelected.value = true
   }
+  isLoading.value = false
 }
 </script>
 
 <style scoped>
 .tooltip {
-  @apply absolute left-0 right-0 top-7 z-10 m-auto  flex min-h-[150px] w-[300px] flex-col items-center justify-center rounded border bg-white p-2.5;
+  @apply flex w-[350px] flex-col items-center justify-center rounded-lg border border-2 border-primary bg-white p-2.5 shadow-[0_20px_250px_25px] shadow-gray-600;
 }
 
 .c-scrollbar::-webkit-scrollbar {

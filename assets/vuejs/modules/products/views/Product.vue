@@ -97,7 +97,7 @@
         <!-- Bloc détails produit -->
         <div>
           <div
-            class="mt-5 flex flex-col rounded-lg bg-white p-5 md:mt-0 md:p-7"
+            class="mt-5 flex flex-col rounded-lg bg-white p-5 md:p-7 lg:mt-0"
           >
             <ProductTitleComponent class="hidden lg:flex">
               <template #name> {{ product.name }}</template>
@@ -279,15 +279,7 @@
           </tbody>
         </table>
       </div>
-      <!-- Fin Bloc Caractéristiques techniques -->
-
-      <!-- Bloc produits similaire -->
-      <!-- <div class="mt-10 justify-center">
-        <h3 class="home-subtitle text-primary">Produits similaires</h3>
-      </div> -->
-      <!-- Fin bloc produits similaire -->
     </div>
-
     <div
       v-else
       class="xs:w-[100%] m-auto my-4 flex max-w-screen-2xl justify-center px-5 sm:px-8"

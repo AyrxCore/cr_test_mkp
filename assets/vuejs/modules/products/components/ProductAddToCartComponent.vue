@@ -1,17 +1,17 @@
 <template>
   <div
     class="sticky bottom-1 flex w-full items-center border bg-white p-4 lg:relative lg:bottom-0 lg:border-0 lg:bg-transparent"
+    :class="{ '!bottom-[400px] lg:bottom-1': tooltipFavoriteIsOpened }"
   >
     <div class="flex w-full flex-col">
       <div
         v-if="props.showPrice"
         class="mb-2 flex flex-row items-center justify-between md:justify-evenly lg:hidden"
       >
-        <div
-          v-if="props.priceReference"
-          class="flex items-center justify-center text-center"
-        >
-          <span class="text-lg text-gray-500 line-through"
+        <div class="flex items-center justify-center text-center">
+          <span
+            v-if="props.priceReference"
+            class="text-lg text-gray-500 line-through"
             >{{ props.priceReference }}€ HT
           </span>
         </div>
@@ -38,11 +38,12 @@
           class="w-full lg:mt-14"
         />
         <AddFavoriteComponent
-          class="lg:hidden"
+          class="ml-5 lg:hidden"
           :product-id="props.product.id"
           :product-name="props.product.name"
           :variant-id="props.variantId"
           :favorites-selected="props.product.favorites"
+          @open-favorite="onOpenFavoriteTooltip"
         />
       </div>
     </div>
@@ -51,10 +52,11 @@
 
 <script lang="ts" setup>
 import ButtonAddToCartComponent from '@/vuejs/modules/shared/ButtonAddToCartComponent.vue'
-import { PropType } from 'vue'
+import { PropType, ref } from 'vue'
 import { Product } from '@/vuejs/types/Product'
 import AddFavoriteComponent from '@/vuejs/modules/products/components/AddFavoriteComponent.vue'
 
+const tooltipFavoriteIsOpened = ref(false)
 const props = defineProps({
   product: {
     required: true,
@@ -91,6 +93,10 @@ const props = defineProps({
     default: null,
   },
 })
+
+const onOpenFavoriteTooltip = (event) => {
+  tooltipFavoriteIsOpened.value = event.showTooltip
+}
 </script>
 
 <style scoped></style>
