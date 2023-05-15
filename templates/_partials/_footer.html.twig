@@ -39,12 +39,14 @@
             href="#"
             id="btnModal"
             data-toggle="modal"
-            onclick="openModal()"
+            onclick="openModal('contactModal')"
           >Nous contacter</a>
           {% include '_partials/_contact-modal.html.twig' %}
         </li>
         <li>
-          <a href="#">Mentions légales</a>
+          <a
+            href="/mentions-legales"
+          >Mentions légales</a>
         </li>
         <li>
           <a href="#">Politique de confidentialité</a>

@@ -10,6 +10,8 @@ import { routes as accountRoutes } from '@/vuejs/modules/account/routerAccount'
 
 import Home from '@/vuejs/modules/home/views/HomePage.vue'
 import Contact from '@/vuejs/modules/contact/views/ContactPage.vue'
+import MentionsLegales from '@/vuejs/modules/MentionsLegales.vue'
+import CGU from '@/vuejs/modules/CGU.vue'
 import NotFoundPage from '@/vuejs/modules/PageNotFound.vue'
 import { useUserStore } from '@/vuejs/stores/user'
 import { useCartStore } from '@/vuejs/stores/cart'
@@ -36,17 +38,27 @@ const routes: RouteRecordRaw[] = [
     redirect: { name: PageList.HOME_PAGE },
   },
   {
-    path: `/home`,
+    path: '/home',
     name: PageList.HOME_PAGE,
     component: Home,
   },
   {
-    path: `/contact`,
+    path: '/contact',
     name: PageList.CONTACT_PAGE,
     component: Contact,
   },
   {
-    path: `/page-not-found`,
+    path: '/mentions-legales',
+    name: PageList.MENTIONS_LEGALES_PAGE,
+    component: MentionsLegales,
+  },
+  {
+    path: '/conditions-generales-d-utilisations',
+    name: PageList.CGU_PAGE,
+    component: CGU,
+  },
+  {
+    path: '/page-not-found',
     name: PageList.PAGE_NOT_FOUND,
     component: NotFoundPage,
   },

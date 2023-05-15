@@ -15,7 +15,7 @@ class DefaultController extends AbstractController
     public RequestStack $requestStack;
 
     #[Route('/', name: 'prehome')]
-    #[Route('/{route}', name: 'app', requirements: ['route' => '^(?!.*_wdt|_profiler|login|api).+'])]
+    #[Route('/{route}', name: 'app', requirements: ['route' => '^(?!.*_wdt|_profiler|login|mentions-legales|api).+'])]
     public function index(Request $request): Response
     {
         $session = $this->requestStack->getSession();
@@ -31,5 +31,11 @@ class DefaultController extends AbstractController
             return $this->render('index.html.twig');
         }
         return $this->render('index_app.html.twig');
+    }
+
+    #[Route('/mentions-legales', name: 'mentions_legales')]
+    public function mentionsLegales(): Response
+    {
+        return $this->render('mentions-legales.html.twig');
     }
 }

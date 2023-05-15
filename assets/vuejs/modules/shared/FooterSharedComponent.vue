@@ -76,7 +76,10 @@
           </p>
           <div class="social-network-logo mb-2 inline">
             <div>
-              <a href="https://www.linkedin.com/company/qantis-co/" target="_blank">
+              <a
+                href="https://www.linkedin.com/company/qantis-co/"
+                target="_blank"
+              >
                 <img :src="linkedInLogoImg" alt="Linkedin" />
               </a>
             </div>
@@ -91,7 +94,10 @@
               </a>
             </div>
             <div>
-              <a href="https://www.youtube.com/channel/UCP-ZzEGFZ4rtW0Yx8u1ZDMQ" target="_blank">
+              <a
+                href="https://www.youtube.com/channel/UCP-ZzEGFZ4rtW0Yx8u1ZDMQ"
+                target="_blank"
+              >
                 <img :src="youtubeLogoImg" alt="Youtube" class="mt-0.5" />
               </a>
             </div>
@@ -124,12 +130,16 @@
                 Nous contacter
               </RouterLink>
             </li>
-            <li><a href="#">Conditions d'utilisation</a></li>
             <li>
-              <a href="#">Conditions générales <br />d'utilisation Lemonway</a>
+              <RouterLink :to="{ name: PageList.CGU_PAGE }"
+                >Conditions générales d'utilisation
+              </RouterLink>
             </li>
-            <li><a href="#">Mentions légales</a></li>
-            <li><a href="#">Cookies</a></li>
+            <li>
+              <RouterLink :to="{ name: PageList.MENTIONS_LEGALES_PAGE }"
+                >Mentions légales
+              </RouterLink>
+            </li>
           </ul>
         </div>
         <div class="mt-6 px-2 md:mt-0 md:px-0 lg:px-2">
@@ -181,7 +191,7 @@ import facebookLogo from '@/vuejs/assets/img/Pictos/facebook_social_logo.png'
 import { useCategoryStore } from '@/vuejs/stores/category'
 import { computed } from 'vue'
 import { AccountPageList, ProductPageList } from '@/vuejs/router/pages-list'
-import { PageList } from '@/vuejs/router';
+import { PageList } from '@/vuejs/router'
 
 const qantisLogoImg = getImage(qantisLogo)
 const ecologieLogoImg = getImage(ecologieLogo)

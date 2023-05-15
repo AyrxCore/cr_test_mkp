@@ -11,6 +11,9 @@
   <StickyContactButtons
     v-else-if="props.component === 'sticky-contact-buttons'"
   />
+  <MentionsLegalesComponent
+    v-else-if="props.component === 'mentions-legales'"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -23,6 +26,7 @@ import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconC
 import ArrowLeftIconComponent from '@/vuejs/modules/shared/icon/ArrowLeftIconComponent.vue'
 import FormComponent from '@/vuejs/modules/contact/component/FormComponent.vue'
 import NotifComponent from '@/vuejs/modules/shared/NotifComponent.vue'
+import MentionsLegalesComponent from '@/vuejs/modules/shared/MentionsLegalesComponent.vue'
 
 import { useCategoryStore } from '@/vuejs/stores/category'
 import { useBuyerCompanyStore } from '@/vuejs/stores/buyer_company'

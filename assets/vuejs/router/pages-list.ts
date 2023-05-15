@@ -31,6 +31,8 @@ export enum CartPageList {
 export enum MainPageList {
   HOME_PAGE = 'HOME_PAGE',
   CONTACT_PAGE = 'CONTACT_PAGE',
+  MENTIONS_LEGALES_PAGE = 'MENTIONS_LEGALES_PAGE',
+  CGU_PAGE = 'CGU_PAGE',
   PAGE_NOT_FOUND = 'PAGE_NOT_FOUND',
 }
 
