@@ -29,13 +29,22 @@
             params: { id: savedCart.id },
           }"
           class="flex"
+          title="Visualisez le contenu du panier sauvegardé"
         >
           <EyeIconComponent class="mr-2 stroke-secondary" />
         </RouterLink>
-        <button class="flex" @click="openAddToCartConfirm">
+        <button
+          class="flex"
+          title="Ajoutez ce panier sauvegardé à votre panier actuel"
+          @click="openAddToCartConfirm"
+        >
           <ShoppingCartIconComponent class="mr-2 !stroke-secondary stroke-2" />
         </button>
-        <button class="flex" @click="openDeleteForm">
+        <button
+          class="flex"
+          title="Supprimez ce panier sauvegardé"
+          @click="openDeleteForm"
+        >
           <TrashIconComponent :stroke-color="'#9866ff'" />
         </button>
       </div>

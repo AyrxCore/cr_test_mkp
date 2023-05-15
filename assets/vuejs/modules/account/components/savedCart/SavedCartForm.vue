@@ -18,7 +18,7 @@
         <input
           v-model="props.savedCart.name"
           type="text"
-          placeholder="Le libellé de votre liste de favori *"
+          placeholder="Nom de votre panier sauvegardé *"
           class="border-1 relative h-[55px] w-full rounded-lg border-gray-200 bg-white px-3 text-gray-600 text-primary placeholder-gray-400"
           required
         />
