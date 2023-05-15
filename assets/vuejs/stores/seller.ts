@@ -3,7 +3,7 @@ import { useAlertStore } from '@/vuejs/stores/alert'
 import { AlertType } from '@/vuejs/types/Alert'
 import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
 import { getErrorMessage } from '@/vuejs/services/login'
-import { Seller, SellerStoreState } from '@/vuejs/types/Seller'
+import { Seller, SellerPromotion, SellerStoreState } from '@/vuejs/types/Seller'
 import SellerHttpClient from '@/vuejs/services/httpclient/SellerHttpClient'
 
 export const useSellerStore = defineStore({
@@ -29,6 +29,9 @@ export const useSellerStore = defineStore({
     },
     async getSeller(id: number): Promise<Seller> {
       return await SellerHttpClient.get().getSeller(id)
+    },
+    async getSellerPromotions(sellerId: number): Promise<SellerPromotion[]> {
+      return await SellerHttpClient.get().getSellerPromotions(sellerId)
     },
   },
   getters: {},

@@ -41,7 +41,7 @@ export const useCartStore = defineStore({
           variantId,
           quantity,
         })
-        this.newlyAddedProducts.indexOf(variantId) === -1 &&
+        this.productVariantsInCart.indexOf(variantId) === -1 &&
           this.newlyAddedProducts.push(variantId)
       } catch (error) {
         notifyError(
@@ -136,12 +136,17 @@ export const useCartStore = defineStore({
   },
 
   getters: {
-    nbProducts(): number {
-      let nbProducts = 0
-      this.cart?.orders?.forEach((order: Order) => {
-        nbProducts += order.items.length
+    productVariantsInCart: (state): number[] => {
+      let variants: number[] = []
+      state.cart?.orders.forEach(o => {
+        o.items.forEach(i => {
+          variants.push(i.variant.id)
+        })
       })
-      return nbProducts + this.newlyAddedProducts.length
+      return [...variants,  ...state.newlyAddedProducts]
+    },
+    nbProducts(): number {
+      return this.productVariantsInCart.length
     },
     hasAllTermsChecked(): boolean {
       return this.termsOfSales.length === this.cart?.orders.length

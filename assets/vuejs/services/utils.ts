@@ -34,7 +34,7 @@ export function getUrlParam(name: string): string | null {
   return params.get(name)
 }
 
-export function notifyError(text: string, time: number = 5000): void {
+export function notifyError(text: string, time: number = 10000): void {
   notify(
     {
       group: 'notif',
@@ -42,7 +42,7 @@ export function notifyError(text: string, time: number = 5000): void {
       title: 'Une erreur est survenue',
       text: text,
     },
-    5000,
+    time,
   )
 }
 

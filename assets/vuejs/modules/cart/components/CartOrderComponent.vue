@@ -44,10 +44,18 @@
         <div class="hidden lg:flex lg:w-1/12"></div>
       </div>
       <div class="flex w-full flex-col">
-        <!-- <p class="text-sm text-gray-500 lg:text-lg">
-          Il vous reste XX€ HT de commande pour bénéficier de la livraison
-          gratuite
-        </p> -->
+        <div class="text-sm italic text-gray-500 lg:text-base">
+          <p v-if="notDisplayedPromotion" class="mt-5">
+            {{ seller?.description }}
+          </p>
+          <p v-else-if="leftBeforePromotion" class="mt-5">
+            Il vous reste {{ leftBeforePromotion }}€ HT de commande pour
+            bénéficier de {{ promotionType }}
+          </p>
+          <p v-else-if="hasReachedFranco" class="mt-5 text-green-600">
+            Franco atteint - vous bénéficiez de la livraison gratuite
+          </p>
+        </div>
         <p
           class="mt-5 flex flex-col text-sm text-gray-500 lg:mt-7 lg:flex-row lg:items-center lg:text-lg"
         >
@@ -100,7 +108,7 @@ import TosOrderComponent from '@/vuejs/modules/cart/components/TosOrderComponent
 import ProductRecapComponent from '@/vuejs/modules/cart/components/ProductRecapComponent.vue'
 import { useCartStore } from '@/vuejs/stores/cart'
 import { useSellerStore } from '@/vuejs/stores/seller'
-import { Seller } from '@/vuejs/types/Seller'
+import { Seller, SellerPromotion } from '@/vuejs/types/Seller'
 
 const cartStore = useCartStore()
 const sellerStore = useSellerStore()
@@ -121,13 +129,76 @@ const selectedShippingMethod = ref<number>(
 )
 
 const seller = ref<Seller>()
+const promotions = ref<SellerPromotion[]>([])
 
 onMounted(async (): Promise<void> => {
-  seller.value = await sellerStore.getSeller(props.order.seller.id)
+  const sellerId = props.order.seller.id
+  let [sellerVal, promotionsVal] = await Promise.all([
+    sellerStore.getSeller(sellerId),
+    sellerStore.getSellerPromotions(sellerId),
+  ])
+  seller.value = sellerVal
+  promotions.value = promotionsVal
 })
 
 const totalPriceDisplayed = computed((): string => {
   return formatPrice(props.order.total_excluding_taxes / 100)
+})
+
+const notDisplayedPromotion = computed((): boolean => {
+  const SELLERS_NO_DISPLAY_PROMOTION = [
+    26, // KRÖMM
+  ]
+  return SELLERS_NO_DISPLAY_PROMOTION.includes(seller.value?.id)
+})
+
+const leftBeforePromotion = computed((): string => {
+  if (!nextPromotion.value) return null
+  return formatPrice(
+    (nextPromotion.value.order_eligibility.amount -
+      props.order.items_total_excluding_taxes) /
+      100,
+  )
+})
+
+const nextPromotion = computed((): SellerPromotion => {
+  const total = props.order.items_total_excluding_taxes
+  let currentPromotion: SellerPromotion = null
+  if (!promotions.value.length) return
+  promotions.value.forEach((p, id) => {
+    if (!currentPromotion && total < p.order_eligibility.amount) {
+      currentPromotion = p
+    } else if (
+      total < p.order_eligibility.amount &&
+      currentPromotion.order_eligibility.amount > p.order_eligibility.amount
+    ) {
+      currentPromotion = p
+    }
+  })
+
+  return currentPromotion
+})
+
+const hasReachedFranco = computed((): boolean => {
+  return (
+    promotions.value &&
+    promotions.value.length > 0 &&
+    nextPromotion.value === null
+  )
+})
+
+const promotionType = computed((): string => {
+  const condition = nextPromotion.value?.conditions[0]
+  if (!condition) return
+  if (condition.apply_type === 'percent') {
+    if (condition.apply_value === 1.0) {
+      return 'la livraison gratuite'
+    } else {
+      return `${condition.apply_value * 100}% de réduction sur la livraison `
+    }
+  } else if (condition.apply_type === 'amount') {
+    return `${condition.apply_value / 100}€ de réduction sur la livraison `
+  }
 })
 
 const selectshippingMethod = async (): Promise<void> => {

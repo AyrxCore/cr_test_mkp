@@ -96,4 +96,18 @@ class UpplerSellerService extends HttpClientProvider
         }
         return $seller;
     }
+
+    public function getSellerPromotions(int $sellerId): array|null
+    {
+        $res = $this->request(
+            'GET',
+            $this->apiUrl . 'v1/administrator/promotion/?criteria[owner]=' . $sellerId . '&criteria[state]=activated&criteria[model]=shipment_order_min&expand[]=buyer_eligibility&expand[]=order_eligibility&expand[]=order_item_eligibility&expand[]=shipment_eligibility&expand[]=variant_eligibility&expand[]=code',
+            [],
+            true,
+        );
+        if (Response::HTTP_OK === $res->getStatusCode()) {
+            return json_decode($res->getContent(), true);
+        }
+        return null;
+    }
 }

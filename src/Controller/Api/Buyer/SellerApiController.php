@@ -45,4 +45,15 @@ class SellerApiController extends AbstractController
 
         return new JsonResponse($seller);
     }
+
+    #[Route('/api/sellers/{id}/promotions', name: 'get_seller_promotion')]
+    public function getSellerPromotions(int $id): JsonResponse
+    {
+        $session = $this->requestStack->getSession();
+        $session->start();
+
+        $promotion = $this->upplerSellerService->getSellerPromotions($id);
+
+        return new JsonResponse($promotion);
+    }
 }
