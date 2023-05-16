@@ -138,18 +138,20 @@ export const useCartStore = defineStore({
   getters: {
     productVariantsInCart: (state): number[] => {
       let variants: number[] = []
-      state.cart?.orders.forEach(o => {
-        o.items.forEach(i => {
+      const orders = state.cart?.orders
+      if (!orders) return state.newlyAddedProducts
+      orders.forEach((o) => {
+        o.items.forEach((i) => {
           variants.push(i.variant.id)
         })
       })
-      return [...variants,  ...state.newlyAddedProducts]
+      return [...variants, ...state.newlyAddedProducts]
     },
     nbProducts(): number {
       return this.productVariantsInCart.length
     },
     hasAllTermsChecked(): boolean {
-      return this.termsOfSales.length === this.cart?.orders.length
+      return this.termsOfSales.length === this.cart?.orders?.length
     },
     hasAllShippingMethodsSelected(): boolean {
       let hasAll = true

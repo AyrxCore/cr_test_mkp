@@ -49,7 +49,7 @@ class CartApiController extends AbstractController
         }
 
         $cart = $this->upplerCartService->getCartById($cartId);
-        if ($cart['state'] !== 'confirmed') {
+        if (!is_null($cart) && $cart['state'] !== 'confirmed') {
             $confirmed = $this->upplerCartService->isPaymentConfirmed($cartId);
 
             $acceptedStatus = ['processing', 'completed'];
