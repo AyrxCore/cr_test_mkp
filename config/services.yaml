@@ -62,7 +62,13 @@ services:
     arguments:
       $env: '%uppler_env%'
 
-# SERVICES UPPLER
+  App\EventListener\MaintenanceListener:
+    arguments:
+      - '@router'
+    tags:
+      - { name: kernel.event_listener, event: kernel.request }
+
+  # SERVICES UPPLER
   App\Service\HttpClientProvider:
     arguments:
       $env: '%uppler_env%'
@@ -101,7 +107,7 @@ services:
       $upplerUrlSourceProductImg: '%uppler_url_source_product_img%'
       $upplerUrlSourceSellerImg: '%uppler_url_source_seller_img%'
 
-# SERVICES MARKETPLACE
+  # SERVICES MARKETPLACE
   App\Service\FavoriteService:
     arguments:
       $em: '@doctrine.orm.entity_manager'
@@ -110,12 +116,12 @@ services:
     arguments:
       $em: '@doctrine.orm.entity_manager'
 
-# Voter
+  # Voter
   App\Security\Voter\FavoriteVoter:
-    tags: [ { name: security.voter } ]
+    tags: [{ name: security.voter }]
 
   App\Security\Voter\SavedCartVoter:
-    tags: [ { name: security.voter } ]
+    tags: [{ name: security.voter }]
 
   Sentry\Integration\IgnoreErrorsIntegration:
     arguments:

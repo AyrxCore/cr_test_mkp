@@ -38,6 +38,11 @@ class BaseClientService {
             console.log(error.config.url)
           }
         }
+        if (error.response?.status === 503) {
+          if (error.response?.data?.maintenance) {
+            location.reload()
+          }
+        }
         return Promise.reject(error)
       },
     )

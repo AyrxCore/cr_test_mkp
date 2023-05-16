@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\SettingRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -14,8 +15,11 @@ class DefaultController extends AbstractController
     #[Required]
     public RequestStack $requestStack;
 
+    #[Required]
+    public SettingRepository $settingRepository;
+
     #[Route('/', name: 'prehome')]
-    #[Route('/{route}', name: 'app', requirements: ['route' => '^(?!.*_wdt|_profiler|login|mentions-legales|api).+'])]
+    #[Route('/{route}', name: 'app', requirements: ['route' => '^(?!.*_wdt|_profiler|login|mentions-legales|maintenance|api).+'])]
     public function index(Request $request): Response
     {
         $session = $this->requestStack->getSession();
@@ -37,5 +41,17 @@ class DefaultController extends AbstractController
     public function mentionsLegales(): Response
     {
         return $this->render('mentions-legales.html.twig');
+    }
+
+    #[Route('/maintenance', name: 'maintenance')]
+    public function maintenance(): Response
+    {
+        $maintenanceMode = $this->settingRepository->findOneBy(['name' => 'maintenance']);
+
+        if (is_null($maintenanceMode) || (int)$maintenanceMode->getValue() !== 1) {
+            return $this->redirectToRoute('prehome');
+        }
+
+        return $this->render('maintenance.html.twig');
     }
 }

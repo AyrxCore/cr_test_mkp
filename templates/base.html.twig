@@ -58,6 +58,9 @@
 
 {% block body %}
 {% endblock %}
-{{ include('_partials/_footer.html.twig') }}
+
+{% block footer %}
+  {{ include('_partials/_footer.html.twig') }}
+{% endblock %}
 </body>
 </html>
