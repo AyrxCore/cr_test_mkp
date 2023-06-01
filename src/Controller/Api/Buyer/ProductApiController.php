@@ -25,22 +25,22 @@ class ProductApiController extends AbstractController
 {
 
     private const HOME_TOP_VENTE_PROPERTY
-    = [
-        'property_id' => '217',
-        'value'       => '5369',
-    ];
+        = [
+            'property_id' => '217',
+            'value'       => '5369',
+        ];
 
     private const HOME_SELECTION_PROPERTY
-    = [
-        'property_id' => '217',
-        'value'       => '5368',
-    ];
+        = [
+            'property_id' => '217',
+            'value'       => '5368',
+        ];
 
     private const HOME_ACCORD_CADRE_PROPERTY
-    = [
-        'property_id' => '217',
-        'value'       => '5367',
-    ];
+        = [
+            'property_id' => '217',
+            'value'       => '5367',
+        ];
 
     #[Required]
     public RequestStack $requestStack;
@@ -139,11 +139,15 @@ class ProductApiController extends AbstractController
 
         $resultat = $this->upplerProductService->findAllCategories((string)$session->get('account')->getId());
 
+        $resultat = json_decode(json_encode($resultat), true);
+
         $categories = (array)$resultat;
         $listMenu = array_slice($categories, 0, 6);
 
+
         usort($categories, function ($a, $b) {
-            return strcmp($a->name, $b->name);
+            //            return strcmp($a->name, $b->name);
+            return strcmp($a['name'], $b['name']);
         });
 
         return new JsonResponse(['categories' => $categories, 'menu' => $listMenu]);
@@ -226,8 +230,8 @@ class ProductApiController extends AbstractController
             $error = true;
             $logger->critical(
                 "Erreur d'envoi de demande de subscription "
-                    . $account->getUser()->getemail() . ' ' . $account->getAdherent()->getName() . " : " .
-                    $exception->getMessage()
+                . $account->getUser()->getemail() . ' ' . $account->getAdherent()->getName() . " : " .
+                $exception->getMessage()
             );
         }
 
@@ -263,4 +267,5 @@ class ProductApiController extends AbstractController
 
         return new JsonResponse($accordStatut->getStatus());
     }
+
 }

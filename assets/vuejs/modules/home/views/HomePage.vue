@@ -9,7 +9,7 @@
             à nos 30 000 entreprises adhérentes
           </h3>
           <p
-            class="mt-2.5 text-sm text-gray-400 sm:mt-5 sm:text-base xl:text-lg"
+               class="mt-2.5 text-sm text-gray-400 sm:mt-5 sm:text-base xl:text-lg"
           >
             Cher adhérent, ce nouvel espace dédié vous permet d'acheter
             directement en ligne et de trouver vos accords-cadres, en quelques
@@ -17,6 +17,9 @@
             disposition pour répondre à toutes vos questions.
           </p>
         </div>
+        <button @click="action">
+          button
+        </button>
         <div class="hidden xl:block">
           <ContactUsButtonComponent />
         </div>
@@ -34,9 +37,9 @@
 
       <!-- Bloc sélection de produits -->
       <ProductHomeComponent
-        class="mt-4"
-        :products="productsSelection"
-        title="Sélection de produits"
+            class="mt-4"
+            :products="productsSelection"
+            title="Sélection de produits"
       />
       <!-- Fin bloc sélection de produits -->
 
@@ -46,8 +49,8 @@
           Plus de 200 partenaires fournisseurs, repartis en 26 catégories, sont
           référencés pour vos achats.
           <RouterLink
-            :to="{ name: ProductPageList.CATEGORIES }"
-            class="font-normal text-secondary underline"
+                :to="{ name: ProductPageList.CATEGORIES }"
+                class="font-normal text-secondary underline"
           >
             Découvrir toutes les catégories d'achats
           </RouterLink>
@@ -59,11 +62,11 @@
     </div>
 
     <div
-      class="home-bloc-economie text-cotext m-auto mt-16 flex-1 py-4 text-white"
+          class="home-bloc-economie text-cotext m-auto mt-16 flex-1 py-4 text-white"
     >
       <div class="px-5 text-left sm:text-center">
         <h3
-          class="text-[23px] font-bold leading-[27px] sm:text-[35px] sm:leading-[38.11px]"
+              class="text-[23px] font-bold leading-[27px] sm:text-[35px] sm:leading-[38.11px]"
         >
           Vous faites des économies tout en <br />
           contribuant à votre démarche RSE
@@ -76,8 +79,8 @@
         </p>
         <p class="mt-10 flex justify-center">
           <RouterLink
-            :to="{ name: ProductPageList.CATEGORIES }"
-            class="button button-gradient"
+                :to="{ name: ProductPageList.CATEGORIES }"
+                class="button button-gradient"
           >
             <ArrowRightIconComponent :stroke-color="'#FFFFFF'" />
             Toutes nos catégories d'achats
@@ -88,7 +91,7 @@
 
     <template v-if="getExpertsContents.length">
       <div
-        class="my-6 mx-4 mt-10 max-w-screen-2xl flex-1 rounded-md bg-white pb-4 shadow-md xl:mx-auto"
+            class="my-6 mx-4 mt-10 max-w-screen-2xl flex-1 rounded-md bg-white pb-4 shadow-md xl:mx-auto"
       >
         <div class="flex flex-col pt-1 text-center">
           <h3 class="primary home-subtitle mt-10 flex flex-col pl-8 font-bold">
@@ -102,8 +105,8 @@
           <div class="flex justify-center">
             <p class="mt-10">
               <RouterLink
-                :to="{ name: NewsPageList.NEWS }"
-                class="button button-gradient"
+                    :to="{ name: NewsPageList.NEWS }"
+                    class="button button-gradient"
               >
                 <ArrowRightIconComponent :stroke-color="'#FFFFFF'" />
                 Tous les contenus experts
@@ -134,12 +137,18 @@ import { useFavoriteStore } from '@/vuejs/stores/favorite'
 
 const favoriteStore = useFavoriteStore()
 
+const categoryStore = useCategoryStore()
 const productStore = useProductStore()
 const { productsTopVente, productsSelection } = storeToRefs(productStore)
 const expertContentStore = useExpertContentStore()
 const { getExpertsContents } = storeToRefs(expertContentStore)
 
 const expertsContentsLoaded = ref<boolean>(false)
+
+
+const action = () => {
+  const cats = categoryStore.getAllCategories
+}
 
 onBeforeMount(async () => {
   await Promise.all([

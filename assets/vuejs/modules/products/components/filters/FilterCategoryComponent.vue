@@ -10,11 +10,11 @@
         class="mr-1"
         :checked="props.category.checked"
         @change="handleCategorySelection(props.category)"
-      />
-      <label>
-        {{ props.category.name }} ({{ props.category.count }})
-      </label>
-      <Chevron2RightIconComponent
+    />
+    <label>
+      {{ props.category.name }} ({{ props.category.count }})
+    </label>
+    <Chevron2RightIconComponent
         v-if="props.category.child"
         :class="{
                 'w-6 font-bold h-3 ml-2': props.category.parent === null,
@@ -22,19 +22,19 @@
                 'mt-4 rotate-90 ease-in-out': showChildren
               }"
         @click="toggleChildren"
-      />
-    </div>
-    <div
+    />
+  </div>
+  <div
       v-if="showChildren"
       class="ml-5"
-    >
-      <FilterCategoryComponent
+  >
+    <FilterCategoryComponent
         v-for="cat in props.category.child"
         :key="cat.id"
         :category="cat"
         @change-category="handleCategorySelection(cat)"
-      />
-    </div>
+    />
+  </div>
 
 </template>
 <script lang="ts" setup>
@@ -62,14 +62,10 @@ const toggleChildren = (() =>  {
 })
 
 const handleCategorySelection = (async (category) =>  {
-  if (category.child && category.child.length) {
-    handleChildSelection(category)
-  }
-  handleParentSelection(category)
-  await emit('change-category', { category_id: category.id})
+  await emit('change-category', {category_id: category.id})
 })
 
-const handleChildSelection = ((category) =>  {
+const handleChildSelection = ((category) => {
   category.child.forEach((child) => {
     child.checked = category.checked
     handleChildSelection(child)
