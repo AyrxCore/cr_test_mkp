@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace App\DataProvider;
 
 use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
+use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Dto\ExpertContentBanner;
 use App\Service\UpplerDynamicEntityService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
 
-class ExpertContentBannerProvider implements ItemDataProviderInterface
+class ExpertContentBannerProvider implements RestrictedDataProviderInterface, ItemDataProviderInterface
 {
 
     #[Required]
