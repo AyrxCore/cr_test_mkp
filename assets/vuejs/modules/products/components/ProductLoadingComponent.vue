@@ -1,43 +1,43 @@
 <template>
   <div
-    class="mx-auto flex flex-col h-[516px] w-[392px] justify-start rounded-md bg-white px-6 py-2"
+    class="mx-auto flex h-[516px] w-[392px] flex-col justify-start rounded-md bg-white px-6 py-2"
   >
     <!-- Bloc header -->
-    <div class="flex items-center justify-between h-[50px]">
-      <div class="flex h-[40px] w-[40px] items-center justify-start loading rounded-md"></div>
+    <div class="flex h-[50px] items-center justify-between">
+      <div
+        class="loading flex h-[40px] w-[40px] items-center justify-start rounded-md"
+      ></div>
     </div>
     <!-- Fin bloc header -->
 
     <!-- Bloc image -->
     <div
-      class="mx-auto flex h-auto w-full items-center justify-center rounded-lg h-[150px] loading px-6 py-2"
-    >
-    </div>
+      class="loading mx-auto flex h-auto h-[150px] w-full items-center justify-center rounded-lg px-6 py-2"
+    ></div>
     <!-- Fin bloc image -->
 
     <!-- Bloc nom et description -->
-    <div class="flex w-full h-[100px] flex-col justify-start loading px-6 py-2 mt-10 rounded-md">
-    </div>
+    <div
+      class="loading mt-10 flex h-[100px] w-full flex-col justify-start rounded-md px-6 py-2"
+    ></div>
     <!-- Fin bloc nom et description -->
 
     <!-- Bloc prix -->
-    <div class="flex w-[150px] h-[60px] items-center justify-start xl:mt-2 loading px-6 py-2 rounded-md">
-    </div>
+    <div
+      class="loading flex h-[60px] w-[150px] items-center justify-start rounded-md px-6 py-2 xl:mt-2"
+    ></div>
     <!-- Fin bloc prix -->
 
     <!-- Bloc quantité -->
     <div class="flex justify-between xl:mt-5">
       <div class="flex items-center justify-start">
-        <span class="text-sm text-gray-500">Qté: </span>
-        <select class="rounded-md border border-gray-300">
-          <option v-for="i in 5" :key="i" value="{{i}}">
-            {{ i }}
-          </option>
-        </select>
+        <span class="mr-2 text-sm text-gray-500">Qté: </span>
+        <ProductQuantityComponent quantity="1" />
       </div>
-      <div class=" flex items-center justify-end">
+      <div class="flex items-center justify-end">
         <ButtonComponent class="button-gradient">
-          <ShoppingCartIconComponent class="w-4" /> Ajouter
+          <ShoppingCartIconComponent class="w-4" />
+          Ajouter
         </ButtonComponent>
       </div>
     </div>
@@ -48,6 +48,7 @@
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
 import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
+import ProductQuantityComponent from '@/vuejs/modules/shared/ProductQuantityComponent.vue'
 </script>
 
 <style scoped>
@@ -60,7 +61,6 @@ import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartI
   background-size: 300% 300%;
   animation: gradient 1s ease infinite;
 }
-
 
 @keyframes gradient {
   0% {

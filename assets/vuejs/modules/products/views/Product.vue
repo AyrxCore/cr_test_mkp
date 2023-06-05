@@ -254,7 +254,7 @@
       <!-- Fin Bloc description -->
 
       <!-- Bloc Caractéristiques techniques -->
-      <div v-if="product.properties.length > 0" class="mt-10 justify-center">
+      <div class="mt-10 justify-center">
         <h3 class="home-subtitle mb-5 text-primary">
           Caractéristiques techniques
         </h3>
