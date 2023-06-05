@@ -4,8 +4,9 @@
       <HeartIconComponent
         class="... h-[40px] w-[40px] stroke-gray-500 lg:h-auto lg:w-auto"
         :class="{
-          'fill-secondary stroke-secondary': favoritesSelected.length > 0,
+          'fill-secondary !stroke-secondary': favoritesSelected.length > 0,
         }"
+        :stroke-color="'#000000'"
       />
     </button>
 
@@ -34,13 +35,32 @@
                 class="c-scrollbar flex max-h-[250px] flex-col overflow-y-auto px-1"
               >
                 <div v-for="favoriteItem in favorites" :key="favoriteItem.id">
-                  <label class="text-base text-gray-600">
+                  <label class="my-1 flex items-center text-base text-gray-600">
                     <input
                       v-model="selectedFavorite[favoriteItem.id]"
                       type="checkbox"
+                      class="cursor-pointer appearance-none rounded border border-gray-400 text-secondary checked:bg-secondary focus:ring-secondary"
                       :checked="isInArray(favoriteItem.id)"
+                      :disabled="isInArray(favoriteItem.id)"
+                      :class="{
+                        'cursor-not-allowed opacity-25': isInArray(
+                          favoriteItem.id,
+                        ),
+                      }"
                     />
-                    {{ favoriteItem.name }}
+                    <span class="ml-2">{{ favoriteItem.name }}</span>
+                    <span
+                      v-if="isInArray(favoriteItem.id)"
+                      class="ml-2 flex cursor-pointer items-center justify-end text-secondary underline"
+                      title="Supprimer de la liste"
+                      @click="onRemoveItem(favoriteItem.id)"
+                    >
+                      <LoaderSharedComponent v-if="isDelFavoriteLoading" />
+                      <TrashIconComponent
+                        v-else
+                        class="w-[20px] stroke-secondary"
+                      />
+                    </span>
                   </label>
                 </div>
               </div>
@@ -64,15 +84,16 @@
                 <ButtonComponent
                   class="button-gradient flex !h-10 justify-end !py-2"
                   :disabled="
-                    selectedNewFavorite &&
-                    (newFavorite === null || newFavorite === '')
+                    (selectedNewFavorite &&
+                      (newFavorite === null || newFavorite === '')) ||
+                    isDelFavoriteLoading
                   "
                   :is-loading="addProductToFavoriteLoading"
                   >Ajouter
                 </ButtonComponent>
                 <ButtonComponent
                   type="button"
-                  class="button-white-secondary flex !h-10 justify-end !py-2 !text-secondary hover:!bg-white focus:!bg-white"
+                  class="button-white-secondary ml-2 flex !h-10 justify-end !py-2 !text-secondary hover:!bg-white focus:!bg-white"
                   @click="onOutsideBlock"
                   >Annuler
                 </ButtonComponent>
@@ -90,6 +111,9 @@ import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
+import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
+import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
+import { notifySuccess } from '@/vuejs/services/utils'
 
 const props = defineProps({
   productId: {
@@ -119,6 +143,7 @@ const selectedNewFavorite = ref(null)
 const newFavorite = ref(null)
 const addProductToFavoriteLoading = ref<boolean>(false)
 const isLoading = ref<boolean>(false)
+const isDelFavoriteLoading = ref<boolean>(false)
 const showErrorNotSelected = ref<boolean>(false)
 
 const emit = defineEmits(['openFavorite'])
@@ -185,6 +210,22 @@ const addProductToFavorite = async () => {
     showErrorNotSelected.value = true
   }
   isLoading.value = false
+}
+
+const onRemoveItem = async (favoriteId) => {
+  isDelFavoriteLoading.value = true
+  try {
+    await favoriteStore.removeItem(favoriteId, props.productId, props.variantId)
+    const index = props.favoritesSelected.findIndex(
+      (element) => element.id === favoriteId,
+    )
+    if (index !== -1) {
+      props.favoritesSelected.splice(index, 1)
+      notifySuccess('Le produit a été retiré de la liste')
+    }
+  } catch (error) {}
+
+  isDelFavoriteLoading.value = false
 }
 </script>
 

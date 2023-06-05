@@ -113,6 +113,7 @@
                     "
                     :accord="product"
                     :key="`ac-${product.id}`"
+                    class="mt-5 md:mt-0"
                   />
                   <ProductComponent
                     v-else-if="

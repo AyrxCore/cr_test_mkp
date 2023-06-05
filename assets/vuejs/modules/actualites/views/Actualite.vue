@@ -74,9 +74,9 @@
       </div>
 
       <!-- Bloc articles recommandés -->
-      <div class="mt-10 justify-center">
+      <div v-if="contents.length > 0" class="mt-10 justify-center">
         <h3 class="home-subtitle mb-5 text-primary">Articles recommandés</h3>
-        <ContenusExpertComponent />
+        <ContenusExpertComponent :contents="contents" />
       </div>
       <!-- Fin Bloc articles recommandés -->
     </div>
@@ -105,7 +105,7 @@ import { ExpertContent } from '@/vuejs/types/ExpertContent'
 import { NewsPageList } from '@/vuejs/router/pages-list'
 
 const route = useRoute()
-const expertContentStore = useExpertContentStore()
+const expertContent = useExpertContentStore()
 const currentExpertContent = ref<ExpertContent>()
 
 const listUrl = ref([
@@ -120,20 +120,28 @@ const formattedDate = computed((): string => {
 })
 
 onBeforeMount(async () => {
-  await expertContentStore.init()
+  await expertContent.init()
 })
 
 const pageTitle = computed(() => {
-  return currentExpertContent.value ? currentExpertContent.value.articleTitle : ''
+  return currentExpertContent.value
+    ? currentExpertContent.value.articleTitle
+    : ''
+})
+
+const contents = computed(() => {
+  return expertContent.expertsContents.filter(
+    (c) =>
+      c.categoryName === currentExpertContent.value.categoryName &&
+      c.slug !== currentExpertContent.value.slug,
+  )
 })
 
 watch(
   () => route.params.slug as string,
   async (slug: string) => {
     if (slug) {
-      currentExpertContent.value = await expertContentStore.initActualitePage(
-        slug,
-      )
+      currentExpertContent.value = await expertContent.initActualitePage(slug)
     }
   },
   { immediate: true },

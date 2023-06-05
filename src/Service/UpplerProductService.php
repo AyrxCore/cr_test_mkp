@@ -199,15 +199,13 @@ class UpplerProductService extends HttpClientProvider
         $this->initHydrateProduct($remoteProduct, $product, $account, true);
         $product->setVariants($remoteProduct->variants);
 
-        $isAccordCadre = $this->isAccordCadre($remoteProduct, $product);
-
-        if (!$isAccordCadre) {
+        if (!$product->isAccordCadre()) {
             $priceReference = round($remoteProduct->price_reference * 0.01, 2);
             $product->setPriceReference($priceReference);
             $images[] = !empty($remoteProduct->images[0]->url) ? $remoteProduct->images[0]->url : null;
             $product->setImages($images);
 
-            $this->hydratePrice($remoteProduct, $product);
+            $this->formatPrice($remoteProduct, $product);
         }
 
         return $product;
@@ -219,9 +217,7 @@ class UpplerProductService extends HttpClientProvider
         $product = new Product();
         $this->initHydrateProduct($remoteProduct, $product, $session->get('account'));
 
-        $isAccordCadre = $this->isAccordCadre($remoteProduct, $product);
-
-        if ($isAccordCadre) {
+        if ($product->isAccordCadre()) {
             if ($accountId) {
                 $properties = [];
                 foreach ($remoteProduct->properties as $property) {
@@ -281,10 +277,10 @@ class UpplerProductService extends HttpClientProvider
                 $product->setVariants($variants);
             }
 
-            $this->hydratePrice($remoteProduct, $product);
+            $this->formatPrice($remoteProduct, $product);
 
             if ($product->getPriceReference() && $product->getPrice()) {
-                $priceDiff = $product->getPriceReference() - $product->getPrice()->getDisplayPrice();
+                $priceDiff = $product->getPriceReference() - $product->getPrice();
                 $percent = round(($priceDiff * 100) / $product->getPriceReference());
                 $product->setPercent($percent);
             }
@@ -340,9 +336,11 @@ class UpplerProductService extends HttpClientProvider
         return $filters;
     }
 
-    private function initHydrateProduct($remoteProduct,Product $product,Account $account, $fromList = false)
+    /**
+     * @throws InvalidArgumentException
+     */
+    private function initHydrateProduct($remoteProduct, Product $product, Account $account, $fromList = false): void
     {
-
         $product->setId($remoteProduct->id);
         $product->setName($remoteProduct->name->default);
         $product->setDescription($remoteProduct->description->default ?? null);
@@ -350,6 +348,7 @@ class UpplerProductService extends HttpClientProvider
         $product->setSlug($remoteProduct->slug->default);
         $favorites = $this->em->getRepository(Favorite::class)->getFavoritesByAccountAndProducId($account, $remoteProduct->id);
         $product->setFavorites($favorites);
+        $this->populatePropertiesAndSetIfIsAccordCadre($remoteProduct, $product);
         $categories = [];
 
         foreach ($remoteProduct->categories as $category) {
@@ -377,10 +376,9 @@ class UpplerProductService extends HttpClientProvider
      * @param $remoteProduct
      * @param  Product  $product
      *
-     * @return bool
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    private function isAccordCadre($remoteProduct, Product $product): bool
+    private function populatePropertiesAndSetIfIsAccordCadre($remoteProduct, Product $product)
     {
         $properties = [];
         $isAccordCadre = false;
@@ -388,12 +386,16 @@ class UpplerProductService extends HttpClientProvider
             if ('accord_cadre' === $property->property->name->default) {
                 $isAccordCadre = true;
             }
-            $properties[$property->property->name->fr] = $property->value;
+
+            if (isset($property->property->type) && $property->property->type === "checkbox") {
+                $propertyValue = $property->value == 1 ? "OUI" : "NON";
+            } else {
+                $propertyValue = $property->value;
+            }
+            $properties[$property->property->name->fr] = $propertyValue;
         }
         $product->setProperties($properties);
         $product->setIsAccordCadre($isAccordCadre);
-
-        return $isAccordCadre;
     }
 
     /**
@@ -402,12 +404,10 @@ class UpplerProductService extends HttpClientProvider
      *
      * @return void
      */
-    private function hydratePrice($remoteProduct, Product $product): void
+    private function formatPrice($remoteProduct, Product $product): void
     {
         if (null !== $remoteProduct->price) {
-            $price = new Price();
-            $price->setDisplayPrice(round($remoteProduct->price->display_price * 0.01, 2));
-            $price->setFormattedDisplayPrice($remoteProduct->price->formatted_display_price);
+            $price = round($remoteProduct->price->display_price * 0.01, 2);
             $product->setPrice($price);
         }
     }

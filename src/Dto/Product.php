@@ -55,7 +55,7 @@ final class Product implements \JsonSerializable
 
     private ?float $percent = 0;
 
-    private ?Price $price = null;
+    private ?float $price = null;
 
     private bool $isAccordCadre = false;
 
@@ -258,17 +258,17 @@ final class Product implements \JsonSerializable
     }
 
     /**
-     * @return Price|null
+     * @return float|null
      */
-    public function getPrice(): ?Price
+    public function getPrice(): ?float
     {
         return $this->price;
     }
 
     /**
-     * @param  Price|null  $price
+     * @param  float|null  $price
      */
-    public function setPrice(?Price $price): void
+    public function setPrice(?float $price): void
     {
         $this->price = $price;
     }

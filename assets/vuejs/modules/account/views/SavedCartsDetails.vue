@@ -34,9 +34,9 @@
           </div>
         </div>
         <SavedCartDetailsComponent
-          v-for="(product, key) in savedCart.savedCartProducts"
+          v-for="(savedCartProduct, key) in savedCart.savedCartProducts"
           :key="key"
-          :product="product"
+          :saved-cart-product="savedCartProduct"
           @change-quantity="onChangeQuantity"
         />
         <div class="mt-6 flex flex-col justify-end md:flex-row">

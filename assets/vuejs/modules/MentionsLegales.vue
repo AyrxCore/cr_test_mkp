@@ -6,17 +6,18 @@
         <ContactUsButtonComponent />
       </div>
       <div class="m-auto my-2 w-[100%] max-w-screen-2xl">
-        <MentionsLegalesComponent />
+        <CmsPageComponent :page-id="MENTIONS_LEGALES_PAGE_ID" />
       </div>
     </div>
   </BaseTemplate>
 </template>
 
 <script lang="ts" setup>
-import MentionsLegalesComponent from '@/vuejs/modules/shared/MentionsLegalesComponent.vue'
+import CmsPageComponent from '@/vuejs/modules/shared/CmsPageComponent.vue'
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
+import { MENTIONS_LEGALES_PAGE_ID } from '@/vuejs/services/const'
 </script>
 
 <style scoped></style>

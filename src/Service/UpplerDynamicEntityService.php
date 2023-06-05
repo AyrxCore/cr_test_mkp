@@ -4,11 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Dto\DynamicEntity;
-use App\Dto\Seller;
-use App\Dto\Price;
-use App\Dto\Product;
-use App\Dto\Property;
+use App\Dto\ExpertContentBanner;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,25 +13,6 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 class UpplerDynamicEntityService extends HttpClientProvider
 {
-
-    private const DEFAULT_IMG = '/vuejs/assets/img/default-image.png';
-    private string $upplerUrlSourceProductImg;
-    private string $upplerUrlSourceSellerImg;
-    public function __construct(
-        string $env,
-        string $apiUrl,
-        string $adminClientId,
-        string $adminClientSecret,
-        string $adminTokenFile,
-        string $httpCachePath,
-        string $upplerUrlSourceProductImg,
-        string $upplerUrlSourceSellerImg
-    )
-    {
-        parent::__construct($env, $apiUrl, $adminClientId, $adminClientSecret, $adminTokenFile, $httpCachePath);
-        $this->upplerUrlSourceProductImg = $upplerUrlSourceProductImg;
-        $this->upplerUrlSourceSellerImg = $upplerUrlSourceSellerImg;
-    }
 
     #[Required]
     public RequestStack $requestStack;
@@ -103,35 +80,43 @@ class UpplerDynamicEntityService extends HttpClientProvider
         return $dynamicsEntities;
     }
 
-
-    public function getDynamicEntity(int $productId = null, array $filters = []): Array
+    public function getDynamicEntityBanner(): ?ExpertContentBanner
     {
-
-        $filters =  empty($filters) ? [] : $filters;
-
-        $urlFilters = null;
-
-        if (!empty($filters)) {
-            foreach ($filters as $filter) {
-                $urlFilters.= null === $urlFilters ? '?expand[]=' . $filter : '&expand[]=' . $filter;
-            }
-        }
-
         $res = $this->request(
             'GET',
-            $this->apiUrl . 'v1/administrator/dynamic-entity/' . $productId . $urlFilters, [],true
+            $this->apiUrl . 'v1/administrator/dynamic-entity?expand[]=dynamic_fields&criteria[dynamic_entity_configuration_id]=2&criteria[enabled]=1',
+            [],
+            true
         );
 
         if (Response::HTTP_OK === $res->getStatusCode()) {
-            dump(json_decode($res->getContent(), true));
-            die;
-            return $this->populateProduct(json_decode($res->getContent()));
+            $remoteBanner = json_decode($res->getContent(), true);
+            if (!empty($remoteBanner[0])) {
+                $banner = new ExpertContentBanner();
+                $banner->setId($remoteBanner[0]['id']);
+                $banner->setSlug($remoteBanner[0]['slug']);
+                foreach ($remoteBanner[0]['dynamic_fields'] as $value) {
+                    $fieldName = $value['dynamic_field_configuration']['name']['default'];
+                    $fieldValue = $value['value'];
+                    switch ($fieldName) {
+                        case 'bandeau_flash_text':
+                            $banner->setText($fieldValue);
+                            break;
+                        case 'bandeau_flash_cta_text':
+                            $banner->setCtaTxt($fieldValue);
+                            break;
+                        case 'bandeau_flash_cta_link':
+                            $banner->setCtaLink($fieldValue);
+                            break;
+                    }
+                }
+                return $banner;
+            } else {
+                throw new NotFoundHttpException('Aucune bannière trouvée');
+            }
         } else {
-            throw new NotFoundHttpException('Aucune entité dynamique trouvée');
+            throw new NotFoundHttpException('Aucune bannière trouvée');
         }
-
-        return [];
     }
-
 
 }

@@ -19,7 +19,7 @@ export async function addProductToCartGoogleAnalytics(
   quantity,
   price = null,
 ) {
-  const priceValue = price ?? product.price?.displayPrice
+  const priceValue = price ?? product.price
 
   window.dataLayer.push({ ecommerce: null })
   const itemObject = {

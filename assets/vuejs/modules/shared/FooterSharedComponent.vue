@@ -140,15 +140,19 @@
                 >Mentions légales
               </RouterLink>
             </li>
+            <li>
+              <RouterLink :to="{ name: PageList.POLITIQUE_DE_CONFIDENTIALITE }"
+                >Politique de confidentialité
+              </RouterLink>
+            </li>
           </ul>
         </div>
         <div class="mt-6 px-2 md:mt-0 md:px-0 lg:px-2">
           <h3 class="mb-7 md:mb-4 lg:mb-7">La marketplace QANTIS</h3>
           <p>
-            Depuis 21 ans, QANTIS accompagne les entreprises françaises dans
-            leur performance et leur croissance durable en s'appuyant sur 3
-            moteurs : la centrale d'achat, l'expertise humaine et la
-            marketplace.
+            Depuis 2001, QANTIS accompagne les entreprises françaises dans leur
+            performance et leur croissance durable en s'appuyant sur 3 moteurs :
+            la centrale d'achat, l'expertise humaine et la marketplace.
           </p>
         </div>
       </div>

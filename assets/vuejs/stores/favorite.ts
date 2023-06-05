@@ -89,10 +89,14 @@ export const useFavoriteStore = defineStore({
         )
       }
     },
-    async removeItem(favoriteId, itemId) {
+    async removeItem(favoriteId, productId, variantId) {
       const alertStore = useAlertStore()
       try {
-        await FavoriteHttpClient.get().removeItem(favoriteId, itemId)
+        await FavoriteHttpClient.get().removeItem(
+          favoriteId,
+          productId,
+          variantId,
+        )
         alertStore.setShow(
           'Le produit a été retiré de la liste',
           AlertType.success,

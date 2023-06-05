@@ -12,7 +12,7 @@
       </div>
       <div class="flex w-6/12 flex-col md:ml-5 md:w-7/12">
         <RouterLink
-          :to="{ name: PageList.PRODUCT, params: { id: productId } }"
+          :to="{ name: PageList.PRODUCT, params: productId }"
           class="text-lg font-bold text-primary lg:text-[22px]"
         >
           {{ productName }}
@@ -30,13 +30,10 @@
       class="flex w-full items-center justify-between px-2 md:w-4/12 md:px-0 md:pr-2"
     >
       <div class="flex">
-        <select
-          v-model.number="product.quantity"
-          class="w-20 rounded-lg border border-gray-300 text-center"
-          @change="changeQuantity"
-        >
-          <option v-for="i in 10" :key="i">{{ i }}</option>
-        </select>
+        <ProductQuantityComponent
+          :quantity="savedCartProduct.quantity"
+          @update-quantity="changeQuantity"
+        />
       </div>
       <div class="flex">
         <div class="md:justify-end">
@@ -61,75 +58,78 @@ import sampleImg from '@/vuejs/assets/img/sample_product_img.png'
 import { Product } from '@/vuejs/types/Product'
 import { useProductStore } from '@/vuejs/stores/product'
 import { PageList } from '@/vuejs/router'
+import ProductQuantityComponent from '../../shared/ProductQuantityComponent.vue'
 
 const productStore = useProductStore()
-const productData = ref<Product>()
+const product = ref<Product>()
 const variantData = ref()
 const productNotFound = ref(false)
-const price = ref('')
 
 const emit = defineEmits(['changeQuantity'])
 const props = defineProps({
-  product: {
+  savedCartProduct: {
     required: true,
     type: Object,
   },
 })
 
 onMounted(async (): Promise<void> => {
-  productData.value = await productStore.findProductById(
-    props.product.upplerProductId,
+  product.value = await productStore.findProductById(
+    props.savedCartProduct.upplerProductId,
   )
-
-  if (!productData.value) {
+  if (!product.value) {
     productNotFound.value = true
   } else {
-    if (Object.entries(productData.value?.variants).length > 1) {
+    if (Object.entries(product.value?.variants).length > 1) {
       variantData.value = await productStore.findVariantById(
-        props.product.upplerVariantId,
+        props.savedCartProduct.upplerVariantId,
       )
     }
   }
 })
 
-const changeQuantity = async () => {
+const changeQuantity = async (event) => {
+  props.savedCartProduct.quantity = event.quantity
   await emit('changeQuantity', {
-    variantId: props.product.upplerVariantId,
-    quantity: props.product.quantity,
+    variantId: props.savedCartProduct.upplerVariantId,
+    quantity: props.savedCartProduct.quantity,
   })
 }
 
 const productImage = computed((): string => {
-  if (productData.value) return productData.value.images[0]
-  return getImage(sampleImg)
+  return product.value ? product.value.images[0] : getImage(sampleImg)
 })
 
-const productId = computed((): string => {
-  return props.product.upplerProductId
+const productId = computed(() => {
+  return product.value
+    ? { id: product.value.slug + '-' + product.value.id }
+    : ''
 })
 
 const productName = computed((): string => {
-  return productData.value
-    ? productData.value.name
-    : props.product.upplerProductName
+  return product.value
+    ? product.value.name
+    : props.savedCartProduct.upplerProductName
 })
 
 const productReference = computed((): string => {
-  return productData.value ? productData.value.reference : ''
+  return product.value ? product.value.reference : ''
 })
 
 const productPrice = computed((): number | string => {
+  let price = 0
   if (variantData.value) {
-    price.value =
-      (variantData.value.price?.display_price / 100) * props.product.quantity
-  } else if (productData.value) {
-    price.value = productData.value.price?.displayPrice * props.product.quantity
+    price =
+      (variantData.value.price?.display_price / 100) *
+      props.savedCartProduct.quantity
+  } else if (product.value) {
+    price = product.value.price * props.savedCartProduct.quantity
   }
-  return formatPrice(price.value)
+  return formatPrice(price)
 })
 
 const productSeller = computed((): string => {
-  return productData.value ? productData.value.seller.name : ''
+  return product.value ? product.value.seller.name : ''
 })
 </script>
 <style scoped>

@@ -5,6 +5,7 @@
       :slides-per-view="1"
       :space-between="20"
       :show-nav="true"
+      :loop="false"
       :breakpoints="{
         1280: {
           slidesPerView: 3,
@@ -17,7 +18,7 @@
       }"
     >
       <SwiperSlide
-        v-for="contenu in getExpertsContents"
+        v-for="contenu in props.contents"
         :key="contenu.id"
         class="flex h-full items-center justify-center overflow-hidden rounded-lg"
       >
@@ -69,13 +70,14 @@
 <script lang="ts" setup>
 import { SwiperSlide } from 'swiper/vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
-
-import { useExpertContentStore } from '@/vuejs/stores/expertContent'
-import { storeToRefs } from 'pinia'
 import { PageList } from '@/vuejs/router'
 
-const expertContent = useExpertContentStore()
-const { getExpertsContents } = storeToRefs(expertContent)
+const props = defineProps({
+  contents: {
+    required: true,
+    type: Array,
+  },
+})
 </script>
 
 <style scoped></style>

@@ -42,9 +42,15 @@ export default class FavoriteHttpClient extends BaseClientService {
       .then((response) => response.data)
   }
 
-  public removeItem<T extends []>(favoriteId, itemId): Promise<T | Favorite> {
+  public removeItem<T extends []>(
+    favoriteId,
+    productId,
+    variantId,
+  ): Promise<T | Favorite> {
     return this.apiClient
-      .delete<T>(`favorites/item/remove/${favoriteId}/${itemId}`)
+      .delete<T>(
+        `favorites/item/remove/${favoriteId}/${productId}/${variantId}`,
+      )
       .then((response) => response.data)
   }
 

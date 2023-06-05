@@ -6,7 +6,7 @@
         <div v-if="product">
           <h4 class="text-sm text-white md:text-base lg:text-lg">
             Voulez-vous vraiment supprimer ce produit:
-            <strong>{{ product.name }}</strong>
+            <strong>{{ product.upplerProductName }}</strong>
           </h4>
         </div>
 
@@ -60,7 +60,8 @@ const onCancelClick = () => {
 const onRemoveItem = async () => {
   await emit('removeItem', {
     favoriteId: props.favoriteId,
-    productId: props.product.id,
+    productId: props.product.upplerProductId,
+    variantId: props.product.upplerVariantId,
   })
 }
 </script>

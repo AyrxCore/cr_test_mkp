@@ -103,9 +103,9 @@ services:
 
   App\Service\UpplerDynamicEntityService:
     parent: App\Service\HttpClientProvider
-    arguments:
-      $upplerUrlSourceProductImg: '%uppler_url_source_product_img%'
-      $upplerUrlSourceSellerImg: '%uppler_url_source_seller_img%'
+
+  App\Service\UpplerPageService:
+    parent: App\Service\HttpClientProvider
 
   # SERVICES MARKETPLACE
   App\Service\FavoriteService:

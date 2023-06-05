@@ -7,7 +7,7 @@
             <RouterLink
               :to="{
                 name: PageList.PRODUCT,
-                params: { id: product.id },
+                params: productId,
               }"
             >
               <img
@@ -24,7 +24,7 @@
               <RouterLink
                 :to="{
                   name: PageList.PRODUCT,
-                  params: { id: product.id },
+                  params: productId,
                 }"
               >
                 {{ product.name.default }}
@@ -96,23 +96,12 @@
           class="mb-4 flex w-full items-center justify-between md:float-right lg:float-none lg:mb-0 lg:w-5/12"
         >
           <div class="text-center lg:w-2/12">
-            <select
+            <ProductQuantityComponent
               v-if="!cartStore.modifyingCart"
-              :value="item.quantity"
-              class="w-20 rounded-lg border border-gray-300 text-center"
-              @change="modifyQuantity"
-            >
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-              <option>6</option>
-              <option>7</option>
-              <option>8</option>
-              <option>9</option>
-              <option>10</option>
-            </select>
+              :quantity="item.quantity"
+              @update-quantity="modifyQuantity"
+            />
+
             <LoaderSharedComponent v-else class="text-primary" />
           </div>
           <div class="text-center lg:w-4/12">
@@ -160,6 +149,7 @@ import WarningIconComponent from '@/vuejs/modules/shared/icon/WarningIconCompone
 
 import sampleImg from '@/vuejs/assets/img/sample_product_img.png'
 import { PageList } from '@/vuejs/router'
+import ProductQuantityComponent from '../../shared/ProductQuantityComponent.vue'
 
 const cartStore = useCartStore()
 const productStore = useProductStore()
@@ -208,6 +198,12 @@ const totalPrice = computed((): number => {
   return props.item.total_excluding_taxes / 100
 })
 
+const productId = computed(() => {
+  return productData.value
+    ? { id: productData.value.slug + '-' + productData.value.id }
+    : { id: product.value.id }
+})
+
 const totalPriceDisplayed = computed((): string => {
   return formatPrice(totalPrice.value)
 })
@@ -220,13 +216,14 @@ const referencePriceDisplayed = computed((): string => {
   return formatPrice(price)
 })
 
-const modifyQuantity = async (event: InputEvent): Promise<void> => {
+const modifyQuantity = async (event): Promise<void> => {
   if (cartStore.modifyingCart) return
   cartStore.modifyingCart = true
   try {
+    props.item.quantity = event.quantity
     await cartStore.updateProductQuantity({
       id: props.item.id,
-      quantity: parseInt(event.target.value),
+      quantity: parseInt(event.quantity),
     })
     await cartStore.getCart()
   } catch (e) {

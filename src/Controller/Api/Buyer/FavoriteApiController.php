@@ -66,8 +66,8 @@ class FavoriteApiController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('/item/remove/{favoriteId}/{upplerProductId}', name: 'remove_favorite_item', methods: ['DELETE'])]
-    public function removeFavoriteItem($favoriteId, $upplerProductId): JsonResponse
+    #[Route('/item/remove/{favoriteId}/{productId}/{variantId}', name: 'remove_favorite_item', methods: ['DELETE'])]
+    public function removeFavoriteItem($favoriteId, $productId, $variantId): JsonResponse
     {
         $session = $this->requestStack->getSession();
         $session->start();
@@ -76,7 +76,9 @@ class FavoriteApiController extends AbstractController
             return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        $favorite = $this->favoriteService->removeItemFromFavorites($favoriteId, $upplerProductId);
+        dump((int)$productId, (int)$variantId);
+
+        $favorite = $this->favoriteService->removeItemFromFavorites($favoriteId, (int)$productId, (int)$variantId);
 
         return new JsonResponse($favorite);
     }
@@ -96,9 +98,9 @@ class FavoriteApiController extends AbstractController
 
         $options = $request->request->all();
         $favoriteIdToReceive= $options['favoriteIdToReceive'] ?? null;
-        $upplerProductId= $options['upplerProductId'] ?? null;
+        $favoriteProductId= $options['favoriteProductId'] ?? null;
         if (isset($favoriteIdToReceive, $favoriteIdToReceive)){
-            $this->favoriteService->moveItemToFavorite($favoriteIdToReceive, $upplerProductId);
+            $this->favoriteService->moveItemToFavorite($favoriteIdToReceive, $favoriteProductId);
             return new JsonResponse(true);
         } else {
             throw new Exception('Impossible de déplacer ce Item');

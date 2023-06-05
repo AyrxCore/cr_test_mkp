@@ -4,6 +4,11 @@
       <CarouselListSharedComponent
         :slides-per-view="1"
         :space-between="20"
+        :autoplay="{
+          delay: 3000,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        }"
         :breakpoints="{
           640: {
             slidesPerView: 1,

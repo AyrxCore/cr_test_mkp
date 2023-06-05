@@ -1,8 +1,8 @@
 <template>
   <div class="relative mt-5">
     <CarouselListSharedComponent
-      :slides-per-view="1"
       :space-between="10"
+      :loop="false"
       :breakpoints="{
         1280: {
           slidesPerView: 4,
@@ -19,8 +19,8 @@
       }"
     >
       <SwiperSlide
-        v-for="(product, key) in props.products"
-        :key="key"
+        v-for="product in props.products"
+        :key="product.id"
         class="flex h-full items-center justify-center overflow-hidden rounded-lg bg-white"
       >
         <ProductComponent :product="product" />
@@ -29,18 +29,15 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { PropType } from 'vue'
 import { SwiperSlide } from 'swiper/vue'
 
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
 import ProductComponent from '@/vuejs/modules/products/components/ProductComponent.vue'
 
-import { Product } from '@/vuejs/types/Product'
-
 const props = defineProps({
   products: {
     required: true,
-    type: Object as PropType<Product[]>,
+    type: Array,
   },
 })
 </script>

@@ -1,15 +1,15 @@
 <template>
   <div class="modal-overlay">
     <div
-      class="z-9999 fixed top-[5%] left-[30%] ml-[-150px] flex h-[90%] w-full flex-col items-center justify-start overflow-auto rounded-xl bg-primary px-10 py-3 text-white !opacity-100 lg:w-[50%]"
+      class="z-9999 fixed top-[5%] left-[30%] ml-[-150px] flex h-[90%] w-full flex-col items-center justify-start overflow-auto rounded-xl bg-white px-10 py-3 text-white !opacity-100 lg:w-[50%]"
     >
-      <CGUComponent />
+      <CmsPageComponent :page-id="CGU_PAGE_ID" />
       <div class="mt-5 flex items-center space-x-3">
         <label
           :class="{
             'text-red-400': showAlertModal,
           }"
-          class="cursor-pointer"
+          class="cursor-pointer text-primary"
         >
           <input v-model="acceptCGU" type="checkbox" class="mr-2" />
           J'accepte les CGU de la marketplace QANTIS
@@ -26,6 +26,8 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import CGUComponent from '@/vuejs/modules/shared/CGUComponent.vue'
+import { CGU_PAGE_ID } from '@/vuejs/services/const'
+import CmsPageComponent from '../../shared/CmsPageComponent.vue'
 
 const showAlertModal = ref<boolean>(false)
 const acceptCGU = ref(false)

@@ -57,3 +57,25 @@ export function notifySuccess(text: string): void {
     5000,
   )
 }
+
+export function arrayEqual(arr1, arr2): boolean {
+  if (arr1.length !== arr2.length) {
+    return false
+  }
+
+  for (let i = 0; i < arr1.length; i++) {
+    if (arr1[i] !== arr2[i]) {
+      return false
+    }
+  }
+
+  return true
+}
+
+export function isUrl(str) {
+  try {
+    return new URL(str)
+  } catch (e) {
+    return false
+  }
+}

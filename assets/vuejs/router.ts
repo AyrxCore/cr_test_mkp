@@ -11,6 +11,7 @@ import { routes as accountRoutes } from '@/vuejs/modules/account/routerAccount'
 import Home from '@/vuejs/modules/home/views/HomePage.vue'
 import Contact from '@/vuejs/modules/contact/views/ContactPage.vue'
 import MentionsLegales from '@/vuejs/modules/MentionsLegales.vue'
+import PolitiqueDeConfidentialite from '@/vuejs/modules/PolitiqueDeConfidentialite.vue'
 import CGU from '@/vuejs/modules/CGU.vue'
 import NotFoundPage from '@/vuejs/modules/PageNotFound.vue'
 import { useUserStore } from '@/vuejs/stores/user'
@@ -51,6 +52,11 @@ const routes: RouteRecordRaw[] = [
     path: '/mentions-legales',
     name: PageList.MENTIONS_LEGALES_PAGE,
     component: MentionsLegales,
+  },
+  {
+    path: '/politique-de-confidentialite',
+    name: PageList.POLITIQUE_DE_CONFIDENTIALITE,
+    component: PolitiqueDeConfidentialite,
   },
   {
     path: '/conditions-generales-d-utilisations',

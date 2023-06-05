@@ -8,7 +8,7 @@
           v-if="productData"
           v-model="selectedItem"
           type="checkbox"
-          class="appearance-none border border-gray-400 text-secondary checked:bg-secondary focus:ring-secondary"
+          class="cursor-pointer appearance-none rounded border border-gray-400 text-secondary checked:bg-secondary focus:ring-secondary"
           @change="onSelectItem"
         />
       </div>
@@ -139,6 +139,7 @@ const onRemoveItem = async (event) => {
   await emit('removeItem', {
     favoriteId: event.favoriteId,
     productId: event.productId,
+    variantId: event.variantId,
   })
   removeItem.value = false
 }
@@ -147,7 +148,7 @@ const onMoveItem = async (event) => {
   await emit('moveItem', {
     favoriteId: event.favoriteId,
     favoriteIdToReceive: event.favoriteIdToReceive,
-    upplerProductId: event.upplerProductId,
+    favoriteProductId: event.favoriteProductId,
   })
   moveItem.value = false
 }
@@ -160,7 +161,7 @@ onMounted(async (): Promise<void> => {
     productNotFound.value = true
   } else {
     priceReference.value = productData.value.priceReference
-    price.value = productData.value.price?.displayPrice
+    price.value = productData.value.price
     percent.value = productData.value.percent
   }
 })
@@ -185,7 +186,7 @@ const productReference = computed((): string => {
 })
 
 const productPrice = computed((): number | string => {
-  return productData.value ? productData.value.price?.displayPrice : ''
+  return productData.value ? productData.value.price : ''
 })
 
 const productSeller = computed((): string => {

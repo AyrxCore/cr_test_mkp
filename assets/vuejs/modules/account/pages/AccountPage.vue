@@ -81,8 +81,11 @@
           <p class="text-sm text-gray-500 md:text-base lg:text-lg">
             Les informations liées à votre compte restent strictement
             confidentielles et ne sont utilisées que conformément à notre
-            <a href="#" class="font-bold underline decoration-2">
-              Politique de confidentialité</a
+            <RouterLink
+              :to="{ name: PageList.POLITIQUE_DE_CONFIDENTIALITE }"
+              class="font-bold underline decoration-2"
+            >
+              Politique de confidentialité</RouterLink
             >
           </p>
         </div>
@@ -104,6 +107,7 @@ import DisconnectIconComponent from '@/vuejs/modules/shared/icon/DisconnectIconC
 import DropdownListComponent from '@/vuejs/modules/shared/DropdownListComponent.vue'
 
 import { MAIL_ANIMATION, PHONE_ANIMATION } from '@/vuejs/services/const'
+import { PageList } from '@/vuejs/router'
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)

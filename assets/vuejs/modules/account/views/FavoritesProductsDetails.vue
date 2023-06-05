@@ -133,7 +133,11 @@ const onSubmitFavorite = async (event) => {
 
 const onRemoveItem = async (event) => {
   try {
-    await favoriteStore.removeItem(event.favoriteId, event.productId)
+    await favoriteStore.removeItem(
+      event.favoriteId,
+      event.productId,
+      event.variantId,
+    )
     await refreshFavoriteItems(favorite.value.id)
   } catch (error) {}
 }
@@ -143,7 +147,7 @@ const onMoveItem = async (event) => {
     await favoriteStore.moveItem({
       favoriteId: event.favoriteId,
       favoriteIdToReceive: event.favoriteIdToReceive,
-      upplerProductId: event.upplerProductId,
+      favoriteProductId: event.favoriteProductId,
     })
     await refreshFavoriteItems(favorite.value.id)
   } catch (error) {}

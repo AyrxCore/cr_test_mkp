@@ -10,38 +10,38 @@
       >
         <div class="flex items-center justify-center text-center">
           <span
-            v-if="props.priceReference"
+            v-if="props.product.priceReference"
             class="text-lg text-gray-500 line-through"
-            >{{ props.priceReference }}€ HT
+            >{{ props.product.priceReference }}€ HT
           </span>
         </div>
         <div
-          v-if="props.price"
+          v-if="props.product.price"
           class="flex items-center justify-center text-[22px] font-bold text-primary md:text-[25px]"
         >
-          {{ props.price }}€ HT
+          {{ props.product.price }}€ HT
         </div>
         <div class="mt-3 ml-2 flex">
           <span
-            v-if="props.percent > 0"
+            v-if="props.product.percent > 0"
             class="ml-2 rounded-lg bg-purple-600 px-2.5 py-1.5 text-sm text-white md:text-lg"
-            >{{ props.percent }} %</span
+            >{{ props.product.percent }} %</span
           >
         </div>
       </div>
       <div class="flex flex-row">
         <ButtonAddToCartComponent
           :product="props.product"
-          :quantity="props.quantity"
-          :variant-id="props.variantId"
-          :price="props.price"
+          :quantity="props.product.quantity"
+          :variant-id="props.product.selectedVariantId"
+          :price="props.product.price"
           class="w-full lg:mt-14"
         />
         <AddFavoriteComponent
           class="ml-5 lg:hidden"
           :product-id="props.product.id"
           :product-name="props.product.name"
-          :variant-id="props.variantId"
+          :variant-id="props.product.selectedVariantId"
           :favorites-selected="props.product.favorites"
           @open-favorite="onOpenFavoriteTooltip"
         />
@@ -66,31 +66,6 @@ const props = defineProps({
     required: false,
     type: Boolean,
     default: false,
-  },
-  quantity: {
-    required: false,
-    type: Number,
-    default: 1,
-  },
-  variantId: {
-    required: false,
-    type: Number,
-    default: null,
-  },
-  price: {
-    required: false,
-    type: Number,
-    default: null,
-  },
-  priceReference: {
-    required: false,
-    type: Number,
-    default: null,
-  },
-  percent: {
-    required: false,
-    type: Number,
-    default: null,
   },
 })
 

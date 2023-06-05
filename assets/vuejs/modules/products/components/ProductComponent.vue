@@ -30,7 +30,7 @@
       <img
         :src="getUpplerImage(props.product.images[0])"
         :alt="props.product.name"
-        class="flex h-full w-full max-w-max cursor-pointer items-center"
+        class="flex h-full cursor-pointer items-center lg:w-full lg:max-w-max"
         @click="
           $router.push({
             name: ProductPageList.PRODUCT,
@@ -57,7 +57,7 @@
       <div class="h-[100px]">
         <p
           class="truncate-custom truncate-custom-3 mt-1 w-full justify-start text-left text-sm text-gray-400 md:text-base lg:text-lg"
-          v-html="props.product.description"
+          v-html="productDescription"
         />
       </div>
     </div>
@@ -66,16 +66,16 @@
     <!-- Bloc prix -->
     <div class="flex w-full items-center justify-start xl:mt-1">
       <span
-        v-if="props.product.price?.displayPrice"
+        v-if="props.product.price"
         class="mr-2 text-sm font-bold text-primary md:text-base lg:text-lg"
       >
-        {{ formatPrice(props.product.price?.displayPrice) }}€
+        {{ formatPrice(props.product.price) }}€
       </span>
       <span
         v-if="showLineThroughPrice"
         :class="{
           'text-sm text-gray-500 line-through md:text-base lg:text-lg':
-            product.price?.displayPrice,
+            product.price,
           'text-sm font-bold text-primary md:text-base lg:text-lg':
             product.price === null,
         }"
@@ -102,14 +102,14 @@
           <ArrowRightIconComponent class="ml-2 w-4 stroke-secondary" />
         </RouterLink>
       </div>
+
       <div v-else class="flex w-full justify-between">
         <div class="flex items-center justify-start">
           <span class="mr-2 text-sm text-gray-500">Qté :</span>
-          <select v-model="quantity" class="rounded-md border border-gray-300">
-            <option v-for="i in 5" :key="i" :value="i">
-              {{ i }}
-            </option>
-          </select>
+          <ProductQuantityComponent
+            :quantity="quantity"
+            @update-quantity="updateQuantity"
+          />
         </div>
         <ButtonAddToCartComponent
           :product="props.product"
@@ -129,6 +129,7 @@ import { ProductPageList } from '@/vuejs/router/pages-list'
 import ButtonAddToCartComponent from '@/vuejs/modules/shared/ButtonAddToCartComponent.vue'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import AddFavoriteComponent from '@/vuejs/modules/products/components/AddFavoriteComponent.vue'
+import ProductQuantityComponent from '../../shared/ProductQuantityComponent.vue'
 
 const props = defineProps({
   product: {
@@ -142,7 +143,7 @@ const quantity = ref<number>(1)
 const showLineThroughPrice = computed(() => {
   return (
     props.product.priceReference &&
-    props.product.priceReference !== props.product.price?.displayPrice
+    props.product.priceReference !== props.product.price
   )
 })
 
@@ -159,6 +160,17 @@ const variantId = computed(() => {
 const productId = computed(() => {
   return props.product.slug + '-' + props.product.id
 })
+
+const productDescription = computed(() => {
+  if (props.product.description.length > 140) {
+    return props.product.description.substring(0, 140) + '...'
+  }
+  return props.product.description
+})
+
+const updateQuantity = (event) => {
+  quantity.value = event.quantity
+}
 </script>
 
 <style scoped></style>

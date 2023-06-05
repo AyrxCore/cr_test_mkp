@@ -1,16 +1,21 @@
-import {defineStore} from 'pinia'
-import {useAlertStore} from '@/vuejs/stores/alert'
-import {AlertType} from '@/vuejs/types/Alert'
-import {HttpStatusCodes} from '@/vuejs/types/HttpClient'
-import {getErrorMessage} from '@/vuejs/services/login'
+import { defineStore } from 'pinia'
+import { useAlertStore } from '@/vuejs/stores/alert'
+import { AlertType } from '@/vuejs/types/Alert'
+import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
+import { getErrorMessage } from '@/vuejs/services/login'
 import ExpertContentHttpClient from '@/vuejs/services/httpclient/ExpertContentHttpClient'
-import {ExpertContent, ExpertContentCategory} from '@/vuejs/types/ExpertContent'
+import {
+  ExpertContent,
+  ExpertContentCategory,
+} from '@/vuejs/types/ExpertContent'
+import { ExpertContentBanner } from '@/vuejs/types/ExpertContentBanner'
 
 export interface ExpertContentStoreState {
   expertsContentsCategories: ExpertContentCategory[]
-  expertsContents: ExpertContent[],
+  expertsContents: ExpertContent[]
   currentExpertContentSlug: string
   currentExpertContent: ExpertContent
+  banner: ExpertContentBanner
 }
 
 export const useExpertContentStore = defineStore({
@@ -21,11 +26,11 @@ export const useExpertContentStore = defineStore({
     expertsContents: [],
     currentExpertContentSlug: null,
     currentExpertContent: null,
+    banner: null,
   }),
 
   actions: {
     async initActualitePage(slug) {
-
       if (!this.expertsContentsCategories.length) {
         await this.findExpertsContentsCategories()
       }
@@ -37,7 +42,9 @@ export const useExpertContentStore = defineStore({
       if (!this.currentExpertContent) {
         this.currentExpertContent = await this.initExpertContent(slug)
       }
-      const category = this.getCategoryColorByName(this.currentExpertContent.categoryName)
+      const category = this.getCategoryColorByName(
+        this.currentExpertContent.categoryName,
+      )
       this.currentExpertContent.categoryColor = category.color
       return this.currentExpertContent
     },
@@ -54,16 +61,25 @@ export const useExpertContentStore = defineStore({
       })
       return this.expertsContents
     },
+    async initBanner() {
+      if (!this.banner) {
+        try {
+          this.banner = await ExpertContentHttpClient.get().getBanner()
+        } catch (error) {}
+      }
+    },
     async findExpertsContentsCategories(): Promise<[]> {
       try {
-        this.expertsContentsCategories = await ExpertContentHttpClient.get().findExpertsContentsCategories()
+        this.expertsContentsCategories =
+          await ExpertContentHttpClient.get().findExpertsContentsCategories()
       } catch (error) {
         return []
       }
     },
     async findExpertsContents(): Promise<[]> {
       try {
-        this.expertsContents = await ExpertContentHttpClient.get().findExpertsContents()
+        this.expertsContents =
+          await ExpertContentHttpClient.get().findExpertsContents()
       } catch (error) {
         return []
       }
@@ -74,18 +90,16 @@ export const useExpertContentStore = defineStore({
         return await ExpertContentHttpClient.get().getExpertContent(slug)
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
-        alertStore.setShow(
-          getErrorMessage(error.response.data.message),
-          AlertType.danger,
-        )
+          alertStore.setShow(
+            getErrorMessage(error.response.data.message),
+            AlertType.danger,
+          )
       }
       return null
-
     },
     getCategoryColorByName(categoryName) {
-      return this.expertsContentsCategories.find(category => {
+      return this.expertsContentsCategories.find((category) => {
         if (category.name === categoryName) {
-
           return category.color
         }
         return null

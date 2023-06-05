@@ -25,7 +25,14 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { Swiper } from 'swiper/vue'
-import { Navigation, Pagination, Scrollbar, A11y, Thumbs } from 'swiper'
+import {
+  Navigation,
+  Pagination,
+  Scrollbar,
+  A11y,
+  Thumbs,
+  Autoplay,
+} from 'swiper'
 import 'swiper/scss'
 import 'swiper/scss/a11y'
 import 'swiper/scss/navigation'
@@ -70,7 +77,15 @@ const props = defineProps({
 })
 
 const defaultModules = computed(
-  () => props.modules ?? [Navigation, Pagination, Scrollbar, A11y, Thumbs],
+  () =>
+    props.modules ?? [
+      Navigation,
+      Pagination,
+      Scrollbar,
+      A11y,
+      Thumbs,
+      Autoplay,
+    ],
 )
 </script>
 
@@ -83,6 +98,7 @@ const defaultModules = computed(
 
 .swiper-pagination-bullet {
   @apply h-[0.625rem] w-[0.625rem] border border-secondary bg-white opacity-100;
+
   &-active {
     @apply bg-secondary;
   }
@@ -99,19 +115,24 @@ const defaultModules = computed(
 
 .swiper {
   position: unset;
+
   &-button-direction {
     &-prev,
     &-next {
       @apply absolute top-0 bottom-0 z-10 flex cursor-pointer items-center text-primary;
+
       svg {
         @apply h-12 w-12 rounded-full bg-white xl:bg-transparent;
       }
     }
+
     &-prev {
       @apply -left-4 xl:-left-12;
     }
+
     &-next {
       @apply -right-4 xl:-right-12;
+
       svg {
         @apply rotate-180;
       }

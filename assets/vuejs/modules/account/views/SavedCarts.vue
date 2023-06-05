@@ -53,7 +53,7 @@ import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.
 const cartStore = useCartStore()
 const alertStore = useAlertStore()
 const showFormSavedCart = ref<boolean>(false)
-const deleteFavorite = ref<boolean>(false)
+const deleteSavedCart = ref<boolean>(false)
 const savedCartStore = useSavedCartStore()
 const isLoading = ref<boolean>(false)
 const { show: showAlert } = storeToRefs(alertStore)
@@ -83,7 +83,7 @@ const onDelete = async (event) => {
     await savedCartStore.delete(event.savedCartId)
 
     await savedCartStore.fetchSavedCarts()
-    deleteFavorite.value = false
+    deleteSavedCart.value = false
   } catch (error) {}
 
   isLoading.value = false
@@ -103,7 +103,7 @@ const onAddToCart = async (event) => {
     await cartStore.addProductsToCart(cartProducts)
 
     await savedCartStore.fetchSavedCarts()
-    deleteFavorite.value = false
+    deleteSavedCart.value = false
   } catch (error) {}
 
   isLoading.value = false

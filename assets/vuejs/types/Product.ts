@@ -17,10 +17,15 @@ export interface Product {
   variants: []
   priceReference: number
   percent?: number
-  price?: Price
+  price?: number
   basePrice?: Price
   seller?: Seller
   accountAccordCadre: AccountAccordCadre
   isAccordCadre?: boolean
   favorites?: Array<any>
+  optionVariant: Array<any>
+  similarProducts: Array<any>
+  selectedVariantId: number
+  selectedVariants: Array<any>
+  quantity: number
 }

@@ -3,29 +3,19 @@
     <StickyContactButtons />
     <HeaderSharedComponent />
     <div
+      v-if="banner"
       class="bg-gradient flex h-[59px] flex-row items-center justify-center py-4 text-white"
     >
       <p
         class="flex w-[305px] flex-col items-center py-2 text-sm md:w-auto md:text-base lg:flex-row lg:text-lg"
       >
         <span class="mr-0 lg:mr-2">
-          Cybersécurité : protégez votre entreprise et vos salariés. Téléchargez
-          notre guide.
+          {{ banner.text }}
         </span>
-        <RouterLink
-          :to="{
-            name: NewsPageList.NEWS_ITEM,
-            params: { slug: 'guide-cybersecurite' },
-          }"
-          class="underline"
-        >
-          Découvrir
-        </RouterLink>
+        <a :href="banner.ctaLink" class="underline">
+          {{ banner.ctaTxt }}
+        </a>
       </p>
-
-      <!--<button class="absolute right-2 text-white">
-        <CloseIconComponent />
-      </button>-->
     </div>
     <main class="">
       <slot />
@@ -52,10 +42,12 @@ import StickyContactButtons from '@/vuejs/modules/shared/StickyContactButtonsCom
 import { useUserStore } from '@/vuejs/stores/user'
 import { storeToRefs } from 'pinia'
 import ChevronDownIconComponent from '@/vuejs/modules/shared/icon/ChevronDownIconComponent.vue'
-import { NewsPageList } from './router/pages-list'
+import { useExpertContentStore } from '@/vuejs/stores/expertContent'
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
+const expertContentStore = useExpertContentStore()
+const { banner } = storeToRefs(expertContentStore)
 const props = defineProps({
   title: {
     required: false,

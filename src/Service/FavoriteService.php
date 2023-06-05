@@ -137,11 +137,15 @@ class FavoriteService
         $this->em->flush();
     }
 
-    public function removeItemFromFavorites($favoriteId, $favoriteProductId): Favorite
+    public function removeItemFromFavorites(string $favoriteId, int $productId, int $variantId): Favorite
     {
         /** @var Favorite $favorite */
         $favorite = $this->em->getRepository(Favorite::class)->find($favoriteId);
-        $favoriteProduct = $this->em->getRepository(FavoriteProduct::class)->find($favoriteProductId);
+        $favoriteProduct = $this->em->getRepository(FavoriteProduct::class)->findOneBy([
+            'favorite' => $favoriteId, 
+            'upplerProductId' => $productId,
+            'upplerVariantId' => $variantId
+        ]);
         $this->em->remove($favoriteProduct);
         $this->em->flush();
 

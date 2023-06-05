@@ -6,7 +6,7 @@
         <div v-if="product">
           <h4 class="text-sm text-white md:text-base lg:text-lg">
             Voulez-vous vraiment déplacer ce produit:
-            <strong>{{ product.name }}</strong>
+            <strong>{{ product.upplerProductName }}</strong>
           </h4>
         </div>
 
@@ -99,7 +99,7 @@ const onMoveItem = async () => {
   await emit('moveItem', {
     favoriteId: props.favoriteId,
     favoriteIdToReceive: selectedFavorite.value,
-    upplerProductId: props.product.id,
+    favoriteProductId: props.product.id,
   })
 }
 

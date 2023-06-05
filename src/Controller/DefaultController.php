@@ -17,9 +17,14 @@ class DefaultController extends AbstractController
 
     #[Required]
     public SettingRepository $settingRepository;
-
+    
     #[Route('/', name: 'prehome')]
-    #[Route('/{route}', name: 'app', requirements: ['route' => '^(?!.*_wdt|_profiler|login|mentions-legales|maintenance|api).+'])]
+    #[Route(
+        '/{route}', 
+        name: 'app', 
+        requirements: ['route' => '^(?!.*_wdt|_profiler|login|mentions-legales|politique-de-confidentialite|maintenance|api).+']
+        )
+    ]
     public function index(Request $request): Response
     {
         $session = $this->requestStack->getSession();
@@ -41,6 +46,12 @@ class DefaultController extends AbstractController
     public function mentionsLegales(): Response
     {
         return $this->render('mentions-legales.html.twig');
+    }
+
+    #[Route('/politique-de-confidentialite', name: 'politique_de_confidentialite')]
+    public function politiqueConfidentialite(): Response
+    {
+        return $this->render('politique-de-confidentialite.html.twig');
     }
 
     #[Route('/maintenance', name: 'maintenance')]

@@ -1,5 +1,7 @@
 <template>
-  <div class="mx-auto flex h-[524px] flex-col rounded-md bg-white px-6 py-4">
+  <div
+    class="mx-auto my-5 flex h-[524px] flex-col rounded-md bg-white px-6 py-4 md:my-0"
+  >
     <div class="mx-auto items-center">
       <RouterLink
         :to="{ name: PageList.NEWS_ITEM, params: { slug: contenu.slug } }"

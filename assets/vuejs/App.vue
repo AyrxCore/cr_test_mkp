@@ -11,8 +11,13 @@
   <StickyContactButtons
     v-else-if="props.component === 'sticky-contact-buttons'"
   />
-  <MentionsLegalesComponent
+  <CmsPageComponent
+    :page-id="MENTIONS_LEGALES_PAGE_ID"
     v-else-if="props.component === 'mentions-legales'"
+  />
+  <CmsPageComponent
+    :page-id="POLITIQUE_DE_CONFIDENTIALITE_PAGE_ID"
+    v-else-if="props.component === 'politique-de-confidentialite'"
   />
 </template>
 
@@ -26,17 +31,23 @@ import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconC
 import ArrowLeftIconComponent from '@/vuejs/modules/shared/icon/ArrowLeftIconComponent.vue'
 import FormComponent from '@/vuejs/modules/contact/component/FormComponent.vue'
 import NotifComponent from '@/vuejs/modules/shared/NotifComponent.vue'
-import MentionsLegalesComponent from '@/vuejs/modules/shared/MentionsLegalesComponent.vue'
+import CmsPageComponent from '@/vuejs/modules/shared/CmsPageComponent.vue'
 
 import { useCategoryStore } from '@/vuejs/stores/category'
 import { useBuyerCompanyStore } from '@/vuejs/stores/buyer_company'
 import { useCartStore } from '@/vuejs/stores/cart'
 import router from './router'
 import { CartPageList } from './router/pages-list'
+import {
+  MENTIONS_LEGALES_PAGE_ID,
+  POLITIQUE_DE_CONFIDENTIALITE_PAGE_ID,
+} from '@/vuejs/services/const'
+import { useExpertContentStore } from '@/vuejs/stores/expertContent'
 
 const cartStore = useCartStore()
 const companyStore = useBuyerCompanyStore()
 const categoryStore = useCategoryStore()
+const expertContentStore = useExpertContentStore()
 
 const props = defineProps({
   component: {
@@ -51,6 +62,7 @@ onBeforeMount(async () => {
     await Promise.all([
       companyStore.getAddresses(),
       categoryStore.initAllCategories(),
+      expertContentStore.initBanner(),
     ])
   }
 })
