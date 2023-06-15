@@ -1,8 +1,13 @@
 version: '3.8'
 
 services:
-  php-fpm-mkp:
+  php:
+    hostname: php-mkp
     image: 211737105908.dkr.ecr.eu-west-3.amazonaws.com/marketplace-php:local
+    env_file:
+      - .env
+      - .env.dev
+      - .env.local
     build:
       context: .
       target: php
@@ -17,17 +22,17 @@ services:
       - 'host.docker.internal:host-gateway'
     networks:
       - dev-qantis
-    environment:
-      APP_ENV: dev
     depends_on:
-      db-mkp:
+      db:
         condition: service_healthy
 
   php-cron:
     image: 211737105908.dkr.ecr.eu-west-3.amazonaws.com/marketplace-php:local
-    depends_on:
-      php-fpm-mkp:
-        condition: service_started
+    hostname: php-cron-mkp
+    env_file:
+      - .env
+      - .env.dev
+      - .env.local
     command: sh -c "bin/console cron:start --blocking -n"
     volumes:
       - ./:/var/www/
@@ -37,8 +42,12 @@ services:
       - 'host.docker.internal:host-gateway'
     networks:
       - dev-qantis
+    depends_on:
+      php:
+        condition: service_started
 
-  nodejs:
+  js:
+    hostname: js-mkp
     build:
       context: .
       target: node
@@ -53,21 +62,22 @@ services:
     ports:
       - '3003:3003'
     depends_on:
-      - php-fpm-mkp
+      - php
     networks:
       - dev-qantis
 
   nginx:
     image: 211737105908.dkr.ecr.eu-west-3.amazonaws.com/marketplace-nginx:refacto-Dockerfile5
+    hostname: nginx-mkp
     build:
       context: .
       target: nginx
     environment:
-      - PHP_URL=php-fpm-mkp
+      - PHP_URL=php-mkp
     depends_on:
-      php-fpm-mkp:
+      php:
         condition: service_started
-      nodejs:
+      js:
         condition: service_started
     volumes:
       - ./:/var/www
@@ -77,9 +87,9 @@ services:
     networks:
       - dev-qantis
 
-  db-mkp:
+  db:
     image: postgres:14
-    restart: always
+    hostname: db-mkp
     environment:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: mkp_db
@@ -90,7 +100,7 @@ services:
     networks:
       - dev-qantis
     healthcheck:
-      test: ["CMD-SHELL", "psql -U postgres -c 'select 1' || exit 1"]
+      test: [ "CMD-SHELL", "psql -U postgres -c 'select 1' || exit 1" ]
       interval: 10s
       timeout: 10s
       retries: 12
@@ -98,10 +108,10 @@ services:
 
   maildev:
     image: maildev/maildev
+    hostname: maildev-mkp
     command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
     ports:
       - '8086:80'
-    restart: always
     networks:
       - dev-qantis
 
