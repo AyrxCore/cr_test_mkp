@@ -33,3 +33,12 @@ node_modules
 # /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
 aws-docker-creds
+
+###> friendsofphp/php-cs-fixer ###
+/.php-cs-fixer.dist.php
+/.php-cs-fixer.cache
+###< friendsofphp/php-cs-fixer ###
+
+###> squizlabs/php_codesniffer ###
+/.phpcs-cache
+###< squizlabs/php_codesniffer ###
