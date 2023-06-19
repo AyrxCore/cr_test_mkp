@@ -1,8 +1,8 @@
 Jenkinsfile
 Dockerfile
 docker-compose.yml
-docker-compose.override.yml
-Makefile
+docker-compose.test.yml
+makefile
 .git
 .gitignore
 var/

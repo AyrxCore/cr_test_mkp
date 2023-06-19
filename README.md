@@ -11,13 +11,13 @@
 ## Install
 
 ```sh
-$ docker-compose build
+$ make build
 ```
 
 ## Run project
 
 ```sh
-$ docker-compose up
+$ make up
 ```
 
 Access to http://localhost:8087
@@ -26,7 +26,7 @@ Access to http://localhost:8087
 
 Le fichier .env contient tous les paramètres de connexion vers l'api Uppler de prod sauf les secrets
 Le fichier .env.dev contient tous les paramètres de connexion vers l'api Uppler de preprod sauf les secrets
-Ajouter dans un nouveau fichier .env.dev.local les paramètres de connexion Uppler de preprod (à récuperer sur VAULT)
+Ajouter dans un nouveau fichier .env.local les paramètres de connexion Uppler de preprod (à récuperer sur VAULT)
 
 ```sh
 UPPLER_ADMIN_CLIENT_ID=
@@ -36,19 +36,19 @@ UPPLER_ADMIN_CLIENT_SECRET=
 ## Add a new user
 
 ```sh
-$ php bin/console user:add {email} {password}
+$ make exec php bin/console user:add {email} {password}
 ```
 
 ## Promote user
 
 ```sh
-$ php bin/console user:promote {email} {role}
+$ make exec php bin/console user:promote {email} {role}
 ```
 
 ## Demote user
 
 ```sh
-$ php bin/console user:demote {email} {role}
+$ make exec php bin/console user:demote {email} {role}
 ```
 
 ## Test unitaires et fonctionnelles
@@ -64,11 +64,11 @@ La gestion des utilisateurs et des logins est totalement couplée au fonctionnem
 
 Il existe dans le projet 2 entités User et Account qui stockent les informations de login.
 
-Un User posséde autant d'account que de liaison à des company Uppler (Adhérents neo).
+Un User possède autant d'account que de liaison à des company Uppler (Adhérents neo).
 
 Un Account ne stocke pas d'information Uppler si ce n'est des ID de ressources (subAccount, User, Company, ...)
 
-A chaque connexion l'api Uppler est requêtée à l'aide de ces ID pour récupérer les informations à jour.
+À chaque connexion l'api Uppler est requêtée à l'aide de ces ID pour récupérer les informations à jour.
 
 Ces informations ne sont pas stockées en base, uniquement dans le store VueJS en front.
 
