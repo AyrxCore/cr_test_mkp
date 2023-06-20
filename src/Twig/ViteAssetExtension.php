@@ -96,7 +96,7 @@ class ViteAssetExtension extends AbstractExtension
 
         // Check to see if the dev server is actually running by pinging the vite endpoint
         try {
-            $response = $this->client->request('GET', 'http://nodejs:3003/assets/@vite/client');
+            $response = $this->client->request('GET', 'http://js:3003/assets/@vite/client');
             return $response->getStatusCode() === 200;
         } catch (Exception $e) {
             return false;
