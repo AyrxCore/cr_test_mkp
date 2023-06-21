@@ -129,7 +129,7 @@ import { ProductPageList } from '@/vuejs/router/pages-list'
 import ButtonAddToCartComponent from '@/vuejs/modules/shared/ButtonAddToCartComponent.vue'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import AddFavoriteComponent from '@/vuejs/modules/products/components/AddFavoriteComponent.vue'
-import ProductQuantityComponent from '../../shared/ProductQuantityComponent.vue'
+import ProductQuantityComponent from '@/vuejs/modules/shared/ProductQuantityComponent.vue'
 
 const props = defineProps({
   product: {

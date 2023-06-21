@@ -14,7 +14,7 @@
       class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 px-5 sm:px-8"
     >
       <BreadcrumbSharedComponent
-        :list-url="breadcrumbUrl()"
+        :list-url="breadcrumbUrl"
         :current-page="product.name"
       />
       <div class="flex w-[100%] max-w-screen-2xl justify-end">
@@ -284,17 +284,11 @@
       <!-- Fin du bloc caractéristiques techniques -->
 
       <!-- Bloc produits similaire -->
-      <div
-        v-if="product.similarProducts.length > 0"
-        class="mt-10 justify-center"
-      >
+      <div v-if="similarProducts.length > 0" class="mt-10 justify-center">
         <h3 class="home-subtitle text-primary">
           Produits de la même catégorie
         </h3>
-        <ProductsCarouselComponent
-          :products="product.similarProducts"
-          class="mt-4"
-        />
+        <ProductsCarouselComponent :products="similarProducts" class="mt-4" />
       </div>
       <!-- Fin bloc produits similaire -->
     </div>
@@ -344,28 +338,29 @@ const thumbsSwiper = ref(null)
 const isLoading = ref<boolean>(false)
 const product = ref<Product>()
 const isLoadingPrice = ref<boolean>(false)
+const similarProducts = ref<Product[]>([])
 
 onMounted(async () => {
   await favoriteStore.fetchFavorites()
 })
 
-const breadcrumbUrl = () => {
+const breadcrumbUrl = computed(() => {
   const breadcrumb = []
   if (product.value.categories.length > 0) {
-    product.value.categories.forEach(([key, value], index) => {
+    for (const [, category] of Object.entries(product.value.categories)) {
       breadcrumb.push({
-        id: key,
-        name: value,
+        id: category.id,
+        name: category.name,
         url: {
           name: ProductPageList.PRODUCTS,
-          query: { category: key, page: 1 },
+          query: { category: category.id, page: 1 },
         },
       })
-    })
+    }
   }
 
   return breadcrumb
-}
+})
 
 const setThumbsSwiper = (swiper) => {
   thumbsSwiper.value = swiper
@@ -391,8 +386,17 @@ watch(
     isLoading.value = true
     try {
       const productId = id.split('-')
-      const formattedId = productId[productId.length - 1]
-      product.value = await productStore.findProductById(formattedId)
+      const formattedProductId = parseInt(productId[productId.length - 1])
+      product.value = await productStore.findProductById(formattedProductId)
+      if (product.value.categories.length > 0) {
+        const categoryId =
+          product.value.categories[product.value.categories.length - 1].id
+        similarProducts.value = await productStore.findSimilarProducts(
+          categoryId,
+          formattedProductId,
+        )
+      }
+
       isLoading.value = false
     } catch (error) {
     } finally {

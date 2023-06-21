@@ -61,11 +61,6 @@ export const useProductStore = defineStore({
         product.quantity = 1
         await this.findDefaultVariantProduct(product)
 
-        product.categories = Object.entries(product.categories)
-        if (product.categories.length > 0) {
-          await this.findSimilarProduct(product)
-        }
-
         return product
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
@@ -125,18 +120,16 @@ export const useProductStore = defineStore({
           )
       }
     },
-    async findSimilarProduct(product: Product) {
+    async findSimilarProducts(categoryId: number, productId: number) {
       const alertStore = useAlertStore()
       try {
-        const categoryId = product.categories[product.categories.length - 1][0]
-
         const similarProducts = await this.fetchProductsByParams({
           perPage: 5,
-          categories: [parseInt(categoryId)],
+          categories: [categoryId],
         })
 
-        product.similarProducts = similarProducts.filter(
-          (sp) => sp.id !== product.id,
+        return similarProducts.filter(
+          (sp) => sp.id !== productId && !sp.isAccordCadre,
         )
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&

@@ -43,7 +43,6 @@ const onInput = (event) => {
 }
 const decrement = () => {
   if (qte.value > 1) {
-    console.log()
     qte.value--
     emit('updateQuantity', {
       quantity: qte.value,

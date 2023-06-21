@@ -22,21 +22,21 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 class UpplerProductService extends HttpClientProvider
 {
-
     protected AdapterInterface $cache;
 
     protected UpplerSellerService $upplerSellerService;
 
     public function __construct(
-        string $env,
-        string $apiUrl,
-        string $adminClientId,
-        string $adminClientSecret,
-        string $adminTokenFile,
-        string $httpCachePath,
-        AdapterInterface $cache,
+        string              $env,
+        string              $apiUrl,
+        string              $adminClientId,
+        string              $adminClientSecret,
+        string              $adminTokenFile,
+        string              $httpCachePath,
+        AdapterInterface    $cache,
         UpplerSellerService $upplerSellerService
-    ) {
+    )
+    {
         parent::__construct($env, $apiUrl, $adminClientId, $adminClientSecret, $adminTokenFile, $httpCachePath);
         $this->cache = $cache;
         $this->upplerSellerService = $upplerSellerService;
@@ -51,10 +51,11 @@ class UpplerProductService extends HttpClientProvider
     public function findProductsByOptions(
         array $options,
         array $params = [],
-        int $page = 1,
-        int $perPage = 10,
-        bool $showFilters = false
-    ): array|null {
+        int   $page = 1,
+        int   $perPage = 10,
+        bool  $showFilters = false
+    ): array|null
+    {
         $session = $this->requestStack->getSession();
         $session->start();
 
@@ -96,11 +97,11 @@ class UpplerProductService extends HttpClientProvider
                 return $b->isAccordCadre() - $a->isAccordCadre();
             });
             return [
-                'filters'       => $this->hydrateFilters($remoteProducts->filters),
+                'filters' => $this->hydrateFilters($remoteProducts->filters),
                 'results_count' => $remoteProducts->results_count,
-                'page'          => $remoteProducts->page,
-                'results'       => $products,
-                'parameters'    => $remoteProducts->parameters,
+                'page' => $remoteProducts->page,
+                'results' => $products,
+                'parameters' => $remoteProducts->parameters,
             ];
         } else {
             return $products;
@@ -257,8 +258,8 @@ class UpplerProductService extends HttpClientProvider
             foreach ($remoteProduct->option_values as $option_value) {
                 $options[$option_value->option->name->default ?? ''][] = [
                     'parent_id' => $option_value->option->id,
-                    'id'        => $option_value->id,
-                    'value'     => $option_value->value->default ?? null,
+                    'id' => $option_value->id,
+                    'value' => $option_value->value->default ?? null,
                 ];
             }
             $product->setOptions($options);
@@ -318,12 +319,12 @@ class UpplerProductService extends HttpClientProvider
                 }
 
                 $filters['properties'][] = [
-                    'id'      => $property->id,
-                    'name'    => $property->name,
-                    'count'   => $property->count,
+                    'id' => $property->id,
+                    'name' => $property->name,
+                    'count' => $property->count,
                     'checked' => $property->checked,
-                    'type'    => $property->type,
-                    'child'   => $child,
+                    'type' => $property->type,
+                    'child' => $child,
                 ];
             }
         }
@@ -352,7 +353,7 @@ class UpplerProductService extends HttpClientProvider
         $categories = [];
 
         foreach ($remoteProduct->categories as $category) {
-            $categories[$category->id] = $category->name->default;
+            $categories[] = ['id' => $category->id, 'name' => $category->name->default];
         }
         $product->setCategories($categories);
         if ($remoteProduct->company->id) {
@@ -374,7 +375,7 @@ class UpplerProductService extends HttpClientProvider
 
     /**
      * @param $remoteProduct
-     * @param  Product  $product
+     * @param Product $product
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -400,7 +401,7 @@ class UpplerProductService extends HttpClientProvider
 
     /**
      * @param $remoteProduct
-     * @param  Product  $product
+     * @param Product $product
      *
      * @return void
      */
@@ -411,5 +412,4 @@ class UpplerProductService extends HttpClientProvider
             $product->setPrice($price);
         }
     }
-
 }
