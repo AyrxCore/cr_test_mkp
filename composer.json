@@ -102,9 +102,11 @@
     }
   },
   "require-dev": {
+    "coduo/php-matcher": "*",
     "doctrine/doctrine-fixtures-bundle": "^3.4",
     "friendsofphp/php-cs-fixer": "^3.13",
     "liip/test-fixtures-bundle": "^2.0.0",
+    "pestphp/pest": "^1.23",
     "phpunit/phpunit": "^9.5",
     "squizlabs/php_codesniffer": "3.*",
     "symfony/browser-kit": "5.4.*",
