@@ -56,7 +56,8 @@
     "allow-plugins": {
       "composer/package-versions-deprecated": true,
       "symfony/flex": true,
-      "symfony/runtime": true
+      "symfony/runtime": true,
+      "pestphp/pest-plugin": true
     },
     "optimize-autoloader": true,
     "preferred-install": {
@@ -112,6 +113,7 @@
     "symfony/maker-bundle": "^1.0",
     "symfony/phpunit-bridge": "^6.1",
     "symfony/stopwatch": "5.4.*",
-    "symfony/web-profiler-bundle": "5.4.*"
+    "symfony/web-profiler-bundle": "5.4.*",
+    "zenstruck/foundry": "^1.33"
   }
 }

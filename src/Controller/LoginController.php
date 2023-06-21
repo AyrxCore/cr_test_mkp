@@ -154,7 +154,7 @@ class LoginController extends AbstractController
                 && null !== $user->getFirstConnexionRequestedAt()
             ) {
                 $user->setFirstConnexionRequestedAt(null);
-                $user->setEnabled(true);
+                $user->setIsEnabled(true);
             }
 
             $user->setPassword($encodedPassword);

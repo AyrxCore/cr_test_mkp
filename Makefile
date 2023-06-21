@@ -99,11 +99,11 @@ database-fixtures:
 #	$(dc_exec) php rm -rf public/images/*
 #	$(dc_exec) php chown -R www-data:www-data public/cache
 #	$(dc_exec) php chown -R www-data:www-data public/images
-	$(dc_exec) php bin/console doctrine:fixtures:load --no-interaction -q --group=dev
+	$(dc_exec) php bin/console doctrine:fixtures:load --no-interaction -q
 
 database-diff: ## Create doctrine migration from database diff
 	$(dc_exec) php bin/console doctrine:migration:diff
-	$(dc_exec) php vendor/bin/php-cs-fixer fix src/Core/Infrastructure/Migrations
+	$(dc_exec) php vendor/bin/php-cs-fixer fix migrations
 .PHONY: diff
 
 database-migrations: ## Run doctrine migrations

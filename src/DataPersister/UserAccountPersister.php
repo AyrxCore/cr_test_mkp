@@ -58,7 +58,7 @@ class UserAccountPersister implements ContextAwareDataPersisterInterface
             $user = $this->em->getRepository(User::class)->findOneBy(['username' => $data->getEmail()]);
             if (!$user) {
                 $user = new User();
-                $user->setEnabled(false);
+                $user->setIsEnabled(false);
                 $user->setPassword($this->userPasswordHasher->hashPassword($user, uniqid()));
             }
             $account = $this->em->getRepository(Account::class)->findOneBy(

@@ -34,7 +34,7 @@ class UserService
         $user = new User();
         $user->setUsername($email);
         $user->setEmail($email);
-        $user->setEnabled(true);
+        $user->setIsEnabled(true);
         $user->setAccesMarketPlace(true);
         $user->setPassword($this->passwordHasher->hashPassword($user, $password));
 
