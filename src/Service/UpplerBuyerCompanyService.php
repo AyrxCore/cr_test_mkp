@@ -16,7 +16,7 @@ class UpplerBuyerCompanyService extends AbstractUpplerService
     public function getBuyerByCompanyId(int $id, array $filters = []): object|null
     {
         $session = $this->requestStack->getSession();
-        $session->start();
+
         $urlFilters = null;
 
         if (!empty($filters)) {

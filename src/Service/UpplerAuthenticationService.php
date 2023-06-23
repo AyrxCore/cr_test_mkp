@@ -18,7 +18,7 @@ class UpplerAuthenticationService extends AbstractUpplerService
     public function authenticateUser(Account $account): bool
     {
         $session = $this->requestStack->getSession();
-        $session->start();
+
         $session->clear();
 
         if (empty($account->getUpplerClientId()) || empty($account->getUpplerClientSecret())) {

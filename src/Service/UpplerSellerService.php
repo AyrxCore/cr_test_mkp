@@ -64,7 +64,6 @@ class UpplerSellerService extends AbstractUpplerService
         }
 
         $session = $this->requestStack->getSession();
-        $session->start();
 
         $res = $this->request(
             'GET',

@@ -28,7 +28,6 @@ class SellerApiController extends AbstractController
     public function list(NormalizerInterface $normalizer): JsonResponse
     {
         $session = $this->requestStack->getSession();
-        $session->start();
 
         $sellers = $this->upplerSellerService->getSellers(16, 3);
 
@@ -39,7 +38,6 @@ class SellerApiController extends AbstractController
     public function getSeller(int $id, NormalizerInterface $normalizer): JsonResponse
     {
         $session = $this->requestStack->getSession();
-        $session->start();
 
         $seller = $this->upplerSellerService->getSeller($id);
 
@@ -50,7 +48,6 @@ class SellerApiController extends AbstractController
     public function getSellerPromotions(int $id): JsonResponse
     {
         $session = $this->requestStack->getSession();
-        $session->start();
 
         $promotion = $this->upplerSellerService->getSellerPromotions($id);
 

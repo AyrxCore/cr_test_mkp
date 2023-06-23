@@ -52,7 +52,6 @@ class ContactController extends AbstractController
     {
         $session = $this->requestStack->getSession();
 
-        $session->start();
         $options = $request->request->all();
 
         $token = new CsrfToken('contact_form', $options['_token']);

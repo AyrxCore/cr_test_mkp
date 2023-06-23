@@ -52,7 +52,6 @@ class UpplerProductService extends AbstractUpplerService
         bool $showFilters = false
     ): array|null {
         $session = $this->requestStack->getSession();
-        $session->start();
 
         $expandParams = null;
         $params = empty($params) ? ['price', 'properties', 'variants', 'company'] : $params;
@@ -107,7 +106,6 @@ class UpplerProductService extends AbstractUpplerService
     public function findProductById(int $productId = null, array $filters = [], ?string $accountId = null): Product|null
     {
         $session = $this->requestStack->getSession();
-        $session->start();
 
         $filters = empty($filters) ? ['price', 'properties', 'variants', 'company'] : $filters;
         $urlFilters = null;
@@ -135,7 +133,6 @@ class UpplerProductService extends AbstractUpplerService
     public function findVariantById(int $variantId = null)
     {
         $session = $this->requestStack->getSession();
-        $session->start();
 
         $filters = ['price'];
         $urlFilters = null;
@@ -164,7 +161,7 @@ class UpplerProductService extends AbstractUpplerService
         $item = $this->cache->getItem('categories_'.$accountId);
         if (!$item->isHit()) {
             $session = $this->requestStack->getSession();
-            $session->start();
+
             $res = $this->request(
                 'POST',
                 'v1/buyer/search/product?page='.$page.'&perPage='.$perPage,

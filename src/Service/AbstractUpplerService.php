@@ -133,7 +133,6 @@ abstract class AbstractUpplerService
     public function getUserToken(Account $account): bool
     {
         $session = $this->requestStack->getSession();
-        $session->start();
 
         $accessToken = $this->getToken($account->getUpplerClientId(), $account->getUpplerClientSecret());
         if ($accessToken !== null) {

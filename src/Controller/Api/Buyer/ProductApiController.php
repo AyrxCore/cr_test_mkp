@@ -63,7 +63,6 @@ class ProductApiController extends AbstractController
     public function list(Request $request, NormalizerInterface $normalizer): JsonResponse
     {
         $session = $this->requestStack->getSession();
-        $session->start();
 
         $options = $request->request->all();
 
@@ -101,7 +100,6 @@ class ProductApiController extends AbstractController
     public function homeProduct(): JsonResponse
     {
         $session = $this->requestStack->getSession();
-        $session->start();
 
         $params = ['properties', 'price', 'company', 'images'];
 
@@ -135,7 +133,6 @@ class ProductApiController extends AbstractController
     public function categoriesList(): JsonResponse
     {
         $session = $this->requestStack->getSession();
-        $session->start();
 
         $resultat = $this->upplerProductService->findAllCategories((string)$session->get('account')->getId());
 
@@ -157,7 +154,6 @@ class ProductApiController extends AbstractController
     public function product(int $id, NormalizerInterface $normalizer): JsonResponse
     {
         $session = $this->requestStack->getSession();
-        $session->start();
 
         $product = $this->upplerProductService->findProductById($id);
 
@@ -168,7 +164,6 @@ class ProductApiController extends AbstractController
     public function variant(int $id, NormalizerInterface $normalizer): JsonResponse
     {
         $session = $this->requestStack->getSession();
-        $session->start();
 
         $variant = $this->upplerProductService->findVariantById($id);
 
@@ -179,7 +174,6 @@ class ProductApiController extends AbstractController
     public function accordCadre(int $id, NormalizerInterface $normalizer): JsonResponse
     {
         $session = $this->requestStack->getSession();
-        $session->start();
 
         $accordCadre = $this->upplerProductService->findProductById(
             $id,
@@ -197,7 +191,6 @@ class ProductApiController extends AbstractController
         LoggerInterface $logger,
     ): JsonResponse {
         $session = $this->requestStack->getSession();
-        $session->start();
 
         $params = json_decode($request->getContent(), true);
         $accountId = (string)$session->get('account')->getId();

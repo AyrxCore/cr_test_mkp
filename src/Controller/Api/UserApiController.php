@@ -77,7 +77,6 @@ class UserApiController extends AbstractController
     public function me(NormalizerInterface $normalizer): JsonResponse
     {
         $session = $this->requestStack->getSession();
-        $session->start();
 
         $buyerData = $this->upplerBuyerCompanyService->getUserBuyerDatas();
         $subAccountData = $this->upplerAccountService->getUserSubAccountDatas();
@@ -114,7 +113,6 @@ class UserApiController extends AbstractController
     public function selectAccount(NormalizerInterface $normalizer, Account $account): JsonResponse
     {
         $session = $this->requestStack->getSession();
-        $session->start();
 
         $userAuth = $this->upplerAuthenticationService->authenticateUser(
             $account
