@@ -6,7 +6,10 @@
   <arg name="cache" value=".phpcs-cache"/>
   <arg name="extensions" value="php"/>
 
-  <rule ref="PSR12"/>
+  <rule ref="PSR12">
+    <exclude name="PSR12.Operators.OperatorSpacing.NoSpaceBefore" />
+    <exclude name="PSR12.Operators.OperatorSpacing.NoSpaceAfter" />
+  </rule>
 
   <rule ref="Generic.Files.LineLength.TooLong">
     <severity>0</severity>
@@ -17,6 +20,7 @@
   <file>public/</file>
   <file>src/</file>
 
+  <exclude-pattern type="relative">tests/*</exclude-pattern>
   <exclude-pattern type="relative">vendor/*</exclude-pattern>
 
 </ruleset>
