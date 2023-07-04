@@ -28,6 +28,7 @@
       <ProductHomeComponent
         :products="productsTopVente"
         title="Les meilleures ventes"
+        description="D'autres adhérents ont déjà acheté ces produits"
       />
       <!-- Fin bloc Produits top ventes -->
 
@@ -40,6 +41,7 @@
         class="mt-4"
         :products="productsSelection"
         title="Sélection de produits"
+        description="Ces produits sont susceptibles de vous intéresser"
       />
       <!-- Fin bloc sélection de produits -->
 
