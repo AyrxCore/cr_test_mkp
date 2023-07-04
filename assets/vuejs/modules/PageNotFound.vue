@@ -6,28 +6,30 @@
         <ContactUsButtonComponent />
       </div>
       <div class="m-auto my-2 w-[100%] max-w-screen-2xl">
-        <div
-          class="mt-10 flex"
-        >
+        <div class="mt-10 flex">
           <div class="">
-            <h3 class="mb-1 text-title-35 text-primary flex-col">
+            <h3 class="mb-1 flex-col text-title-35 text-primary">
               <span class="flex">Erreur 404</span>
-              <span class="font-bold flex">Page introuvable</span>
+              <span class="flex font-bold">Page introuvable</span>
             </h3>
-            <p class="text-sm text-gray-500 md:text-lg w-1/2">
-              Nous sommes désolés, la page que vous cherchez n'a pas été trouvée. Nous vous proposons de retourner à la
-              page d'accueil ou bien de découvrir toutes nos catégories d'achats.
+            <p class="w-1/2 text-sm text-gray-500 md:text-lg">
+              Nous sommes désolés, la page que vous cherchez n'a pas été
+              trouvée. Nous vous proposons de retourner à la page d'accueil ou
+              bien de découvrir toutes nos catégories d'achats.
             </p>
             <RouterLink
               class="button button-gradient mt-10 w-full md:w-auto"
               :to="{ name: PageList.HOME_PAGE }"
             >
-              <ArrowRightIconComponent :stroke-color="'#FFFFFF'" class="mr-2 w-4" />
+              <ArrowRightIconComponent
+                :stroke-color="'#FFFFFF'"
+                class="mr-2 w-4"
+              />
               Retour à la page d'accueil
             </RouterLink>
 
             <h3 class="mt-24 text-[19px] text-primary md:text-[25px]">
-              <span class="text-gradient"> Depuis plus de 20 ans, </span>
+              <span class="text-gradient"> Depuis 2001, </span>
               <br />
               <span> nous achetons mieux ensemble </span>
             </h3>
@@ -43,7 +45,7 @@
                     Réalisez 27% d'économies
                   </h4>
                   <p
-                    class="mt-3 flex text-sm text-gray-400 lg:w-[188px] md:text-base"
+                    class="mt-3 flex text-sm text-gray-400 md:text-base lg:w-[188px]"
                   >
                     Bénéficiez d'avantages comparables à ceux des grands groupes
                   </p>
@@ -52,16 +54,22 @@
                   class="flex w-[122px] flex-col items-center md:w-[154px] md:items-start"
                 >
                   <FolderSearchIconComponent class="flex h-10 w-10" />
-                  <h4 class="mt-3 flex text-base text-gray-500 md:mt-7 md:text-xl">
+                  <h4
+                    class="mt-3 flex text-base text-gray-500 md:mt-7 md:text-xl"
+                  >
                     Gagnez du temps
                   </h4>
                   <p class="mt-3 flex text-sm text-gray-400 md:text-base">
                     Restez concentré sur votre coeur de métier
                   </p>
                 </div>
-                <div class="flex flex-col items-center lg:w-[176px] md:items-start">
+                <div
+                  class="flex flex-col items-center md:items-start lg:w-[176px]"
+                >
                   <ExpandIconComponent class="flex h-10 w-10" />
-                  <h4 class="mt-3 flex text-base text-gray-500 md:mt-7 md:text-xl">
+                  <h4
+                    class="mt-3 flex text-base text-gray-500 md:mt-7 md:text-xl"
+                  >
                     Structurez et optimisez vos achats
                   </h4>
                   <p class="mt-3 text-sm text-gray-400 md:text-base">
@@ -75,7 +83,9 @@
                   >
                     Commencez votre démarche RSE par vos achats
                   </h4>
-                  <p class="mt-3 text-sm text-gray-400 md:w-[176px] md:text-base">
+                  <p
+                    class="mt-3 text-sm text-gray-400 md:w-[176px] md:text-base"
+                  >
                     Nous notons nos fournisseurs à l'aide d'un référentiel RSE
                   </p>
                 </div>

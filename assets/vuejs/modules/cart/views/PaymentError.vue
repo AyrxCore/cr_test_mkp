@@ -2,22 +2,23 @@
   <h3 class="mt-10 mb-1 text-[23px] text-primary md:text-[35px]">
     Erreur lors de la finalisation de commande
   </h3>
-  <div class="flex p-3 bg-orange-100 mb-5 w-1/2">
+  <div class="mb-5 flex w-1/2 bg-orange-100 p-3">
     <p class="text-sm text-gray-500 md:text-lg">
-      Une erreur est survenue lors de la validation de votre commande,
-      Aucun prélèvement n'a été effectué sur votre compte,
-      veuillez contacter le service adhérents.
+      Une erreur est survenue lors de la validation de votre commande, Aucun
+      prélèvement n'a été effectué sur votre compte, veuillez contacter le
+      service adhérents.
     </p>
   </div>
   <RouterLink
-    :to="{name: PageList.CONTACT_PAGE}"
-    class="button button-secondary">
+    :to="{ name: PageList.CONTACT_PAGE }"
+    class="button button-secondary"
+  >
     <MailIconLightComponent class="mr-1" />
     Contactez-nous
   </RouterLink>
 
   <h3 class="mt-24 text-[19px] text-primary md:text-[25px]">
-    <span class="text-gradient"> Depuis plus de 20 ans, </span>
+    <span class="text-gradient"> Depuis 2001, </span>
     <br />
     <span> nous achetons mieux ensemble </span>
   </h3>
@@ -79,10 +80,10 @@ import ExpandIconComponent from '@/vuejs/modules/shared/icon/ExpandIconComponent
 
 import { useUserStore } from '@/vuejs/stores/user'
 import { PageList } from '@/vuejs/router'
-import MailIconLightComponent from '@/vuejs/modules/shared/icon/MailIconLightComponent.vue';
-import { onMounted } from 'vue';
-import { gtmCartTrackingEvent } from '@/vuejs/modules/cart';
-import { useCartStore } from '@/vuejs/stores/cart';
+import MailIconLightComponent from '@/vuejs/modules/shared/icon/MailIconLightComponent.vue'
+import { onMounted } from 'vue'
+import { gtmCartTrackingEvent } from '@/vuejs/modules/cart'
+import { useCartStore } from '@/vuejs/stores/cart'
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)

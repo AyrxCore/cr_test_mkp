@@ -18,7 +18,7 @@
   </RouterLink>
 
   <h3 class="mt-24 text-[19px] text-primary md:text-[25px]">
-    <span class="text-gradient"> Depuis plus de 20 ans, </span>
+    <span class="text-gradient"> Depuis 2001, </span>
     <br />
     <span> nous achetons mieux ensemble </span>
   </h3>
@@ -99,7 +99,11 @@ watch(
   async (id: string) => {
     if (id) {
       cartResume.value = await cartStore.findCartById(parseInt(id))
-      await gtmCartTrackingEvent('purchase', cartResume.value.cart, cartResume.value.confirmation)
+      await gtmCartTrackingEvent(
+        'purchase',
+        cartResume.value.cart,
+        cartResume.value.confirmation,
+      )
     }
   },
 
