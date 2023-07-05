@@ -28,7 +28,7 @@
         >
           <RouterView />
         </template>
-        <LoaderSharedComponent v-else class="loader-xl mt-6 text-primary" />
+        <LoadingComponent v-else />
       </div>
     </div>
   </BaseTemplate>
@@ -43,10 +43,9 @@ import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import CartBreadcrumbItemComponent from '@/vuejs/modules/cart/components/CartBreadcrumbItemComponent.vue'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
-import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
-
 import { CartPageList } from '@/vuejs/router/pages-list'
 import { useCartStore } from '@/vuejs/stores/cart'
+import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 
 const router = useRouter()
 const cartStore = useCartStore()

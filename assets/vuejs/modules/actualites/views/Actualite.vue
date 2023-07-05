@@ -16,7 +16,7 @@
       >
         <!-- Bloc text actualité -->
         <div>
-          <h3 class="primary mb-2 text-title-35">
+          <h3 class="home-subtitle mb-2 text-primary">
             {{ currentExpertContent.articleTitle }}
           </h3>
           <span
@@ -80,12 +80,7 @@
       </div>
       <!-- Fin Bloc articles recommandés -->
     </div>
-    <div v-else class="mt-5 flex h-20 w-full items-center justify-center">
-      <LoaderSharedComponent
-        class="text-secondary"
-        classes="loader-xl loader"
-      />
-    </div>
+    <LoadingComponent v-else />
   </BaseTemplate>
 </template>
 
@@ -99,7 +94,7 @@ import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import ContenusExpertComponent from '@/vuejs/modules/home/component/ContenusExpertComponent.vue'
-import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
+import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 import { useExpertContentStore } from '@/vuejs/stores/expertContent'
 import { ExpertContent } from '@/vuejs/types/ExpertContent'
 import { NewsPageList } from '@/vuejs/router/pages-list'

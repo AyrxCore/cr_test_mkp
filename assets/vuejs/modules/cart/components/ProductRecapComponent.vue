@@ -9,12 +9,18 @@
                 name: PageList.PRODUCT,
                 params: productId,
               }"
+              class="contents"
             >
               <img
+                v-if="productImage"
                 :src="productImage"
                 :alt="`Image ${product.name.default}`"
                 class="m-auto block max-h-full max-w-full"
               />
+              <div
+                v-else
+                class="loading flex h-[116px] w-full items-center justify-center rounded-lg px-6 py-2"
+              ></div>
             </RouterLink>
           </div>
           <div class="ml-4 w-6/12 lg:w-7/12">
@@ -40,12 +46,6 @@
                 />
               </span>
             </h3>
-            <!-- <span
-            class="flex flex-col text-sm text-gray-500 md:flex-row lg:text-lg"
-          >
-            <span>Vendu par :</span>
-            <span>{{ item.partner }}</span>
-          </span> -->
             <span
               class="flex flex-col text-sm text-gray-500 lg:flex-row lg:text-lg"
             >
@@ -135,25 +135,21 @@
 <script lang="ts" setup>
 import { ref, computed, PropType, onMounted } from 'vue'
 
-import { getImage, formatPrice } from '@/vuejs/services/utils'
+import { formatPrice } from '@/vuejs/services/utils'
 
 import { OrderItem, OrderProduct } from '@/vuejs/types/Cart'
 import { useCartStore } from '@/vuejs/stores/cart'
 import { useProductStore } from '@/vuejs/stores/product'
 import { Product } from '@/vuejs/types/Product'
-
 import Chevron2RightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
 import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 import WarningIconComponent from '@/vuejs/modules/shared/icon/WarningIconComponent.vue'
-
-import sampleImg from '@/vuejs/assets/img/sample_product_img.png'
 import { PageList } from '@/vuejs/router'
 import ProductQuantityComponent from '../../shared/ProductQuantityComponent.vue'
 
 const cartStore = useCartStore()
 const productStore = useProductStore()
-
 const props = defineProps({
   item: {
     required: true,
@@ -176,8 +172,7 @@ onMounted(async (): Promise<void> => {
 })
 
 const productImage = computed((): string => {
-  if (productData.value) return productData.value.images[0]
-  return getImage(sampleImg)
+  return productData.value ? productData.value.images[0] : null
 })
 
 const variantOptions = async () => {

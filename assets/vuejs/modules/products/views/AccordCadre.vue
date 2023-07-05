@@ -1,11 +1,6 @@
 <template>
   <BaseTemplate :title="`${accordTitle} Qantis - MarketPlace`">
-    <div v-if="isLoading" class="flex h-16 w-full items-center justify-center">
-      <LoaderSharedComponent
-        class="text-secondary"
-        classes="loader-xl loader"
-      />
-    </div>
+    <LoadingComponent v-if="isLoading" />
     <div
       v-else-if="accord && !isLoading"
       class="xs:w-[100%] m-auto my-4 max-w-screen-2xl px-5 sm:px-8"
@@ -80,7 +75,7 @@ import { computed, ref, watch } from 'vue'
 import PartnersCarouselComponent from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
 import { Product } from '@/vuejs/types/Product'
 import { useRoute } from 'vue-router'
-import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
+import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 import MiseEnAvantComponent from '@/vuejs/modules/products/components/accord-cadre/CarouselMiseEnAvantComponent.vue'
 import ConditionsNegocieesComponent from '@/vuejs/modules/products/components/accord-cadre/ConditionsNegocieesComponent.vue'
 import { status } from '@/vuejs/modules/products'

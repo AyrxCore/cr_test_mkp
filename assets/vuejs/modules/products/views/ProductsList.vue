@@ -2,11 +2,11 @@
   <BaseTemplate
     title="Résultat de recherche de produits | Qantis - MarketPlace"
   >
-    <div v-if="isLoading" class="flex h-16 w-full items-center justify-center">
-      <LoaderSharedComponent
-        class="text-secondary"
-        classes="loader-xl loader"
-      />
+    <div
+      v-if="isLoading"
+      class="my-20 flex h-20 w-full flex-col items-center justify-center text-primary"
+    >
+      <LoadingComponent />
     </div>
     <div v-else class="m-auto my-4 w-full max-w-screen-2xl px-5 sm:px-8">
       <breadcrumb-shared-component
@@ -160,6 +160,7 @@ import { storeToRefs } from 'pinia'
 import { filterType } from '@/vuejs/modules/products'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import ProductPaginationComponent from '@/vuejs/modules/products/components/ProductPaginationComponent.vue'
+import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 
 const route = useRoute()
 const productStore = useProductStore()

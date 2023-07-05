@@ -46,31 +46,6 @@
 </template>
 <script lang="ts" setup>
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
 import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
 import ProductQuantityComponent from '@/vuejs/modules/shared/ProductQuantityComponent.vue'
 </script>
-
-<style scoped>
-.loading {
-  /*color: transparent;*/
-  /*background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);*/
-  /*background-size: 200% 100%;*/
-  /*animation: 1s shine linear infinite;*/
-  background: linear-gradient(-90deg, #e8e8e8, #d0cfcf, #e8e8e8);
-  background-size: 300% 300%;
-  animation: gradient 1s ease infinite;
-}
-
-@keyframes gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-</style>

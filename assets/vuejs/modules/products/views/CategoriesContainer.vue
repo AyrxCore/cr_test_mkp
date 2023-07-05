@@ -16,35 +16,25 @@
       </div>
       <div
         v-if="categories.length < 1"
-        class="w-full flex h-16 justify-center items-center"
+        class="flex h-16 w-full items-center justify-center"
       >
-        <LoaderSharedComponent
-          class="text-secondary"
-          classes="loader-xl loader"
-        />
+        <LoadingComponent />
       </div>
       <div
         v-else
-        class="m-auto grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-cols-max"
+        class="m-auto grid auto-cols-max grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
       >
-        <div
-          v-for="category in categories"
-          :key="category.id"
-        >
-          <div class="bg-white p-5 rounded-xl">
+        <div v-for="category in categories" :key="category.id">
+          <div class="rounded-xl bg-white p-5">
             <img
               v-if="category.image"
               :src="category.image"
               :alt="category.name"
               class="h-[210px]"
             />
-            <CategoryComponent
-              :category="category"
-            />
+            <CategoryComponent :category="category" />
           </div>
-
         </div>
-
       </div>
     </div>
   </BaseTemplate>
@@ -56,14 +46,13 @@ import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComp
 import { computed } from 'vue'
 import { useCategoryStore } from '@/vuejs/stores/category'
 import CategoryComponent from '@/vuejs/modules/products/components/CategoryComponent.vue'
-import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
+import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 
 const categoryStore = useCategoryStore()
 
 const categories = computed(() => {
   return categoryStore.categories
 })
-
 </script>
 
 <style scoped></style>

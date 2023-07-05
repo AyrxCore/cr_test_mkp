@@ -47,13 +47,13 @@
             <div class="mb-3 mt-3 flex justify-between">
               <a
                 href="/login/first-signin"
-                class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-300"
+                class="ml-2 text-sm font-medium text-gray-500"
               >
                 Première connexion
               </a>
               <a
                 href="/login/reset-password"
-                class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-300"
+                class="ml-2 text-sm font-medium text-gray-500"
               >
                 Mot de passe oublié ?
               </a>

@@ -1,14 +1,6 @@
 <template>
   <BaseTemplate :title="`${productTitle} Qantis - MarketPlace`">
-    <div
-      v-if="isLoading"
-      class="mt-5 flex h-20 w-full items-center justify-center"
-    >
-      <LoaderSharedComponent
-        class="text-secondary"
-        classes="loader-xl loader"
-      />
-    </div>
+    <LoadingComponent v-if="isLoading" />
     <div
       v-else-if="product && !isLoading"
       class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 px-5 sm:px-8"
@@ -328,6 +320,7 @@ import AddFavoriteComponent from '@/vuejs/modules/products/components/AddFavorit
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
 import ProductQuantityComponent from '../../shared/ProductQuantityComponent.vue'
+import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 
 const route = useRoute()
 const productStore = useProductStore()
