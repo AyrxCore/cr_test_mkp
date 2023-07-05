@@ -1,15 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
-use App\Entity\Account;
 use App\Entity\Favorite;
 use App\Entity\FavoriteProduct;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Service\Attribute\Required;
 
@@ -43,9 +41,10 @@ class FavoriteService
 
             if ($flush) {
                 $this->em->flush();
+
                 return $favorite;
             }
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             return $exception->getMessage();
         }
     }
@@ -56,8 +55,8 @@ class FavoriteService
 
         $oldSelectedFavorites = $this->em->getRepository(FavoriteProduct::class)->getFavoritesProductsByAccountAndProductId($account, $productId);
 
-        $favoritesIdToRemove = array_diff($oldSelectedFavorites, $favoriteIds);
-        $favoritesIdToAdd = array_diff($favoriteIds, $oldSelectedFavorites);
+        $favoritesIdToRemove = \array_diff($oldSelectedFavorites, $favoriteIds);
+        $favoritesIdToAdd = \array_diff($favoriteIds, $oldSelectedFavorites);
 
         foreach ($favoritesIdToRemove as $favoriteProductId) {
             $this->removeProductFromFavorites($favoriteProductId);
@@ -71,7 +70,7 @@ class FavoriteService
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function moveProductToFavorite(string $favoriteId, string $favoriteProductId): ?Favorite
     {
@@ -92,10 +91,10 @@ class FavoriteService
         return $favorite;
     }
 
-
     /**
-     * Permet de faire la suppression d'une liste de favori tout en déplaçant tous les produits de la liste à supprimer vers une nouvelle liste de favori existante
-     * @throws Exception
+     * Permet de faire la suppression d'une liste de favori tout en déplaçant tous les produits de la liste à supprimer vers une nouvelle liste de favori existante.
+     *
+     * @throws \Exception
      */
     public function moveProductsToOtherFavorite($favoriteId, $favoriteIdToReceive): Favorite
     {
@@ -127,7 +126,7 @@ class FavoriteService
     {
         return $this->em->getRepository(FavoriteProduct::class)->findOneBy([
             'favorite' => $favoriteId,
-            'upplerVariantId' => $variantId
+            'upplerVariantId' => $variantId,
         ]);
     }
 }

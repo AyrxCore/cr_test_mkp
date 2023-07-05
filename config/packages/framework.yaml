@@ -17,6 +17,11 @@ framework:
   php_errors:
     log: true
 
+  http_client:
+    scoped_clients:
+      uppler.client:
+        base_uri: '%env(UPPLER_API_URL)%'
+
 when@test:
   framework:
     test: true

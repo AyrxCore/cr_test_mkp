@@ -5,17 +5,12 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Account;
-use App\Entity\User;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Service\Attribute\Required;
 
-class UpplerAuthenticationService extends HttpClientProvider
+class UpplerAuthenticationService extends AbstractUpplerService
 {
-    #[Required]
-    public RequestStack $requestStack;
-
     #[Required]
     public EntityManagerInterface $em;
 
@@ -32,17 +27,17 @@ class UpplerAuthenticationService extends HttpClientProvider
             // grace aux paramétres de connexion déjà connus on sollicite un accessToken pour ce user
             $this->getUserToken($account);
 
-            //si l'accessToken a été récupéré il doit être en session,
+            // si l'accessToken a été récupéré il doit être en session,
             // si c'est le cas on stocke  aussi les infos du tokenUser
             if ($session->has('access_token') && !empty($session->get('access_token'))) {
-                $account->setLastConnexion(new \DateTime('now'));
+                $account->setLastConnexion(new DateTime('now'));
                 $this->em->persist($account);
                 $this->em->flush();
+
                 return true;
             }
         }
 
         return false;
     }
-
 }
