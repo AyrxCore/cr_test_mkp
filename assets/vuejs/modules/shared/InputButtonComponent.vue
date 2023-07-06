@@ -2,13 +2,13 @@
   <div ref="wrapper" class="flex w-full">
     <input
       v-model="query"
-      class="input !rounded-r-none !p-2 !text-sm md:!text-base md:!text-lg lg:!px-8 lg:!py-4 truncate md:text-clip"
+      class="input truncate !rounded-r-none !p-2 !text-sm md:text-clip md:!text-base md:!text-lg lg:!px-8 lg:!py-4"
       name="search"
       :placeholder="props.placeholder"
       :type="props.type"
     />
     <button
-      class="flex items-center rounded-r-md px-3 py-1 text-white hover:opacity-75"
+      class="flex items-center rounded-r-md px-3 py-2 text-white hover:opacity-75"
       :class="btnColor"
     >
       <slot />

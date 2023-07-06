@@ -15,7 +15,7 @@
                 <div class="rounded-lg bg-white pt-2 xl:p-7">
                   <div class="hidden xl:flex xl:flex-col">
                     <h3
-                      class="tex-primary text-md mb-2 font-bold xl:text-[20px]"
+                      class="text-md mb-2 font-bold text-primary xl:text-[20px]"
                     >
                       {{ user.firstName }}
                       <span class="uppercase">{{ user.lastName }}</span>
@@ -85,8 +85,8 @@
               :to="{ name: PageList.POLITIQUE_DE_CONFIDENTIALITE }"
               class="font-bold underline decoration-2"
             >
-              Politique de confidentialité</RouterLink
-            >
+              Politique de confidentialité
+            </RouterLink>
           </p>
         </div>
       </div>

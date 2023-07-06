@@ -85,14 +85,14 @@ import SelectField from '@/vuejs/modules/shared/formfields/SelectField.vue'
 import router, { PageList } from '@/vuejs/router'
 import { useBuyerCompanyStore } from '@/vuejs/stores/buyer_company'
 import { useRoute } from 'vue-router'
-import { useCoutryStore } from '@/vuejs/stores/country'
+import { useCountryStore } from '@/vuejs/stores/country'
 
 const route = useRoute()
 const buyerCompanyStore = useBuyerCompanyStore()
 const { currentAddress, isloading } = storeToRefs(buyerCompanyStore)
 const isEditing = ref<boolean>(false)
 const isEditedLoaded = ref<boolean>(false)
-const countryStore = useCoutryStore()
+const countryStore = useCountryStore()
 const { countries } = storeToRefs(countryStore)
 
 const props = defineProps({

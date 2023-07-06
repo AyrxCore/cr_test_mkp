@@ -42,7 +42,7 @@
         <div class="w-3/12">Total de la commande</div>
         <div class="w-1/12"></div>
       </div>
-      <OrderHistoryComponent
+      <orderComponent
         v-for="(order, key) in listOrders"
         :key="key"
         :order="order"
@@ -54,7 +54,7 @@
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import { computed } from 'vue'
 import { AccountPageList } from '@/vuejs/router/pages-list'
-import OrderHistoryComponent from '@/vuejs/modules/account/components/OrderHistoryComponent.vue'
+import OrderComponent from '@/vuejs/modules/account/components/OrderComponent.vue'
 import InputButtonComponent from '@/vuejs/modules/shared/InputButtonComponent.vue'
 import CalendarCheckIconComponent from '@/vuejs/modules/shared/icon/CalendarCheckIconComponent.vue'
 

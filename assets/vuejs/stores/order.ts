@@ -1,0 +1,48 @@
+import { defineStore } from 'pinia'
+import { Invoice, OrderStoreState } from '@/vuejs/types/Order'
+import OrderHttpClient from '@/vuejs/services/httpclient/OrderHttpClient'
+import { AlertType } from '@/vuejs/types/Alert'
+import { useAlertStore } from '@/vuejs/stores/alert'
+
+export const useOrderStore = defineStore({
+  id: 'order',
+  state: (): OrderStoreState => ({
+    orders: [],
+  }),
+
+  actions: {
+    async getOrders() {
+      try {
+        this.orders = await OrderHttpClient.get().getOrders()
+      } catch (error) {
+        const alertStore = useAlertStore()
+        alertStore.setShow(
+          error.response.data['hydra:description'],
+          AlertType.danger,
+        )
+      }
+    },
+    async getOrderById(orderId: number) {
+      try {
+        return await OrderHttpClient.get().getOrderById(orderId)
+      } catch (error) {
+        const alertStore = useAlertStore()
+        alertStore.setShow(
+          error.response.data['hydra:description'],
+          AlertType.danger,
+        )
+      }
+    },
+    async getOrderInvoiceById(orderInvoiceId: number): Promise<Invoice | []> {
+      try {
+        return await OrderHttpClient.get().getOrderInvoiceById(orderInvoiceId)
+      } catch (error) {
+        const alertStore = useAlertStore()
+        alertStore.setShow(
+          error.response.data['hydra:description'],
+          AlertType.danger,
+        )
+      }
+    },
+  },
+})

@@ -3,11 +3,11 @@ import { useAlertStore } from '@/vuejs/stores/alert'
 import { AlertType } from '@/vuejs/types/Alert'
 import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
 import { getErrorMessage } from '@/vuejs/services/login'
-import {Country, CountryStoreState} from "@/vuejs/types/Country";
-import CountryHttpClient from "@/vuejs/services/httpclient/CountryHttpClient";
-import {SelectOption} from "@/vuejs/types/Select";
+import { CountryStoreState } from '@/vuejs/types/Country'
+import CountryHttpClient from '@/vuejs/services/httpclient/CountryHttpClient'
+import { SelectOption } from '@/vuejs/types/Select'
 
-export const useCoutryStore = defineStore({
+export const useCountryStore = defineStore({
   id: 'country',
   state: (): CountryStoreState => ({
     countries: [],
@@ -29,11 +29,11 @@ export const useCoutryStore = defineStore({
     },
     getCountriesForSelect(): SelectOption[] {
       return this.countries.map((country) => {
-          return {
-            label: country.name,
-            value: country.id
-          }
+        return {
+          label: country.name,
+          value: country.id,
+        }
       })
-    }
-  }
+    },
+  },
 })

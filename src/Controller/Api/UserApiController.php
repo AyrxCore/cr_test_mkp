@@ -62,11 +62,11 @@ class UserApiController extends AbstractController
     #[Route('/accounts')]
     public function accounts(NormalizerInterface $normalizer): JsonResponse
     {
-        /** @var User $user*/
+        /** @var User $user */
         $user = $this->getUser();
         $accounts = [];
 
-        /** @var  Account $account*/
+        /** @var  Account $account */
         foreach ($user->getAccounts() as $account) {
             if (!$account->isEnabled()) {
                 continue;
@@ -117,7 +117,7 @@ class UserApiController extends AbstractController
         EntityManagerInterface $em
     ) {
         $datas = json_decode($request->getContent());
-        /**@var User $user*/
+        /**@var User $user */
         $user = $this->getUser();
 
         if (!$userPasswordHasher->isPasswordValid($user, $datas->currentPassword)) {

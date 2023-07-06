@@ -10,7 +10,8 @@ import ProfileDetailsEditForm from '@/vuejs/modules/account/views/ProfileInforma
 import FavoritesProductsPage from '@/vuejs/modules/account/views/FavoritesProducts.vue'
 import FavoritesProductsDetailsPage from '@/vuejs/modules/account/views/FavoritesProductsDetails.vue'
 import SavedCartDetailsPage from '@/vuejs/modules/account/views/SavedCartsDetails.vue'
-import OrdersHistoryPage from '@/vuejs/modules/account/views/OrdersHistory.vue'
+import OrdersPage from '@/vuejs/modules/account/views/Orders.vue'
+import OrderDetailsPage from '@/vuejs/modules/account/views/OrderDetails.vue'
 import SavedCartsPage from '@/vuejs/modules/account/views/SavedCarts.vue'
 import OrdersValidationPage from '@/vuejs/modules/account/views/OrdersValidation.vue'
 
@@ -73,8 +74,13 @@ export const routes: RouteRecordRaw[] = [
       },
       {
         path: 'orders',
-        component: OrdersHistoryPage,
-        name: AccountPageList.ORDERS_HISTORY,
+        component: OrdersPage,
+        name: AccountPageList.ORDERS,
+      },
+      {
+        path: 'orders/:id',
+        component: OrderDetailsPage,
+        name: AccountPageList.ORDER_DETAILS,
       },
       {
         path: 'saved-carts',

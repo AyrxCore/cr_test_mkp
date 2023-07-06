@@ -37,7 +37,7 @@ class Account
     private ?Uuid $id = null;
 
     #[ORM\Column()]
-    #[Groups(['account:list', 'account:get'])]
+    #[Groups(['simpleUser', 'account:list', 'account:get'])]
     private ?int $upplerUserId = null;
 
     #[ORM\Column()]

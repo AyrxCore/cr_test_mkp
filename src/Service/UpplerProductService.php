@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Dto\Price;
 use App\Dto\Product;
 use App\Dto\Property;
 use App\Entity\Account;
 use App\Entity\AccordStatut;
 use App\Dto\AccountAccordCadre;
 use App\Entity\Favorite;
+use App\Helper\UpplerHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
@@ -27,16 +27,15 @@ class UpplerProductService extends HttpClientProvider
     protected UpplerSellerService $upplerSellerService;
 
     public function __construct(
-        string              $env,
-        string              $apiUrl,
-        string              $adminClientId,
-        string              $adminClientSecret,
-        string              $adminTokenFile,
-        string              $httpCachePath,
-        AdapterInterface    $cache,
+        string $env,
+        string $apiUrl,
+        string $adminClientId,
+        string $adminClientSecret,
+        string $adminTokenFile,
+        string $httpCachePath,
+        AdapterInterface $cache,
         UpplerSellerService $upplerSellerService
-    )
-    {
+    ) {
         parent::__construct($env, $apiUrl, $adminClientId, $adminClientSecret, $adminTokenFile, $httpCachePath);
         $this->cache = $cache;
         $this->upplerSellerService = $upplerSellerService;
@@ -51,11 +50,10 @@ class UpplerProductService extends HttpClientProvider
     public function findProductsByOptions(
         array $options,
         array $params = [],
-        int   $page = 1,
-        int   $perPage = 10,
-        bool  $showFilters = false
-    ): array|null
-    {
+        int $page = 1,
+        int $perPage = 10,
+        bool $showFilters = false
+    ): array|null {
         $session = $this->requestStack->getSession();
         $session->start();
 
@@ -408,7 +406,7 @@ class UpplerProductService extends HttpClientProvider
     private function formatPrice($remoteProduct, Product $product): void
     {
         if (null !== $remoteProduct->price) {
-            $price = round($remoteProduct->price->display_price * 0.01, 2);
+            $price = UpplerHelper::formatPrice($remoteProduct->price->display_price);
             $product->setPrice($price);
         }
     }

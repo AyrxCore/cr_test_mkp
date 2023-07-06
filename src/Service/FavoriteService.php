@@ -142,7 +142,7 @@ class FavoriteService
         /** @var Favorite $favorite */
         $favorite = $this->em->getRepository(Favorite::class)->find($favoriteId);
         $favoriteProduct = $this->em->getRepository(FavoriteProduct::class)->findOneBy([
-            'favorite' => $favoriteId, 
+            'favorite' => $favoriteId,
             'upplerProductId' => $productId,
             'upplerVariantId' => $variantId
         ]);

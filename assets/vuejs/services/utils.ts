@@ -2,6 +2,7 @@ import { notify } from 'notiwind'
 
 import { Address } from '../types/Address'
 import imgDefault from '@/vuejs/assets/img/default-image.png'
+import { format } from 'date-fns'
 
 export function getImage(urlImage: string): string {
   return new URL(urlImage, import.meta.url).href
@@ -78,4 +79,16 @@ export function isUrl(str) {
   } catch (e) {
     return false
   }
+}
+
+export function formatDateFr(date: Date | null) {
+  return date !== null ? format(new Date(date), 'dd/MM/yyyy') : null
+}
+
+export function hexToBinary(hexString) {
+  const buffer = new Uint8Array(hexString.length / 2)
+  for (let i = 0; i < hexString.length; i += 2) {
+    buffer[i / 2] = parseInt(hexString.substr(i, 2), 16)
+  }
+  return buffer
 }

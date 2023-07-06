@@ -34,6 +34,7 @@ export interface Adherent {
 export interface Account {
   id: string
   lastConnexion: Date
+  upplerUserId: number
   buyer: AccountBuyer
   adherent: Adherent
   subaccount: SubAccount
@@ -58,6 +59,9 @@ interface AccountToUpdate {
   phone: string
 }
 
-export type AccountEmail = Omit<AccountToUpdate, 'lastName' | 'firstName' | 'phone'>
+export type AccountEmail = Omit<
+  AccountToUpdate,
+  'lastName' | 'firstName' | 'phone'
+>
 
 export type AccountDetails = Omit<AccountToUpdate, 'email'>
