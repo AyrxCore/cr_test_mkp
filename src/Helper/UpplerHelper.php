@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helper;
 
 class UpplerHelper
@@ -17,6 +19,6 @@ class UpplerHelper
 
     public static function formatPrice(int $price): float
     {
-        return round($price * 0.01, 2);
+        return \round($price * 0.01, 2);
     }
 }
