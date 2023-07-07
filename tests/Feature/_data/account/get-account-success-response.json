@@ -1,0 +1,19 @@
+{
+  "@context": "\/api\/contexts\/Account",
+  "@id": "\/api\/accounts\/@uuid@",
+  "@type": "Account",
+  "id": "@uuid@",
+  "upplerUserId": 113,
+  "upplerSubAccountId": 23,
+  "upplerCompanyId": 72,
+  "upplerUsername": "@string@",
+  "_user": {
+    "@type": "User",
+    "id": "@uuid@",
+    "email": "gsm@qantis.co",
+    "username": "gsm@qantis.co",
+    "firstName": "Gaëtan",
+    "lastName": "DE SAINTE MARIE",
+    "isEnabled": true
+  }
+}

@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Constraints;
+namespace App\Tests\Constraint;
 
+use App\Tests\Feature\Helper\JsonHelper;
 use Coduo\PHPMatcher\PHPMatcher;
 use PHPUnit\Framework\Constraint\Constraint;
 use Symfony\Component\HttpFoundation\Response;
 
-final class ResponseEqualsJson extends Constraint
+final class MatchesJson extends Constraint
 {
     private PHPMatcher $matcher;
     private string|false $pattern;
 
     public function __construct(private string $jsonFilePath)
     {
-        $this->parseJsonFile();
-
         $this->matcher = new PHPMatcher();
+        $this->pattern = JsonHelper::parseJsonDataFile($this->jsonFilePath);
     }
 
     public function toString(): string
@@ -56,12 +56,5 @@ final class ResponseEqualsJson extends Constraint
     protected function additionalFailureDescription($response): string
     {
         return (string) $response;
-    }
-
-    private function parseJsonFile(): void
-    {
-        $jsonFileContent = \file_get_contents(\sprintf('%s/../Feature/data/%s', __DIR__, $this->jsonFilePath));
-
-        $this->pattern = \json_encode(\json_decode($jsonFileContent));
     }
 }

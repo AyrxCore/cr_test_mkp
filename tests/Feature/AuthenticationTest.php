@@ -41,19 +41,21 @@ use Symfony\Component\HttpFoundation\Cookie;
             'roles' => $expectedRoles,
         ]);
 
-    // Select an account to initialize the session
     $accounts = UserFactory::find(['username' => $username])->getAccounts();
-    if (!$accounts->isEmpty()) {
-        $client->request('GET', "/api/user/account/{$accounts->first()->getId()}/select");
-        $this->assertResponseIsSuccessful();
-        $this->assertResponseStatusCodeSame(200);
-
-        // get current user info
-        $client->request('GET', '/api/user/me');
-        $this->assertResponseIsSuccessful();
-        $this->assertResponseStatusCodeSame(200);
-        $this->assertJsonResponseEquals($expectedResponse);
+    if ($accounts->isEmpty()) {
+        return;
     }
+
+    // Select an account to initialize the session
+    $client->request('GET', "/api/user/account/{$accounts->first()->getId()}/select");
+    $this->assertResponseIsSuccessful();
+    $this->assertResponseStatusCodeSame(200);
+
+    // get current user info
+    $client->request('GET', '/api/user/me');
+    $this->assertResponseIsSuccessful();
+    $this->assertResponseStatusCodeSame(200);
+    $this->assertJsonResponseMatches($expectedResponse);
 })
     ->with([
         'user with ROLE_USER' => [
@@ -69,7 +71,8 @@ use Symfony\Component\HttpFoundation\Cookie;
             'expectedStatusCode' => 204,
             'roles' => ['ROLE_API', 'ROLE_USER'],
         ],
-    ]);
+    ])
+    ->group('authentication');
 
 \it('fails to authenticate a user', function (
     $username,
@@ -119,4 +122,5 @@ use Symfony\Component\HttpFoundation\Cookie;
             'password' => '000000',
             'error_message' => 'user_empty_account',
         ],
-    ]);
+    ])
+    ->group('authentication');

@@ -1,19 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Dto\UserAccountInputDto;
 use App\Repository\AccountRepository;
-use App\State\UserAccountProcessor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
-use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
-use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AccountRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -21,6 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     collectionOperations: [],
     itemOperations: [
         'get' => [
+            'security' => 'is_granted("ROLE_API") or object.getUser() == user',
             'normalization_context' => ['groups' => ['account:get']],
         ],
     ],
@@ -28,7 +28,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 class Account
 {
-
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
@@ -108,6 +107,11 @@ class Account
         $this->savedCarts = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->upplerClientId;
+    }
+
     #[ORM\PrePersist]
     public function onPrePersist()
     {
@@ -119,11 +123,6 @@ class Account
     public function onPreUpdate()
     {
         $this->updatedAt = new \DateTime('now');
-    }
-
-    public function __toString(): string
-    {
-        return $this->upplerClientId;
     }
 
     public function getId(): ?Uuid

@@ -1,0 +1,58 @@
+{
+  "shipment_proposal": {
+    "method_proposals": [
+      {
+        "shipping_method": {
+          "id": 17,
+          "name": {
+            "fr": "Frais de port - MIEKO",
+            "default": "Frais de port - MIEKO"
+          }
+        },
+        "selected": true,
+        "amount": 900,
+        "order": {
+          "id": 587,
+          "items": [
+            {
+              "id": 794,
+              "quantity": 1,
+              "variant": {
+                "id": 34335
+              },
+              "canceled_at": null
+            }
+          ]
+        },
+        "item": null
+      },
+      {
+        "shipping_method": {
+          "id": 10,
+          "name": {
+            "fr": "Frais de port - ALDA Majuscule",
+            "default": "Frais de port - ALDA Majuscule"
+          }
+        },
+        "selected": true,
+        "amount": 700,
+        "order": {
+          "id": 588,
+          "items": [
+            {
+              "id": 795,
+              "quantity": 1,
+              "variant": {
+                "id": 40665
+              },
+              "canceled_at": null
+            }
+          ]
+        },
+        "item": null
+      }
+    ],
+    "delivery_date_proposals": [],
+    "not_shippable_items": []
+  }
+}

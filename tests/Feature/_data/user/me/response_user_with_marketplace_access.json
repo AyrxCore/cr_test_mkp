@@ -9,6 +9,7 @@
   "userInfoUpdateRequests": [],
   "account": {
     "id": "@uuid@",
+    "upplerUserId": 113,
     "lastConnexion": "@datetime@",
     "_user": {
       "email": "gsm@qantis.co",

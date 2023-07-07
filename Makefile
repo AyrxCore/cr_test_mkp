@@ -125,8 +125,14 @@ build-front: ## Build front environment
 
 test: test-unit test-feature ## Run feature and unit tests
 
-test-file: ## Run test on a single file (ex: make test-file tests/Feature/AuthenticationTest.php)
+test-file: ## Run tests on a single file (ex: make test-file tests/Feature/AuthenticationTest.php)
 	$(dc_exec) php vendor/bin/pest $(args) || true
+
+test-filter: ## Run tests by filtering on the case name (ex: make test-filter "authenticates a user")
+	$(dc_exec) php vendor/bin/pest --filter "$(args)" || true
+
+test-group: ## Run tests on groups (ex: make test-group "authentication,accounts")
+	$(dc_exec) php vendor/bin/pest --group=$(args) || true
 
 test-unit: ## Run unit tests
 	$(dc_exec) php vendor/bin/pest --testsuite unit
