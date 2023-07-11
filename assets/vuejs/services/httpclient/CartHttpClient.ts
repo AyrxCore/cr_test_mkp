@@ -8,6 +8,7 @@ import {
   OrderShippingUpdate,
   CartPaymentMethodUpdate,
   CartPaymentMethodUpdated,
+  ShippingMethod,
 } from '@/vuejs/types/Cart'
 
 export default class CartHttpClient extends BaseClientService {
@@ -81,6 +82,14 @@ export default class CartHttpClient extends BaseClientService {
   public findCartById<T extends []>(id: number): Promise<Cart> {
     return this.apiClient
       .get(`buyer/cart/${id}`)
+      .then((response) => response.data)
+  }
+
+  public getCartShippingMethods<T extends []>(
+    cartId: number,
+  ): Promise<ShippingMethod[]> {
+    return this.apiClient
+      .get(`buyer/cart/${cartId}/shipments`)
       .then((response) => response.data)
   }
 }

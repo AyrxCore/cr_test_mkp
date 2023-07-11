@@ -122,13 +122,13 @@
           <div v-for="(account, id) in userAccounts" :key="id">
             <label
               v-if="account.upplerDatas"
-              for="account-radio"
+              :for="`account-radio-${id}`"
               class="mb-3 flex cursor-pointer items-center rounded-md bg-white px-4 py-2"
             >
               <input
                 v-model="accountSelectedId"
                 :value="account.id"
-                id="account-radio"
+                :id="`account-radio-${id}`"
                 type="radio"
                 class="mr-4"
                 @change="onChangeBuyer(account.acceptCGU)"

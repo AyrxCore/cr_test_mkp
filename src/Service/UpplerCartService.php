@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\CartSavings;
-use App\Repository\AccountRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use stdClass;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Service\Attribute\Required;
@@ -22,9 +19,6 @@ class UpplerCartService extends HttpClientProvider
 
     #[Required]
     public UpplerAccountService $upplerAccountService;
-
-    #[Required]
-    public AccountRepository $accountRepository;
 
     protected string $appDomain;
 
@@ -41,61 +35,42 @@ class UpplerCartService extends HttpClientProvider
         $this->appDomain = $appDomain;
     }
 
-    public function createCart(): string | null
+    public function createCart(): string|null
     {
         $res = $this->request(
             'POST',
-            $this->apiUrl . 'v1/buyer/cart/',
+            $this->apiUrl.'v1/buyer/cart/',
         );
 
-        if (Response::HTTP_CREATED === $res->getStatusCode()) {
+        if ($res->getStatusCode() === Response::HTTP_CREATED) {
             $headers = $res->getHeaders();
+
             return $headers['location'][0];
         }
 
         return null;
     }
 
-    public function getCart(): array | null
+    public function getCart(): array|null
     {
         $res = $this->request(
             'GET',
-            $this->apiUrl . 'v1/buyer/cart?&expand[]=orders&expand[]=orderItems&criteria[state][]=new&criteria[state][]=address&criteria[state][]=shipping_method&criteria[state][]=payment',
+            $this->apiUrl.'v1/buyer/cart?&expand[]=orders&expand[]=orderItems&criteria[state][]=new&criteria[state][]=address&criteria[state][]=shipping_method&criteria[state][]=payment&sorting[id]=asc&perPage=1&page=1',
         );
 
+        if (\in_array($res->getStatusCode(), [Response::HTTP_OK, Response::HTTP_PARTIAL_CONTENT], true)) {
+            $carts = \json_decode($res->getContent(), true);
 
-        if (Response::HTTP_OK === $res->getStatusCode()) {
-            $carts = json_decode($res->getContent(), true);
+            if (\count($carts) > 0) {
+                $cart = $carts[0];
 
-            if (sizeof($carts) > 0) {
-                $cart = reset($carts);
-
-                if (is_null($cart['shipping_address']) || is_null($cart['billing_address'])) {
-                    $account = $this->upplerAccountService->getUserSubAccountDatas();
-                    $this->updateCartAddress($cart['id'], $account->shipping_address, $account->billing_address);
+                if ($cart['state'] === 'payment') {
+                    $this->isPaymentConfirmed($cart['id']);
                 }
-                if (sizeof($cart['orders']) > 0) {
-
+                if (\count($cart['orders']) > 0) {
                     $cart['paymentMethods'] = $this->getPaymentMethods($cart['id']);
-
-                    $res = $this->request(
-                        'GET',
-                        $this->apiUrl . 'v1/buyer/cart/' . $cart['id'] . '/shipping-method',
-                    );
-                    $shippingMethods = json_decode($res->getContent());
-                    foreach ($cart['orders'] as $keyOrder => $order) {
-                        $shippingMethodsAvailable = $this->getShippingMethodsForOrder(
-                            $shippingMethods->shipment_proposal->method_proposals,
-                            $order['id']
-                        );
-                        $cart['orders'][$keyOrder]['shippingMethodsAvailable'] = $shippingMethodsAvailable;
-
-                        if (sizeof($order['shipments']) === 0 && sizeof($shippingMethodsAvailable) > 0) {
-                            $this->setShippingMethod($cart['id'], $order['id'], $shippingMethodsAvailable[0]->shipping_method->id);
-                            return $this->getCart();
-                        }
-                    }
                 }
+
                 return $cart;
             } else {
                 if ($this->createCart()) {
@@ -107,16 +82,17 @@ class UpplerCartService extends HttpClientProvider
         return null;
     }
 
-    public function getCartById(int $cartId): array | null
+    public function getCartById(int $cartId): array|null
     {
         $res = $this->request(
             'GET',
-            $this->apiUrl . 'v1/buyer/cart/' . $cartId . '?expand[]=orders&expand[]=orderItems',
+            $this->apiUrl.'v1/buyer/cart/'.$cartId.'?expand[]=orders&expand[]=orderItems',
         );
 
-        if (Response::HTTP_OK === $res->getStatusCode()) {
-            return json_decode($res->getContent(), true);
+        if ($res->getStatusCode() === Response::HTTP_OK) {
+            return \json_decode($res->getContent(), true);
         }
+
         return null;
     }
 
@@ -124,26 +100,27 @@ class UpplerCartService extends HttpClientProvider
     {
         $res = $this->request(
             'POST',
-            $this->apiUrl . 'v1/buyer/cart/' . $cartId . '/items',
+            $this->apiUrl.'v1/buyer/cart/'.$cartId.'/items',
             [
                 'json' => [
                     'items' => [
                         [
                             'variant_id' => $variantId,
                             'quantity' => $quantity,
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
             ],
         );
-        return $res && Response::HTTP_NO_CONTENT === $res->getStatusCode();
+
+        return $res && $res->getStatusCode() === Response::HTTP_NO_CONTENT;
     }
 
     public function updateCartAddress(int|string $cartReference, int $shippingId, int $billingId): bool
     {
         $res = $this->request(
             'PATCH',
-            is_string($cartReference) ? $cartReference : $this->apiUrl . 'v1/buyer/cart/' . $cartReference,
+            \is_string($cartReference) ? $cartReference : $this->apiUrl.'v1/buyer/cart/'.$cartReference,
             [
                 'json' => [
                     'shipping_address' => $shippingId,
@@ -151,28 +128,46 @@ class UpplerCartService extends HttpClientProvider
                 ],
             ],
         );
-        return $res && Response::HTTP_NO_CONTENT === $res->getStatusCode();
+
+        return $res && $res->getStatusCode() === Response::HTTP_NO_CONTENT;
     }
 
     public function updateOrderItemQuantity(int $id, int $quantity): bool
     {
         $res = $this->request(
             'PATCH',
-            $this->apiUrl . 'v1/buyer/order-item/' . $id,
+            $this->apiUrl.'v1/buyer/order-item/'.$id,
             [
                 'json' => ['quantity' => $quantity],
             ],
         );
-        return $res && Response::HTTP_NO_CONTENT === $res->getStatusCode();
+
+        return $res && $res->getStatusCode() === Response::HTTP_NO_CONTENT;
     }
 
     public function deleteOrderItem(int $id): bool
     {
         $res = $this->request(
             'DELETE',
-            $this->apiUrl . 'v1/buyer/order-item/' . $id,
+            $this->apiUrl.'v1/buyer/order-item/'.$id,
         );
-        return $res && Response::HTTP_NO_CONTENT === $res->getStatusCode();
+
+        return $res && $res->getStatusCode() === Response::HTTP_NO_CONTENT;
+    }
+
+    public function getShippingMethods(int $cartId): array|bool
+    {
+        $res = $this->request(
+            'GET',
+            $this->apiUrl.'v1/buyer/cart/'.$cartId.'/shipping-method',
+        );
+        if ($res && $res->getStatusCode() === Response::HTTP_OK) {
+            $res = \json_decode($res->getContent(), true);
+
+            return $res['shipment_proposal']['method_proposals'];
+        }
+
+        return false;
     }
 
     public function getShippingMethodsForOrder(array $shippingMethods, int $orderId): array
@@ -183,6 +178,7 @@ class UpplerCartService extends HttpClientProvider
                 $methods[] = $method;
             }
         }
+
         return $methods;
     }
 
@@ -190,7 +186,7 @@ class UpplerCartService extends HttpClientProvider
     {
         $res = $this->request(
             'PATCH',
-            $this->apiUrl . 'v1/buyer/cart/' . $cartId . '/shipping-method',
+            $this->apiUrl.'v1/buyer/cart/'.$cartId.'/shipping-method',
             [
                 'json' => [
                     'shipment_proposal' => [
@@ -199,53 +195,57 @@ class UpplerCartService extends HttpClientProvider
                                 'order' => $orderId,
                                 'shipping_method' => $shippingMethodId,
                             ],
-                        ]
+                        ],
                     ],
                 ],
             ],
         );
-        return $res && Response::HTTP_NO_CONTENT === $res->getStatusCode();
+
+        return $res && $res->getStatusCode() === Response::HTTP_NO_CONTENT;
     }
 
     public function getPaymentMethods(int $cartId): array
     {
         $res = $this->request(
             'GET',
-            $this->apiUrl . 'v1/buyer/cart/' . $cartId . '/payment-method',
+            $this->apiUrl.'v1/buyer/cart/'.$cartId.'/payment-method',
         );
-        if ($res && Response::HTTP_OK === $res->getStatusCode()) {
-            return json_decode($res->getContent());
+        if ($res && $res->getStatusCode() === Response::HTTP_OK) {
+            return \json_decode($res->getContent());
         }
+
         return [];
     }
 
-    public function setPaymentMethod(int $cartId, int $paymentMethodId): stdClass
+    public function setPaymentMethod(int $cartId, int $paymentMethodId): array|bool
     {
         $res = $this->request(
             'PATCH',
-            $this->apiUrl . 'v1/buyer/cart/' . $cartId . '/payment-method',
+            $this->apiUrl.'v1/buyer/cart/'.$cartId.'/payment-method',
             [
                 'json' => [
                     'payment_method' => $paymentMethodId,
-                    'callback_url' => $this->appDomain . '/api/buyer/cart/' . $cartId . '/confirm',
+                    'callback_url' => $this->appDomain.'/api/buyer/cart/'.$cartId.'/confirm',
                 ],
             ],
         );
-        if ($res && Response::HTTP_OK === $res->getStatusCode()) {
-            return json_decode($res->getContent());
+        if ($res && $res->getStatusCode() === Response::HTTP_OK) {
+            return \json_decode($res->getContent(), true);
         }
+
         return false;
     }
 
-    public function isPaymentConfirmed(int $cartId): stdClass | bool
+    public function isPaymentConfirmed(int $cartId): array|bool
     {
         $res = $this->request(
             'GET',
-            $this->apiUrl . 'v1/buyer/cart/' . $cartId . '/transaction/confirm',
+            $this->apiUrl.'v1/buyer/cart/'.$cartId.'/transaction/confirm',
         );
-        if ($res && Response::HTTP_OK === $res->getStatusCode()) {
-            return json_decode($res->getContent());
+        if ($res && $res->getStatusCode() === Response::HTTP_OK) {
+            return \json_decode($res->getContent(), true);
         }
+
         return false;
     }
 
@@ -253,39 +253,9 @@ class UpplerCartService extends HttpClientProvider
     {
         $res = $this->request(
             'PATCH',
-            $this->apiUrl . 'v1/buyer/cart/' . $cartId . '/confirm',
+            $this->apiUrl.'v1/buyer/cart/'.$cartId.'/confirm',
         );
 
-        return $res && Response::HTTP_NO_CONTENT === $res->getStatusCode();
-    }
-
-    public function processCartSavings(array $cart): void
-    {
-        $account = $this->accountRepository->findOneBy([
-            'upplerUserId' => $cart['user']['id']
-        ]);
-
-        foreach ($cart['orders'] as $order) {
-            $cartSaving = new CartSavings();
-            $cartSaving->setCartId($cart['id']);
-            $cartSaving->setAccount($account);
-            $cartSaving->setOrderId($order['id']);
-            $cartSaving->setSellerId($order['seller']['id']);
-            $priceReferenceByOrder = 0;
-            foreach ($order['items'] as $item) {
-                $pricePaid = $item['variant']['product']['price_reference'] * $item['quantity'];
-
-                // Si le price_reference = null alors pricePaid = 0
-                if ($pricePaid === 0) {
-                    $pricePaid = $item['total_excluding_taxes'];
-                }
-
-                $priceReferenceByOrder += $pricePaid;
-            }
-            $cartSaving->setAmount($priceReferenceByOrder - $order['items_total_excluding_taxes']);
-            $this->em->persist($cartSaving);
-        }
-
-        $this->em->flush();
+        return $res && $res->getStatusCode() === Response::HTTP_NO_CONTENT;
     }
 }

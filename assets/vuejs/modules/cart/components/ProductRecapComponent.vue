@@ -55,13 +55,13 @@
               class="flex cursor-pointer items-center text-sm text-gray-500 lg:text-lg"
               @click="variantOptions"
             >
-              Détails
               <Chevron2RightIconComponent
-                class="ml-1 text-sm lg:text-lg"
+                class="mr-1 text-sm lg:text-lg"
                 :class="{
-                  'mt-4 rotate-90 ease-in-out': isOpen,
+                  'rotate-90 ease-in-out': isOpen,
                 }"
               />
+              Détails
             </span>
             <div
               v-if="isLoadingOptions"
@@ -79,17 +79,13 @@
                   :key="option.id"
                   class="ml-3 text-sm text-gray-500 lg:text-base"
                 >
-                  <span v-if="option.option.name.default" class="font-bold"
-                    >{{ option.option.name.default }} :
+                  <span v-if="option.option.name.default" class="font-bold">
+                    {{ option.option.name.default }} :
                   </span>
                   <span class="italic">{{ option.value.default }}</span>
                 </li>
               </ul>
             </div>
-
-            <!-- <span class="flex text-sm text-green-400 lg:text-lg">
-              En stock
-            </span> -->
           </div>
         </div>
         <div
@@ -176,13 +172,13 @@ const productImage = computed((): string => {
 })
 
 const variantOptions = async () => {
+  isOpen.value = !isOpen.value
   if (options.value.length === 0) {
     isLoadingOptions.value = true
     const variant = await productStore.findVariantById(props.item.variant.id)
     options.value = variant.option_values
     isLoadingOptions.value = false
   }
-  isOpen.value = !isOpen.value
 }
 
 const referencePrice = computed((): number => {

@@ -94,7 +94,7 @@ onMounted(async () => {
         { avatar: getImage(imgAdecco), name: 'Adecco' },
         { avatar: getImage(imgWurth), name: 'Wurth' },
         { avatar: getImage(imgLdlc), name: 'LDLC Pro' },
-        { avatar: getImage(imgHertz), name: 'Herts' },
+        { avatar: getImage(imgHertz), name: 'Hertz' },
         { avatar: getImage(imgEuromaster), name: 'Euromaster' },
         { avatar: getImage(imgShell), name: 'Shell' },
         { avatar: getImage(imgSfr), name: 'SFR' },

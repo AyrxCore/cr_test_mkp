@@ -71,7 +71,9 @@ onMounted(async () => {
   await router.isReady()
   if (
     props.component === '' &&
-    router.currentRoute.value.name !== CartPageList.RECAP
+    ![CartPageList.CART_RECAP, CartPageList.CART_PAYMENT_ERROR].includes(
+      router.currentRoute.value.name,
+    )
   ) {
     await cartStore.getCart()
   }

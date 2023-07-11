@@ -1,37 +1,39 @@
 import { defineStore } from 'pinia'
-import { useAlertStore } from '@/vuejs/stores/alert'
-import { AlertType } from '@/vuejs/types/Alert'
-import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
-import { getErrorMessage } from '@/vuejs/services/login'
-import { Seller, SellerPromotion, SellerStoreState } from '@/vuejs/types/Seller'
+import { Seller, SellerStoreState } from '@/vuejs/types/Seller'
 import SellerHttpClient from '@/vuejs/services/httpclient/SellerHttpClient'
+import { notifyError } from '@/vuejs/services/utils'
+
+export const SELLER_IDS = {
+  KRÖMM: 26,
+}
 
 export const useSellerStore = defineStore({
   id: 'seller',
   state: (): SellerStoreState => ({
     sellers: [],
+    promotions: {},
   }),
 
   actions: {
     async init() {
-      const alertStore = useAlertStore()
       try {
         if (this.sellers.length === 0) {
           this.sellers = await SellerHttpClient.get().fetchSellers()
         }
       } catch (error) {
-        error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow(
-            getErrorMessage(error.response.data.message),
-            AlertType.danger,
-          )
+        notifyError(
+          `Une erreur est survenue lors du chargement du vendeur, merci de contacter un administrateur.`,
+        )
       }
     },
-    async getSeller(id: number): Promise<Seller> {
-      return await SellerHttpClient.get().getSeller(id)
+    async getSeller(id: number): Promise<void> {
+      if (this.sellers.find((e: Seller) => e.id === id)) return
+      this.sellers.push(await SellerHttpClient.get().getSeller(id))
     },
-    async getSellerPromotions(sellerId: number): Promise<SellerPromotion[]> {
-      return await SellerHttpClient.get().getSellerPromotions(sellerId)
+    async getSellerPromotions(sellerId: number): Promise<void> {
+      if (this.promotions[sellerId]) return
+      this.promotions[sellerId] =
+        await SellerHttpClient.get().getSellerPromotions(sellerId)
     },
   },
   getters: {},

@@ -1,14 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Api\Buyer;
 
+use App\Service\CartService;
 use App\Service\UpplerCartService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Service\Attribute\Required;
 
@@ -22,6 +25,9 @@ class CartApiController extends AbstractController
     public EntityManagerInterface $em;
 
     #[Required]
+    public CartService $cartService;
+
+    #[Required]
     public UpplerCartService $upplerCartService;
 
     #[Route('', name: 'get_cart')]
@@ -31,6 +37,10 @@ class CartApiController extends AbstractController
         $session->start();
 
         $cart = $this->upplerCartService->getCart();
+
+        if ($cart === null) {
+            throw new NotFoundHttpException();
+        }
 
         return new JsonResponse($cart);
     }
@@ -49,20 +59,35 @@ class CartApiController extends AbstractController
         }
 
         $cart = $this->upplerCartService->getCartById($cartId);
-        if (!is_null($cart) && $cart['state'] !== 'confirmed') {
+        if ($cart !== null && $cart['state'] !== 'confirmed') {
             $confirmed = $this->upplerCartService->isPaymentConfirmed($cartId);
 
-            $acceptedStatus = ['processing', 'completed'];
+            $acceptedStatus = ['completed'];
 
-            if ($confirmed && in_array($confirmed->status, $acceptedStatus)) {
+            if ($confirmed && \in_array($confirmed['status'], $acceptedStatus, true)) {
                 $this->upplerCartService->confirmCart($cartId);
-                $this->upplerCartService->processCartSavings($cart);
+                $this->cartService->processCartSavings($cart);
 
-                return $this->redirect('/cart/confirmed/' . $cartId);
+                return $this->redirect('/cart/confirmed/'.$cartId);
             }
         }
 
         return $this->redirect('/cart/payment-error');
+    }
+
+    #[Route('/{cartId}/shipments', name: 'get_cart_shipping_methods')]
+    public function getCartShippingMethods(int $cartId): Response
+    {
+        $session = $this->requestStack->getSession();
+        $session->start();
+
+        $shippingMethods = $this->upplerCartService->getShippingMethods($cartId);
+
+        if (!$shippingMethods) {
+            throw new NotFoundHttpException();
+        }
+
+        return new JsonResponse($shippingMethods);
     }
 
     #[Route('/{cartId}', name: 'get_cart_by_id')]

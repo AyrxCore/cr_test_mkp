@@ -21,6 +21,8 @@ export const useCartStore = defineStore({
     termsOfSales: [],
     newlyAddedProducts: [],
     modifyingCart: false,
+    shippingMethods: [],
+    selectedShippingMethods: {},
   }),
 
   actions: {
@@ -29,6 +31,7 @@ export const useCartStore = defineStore({
         this.cart = await CartHttpClient.get().getCartAsBuyer()
         this.newlyAddedProducts = []
       } catch (error) {
+        this.cart = {}
         notifyError(
           `Une erreur est survenue lors du chargement du panier, merci de contacter un administrateur.`,
         )
@@ -36,6 +39,9 @@ export const useCartStore = defineStore({
     },
     async addProductToCart(variantId: number, quantity: number): Promise<void> {
       try {
+        if (!this.cart?.id) {
+          throw new Error()
+        }
         await CartHttpClient.get().addProductToCartAsBuyer({
           cartId: this.cart.id,
           variantId,
@@ -52,12 +58,15 @@ export const useCartStore = defineStore({
     },
     async addProductsToCart(products): Promise<void> {
       try {
+        if (!this.cart?.id) {
+          throw new Error()
+        }
         await CartHttpClient.get().addProductsToCartAsBuyer({
           cartId: this.cart.id,
           products: products,
         })
         await products.forEach((product) => {
-          this.newlyAddedProducts.indexOf(product.variantId) === -1 &&
+          this.productVariantsInCart.indexOf(product.variantId) === -1 &&
             this.newlyAddedProducts.push(product.variantId)
         })
         notifySuccess(
@@ -106,7 +115,7 @@ export const useCartStore = defineStore({
         await CartHttpClient.get(true).updateOrderShipping(data)
       } catch (error) {
         notifyError(
-          `Une erreur est survenue lors du choix de l'adresse, merci de contacter un administrateur.`,
+          `Une erreur est survenue lors du choix de la méthode de livraison, merci de contacter un administrateur.`,
         )
       }
     },
@@ -120,7 +129,7 @@ export const useCartStore = defineStore({
         })
       } catch (error) {
         notifyError(
-          `Une erreur est survenue lors du choix du paiement, merci de contacter un administrateur.`,
+          `Une erreur est survenue lors du choix de la méthode de paiement, merci de contacter un administrateur.`,
         )
       }
     },
@@ -130,6 +139,16 @@ export const useCartStore = defineStore({
       } catch (error) {
         notifyError(
           `Une erreur est survenue, merci de contacter un administrateur.`,
+        )
+      }
+    },
+    async getCartShippingMethods(cartId: number): Promise<void> {
+      try {
+        this.shippingMethods =
+          await CartHttpClient.get().getCartShippingMethods(cartId)
+      } catch (error) {
+        notifyError(
+          `Une erreur est survenue lors du chargement des méthodes de livraison, merci de contacter un administrateur.`,
         )
       }
     },
@@ -155,18 +174,18 @@ export const useCartStore = defineStore({
     },
     hasAllShippingMethodsSelected(): boolean {
       let hasAll = true
-      this.cart?.orders.forEach((e: Order) => {
+      this.cart?.orders?.forEach((e: Order) => {
         if (e.shipments.length === 0) hasAll = false
       })
       return hasAll
     },
     CBPaymentMethod(): PaymentMethod {
-      return this.cart?.paymentMethods.find(
+      return this.cart?.paymentMethods?.find(
         (e) => e.name.default === 'Carte de crédit',
       )
     },
     SEPAPaymentMethod(): PaymentMethod {
-      return this.cart?.paymentMethods.find(
+      return this.cart?.paymentMethods?.find(
         (e) => e.name.default === 'Virement bancaire',
       )
     },

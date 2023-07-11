@@ -98,10 +98,14 @@ router.beforeEach(async (to, from, next) => {
     }
 
     if (
-      [CartPageList.ADDRESSES, CartPageList.PAYMENT].includes(to.name) &&
+      [
+        CartPageList.CART_ADDRESSES,
+        CartPageList.CART_SHIPMENTS,
+        CartPageList.CART_PAYMENT,
+      ].includes(to.name) &&
       !cartStore.hasAllTermsChecked
     ) {
-      router.push({ name: CartPageList.RECAP })
+      router.push({ name: CartPageList.CART_RECAP })
     }
   }
 

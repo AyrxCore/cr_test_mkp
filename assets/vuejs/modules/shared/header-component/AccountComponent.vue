@@ -36,7 +36,7 @@
         <HeartIcon />
       </a> -->
       <RouterLink
-        :to="{ name: CartPageList.RECAP }"
+        :to="{ name: CartPageList.CART_RECAP }"
         class="relative ml-4 self-center"
       >
         <div

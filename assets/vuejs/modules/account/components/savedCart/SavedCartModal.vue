@@ -7,7 +7,7 @@
           <SavedCartForm :saved-cart="savedCart" />
           <div class="flex justify-between md:justify-end">
             <ButtonComponent
-              class="button-secondary mr-2 !border"
+              class="button-secondary mr-2"
               type="button"
               @click="onCancelClick"
             >
@@ -56,7 +56,6 @@ const savedCartStore = useSavedCartStore()
 const emit = defineEmits(['cancel', 'submitSavedCart'])
 
 onMounted(async () => {
-  console.log(savedCartStore.savedCarts)
   if (props.savedCartId) {
     savedCart.value = savedCartStore.savedCarts.find(
       (sc) => sc.id === props.savedCartId,

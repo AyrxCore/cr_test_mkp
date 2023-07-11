@@ -32,7 +32,7 @@
     <div class="flex justify-between xl:mt-5">
       <div class="flex items-center justify-start">
         <span class="mr-2 text-sm text-gray-500">Qté: </span>
-        <ProductQuantityComponent quantity="1" />
+        <ProductQuantityComponent :quantity="1" />
       </div>
       <div class="flex items-center justify-end">
         <ButtonComponent class="button-gradient">

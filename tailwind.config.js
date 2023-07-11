@@ -57,4 +57,5 @@ module.exports = {
       })
     }),
   ],
+  safelist: ['bg-gray-100'],
 }

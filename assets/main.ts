@@ -1,12 +1,14 @@
 import '@/style/main.scss'
 import 'vue-universal-modal/dist/index.css'
+import 'floating-vue/dist/style.css'
+
 import { createHead } from '@vueuse/head'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './vuejs/App.vue'
 import router from '@/vuejs/router'
 import VueUniversalModal from 'vue-universal-modal'
-
+import FloatingVue from 'floating-vue'
 import clickOutside from '@/vuejs/directives/click-outside'
 
 const rootElements = document.querySelectorAll('.vue-app')
@@ -35,5 +37,6 @@ if (document.getElementById('app')) {
   app.use(VueUniversalModal, {
     teleportTarget: '#modals',
   })
+  app.use(FloatingVue)
   app.mount('#app')
 }

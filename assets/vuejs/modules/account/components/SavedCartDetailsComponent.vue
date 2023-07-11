@@ -38,10 +38,10 @@
       <div class="flex">
         <div class="md:justify-end">
           <div
-            class="flex w-full flex-row flex-wrap items-center items-center justify-between md:w-auto"
+            class="flex w-full flex-row flex-wrap items-center justify-between md:w-auto"
           >
             <span
-              class="flex items-start items-center text-sm font-bold text-primary md:text-base lg:text-lg"
+              class="flex items-center text-sm font-bold text-primary md:text-base lg:text-lg"
             >
               {{ productPrice }}€ HT
             </span>

@@ -44,48 +44,16 @@
         <div class="hidden lg:flex lg:w-1/12"></div>
       </div>
       <div class="flex w-full flex-col">
-        <div class="text-sm italic text-gray-500 lg:text-base">
-          <p v-if="notDisplayedPromotion" class="mt-5">
-            {{ seller?.description }}
-          </p>
-          <p v-else-if="leftBeforePromotion" class="mt-5">
-            Il vous reste {{ leftBeforePromotion }}€ HT de commande pour
-            bénéficier de {{ promotionType }}
-          </p>
-          <p v-else-if="hasReachedFranco" class="mt-5 text-green-600">
-            Franco atteint - vous bénéficiez de la livraison gratuite
-          </p>
-        </div>
-        <p
-          class="mt-5 flex flex-col text-sm text-gray-500 lg:mt-7 lg:flex-row lg:items-center lg:text-lg"
-        >
-          Méthode de livraison :
-          <select
-            v-if="order.shippingMethodsAvailable.length > 0"
-            v-model="selectedShippingMethod"
-            class="flex h-[35px] rounded-md py-0 text-gray-600 placeholder-gray-400 lg:ml-2"
-            @change="selectshippingMethod"
-          >
-            <option
-              v-for="method in order.shippingMethodsAvailable"
-              :value="method.shipping_method.id"
-            >
-              {{ method.shipping_method.name.fr }} - {{ method.amount / 100 }}€
-            </option>
-          </select>
-          <template v-else>Aucune méthode de livraison disponible</template>
-        </p>
-        <p
-          class="mt-7 inline-flex items-start text-sm text-gray-500 lg:items-center lg:text-lg"
-        >
+        <CartFrancoComponent :order="order" class="mt-5" />
+        <p class="mt-7 flex items-center text-sm text-gray-500 lg:text-lg">
           <input
             v-model="termsOfSales"
             type="checkbox"
-            class="mr-2 mt-1 cursor-pointer lg:mt-0"
+            class="mr-2 cursor-pointer lg:mt-0"
             @change="onTermsChange"
           />
-          J'accepte les&nbsp;
-          <span class="cursor-pointer underline" @click="showTos = true">
+          J'accepte les
+          <span class="ml-1 cursor-pointer underline" @click="showTos = true">
             Conditions Générales de Vente du fournisseur
           </span>
           <TosOrderComponent
@@ -104,11 +72,13 @@ import { Order } from '@/vuejs/types/Cart'
 
 import { formatPrice } from '@/vuejs/services/utils'
 
-import TosOrderComponent from '@/vuejs/modules/cart/components/TosOrderComponent.vue'
+import CartFrancoComponent from '@/vuejs/modules/cart/components/CartFrancoComponent.vue'
 import ProductRecapComponent from '@/vuejs/modules/cart/components/ProductRecapComponent.vue'
+import TosOrderComponent from '@/vuejs/modules/cart/components/TosOrderComponent.vue'
+
 import { useCartStore } from '@/vuejs/stores/cart'
 import { useSellerStore } from '@/vuejs/stores/seller'
-import { Seller, SellerPromotion } from '@/vuejs/types/Seller'
+import { Seller } from '@/vuejs/types/Seller'
 
 const cartStore = useCartStore()
 const sellerStore = useSellerStore()
@@ -123,92 +93,18 @@ const props = defineProps({
 const termsOfSales = ref<boolean>(false)
 const showTos = ref<boolean>(false)
 
-const selectedShippingMethod = ref<number>(
-  props.order.shippingMethodsAvailable.find((e) => e.selected)?.shipping_method
-    ?.id || 0,
-)
-
-const seller = ref<Seller>()
-const promotions = ref<SellerPromotion[]>([])
+const seller = computed((): Seller => {
+  return sellerStore.sellers.find((e) => e.id === props.order.seller.id)
+})
 
 onMounted(async (): Promise<void> => {
   const sellerId = props.order.seller.id
-  let [sellerVal, promotionsVal] = await Promise.all([
-    sellerStore.getSeller(sellerId),
-    sellerStore.getSellerPromotions(sellerId),
-  ])
-  seller.value = sellerVal
-  promotions.value = promotionsVal
+  await sellerStore.getSeller(sellerId)
 })
 
 const totalPriceDisplayed = computed((): string => {
-  return formatPrice(props.order.total_excluding_taxes / 100)
+  return formatPrice(props.order.items_total_excluding_taxes / 100)
 })
-
-const notDisplayedPromotion = computed((): boolean => {
-  const SELLERS_NO_DISPLAY_PROMOTION = [
-    26, // KRÖMM
-  ]
-  return SELLERS_NO_DISPLAY_PROMOTION.includes(seller.value?.id)
-})
-
-const leftBeforePromotion = computed((): string => {
-  if (!nextPromotion.value) return null
-  return formatPrice(
-    (nextPromotion.value.order_eligibility.amount -
-      props.order.items_total_excluding_taxes) /
-      100,
-  )
-})
-
-const nextPromotion = computed((): SellerPromotion => {
-  const total = props.order.items_total_excluding_taxes
-  let currentPromotion: SellerPromotion = null
-  if (!promotions.value.length) return
-  promotions.value.forEach((p, id) => {
-    if (!currentPromotion && total < p.order_eligibility.amount) {
-      currentPromotion = p
-    } else if (
-      total < p.order_eligibility.amount &&
-      currentPromotion.order_eligibility.amount > p.order_eligibility.amount
-    ) {
-      currentPromotion = p
-    }
-  })
-
-  return currentPromotion
-})
-
-const hasReachedFranco = computed((): boolean => {
-  return (
-    promotions.value &&
-    promotions.value.length > 0 &&
-    nextPromotion.value === null
-  )
-})
-
-const promotionType = computed((): string => {
-  const condition = nextPromotion.value?.conditions[0]
-  if (!condition) return
-  if (condition.apply_type === 'percent') {
-    if (condition.apply_value === 1.0) {
-      return 'la livraison gratuite'
-    } else {
-      return `${condition.apply_value * 100}% de réduction sur la livraison `
-    }
-  } else if (condition.apply_type === 'amount') {
-    return `${condition.apply_value / 100}€ de réduction sur la livraison `
-  }
-})
-
-const selectshippingMethod = async (): Promise<void> => {
-  await cartStore.updateOrderShipping({
-    cartId: cartStore.cart.id,
-    orderId: props.order.id,
-    shippingId: selectedShippingMethod.value,
-  })
-  cartStore.getCart()
-}
 
 const onTermsChange = (): void => {
   cartStore.termsOfSales = cartStore.termsOfSales.filter(

@@ -17,6 +17,9 @@ export interface Seller {
 
 export interface SellerStoreState {
   sellers: Seller[]
+  promotions: {
+    [key: number]: SellerPromotion[]
+  }
 }
 
 export interface SellerPromotion {

@@ -15,6 +15,10 @@ export interface CartStoreState {
   termsOfSales: number[]
   newlyAddedProducts: number[]
   modifyingCart: boolean
+  shippingMethods: ShippingMethod[]
+  selectedShippingMethods: {
+    [key: number]: number
+  }
 }
 
 interface LanguageVariation {
@@ -87,6 +91,9 @@ export interface ShippingMethod {
       default: string
     }
   }
+  order: {
+    id: number
+  }
 }
 
 export interface PaymentMethod {
@@ -114,7 +121,6 @@ export interface Order {
   total: number
   currency: Currency
   note: string | null
-  shippingMethodsAvailable: ShippingMethod[]
   shipments: EntityId[]
 }
 

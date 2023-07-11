@@ -1,15 +1,16 @@
 <template>
-  <div class="mt-10 mb-2 flex items-center justify-between">
+  <div class="mt-8 mb-2 flex items-center justify-between">
     <h3 class="text-title-35 text-primary">
       Panier <span class="uppercase">{{ user.account.buyer.name }}</span>
     </h3>
-    <button
+    <ButtonComponent
       v-if="cart.orders && cart.orders.length > 0"
-      class="button button-secondary-outline"
+      class="button-secondary-outline"
+      type="button"
       @click="openSaveCartForm"
     >
       Sauvegarder le panier
-    </button>
+    </ButtonComponent>
     <SavedCartModal
       v-if="showSaveCartForm"
       class="modal"
@@ -35,23 +36,24 @@
     </div>
     <template v-else>Votre panier est vide !</template>
 
-    <div v-if="cart.orders && cart.orders.length > 0">
-      <CartRightSideComponent>
-        <template #title>Récapitulatif panier</template>
-        <template #button-next>
-          <ButtonComponent
-            class="button button-gradient mt-3 w-full"
-            @click="goToAdress"
-          >
-            <ArrowRightIconComponent :stroke-color="'#FFFFFF'" />
-            Passer la commande
-          </ButtonComponent>
-          <div v-if="error" class="mt-2 text-center text-xs text-red-600">
-            {{ error }}
-          </div>
-        </template>
-      </CartRightSideComponent>
-    </div>
+    <CartRightSideComponent
+      v-if="cart.orders && cart.orders.length > 0"
+      :show-shipment-price="false"
+    >
+      <template #title>Récapitulatif panier</template>
+      <template #button-next>
+        <ButtonComponent
+          class="button button-gradient mt-3 w-full"
+          @click="goToAdress"
+        >
+          <ArrowRightIconComponent :stroke-color="'#FFFFFF'" />
+          Passer la commande
+        </ButtonComponent>
+        <div v-if="error" class="mt-2 text-center text-xs text-red-600">
+          {{ error }}
+        </div>
+      </template>
+    </CartRightSideComponent>
   </div>
 </template>
 <script lang="ts" setup>
@@ -87,11 +89,9 @@ const goToAdress = async (): Promise<void> => {
   error.value = ''
   if (!cartStore.hasAllTermsChecked) {
     error.value = 'Veuillez accepter les conditions générales'
-  } else if (!cartStore.hasAllShippingMethodsSelected) {
-    error.value = 'Une ou plusieurs méthodes de livraisons sont incorrectes'
   } else {
     await gtmCartTrackingEvent('begin_checkout', cart.value)
-    await router.push({ name: CartPageList.ADDRESSES })
+    router.push({ name: CartPageList.CART_ADDRESSES })
   }
 }
 

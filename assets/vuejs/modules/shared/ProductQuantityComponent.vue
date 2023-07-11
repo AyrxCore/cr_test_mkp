@@ -10,7 +10,13 @@
         @click="decrement"
         >-</span
       >
-      <input v-model.number="qte" type="text" class="in-num" @input="onInput" />
+      <input
+        v-model.number="qte"
+        type="text"
+        class="in-num"
+        @input="onInput"
+        @blur="onBlur"
+      />
       <span class="plus rounded-r-md" @click="increment">+</span>
     </div>
   </div>
@@ -30,7 +36,7 @@ const props = defineProps({
 
 const qte = ref<number>(props.quantity)
 
-const onInput = (event) => {
+const onInput = (event: InputEvent): void => {
   const inputValue = event.target.value
   const onlyNumbers = inputValue.replace(/[^0-9]/g, '') // Filtrer uniquement les chiffres
   if (onlyNumbers == 0 && onlyNumbers != '') {
@@ -38,10 +44,21 @@ const onInput = (event) => {
   } else if (onlyNumbers > 99) {
     qte.value = 99
   } else {
-    qte.value = onlyNumbers
+    qte.value = parseInt(onlyNumbers)
   }
 }
-const decrement = () => {
+
+const onBlur = (): void => {
+  if (qte.value !== props.quantity && qte.value >= 1 && qte.value <= 99) {
+    emit('updateQuantity', {
+      quantity: qte.value,
+    })
+  } else {
+    qte.value = props.quantity
+  }
+}
+
+const decrement = (): void => {
   if (qte.value > 1) {
     qte.value--
     emit('updateQuantity', {
@@ -50,7 +67,7 @@ const decrement = () => {
   }
 }
 
-const increment = () => {
+const increment = (): void => {
   if (qte.value < 99) {
     qte.value++
     emit('updateQuantity', {

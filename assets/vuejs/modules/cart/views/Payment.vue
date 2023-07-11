@@ -1,5 +1,5 @@
 <template>
-  <h3 class="mt-10 mb-2 text-title-35 text-primary">
+  <h3 class="mt-8 mb-2 text-title-35 text-primary">
     Choisir un type de paiement
   </h3>
   <div class="flex flex-col-reverse lg:grid lg:grid-cols-4 lg:gap-4 lg:px-0">

@@ -1,28 +1,24 @@
 <template>
-  <breadcrumb-shared-component
-    :list-url="breadcrumbUrl"
-    :current-page="name"
-  />
-  <ContactUsButtonComponent/>
+  <BreadcrumbSharedComponent :list-url="breadcrumbUrl" :current-page="name" />
+  <ContactUsButtonComponent />
   <div class="text-green mt-3.5 flex flex-col lg:flex-row lg:items-center">
     <h3 class="text-title-35 text-primary">
       {{ name }}
     </h3>
-    <div
-      v-if="note"
-      class="flex flex-row"
-    >
-      <LeafIconComponent class="mx-2"/>
-      <span class="mr-2 flex text-sm font-bold md:text-lg text-green-qantis">{{ note }}</span>
-      <span class="mt-1 flex text-xs text-gray-500 md:mt-2"
-      >Selon notre référentiel RSE</span
-      >
+    <div v-if="note" class="flex flex-row items-center">
+      <LeafIconComponent class="mx-2" />
+      <span class="mr-2 flex text-sm font-bold text-green-qantis md:text-lg">
+        {{ note }}
+      </span>
+      <span class="flex text-xs text-gray-500">
+        Selon notre référentiel RSE
+      </span>
       <span
-        class="flex cursor-pointer md:mt-1"
+        class="flex cursor-pointer items-center"
         title="Message explicatif du référentiel RSE"
         @click.prevent="scrollTo"
       >
-        <InformationIconComponent/>
+        <InformationIconComponent class="ml-1 text-gray-500" />
       </span>
     </div>
   </div>
@@ -50,8 +46,7 @@ import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComp
 import { computed } from 'vue'
 import LeafIconComponent from '@/vuejs/modules/shared/icon/LeafIconComponent.vue'
 import InformationIconComponent from '@/vuejs/modules/shared/icon/InformationIconComponent.vue'
-import { PageList } from '@/vuejs/router'
-import { ProductPageList } from '@/vuejs/router/pages-list';
+import { ProductPageList } from '@/vuejs/router/pages-list'
 
 const emit = defineEmits(['scroll-to'])
 
@@ -86,7 +81,10 @@ const breadcrumbUrl = computed(() => {
       breadcrumb.push({
         id: key,
         name: value,
-        url: { name: ProductPageList.PRODUCTS, query: { category: key, page: 1 } },
+        url: {
+          name: ProductPageList.PRODUCTS,
+          query: { category: key, page: 1 },
+        },
       })
     })
   }

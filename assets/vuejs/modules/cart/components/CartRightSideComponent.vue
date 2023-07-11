@@ -1,49 +1,72 @@
 <template>
-  <div
-    class="flex flex-col items-center justify-between rounded-lg bg-white p-5 md:flex-row lg:flex-col lg:p-3 xl:p-5"
-  >
-    <div class="w-auto md:w-7/12 lg:w-auto">
-      <h3 class="mb-5 text-[19px] text-primary xl:text-[25px]">
-        <slot name="title" />
-      </h3>
-      <div
-        class="mb-2 inline-flex w-full justify-between text-sm text-gray-500 md:text-base xl:text-lg"
-      >
-        <div>Sous-total HT :</div>
-        <div class="float-right">{{ subTotalWithoutTaxesDisplayed }}€</div>
-      </div>
-      <div
-        class="mb-2 inline-flex w-full justify-between text-sm text-gray-500 md:text-base xl:text-lg"
-      >
-        <div>Frais de livraison HT :</div>
-        <div class="float-right">{{ shipmentPrice }} €</div>
-      </div>
-      <div
-        class="primary mb-2 inline-flex w-full justify-between text-sm font-bold md:text-base xl:text-lg"
-      >
-        <div>TOTAL HT :</div>
-        <div class="float-right">{{ totalWithoutTaxesDisplayed }}€</div>
-      </div>
-      <div
-        class="inline-flex w-full justify-between text-sm text-gray-500 md:text-base xl:text-lg"
-      >
-        <div>TOTAL TTC :</div>
-        <div class="float-right">{{ totalDisplayed }}€</div>
-      </div>
-    </div>
-    <div class="w-full md:w-4/12 lg:w-auto xl:w-full">
-      <slot name="button-next" />
-    </div>
-  </div>
-  <div v-if="hasPaymentMethods" class="mt-5 flex justify-start">
-    <div v-if="!!CBPaymentMethod" class="items-center rounded-lg bg-white p-5">
-      <img class="h-14" :src="cbLogosImg" alt="CB Icons" />
-    </div>
+  <div>
     <div
-      v-if="!!SEPAPaymentMethod"
-      class="h-14 items-center rounded-lg bg-white p-5"
+      class="flex flex-col items-center justify-between rounded-lg bg-white p-5 md:flex-row lg:flex-col lg:p-3 xl:p-5"
     >
-      <SepaIconComponent />
+      <div class="w-auto md:w-7/12 lg:w-auto">
+        <h3 class="mb-5 text-[19px] text-primary xl:text-[25px]">
+          <slot name="title" />
+        </h3>
+        <div
+          class="mb-2 inline-flex w-full justify-between text-sm text-gray-500 md:text-base xl:text-lg"
+        >
+          <div>Sous-total HT :</div>
+          <div class="float-right">{{ subTotalWithoutTaxesDisplayed }}€</div>
+        </div>
+        <div
+          class="mb-2 inline-flex w-full justify-between text-sm text-gray-500 md:text-base xl:text-lg"
+        >
+          <div>Frais de livraison HT :</div>
+          <div class="float-right flex items-center">
+            <template v-if="showShipmentPrice">
+              {{ shipmentPrice }} €
+            </template>
+            <VTooltip :triggers="['hover', 'focus']" v-else>
+              <InformationIconComponent class="text-secondary" />
+              <template #popper>
+                Le montant des frais de livraison sera indiqué <br />lors de
+                l'étape "livraison"
+              </template>
+            </VTooltip>
+          </div>
+        </div>
+        <div
+          class="primary mb-2 inline-flex w-full justify-between text-sm font-bold md:text-base xl:text-lg"
+        >
+          <div>TOTAL HT :</div>
+          <div class="float-right">
+            {{
+              showShipmentPrice
+                ? totalWithoutTaxesDisplayed
+                : subTotalWithoutTaxesDisplayed
+            }}€
+          </div>
+        </div>
+        <div
+          v-if="showShipmentPrice"
+          class="inline-flex w-full justify-between text-sm text-gray-500 md:text-base xl:text-lg"
+        >
+          <div>TOTAL TTC :</div>
+          <div class="float-right">{{ totalDisplayed }}€</div>
+        </div>
+      </div>
+      <div class="w-full md:w-4/12 lg:w-auto xl:w-full">
+        <slot name="button-next" />
+      </div>
+    </div>
+    <div v-if="hasPaymentMethods" class="mt-5 flex justify-start">
+      <div
+        v-if="!!CBPaymentMethod"
+        class="items-center rounded-lg bg-white p-5"
+      >
+        <img class="h-14" :src="cbLogosImg" alt="CB Icons" />
+      </div>
+      <div
+        v-if="!!SEPAPaymentMethod"
+        class="h-14 items-center rounded-lg bg-white p-5"
+      >
+        <SepaIconComponent />
+      </div>
     </div>
   </div>
 </template>
@@ -53,6 +76,7 @@ import { computed } from 'vue'
 
 import cbLogos from '@/vuejs/assets/img/cb-icons.png'
 import SepaIconComponent from '@/vuejs/modules/shared/icon/SepaIconComponent.vue'
+import InformationIconComponent from '@/vuejs/modules/shared/icon/InformationIconComponent.vue'
 
 import { formatPrice, getImage } from '@/vuejs/services/utils'
 import { useCartStore } from '@/vuejs/stores/cart'
@@ -70,6 +94,11 @@ const props = defineProps({
     default: true,
   },
   hasPaymentMethods: {
+    required: false,
+    type: Boolean,
+    default: true,
+  },
+  showShipmentPrice: {
     required: false,
     type: Boolean,
     default: true,

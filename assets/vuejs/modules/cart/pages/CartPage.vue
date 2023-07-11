@@ -6,25 +6,34 @@
         <ContactUsButtonComponent />
       </div>
       <div class="m-auto my-2 w-[100%] max-w-screen-2xl">
-        <div class="tabs clearfix flex w-max" data-tabgroup="first-tab-group">
-          <CartBreadcrumbItemComponent :route-name="CartPageList.RECAP">
+        <div class="flex flex-wrap">
+          <CartBreadcrumbItemComponent :route-name="CartPageList.CART_RECAP">
             Panier
           </CartBreadcrumbItemComponent>
-          <CartBreadcrumbItemComponent :route-name="CartPageList.ADDRESSES">
+          <CartBreadcrumbItemComponent
+            :route-name="CartPageList.CART_ADDRESSES"
+          >
             Adresses
           </CartBreadcrumbItemComponent>
-          <CartBreadcrumbItemComponent :route-name="CartPageList.PAYMENT">
+          <CartBreadcrumbItemComponent
+            :route-name="CartPageList.CART_SHIPMENTS"
+          >
+            Livraison
+          </CartBreadcrumbItemComponent>
+          <CartBreadcrumbItemComponent :route-name="CartPageList.CART_PAYMENT">
             Paiement
           </CartBreadcrumbItemComponent>
           <CartBreadcrumbItemComponent
-            v-if="CartPageList.CONFIRMED === currentRouteName"
-            :route-name="CartPageList.CONFIRMED"
+            v-if="CartPageList.CART_CONFIRMED === currentRouteName"
+            :route-name="CartPageList.CART_CONFIRMED"
           >
             Confirmation
           </CartBreadcrumbItemComponent>
         </div>
         <template
-          v-if="!loadingCart || CartPageList.CONFIRMED === currentRouteName"
+          v-if="
+            !loadingCart || CartPageList.CART_CONFIRMED === currentRouteName
+          "
         >
           <RouterView />
         </template>
@@ -49,7 +58,6 @@ import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 
 const router = useRouter()
 const cartStore = useCartStore()
-const { cart } = storeToRefs(cartStore)
 
 const loadingCart = ref<boolean>(true)
 

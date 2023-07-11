@@ -1,5 +1,5 @@
 <template>
-  <h3 class="mt-10 mb-2 text-title-35 text-primary">Adresses</h3>
+  <h3 class="mt-8 mb-2 text-title-35 text-primary">Adresses</h3>
   <div class="flex flex-col-reverse lg:grid lg:grid-cols-4 lg:gap-4 lg:px-0">
     <div class="col-span-3 flex flex-col lg:grid lg:grid-cols-2 lg:gap-2">
       <div>
@@ -62,24 +62,31 @@
           </p>
         </div>
       </div>
+      <div class="col-span-2 m-auto mt-4 lg:mt-0">
+        <RouterLink
+          class="button button-secondary"
+          :to="{ name: PageList.ADDRESSES }"
+        >
+          Gérer mes adresses
+        </RouterLink>
+      </div>
     </div>
-    <div>
-      <CartRightSideComponent>
-        <template #title>Récapitulatif</template>
-        <template #button-next>
-          <ButtonComponent
-            @click="goToPayment"
-            class="button button-gradient mt-3 w-full"
-          >
-            <ArrowRightIconComponent :stroke-color="'#FFFFFF'" />
-            Passer au paiement
-          </ButtonComponent>
-          <!-- <div v-if="error" class="mt-2 text-center text-xs text-red-600">
+    <CartRightSideComponent :show-shipment-price="false">
+      <template #title>Récapitulatif</template>
+      <template #button-next>
+        <ButtonComponent
+          @click="goToShipments"
+          :is-loading="isLoading"
+          class="button button-gradient mt-3 w-full"
+        >
+          <ArrowRightIconComponent :stroke-color="'#FFFFFF'" />
+          Continuer
+        </ButtonComponent>
+        <!-- <div v-if="error" class="mt-2 text-center text-xs text-red-600">
             {{ error }}
           </div> -->
-        </template>
-      </CartRightSideComponent>
-    </div>
+      </template>
+    </CartRightSideComponent>
   </div>
 </template>
 <script lang="ts" setup>
@@ -92,11 +99,11 @@ import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import CartRightSideComponent from '@/vuejs/modules/cart/components/CartRightSideComponent.vue'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 
-import { CartPageList } from '@/vuejs/router/pages-list'
 import { formatAddress, notifyError } from '@/vuejs/services/utils'
 import { useBuyerCompanyStore } from '@/vuejs/stores/buyer_company'
 import { useCartStore } from '@/vuejs/stores/cart'
 import { Address } from '@/vuejs/types/Address'
+import { PageList } from '@/vuejs/router'
 
 const router = useRouter()
 const cartStore = useCartStore()
@@ -106,6 +113,8 @@ const {
   defaultAddress,
   shippingAddresses: storeShippingAddresses,
   billingAddresses: storeBillingAddresses,
+  defaultBillingAddress,
+  defaultShippingAddress,
 } = storeToRefs(companyStore)
 
 const { cart } = storeToRefs(cartStore)
@@ -116,9 +125,10 @@ const allShippingAddresses = [
 ]
 
 const selectedShippingAddress = computed((): Address => {
-  return allShippingAddresses.find(
-    (a) => a.id === cart.value.shipping_address.id,
+  const selected = allShippingAddresses.find(
+    (a) => a.id === cart.value.shipping_address?.id,
   )
+  return selected || defaultShippingAddress.value
 })
 
 const shippingAddresses = computed((): Address[] => {
@@ -134,7 +144,10 @@ const allBillingAddresses = [
 ]
 
 const selectedBillingAddress = computed((): Address => {
-  return allBillingAddresses.find((a) => a.id === cart.value.billing_address.id)
+  const selected = allBillingAddresses.find(
+    (a) => a.id === cart.value.billing_address?.id,
+  )
+  return selected || defaultBillingAddress.value
 })
 const billingAddresses = computed((): Address[] => {
   if (!selectedBillingAddress.value) return allBillingAddresses
@@ -147,14 +160,22 @@ const selectedShippingAddressId = ref<number>(0)
 const selectedBillingAddressId = ref<number>(0)
 const isLoading = ref<boolean>(false)
 
-const goToPayment = (): void => {
+const goToShipments = async (): Promise<void> => {
   if (!selectedBillingAddress.value || !selectedShippingAddress.value) {
     notifyError(
       'Veuillez sélectionner une adresse de facturation et de livraison pour continuer.',
     )
     return
   }
-  router.push({ name: CartPageList.PAYMENT })
+  if (
+    !cartStore.cart.shipping_address?.id ||
+    !cartStore.cart.billing_address?.id
+  ) {
+    isLoading.value = true
+    await selectAddress('all')
+    isLoading.value = false
+  }
+  router.push({ name: PageList.CART_SHIPMENTS })
 }
 
 const selectAddress = async (type: string): Promise<void> => {

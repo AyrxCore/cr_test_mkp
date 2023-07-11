@@ -31,14 +31,12 @@ class CartPaymentPersister implements ContextAwareDataPersisterInterface
                 $data->getId(),
                 $data->getPaymentMethodId(),
             );
-            if ($result) {
-                if (is_null($result->payment_url)) {
-                    \Sentry\captureMessage('URL de paiement non présente');
-                }
-                return new JsonResponse($result);
+            if (!$result || $result['payment_url'] === null) {
+                \Sentry\captureMessage('URL de paiement non présente');
+                throw new BadRequestException('Update cart payment error');
             }
 
-            throw new BadRequestException('Update cart payment error');
+            return new JsonResponse($result);
         }
         throw new BadRequestException('Persist error');
     }
