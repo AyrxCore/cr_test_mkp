@@ -47,8 +47,8 @@ class FavoriteRepository extends ServiceEntityRepository
      */
     public function findFavorites(Account $account): array
     {
-        $qb =  $this->createQueryBuilder('f')
-        ->select('f.id AS id, f.name AS name, f.createdAt AS createdAt, f.updatedAt AS updatedAt, a.id as accountId, f.public AS public, COUNT(fp.id) AS nbFavoriteProducts');
+        $qb = $this->createQueryBuilder('f')
+            ->select('f.id AS id, f.name AS name, f.createdAt AS createdAt, f.updatedAt AS updatedAt, a.id as accountId, f.public AS public, COUNT(fp.id) AS nbFavoriteProducts');
 
         $qb
             ->innerJoin('f.account', 'a')
@@ -74,14 +74,13 @@ class FavoriteRepository extends ServiceEntityRepository
 
         return $qb
             ->getQuery()
-            ->getScalarResult()
-        ;
+            ->getScalarResult();
     }
 
-    public function getFavoritesByAccountAndProducId(Account $account, int $productId): array|float|int|string
+    public function getFavoritesByAccountAndProductId(Account $account, int $productId): array|float|int|string
     {
-        $qb =  $this->createQueryBuilder('f')
-            ->select('fp.id, f.id');
+        $qb = $this->createQueryBuilder('f')
+            ->select('f.id');
 
         $qb
             ->innerJoin('f.account', 'a')
@@ -108,7 +107,6 @@ class FavoriteRepository extends ServiceEntityRepository
 
         return $qb
             ->getQuery()
-            ->getScalarResult()
-            ;
+            ->getSingleColumnResult();
     }
 }

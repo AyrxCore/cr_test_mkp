@@ -29,7 +29,7 @@ class OrderDataProvider implements RestrictedDataProviderInterface, ItemDataProv
 
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
     {
-        return Order::class === $resourceClass;
+        return $resourceClass === Order::class;
     }
 
     /**
@@ -59,19 +59,16 @@ class OrderDataProvider implements RestrictedDataProviderInterface, ItemDataProv
      */
     public function getCollection(string $resourceClass, string $operationName = null): array
     {
-        $session = $this->requestStack->getSession();
         /** @var Account $account */
-        $account = $session->get('account');
-        $remoteOrders = $this->upplerOrderService->getOrdersByUserId($account->getUpplerUserId());
+        $account = $this->requestStack->getSession()->get('account');
 
         try {
-            $orders = [];
-            foreach ($remoteOrders as $remoteOrder) {
-                $orders[] = OrderFactory::createFromUpplerResponse($remoteOrder);
-            }
+            $orders = \array_map(function ($remoteOrder) {
+                return OrderFactory::createFromUpplerResponse($remoteOrder);
+            }, $this->upplerOrderService->getOrdersByUserId($account->getUpplerUserId()));
 
-            usort($orders, function (Order $a, Order $b) {
-                return strtotime($b->getCreatedAt()->format('Y-m-d')) - strtotime($a->getCreatedAt()->format('Y-m-d'));
+            \usort($orders, function (Order $a, Order $b) {
+                return \strtotime($b->getCreatedAt()->format('Y-m-d')) - \strtotime($a->getCreatedAt()->format('Y-m-d'));
             });
 
             return $orders;

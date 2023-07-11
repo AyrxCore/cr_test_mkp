@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Controller\Api\Buyer\FavoriteApiController;
 use App\Repository\FavoriteRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -23,22 +22,22 @@ use Symfony\Component\Uid\Uuid;
             ],
             "method" => "POST",
             "validate" => true,
-            "path" => "/favorites/create"
-        ]
+        ],
     ],
     itemOperations: [
         'get' => [
             'normalization_context' => ['groups' => ['favorite:get']],
+            'security' => "is_granted('VIEW_FAVORITE', object)",
         ],
         'update' => [
-            "openapi_context"        => [
-                'summary'     => 'Modifier une liste de favori',
+            "openapi_context" => [
+                'summary' => 'Modifier une liste de favori',
                 'description' => "Permet de mettre a jour le nom et la visibilité d'une liste de favoris",
             ],
-            "method"                 => "PATCH",
-            "validate"               => true,
-            "path" => "/favorites/update/{id}",
+            "method" => "PATCH",
+            "validate" => true,
             'normalization_context' => ['groups' => ['update']],
+            'security' => "is_granted('EDIT_FAVORITE', object)",
         ],
         'delete' => [
             'openapi_context' => [
@@ -46,16 +45,8 @@ use Symfony\Component\Uid\Uuid;
             ],
             'method' => 'DELETE',
             'validate' => true,
-            "path" => "/favorites/delete/{id}",
+            'security' => "is_granted('DELETE_FAVORITE', object)",
         ],
-        'get_upplers_products' => [
-          "method" => "GET",
-          "path" => "/favorites/{id}/products",
-          "controller" => FavoriteApiController::class,
-          "openapi_context" =>  [
-              'summary' => 'Afficher la liste des produits liés à un favori'
-          ],
-        ]
     ]
 )]
 #[ORM\Entity(repositoryClass: FavoriteRepository::class)]
@@ -65,7 +56,8 @@ use Symfony\Component\Uid\Uuid;
 )]
 #[UniqueEntity(
     fields: ['name', 'account'],
-    message: 'Ce libellé {{ value }} est déjà utilisé'
+    message: 'Ce libellé {{ value }} est déjà utilisé',
+    errorPath: 'name'
 )]
 #[ORM\HasLifecycleCallbacks]
 class Favorite
@@ -117,6 +109,11 @@ class Favorite
     public function onPreUpdate(): void
     {
         $this->updatedAt = new \DateTimeImmutable('now');
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
     }
 
     /**
@@ -197,10 +194,14 @@ class Favorite
 
     public function addFavoriteProduct(FavoriteProduct $favoriteProduct): self
     {
-        if (!$this->favoriteProducts->contains($favoriteProduct)) {
-            $this->favoriteProducts->add($favoriteProduct);
-            $favoriteProduct->setFavorite($this);
+        foreach ($this->favoriteProducts as $product) {
+            if ($favoriteProduct->getUpplerVariantId() === $product->getUpplerVariantId()) {
+                throw new \Exception(sprintf("Le produit %s existe déjà dans la liste %s", $favoriteProduct->getUpplerProductName(), $this->name));
+            }
         }
+
+        $this->favoriteProducts->add($favoriteProduct);
+        $favoriteProduct->setFavorite($this);
 
         return $this;
     }

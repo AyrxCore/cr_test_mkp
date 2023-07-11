@@ -39,7 +39,8 @@ const qte = ref<number>(props.quantity)
 const onInput = (event: InputEvent): void => {
   const inputValue = event.target.value
   const onlyNumbers = inputValue.replace(/[^0-9]/g, '') // Filtrer uniquement les chiffres
-  if (onlyNumbers == 0 && onlyNumbers != '') {
+
+  if (onlyNumbers === 0 && onlyNumbers !== '') {
     qte.value = 1
   } else if (onlyNumbers > 99) {
     qte.value = 99

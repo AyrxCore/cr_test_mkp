@@ -150,7 +150,7 @@
                     :product-id="product.id"
                     :product-name="product.name"
                     :variant-id="product.selectedVariantId"
-                    :favorites-selected="product.favorites"
+                    :favorites-product="product.favorites"
                   />
                   Ajouter ce produit à mes favoris
                 </div>

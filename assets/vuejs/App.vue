@@ -12,12 +12,12 @@
     v-else-if="props.component === 'sticky-contact-buttons'"
   />
   <CmsPageComponent
-    :page-id="MENTIONS_LEGALES_PAGE_ID"
     v-else-if="props.component === 'mentions-legales'"
+    :page-id="MENTIONS_LEGALES_PAGE_ID"
   />
   <CmsPageComponent
-    :page-id="POLITIQUE_DE_CONFIDENTIALITE_PAGE_ID"
     v-else-if="props.component === 'politique-de-confidentialite'"
+    :page-id="POLITIQUE_DE_CONFIDENTIALITE_PAGE_ID"
   />
 </template>
 

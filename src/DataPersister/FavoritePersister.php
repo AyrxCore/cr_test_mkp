@@ -8,6 +8,7 @@ use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 use App\Entity\Account;
 use App\Entity\Favorite;
 use App\Service\FavoriteService;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -41,18 +42,22 @@ class FavoritePersister implements ContextAwareDataPersisterInterface
      * @param Favorite $data
      * @throws Exception
      */
-    public function persist($data, array $context = [])
+    public function persist($data, array $context = []): Favorite
     {
         try {
-            if (isset($context["collection_operation_name"]) && ('create' === $context["collection_operation_name"])) {
-                return $this->favoriteService->createFavorite($data);
-            } else  {
-                return $this->favoriteService->updateFavorite($data);
+            if (($context['collection_operation_name'] ?? null) === 'create') {
+                $session = $this->requestStack->getSession();
+                $account = $this->em->getRepository(Account::class)->find($session->get('account')->getId());
+                $data->setAccount($account);
             }
+
+            $this->em->persist($data);
+            $this->em->flush();
+
+            return $data;
         } catch (Exception $exception) {
             throw  new Exception($exception->getMessage());
         }
-
     }
 
     /**
@@ -60,6 +65,9 @@ class FavoritePersister implements ContextAwareDataPersisterInterface
      */
     public function remove($data, array $context = []): bool
     {
-        return $this->favoriteService->removeFavorite($data->getId());
+        $this->em->remove($data);
+        $this->em->flush();
+
+        return true;
     }
 }

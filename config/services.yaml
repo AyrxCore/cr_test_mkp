@@ -110,15 +110,6 @@ services:
   App\Service\UpplerOrderService:
     parent: App\Service\HttpClientProvider
 
-  # SERVICES MARKETPLACE
-  App\Service\FavoriteService:
-    arguments:
-      $em: '@doctrine.orm.entity_manager'
-
-  App\Service\SavedCartService:
-    arguments:
-      $em: '@doctrine.orm.entity_manager'
-
   # Voter
   App\Security\Voter\FavoriteVoter:
     tags: [{ name: security.voter }]

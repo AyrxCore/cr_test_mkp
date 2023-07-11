@@ -16,11 +16,7 @@
         <div class="w-3/12">Total de la commande</div>
         <div class="w-1/12"></div>
       </div>
-      <LoaderSharedComponent
-        v-if="isLoading"
-        class="mx-auto text-purple-600"
-        classes="loader-xl loader"
-      />
+      <LoadingComponent v-if="isLoading" />
       <div v-else-if="showAlert" class="lg:w-5/6">
         <AlertSharedComponent
           class="bg-red-200 text-red-800 dark:bg-red-200 dark:text-red-800"
@@ -48,7 +44,7 @@
 <script lang="ts" setup>
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import { onMounted, ref } from 'vue'
-import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
+import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
 import { useAlertStore } from '@/vuejs/stores/alert'
 import { storeToRefs } from 'pinia'

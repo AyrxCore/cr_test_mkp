@@ -23,8 +23,8 @@
           />
         </svg>
       </div>
-      <div class="ml-3 text-sm font-medium flex justify-start">
-        <p v-html="alertStore.message"/>
+      <div class="ml-3 flex justify-start text-sm font-medium">
+        <p v-html="alertStore.message" />
       </div>
     </div>
     <button
@@ -69,15 +69,15 @@ const classes = computed((): string => {
       classes = 'text-blue-700 bg-blue-100 hover:bg-blue-200'
       break
     case AlertType.success: {
-      classes = 'text-green-700 bg-green-100 hover:bg-green-200'
+      classes = '!text-green-700 !bg-green-100 !hover:bg-green-200'
       break
     }
     case AlertType.danger: {
-      classes = 'text-red-700 bg-red-100 hover:bg-red-200'
+      classes = '!text-red-700 !bg-red-100 !hover:bg-red-200'
       break
     }
     case AlertType.warning: {
-      classes = 'text-yellow-700 bg-yellow-100 hover:bg-yellow-200'
+      classes = '!text-yellow-700 !bg-yellow-100 !hover:bg-yellow-200'
       break
     }
   }

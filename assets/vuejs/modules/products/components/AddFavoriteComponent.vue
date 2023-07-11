@@ -4,7 +4,8 @@
       <HeartIconComponent
         class="... h-[40px] w-[40px] stroke-gray-500 lg:h-auto lg:w-auto"
         :class="{
-          'fill-secondary !stroke-secondary': favoritesSelected.length > 0,
+          'fill-secondary !stroke-secondary':
+            currentSelectedFavorites.length > 0,
         }"
         :stroke-color="'#000000'"
       />
@@ -37,41 +38,18 @@
                 <div v-for="favoriteItem in favorites" :key="favoriteItem.id">
                   <label class="my-1 flex items-center text-base text-gray-600">
                     <input
-                      v-model="selectedFavorite[favoriteItem.id]"
+                      v-model="newSelectedFavorites"
                       type="checkbox"
-                      class="cursor-pointer appearance-none rounded border border-gray-400 text-secondary checked:bg-secondary focus:ring-secondary"
-                      :checked="isInArray(favoriteItem.id)"
-                      :disabled="isInArray(favoriteItem.id)"
-                      :class="{
-                        'cursor-not-allowed opacity-25': isInArray(
-                          favoriteItem.id,
-                        ),
-                      }"
+                      class="checkbox-secondary"
+                      :value="favoriteItem.id"
+                      :checked="isChecked(favoriteItem.id)"
+                      @change="handleChange"
                     />
                     <span class="ml-2">{{ favoriteItem.name }}</span>
-                    <span
-                      v-if="isInArray(favoriteItem.id)"
-                      class="ml-2 flex cursor-pointer items-center justify-end text-secondary underline"
-                      title="Supprimer de la liste"
-                      @click="onRemoveItem(favoriteItem.id)"
-                    >
-                      <LoaderSharedComponent v-if="isDelFavoriteLoading" />
-                      <TrashIconComponent
-                        v-else
-                        class="w-[20px] stroke-secondary"
-                      />
-                    </span>
                   </label>
                 </div>
               </div>
               <div class="flex px-1">
-                <label class="text-base text-gray-600">
-                  <input
-                    v-model="selectedNewFavorite"
-                    type="checkbox"
-                    :checked="newFavorite !== null || newFavorite !== ''"
-                  />
-                </label>
                 <input
                   v-model.trim="newFavorite"
                   class="ml-1 w-full rounded py-0"
@@ -84,9 +62,8 @@
                 <ButtonComponent
                   class="button-gradient flex !h-10 justify-end !py-2"
                   :disabled="
-                    (selectedNewFavorite &&
-                      (newFavorite === null || newFavorite === '')) ||
-                    isDelFavoriteLoading
+                    disableAddButton &&
+                    (newFavorite === null || newFavorite === '')
                   "
                   :is-loading="addProductToFavoriteLoading"
                   >Ajouter
@@ -113,7 +90,7 @@ import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
-import { notifySuccess } from '@/vuejs/services/utils'
+import { arrayEqual, notifySuccess } from '@/vuejs/services/utils'
 
 const props = defineProps({
   productId: {
@@ -128,7 +105,7 @@ const props = defineProps({
     required: true,
     type: String,
   },
-  favoritesSelected: {
+  favoritesProduct: {
     type: Array,
     default: null,
   },
@@ -138,15 +115,15 @@ const favoriteStore = useFavoriteStore()
 const { favorites } = storeToRefs(favoriteStore)
 const showTooltip = ref<boolean>(false)
 const showList = ref<boolean>(true)
-const selectedFavorite = ref([])
-const selectedNewFavorite = ref(null)
+const currentSelectedFavorites = ref(props.favoritesProduct)
+const newSelectedFavorites = ref(props.favoritesProduct)
 const newFavorite = ref(null)
 const addProductToFavoriteLoading = ref<boolean>(false)
 const isLoading = ref<boolean>(false)
-const isDelFavoriteLoading = ref<boolean>(false)
 const showErrorNotSelected = ref<boolean>(false)
+const disableAddButton = ref<boolean>(true)
 
-const emit = defineEmits(['openFavorite'])
+const emit = defineEmits(['openFavorite', 'updateSelectedFavoritesList'])
 
 const onOpenFavorite = () => {
   showTooltip.value = true
@@ -154,55 +131,52 @@ const onOpenFavorite = () => {
 }
 const onOutsideBlock = () => {
   showTooltip.value = false
-  selectedFavorite.value = []
   showErrorNotSelected.value = false
-  selectedNewFavorite.value = false
   newFavorite.value = null
   emit('openFavorite', { showTooltip: showTooltip.value })
 }
 
-const isInArray = (favoriteId) => {
-  const selected = props.favoritesSelected.filter(function (el) {
-    return el.id === favoriteId
-  })
+const isChecked = (favoriteId) => {
+  return Object.entries(props.favoritesProduct).includes(favoriteId)
+}
 
-  return selected.length > 0
+const handleChange = () => {
+  disableAddButton.value = arrayEqual(
+    newSelectedFavorites.value,
+    currentSelectedFavorites.value,
+  )
 }
 
 const addProductToFavorite = async () => {
-  if (
-    selectedNewFavorite.value &&
-    (newFavorite.value === null || newFavorite.value === '')
-  ) {
-    return false
-  }
   isLoading.value = true
-  const selectedFavorites = Object.keys(selectedFavorite.value)
 
-  if (selectedNewFavorite.value || selectedFavorites.length > 0) {
+  if (
+    newFavorite.value ||
+    newSelectedFavorites.value.length > 0 ||
+    (newSelectedFavorites.value.length === 0 &&
+      currentSelectedFavorites.value.length > 0)
+  ) {
     showErrorNotSelected.value = false
     addProductToFavoriteLoading.value = true
     try {
-      if (selectedNewFavorite.value) {
+      if (newFavorite.value) {
         const favorite = await favoriteStore.create({
           name: newFavorite.value,
           public: false,
         })
         const favoriteId = favorite.id
-        selectedFavorites.push(favoriteId)
+        newSelectedFavorites.value.push(favoriteId)
       }
-      await favoriteStore.addItem({
-        selectedFavorites,
+      await favoriteStore.addProduct({
+        selectedFavorites: newSelectedFavorites.value,
         productId: props.productId,
         productName: props.productName,
         variantId: props.variantId,
       })
-      selectedFavorites.forEach((favoriteId) => {
-        props.favoritesSelected.push({ id: favoriteId })
-      })
+
+      currentSelectedFavorites.value = newSelectedFavorites.value
       onOutsideBlock()
       await favoriteStore.fetchFavorites()
-      selectedFavorite.value = []
     } catch (error) {}
 
     addProductToFavoriteLoading.value = false
@@ -210,22 +184,6 @@ const addProductToFavorite = async () => {
     showErrorNotSelected.value = true
   }
   isLoading.value = false
-}
-
-const onRemoveItem = async (favoriteId) => {
-  isDelFavoriteLoading.value = true
-  try {
-    await favoriteStore.removeItem(favoriteId, props.productId, props.variantId)
-    const index = props.favoritesSelected.findIndex(
-      (element) => element.id === favoriteId,
-    )
-    if (index !== -1) {
-      props.favoritesSelected.splice(index, 1)
-      notifySuccess('Le produit a été retiré de la liste')
-    }
-  } catch (error) {}
-
-  isDelFavoriteLoading.value = false
 }
 </script>
 

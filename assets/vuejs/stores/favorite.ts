@@ -1,9 +1,6 @@
 import { defineStore } from 'pinia'
 import { Favorite } from '@/vuejs/types/Favorite'
-import { useAlertStore } from '@/vuejs/stores/alert'
 import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
-import { getErrorMessage } from '@/vuejs/services/login'
-import { AlertType } from '@/vuejs/types/Alert'
 import FavoriteHttpClient from '@/vuejs/services/httpclient/FavoriteHttpClient'
 import { notifyError, notifySuccess } from '@/vuejs/services/utils'
 
@@ -21,124 +18,96 @@ export const useFavoriteStore = defineStore({
 
   actions: {
     async fetchFavorites(): Promise<void> {
-      const alertStore = useAlertStore()
       try {
         this.favorites = await FavoriteHttpClient.get().fetchList()
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow(
-            getErrorMessage(error.response.data.message),
-            AlertType.danger,
-          )
+          notifyError(error.response.data.message)
       }
     },
     async create(favorite: Favorite) {
-      const alertStore = useAlertStore()
       try {
         const newFavorite = await FavoriteHttpClient.get().create(favorite)
-        alertStore.setShow('Votre liste a été créée', AlertType.success)
+        notifySuccess('Votre liste a été créée')
         return newFavorite
       } catch (error) {
-        alertStore.setShow(
-          'Une erreur est survenue lors de la création de votre liste, veuillez essayer ultérieurement ou contacter le service client',
-          AlertType.danger,
-        )
+        notifyError(`Le libellé ${favorite.name} existe déjà`)
       }
     },
     async findFavoriteById(id) {
-      return await FavoriteHttpClient.get().findFavoriteById(id)
+      try {
+        return await FavoriteHttpClient.get().findFavoriteById(id)
+      } catch (error) {}
     },
 
     async update(favorite: Favorite) {
-      const alertStore = useAlertStore()
       try {
         const updatedFavorite = await FavoriteHttpClient.get(true).update(
           favorite,
         )
-        alertStore.setShow(
-          `La liste <strong>${favorite.name}</strong> a été mise à jour`,
-          AlertType.success,
-        )
+        notifySuccess(`La liste ${favorite.name} a été mise à jour`)
         return updatedFavorite
       } catch (error) {
-        alertStore.setShow(
-          `La liste  <strong>${favorite.name}</strong> n'a pas pu être mise à jour`,
-          AlertType.danger,
-        )
+        notifyError(`La liste ${favorite.name} n'a pas pu être mise à jour`)
       }
     },
     async delete(id): Promise<void> {
-      const alertStore = useAlertStore()
       try {
         await FavoriteHttpClient.get().delete(id)
-        alertStore.setShow('La liste a bien été supprimée', AlertType.success)
+        notifySuccess('La liste a bien été supprimée')
       } catch (error) {
-        alertStore.setShow(
-          getErrorMessage(error.response.data.message),
-          AlertType.danger,
-        )
+        notifyError(error.response.data.message)
       }
     },
-    async addItem(data) {
+    async addProduct(data) {
       try {
-        await FavoriteHttpClient.get().addItem(data)
-        notifySuccess(`Le produit ${data.productName} a été ajouté`)
+        await FavoriteHttpClient.get().addProduct(data)
+
+        let message = `Le produit ${data.productName} a été ajouté aux listes de favori`
+
+        if (data.selectedFavorites.length === 0) {
+          message = `Le produit ${data.productName} a été retiré de toutes les listes de favori`
+        }
+
+        notifySuccess(message)
       } catch (error) {
         notifyError(
           "Impossible d'ajouter ce produit à cette liste car elle n'existe plus",
         )
       }
     },
-    async removeItem(favoriteId, productId, variantId) {
-      const alertStore = useAlertStore()
+    async removeProduct(favoriteProductId) {
       try {
-        await FavoriteHttpClient.get().removeItem(
-          favoriteId,
-          productId,
-          variantId,
-        )
-        alertStore.setShow(
-          'Le produit a été retiré de la liste',
-          AlertType.success,
-        )
+        await FavoriteHttpClient.get().removeProduct(favoriteProductId)
+        notifySuccess('Ce produit a été rétiré de la liste')
       } catch (error) {
-        alertStore.setShow(
-          "Une erreur est survenue lors de l'ajout",
-          AlertType.danger,
-        )
+        notifyError("Une erreur est survenue lors de l'ajout")
       }
     },
-    async moveItem(data) {
-      const alertStore = useAlertStore()
+    async moveProduct(favoriteProductId, favoriteId) {
       try {
-        await FavoriteHttpClient.get().moveItem(data)
-        alertStore.setShow(
-          'Le produit a été retiré de la liste',
-          AlertType.success,
+        const response = await FavoriteHttpClient.get(true).moveProduct(
+          favoriteProductId,
+          {
+            favoriteId,
+          },
         )
+        notifySuccess(response.message)
       } catch (error) {
-        alertStore.setShow(
-          "Une erreur est survenue lors de l'ajout",
-          AlertType.danger,
-        )
+        notifyError(error.response.data.message)
       }
     },
     async deleteFavoriteAndMoveProductToOtherFavorite(id, idToReceive) {
-      const alertStore = useAlertStore()
       try {
-        await FavoriteHttpClient.get().deleteFavoriteAndMoveProductToOtherFavorite(
-          id,
-          idToReceive,
-        )
-        alertStore.setShow(
-          'La liste a bien été supprimée et les produits déplacés',
-          AlertType.success,
-        )
+        const response =
+          await FavoriteHttpClient.get().moveProductToOtherFavorite(
+            id,
+            idToReceive,
+          )
+        await this.delete(id)
+        notifySuccess(response.message)
       } catch (error) {
-        alertStore.setShow(
-          "Une erreur est survenue lors de l'ajout",
-          AlertType.danger,
-        )
+        notifyError(error.response.data.message)
       }
     },
   },

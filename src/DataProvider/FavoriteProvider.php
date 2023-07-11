@@ -7,7 +7,6 @@ namespace App\DataProvider;
 use ApiPlatform\Core\DataProvider\CollectionDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Entity\Favorite;
-use App\Service\FavoriteService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
@@ -20,9 +19,6 @@ class FavoriteProvider implements RestrictedDataProviderInterface, CollectionDat
     public EntityManagerInterface $em;
 
     #[Required]
-    public FavoriteService $favoriteService;
-
-    #[Required]
     public RequestStack $requestStack;
 
     #[Required]
@@ -31,8 +27,8 @@ class FavoriteProvider implements RestrictedDataProviderInterface, CollectionDat
 
     public function getCollection(string $resourceClass, string $operationName = null)
     {
-        $session = $this->requestStack->getSession();
-        return $this->favoriteService->getFavorites($session->get('account'));
+        $account = $this->requestStack->getSession()->get('account');
+        return $this->em->getRepository(Favorite::class)->findFavorites($account);
     }
 
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool

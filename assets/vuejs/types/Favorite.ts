@@ -1,3 +1,10 @@
+export interface FavoriteProduct {
+  id?: string
+  upplerProductId?: number
+  upplerVariantId?: number
+  upplerProductName?: string
+}
+
 export interface Favorite {
   id?: string
   accountId?: string
@@ -5,5 +12,5 @@ export interface Favorite {
   public?: boolean
   createdAt?: Date
   updatedAt?: Date
-  favoriteProducts?: Array<object>
+  favoriteProducts?: Array<FavoriteProduct>
 }

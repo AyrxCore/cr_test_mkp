@@ -10,7 +10,7 @@ export default class SavedCartHttpClient extends BaseClientService {
 
   public create<T extends []>(savedCart: SavedCart): Promise<T | SavedCart> {
     return this.apiClient
-      .post<T>('saved-carts/create', savedCart)
+      .post<T>('saved-carts', savedCart)
       .then((response) => response.data)
   }
 
@@ -22,7 +22,7 @@ export default class SavedCartHttpClient extends BaseClientService {
 
   public update<T extends []>(savedCart: SavedCart): Promise<T> {
     return this.apiClient
-      .patch(`saved-carts/update/${savedCart.id}`, {
+      .patch(`saved-carts/${savedCart.id}`, {
         name: savedCart.name,
       })
       .then((response) => response.data)
@@ -30,7 +30,7 @@ export default class SavedCartHttpClient extends BaseClientService {
 
   public delete<T extends []>(id): Promise<T> {
     return this.apiClient
-      .delete(`saved-carts/delete/${id}`)
+      .delete(`saved-carts/${id}`)
       .then((response) => response.data)
   }
 }

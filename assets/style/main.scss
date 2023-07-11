@@ -91,6 +91,10 @@
   animation: gradient 1s ease infinite;
 }
 
+.checkbox-secondary {
+  @apply cursor-pointer appearance-none rounded border border-gray-400 text-secondary checked:bg-secondary focus:ring-secondary;
+}
+
 @keyframes gradient {
   0% {
     background-position: 0% 50%;

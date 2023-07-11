@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Account;
 use App\Entity\FavoriteProduct;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -39,28 +40,36 @@ class FavoriteProductRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return FavoriteProduct[] Returns an array of FavoriteProduct objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('f.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function getFavoritesProductsByAccountAndProductId(Account $account, int $productId): array|float|int|string
+    {
+        $qb = $this->createQueryBuilder('fp')
+            ->select('fp.id');
 
-//    public function findOneBySomeField($value): ?FavoriteProduct
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        $qb
+            ->innerJoin('fp.favorite', 'f')
+            ->leftJoin('f.account', 'a')
+            ->where(
+                $qb->expr()->orX(
+                    $qb->expr()->andX(
+                        $qb->expr()->eq('f.account', ':accountId'),
+                        $qb->expr()->eq('f.public', ':isPublicFalse')
+                    ),
+                    $qb->expr()->andX(
+                        $qb->expr()->eq('a.adherent', ':adherentId'),
+                        $qb->expr()->eq('f.public', ':isPublicTrue')
+                    )
+                )
+            )
+            ->andWhere('fp.upplerProductId = :upplerProductId')
+            ->setParameter('accountId', $account->getId())
+            ->setParameter('isPublicFalse', false)
+            ->setParameter('adherentId', $account->getAdherent())
+            ->setParameter('isPublicTrue', true)
+            ->setParameter('upplerProductId', $productId)
+            ->groupBy('fp.id, f.id');
+
+        return $qb
+            ->getQuery()
+            ->getSingleColumnResult();
+    }
 }

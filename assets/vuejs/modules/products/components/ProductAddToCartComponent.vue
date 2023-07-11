@@ -42,7 +42,7 @@
           :product-id="props.product.id"
           :product-name="props.product.name"
           :variant-id="props.product.selectedVariantId"
-          :favorites-selected="props.product.favorites"
+          :favorites-product="props.product.favorites"
           @open-favorite="onOpenFavoriteTooltip"
         />
       </div>

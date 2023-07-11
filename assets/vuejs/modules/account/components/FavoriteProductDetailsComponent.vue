@@ -5,19 +5,24 @@
     <div class="flex md:w-8/12 lg:w-9/12">
       <div class="mr-2">
         <input
-          v-if="productData"
-          v-model="selectedItem"
+          v-if="product"
+          v-model="selectedProduct"
           type="checkbox"
-          class="cursor-pointer appearance-none rounded border border-gray-400 text-secondary checked:bg-secondary focus:ring-secondary"
-          @change="onSelectItem"
+          class="checkbox-secondary"
+          @change="onSelectProduct"
         />
       </div>
       <div class="flex w-6/12 md:w-3/12">
         <img
+          v-if="productImage"
           :src="productImage"
           alt="Image produit"
           class="flex h-full w-full max-w-max cursor-pointer items-center"
         />
+        <div
+          v-else
+          class="loading flex h-[116px] w-full items-center justify-center rounded-lg px-6 py-2"
+        ></div>
       </div>
       <div class="flex w-6/12 flex-col md:ml-5 md:w-7/12">
         <RouterLink
@@ -46,29 +51,29 @@
             {{ productPrice }}€ HT
           </span>
           <div class="bottom-0 flex items-start justify-between space-x-3">
-            <button @click="openMoveItemForm">
+            <button @click="openMoveProductForm">
               <ChangeIconComponent :stroke-color="'#9866ff'" />
             </button>
             <button @click="openRemoveForm">
               <TrashIconComponent :stroke-color="'#9866ff'" />
             </button>
           </div>
-          <ItemDeleteModal
-            v-if="removeItem"
+          <ProductDeleteModal
+            v-if="removeProduct"
             class="modal"
-            :product="product"
+            :favorite-product="favoriteProduct"
             :favorite-id="favoriteId"
-            @cancel="removeItem = false"
-            @remove-item="onRemoveItem"
+            @cancel="removeProduct = false"
+            @remove-product="onRemoveProduct"
           />
 
-          <ItemMoveModal
-            v-if="moveItem"
+          <ProductMoveModal
+            v-if="moveProduct"
             class="modal"
-            :product="product"
+            :favorite-product="favoriteProduct"
             :favorite-id="favoriteId"
-            @cancel="moveItem = false"
-            @move-item="onMoveItem"
+            @cancel="moveProduct = false"
+            @move-product="onMoveProduct"
           />
         </div>
       </div>
@@ -77,33 +82,36 @@
 </template>
 <script lang="ts" setup>
 import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
-import { computed, onMounted, ref } from 'vue'
-import { getImage } from '@/vuejs/services/utils'
-import sampleImg from '@/vuejs/assets/img/sample_product_img.png'
+import { computed, onMounted, PropType, ref } from 'vue'
 import { Product } from '@/vuejs/types/Product'
 import { useProductStore } from '@/vuejs/stores/product'
 import { PageList } from '@/vuejs/router'
 import ChangeIconComponent from '@/vuejs/modules/shared/icon/ChangeIconComponent.vue'
-import ItemDeleteModal from '@/vuejs/modules/account/components/favorite/ItemRemoveModal.vue'
-import ItemMoveModal from '@/vuejs/modules/account/components/favorite/ItemMoveModal.vue'
+import ProductDeleteModal from '@/vuejs/modules/account/components/favorite/ProductRemoveModal.vue'
+import ProductMoveModal from '@/vuejs/modules/account/components/favorite/ProductMoveModal.vue'
+import { FavoriteProduct } from '@/vuejs/types/Favorite'
 
 const emit = defineEmits([
-  'removeItem',
-  'moveItem',
-  'selectedItem',
-  'removeSelectedItem',
+  'removeProduct',
+  'moveProduct',
+  'selectedProduct',
+  'removeSelectedProduct',
 ])
+
 const productStore = useProductStore()
-const productData = ref<Product>()
+const product = ref<Product>()
 const productNotFound = ref(false)
-const selectedItem = ref(null)
+const selectedProduct = ref(null)
 const priceReference = ref()
 const price = ref()
 const percent = ref()
+const removeProduct = ref<boolean>(false)
+const moveProduct = ref<boolean>(false)
+
 const props = defineProps({
-  product: {
+  favoriteProduct: {
     required: true,
-    type: Object,
+    type: Object as PropType<FavoriteProduct>,
   },
   favoriteId: {
     type: String,
@@ -111,86 +119,82 @@ const props = defineProps({
     default: null,
   },
 })
-const removeItem = ref<boolean>(false)
-const moveItem = ref<boolean>(false)
 
 const openRemoveForm = () => {
-  removeItem.value = true
+  removeProduct.value = true
 }
 
-const openMoveItemForm = () => {
-  moveItem.value = true
+const openMoveProductForm = () => {
+  moveProduct.value = true
 }
 
-const onSelectItem = async () => {
-  if (selectedItem.value) {
-    await emit('selectedItem', {
-      selectedItem: props.product,
-      product: productData.value,
+const onSelectProduct = async () => {
+  if (selectedProduct.value) {
+    await emit('selectedProduct', {
+      selectedProduct: props.favoriteProduct,
+      product: product.value,
     })
   } else {
-    await emit('removeSelectedItem', {
-      selectedItem: props.product,
+    await emit('removeSelectedProduct', {
+      selectedProduct: props.favoriteProduct,
     })
   }
 }
 
-const onRemoveItem = async (event) => {
-  await emit('removeItem', {
-    favoriteId: event.favoriteId,
-    productId: event.productId,
-    variantId: event.variantId,
-  })
-  removeItem.value = false
-}
-
-const onMoveItem = async (event) => {
-  await emit('moveItem', {
-    favoriteId: event.favoriteId,
-    favoriteIdToReceive: event.favoriteIdToReceive,
+const onRemoveProduct = async (event) => {
+  await emit('removeProduct', {
     favoriteProductId: event.favoriteProductId,
   })
-  moveItem.value = false
+  removeProduct.value = false
+}
+
+const onMoveProduct = async (event) => {
+  await emit('moveProduct', {
+    favoriteId: event.favoriteId,
+    favoriteProductId: event.favoriteProductId,
+  })
+  moveProduct.value = false
 }
 
 onMounted(async (): Promise<void> => {
-  productData.value = await productStore.findProductById(
-    props.product.upplerProductId,
+  product.value = await productStore.findProductById(
+    props.favoriteProduct.upplerProductId,
   )
-  if (!productData.value) {
+  if (!product.value) {
     productNotFound.value = true
   } else {
-    priceReference.value = productData.value.priceReference
-    price.value = productData.value.price
-    percent.value = productData.value.percent
+    priceReference.value = product.value.priceReference
+    price.value = product.value.price
+    percent.value = product.value.percent
   }
 })
 
 const productImage = computed((): string => {
-  if (productData.value) return productData.value.images[0]
-  return getImage(sampleImg)
+  return product.value ? product.value.images[0] : null
 })
 
 const productId = computed((): string => {
-  return props.product.upplerProductId
+  return product.value
+    ? product.value.slug + '-' + product.value.id
+    : props.favoriteProduct.upplerProductId
 })
 
 const productName = computed((): string => {
-  return productData.value
-    ? productData.value.name
-    : props.product.upplerProductName
+  return product.value
+    ? product.value.name
+    : props.favoriteProduct.upplerProductName
 })
 
 const productReference = computed((): string => {
-  return productData.value ? productData.value.reference : ''
+  return product.value ? product.value.reference : ''
 })
 
 const productPrice = computed((): number | string => {
-  return productData.value ? productData.value.price : ''
+  return product.value ? product.value.price : ''
 })
 
 const productSeller = computed((): string => {
-  return productData.value ? productData.value.seller.name : ''
+  return product.value ? product.value.seller.name : ''
 })
 </script>
 <style scoped>

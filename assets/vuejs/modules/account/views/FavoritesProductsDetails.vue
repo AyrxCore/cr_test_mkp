@@ -1,73 +1,85 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <div
-        v-if="isLoading"
-        class="mt-5 flex h-20 w-full items-center justify-center"
-      >
-        <LoaderSharedComponent
-          class="text-secondary"
-          classes="loader-xl loader"
-        />
-      </div>
+      <LoadingComponent v-if="isLoading" />
       <div v-else>
-        <div v-if="showAlert" class="lg:w-5/6">
-          <AlertSharedComponent />
-        </div>
-        <div class="mt-2 mb-2 flex justify-between md:mt-0 md:mb-0">
-          <h3 class="mb-2 text-title-35 text-primary">{{ favoriteName }}</h3>
-          <ButtonComponent
-            class="button button-white button-white-secondary"
-            @click="openFavoriteForm"
-          >
-            Renommer
-          </ButtonComponent>
-        </div>
-        <FavoriteFormModal
-          v-if="showFormFavorite"
-          class="modal"
-          :favorite-id="favorite.id"
-          :is-editing="true"
-          :is-loading="isEditLoading"
-          @cancel="showFormFavorite = false"
-          @submit-favorite="onSubmitFavorite"
-        />
+        <div v-if="favorite">
+          <div v-if="showAlert" class="lg:w-5/6">
+            <AlertSharedComponent />
+          </div>
+          <div class="mt-2 mb-2 flex justify-between md:mt-0 md:mb-0">
+            <h3 class="mb-2 text-title-35 text-primary">{{ favoriteName }}</h3>
+            <ButtonComponent
+              class="button button-white button-white-secondary"
+              @click="openFavoriteForm"
+            >
+              Renommer
+            </ButtonComponent>
+          </div>
+          <FavoriteFormModal
+            v-if="showFormFavorite"
+            class="modal"
+            :favorite-id="favorite.id"
+            :is-editing="true"
+            :is-loading="isEditLoading"
+            @cancel="showFormFavorite = false"
+            @submit-favorite="onSubmitFavorite"
+          />
 
-        <div
-          class="mb-2.5 hidden items-center text-sm text-gray-500 md:flex lg:text-base"
-        >
-          <div class="md:w-8/12 lg:w-9/12">Description des articles</div>
-          <div class="flex justify-start md:w-4/12 lg:w-3/12">Sous-total</div>
+          <div
+            class="mb-2.5 hidden items-center text-sm text-gray-500 md:flex lg:text-base"
+          >
+            <div class="md:w-8/12 lg:w-9/12">Description des articles</div>
+            <div class="flex justify-start md:w-4/12 lg:w-3/12">Sous-total</div>
+          </div>
+          <FavoritesProductsDetailsComponent
+            v-for="(favoriteProduct, key) in favorite.favoriteProducts"
+            :key="key"
+            :favorite-product="favoriteProduct"
+            :favorite-id="favorite.id"
+            @remove-product="onRemoveProduct"
+            @move-product="onMoveProduct"
+            @selected-product="addProductSelectedToList"
+            @remove-selected-product="removeProductSelectedToList"
+          />
+          <div class="mt-6 flex flex-col justify-between md:flex-row">
+            <ButtonComponent
+              class="button-white-secondary !text-secondary hover:!bg-white focus:!bg-white"
+              @click="refreshFavoriteItems(favorite.id)"
+            >
+              Mettre à jour la liste
+            </ButtonComponent>
+            <ButtonComponent
+              class="button-gradient mt-5 md:mt-0"
+              :disabled="listItemToAddCart.length === 0"
+              :is-loading="isAddToCartLoading"
+              @click="addToCart"
+            >
+              <ShoppingCartIconComponent
+                :stroke-color="'#FFFFFF'"
+                class="mr-2 w-4"
+              />
+              Ajouter au panier
+            </ButtonComponent>
+          </div>
         </div>
-        <FavoritesProductsDetailsComponent
-          v-for="(product, key) in favorite.favoriteProducts"
-          :key="key"
-          :product="product"
-          :favorite-id="favorite.id"
-          @remove-item="onRemoveItem"
-          @move-item="onMoveItem"
-          @selected-item="addItemSelectedToList"
-          @remove-selected-item="removeItemSelectedToList"
-        />
-        <div class="mt-6 flex flex-col justify-between md:flex-row">
-          <ButtonComponent
-            class="button-white-secondary !text-secondary hover:!bg-white focus:!bg-white"
-            @click="refreshFavoriteItems(favorite.id)"
+        <div
+          v-else
+          class="xs:w-full m-auto my-4 flex max-w-screen-2xl flex-col items-center justify-center p-10"
+        >
+          <div class="text-gray-500">
+            Aucune liste avec cet identifiant n'a été trouvée
+          </div>
+          <RouterLink
+            class="button button-gradient mt-10 w-auto md:w-auto"
+            :to="{ name: PageList.FAVORITES_LIST }"
           >
-            Mettre à jour la liste
-          </ButtonComponent>
-          <ButtonComponent
-            class="button-gradient mt-5 md:mt-0"
-            :disabled="listItemToAddCart.length === 0"
-            :is-loading="isAddToCartLoading"
-            @click="addToCart"
-          >
-            <ShoppingCartIconComponent
+            <ArrowLeftIconComponent
               :stroke-color="'#FFFFFF'"
-              class="mr-2 w-4"
+              class="mr-2 w-4 !stroke-white"
             />
-            Ajouter au panier
-          </ButtonComponent>
+            Retour à la liste des favoris
+          </RouterLink>
         </div>
       </div>
     </template>
@@ -81,7 +93,6 @@ import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartI
 import { useRoute } from 'vue-router'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import { Favorite } from '@/vuejs/types/Favorite'
-import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 import FavoriteFormModal from '@/vuejs/modules/account/components/favorite/FavoriteAddEditModal.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import { useAlertStore } from '@/vuejs/stores/alert'
@@ -89,6 +100,9 @@ import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vu
 import { storeToRefs } from 'pinia'
 import { addProductToCartGoogleAnalytics } from '@/vuejs/modules/products'
 import { useCartStore } from '@/vuejs/stores/cart'
+import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
+import { PageList } from '@/vuejs/router'
+import ArrowLeftIconComponent from '@/vuejs/modules/shared/icon/ArrowLeftIconComponent.vue'
 
 const cartStore = useCartStore()
 const route = useRoute()
@@ -122,60 +136,65 @@ onMounted(async () => {
 })
 
 const onSubmitFavorite = async (event) => {
+  isEditLoading.value = true
+
   try {
-    isEditLoading.value = true
     await favoriteStore.update(event.favorite)
     favorite.value.name = event.favorite.name
     isEditLoading.value = false
     showFormFavorite.value = false
-  } catch (error) {}
+  } catch (error) {
+  } finally {
+    isEditLoading.value = false
+  }
 }
 
-const onRemoveItem = async (event) => {
+const onRemoveProduct = async (event) => {
+  isLoading.value = true
+
   try {
-    await favoriteStore.removeItem(
-      event.favoriteId,
-      event.productId,
-      event.variantId,
-    )
+    await favoriteStore.removeProduct(event.favoriteProductId)
     await refreshFavoriteItems(favorite.value.id)
-  } catch (error) {}
+  } catch (error) {
+  } finally {
+    isLoading.value = false
+  }
 }
 
-const onMoveItem = async (event) => {
+const onMoveProduct = async (event) => {
+  isLoading.value = true
   try {
-    await favoriteStore.moveItem({
-      favoriteId: event.favoriteId,
-      favoriteIdToReceive: event.favoriteIdToReceive,
-      favoriteProductId: event.favoriteProductId,
-    })
+    await favoriteStore.moveProduct(event.favoriteProductId, event.favoriteId)
     await refreshFavoriteItems(favorite.value.id)
-  } catch (error) {}
+  } catch (error) {
+  } finally {
+    isLoading.value = false
+  }
 }
 
-const addItemSelectedToList = async (event) => {
+const addProductSelectedToList = async (event) => {
   try {
     listItemToAddCart.value.push({
-      id: event.selectedItem.id,
-      variantId: event.selectedItem.upplerVariantId,
+      id: event.selectedProduct.id,
+      variantId: event.selectedProduct.upplerVariantId,
       product: event.product,
     })
 
     cartProducts.value.push({
-      variantId: event.selectedItem.upplerVariantId,
+      variantId: event.selectedProduct.upplerVariantId,
       quantity: 1,
     })
   } catch (error) {}
 }
 
-const removeItemSelectedToList = async (event) => {
+const removeProductSelectedToList = async (event) => {
   try {
     listItemToAddCart.value = listItemToAddCart.value.filter(
-      (item) => item.id !== event.selectedItem.id,
+      (product) => product.id !== event.selectedProduct.id,
     )
     cartProducts.value = cartProducts.value.filter(
       (cartProduct) =>
-        cartProduct.variantId !== event.selectedItem.upplerVariantId,
+        cartProduct.variantId !== event.selectedProduct.upplerVariantId,
     )
   } catch (error) {}
 }
@@ -187,6 +206,8 @@ const addToCart = async () => {
     await addProductToCartGoogleAnalytics(value.product, value.variantId, 1)
   }
   isAddToCartLoading.value = false
+
+  await refreshFavoriteItems(favorite.value.id)
 }
 
 watch(
@@ -200,5 +221,6 @@ watch(
   { immediate: true },
 )
 </script>
+OK
 
 <style scoped></style>

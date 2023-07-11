@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Controller\Api\Buyer\SavedCartApiController;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\SavedCartRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -13,56 +15,56 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
-
 #[ApiResource(
     collectionOperations: [
         'get' => [
-            "method" => "GET",
-            "path" => "/saved-carts"
+            'method' => 'GET',
+            'path' => '/saved-carts',
         ],
         'create' => [
-            "openapi_context" => [
+            'openapi_context' => [
                 'summary' => 'Créer une nouvelle liste de panier sauvegardé',
-                'description' => 'Permet de créer une nouvelle liste de panier sauvegardé'
+                'description' => 'Permet de créer une nouvelle liste de panier sauvegardé',
             ],
-            "method" => "POST",
-            "validate" => true,
-            "path" => "/saved-carts/create"
-        ]
+            'method' => 'POST',
+            'validate' => true,
+            'path' => '/saved-carts/create',
+        ],
     ],
     itemOperations: [
         'get' => [
             'normalization_context' => ['groups' => ['savedCart:get']],
-            "method" => "GET",
-            "path" => "/saved-carts/{id}"
+            'method' => 'GET',
+            'path' => '/saved-carts/{id}',
         ],
-        'update' => [
-            "openapi_context"        => [
-                'summary'     => 'Modifier une liste de panier',
+        'patch' => [
+            'openapi_context' => [
+                'summary' => 'Modifier une liste de panier',
                 'description' => "Permet de mettre a jour le nom et la visibilité d'une liste de panier sauvegardé",
             ],
-            "method"                 => "PATCH",
-            "validate"               => true,
-            "path" => "/saved-carts/update/{id}",
+            'security' => "is_granted('MANAGE_SAVED_CART', object)",
+            'method' => 'PATCH',
+            'path' => '/saved-carts/{id}',
+            'validate' => true,
             'normalization_context' => ['groups' => ['update']],
         ],
         'delete' => [
             'openapi_context' => [
                 'summary' => 'Supprimer une liste de panier sauvegardé',
             ],
+            'security' => "is_granted('MANAGE_SAVED_CART', object)",
             'method' => 'DELETE',
+            'path' => '/saved-carts/{id}',
             'validate' => true,
-            "path" => "/saved-carts/delete/{id}",
         ],
-        'get_upplers_products' => [
-            "method" => "GET",
-            "path" => "/saved-carts/{id}/products",
-            "controller" => SavedCartApiController::class,
-            "openapi_context" =>  [
-                'summary' => 'Afficher la liste des produits liés à un panier sauvegardé'
+        'get_uppler_products' => [
+            'method' => 'GET',
+            'path' => '/saved-carts/{id}/products',
+            'openapi_context' => [
+                'summary' => 'Afficher la liste des produits liés à un panier sauvegardé',
             ],
-        ]
-    ]
+        ],
+    ],
 )]
 #[ORM\Entity(repositoryClass: SavedCartRepository::class)]
 #[ORM\UniqueConstraint(
@@ -102,6 +104,7 @@ class SavedCart
 
     #[ORM\OneToMany(mappedBy: 'savedCart', targetEntity: SavedCartProduct::class, cascade: ['persist'], orphanRemoval: true)]
     #[Groups(['savedCart:get'])]
+    #[ApiSubresource]
     private Collection $savedCartProducts;
 
     public function __construct()
@@ -122,9 +125,6 @@ class SavedCart
         $this->updatedAt = new \DateTimeImmutable('now');
     }
 
-    /**
-     * @return Uuid|null
-     */
     public function getId(): ?Uuid
     {
         return $this->id;

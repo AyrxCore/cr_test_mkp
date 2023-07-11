@@ -47,7 +47,7 @@ export function notifyError(text: string, time: number = 10000): void {
   )
 }
 
-export function notifySuccess(text: string): void {
+export function notifySuccess(text: string, time: number = 10000): void {
   notify(
     {
       group: 'notif',
@@ -55,7 +55,7 @@ export function notifySuccess(text: string): void {
       title: 'Succès!',
       text: text,
     },
-    5000,
+    time,
   )
 }
 

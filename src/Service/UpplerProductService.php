@@ -27,15 +27,16 @@ class UpplerProductService extends HttpClientProvider
     protected UpplerSellerService $upplerSellerService;
 
     public function __construct(
-        string $env,
-        string $apiUrl,
-        string $adminClientId,
-        string $adminClientSecret,
-        string $adminTokenFile,
-        string $httpCachePath,
-        AdapterInterface $cache,
+        string              $env,
+        string              $apiUrl,
+        string              $adminClientId,
+        string              $adminClientSecret,
+        string              $adminTokenFile,
+        string              $httpCachePath,
+        AdapterInterface    $cache,
         UpplerSellerService $upplerSellerService
-    ) {
+    )
+    {
         parent::__construct($env, $apiUrl, $adminClientId, $adminClientSecret, $adminTokenFile, $httpCachePath);
         $this->cache = $cache;
         $this->upplerSellerService = $upplerSellerService;
@@ -50,10 +51,11 @@ class UpplerProductService extends HttpClientProvider
     public function findProductsByOptions(
         array $options,
         array $params = [],
-        int $page = 1,
-        int $perPage = 10,
-        bool $showFilters = false
-    ): array|null {
+        int   $page = 1,
+        int   $perPage = 10,
+        bool  $showFilters = false
+    ): array|null
+    {
         $session = $this->requestStack->getSession();
         $session->start();
 
@@ -345,7 +347,7 @@ class UpplerProductService extends HttpClientProvider
         $product->setDescription($remoteProduct->description->default ?? null);
         $product->setReference($remoteProduct->reference);
         $product->setSlug($remoteProduct->slug->default);
-        $favorites = $this->em->getRepository(Favorite::class)->getFavoritesByAccountAndProducId($account, $remoteProduct->id);
+        $favorites = $this->em->getRepository(Favorite::class)->getFavoritesByAccountAndProductId($account, $remoteProduct->id);
         $product->setFavorites($favorites);
         $this->populatePropertiesAndSetIfIsAccordCadre($remoteProduct, $product);
         $categories = [];

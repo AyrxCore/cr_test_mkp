@@ -11,19 +11,19 @@ export default class FavoriteHttpClient extends BaseClientService {
 
   public create<T extends []>(favorite: Favorite): Promise<T | Favorite> {
     return this.apiClient
-      .post<T>('favorites/create', favorite)
+      .post<T>('favorites', favorite)
       .then((response) => response.data)
   }
 
   public findFavoriteById<T extends []>(id): Promise<Favorite> {
     return this.apiClient
-      .get(`favorites/${id}/products`)
+      .get(`favorites/${id}`)
       .then((response) => response.data)
   }
 
   public update<T extends []>(favorite: Favorite): Promise<T> {
     return this.apiClient
-      .patch(`favorites/update/${favorite.id}`, {
+      .patch(`favorites/${favorite.id}`, {
         name: favorite.name,
         public: favorite.public,
       })
@@ -32,46 +32,40 @@ export default class FavoriteHttpClient extends BaseClientService {
 
   public delete<T extends []>(id): Promise<T> {
     return this.apiClient
-      .delete(`favorites/delete/${id}`)
+      .delete(`favorites/${id}`)
       .then((response) => response.data)
   }
 
-  public addItem<T extends []>(data): Promise<T | Favorite> {
+  public addProduct<T extends []>(data): Promise<T | Favorite> {
     return this.apiClient
-      .postForm<T>('favorites/item/add', data)
+      .postForm<T>('favorite-products', data)
       .then((response) => response.data)
   }
 
-  public removeItem<T extends []>(
-    favoriteId,
-    productId,
-    variantId,
+  public removeProduct<T extends []>(id): Promise<T | Favorite> {
+    return this.apiClient
+      .delete<T>(`favorite-products/${id}`)
+      .then((response) => response.data)
+  }
+
+  public moveProduct<T extends []>(
+    favoriteProductId,
+    data,
   ): Promise<T | Favorite> {
     return this.apiClient
-      .delete<T>(
-        `favorites/item/remove/${favoriteId}/${productId}/${variantId}`,
-      )
+      .postForm<T>(`favorite-products/${favoriteProductId}/favorites`, data)
       .then((response) => response.data)
   }
 
-  public moveItem<T extends []>(data): Promise<T | Favorite> {
-    return this.apiClient
-      .postForm<T>('favorites/item/move', data)
-      .then((response) => response.data)
-  }
-
-  public deleteFavoriteAndMoveProductToOtherFavorite<T extends []>(
+  public moveProductToOtherFavorite<T extends []>(
     id,
-    idToMove,
+    favoriteIdToReceive,
   ): Promise<T | Favorite> {
     return this.apiClient
-      .postForm<T>(
-        'favorites/items-move-to-other-favorite-and-delete-favorite',
-        {
-          favoriteId: id,
-          favoriteIdToReceive: idToMove,
-        },
-      )
+      .postForm<T>('favorite-products/favorites', {
+        favoriteId: id,
+        favoriteIdToReceive,
+      })
       .then((response) => response.data)
   }
 }

@@ -3,10 +3,10 @@
     <template #title> Déplacer vers une autre liste</template>
     <template #content>
       <div class="px-5">
-        <div v-if="product">
+        <div v-if="favoriteProduct">
           <h4 class="text-sm text-white md:text-base lg:text-lg">
             Voulez-vous vraiment déplacer ce produit:
-            <strong>{{ product.upplerProductName }}</strong>
+            <strong>{{ favoriteProduct.upplerProductName }}</strong>
           </h4>
         </div>
 
@@ -52,8 +52,8 @@
 <script lang="ts" setup>
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import FavoriteModal from '@/vuejs/modules/account/pages/DefaultModalPage.vue'
-import { computed, onMounted, ref } from 'vue'
-import { Favorite } from '@/vuejs/types/Favorite'
+import { computed, onMounted, PropType, ref } from 'vue'
+import { Favorite, FavoriteProduct } from '@/vuejs/types/Favorite'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import { storeToRefs } from 'pinia'
 
@@ -63,8 +63,8 @@ const props = defineProps({
     required: false,
     default: null,
   },
-  product: {
-    type: Object,
+  favoriteProduct: {
+    type: Object as PropType<FavoriteProduct>,
     required: true,
   },
   isLoading: {
@@ -73,7 +73,7 @@ const props = defineProps({
     default: false,
   },
 })
-const emit = defineEmits(['cancel', 'moveItem'])
+const emit = defineEmits(['cancel', 'moveProduct'])
 const favorite = ref<Favorite>()
 const errorSelectavorite = ref<boolean>(false)
 const selectedFavorite = ref(null)
@@ -96,10 +96,9 @@ const onMoveItem = async () => {
     return false
   }
 
-  await emit('moveItem', {
-    favoriteId: props.favoriteId,
-    favoriteIdToReceive: selectedFavorite.value,
-    favoriteProductId: props.product.id,
+  await emit('moveProduct', {
+    favoriteId: selectedFavorite.value,
+    favoriteProductId: props.favoriteProduct.id,
   })
 }
 

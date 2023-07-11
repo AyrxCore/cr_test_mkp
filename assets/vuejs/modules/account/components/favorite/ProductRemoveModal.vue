@@ -3,10 +3,10 @@
     <template #title> Supprimer un produit de la liste</template>
     <template #content>
       <div class="px-5">
-        <div v-if="product">
+        <div v-if="favoriteProduct">
           <h4 class="text-sm text-white md:text-base lg:text-lg">
             Voulez-vous vraiment supprimer ce produit:
-            <strong>{{ product.upplerProductName }}</strong>
+            <strong>{{ favoriteProduct.upplerProductName }}</strong>
           </h4>
         </div>
 
@@ -21,7 +21,7 @@
           <ButtonComponent
             class="button-primary !border-0 hover:!bg-primary focus:!bg-primary"
             :is-loading="isLoading"
-            @click="onRemoveItem"
+            @click="onRemoveProduct"
           >
             Supprimer
           </ButtonComponent>
@@ -34,6 +34,8 @@
 <script lang="ts" setup>
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import FavoriteModal from '@/vuejs/modules/account/pages/DefaultModalPage.vue'
+import { PropType } from 'vue'
+import { FavoriteProduct } from '@/vuejs/types/Favorite'
 
 const props = defineProps({
   favoriteId: {
@@ -41,8 +43,8 @@ const props = defineProps({
     required: false,
     default: null,
   },
-  product: {
-    type: Object,
+  favoriteProduct: {
+    type: Object as PropType<FavoriteProduct>,
     required: true,
   },
   isLoading: {
@@ -51,17 +53,15 @@ const props = defineProps({
     default: false,
   },
 })
-const emit = defineEmits(['cancel', 'removeItem'])
+const emit = defineEmits(['cancel', 'removeProduct'])
 
 const onCancelClick = () => {
   emit('cancel')
 }
 
-const onRemoveItem = async () => {
-  await emit('removeItem', {
-    favoriteId: props.favoriteId,
-    productId: props.product.upplerProductId,
-    variantId: props.product.upplerVariantId,
+const onRemoveProduct = async () => {
+  await emit('removeProduct', {
+    favoriteProductId: props.favoriteProduct.id,
   })
 }
 </script>

@@ -1,62 +1,36 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security\Voter;
 
-use App\Entity\SavedCart;
-use App\Entity\User;
 use App\Entity\Account;
+use App\Entity\SavedCart;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class SavedCartVoter extends Voter
 {
-    const VIEW = 'view';
-    const EDIT = 'edit';
-    const DELETE = 'delete';
+    private const MANAGE_SAVED_CART = 'MANAGE_SAVED_CART';
 
-    /**
-     * @inheritDoc
-     */
-    protected function supports(string $attribute, $subject)
+    public function __construct(private RequestStack $requestStack)
     {
-        if (!in_array($attribute, [self::VIEW, self::EDIT, self::DELETE])) {
-            return false;
-        }
+    }
 
-        [$savedCart, $account] = $subject;
-        if (!$savedCart instanceof SavedCart || !$account instanceof Account) {
-            return false;
-        }
-
-        return true;
+    protected function supports(string $attribute, $subject): bool
+    {
+        return $subject instanceof SavedCart && $attribute === self::MANAGE_SAVED_CART;
     }
 
     /**
-     * @inheritDoc
+     * @param SavedCart $subject
      */
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool|int
     {
-        /** @var User $user */
-        $user = $token->getUser();
+        /** @var Account $account */
+        $account = $this->requestStack->getSession()->get('account');
 
-        if (!$user instanceof User) {
-            // L'utilisateur doit être loggué avant de pouvoir accéder
-            return false;
-        }
-
-        /** @var SavedCart $savedCart
-         *  @var Account $account
-         */
-        [$savedCart, $account] = $subject;
-
-        return match($attribute) {
-            self::VIEW, self::EDIT, self::DELETE => $this->canAccess($savedCart, $account),
-            default => throw new \LogicException('This code should not be reached!')
-        };
-    }
-
-    private function canAccess(SavedCart $savedCart, Account $account): bool
-    {
-        return $savedCart->getAccount()->getId()->equals($account->getId());
+        return $subject->getAccount()->getId()->equals($account->getId());
     }
 }

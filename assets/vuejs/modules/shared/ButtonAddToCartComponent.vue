@@ -44,10 +44,14 @@ const isLoading = ref<boolean>(false)
 
 const addToCart = async (): Promise<void> => {
   if (!cartStore.cart) return
+
   isLoading.value = true
+
   try {
     await cartStore.addProductToCart(props.variantId, props.quantity)
+
     isLoading.value = false
+
     await addProductToCartGoogleAnalytics(
       props.product,
       props.variantId,

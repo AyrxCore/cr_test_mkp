@@ -32,15 +32,7 @@
         <div class="w-2/12">Nombre d'articles</div>
         <div class="w-1/12"></div>
       </div>
-      <div
-        v-if="isLoading"
-        class="mt-5 flex h-20 w-full items-center justify-center"
-      >
-        <LoaderSharedComponent
-          class="text-secondary"
-          classes="loader-xl loader"
-        />
-      </div>
+      <LoadingComponent v-if="isLoading" />
       <div v-else>
         <div
           v-if="favorites && favorites.length === 0"
@@ -75,6 +67,7 @@ import { useAlertStore } from '@/vuejs/stores/alert'
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 import { useUserStore } from '@/vuejs/stores/user'
+import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
