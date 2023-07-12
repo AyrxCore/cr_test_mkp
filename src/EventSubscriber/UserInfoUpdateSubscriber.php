@@ -56,30 +56,30 @@ class UserInfoUpdateSubscriber implements EventSubscriberInterface
         $adherent = $user->getAccounts()[0]->getAdherent();
 
         $logEmail = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy([
-            '_user'     => $user,
+            '_user' => $user,
             'attribute' => 'email',
-            'isIso'     => 'false',
+            'isIso' => 'false',
         ]);
         $logLastname = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy([
-            '_user'     => $user,
+            '_user' => $user,
             'attribute' => 'lastname',
-            'isIso'     => 'false',
+            'isIso' => 'false',
         ]);
         $logFirstname = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy([
-            '_user'     => $user,
+            '_user' => $user,
             'attribute' => 'firstname',
-            'isIso'     => 'false',
+            'isIso' => 'false',
         ]);
         $logPhone = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy([
-            '_user'   => $user,
+            '_user' => $user,
             'attribute' => 'phone',
-            'isIso'     => 'false',
+            'isIso' => 'false',
         ]);
         $logs = [
-            'email'     => $logEmail,
+            'email' => $logEmail,
             'firstname' => $logFirstname,
-            'lastname'  => $logLastname,
-            'phone'     => $logPhone,
+            'lastname' => $logLastname,
+            'phone' => $logPhone,
         ];
 
         $from = $this->parameterBag->get('SUBSCRIPTION_MAIL_FROM');
@@ -91,14 +91,14 @@ class UserInfoUpdateSubscriber implements EventSubscriberInterface
             $to,
             'Un utilisateur a changé ses informations personnelles',
             $this->twig->render('mails/request.userinfo.update.html.twig', [
-                'objet'        => '[marketplace] Un utilisateur a modifié ses informations personnelles',
-                'logs'         => $logs,
-                'email'        => $user->getEmail(),
-                'firstname'    => $user->getFirstName(),
-                'lastname'     => $user->getLastName(),
-                'phone'        => $logPhone?->getOldValue(),
+                'objet' => '[marketplace] Un utilisateur a modifié ses informations personnelles',
+                'logs' => $logs,
+                'email' => $user->getEmail(),
+                'firstname' => $user->getFirstName(),
+                'lastname' => $user->getLastName(),
+                'phone' => $logPhone?->getValue(),
                 'adherentName' => $adherent->getName(),
-                'sugarLink'    => $sugarLink . (string)$adherent->getId(),
+                'sugarLink' => $sugarLink . (string)$adherent->getId(),
             ])
         );
     }

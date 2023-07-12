@@ -9,6 +9,7 @@ export interface User {
   firstName: string
   lastName: string
   editingInfo: string[]
+  userInfoUpdateRequests: string[]
 }
 
 // Décrit le state général du store user

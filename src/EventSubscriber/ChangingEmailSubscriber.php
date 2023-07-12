@@ -64,21 +64,21 @@ class ChangingEmailSubscriber implements EventSubscriberInterface
             $log->getValue(),
             $this->translator->trans('emails.request.changing_email_validation.subject', [], 'prehome'),
             $this->twig->render('mails/request.changing_email_validation.html.twig', [
-                'username'         => $user->getLastName() . " " . $user->getFirstName(),
+                'username' => $user->getLastName() . " " . $user->getFirstName(),
                 'confirmation_url' => $confirmation_url,
-                'newEmail'         => $log->getValue(),
-                'oldEmail'         => $log->getOldValue(),
+                'newEmail' => $log->getValue(),
+                'oldEmail' => $log->getOldValue(),
             ])
         );
         $this->mailerProvider->send(
             $this->parameterBag->get('mail_from'),
-            $log->getValue(),
+            $log->getOldValue(),
             $this->translator->trans('emails.request.changing_email_information.subject', [], 'prehome'),
             $this->twig->render('mails/request.changing_email_information.html.twig', [
-                'username'         => $user->getLastName() . " " . $user->getFirstName(),
+                'username' => $user->getLastName() . " " . $user->getFirstName(),
                 'confirmation_url' => $confirmation_url,
-                'newEmail'         => $log->getValue(),
-                'oldEmail'         => $log->getOldValue(),
+                'newEmail' => $log->getValue(),
+                'oldEmail' => $log->getOldValue(),
             ])
         );
     }

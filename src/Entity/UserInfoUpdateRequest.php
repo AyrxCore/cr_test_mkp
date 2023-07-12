@@ -5,18 +5,18 @@ namespace App\Entity;
 use App\Repository\UserInfoUpdateRequestRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserInfoUpdateRequestRepository::class)]
 class UserInfoUpdateRequest
 {
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true)]
+    #[ORM\ManyToOne(inversedBy: 'userInfoUpdateRequests')]
     private ?User $_user = null;
 
     #[ORM\ManyToOne]
@@ -24,12 +24,15 @@ class UserInfoUpdateRequest
     private ?Account $account = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['simpleUser'])]
     private ?string $attribute = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['simpleUser'])]
     private ?string $value = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['simpleUser'])]
     private ?string $oldValue = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -42,6 +45,7 @@ class UserInfoUpdateRequest
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[Groups(['simpleUser'])]
     private ?bool $isIso = null;
 
     #[ORM\Column(nullable: true)]
@@ -109,7 +113,7 @@ class UserInfoUpdateRequest
     }
 
     /**
-     * @param  string|null  $oldValue
+     * @param string|null $oldValue
      */
     public function setOldValue(?string $oldValue): void
     {

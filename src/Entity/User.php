@@ -86,6 +86,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $emailChangingRequestedAt = null;
 
+    #[ORM\OneToMany(mappedBy: '_user', targetEntity: UserInfoUpdateRequest::class)]
+    #[Groups(['simpleUser'])]
+    private Collection $userInfoUpdateRequests;
+
     public function __construct()
     {
         $this->accounts = new ArrayCollection();
@@ -400,5 +404,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->emailChangingRequestedAt = $emailChangingRequestedAt;
 
         return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getUserInfoUpdateRequests(): Collection
+    {
+        return $this->userInfoUpdateRequests;
+    }
+
+    /**
+     * @param Collection $userInfoUpdateRequests
+     */
+    public function setUserInfoUpdateRequests(Collection $userInfoUpdateRequests): void
+    {
+        $this->userInfoUpdateRequests = $userInfoUpdateRequests;
     }
 }

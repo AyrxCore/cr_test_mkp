@@ -10,52 +10,21 @@ use App\Entity\Account;
 use App\Entity\UserInfoUpdateRequest;
 use App\Events\ChangingEmailEvent;
 use App\Events\UserInfoUpdateEvent;
-use App\Service\MailerProvider;
 use App\Service\UpplerAccountService;
 use Doctrine\ORM\EntityManagerInterface;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
-use Twig\Environment;
-
 
 class SubAccountPersister implements ContextAwareDataPersisterInterface
 {
-
-    #[Required]
-    public Environment $twig;
-
-    #[Required]
-    public MailerProvider $mailerProvider;
-
-    #[Required]
-    public ParameterBagInterface $parameterBag;
-
     #[Required]
     public EntityManagerInterface $em;
-
-    #[Required]
-    public UserPasswordHasherInterface $userPasswordHasher;
-
-    #[Required]
-    public NormalizerInterface $normalizer;
 
     #[Required]
     public UpplerAccountService $upplerAccountService;
 
     #[Required]
-    public RequestStack $requestStack;
-
-    #[Required]
     public EventDispatcherInterface $eventDispatcher;
-
-    #[Required]
-    public JWTTokenManagerInterface $JWTTokenManager;
 
     public function supports($data, array $context = []): bool
     {
@@ -63,7 +32,7 @@ class SubAccountPersister implements ContextAwareDataPersisterInterface
     }
 
     /**
-     * @param  SubAccount  $data
+     * @param SubAccount $data
      */
     public function persist($data, array $context = [])
     {
@@ -75,9 +44,9 @@ class SubAccountPersister implements ContextAwareDataPersisterInterface
             $this->em->persist($user);
 
             $log = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy([
-                '_user'     => $user,
+                '_user' => $user,
                 'attribute' => 'email',
-                'isIso'     => 'false',
+                'isIso' => 'false',
             ]);
             if (!$log) {
                 $log = new UserInfoUpdateRequest();
@@ -109,9 +78,9 @@ class SubAccountPersister implements ContextAwareDataPersisterInterface
         ) {
             if (null !== $data->getLastName() && $user->getLastName() !== $data->getLastName()) {
                 $log = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy([
-                    '_user'     => $user,
+                    '_user' => $user,
                     'attribute' => 'lastname',
-                    'isIso'     => 'false',
+                    'isIso' => 'false',
                 ]);
                 if (!$log) {
                     $log = new UserInfoUpdateRequest();
@@ -127,9 +96,9 @@ class SubAccountPersister implements ContextAwareDataPersisterInterface
             }
             if (null !== $data->getFirstName() && $user->getFirstName() !== $data->getFirstName()) {
                 $log = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy([
-                    '_user'     => $user,
+                    '_user' => $user,
                     'attribute' => 'firstname',
-                    'isIso'     => 'false',
+                    'isIso' => 'false',
                 ]);
                 if (!$log) {
                     $log = new UserInfoUpdateRequest();
@@ -145,12 +114,13 @@ class SubAccountPersister implements ContextAwareDataPersisterInterface
             }
             if (null !== $data->getPhone() && $account->getPhone() !== $data->getPhone()) {
                 $log = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy([
-                    'account'   => $account,
+                    'account' => $account,
                     'attribute' => 'phone',
-                    'isIso'     => 'false',
+                    'isIso' => 'false',
                 ]);
                 if (!$log) {
                     $log = new UserInfoUpdateRequest();
+                    $log->setUser($user);
                     $log->setAccount($account);
                     $log->setAttribute('phone');
                     $log->setIsIso(false);
@@ -189,5 +159,4 @@ class SubAccountPersister implements ContextAwareDataPersisterInterface
     {
         // TODO: Implement remove() method.
     }
-
 }

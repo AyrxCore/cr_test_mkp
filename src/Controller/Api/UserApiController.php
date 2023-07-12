@@ -20,17 +20,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/api/user')]
 class UserApiController extends AbstractController
 {
-
     #[Required]
     public RequestStack $requestStack;
 
@@ -53,26 +50,21 @@ class UserApiController extends AbstractController
     public JWTTokenManagerInterface $JWTTokenManager;
 
     #[Route('/email-change/{token}', name: 'changing_email_action')]
-    public function emailChanging(
-        Request $request,
-        EntityManagerInterface $em,
-        TranslatorInterface $translator,
-        string $token
-    ) {
-
-        $log=$em->getRepository(UserInfoUpdateRequest::class)->findOneBy(['emailChangingToken' => $token]);
-        $user=$log->getUser();
+    public function emailChanging(string $token)
+    {
+        $log = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy(['emailChangingToken' => $token]);
+        $user = $log->getUser();
         $event = new UserInfoUpdateEvent($user);
         $this->eventDispatcher->dispatch($event);
         $log = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy([
-            '_user'     => $user,
+            '_user' => $user,
             'attribute' => 'email',
-            'isIso'     => 'false',
+            'isIso' => 'false',
         ]);
         if ($log) {
             $user->setEmail($log->getValue());
-            $em->persist($user);
-            $em->flush();
+            $this->em->persist($user);
+            $this->em->flush();
         }
 
         $response = new Response();
@@ -87,13 +79,13 @@ class UserApiController extends AbstractController
         $session = $this->requestStack->getSession();
         $session->start();
 
-        $buyerDatas = $this->upplerBuyerCompanyService->getUserBuyerDatas();
-        $subAccountDatas = $this->upplerAccountService->getUserSubAccountDatas();
+        $buyerData = $this->upplerBuyerCompanyService->getUserBuyerDatas();
+        $subAccountData = $this->upplerAccountService->getUserSubAccountDatas();
         $user = $normalizer->normalize($this->getUser(), 'json', ['groups' => 'simpleUser']);
         $account = $normalizer->normalize($session->get('account'), 'json', ['groups' => 'simpleUser']);
         $user['account'] = $account;
-        $user['account']['subaccount'] = $subAccountDatas;
-        $user['account']['buyer'] = $buyerDatas;
+        $user['account']['subaccount'] = $subAccountData;
+        $user['account']['buyer'] = $buyerData;
         return new JsonResponse($user);
     }
 
@@ -153,7 +145,7 @@ class UserApiController extends AbstractController
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher,
         EntityManagerInterface $em
-    ) {
+    ): JsonResponse {
         $datas = json_decode($request->getContent());
         /**@var User $user */
         $user = $this->getUser();
@@ -172,5 +164,4 @@ class UserApiController extends AbstractController
         $em->flush();
         return new JsonResponse(['password changed'], Response::HTTP_OK);
     }
-
 }

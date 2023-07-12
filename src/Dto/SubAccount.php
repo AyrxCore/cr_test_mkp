@@ -6,8 +6,6 @@ namespace App\Dto;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\ORM\Mapping as ORM;
-use phpDocumentor\Reflection\Types\Scalar;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -17,11 +15,11 @@ use Symfony\Component\Validator\Constraints as Assert;
         'get',
         'update' => [
             "openapi_context" => [
-                'summary'     => 'Editer un account',
+                'summary' => 'Editer un account',
                 'description' => "Permet d'enregistrer des modifications dans un account uppler",
             ],
-            "method"          => "PATCH",
-            "validate"        => true,
+            "method" => "PATCH",
+            "validate" => true,
         ],
     ]
 )]
@@ -40,7 +38,6 @@ final class SubAccount
     #[Assert\Type("string", message: "(firstname) string required")]
     private ?string $firstName = null;
 
-    #[Assert\Type("string", message: "(phone) string required")]
     private ?string $phone = '';
 
     #[Assert\Type("integer", message: "(shipping_address_id) Integer required")]
@@ -103,7 +100,7 @@ final class SubAccount
         return $this->phone;
     }
 
-    public function setPhone(string $phone): self
+    public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
 
