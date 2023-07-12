@@ -35,7 +35,7 @@
       <LoadingComponent v-if="isLoading" />
       <div v-else>
         <div
-          v-if="favorites && favorites.length === 0"
+          v-if="favorites.length === 0"
           class="mt-5 flex flex-row flex-wrap justify-center rounded-lg bg-white py-2 text-sm text-gray-600 md:text-base lg:text-lg"
         >
           Aucune liste de favori n'a été créée
@@ -65,7 +65,6 @@ import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import { storeToRefs } from 'pinia'
 import { useAlertStore } from '@/vuejs/stores/alert'
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
-import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 import { useUserStore } from '@/vuejs/stores/user'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 

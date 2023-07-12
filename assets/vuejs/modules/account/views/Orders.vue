@@ -25,9 +25,8 @@
       <div v-else>
         <div
           v-if="orderStore.orders.length === 0"
-          class="flex w-10/12 items-center justify-center rounded-lg bg-orange-400 p-5 text-white"
+          class="mt-5 flex flex-row flex-wrap justify-center rounded-lg bg-white py-2 text-sm text-gray-600 md:text-base lg:text-lg"
         >
-          <InformationIconComponent class="mr-2 fill-orange-400" />
           Vous n'avez pas encore passé de commande
         </div>
         <orderComponent

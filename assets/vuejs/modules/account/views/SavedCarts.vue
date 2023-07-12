@@ -25,16 +25,24 @@
           classes="loader-xl loader"
         />
       </div>
-      <div v-else class="flex flex-row flex-wrap justify-between">
-        <SavedCartComponent
-          v-for="(savedCart, key) in savedCarts"
-          :key="key"
-          :saved-cart="savedCart"
-          @cancel="showFormSavedCart = false"
-          @submit="onSubmit"
-          @delete="onDelete"
-          @add-to-cart="onAddToCart"
-        />
+      <div v-else>
+        <div
+          v-if="savedCarts.length === 0"
+          class="mt-5 flex flex-row flex-wrap justify-center rounded-lg bg-white py-2 text-sm text-gray-600 md:text-base lg:text-lg"
+        >
+          Aucun panier n'a été sauvegardé
+        </div>
+        <div v-else class="flex flex-row flex-wrap justify-between">
+          <SavedCartComponent
+            v-for="(savedCart, key) in savedCarts"
+            :key="key"
+            :saved-cart="savedCart"
+            @cancel="showFormSavedCart = false"
+            @submit="onSubmit"
+            @delete="onDelete"
+            @add-to-cart="onAddToCart"
+          />
+        </div>
       </div>
     </template>
   </AccountPage>

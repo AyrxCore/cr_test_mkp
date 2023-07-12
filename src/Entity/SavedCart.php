@@ -28,7 +28,7 @@ use Symfony\Component\Uid\Uuid;
             ],
             'method' => 'POST',
             'validate' => true,
-            'path' => '/saved-carts/create',
+            'path' => '/saved-carts',
         ],
     ],
     itemOperations: [
