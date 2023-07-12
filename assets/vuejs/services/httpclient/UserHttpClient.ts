@@ -1,12 +1,11 @@
 import BaseClientService from '@/vuejs/services/BaseClientService'
 import {
   AuthenticateResponse,
-  AuthenticateUserDatas,
+  AuthenticateUserData,
   PasswordChangeRequest,
   User,
 } from '@/vuejs/types/User'
 import {
-  AccountDetails,
   AccountEmail,
   DefaultBillingAddressToUpdate,
   DefaultShippingAddressToUpdate,
@@ -14,7 +13,7 @@ import {
 
 export default class UserHttpClient extends BaseClientService {
   public getUserToken<T extends AuthenticateResponse>(
-    userDatas: AuthenticateUserDatas,
+    userDatas: AuthenticateUserData,
   ): Promise<T> {
     return this.apiClient
       .post<T>('authentication/token', {
@@ -51,51 +50,27 @@ export default class UserHttpClient extends BaseClientService {
   public updateUserAccountEmail<T extends User>(
     accountEmail: AccountEmail,
   ): Promise<T> {
-    const response = this.apiClient
+    return this.apiClient
       .patch(`sub_accounts/${accountEmail.id}`, accountEmail)
       .then((response) => {
         return response.data
-      }).catch((res) => {
-          return {err: res.response.data}
-        },
-      )
-    // console.log('response')
-    // console.log(response)
-    // console.log(response['state'])
-    return response
-  }
-
-  public updateUserAccountDetails<T extends User>(
-    id, payload,
-  ): Promise<T> {
-    return this.apiClient
-      .patch(`sub_accounts/${id}`, payload)
-      .then((response) => {
-        response.data
+      })
+      .catch((res) => {
+        return { err: res.response.data }
       })
   }
 
-  public updateUserAccountDetails<T extends User>(
-    id, payload,
-  ): Promise<T> {
-    return this.apiClient
-      .patch(`sub_accounts/${id}`, payload)
-      .then((response) => response.data)
-  }
-
-  public updateUserAccountDetails<T extends User>(
-    id, payload,
-  ): Promise<T> {
+  public updateUserAccountDetails<T extends User>(id, payload): Promise<T> {
     return this.apiClient
       .patch(`sub_accounts/${id}`, payload)
       .then((response) => response.data)
   }
 
   public updateUserPassword<T extends User>(
-    datas: PasswordChangeRequest,
+    data: PasswordChangeRequest,
   ): Promise<T> {
     return this.apiClient
-      .patch(`user/change-password`, datas)
+      .patch('user/change-password', data)
       .then((response) => response.data)
   }
 

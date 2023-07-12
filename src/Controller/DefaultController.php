@@ -17,13 +17,13 @@ class DefaultController extends AbstractController
 
     #[Required]
     public SettingRepository $settingRepository;
-    
+
     #[Route('/', name: 'prehome')]
     #[Route(
-        '/{route}', 
-        name: 'app', 
+        '/{route}',
+        name: 'app',
         requirements: ['route' => '^(?!.*_wdt|_profiler|login|mentions-legales|politique-de-confidentialite|maintenance|api).+']
-        )
+    )
     ]
     public function index(Request $request): Response
     {

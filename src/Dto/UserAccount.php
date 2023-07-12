@@ -6,11 +6,7 @@ namespace App\Dto;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Entity\Account;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -19,33 +15,33 @@ use Symfony\Component\Validator\Constraints as Assert;
     collectionOperations: [
         'create' => [
             "openapi_context" => [
-                'summary'     => 'Déclarer un account Uppler',
+                'summary' => 'Déclarer un account Uppler',
                 'description' => 'Permet de créer un account Uppler sur la marketplace
             en passant toutes les infos de ce compte. Un compte utilisateur est automatiquement créé si nécessaire',
             ],
-            "method"          => "POST",
-            "validate"        => true,
+            "method" => "POST",
+            "validate" => true,
         ],
     ],
     itemOperations: [
-        'get'    => [
+        'get' => [
             "openapi_context" => [
-                'summary'     => 'Editer un account',
+                'summary' => 'Editer un account',
                 'description' => "Permet d'enregistrer des modifications dans un account uppler",
             ],
         ],
         'update' => [
             "openapi_context" => [
-                'summary'     => 'Modifier un account',
+                'summary' => 'Modifier un account',
                 'description' => "Permet d'enregistrer des modifications dans un account uppler",
             ],
-            "method"          => "PATCH",
-            "validate"        => true,
+            "method" => "PATCH",
+            "validate" => true,
         ],
-    ])]
+    ]
+)]
 final class UserAccount
 {
-
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
@@ -101,7 +97,7 @@ final class UserAccount
     private bool $isMarketplace = true;
 
     #[Assert\Type("string", message: "(phone) string required")]
-    private string $phone = '';
+    private ?string $phone = '';
 
     public function getAccountId(): ?Uuid
     {
@@ -204,92 +200,58 @@ final class UserAccount
         return $this->adherentId;
     }
 
-    /**
-     * @param  string  $adherentId
-     */
     public function setAdherentId(string $adherentId): void
     {
         $this->adherentId = $adherentId;
     }
 
-    /**
-     * @return string
-     */
     public function getAdherentName(): string
     {
         return $this->adherentName;
     }
 
-    /**
-     * @param  string  $adherentName
-     */
     public function setAdherentName(string $adherentName): void
     {
         $this->adherentName = $adherentName;
     }
 
-    /**
-     * @return string
-     */
     public function getFirstname(): string
     {
         return $this->firstname;
     }
 
-    /**
-     * @param  string  $firstname
-     */
     public function setFirstname(string $firstname): void
     {
         $this->firstname = $firstname;
     }
 
-    /**
-     * @return string
-     */
     public function getLastname(): string
     {
         return $this->lastname;
     }
 
-    /**
-     * @param  string  $lastname
-     */
     public function setLastname(string $lastname): void
     {
         $this->lastname = $lastname;
     }
 
-    /**
-     * @return bool
-     */
     public function isMarketplace(): bool
     {
         return $this->isMarketplace;
     }
 
-    /**
-     * @param  bool  $isMarketplace
-     */
     public function setIsMarketplace(bool $isMarketplace): void
     {
         $this->isMarketplace = $isMarketplace;
     }
 
-    /**
-     * @return string
-     */
-    public function getPhone(): string
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
 
-    /**
-     * @param  string  $phone
-     */
-    public function setPhone(string $phone): void
+    public function setPhone(?string $phone): void
     {
         $this->phone = $phone;
     }
-
 }

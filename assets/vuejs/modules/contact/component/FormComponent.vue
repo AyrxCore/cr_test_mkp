@@ -124,7 +124,6 @@ import { useContactStore } from '@/vuejs/stores/contact'
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
 import { useAlertStore } from '@/vuejs/stores/alert'
 import { AlertType } from '@/vuejs/types/Alert'
-import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 
 onMounted(async () => {
   await contactStore.init()
