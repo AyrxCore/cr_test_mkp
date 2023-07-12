@@ -91,6 +91,10 @@ class Account
     #[Groups('simpleUser')]
     private ?bool $acceptCGU = false;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups('simpleUser')]
+    private ?string $phone = null;
+
     #[ORM\OneToMany(mappedBy: 'account', targetEntity: Favorite::class)]
     private Collection $favorites;
 
@@ -384,4 +388,17 @@ class Account
 
         return $this;
     }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?string $phone): self
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
 }

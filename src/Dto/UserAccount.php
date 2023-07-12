@@ -100,6 +100,9 @@ final class UserAccount
     #[Assert\Type("bool", message: "(isMarketplace) bool required")]
     private bool $isMarketplace = true;
 
+    #[Assert\Type("string", message: "(phone) string required")]
+    private string $phone = '';
+
     public function getAccountId(): ?Uuid
     {
         return $this->accountId;
@@ -271,6 +274,22 @@ final class UserAccount
     public function setIsMarketplace(bool $isMarketplace): void
     {
         $this->isMarketplace = $isMarketplace;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhone(): string
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param  string  $phone
+     */
+    public function setPhone(string $phone): void
+    {
+        $this->phone = $phone;
     }
 
 }

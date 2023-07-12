@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import {defineStore} from 'pinia'
 import {
   AuthenticateUserDatas,
   PasswordChangeRequest,
@@ -6,17 +6,17 @@ import {
 } from '@/vuejs/types/User'
 
 import UserHttpClient from '@/vuejs/services/httpclient/UserHttpClient'
-import { useAlertStore } from '@/vuejs/stores/alert'
-import { AlertType } from '@/vuejs/types/Alert'
-import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
-import { getErrorMessage } from '@/vuejs/services/login'
-import router, { PageList } from '@/vuejs/router'
-import { useCategoryStore } from '@/vuejs/stores/category'
+import {useAlertStore} from '@/vuejs/stores/alert'
+import {AlertType} from '@/vuejs/types/Alert'
+import {HttpStatusCodes} from '@/vuejs/types/HttpClient'
+import {getErrorMessage} from '@/vuejs/services/login'
+import router, {PageList} from '@/vuejs/router'
 
 export const useUserStore = defineStore({
   id: 'user',
   state: (): UserStoreState => ({
     user: null,
+    editingInfo: [],
   }),
 
   actions: {
@@ -27,10 +27,10 @@ export const useUserStore = defineStore({
         return await UserHttpClient.get().getUserAccounts()
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow(
-            getErrorMessage(error.response.data.message),
-            AlertType.danger,
-          )
+        alertStore.setShow(
+          getErrorMessage(error.response.data.message),
+          AlertType.danger,
+        )
         return []
       }
     },
@@ -40,10 +40,10 @@ export const useUserStore = defineStore({
         await UserHttpClient.get().selectUserAccount(id)
         return true
       } catch (error) {
-          alertStore.setShow(
-            getErrorMessage(error.response.data.message),
-            AlertType.danger,
-          )
+        alertStore.setShow(
+          getErrorMessage(error.response.data.message),
+          AlertType.danger,
+        )
         return false
       }
     },
@@ -53,11 +53,17 @@ export const useUserStore = defineStore({
         this.user = await UserHttpClient.get().getUserMe()
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow('Erreur technique', AlertType.danger)
+        alertStore.setShow('Erreur technique', AlertType.danger)
       }
     },
     setEditingSubAccount(): void {
-      this.user.account.editingSubAccount = { ...this.user.account.subaccount }
+      // this.user.account.editingSubAccount = {...this.user.account.subaccount}
+      this.editingInfo = {
+        'username': this.user.username,
+        'firstName': this.user.firstName,
+        'lastName': this.user.lastName,
+        'phone': this.user.account.phone,
+      }
     },
     async updateUserDefaultBillingAddress(id: number): Promise<void> {
       const alertStore = useAlertStore()
@@ -69,12 +75,12 @@ export const useUserStore = defineStore({
         })
         this.user.account.subaccount.billing_address = id
         alertStore.setShow(
-          "L'adresse de facturation par défaut a été modifiée avec succès",
+          'L\'adresse de facturation par défaut a été modifiée avec succès',
           AlertType.success,
         )
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow('Erreur technique', AlertType.danger)
+        alertStore.setShow('Erreur technique', AlertType.danger)
       }
     },
     async updateUserDefaultShippingAddress(id: number): Promise<void> {
@@ -86,49 +92,42 @@ export const useUserStore = defineStore({
         })
         this.user.account.subaccount.shipping_address = id
         alertStore.setShow(
-          "L'adresse de livraison par défaut a été modifiée avec succès",
+          'L\'adresse de livraison par défaut a été modifiée avec succès',
           AlertType.success,
         )
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow('Erreur technique', AlertType.danger)
+        alertStore.setShow('Erreur technique', AlertType.danger)
       }
     },
     async updateUserAccountEmail(): Promise<void> {
       const alertStore = useAlertStore()
       try {
-        await UserHttpClient.get(true).updateUserAccountEmail({
-          email: this.user.account.editingSubAccount.email,
-          id: this.user.account.editingSubAccount.id,
+        const response = await UserHttpClient.get(true).updateUserAccountEmail({
+          email: this.editingInfo.username,
+          id: this.user.account.id,
         })
-        this.user.account.subaccount.email =
-          this.user.account.editingSubAccount.email
         alertStore.setShow(
-          "L'adresse email de contact a été modifiée avec succès",
+          'La demande de modification d\'email de contact a été engegistrée avec succès',
           AlertType.success,
         )
-        router.push({
-          name: PageList.ACCOUNT,
-        })
       } catch (error) {
-        console.log(error)
         error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow('Erreur technique', AlertType.danger)
+        alertStore.setShow('Erreur technique', AlertType.danger)
       }
     },
     async updateUserAccountDetails(): Promise<void> {
       const alertStore = useAlertStore()
       try {
-        await UserHttpClient.get(true).updateUserAccountDetails({
-          lastName: this.user.account.editingSubAccount.lastname,
-          firstName: this.user.account.editingSubAccount.firstname,
-          phone: this.user.account.editingSubAccount.phone,
-          id: this.user.account.editingSubAccount.id,
+        await UserHttpClient.get(true).updateUserAccountDetails(this.user.account.id, {
+          lastName: this.editingInfo.lastName,
+          firstName: this.editingInfo.firstName,
+          phone: this.editingInfo.phone,
+          id: this.user.account.id,
         })
-        this.user.account.subaccount.lastname =
-          this.user.account.editingSubAccount.lastname
-        this.user.account.subaccount.firstname =
-          this.user.account.editingSubAccount.firstname
+        this.user.lastName = this.editingInfo.lastName
+        this.user.firstName = this.editingInfo.firstName
+        this.user.account.phone = this.editingInfo.phone
         alertStore.setShow(
           'Les détails du profil ont été modifiés avec succès',
           AlertType.success,
@@ -138,7 +137,7 @@ export const useUserStore = defineStore({
         })
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow('Erreur technique', AlertType.danger)
+        alertStore.setShow('Erreur technique', AlertType.danger)
       }
     },
     async logout(): Promise<boolean> {
@@ -164,7 +163,7 @@ export const useUserStore = defineStore({
         })
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow('Erreur technique', AlertType.danger)
+        alertStore.setShow('Erreur technique', AlertType.danger)
       }
     },
   },

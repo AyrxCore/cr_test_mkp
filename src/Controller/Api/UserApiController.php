@@ -3,15 +3,19 @@
 namespace App\Controller\Api;
 
 use App\Entity\Account;
+use App\Entity\UserInfoUpdateRequest;
 use App\Entity\User;
 use App\Events\UserAcceptCGUEvent;
+use App\Events\UserInfoUpdateEvent;
 use App\Service\UpplerAccountService;
 use App\Service\UpplerAuthenticationService;
 use App\Service\UpplerBuyerCompanyService;
 use Doctrine\ORM\EntityManagerInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -21,10 +25,12 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/api/user')]
 class UserApiController extends AbstractController
 {
+
     #[Required]
     public RequestStack $requestStack;
 
@@ -42,6 +48,38 @@ class UserApiController extends AbstractController
 
     #[Required]
     public EventDispatcherInterface $eventDispatcher;
+
+    #[Required]
+    public JWTTokenManagerInterface $JWTTokenManager;
+
+    #[Route('/email-change/{token}', name: 'changing_email_action')]
+    public function emailChanging(
+        Request $request,
+        EntityManagerInterface $em,
+        TranslatorInterface $translator,
+        string $token
+    ) {
+
+        $log=$em->getRepository(UserInfoUpdateRequest::class)->findOneBy(['emailChangingToken' => $token]);
+        $user=$log->getUser();
+        $event = new UserInfoUpdateEvent($user);
+        $this->eventDispatcher->dispatch($event);
+        $log = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy([
+            '_user'     => $user,
+            'attribute' => 'email',
+            'isIso'     => 'false',
+        ]);
+        if ($log) {
+            $user->setEmail($log->getValue());
+            $em->persist($user);
+            $em->flush();
+        }
+
+        $response = new Response();
+        $token = $this->JWTTokenManager->create($user);
+        $response->headers->setCookie(new Cookie('BEARER', $token));
+        return $this->redirect('/account/details');
+    }
 
     #[Route('/me', name: 'get_me')]
     public function me(NormalizerInterface $normalizer): JsonResponse
@@ -134,4 +172,5 @@ class UserApiController extends AbstractController
         $em->flush();
         return new JsonResponse(['password changed'], Response::HTTP_OK);
     }
+
 }

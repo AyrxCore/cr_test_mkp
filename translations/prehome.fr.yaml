@@ -17,3 +17,10 @@ resetting:
 emails:
   request.resetting.subject: "Création du mot de passe de votre Marketplace QANTIS"
   request.first_connexion.subject: "Première connexion"
+
+  request:
+    changing_email_validation:
+      subject: "Marketplace : changement d'adresse email"
+
+    changing_email_information:
+      subject: "Marketplace : changement d'adresse email"

@@ -8,25 +8,28 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use phpDocumentor\Reflection\Types\Scalar;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
+
 #[ApiResource(
     collectionOperations: [],
     itemOperations: [
         'get',
         'update' => [
             "openapi_context" => [
-                'summary' => 'Editer un account',
-                'description' => "Permet d'enregistrer des modifications dans un account uppler"
+                'summary'     => 'Editer un account',
+                'description' => "Permet d'enregistrer des modifications dans un account uppler",
             ],
-            "method" => "PATCH",
-            "validate" => true,
-        ]
+            "method"          => "PATCH",
+            "validate"        => true,
+        ],
     ]
 )]
 final class SubAccount
 {
+
     #[ApiProperty(identifier: true)]
-    private ?int $id = null;
+    private ?Uuid $id = null;
 
     #[Assert\Type("string", message: "(email) string required")]
     private ?string $email = null;
@@ -38,7 +41,7 @@ final class SubAccount
     private ?string $firstName = null;
 
     #[Assert\Type("string", message: "(phone) string required")]
-    private ?string $phone = null;
+    private ?string $phone = '';
 
     #[Assert\Type("integer", message: "(shipping_address_id) Integer required")]
     private ?int $shippingAddressId = null;
@@ -47,12 +50,12 @@ final class SubAccount
     private ?int $billingAddressId = null;
 
 
-    public function getId(): ?int
+    public function getId(): ?Uuid
     {
         return $this->id;
     }
 
-    public function setId(int $id): self
+    public function setId(Uuid $id): self
     {
         $this->id = $id;
 
@@ -130,4 +133,5 @@ final class SubAccount
 
         return $this;
     }
+
 }

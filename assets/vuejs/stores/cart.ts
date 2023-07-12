@@ -47,8 +47,6 @@ export const useCartStore = defineStore({
           variantId,
           quantity,
         })
-
-        notifySuccess('Le produit a été ajouté au panier')
         this.productVariantsInCart.indexOf(variantId) === -1 &&
           this.newlyAddedProducts.push(variantId)
       } catch (error) {

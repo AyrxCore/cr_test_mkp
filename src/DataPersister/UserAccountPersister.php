@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace App\DataPersister;
 
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
-use App\Dto\AccountAccordCadre;
 use App\Dto\UserAccount;
-use App\Entity\AccordStatut;
 use App\Entity\Account;
 use App\Entity\Adherent;
+use App\Entity\UserInfoUpdateRequest;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -71,11 +70,57 @@ class UserAccountPersister implements ContextAwareDataPersisterInterface
             $account = new Account();
         }
 
+        $logEmail = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy([
+            '_user'     => $user,
+            'attribute' => 'email',
+            'isIso'     => false,
+        ]);
+        $logLastname = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy([
+            '_user'     => $user,
+            'attribute' => 'lastname',
+            'isIso'     => false,
+        ]);
+        $logFirstname = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy([
+            '_user'     => $user,
+            'attribute' => 'firstname',
+            'isIso'     => false,
+        ]);
+        $logPhone = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy([
+            'account'   => $account,
+            'attribute' => 'phone',
+            'isIso'     => false,
+        ]);
+
         $user->setAccesMarketPlace($data->isMarketplace());
-        $user->setUsername($data->getEmail());
-        $user->setFirstName($data->getFirstname());
-        $user->setLastName($data->getLastname());
-        $user->setEmail($data->getEmail());
+
+        if (!$logEmail || ($logEmail->getValue() === $data->getEmail())) {
+            $user->setUsername($data->getEmail());
+            $user->setEmail($data->getEmail());
+            if ($logEmail) {
+                $logEmail->setIsIso(true);
+                $logEmail->setIsoAt(new \DateTimeImmutable('now'));
+                $this->em->persist($logEmail);
+            }
+        }
+
+        if (!$logFirstname || ($logFirstname->getValue() === $data->getFirstname())) {
+            $user->setFirstName($data->getFirstname());
+            if ($logFirstname) {
+                $logFirstname->setIsIso(true);
+                $logFirstname->setIsoAt(new \DateTimeImmutable('now'));
+                $this->em->persist($logFirstname);
+            }
+        }
+
+        if (!$logLastname || ($logLastname->getValue() === $data->getLastname())) {
+            $user->setLastName($data->getLastname());
+            if ($logLastname) {
+                $logLastname->setIsIso(true);
+                $logLastname->setIsoAt(new \DateTimeImmutable('now'));
+                $this->em->persist($logLastname);
+            }
+        }
+
         $this->em->persist($user);
 
 
@@ -86,8 +131,17 @@ class UserAccountPersister implements ContextAwareDataPersisterInterface
         $account->setUpplerCompanyId($data->getUpplerCompanyId());
         $account->setUser($user);
         $account->setIsEnabled(true);
-
         $account->setAdherent($adh);
+
+        if (!$logPhone || ($logPhone->getValue() === $data->getPhone())) {
+            $account->setPhone($data->getPhone());
+            if ($logPhone) {
+                $logPhone->setIsIso(true);
+                $logPhone->setIsoAt(new \DateTimeImmutable('now'));
+                $this->em->persist($logPhone);
+            }
+        }
+
         $this->em->persist($account);
 
         $this->em->flush();

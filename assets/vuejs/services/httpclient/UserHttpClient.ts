@@ -51,8 +51,43 @@ export default class UserHttpClient extends BaseClientService {
   public updateUserAccountEmail<T extends User>(
     accountEmail: AccountEmail,
   ): Promise<T> {
-    return this.apiClient
+    const response = this.apiClient
       .patch(`sub_accounts/${accountEmail.id}`, accountEmail)
+      .then((response) => {
+        return response.data
+      }).catch((res) => {
+          return {err: res.response.data}
+        },
+      )
+    // console.log('response')
+    // console.log(response)
+    // console.log(response['state'])
+    return response
+  }
+
+  public updateUserAccountDetails<T extends User>(
+    id, payload,
+  ): Promise<T> {
+    return this.apiClient
+      .patch(`sub_accounts/${id}`, payload)
+      .then((response) => {
+        response.data
+      })
+  }
+
+  public updateUserAccountDetails<T extends User>(
+    id, payload,
+  ): Promise<T> {
+    return this.apiClient
+      .patch(`sub_accounts/${id}`, payload)
+      .then((response) => response.data)
+  }
+
+  public updateUserAccountDetails<T extends User>(
+    id, payload,
+  ): Promise<T> {
+    return this.apiClient
+      .patch(`sub_accounts/${id}`, payload)
       .then((response) => response.data)
   }
 

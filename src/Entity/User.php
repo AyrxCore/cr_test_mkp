@@ -80,6 +80,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?bool $accesMarketPlace = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $emailChangingToken = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $emailChangingRequestedAt = null;
+
     public function __construct()
     {
         $this->accounts = new ArrayCollection();
@@ -368,6 +374,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAccesMarketPlace(bool $accesMarketPlace): self
     {
         $this->accesMarketPlace = $accesMarketPlace;
+
+        return $this;
+    }
+
+    public function getEmailChangingToken(): ?string
+    {
+        return $this->emailChangingToken;
+    }
+
+    public function setEmailChangingToken(?string $emailChangingToken): self
+    {
+        $this->emailChangingToken = $emailChangingToken;
+
+        return $this;
+    }
+
+    public function getEmailChangingRequestedAt(): ?\DateTimeInterface
+    {
+        return $this->emailChangingRequestedAt;
+    }
+
+    public function setEmailChangingRequestedAt(?\DateTimeInterface $emailChangingRequestedAt): self
+    {
+        $this->emailChangingRequestedAt = $emailChangingRequestedAt;
 
         return $this;
     }

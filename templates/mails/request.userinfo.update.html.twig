@@ -1,0 +1,31 @@
+<h2>{{ objet }}</h2>
+<p></p>
+<p>Informations Utilisateurs:</p>
+<ul>
+    {% if logs.email %}
+        <li><strong>Email: {{ logs.email.value }}</strong> ({{ logs.email.oldValue }})</li>
+    {% else %}
+        <li>Email: {{ email }}</li>
+    {% endif %}
+
+    {% if logs.firstname %}
+        <li><strong>Prénom: {{ logs.firstname.value }}</strong> ({{ logs.firstname.oldValue }})</li>
+    {% else %}
+        <li>Prénom: {{ firstname }}</li>
+    {% endif %}
+
+    {% if logs.lastname %}
+        <li><strong>Nom: {{ logs.lastname.value }}</strong> ({{ logs.lastname.oldValue }})</li>
+    {% else %}
+        <li>Nom: {{ lastname }}</li>
+    {% endif %}
+
+    {% if logs.phone %}
+        <li><strong>Téléphone: {{ logs.phone.value }}</strong> ({{ logs.phone.oldValue }})</li>
+    {% else %}
+        <li>Téléphone: {{ phone }}</li>
+    {% endif %}
+
+    <li>Société: {{ adherentName }} (<a href="{{ sugarLink }}" target="_blank">Voir dans SugarCRM</a>)
+    </li>
+</ul>

@@ -44,3 +44,26 @@ export interface SellerPromotion {
     amount_operator: string
   }
 }
+
+export interface SellerPromotion {
+  id: number
+  name: {
+    fr: string
+    default: string
+  }
+  conditions: [
+    {
+      id: number
+      apply_type: string
+      apply_value: number
+    },
+  ]
+  state: string
+  order_eligibility: {
+    id: number
+    operator: string
+    amount: number
+    amount_type: string
+    amount_operator: string
+  }
+}
