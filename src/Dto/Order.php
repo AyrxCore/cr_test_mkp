@@ -30,6 +30,14 @@ use DateTimeInterface;
 )]
 final class Order
 {
+    public const ORDER_NEW = 'NEW';
+    public const ORDER_PENDING = 'PENDING';
+    public const ORDER_CONFIRMED = 'CONFIRMED';
+    public const ORDER_EDITED = 'EDITED';
+    public const ORDER_REFUSED = 'REFUSED';
+    public const ORDER_EXPIRED = 'EXPIRED';
+    public const ORDER_CANCELED = 'CANCELED';
+
     #[ApiProperty(identifier: true)]
     private ?int $id = null;
     private string $orderNumber;

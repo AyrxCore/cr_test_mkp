@@ -66,7 +66,8 @@
                     (newFavorite === null || newFavorite === '')
                   "
                   :is-loading="addProductToFavoriteLoading"
-                  >Ajouter
+                >
+                  {{ addButtonName }}
                 </ButtonComponent>
                 <ButtonComponent
                   type="button"
@@ -87,10 +88,8 @@ import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.v
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
-import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
-import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
-import { arrayEqual, notifySuccess } from '@/vuejs/services/utils'
+import { computed, ref } from 'vue'
+import { arrayEqual } from '@/vuejs/services/utils'
 
 const props = defineProps({
   productId: {
@@ -146,6 +145,14 @@ const handleChange = () => {
     currentSelectedFavorites.value,
   )
 }
+
+const addButtonName = computed(() => {
+  return (newSelectedFavorites.value.length === 0 &&
+    currentSelectedFavorites.value.length > 0) ||
+    newSelectedFavorites.value.length < currentSelectedFavorites.value.length
+    ? 'Retirer'
+    : 'Ajouter'
+})
 
 const addProductToFavorite = async () => {
   isLoading.value = true

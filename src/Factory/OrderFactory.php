@@ -33,7 +33,7 @@ class OrderFactory
         $country = $billingAddress->country->name->default;
         $billingAddress = sprintf("%s %s %s, %s", $billingAddress->street, $billingAddress->postcode, $billingAddress->city, $country);
         $order->setBillingAddress($billingAddress);
-        if ($remoteOrder->payment_state === 'payout') {
+        if ($remoteOrder->state === strtolower(Order::ORDER_CONFIRMED)) {
             $order->setPaymentId($remoteOrder->payment->id);
         }
 
