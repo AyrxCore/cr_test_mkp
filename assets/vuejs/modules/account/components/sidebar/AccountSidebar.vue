@@ -1,53 +1,16 @@
 <template>
   <AccountSidebarBlock
     :items="[
-      // {
-      //   name: 'Historiques de commandes',
-      //   id: AccountPageList.ORDERS_HISTORY,
-      //   url: AccountPageList.ORDERS_HISTORY,
-      // },
-      // { name: 'Factures', id: '', url: AccountPageList.ORDERS_HISTORY },
-      {
-        name: 'Paniers sauvegardés',
-        id: AccountPageList.SAVED_CARTS,
-        url: AccountPageList.SAVED_CARTS,
-      },
-      // {
-      //   name: 'Bons de livraison',
-      //   id: '',
-      //   url: AccountPageList.ORDERS_HISTORY,
-      // },
-      // {
-      //   name: 'Validation de commandes',
-      //   id: AccountPageList.ORDERS_VALIDATION,
-      //   url: AccountPageList.ORDERS_VALIDATION,
-      // },
-    ]"
-    :title="'Mes Commandes'"
-  />
-  <AccountSidebarBlock
-    :items="[
       {
         name: 'Historiques de commandes',
         id: AccountPageList.ORDERS,
         url: AccountPageList.ORDERS,
       },
-      // { name: 'Factures', id: '', url: AccountPageList.ORDERS },
       {
         name: 'Paniers sauvegardés',
         id: AccountPageList.SAVED_CARTS,
         url: AccountPageList.SAVED_CARTS,
       },
-      // {
-      //   name: 'Bons de livraison',
-      //   id: '',
-      //   url: AccountPageList.ORDERS,
-      // },
-      // {
-      //   name: 'Validation de commandes',
-      //   id: AccountPageList.ORDERS_VALIDATION,
-      //   url: AccountPageList.ORDERS_VALIDATION,
-      // },
     ]"
     :title="'Mes Commandes'"
   />
