@@ -349,7 +349,7 @@ class UpplerProductService extends HttpClientProvider
         $product->setSlug($remoteProduct->slug->default);
         $favorites = $this->em->getRepository(Favorite::class)->getFavoritesByAccountAndProductId($account, $remoteProduct->id);
         $product->setFavorites($favorites);
-        $this->populatePropertiesAndSetIfIsAccordCadre($remoteProduct, $product);
+        $this->hydratePropertiesAndSetIfIsAccordCadre($remoteProduct, $product);
         $categories = [];
 
         foreach ($remoteProduct->categories as $category) {
@@ -379,22 +379,27 @@ class UpplerProductService extends HttpClientProvider
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    private function populatePropertiesAndSetIfIsAccordCadre($remoteProduct, Product $product)
+    private function hydratePropertiesAndSetIfIsAccordCadre($remoteProduct, Product $product): void
     {
         $properties = [];
         $isAccordCadre = false;
         foreach ($remoteProduct->properties as $property) {
+            $propertyValue = $property->value;
+            if ($propertyValue === Product::HOME_SELECTION || $propertyValue === Product::HOME_TOP_VENTE) {
+                continue;
+            }
+
             if ('accord_cadre' === $property->property->name->default) {
                 $isAccordCadre = true;
             }
 
             if (isset($property->property->type) && $property->property->type === "checkbox") {
                 $propertyValue = $property->value == 1 ? "OUI" : "NON";
-            } else {
-                $propertyValue = $property->value;
             }
+
             $properties[$property->property->name->fr] = $propertyValue;
         }
+
         $product->setProperties($properties);
         $product->setIsAccordCadre($isAccordCadre);
     }

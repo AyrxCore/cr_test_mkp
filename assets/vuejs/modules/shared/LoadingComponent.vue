@@ -49,8 +49,8 @@
   float: left;
   margin-left: 9px;
   border-radius: 100%;
-  width: 10px;
-  height: 10px;
+  width: 15px;
+  height: 15px;
   background: #fff;
   animation: pop 1s infinite alternate;
   transform: scale(0);

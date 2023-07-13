@@ -28,7 +28,7 @@ class SavedCartProduct
 
     #[ORM\Column(length: 255)]
     #[Groups(['savedCart:get'])]
-    private ?string $UpplerProductName = null;
+    private ?string $upplerProductName = null;
 
     #[ORM\Column]
     #[Groups(['savedCart:get'])]
@@ -69,12 +69,12 @@ class SavedCartProduct
 
     public function getUpplerProductName(): ?string
     {
-        return $this->UpplerProductName;
+        return $this->upplerProductName;
     }
 
-    public function setUpplerProductName(string $UpplerProductName): self
+    public function setUpplerProductName(string $upplerProductName): self
     {
-        $this->UpplerProductName = $UpplerProductName;
+        $this->upplerProductName = $upplerProductName;
 
         return $this;
     }

@@ -246,7 +246,8 @@
       <!-- Fin Bloc description -->
 
       <!-- Bloc Caractéristiques techniques -->
-      <div class="mt-10 justify-center">
+
+      <div v-if="product.properties.length !== 0" class="mt-10 justify-center">
         <h3 class="home-subtitle mb-5 text-primary">
           Caractéristiques techniques
         </h3>
@@ -256,11 +257,6 @@
               v-for="(property, key, index) in product.properties"
               :key="index"
               class="border text-sm text-primary md:text-base lg:text-lg"
-              :class="{
-                hidden:
-                  property === 'home-top-vente' ||
-                  property === 'home-selection',
-              }"
             >
               <td class="w-[20%] border p-2">{{ key }}</td>
               <td class="p-2">
@@ -276,12 +272,18 @@
       <!-- Fin du bloc caractéristiques techniques -->
 
       <!-- Bloc produits similaire -->
-      <div v-if="similarProducts.length > 0" class="mt-10 justify-center">
-        <h3 class="home-subtitle text-primary">
-          Produits de la même catégorie
-        </h3>
-        <ProductsCarouselComponent :products="similarProducts" class="mt-4" />
+      <h3 class="home-subtitle mt-10 text-primary">
+        Produits de la même catégorie
+      </h3>
+      <ProductsLoadingCarouselComponent
+        v-if="similarProducts.length === 0 && isLoadingSimilarProducts"
+      />
+      <div v-else>
+        <div v-if="similarProducts.length > 0" class="mt-10 justify-center">
+          <ProductsCarouselComponent :products="similarProducts" class="mt-4" />
+        </div>
       </div>
+
       <!-- Fin bloc produits similaire -->
     </div>
     <div
@@ -321,6 +323,7 @@ import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
 import ProductQuantityComponent from '../../shared/ProductQuantityComponent.vue'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
+import ProductsLoadingCarouselComponent from '@/vuejs/modules/shared/ProductsLoadingCarouselComponent.vue'
 
 const route = useRoute()
 const productStore = useProductStore()
@@ -331,6 +334,7 @@ const thumbsSwiper = ref(null)
 const isLoading = ref<boolean>(false)
 const product = ref<Product>()
 const isLoadingPrice = ref<boolean>(false)
+const isLoadingSimilarProducts = ref<boolean>(false)
 const similarProducts = ref<Product[]>([])
 
 onMounted(async () => {
@@ -377,10 +381,14 @@ watch(
   () => route.params.id as string,
   async (id: string) => {
     isLoading.value = true
+    isLoadingSimilarProducts.value = true
     try {
       const productId = id.split('-')
       const formattedProductId = parseInt(productId[productId.length - 1])
+
       product.value = await productStore.findProductById(formattedProductId)
+      isLoading.value = false
+
       if (product.value.categories.length > 0) {
         const categoryId =
           product.value.categories[product.value.categories.length - 1].id
@@ -389,8 +397,7 @@ watch(
           formattedProductId,
         )
       }
-
-      isLoading.value = false
+      isLoadingSimilarProducts.value = false
     } catch (error) {
     } finally {
       isLoading.value = false

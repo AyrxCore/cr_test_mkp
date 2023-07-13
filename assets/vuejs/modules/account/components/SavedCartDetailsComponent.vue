@@ -5,10 +5,15 @@
     <div class="flex md:w-8/12 lg:w-9/12">
       <div class="flex w-6/12 md:w-3/12">
         <img
+          v-if="productImage"
           :src="productImage"
           alt="Image produit"
           class="flex h-full w-full max-w-max cursor-pointer items-center"
         />
+        <div
+          v-else
+          class="loading flex h-[116px] w-full items-center justify-center rounded-lg px-6 py-2"
+        ></div>
       </div>
       <div class="flex w-6/12 flex-col md:ml-5 md:w-7/12">
         <RouterLink
@@ -31,7 +36,7 @@
     >
       <div class="flex">
         <ProductQuantityComponent
-          :quantity="savedCartProduct.quantity"
+          :quantity="quantity"
           @update-quantity="changeQuantity"
         />
       </div>
@@ -52,24 +57,24 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue'
-import { formatPrice, getImage } from '@/vuejs/services/utils'
-import sampleImg from '@/vuejs/assets/img/sample_product_img.png'
+import { computed, onMounted, PropType, ref } from 'vue'
+import { formatPrice } from '@/vuejs/services/utils'
 import { Product } from '@/vuejs/types/Product'
 import { useProductStore } from '@/vuejs/stores/product'
 import { PageList } from '@/vuejs/router'
 import ProductQuantityComponent from '../../shared/ProductQuantityComponent.vue'
+import { SavedCartProduct } from '@/vuejs/types/SavedCart'
 
 const productStore = useProductStore()
 const product = ref<Product>()
 const variantData = ref()
 const productNotFound = ref(false)
-
+const quantity = ref()
 const emit = defineEmits(['changeQuantity'])
 const props = defineProps({
   savedCartProduct: {
     required: true,
-    type: Object,
+    type: Object as PropType<SavedCartProduct>,
   },
 })
 
@@ -86,24 +91,26 @@ onMounted(async (): Promise<void> => {
       )
     }
   }
+  quantity.value = props.savedCartProduct.quantity
 })
 
 const changeQuantity = async (event) => {
-  props.savedCartProduct.quantity = event.quantity
+  quantity.value = event.quantity
+
   await emit('changeQuantity', {
     variantId: props.savedCartProduct.upplerVariantId,
-    quantity: props.savedCartProduct.quantity,
+    quantity: quantity.value,
   })
 }
 
 const productImage = computed((): string => {
-  return product.value ? product.value.images[0] : getImage(sampleImg)
+  return product.value ? product.value.images[0] : null
 })
 
 const productId = computed(() => {
   return product.value
     ? { id: product.value.slug + '-' + product.value.id }
-    : ''
+    : props.savedCartProduct.upplerProductId
 })
 
 const productName = computed((): string => {
@@ -118,13 +125,13 @@ const productReference = computed((): string => {
 
 const productPrice = computed((): number | string => {
   let price = 0
+
   if (variantData.value) {
-    price =
-      (variantData.value.price?.display_price / 100) *
-      props.savedCartProduct.quantity
+    price = (variantData.value.price?.display_price / 100) * quantity.value
   } else if (product.value) {
-    price = product.value.price * props.savedCartProduct.quantity
+    price = product.value.price * quantity.value
   }
+
   return formatPrice(price)
 })
 
