@@ -1,15 +1,7 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <div
-        v-if="isLoading"
-        class="mt-5 flex h-20 w-full items-center justify-center"
-      >
-        <LoaderSharedComponent
-          class="text-secondary"
-          classes="loader-xl loader"
-        />
-      </div>
+      <LoadingComponent v-if="isLoading" />
       <div v-else-if="showAlert" class="lg:w-5/6">
         <AlertSharedComponent
           class="bg-red-200 text-red-800 dark:bg-red-200 dark:text-red-800"
@@ -32,6 +24,13 @@
           et/ou un état différent parce qu’ils sont expédiés dans un emballage
           distinct.
         </p>
+        <div
+          v-if="order.paymentId"
+          class="mt-5 flex flex-wrap items-center justify-center rounded-lg bg-white py-2 text-sm font-bold text-primary md:text-base lg:text-lg"
+        >
+          <span class="mr-1">Télécharger la facture: </span>
+          <ButtonDownloadInvoiceComponent :payment-id="order.paymentId" />
+        </div>
         <div class="mt-5 flex w-full rounded-lg bg-white p-5">
           <div
             class="mr-5 flex flex-col items-end justify-center space-y-4 text-gray-500"
@@ -61,7 +60,7 @@
             </div>
             <div>
               <span class="flex text-gray-500"
-                >({{ formatPrice(order.total) }} € TTC)</span
+                >{{ formatPrice(order.total) }} € TTC</span
               >
             </div>
           </div>
@@ -116,7 +115,7 @@
                 class="mr-2 flex flex-col items-end justify-center space-y-3 text-sm text-gray-500"
               >
                 <div>Sous-total HT:</div>
-                <div>Faris de livraison HT:</div>
+                <div>Frais de livraison HT:</div>
                 <div>Total TTC:</div>
               </div>
               <div
@@ -148,6 +147,8 @@ import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vu
 import { AccountPageList } from '@/vuejs/router/pages-list'
 import ArrowLeftIconComponent from '@/vuejs/App.vue'
 import OrderDetailsComponent from '@/vuejs/modules/account/components/OrderDetailsComponent.vue'
+import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
+import ButtonDownloadInvoiceComponent from '@/vuejs/modules/account/components/ButtonDownloadInvoiceComponent.vue'
 
 const route = useRoute()
 const orderStore = useOrderStore()

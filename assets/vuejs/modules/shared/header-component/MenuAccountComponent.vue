@@ -69,18 +69,10 @@ const props = defineProps({
 })
 
 const listAccount = ref<any[]>([
-  // {
-  //   label: 'Historique des commandes',
-  //   url: '/app/account/orders-history',
-  // },
-  // {
-  //   label: 'Mes factures',
-  //   url: '/app/account/orders-history',
-  // },
-  // {
-  //   label: 'Bons de livraison',
-  //   url: '/app/account/orders-history',
-  // },
+  {
+    label: 'Historique des commandes',
+    routeName: AccountPageList.ORDERS,
+  },
   {
     label: 'Mes coordonnées',
     routeName: AccountPageList.ACCOUNT,
@@ -93,10 +85,6 @@ const listAccount = ref<any[]>([
     label: 'Paniers sauvegardés',
     routeName: AccountPageList.SAVED_CARTS,
   },
-  // {
-  //   label: 'Changer de SIRET',
-  //   url: '/app/account/orders-history',
-  // },
 ])
 
 const userStore = useUserStore()

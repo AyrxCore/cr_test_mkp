@@ -2,7 +2,7 @@
   <div
     class="mb-5 flex flex-col rounded-lg bg-white text-sm text-gray-500 lg:text-[15px]"
   >
-    <div class="mb-2.5 flex w-full flex-col px-5 py-2.5 md:flex-row md:px-2.5">
+    <div class="flex w-full flex-col px-5 py-2.5 md:flex-row md:px-2.5">
       <div class="flex w-full justify-start md:w-2/12 lg:w-3/12">
         <span class="flex text-gray-500"
           ><CalendarCheckIconComponent
@@ -65,33 +65,26 @@
           >({{ formatPrice(order.total) }} € TTC)</span
         >
       </div>
-      <div class="flex items-center justify-between md:w-1/12 md:flex-col">
+      <div class="flex items-end justify-between md:w-1/12 md:flex-col">
         <RouterLink
           :to="{
             name: PageList.ORDER_DETAILS,
             params: { id: order.id },
           }"
-          class="rounded-lg border border-gray-500 p-2"
+          class="rounded-lg border border-primary p-0.5"
         >
-          <EyeIconComponent class="h-[18px] w-[18px]" />
+          <EyeIconComponent class="h-[18px] w-[18px] stroke-primary" />
         </RouterLink>
-        <LoaderSharedComponent v-if="isLoadingDownload" />
-        <div v-else>
-          <button
-            v-if="order.paymentId"
-            class="rounded-lg border border-gray-500 p-2"
-            title="Télécharger la facture"
-            @click="downloadInvoice"
-          >
-            <DownloadIconComponent class="h-[20px] w-[20px] stroke-gray-500" />
-          </button>
-        </div>
+        <ButtonDownloadInvoiceComponent
+          v-if="order.paymentId"
+          :payment-id="order.paymentId"
+        />
       </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import { computed, PropType, ref } from 'vue'
+import { computed, PropType } from 'vue'
 import { Order } from '@/vuejs/types/Order'
 import { formatDateFr, formatPrice } from '@/vuejs/services/utils'
 import { ORDER_STATUS, SHIPPING_STATUS } from '@/vuejs/services/const'
@@ -99,10 +92,7 @@ import CalendarCheckIconComponent from '@/vuejs/modules/shared/icon/CalendarChec
 import MapInIconComponent from '@/vuejs/modules/shared/icon/MapInIconComponent.vue'
 import EyeIconComponent from '@/vuejs/modules/shared/icon/EyeIconComponent.vue'
 import { PageList } from '@/vuejs/router'
-import DownloadIconComponent from '@/vuejs/modules/shared/icon/DownloadIconComponent.vue'
-import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
-
-const isLoadingDownload = ref<boolean>(false)
+import ButtonDownloadInvoiceComponent from '@/vuejs/modules/account/components/ButtonDownloadInvoiceComponent.vue'
 
 const props = defineProps({
   order: {
@@ -110,8 +100,6 @@ const props = defineProps({
     type: Object as PropType<Order>,
   },
 })
-
-const emit = defineEmits(['downloadInvoice'])
 
 const shippingStateDate = computed(() => {
   switch (props.order.shippingState) {
@@ -129,15 +117,4 @@ const shippingStateDate = computed(() => {
       return props.order.createdAt
   }
 })
-
-const downloadInvoice = async () => {
-  console.log(isLoadingDownload.value)
-  isLoadingDownload.value = true
-  console.log(isLoadingDownload.value)
-  await emit('downloadInvoice', {
-    paymentId: props.order.paymentId,
-  })
-  isLoadingDownload.value = false
-  console.log(isLoadingDownload.value)
-}
 </script>

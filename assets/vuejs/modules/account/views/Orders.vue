@@ -34,7 +34,6 @@
           v-else
           :key="key"
           :order="order"
-          @download-invoice="downloadInvoice"
         />
       </div>
     </template>
@@ -57,7 +56,6 @@ const orderStore = useOrderStore()
 const alertStore = useAlertStore()
 const { show: showAlert } = storeToRefs(alertStore)
 const isLoading = ref<boolean>(false)
-const invoice = ref<Invoice>()
 
 onMounted(async () => {
   isLoading.value = true
@@ -68,21 +66,6 @@ onMounted(async () => {
     isLoading.value = false
   }
 })
-
-const downloadInvoice = async (event) => {
-  invoice.value = <Invoice>await orderStore.getOrderInvoiceById(event.paymentId)
-  const fileContentEncoded = invoice.value.content
-  // Convertir les octets hexadécimaux en octets binaires
-  const fileContentBinary = hexToBinary(fileContentEncoded)
-  // Créer un objet Blob à partir de la chaîne binaire
-  const blob = new Blob([fileContentBinary], { type: 'application/pdf' })
-  // Créer un lien temporaire pour télécharger le fichier
-  const link = document.createElement('a')
-  link.href = URL.createObjectURL(blob)
-  link.download = invoice.value.name
-  // Cliquez sur le lien pour déclencher le téléchargement
-  link.click()
-}
 </script>
 
 <style scoped></style>

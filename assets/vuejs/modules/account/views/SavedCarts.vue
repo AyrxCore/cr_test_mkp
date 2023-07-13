@@ -16,15 +16,7 @@
         <!--        <div class="w-2/12"></div>-->
         <div class="w-2/12"></div>
       </div>
-      <div
-        v-if="isLoading"
-        class="mt-5 flex h-20 w-full items-center justify-center"
-      >
-        <LoaderSharedComponent
-          class="text-secondary"
-          classes="loader-xl loader"
-        />
-      </div>
+      <LoadingComponent v-if="isLoading" />
       <div v-else>
         <div
           v-if="savedCarts.length === 0"
@@ -57,6 +49,7 @@ import { useSavedCartStore } from '@/vuejs/stores/savedCart'
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
 import { useCartStore } from '@/vuejs/stores/cart'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
+import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 
 const cartStore = useCartStore()
 const alertStore = useAlertStore()

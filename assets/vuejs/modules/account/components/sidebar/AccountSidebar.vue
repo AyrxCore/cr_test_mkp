@@ -2,7 +2,7 @@
   <AccountSidebarBlock
     :items="[
       {
-        name: 'Historiques de commandes',
+        name: 'Historique de commandes',
         id: AccountPageList.ORDERS,
         url: AccountPageList.ORDERS,
       },
