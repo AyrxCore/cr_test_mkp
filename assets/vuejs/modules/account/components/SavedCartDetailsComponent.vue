@@ -69,7 +69,7 @@ const productStore = useProductStore()
 const product = ref<Product>()
 const variantData = ref()
 const productNotFound = ref(false)
-const quantity = ref()
+const quantity = ref<number>()
 const emit = defineEmits(['changeQuantity'])
 const props = defineProps({
   savedCartProduct: {
@@ -91,7 +91,7 @@ onMounted(async (): Promise<void> => {
       )
     }
   }
-  quantity.value = props.savedCartProduct.quantity
+  quantity.value = parseInt(props.savedCartProduct.quantity)
 })
 
 const changeQuantity = async (event) => {
