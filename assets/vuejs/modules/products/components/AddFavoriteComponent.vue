@@ -21,7 +21,7 @@
               @submit.prevent="addProductToFavorite"
             >
               <h3 class="font-bold text-primary">
-                Ajouter à une liste de produits préférés
+                Ajouter à une liste de produits favoris
               </h3>
               <hr />
               <span
@@ -89,7 +89,7 @@ import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
-import { arrayEqual } from '@/vuejs/services/utils'
+import { arrayEqual, notifySuccess } from '@/vuejs/services/utils'
 
 const props = defineProps({
   productId: {
@@ -174,12 +174,31 @@ const addProductToFavorite = async () => {
         const favoriteId = favorite.id
         newSelectedFavorites.value.push(favoriteId)
       }
+
       await favoriteStore.addProduct({
         selectedFavorites: newSelectedFavorites.value,
         productId: props.productId,
         productName: props.productName,
         variantId: props.variantId,
       })
+
+      const favoritesNotChanged = currentSelectedFavorites.value.filter((val) =>
+        newSelectedFavorites.value.includes(val),
+      )
+
+      if (favoritesNotChanged.length < currentSelectedFavorites.value.length) {
+        notifySuccess(
+          `Le produit ${props.productName} a été retiré des favoris`,
+        )
+      }
+      if (
+        newSelectedFavorites.value.length > 0 &&
+        newSelectedFavorites.value.length > favoritesNotChanged.length
+      ) {
+        notifySuccess(
+          `Le produit ${props.productName} a été ajouté aux favoris`,
+        )
+      }
 
       currentSelectedFavorites.value = newSelectedFavorites.value
       onOutsideBlock()

@@ -62,14 +62,6 @@ export const useFavoriteStore = defineStore({
     async addProduct(data) {
       try {
         await FavoriteHttpClient.get().addProduct(data)
-
-        let message = `Le produit ${data.productName} a été ajouté aux listes de favori`
-
-        if (data.selectedFavorites.length === 0) {
-          message = `Le produit ${data.productName} a été retiré de toutes les listes de favori`
-        }
-
-        notifySuccess(message)
       } catch (error) {
         notifyError(
           "Impossible d'ajouter ce produit à cette liste car elle n'existe plus",
