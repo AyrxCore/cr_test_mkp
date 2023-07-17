@@ -47,7 +47,7 @@
         <CartFrancoComponent :order="order" class="mt-5" />
         <p class="mt-7 flex items-center text-sm text-gray-500 lg:text-lg">
           <input
-            v-model="termsOfSales"
+            v-model="orderTermsOfSales"
             type="checkbox"
             class="mr-2 cursor-pointer lg:mt-0"
             @change="onTermsChange"
@@ -90,7 +90,7 @@ const props = defineProps({
   },
 })
 
-const termsOfSales = ref<boolean>(false)
+const orderTermsOfSales = ref<boolean>(false)
 const showTos = ref<boolean>(false)
 
 const seller = computed((): Seller => {
@@ -108,10 +108,10 @@ const totalPriceDisplayed = computed((): string => {
 
 const onTermsChange = (): void => {
   cartStore.termsOfSales = cartStore.termsOfSales.filter(
-    (e) => e !== props.order.id,
+    (e) => e !== props.order.seller.id,
   )
-  if (termsOfSales.value) {
-    cartStore.termsOfSales.push(props.order.id)
+  if (orderTermsOfSales.value) {
+    cartStore.termsOfSales.push(props.order.seller.id)
   }
 }
 </script>

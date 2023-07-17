@@ -170,14 +170,12 @@ export const useCartStore = defineStore({
       return this.productVariantsInCart.length
     },
     hasAllTermsChecked(): boolean {
-      return this.termsOfSales.length === this.cart?.orders?.length
-    },
-    hasAllShippingMethodsSelected(): boolean {
-      let hasAll = true
-      this.cart?.orders?.forEach((e: Order) => {
-        if (e.shipments.length === 0) hasAll = false
-      })
-      return hasAll
+      for (const order of this.cart?.orders) {
+        if (!this.termsOfSales.some((e) => e === order.seller.id)) {
+          return false
+        }
+      }
+      return true
     },
     CBPaymentMethod(): PaymentMethod {
       return this.cart?.paymentMethods?.find(
