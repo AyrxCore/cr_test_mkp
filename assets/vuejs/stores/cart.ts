@@ -70,11 +70,11 @@ export const useCartStore = defineStore({
             this.newlyAddedProducts.push(product.variantId)
         })
         notifySuccess(
-          `Vos ${products.length} produit(s) ont été ajouté(s) au panier avec succès`,
+          `Vos ${products.length} référence(s) ont été ajoutée(s) au panier avec succès`,
         )
       } catch (error) {
         notifyError(
-          `L'ajout au panier est impossible, merci de contacter un administrateur.`,
+          "L'ajout au panier est impossible, merci de contacter un administrateur.",
         )
         throw new Error()
       }

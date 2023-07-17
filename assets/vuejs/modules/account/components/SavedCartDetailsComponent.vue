@@ -65,11 +65,6 @@ import { PageList } from '@/vuejs/router'
 import ProductQuantityComponent from '../../shared/ProductQuantityComponent.vue'
 import { SavedCartProduct } from '@/vuejs/types/SavedCart'
 
-const productStore = useProductStore()
-const product = ref<Product>()
-const variantData = ref()
-const productNotFound = ref(false)
-const quantity = ref<number>()
 const emit = defineEmits(['changeQuantity'])
 const props = defineProps({
   savedCartProduct: {
@@ -77,6 +72,12 @@ const props = defineProps({
     type: Object as PropType<SavedCartProduct>,
   },
 })
+
+const productStore = useProductStore()
+const product = ref<Product>()
+const variantData = ref()
+const productNotFound = ref(false)
+const quantity = ref<number>(parseInt(props.savedCartProduct.quantity))
 
 onMounted(async (): Promise<void> => {
   product.value = await productStore.findProductById(
@@ -91,7 +92,6 @@ onMounted(async (): Promise<void> => {
       )
     }
   }
-  quantity.value = parseInt(props.savedCartProduct.quantity)
 })
 
 const changeQuantity = async (event) => {

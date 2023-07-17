@@ -9,7 +9,7 @@
           <h4 class="text-sm text-white md:text-base lg:text-lg">
             Voulez-vous vraiment ajouter la liste
             <strong>{{ savedCart.name }}</strong>
-            contenant {{ savedCart.savedCartProducts.length }} produit(s) dans
+            contenant {{ savedCart.savedCartProducts.length }} référence(s) dans
             votre panier
           </h4>
         </div>

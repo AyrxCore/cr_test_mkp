@@ -5,7 +5,7 @@
       <div class="px-5">
         <div v-if="savedCart">
           <h4 class="text-sm text-white md:text-base lg:text-lg">
-            Voulez-vous vraiment supprimer cette liste:
+            Voulez-vous vraiment supprimer ce panier:
             <strong>{{ savedCart.name }}</strong>
           </h4>
         </div>

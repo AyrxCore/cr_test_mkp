@@ -7,14 +7,6 @@
           'flex items-center': !formCol,
         }"
       >
-        <label
-          class="flex w-full justify-start text-white md:block md:w-2/5"
-          :class="{
-            '!w-full text-primary': formCol,
-          }"
-        >
-          Nom de la liste <span class="text-red-600">*</span>
-        </label>
         <input
           v-model="props.savedCart.name"
           type="text"
