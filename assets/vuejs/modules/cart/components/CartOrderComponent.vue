@@ -45,17 +45,22 @@
       </div>
       <div class="flex w-full flex-col">
         <CartFrancoComponent :order="order" class="mt-5" />
-        <p class="mt-7 flex items-center text-sm text-gray-500 lg:text-lg">
+        <p
+          class="mt-7 flex items-center text-sm text-gray-500 md:items-center lg:text-lg"
+        >
           <input
             v-model="orderTermsOfSales"
             type="checkbox"
             class="mr-2 cursor-pointer lg:mt-0"
             @change="onTermsChange"
           />
-          J'accepte les
-          <span class="ml-1 cursor-pointer underline" @click="showTos = true">
-            Conditions Générales de Vente du fournisseur
+          <span>
+            J'accepte les
+            <span class="ml-1 cursor-pointer underline" @click="showTos = true">
+              Conditions Générales de Vente du fournisseur
+            </span>
           </span>
+
           <TosOrderComponent
             :seller="seller"
             v-if="showTos"
