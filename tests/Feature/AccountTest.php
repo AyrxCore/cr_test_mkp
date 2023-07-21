@@ -8,25 +8,22 @@ use App\DataFixtures\Factory\UserFactory;
 
 \it('returns an error on collection operations', function (
     string $method,
-    int $expectedStatusCode,
     string $expectedResponse
 ) {
     $client = $this::createClientWithCredentials();
 
     $client->request($method, '/api/accounts');
 
-    $this->assertResponseStatusCodeSame($expectedStatusCode);
+    $this->assertResponseStatusCodeSame(404);
     $this->assertJsonResponseMatches($expectedResponse);
 })
     ->with([
         'GET' => [
             'method' => 'GET',
-            'expectedStatusCode' => 404,
             'expectedResponse' => 'account/get-collection-not-found-response.json',
         ],
         'POST' => [
             'method' => 'POST',
-            'expectedStatusCode' => 404,
             'expectedResponse' => 'account/post-not-found-response.json',
         ],
     ])
