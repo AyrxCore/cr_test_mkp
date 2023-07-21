@@ -6,66 +6,72 @@ namespace App\Service;
 
 use App\Dto\Seller;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class UpplerSellerService extends HttpClientProvider
+class UpplerSellerService extends AbstractUpplerService
 {
-
     private const IMG_PATH = 'https://uppler-platform-quantis.s3.eu-west-3.amazonaws.com/image/';
 
-    protected AdapterInterface $cache;
-
     public function __construct(
-        string $env,
-        string $apiUrl,
+        HttpClientInterface $upplerClient,
+        RequestStack $requestStack,
+        string $upplerEnv,
         string $adminClientId,
         string $adminClientSecret,
         string $adminTokenFile,
         string $httpCachePath,
-        AdapterInterface $cache
+        private AdapterInterface $cache
     ) {
-        parent::__construct($env, $apiUrl, $adminClientId, $adminClientSecret, $adminTokenFile, $httpCachePath);
-        $this->cache = $cache;
+        parent::__construct(
+            upplerClient: $upplerClient,
+            requestStack: $requestStack,
+            upplerEnv: $upplerEnv,
+            adminClientId: $adminClientId,
+            adminClientSecret: $adminClientSecret,
+            adminTokenFile: $adminTokenFile,
+            httpCachePath: $httpCachePath,
+        );
     }
 
     public function getSellers($perPage = 16, $page = 1): array|null
     {
         $res = $this->request(
             'POST',
-            $this->apiUrl . 'v1/buyer/search/company?perPage=' . $perPage . '&page=' . $page
+            'v1/buyer/search/company?perPage='.$perPage.'&page='.$page
         );
 
-        if (Response::HTTP_PARTIAL_CONTENT === $res->getStatusCode() || Response::HTTP_OK === $res->getStatusCode()) {
-            $upplerSellers = json_decode($res->getContent());
+        if ($res->getStatusCode() === Response::HTTP_PARTIAL_CONTENT || $res->getStatusCode() === Response::HTTP_OK) {
+            $upplerSellers = \json_decode($res->getContent());
             $sellers = [];
             foreach ($upplerSellers->results as $upplerSeller) {
                 $sellers[] = $this->hydrateSeller($upplerSeller);
             }
+
             return $sellers;
         }
 
         return null;
     }
 
-
     public function getSeller(int $sellerId = null): Seller|null
     {
-        $item = $this->cache->getItem('seller_' . $sellerId);
+        $item = $this->cache->getItem('seller_'.$sellerId);
 
         if ($item->isHit()) {
             return $item->get();
         }
 
         $session = $this->requestStack->getSession();
-        $session->start();
 
         $res = $this->request(
             'GET',
-            $this->apiUrl . 'v1/buyer/seller/' . $sellerId
+            'v1/buyer/seller/'.$sellerId
         );
 
-        if (Response::HTTP_OK === $res->getStatusCode()) {
-            $upplerSeller = json_decode($res->getContent());
+        if ($res->getStatusCode() === Response::HTTP_OK) {
+            $upplerSeller = \json_decode($res->getContent());
 
             $item->set($this->hydrateSeller($upplerSeller));
             $item->expiresAfter(new \DateInterval('P1D')); // the item will be cached for 10 seconds
@@ -88,12 +94,13 @@ class UpplerSellerService extends HttpClientProvider
         if (!empty($remoteSeller->avatar_url)) {
             $avatar = $remoteSeller->avatar_url;
         } elseif (!empty($remoteSeller->avatar)) {
-            $avatar = self::IMG_PATH . $remoteSeller->avatar;
+            $avatar = self::IMG_PATH.$remoteSeller->avatar;
         }
         $seller->setAvatar($avatar);
         if (isset($remoteSeller->tos)) {
-            $seller->setTos(json_decode(json_encode($remoteSeller->tos), true));
+            $seller->setTos(\json_decode(\json_encode($remoteSeller->tos), true));
         }
+
         return $seller;
     }
 
@@ -101,13 +108,14 @@ class UpplerSellerService extends HttpClientProvider
     {
         $res = $this->request(
             'GET',
-            $this->apiUrl . 'v1/administrator/promotion/?criteria[owner]=' . $sellerId . '&criteria[state]=activated&criteria[model]=shipment_order_min&expand[]=buyer_eligibility&expand[]=order_eligibility&expand[]=order_item_eligibility&expand[]=shipment_eligibility&expand[]=variant_eligibility&expand[]=code',
+            'v1/administrator/promotion/?criteria[owner]='.$sellerId.'&criteria[state]=activated&criteria[model]=shipment_order_min&expand[]=buyer_eligibility&expand[]=order_eligibility&expand[]=order_item_eligibility&expand[]=shipment_eligibility&expand[]=variant_eligibility&expand[]=code',
             [],
             true,
         );
-        if (Response::HTTP_OK === $res->getStatusCode()) {
-            return json_decode($res->getContent(), true);
+        if ($res->getStatusCode() === Response::HTTP_OK) {
+            return \json_decode($res->getContent(), true);
         }
+
         return null;
     }
 }

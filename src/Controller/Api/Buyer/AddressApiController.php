@@ -27,7 +27,6 @@ class AddressApiController extends AbstractController
     public function list(NormalizerInterface $normalizer): JsonResponse
     {
         $session = $this->requestStack->getSession();
-        $session->start();
 
         $addresses = $this->upplerBuyerCompanyService->getAdresses();
 

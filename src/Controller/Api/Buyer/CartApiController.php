@@ -34,7 +34,6 @@ class CartApiController extends AbstractController
     public function getCartAsBuyer(): JsonResponse
     {
         $session = $this->requestStack->getSession();
-        $session->start();
 
         $cart = $this->upplerCartService->getCart();
 
@@ -49,7 +48,6 @@ class CartApiController extends AbstractController
     public function confirmCartAsBuyer(int $cartId): Response
     {
         $session = $this->requestStack->getSession();
-        $session->start();
 
         if (
             !$session->has('account') || empty($session->get('account'))
@@ -79,7 +77,6 @@ class CartApiController extends AbstractController
     public function getCartShippingMethods(int $cartId): Response
     {
         $session = $this->requestStack->getSession();
-        $session->start();
 
         $shippingMethods = $this->upplerCartService->getShippingMethods($cartId);
 
@@ -94,7 +91,6 @@ class CartApiController extends AbstractController
     public function getCartById(int $cartId): Response
     {
         $session = $this->requestStack->getSession();
-        $session->start();
 
         $cartResume = new \stdClass();
         $cartResume->cart = $this->upplerCartService->getCartById($cartId);

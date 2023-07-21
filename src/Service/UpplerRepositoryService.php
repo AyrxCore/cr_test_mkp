@@ -4,53 +4,45 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use function Symfony\Component\String\u;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Contracts\Service\Attribute\Required;
 
 // centralise les appels vers uppler pour manipuler des référentiels (countries, ...)
-class UpplerRepositoryService extends HttpClientProvider
+class UpplerRepositoryService extends AbstractUpplerService
 {
-    #[Required]
-    public RequestStack $requestStack;
-
-    #[Required]
-    public EntityManagerInterface $em;
-
-    public function getCountries($perPage = 200, $page = 1,array $sortings = [], $countries= []): array | null
+    public function getCountries($perPage = 200, $page = 1, array $sortings = [], $countries = []): array|null
     {
-        $urlSorts= null;
+        $urlSorts = null;
 
         if (!empty($sortings)) {
             foreach ($sortings as $sorting) {
-                $urlSorts.= '&sorting[]=' . $sorting;
+                $urlSorts .= '&sorting[]='.$sorting;
             }
         }
 
         $res = $this->request(
             'GET',
-            $this->apiUrl . 'v1/country?perPage=' . $perPage . '&page=' . $page . $urlSorts,
+            'v1/country?perPage='.$perPage.'&page='.$page.$urlSorts,
             [],
             false,
             false,
             true
         );
 
-        if (Response::HTTP_PARTIAL_CONTENT === $res->getStatusCode()) {
+        if ($res->getStatusCode() === Response::HTTP_PARTIAL_CONTENT) {
             $headers = $res->getHeaders();
-            $paginationArgs = explode('/', $headers["content-range"][0]);
+            $paginationArgs = \explode('/', $headers['content-range'][0]);
             $totalItems = $paginationArgs[1];
-            $paginationOffset = explode('-', $paginationArgs[0])[1];
+            $paginationOffset = \explode('-', $paginationArgs[0])[1];
 
-            $newCountries = json_decode($res->getContent());
+            $newCountries = \json_decode($res->getContent());
             $this->computeCountries($newCountries);
-            $countries = array_merge($countries, $newCountries);
+            $countries = \array_merge($countries, $newCountries);
             if ($totalItems > $paginationOffset) {
-                $page++;
+                ++$page;
+
                 return $this->getCountries(200, $page, $sortings, $countries);
             }
+
             return $countries;
         }
 
@@ -75,6 +67,4 @@ class UpplerRepositoryService extends HttpClientProvider
         unset($country->phone_code);
         unset($country->iso_name);
     }
-
-
 }

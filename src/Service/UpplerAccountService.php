@@ -6,35 +6,28 @@ namespace App\Service;
 
 use App\Dto\SubAccount;
 use App\Entity\Account;
-use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Contracts\Service\Attribute\Required;
 
-class UpplerAccountService extends HttpClientProvider
+class UpplerAccountService extends AbstractUpplerService
 {
-    #[Required]
-    public RequestStack $requestStack;
-
-    #[Required]
-    public EntityManagerInterface $em;
-
-    public function getUserSubAccountDatas(): object | null
+    public function getUserSubAccountDatas(): object|null
     {
         $session = $this->requestStack->getSession();
-        /**@var Account $account*/
+        /** @var Account $account */
         $account = $session->get('account');
         $res = $this->request(
             'GET',
-            $this->apiUrl . 'v1/administrator/sub-account/' .
-            $account->getUpplerSubAccountId()  .
-            '?expand[]=accounter',
-            [],
-            true
+            'v1/administrator/sub-account/'.$account->getUpplerSubAccountId(),
+            [
+                'query' => [
+                    'expand[]' => 'accounter',
+                ],
+            ],
+            isAdmin: true
         );
-        if (Response::HTTP_OK === $res->getStatusCode()) {
-            $account = $this->computeSubAccount(json_decode($res->getContent()));
+        if ($res->getStatusCode() === Response::HTTP_OK) {
+            $account = $this->computeSubAccount(\json_decode($res->getContent()));
+
             return $account;
         }
 
@@ -43,42 +36,42 @@ class UpplerAccountService extends HttpClientProvider
 
     public function updateUserSubAccountDatas(SubAccount $subAccount): bool
     {
-        $datas = [];
-        if (null !== $subAccount->getBillingAddressId()) {
-            $datas["billing_address_id"] = $subAccount->getBillingAddressId();
+        $data = [];
+        if ($subAccount->getBillingAddressId() !== null) {
+            $data['billing_address_id'] = $subAccount->getBillingAddressId();
         }
 
-        if (null !== $subAccount->getShippingAddressId()) {
-            $datas["shipping_address_id"] = $subAccount->getShippingAddressId();
+        if ($subAccount->getShippingAddressId() !== null) {
+            $data['shipping_address_id'] = $subAccount->getShippingAddressId();
         }
 
-        if (null !== $subAccount->getEmail()) {
-            $datas["email"] = $subAccount->getEmail();
+        if ($subAccount->getEmail() !== null) {
+            $data['email'] = $subAccount->getEmail();
         }
 
-        if (null !== $subAccount->getLastName()) {
-            $datas["lastname"] = $subAccount->getLastName();
+        if ($subAccount->getLastName() !== null) {
+            $data['lastname'] = $subAccount->getLastName();
         }
 
-        if (null !== $subAccount->getFirstName()) {
-            $datas["firstname"] = $subAccount->getFirstName();
+        if ($subAccount->getFirstName() !== null) {
+            $data['firstname'] = $subAccount->getFirstName();
         }
 
-            // TODO Uppler n'accepte pas ce champ en PATCH, voir avec eux pour faire évoluer cela
+        // TODO Uppler n'accepte pas ce champ en PATCH, voir avec eux pour faire évoluer cela
 //        if (null !== $subAccount->getPhone()) {
 //            $datas["phone"] = $subAccount->getPhone();
 //        }
 
         $res = $this->request(
             'PATCH',
-            $this->apiUrl . 'v1/administrator/sub-account/' . $subAccount->getId(),
+            'v1/administrator/sub-account/'.$subAccount->getId(),
             [
-                'json' => $datas
+                'json' => $data,
             ],
-            true
+            isAdmin: true
         );
 
-        if (Response::HTTP_NO_CONTENT === $res->getStatusCode()) {
+        if ($res->getStatusCode() === Response::HTTP_NO_CONTENT) {
             return true;
         }
 
@@ -94,20 +87,18 @@ class UpplerAccountService extends HttpClientProvider
         $account->firstname = $subAccount->accounter->firstname;
 
         $account->shipping_address = (
-            null !== $subAccount->shipping_address &&
-            property_exists($subAccount->shipping_address, 'id')
+            $subAccount->shipping_address !== null &&
+            \property_exists($subAccount->shipping_address, 'id')
         )
             ? $subAccount->shipping_address->id
-            : $subAccount->shipping_address
-        ;
+            : $subAccount->shipping_address;
         $account->billing_address = (
-            null !== $subAccount->billing_address &&
-            property_exists($subAccount->billing_address, 'id')
+            $subAccount->billing_address !== null &&
+            \property_exists($subAccount->billing_address, 'id')
         )
             ? $subAccount->billing_address->id
-            : $subAccount->billing_address
-        ;
+            : $subAccount->billing_address;
+
         return $account;
     }
-
 }

@@ -25,13 +25,14 @@ init: ## Initialize docker development environment
 	make database-create
 	make database-update
 	make database-migrations
-#	make init-tests
+	make init-tests
 	make generate-keypair
 	make build-front
 
 init-tests: ## Initialize test environment
-	make exec php "bin/console doctrine:database:create --if-not-exists -e test"
-	make exec php "bin/console doctrine:schema:update --force -e test"
+	$(dc_exec) php bin/console doctrine:database:create --if-not-exists -e test
+	$(dc_exec) php bin/console doctrine:schema:drop --force -e test
+	$(dc_exec) php bin/console doctrine:schema:update --force -e test
 
 build: .env.local ## Build container: make build SERVICE
 	$(dc) build --pull --no-cache $(args)
@@ -99,11 +100,11 @@ database-fixtures:
 #	$(dc_exec) php rm -rf public/images/*
 #	$(dc_exec) php chown -R www-data:www-data public/cache
 #	$(dc_exec) php chown -R www-data:www-data public/images
-	$(dc_exec) php bin/console doctrine:fixtures:load --no-interaction -q --group=dev
+	$(dc_exec) php bin/console doctrine:fixtures:load --no-interaction -q
 
 database-diff: ## Create doctrine migration from database diff
 	$(dc_exec) php bin/console doctrine:migration:diff
-	$(dc_exec) php vendor/bin/php-cs-fixer fix src/Core/Infrastructure/Migrations
+	$(dc_exec) php vendor/bin/php-cs-fixer fix migrations
 .PHONY: diff
 
 database-migrations: ## Run doctrine migrations
@@ -122,21 +123,25 @@ build-front: ## Build front environment
 ##
 ## Tests
 
-test: ## Run behat tests tagged with '@javascript': make test [FILE]
-	#$(dc) exec js yarn build
-	$(dc) -f etc/docker/docker-compose.chrome.yaml up -d chrome
-	$(dc_exec) php mkdir -p var/screenshots && rm -rf var/screenshots/*
-	$(dc_exec) php mkdir -p /tmp/behat_gherkin_cache
-	$(dc_exec) php chown -R www-data var/ /tmp/behat_gherkin_cache/
-	$(dc_exec) --user www-data php vendor/bin/behat --tags '@javascript' $(args) || true
-	$(dc) -f etc/docker/docker-compose.chrome.yaml stop chrome
+test: test-unit test-feature ## Run feature and unit tests
 
-.PHONY: phpspec
-phpspec: ## Run phpspec tests: make phpspec [FILE]
-	$(dc_exec) php vendor/bin/phpspec run $(args)
+test-file: ## Run tests on a single file (ex: make test-file tests/Feature/AuthenticationTest.php)
+	$(dc_exec) php vendor/bin/pest $(args) || true
 
-behat: ## Run behat tests: make behat [FILE]
-	$(dc_exec) php vendor/bin/behat $(args)
+test-filter: ## Run tests by filtering on the case name (ex: make test-filter "authenticates a user")
+	$(dc_exec) php vendor/bin/pest --filter "$(args)" || true
+
+test-group: ## Run tests on groups (ex: make test-group "authentication,accounts")
+	$(dc_exec) php vendor/bin/pest --group=$(args) || true
+
+test-unit: ## Run unit tests
+	$(dc_exec) php vendor/bin/pest --testsuite unit
+
+test-feature: ## Run feature tests
+	$(dc_exec) php vendor/bin/pest --testsuite feature
+
+coverage-html:
+	$(dc_exec) php php -d xdebug.mode=coverage vendor/bin/pest --coverage-html var/coverage/
 
 ##
 ## Coding standards

@@ -4,42 +4,38 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Contracts\Service\Attribute\Required;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class UpplerCartService extends HttpClientProvider
+class UpplerCartService extends AbstractUpplerService
 {
-    #[Required]
-    public RequestStack $requestStack;
-
-    #[Required]
-    public EntityManagerInterface $em;
-
-    #[Required]
-    public UpplerAccountService $upplerAccountService;
-
-    protected string $appDomain;
-
     public function __construct(
-        string $env,
-        string $apiUrl,
+        HttpClientInterface $upplerClient,
+        RequestStack $requestStack,
+        string $upplerEnv,
         string $adminClientId,
         string $adminClientSecret,
         string $adminTokenFile,
         string $httpCachePath,
-        string $appDomain,
+        private string $appDomain,
     ) {
-        parent::__construct($env, $apiUrl, $adminClientId, $adminClientSecret, $adminTokenFile, $httpCachePath);
-        $this->appDomain = $appDomain;
+        parent::__construct(
+            upplerClient: $upplerClient,
+            requestStack: $requestStack,
+            upplerEnv: $upplerEnv,
+            adminClientId: $adminClientId,
+            adminClientSecret: $adminClientSecret,
+            adminTokenFile: $adminTokenFile,
+            httpCachePath: $httpCachePath,
+        );
     }
 
     public function createCart(): string|null
     {
         $res = $this->request(
             'POST',
-            $this->apiUrl.'v1/buyer/cart/',
+            'v1/buyer/cart/',
         );
 
         if ($res->getStatusCode() === Response::HTTP_CREATED) {
@@ -55,7 +51,7 @@ class UpplerCartService extends HttpClientProvider
     {
         $res = $this->request(
             'GET',
-            $this->apiUrl.'v1/buyer/cart?&expand[]=orders&expand[]=orderItems&criteria[state][]=new&criteria[state][]=address&criteria[state][]=shipping_method&criteria[state][]=payment&sorting[id]=asc&perPage=1&page=1',
+            'v1/buyer/cart?&expand[]=orders&expand[]=orderItems&criteria[state][]=new&criteria[state][]=address&criteria[state][]=shipping_method&criteria[state][]=payment&sorting[id]=asc&perPage=1&page=1',
         );
 
         if (\in_array($res->getStatusCode(), [Response::HTTP_OK, Response::HTTP_PARTIAL_CONTENT], true)) {
@@ -86,7 +82,7 @@ class UpplerCartService extends HttpClientProvider
     {
         $res = $this->request(
             'GET',
-            $this->apiUrl.'v1/buyer/cart/'.$cartId.'?expand[]=orders&expand[]=orderItems',
+            'v1/buyer/cart/'.$cartId.'?expand[]=orders&expand[]=orderItems',
         );
 
         if ($res->getStatusCode() === Response::HTTP_OK) {
@@ -100,7 +96,7 @@ class UpplerCartService extends HttpClientProvider
     {
         $res = $this->request(
             'POST',
-            $this->apiUrl.'v1/buyer/cart/'.$cartId.'/items',
+            'v1/buyer/cart/'.$cartId.'/items',
             [
                 'json' => [
                     'items' => [
@@ -120,7 +116,7 @@ class UpplerCartService extends HttpClientProvider
     {
         $res = $this->request(
             'PATCH',
-            \is_string($cartReference) ? $cartReference : $this->apiUrl.'v1/buyer/cart/'.$cartReference,
+            \is_string($cartReference) ? $cartReference : 'v1/buyer/cart/'.$cartReference,
             [
                 'json' => [
                     'shipping_address' => $shippingId,
@@ -136,7 +132,7 @@ class UpplerCartService extends HttpClientProvider
     {
         $res = $this->request(
             'PATCH',
-            $this->apiUrl.'v1/buyer/order-item/'.$id,
+            'v1/buyer/order-item/'.$id,
             [
                 'json' => ['quantity' => $quantity],
             ],
@@ -149,7 +145,7 @@ class UpplerCartService extends HttpClientProvider
     {
         $res = $this->request(
             'DELETE',
-            $this->apiUrl.'v1/buyer/order-item/'.$id,
+            'v1/buyer/order-item/'.$id,
         );
 
         return $res && $res->getStatusCode() === Response::HTTP_NO_CONTENT;
@@ -159,7 +155,7 @@ class UpplerCartService extends HttpClientProvider
     {
         $res = $this->request(
             'GET',
-            $this->apiUrl.'v1/buyer/cart/'.$cartId.'/shipping-method',
+            'v1/buyer/cart/'.$cartId.'/shipping-method',
         );
         if ($res && $res->getStatusCode() === Response::HTTP_OK) {
             $res = \json_decode($res->getContent(), true);
@@ -186,7 +182,7 @@ class UpplerCartService extends HttpClientProvider
     {
         $res = $this->request(
             'PATCH',
-            $this->apiUrl.'v1/buyer/cart/'.$cartId.'/shipping-method',
+            'v1/buyer/cart/'.$cartId.'/shipping-method',
             [
                 'json' => [
                     'shipment_proposal' => [
@@ -208,7 +204,7 @@ class UpplerCartService extends HttpClientProvider
     {
         $res = $this->request(
             'GET',
-            $this->apiUrl.'v1/buyer/cart/'.$cartId.'/payment-method',
+            'v1/buyer/cart/'.$cartId.'/payment-method',
         );
         if ($res && $res->getStatusCode() === Response::HTTP_OK) {
             return \json_decode($res->getContent());
@@ -221,7 +217,7 @@ class UpplerCartService extends HttpClientProvider
     {
         $res = $this->request(
             'PATCH',
-            $this->apiUrl.'v1/buyer/cart/'.$cartId.'/payment-method',
+            'v1/buyer/cart/'.$cartId.'/payment-method',
             [
                 'json' => [
                     'payment_method' => $paymentMethodId,
@@ -240,7 +236,7 @@ class UpplerCartService extends HttpClientProvider
     {
         $res = $this->request(
             'GET',
-            $this->apiUrl.'v1/buyer/cart/'.$cartId.'/transaction/confirm',
+            'v1/buyer/cart/'.$cartId.'/transaction/confirm',
         );
         if ($res && $res->getStatusCode() === Response::HTTP_OK) {
             return \json_decode($res->getContent(), true);
@@ -253,7 +249,7 @@ class UpplerCartService extends HttpClientProvider
     {
         $res = $this->request(
             'PATCH',
-            $this->apiUrl.'v1/buyer/cart/'.$cartId.'/confirm',
+            'v1/buyer/cart/'.$cartId.'/confirm',
         );
 
         return $res && $res->getStatusCode() === Response::HTTP_NO_CONTENT;

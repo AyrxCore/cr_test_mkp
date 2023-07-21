@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Api\Buyer;
 
 use App\Dto\AccountAccordCadre;
@@ -20,27 +22,29 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\Service\Attribute\Required;
 use Twig\Environment;
 
-
 class ProductApiController extends AbstractController
 {
-
-    private const HOME_TOP_VENTE_PROPERTY
+    public const HOME_TOP_VENTE_PROPERTY
         = [
             'property_id' => '217',
-            'value'       => '5369',
+            'value' => '5369',
         ];
 
-    private const HOME_SELECTION_PROPERTY
+    public const HOME_SELECTION_PROPERTY
         = [
             'property_id' => '217',
-            'value'       => '5368',
+            'value' => '5368',
         ];
 
-    private const HOME_ACCORD_CADRE_PROPERTY
+    public const HOME_ACCORD_CADRE_PROPERTY
         = [
             'property_id' => '217',
-            'value'       => '5367',
+            'value' => '5367',
         ];
+
+    private const PAGE = 1;
+
+    private const PER_PAGE = 5;
 
     #[Required]
     public RequestStack $requestStack;
@@ -54,16 +58,11 @@ class ProductApiController extends AbstractController
     #[Required]
     public Environment $twig;
 
-    private const PAGE = 1;
-
-    private const PER_PAGE = 5;
-
     #[Route('/api/products', name: 'search_products', methods: ['POST'])]
     #[Route('/api/accords-cadre', name: 'search_accords_cadre', methods: ['POST'])]
     public function list(Request $request, NormalizerInterface $normalizer): JsonResponse
     {
         $session = $this->requestStack->getSession();
-        $session->start();
 
         $options = $request->request->all();
 
@@ -101,10 +100,10 @@ class ProductApiController extends AbstractController
     public function homeProduct(): JsonResponse
     {
         $session = $this->requestStack->getSession();
-        $session->start();
 
         $params = ['properties', 'price', 'company', 'images'];
 
+        // TODO: make concurrent requests: https://symfony.com/doc/current/http_client.html#concurrent-requests
         $productsTopVente = $this->upplerProductService->findProductsByOptions(
             ['properties' => [self::HOME_TOP_VENTE_PROPERTY]],
             $params,
@@ -135,19 +134,17 @@ class ProductApiController extends AbstractController
     public function categoriesList(): JsonResponse
     {
         $session = $this->requestStack->getSession();
-        $session->start();
 
-        $resultat = $this->upplerProductService->findAllCategories((string)$session->get('account')->getId());
+        $resultat = $this->upplerProductService->findAllCategories((string) $session->get('account')->getId());
 
-        $resultat = json_decode(json_encode($resultat), true);
+        $resultat = \json_decode(\json_encode($resultat), true);
 
-        $categories = (array)$resultat;
-        $listMenu = array_slice($categories, 0, 6);
+        $categories = (array) $resultat;
+        $listMenu = \array_slice($categories, 0, 6);
 
-
-        usort($categories, function ($a, $b) {
+        \usort($categories, function ($a, $b) {
             //            return strcmp($a->name, $b->name);
-            return strcmp($a['name'], $b['name']);
+            return \strcmp($a['name'], $b['name']);
         });
 
         return new JsonResponse(['categories' => $categories, 'menu' => $listMenu]);
@@ -157,7 +154,6 @@ class ProductApiController extends AbstractController
     public function product(int $id, NormalizerInterface $normalizer): JsonResponse
     {
         $session = $this->requestStack->getSession();
-        $session->start();
 
         $product = $this->upplerProductService->findProductById($id);
 
@@ -168,7 +164,6 @@ class ProductApiController extends AbstractController
     public function variant(int $id, NormalizerInterface $normalizer): JsonResponse
     {
         $session = $this->requestStack->getSession();
-        $session->start();
 
         $variant = $this->upplerProductService->findVariantById($id);
 
@@ -179,12 +174,11 @@ class ProductApiController extends AbstractController
     public function accordCadre(int $id, NormalizerInterface $normalizer): JsonResponse
     {
         $session = $this->requestStack->getSession();
-        $session->start();
 
         $accordCadre = $this->upplerProductService->findProductById(
             $id,
             ['properties', 'company'],
-            (string)$session->get('account')->getId()
+            (string) $session->get('account')->getId()
         );
 
         return new JsonResponse($accordCadre);
@@ -197,10 +191,9 @@ class ProductApiController extends AbstractController
         LoggerInterface $logger,
     ): JsonResponse {
         $session = $this->requestStack->getSession();
-        $session->start();
 
-        $params = json_decode($request->getContent(), true);
-        $accountId = (string)$session->get('account')->getId();
+        $params = \json_decode($request->getContent(), true);
+        $accountId = (string) $session->get('account')->getId();
         $account = $this->em->getRepository(Account::class)->find($accountId);
 
         $accordStatut = $this->em->getRepository(AccordStatut::class)->findOneBy([
@@ -217,20 +210,20 @@ class ProductApiController extends AbstractController
             $mailerProvider->send(
                 $from,
                 $to,
-                'MARKETPLACE - Bénéficier des conditions pour la FAT ' . $params['accordName'],
+                'MARKETPLACE - Bénéficier des conditions pour la FAT '.$params['accordName'],
                 $this->twig->render('mails/request.accord.subscription.html.twig', [
-                    'fat'       => $params['accordName'],
-                    'email'     => $account->getUser()->getemail(),
-                    'nom'       => $account->getUser()->getFirstName() . ' ' . $account->getUser()->getLastName(),
-                    'societe'   => $account->getAdherent()->getName(),
-                    'sugarLink' => $sugarLink . $account->getAdherent()->getId(),
+                    'fat' => $params['accordName'],
+                    'email' => $account->getUser()->getemail(),
+                    'nom' => $account->getUser()->getFirstName().' '.$account->getUser()->getLastName(),
+                    'societe' => $account->getAdherent()->getName(),
+                    'sugarLink' => $sugarLink.$account->getAdherent()->getId(),
                 ])
             );
         } catch (\Exception $exception) {
             $error = true;
             $logger->critical(
                 "Erreur d'envoi de demande de subscription "
-                . $account->getUser()->getemail() . ' ' . $account->getAdherent()->getName() . " : " .
+                .$account->getUser()->getemail().' '.$account->getAdherent()->getName().' : '.
                 $exception->getMessage()
             );
         }
@@ -242,7 +235,7 @@ class ProductApiController extends AbstractController
             $accordStatut->setStatus(AccountAccordCadre::PROCESS_STATUS_NOT_ACTIVATED);
             $accordStatut->setAccordStatutRequestAt(new \DateTime('now'));
         } elseif ($accordStatut) {
-            if (AccountAccordCadre::PROCESS_STATUS_NOT_ACTIVATED === $accordStatut->getStatus()) {
+            if ($accordStatut->getStatus() === AccountAccordCadre::PROCESS_STATUS_NOT_ACTIVATED) {
                 $accordStatut->setStatus(AccountAccordCadre::PROCESS_STATUS_PENDING);
 
                 $this->em->persist($accordStatut);
@@ -267,5 +260,4 @@ class ProductApiController extends AbstractController
 
         return new JsonResponse($accordStatut->getStatus());
     }
-
 }

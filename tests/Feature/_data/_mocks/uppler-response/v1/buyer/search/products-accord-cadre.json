@@ -1,0 +1,2196 @@
+{
+  "filters": {
+    "category": {
+      "864": {
+        "id": 864,
+        "name": "VEHICULES",
+        "parent": null,
+        "count": 1,
+        "checked": null,
+        "display": true,
+        "level": 0,
+        "image": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/f5\/df\/599b044acf3855a383b7a8332e68.png",
+        "banner": null,
+        "child": []
+      },
+      "588": {
+        "id": 588,
+        "name": "FOURNITURES DE BUREAU",
+        "parent": null,
+        "count": 1,
+        "checked": null,
+        "display": true,
+        "level": 0,
+        "image": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/d8\/44\/ca8a0c47751c6a56b8eb116f00c8.png",
+        "banner": null,
+        "child": []
+      },
+      "678": {
+        "id": 678,
+        "name": "OUTILLAGE",
+        "parent": null,
+        "count": 1,
+        "checked": null,
+        "display": true,
+        "level": 0,
+        "image": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/5c\/80\/1c2c7e512d9cc7bcbc196df9c923.png",
+        "banner": null,
+        "child": []
+      },
+      "670": {
+        "id": 670,
+        "name": "LOCATION DE MATERIEL",
+        "parent": null,
+        "count": 1,
+        "checked": null,
+        "display": true,
+        "level": 0,
+        "image": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/aa\/56\/0cba78ca100725c9afe27b7c685e.png",
+        "banner": null
+      }
+    },
+    "property": {
+      "217": {
+        "id": 217,
+        "name": "Homepage - Mises en avant",
+        "type": "choice",
+        "unit": null,
+        "count": 4,
+        "checked": null,
+        "child": {
+          "5367": {
+            "id": 217,
+            "value": 5367,
+            "name": "home-accord-cadre",
+            "unit": null,
+            "image": null,
+            "count": 4,
+            "checked": null
+          }
+        }
+      }
+    },
+    "company": {
+      "27": {
+        "id": 27,
+        "name": "ALDA MAJUSCULE",
+        "parent": null,
+        "count": 1,
+        "checked": null
+      },
+      "22": {
+        "id": 22,
+        "name": "BERNER",
+        "parent": null,
+        "count": 1,
+        "checked": null
+      },
+      "51": {
+        "id": 51,
+        "name": "KILOUTOU",
+        "parent": null,
+        "count": 1,
+        "checked": null
+      },
+      "58": {
+        "id": 58,
+        "name": "RENAULT",
+        "parent": null,
+        "count": 1,
+        "checked": null
+      }
+    },
+    "country": {
+      "83": {
+        "id": 83,
+        "name": "France",
+        "count": 4,
+        "checked": null
+      }
+    },
+    "continent": {
+      "1": {
+        "id": 1,
+        "name": null,
+        "count": 4,
+        "checked": null
+      }
+    },
+    "promotions": {
+      "franco-fourniture-alda": {
+        "id": "franco-fourniture-alda",
+        "name": "Franco de port - ALDA MAJUSCULE",
+        "parent": null,
+        "count": 1,
+        "checked": null
+      }
+    }
+  },
+  "error": null,
+  "results_count": 4,
+  "page": 1,
+  "results_per_page": 5,
+  "results_pages": 2000,
+  "parameters": {
+    "name": null,
+    "has_promotion": null,
+    "promotion_models": [],
+    "promotion_company_type": null,
+    "in_stock": null,
+    "sort": "score_desc",
+    "categories": [],
+    "properties": [
+      {
+        "property": 217,
+        "value": "5367"
+      }
+    ],
+    "options": [],
+    "companies": []
+  },
+  "results": [
+    {
+      "id": 19384,
+      "categories": [
+        {
+          "id": 670,
+          "name": {
+            "fr": "LOCATION DE MATERIEL",
+            "default": "LOCATION DE MATERIEL"
+          },
+          "image": "aa\/56\/0cba78ca100725c9afe27b7c685e.png"
+        }
+      ],
+      "description": {
+        "fr": "<p>Acteur majeur de la location de mat&eacute;riels en France, KILOUTOU propose la gamme la plus large du march&eacute; avec plus de 10000 r&eacute;f&eacute;rences et plus de 250 000 mat&eacute;riels : terrassement, &eacute;l&eacute;vation, v&eacute;hicules utilitaires, &eacute;v&eacute;nement, manutention, construction, &eacute;nergie, air, outillage etc. KILOUTOU concilie depuis plus de 40 ans : &eacute;conomie, environnement et humain pour r&eacute;pondre aux besoins des professionnels du BTP, artisans, PME, collectivit&eacute;s locales, et industriels.<\/p>",
+        "default": "<p>Acteur majeur de la location de mat&eacute;riels en France, KILOUTOU propose la gamme la plus large du march&eacute; avec plus de 10000 r&eacute;f&eacute;rences et plus de 250 000 mat&eacute;riels : terrassement, &eacute;l&eacute;vation, v&eacute;hicules utilitaires, &eacute;v&eacute;nement, manutention, construction, &eacute;nergie, air, outillage etc. KILOUTOU concilie depuis plus de 40 ans : &eacute;conomie, environnement et humain pour r&eacute;pondre aux besoins des professionnels du BTP, artisans, PME, collectivit&eacute;s locales, et industriels.<\/p>"
+      },
+      "images": [],
+      "name": {
+        "fr": "Kiloutou",
+        "default": "Kiloutou"
+      },
+      "slug": {
+        "fr": "kiloutou-fat-kiloutou",
+        "default": "kiloutou-fat-kiloutou"
+      },
+      "properties": [
+        {
+          "id": 87523,
+          "property": {
+            "id": 216,
+            "name": {
+              "fr": "fat_marque",
+              "default": "fat_marque"
+            }
+          },
+          "value": "Kiloutou"
+        },
+        {
+          "id": 87524,
+          "property": {
+            "id": 200,
+            "name": {
+              "fr": "accord_cadre",
+              "default": "accord_cadre"
+            }
+          },
+          "value": "oui"
+        },
+        {
+          "id": 87525,
+          "property": {
+            "id": 218,
+            "name": {
+              "fr": "tarif-id",
+              "default": "tarif-id"
+            }
+          },
+          "value": "3c04d331-4956-bd45-496f-50cb77534cda"
+        },
+        {
+          "id": 87526,
+          "property": {
+            "id": 219,
+            "name": {
+              "fr": "accord-id",
+              "default": "accord-id"
+            }
+          },
+          "value": "01928f90-5c2a-11ec-8ca8-0aa8df995aa4"
+        },
+        {
+          "id": 87527,
+          "property": {
+            "id": 146,
+            "name": {
+              "fr": "logo_partenaire",
+              "default": "logo_partenaire"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.amazonaws.com\/marketplace\/Accords-cadres\/KILOUTOU\/Kiloutou-Logo-Marketplace.jpg"
+        },
+        {
+          "id": 87528,
+          "property": {
+            "id": 147,
+            "name": {
+              "fr": "banniere_partenaire",
+              "default": "banniere_partenaire"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.amazonaws.com\/marketplace\/Accords-cadres\/KILOUTOU\/Kiloutou-Banni%C3%A8re-Page.jpg"
+        },
+        {
+          "id": 87529,
+          "property": {
+            "id": 148,
+            "name": {
+              "fr": "points_cles_1",
+              "default": "points_cles_1"
+            }
+          },
+          "value": "Plus de 250 000 mat\u00e9riels disponibles pour vos travaux"
+        },
+        {
+          "id": 87530,
+          "property": {
+            "id": 149,
+            "name": {
+              "fr": "points_cles_2",
+              "default": "points_cles_2"
+            }
+          },
+          "value": "1000 r\u00e9f\u00e9rences pour vos besoins"
+        },
+        {
+          "id": 87531,
+          "property": {
+            "id": 150,
+            "name": {
+              "fr": "points_cles_3",
+              "default": "points_cles_3"
+            }
+          },
+          "value": "Plus de 400 agences en France pour \u00eatre au plus pr\u00e8s de vous"
+        },
+        {
+          "id": 87532,
+          "property": {
+            "id": 153,
+            "name": {
+              "fr": "text1_conditions_negocies",
+              "default": "text1_conditions_negocies"
+            }
+          },
+          "value": "Profitez de conditions n\u00e9goci\u00e9es sur les r\u00e9f\u00e9rences les plus utilis\u00e9es par nos adh\u00e9rents, ainsi que sur une s\u00e9lection de produits n\u00e9goces."
+        },
+        {
+          "id": 87533,
+          "property": {
+            "id": 156,
+            "name": {
+              "fr": "cta1_text",
+              "default": "cta1_text"
+            }
+          },
+          "value": "T\u00e9l\u00e9chargez les conditions n\u00e9goci\u00e9es"
+        },
+        {
+          "id": 87534,
+          "property": {
+            "id": 157,
+            "name": {
+              "fr": "cta1_link",
+              "default": "cta1_link"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.amazonaws.com\/marketplace\/Accords-cadres\/KILOUTOU\/Conditions-n%C3%A9goci%C3%A9es-Kiloutou-QANTIS.zip"
+        },
+        {
+          "id": 87535,
+          "property": {
+            "id": 158,
+            "name": {
+              "fr": "cta2_text",
+              "default": "cta2_text"
+            }
+          },
+          "value": "T\u00e9l\u00e9chargez les conditions n\u00e9goci\u00e9es - Assurances & Garanties"
+        },
+        {
+          "id": 87536,
+          "property": {
+            "id": 159,
+            "name": {
+              "fr": "cta2_link",
+              "default": "cta2_link"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.amazonaws.com\/qantis-achat\/kiloutou\/kiloutou-conditions-assurance-garantie-qantis.pdf"
+        },
+        {
+          "id": 87537,
+          "property": {
+            "id": 160,
+            "name": {
+              "fr": "process_not_activated",
+              "default": "process_not_activated"
+            }
+          },
+          "value": "Vous ne b\u00e9n\u00e9ficiez pas encore des conditions de ce partenaire. Pour b\u00e9n\u00e9ficier des conditions, cliquez sur le bouton ci-dessus."
+        },
+        {
+          "id": 87538,
+          "property": {
+            "id": 161,
+            "name": {
+              "fr": "cta_text_not_activated",
+              "default": "cta_text_not_activated"
+            }
+          },
+          "value": "B\u00e9n\u00e9ficier des conditions"
+        },
+        {
+          "id": 87539,
+          "property": {
+            "id": 163,
+            "name": {
+              "fr": "process_pending",
+              "default": "process_pending"
+            }
+          },
+          "value": "Votre ouverture de compte sera effective sous 5 jours, \u00e0 partir de laquelle vous pourrez vous rendre dans l'agence KILOUTOU la plus proche, muni de votre num\u00e9ro de SIRET pour b\u00e9n\u00e9ficier de vos conditions. En cas de questions, n'h\u00e9sitez pas \u00e0 prendre contact avec votre service adh\u00e9rents."
+        },
+        {
+          "id": 87540,
+          "property": {
+            "id": 164,
+            "name": {
+              "fr": "cta1_text_pending",
+              "default": "cta1_text_pending"
+            }
+          },
+          "value": "Contactez le service adh\u00e9rents"
+        },
+        {
+          "id": 87542,
+          "property": {
+            "id": 168,
+            "name": {
+              "fr": "process_activated",
+              "default": "process_activated"
+            }
+          },
+          "value": "Contactez votre agence Kiloutou la plus proche de vous, ou de votre chantier, muni de votre num\u00e9ro de SIRET pour b\u00e9n\u00e9ficier de vos conditions en agence."
+        },
+        {
+          "id": 87543,
+          "property": {
+            "id": 169,
+            "name": {
+              "fr": "cta1_text_activated",
+              "default": "cta1_text_activated"
+            }
+          },
+          "value": "Trouvez l'agence KILOUTOU la plus proche"
+        },
+        {
+          "id": 87544,
+          "property": {
+            "id": 170,
+            "name": {
+              "fr": "cta1_link_activated",
+              "default": "cta1_link_activated"
+            }
+          },
+          "value": "https:\/\/www.kiloutou.fr\/agences\/"
+        },
+        {
+          "id": 87545,
+          "property": {
+            "id": 173,
+            "name": {
+              "fr": "mises_en_avant_1_img",
+              "default": "mises_en_avant_1_img"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.amazonaws.com\/marketplace\/Accords-cadres\/KILOUTOU\/MAV-kiloutou-guide-loc-mat%C3%A9riels.png"
+        },
+        {
+          "id": 87546,
+          "property": {
+            "id": 174,
+            "name": {
+              "fr": "mises_en_avant_1_titre",
+              "default": "mises_en_avant_1_titre"
+            }
+          },
+          "value": "Guide - Location de mat\u00e9riels"
+        },
+        {
+          "id": 87547,
+          "property": {
+            "id": 175,
+            "name": {
+              "fr": "mises_en_avant_1_txt",
+              "default": "mises_en_avant_1_txt"
+            }
+          },
+          "value": "Pourquoi louer son mat\u00e9riel ? Comment choisir son locatier ? Quels impacts sur vos finances ou sur votre politique RSE ? Afin de vous donner l'ensemble des cl\u00e9s n\u00e9cessaires dans votre processus de d\u00e9cision, l'\u00e9quipe QANTIS a r\u00e9dig\u00e9 pour vous un guide d\u00e9di\u00e9 \u00e0 la location de mat\u00e9riels."
+        },
+        {
+          "id": 87548,
+          "property": {
+            "id": 176,
+            "name": {
+              "fr": "mises_en_avant_1_cta_txt",
+              "default": "mises_en_avant_1_cta_txt"
+            }
+          },
+          "value": "T\u00e9l\u00e9charchez le guide"
+        },
+        {
+          "id": 87549,
+          "property": {
+            "id": 177,
+            "name": {
+              "fr": "mises_en_avant_1_cta_link",
+              "default": "mises_en_avant_1_cta_link"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.eu-west-3.amazonaws.com\/doc\/guides\/guide-location-materiels-anim.pdf"
+        },
+        {
+          "id": 87550,
+          "property": {
+            "id": 213,
+            "name": {
+              "fr": "mises_en_avant_2_video",
+              "default": "mises_en_avant_2_video"
+            }
+          },
+          "value": "https:\/\/www.youtube.com\/embed\/sb1GOHTUTDs"
+        },
+        {
+          "id": 87551,
+          "property": {
+            "id": 179,
+            "name": {
+              "fr": "mises_en_avant_2_titre",
+              "default": "mises_en_avant_2_titre"
+            }
+          },
+          "value": "My KILOUTOU Pro"
+        },
+        {
+          "id": 87552,
+          "property": {
+            "id": 180,
+            "name": {
+              "fr": "mises_en_avant_2_txt",
+              "default": "mises_en_avant_2_txt"
+            }
+          },
+          "value": "Gr\u00e2ce \u00e0 My Kiloutou, g\u00e9rez vos contrats, r\u00e9servations et devis en cours, effectuez des demandes de reprise, faites une demande d'assistance, consultez et t\u00e9l\u00e9chargez l'historique de vos factures et t\u00e9l\u00e9chargez votre grille tarifaire."
+        },
+        {
+          "id": 87553,
+          "property": {
+            "id": 183,
+            "name": {
+              "fr": "mises_en_avant_3_img",
+              "default": "mises_en_avant_3_img"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.amazonaws.com\/marketplace\/Accords-cadres\/KILOUTOU\/MAV-kiloutou-guide-mat-alternatifs.png"
+        },
+        {
+          "id": 87554,
+          "property": {
+            "id": 184,
+            "name": {
+              "fr": "mises_en_avant_3_titre",
+              "default": "mises_en_avant_3_titre"
+            }
+          },
+          "value": "Guide des mat\u00e9riels alternatifs"
+        },
+        {
+          "id": 87555,
+          "property": {
+            "id": 185,
+            "name": {
+              "fr": "mises_en_avant_3_txt",
+              "default": "mises_en_avant_3_txt"
+            }
+          },
+          "value": "Parce qu'un chantier plus respectueux de l'environnement passe aussi par des mat\u00e9riels plus responsables, Kiloutou vous accompagne en vous proposant des alternatives au diesel qui vont vous permettre de r\u00e9duire les \u00e9missions carbones jusqu'\u00e0 99%.Avec plus de 3 000 mat\u00e9riels d\u00e9ploy\u00e9s dans toute la France, Kiloutou et ses \u00e9quipes d\u00e9di\u00e9es vous accompagnent dans le choix de mat\u00e9riels adapt\u00e9s \u00e0 vos chantiers."
+        },
+        {
+          "id": 87556,
+          "property": {
+            "id": 186,
+            "name": {
+              "fr": "mises_en_avant_3_cta_txt",
+              "default": "mises_en_avant_3_cta_txt"
+            }
+          },
+          "value": "T\u00e9l\u00e9chargez le guide"
+        },
+        {
+          "id": 87557,
+          "property": {
+            "id": 187,
+            "name": {
+              "fr": "mises_en_avant_3_cta_link",
+              "default": "mises_en_avant_3_cta_link"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.eu-west-3.amazonaws.com\/qantis-achat\/kiloutou\/kiloutou-guide-materiels-alternatifs-qantis.pdf"
+        },
+        {
+          "id": 87558,
+          "property": {
+            "id": 188,
+            "name": {
+              "fr": "note_rse",
+              "default": "note_rse"
+            }
+          },
+          "value": "7,8\/10"
+        },
+        {
+          "id": 87559,
+          "property": {
+            "id": 189,
+            "name": {
+              "fr": "texte_rse",
+              "default": "texte_rse"
+            }
+          },
+          "value": "L'anne\u0301e 2020 a vu l'e\u0301criture de la feuille de route environnement de Kiloutou pour de\u0301finir la trajectoire de re\u0301duction de leur empreinte carbone de -40% a\u0300 horizon 2030. De plus, la durabilite\u0301 est aujourd'hui indissociable de la cre\u0301ation de valeur et de la performance e\u0301conomique de Kiloutou."
+        },
+        {
+          "id": 87560,
+          "property": {
+            "id": 190,
+            "name": {
+              "fr": "points_cles_rse_1",
+              "default": "points_cles_rse_1"
+            }
+          },
+          "value": "Qualit\u00e9 ISO 9001"
+        },
+        {
+          "id": 87561,
+          "property": {
+            "id": 191,
+            "name": {
+              "fr": "points_cles_rse_2",
+              "default": "points_cles_rse_2"
+            }
+          },
+          "value": "Neutralit\u00e9 carbone en 2050"
+        },
+        {
+          "id": 87562,
+          "property": {
+            "id": 192,
+            "name": {
+              "fr": "points_cles_rse_3",
+              "default": "points_cles_rse_3"
+            }
+          },
+          "value": "Offre verte : gamme IMPAKT"
+        },
+        {
+          "id": 87563,
+          "property": {
+            "id": 193,
+            "name": {
+              "fr": "cta_en_savoir_plus_text_1",
+              "default": "cta_en_savoir_plus_text_1"
+            }
+          },
+          "value": "EC - Prix Public Entreprises 2023"
+        },
+        {
+          "id": 87564,
+          "property": {
+            "id": 194,
+            "name": {
+              "fr": "cta_en_savoir_plus_link_1",
+              "default": "cta_en_savoir_plus_link_1"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.amazonaws.com\/qantis-achat\/kiloutou\/kiloutou-ec-prix-public-entreprises-2023.pdf"
+        },
+        {
+          "id": 87565,
+          "property": {
+            "id": 195,
+            "name": {
+              "fr": "cta_en_savoir_plus_text_2",
+              "default": "cta_en_savoir_plus_text_2"
+            }
+          },
+          "value": "CGV"
+        },
+        {
+          "id": 87566,
+          "property": {
+            "id": 196,
+            "name": {
+              "fr": "cta_en_savoir_plus_link_2",
+              "default": "cta_en_savoir_plus_link_2"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.amazonaws.com\/qantis-achat\/kiloutou\/kiloutou-cgv-qantis.pdf"
+        },
+        {
+          "id": 87567,
+          "property": {
+            "id": 197,
+            "name": {
+              "fr": "cta_en_savoir_plus_text_3",
+              "default": "cta_en_savoir_plus_text_3"
+            }
+          },
+          "value": "D\u00e9marche RSE Kiloutou"
+        },
+        {
+          "id": 87568,
+          "property": {
+            "id": 198,
+            "name": {
+              "fr": "cta_en_savoir_plus_link_3",
+              "default": "cta_en_savoir_plus_link_3"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.eu-west-3.amazonaws.com\/qantis-achat\/kiloutou\/kiloutou-demarche-rse-qantis.pdf"
+        },
+        {
+          "id": 87569,
+          "property": {
+            "id": 217,
+            "name": {
+              "fr": "Homepage - Mises en avant",
+              "default": "Homepage - Mises en avant"
+            }
+          },
+          "value": "home-accord-cadre"
+        },
+        {
+          "id": 194820,
+          "property": {
+            "id": 320,
+            "name": {
+              "fr": "cta1_mailto_pending",
+              "default": "cta1_mailto_pending"
+            }
+          },
+          "value": "mailto:marketplace@qantis.co?subject=Demande%20pour%20le%20partenaire%20KILOUTOU"
+        }
+      ],
+      "orderable": false,
+      "quotable": true,
+      "wishlistable": true,
+      "reference": "fat-kiloutou",
+      "seller_categories": [],
+      "variants": [
+        {
+          "id": 47521,
+          "available_on_demand": true,
+          "sku": null,
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": null,
+          "master_quantity": null
+        },
+        {
+          "id": 47522,
+          "available_on_demand": true,
+          "sku": "fat-kiloutou",
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": 1.0,
+          "master_quantity": null
+        }
+      ],
+      "company": {
+        "id": 51,
+        "name": "KILOUTOU"
+      },
+      "price_reference": null,
+      "price": null,
+      "base_price": null,
+      "gtin": null
+    },
+    {
+      "id": 19385,
+      "categories": [
+        {
+          "id": 864,
+          "name": {
+            "fr": "VEHICULES",
+            "default": "VEHICULES"
+          },
+          "image": "f5\/df\/599b044acf3855a383b7a8332e68.png"
+        }
+      ],
+      "description": {
+        "fr": "<p>Berline, citadine, SUV&hellip; Vous &ecirc;tes &agrave; la recherche de la voiture id&eacute;ale ? D&eacute;couvrez l&#39;ensemble des mod&egrave;les Renault et trouvez le v&eacute;hicule qui vous ressemble. Renault, entreprise fran&ccedil;aise de construction automobile, pr&eacute;sente dans le monde entier sur les march&eacute;s des v&eacute;hicules particuliers et utilitaires, vous propose des v&eacute;hicules &agrave; l&#39;achat mais aussi en location longue dur&eacute;e<\/p>",
+        "default": "<p>Berline, citadine, SUV&hellip; Vous &ecirc;tes &agrave; la recherche de la voiture id&eacute;ale ? D&eacute;couvrez l&#39;ensemble des mod&egrave;les Renault et trouvez le v&eacute;hicule qui vous ressemble. Renault, entreprise fran&ccedil;aise de construction automobile, pr&eacute;sente dans le monde entier sur les march&eacute;s des v&eacute;hicules particuliers et utilitaires, vous propose des v&eacute;hicules &agrave; l&#39;achat mais aussi en location longue dur&eacute;e<\/p>"
+      },
+      "images": [],
+      "name": {
+        "fr": "RENAULT",
+        "default": "RENAULT"
+      },
+      "slug": {
+        "fr": "renault-fat-renault",
+        "default": "renault-fat-renault"
+      },
+      "properties": [
+        {
+          "id": 87570,
+          "property": {
+            "id": 216,
+            "name": {
+              "fr": "fat_marque",
+              "default": "fat_marque"
+            }
+          },
+          "value": "Renault"
+        },
+        {
+          "id": 87571,
+          "property": {
+            "id": 200,
+            "name": {
+              "fr": "accord_cadre",
+              "default": "accord_cadre"
+            }
+          },
+          "value": "oui"
+        },
+        {
+          "id": 87572,
+          "property": {
+            "id": 218,
+            "name": {
+              "fr": "tarif-id",
+              "default": "tarif-id"
+            }
+          },
+          "value": "4f256656-4ffe-85b4-fb0f-50cb775ea75d"
+        },
+        {
+          "id": 87573,
+          "property": {
+            "id": 219,
+            "name": {
+              "fr": "accord-id",
+              "default": "accord-id"
+            }
+          },
+          "value": "0120410a-5c2b-11ec-98ff-0af08f946010"
+        },
+        {
+          "id": 87574,
+          "property": {
+            "id": 146,
+            "name": {
+              "fr": "logo_partenaire",
+              "default": "logo_partenaire"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.amazonaws.com\/marketplace\/Accords-cadres\/RENAULT\/Logo_Renault.png"
+        },
+        {
+          "id": 87575,
+          "property": {
+            "id": 147,
+            "name": {
+              "fr": "banniere_partenaire",
+              "default": "banniere_partenaire"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.amazonaws.com\/marketplace\/Accords-cadres\/RENAULT\/Banniere-Renault.jpg"
+        },
+        {
+          "id": 87576,
+          "property": {
+            "id": 148,
+            "name": {
+              "fr": "points_cles_1",
+              "default": "points_cles_1"
+            }
+          },
+          "value": "Des remises n\u00e9goci\u00e9es sur les v\u00e9hicules thermiques, hydriques, et \u00e9lectriques de la gamme Renault"
+        },
+        {
+          "id": 87577,
+          "property": {
+            "id": 149,
+            "name": {
+              "fr": "points_cles_2",
+              "default": "points_cles_2"
+            }
+          },
+          "value": "3756 points de vente Renault : une agence \u00e0 deux pas de chez vous"
+        },
+        {
+          "id": 87578,
+          "property": {
+            "id": 150,
+            "name": {
+              "fr": "points_cles_3",
+              "default": "points_cles_3"
+            }
+          },
+          "value": "Conditions n\u00e9goci\u00e9es \u00e0 l'achat ou en location longue dur\u00e9e"
+        },
+        {
+          "id": 87579,
+          "property": {
+            "id": 151,
+            "name": {
+              "fr": "mentions_legales_conditions",
+              "default": "mentions_legales_conditions"
+            }
+          },
+          "value": "Les remises sont applicables sur le prix du v\u00e9hicule neuf et sur les options (remises non applicables sur les accessoires). Ces conditions grands comptes n'autorisent pas \u00e0 revendre le v\u00e9hicule avant 12 mois (droit de garde obligatoire)"
+        },
+        {
+          "id": 87580,
+          "property": {
+            "id": 152,
+            "name": {
+              "fr": "tableau_conditions_negocies",
+              "default": "tableau_conditions_negocies"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.amazonaws.com\/marketplace\/Accords-cadres\/RENAULT\/renault-tableaux.png;https:\/\/ged-wp-files.s3.amazonaws.com\/marketplace\/Accords-cadres\/RENAULT\/renault-tableaux2.png;https:\/\/ged-wp-files.s3.amazonaws.com\/marketplace\/Accords-cadres\/RENAULT\/renault-tableaux3.png;https:\/\/ged-wp-files.s3.amazonaws.com\/marketplace\/Accords-cadres\/RENAULT\/renault-tableaux4.png"
+        },
+        {
+          "id": 87581,
+          "property": {
+            "id": 156,
+            "name": {
+              "fr": "cta1_text",
+              "default": "cta1_text"
+            }
+          },
+          "value": "Consultez les conditions n\u00e9goci\u00e9es Renault"
+        },
+        {
+          "id": 87582,
+          "property": {
+            "id": 157,
+            "name": {
+              "fr": "cta1_link",
+              "default": "cta1_link"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.amazonaws.com\/qantis-achat\/renault\/renault-conditions-negociees-qantis.pdf"
+        },
+        {
+          "id": 87583,
+          "property": {
+            "id": 160,
+            "name": {
+              "fr": "process_not_activated",
+              "default": "process_not_activated"
+            }
+          },
+          "value": "Vous ne b\u00e9n\u00e9ficiez pas encore des conditions de ce partenaire. Pour b\u00e9n\u00e9ficier des conditions, cliquez sur le bouton ci-dessus."
+        },
+        {
+          "id": 87584,
+          "property": {
+            "id": 161,
+            "name": {
+              "fr": "cta_text_not_activated",
+              "default": "cta_text_not_activated"
+            }
+          },
+          "value": "B\u00e9n\u00e9ficier des conditions"
+        },
+        {
+          "id": 87585,
+          "property": {
+            "id": 163,
+            "name": {
+              "fr": "process_pending",
+              "default": "process_pending"
+            }
+          },
+          "value": "Rendez-vous dans la concession RENAULT la plus proche de chez vous, muni de votre num\u00e9ro de SIRET et en indiquant que vous \u00eates adh\u00e9rent QANTIS."
+        },
+        {
+          "id": 87586,
+          "property": {
+            "id": 164,
+            "name": {
+              "fr": "cta1_text_pending",
+              "default": "cta1_text_pending"
+            }
+          },
+          "value": "Contactez le service adh\u00e9rents"
+        },
+        {
+          "id": 87588,
+          "property": {
+            "id": 168,
+            "name": {
+              "fr": "process_activated",
+              "default": "process_activated"
+            }
+          },
+          "value": "Rendez-vous dans la concession RENAULT la plus proche de chez vous, muni de votre num\u00e9ro de SIRET et en indiquant que vous \u00eates adh\u00e9rent QANTIS."
+        },
+        {
+          "id": 87589,
+          "property": {
+            "id": 169,
+            "name": {
+              "fr": "cta1_text_activated",
+              "default": "cta1_text_activated"
+            }
+          },
+          "value": "Contactez le service adh\u00e9rents"
+        },
+        {
+          "id": 87591,
+          "property": {
+            "id": 173,
+            "name": {
+              "fr": "mises_en_avant_1_img",
+              "default": "mises_en_avant_1_img"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.amazonaws.com\/marketplace\/Accords-cadres\/PEUGEOT\/Peugeot_MAV1.jpg"
+        },
+        {
+          "id": 87592,
+          "property": {
+            "id": 174,
+            "name": {
+              "fr": "mises_en_avant_1_titre",
+              "default": "mises_en_avant_1_titre"
+            }
+          },
+          "value": "BON \u00c0 SAVOIR"
+        },
+        {
+          "id": 87593,
+          "property": {
+            "id": 175,
+            "name": {
+              "fr": "mises_en_avant_1_txt",
+              "default": "mises_en_avant_1_txt"
+            }
+          },
+          "value": "Afin de b\u00e9n\u00e9ficier de toujours plus d'\u00e9conomies, renvoyez-nous la copie de votre carte grise une fois votre v\u00e9hicule achet\u00e9. Elle nous servira \u00e0 ren\u00e9gocier vos remises chaque fin d'ann\u00e9e !"
+        },
+        {
+          "id": 87594,
+          "property": {
+            "id": 176,
+            "name": {
+              "fr": "mises_en_avant_1_cta_txt",
+              "default": "mises_en_avant_1_cta_txt"
+            }
+          },
+          "value": "Envoyez une copie de votre carte grise"
+        },
+        {
+          "id": 87596,
+          "property": {
+            "id": 189,
+            "name": {
+              "fr": "texte_rse",
+              "default": "texte_rse"
+            }
+          },
+          "value": "Le groupe Renault se transforme en une entreprise green, tech, centr\u00e9e sur les nouveaux business de l'\u00e9nergie, des donn\u00e9es et des services. Ces engagements en mati\u00e8re de d\u00e9carbonation, s\u00e9curit\u00e9 et inclusion s'int\u00e8grent pleinement dans les activit\u00e9s op\u00e9rationnelles et soutiennent la cr\u00e9ation de valeur."
+        },
+        {
+          "id": 87597,
+          "property": {
+            "id": 190,
+            "name": {
+              "fr": "points_cles_rse_1",
+              "default": "points_cles_rse_1"
+            }
+          },
+          "value": "Respect de l'environnement : lutte contre le r\u00e9chauffement climatique : r\u00e9duction des \u00e9missions de gaz \u00e0 effet de serre."
+        },
+        {
+          "id": 87598,
+          "property": {
+            "id": 191,
+            "name": {
+              "fr": "points_cles_rse_2",
+              "default": "points_cles_rse_2"
+            }
+          },
+          "value": "Favoriser la construction d'une soci\u00e9t\u00e9 plus inclusive, \u0153uvrer pour l'\u00e9mergence d'une mobilit\u00e9 durable responsable pour tous."
+        },
+        {
+          "id": 87599,
+          "property": {
+            "id": 193,
+            "name": {
+              "fr": "cta_en_savoir_plus_text_1",
+              "default": "cta_en_savoir_plus_text_1"
+            }
+          },
+          "value": "Dossier Essai - Nouvelle M\u00c9GANE"
+        },
+        {
+          "id": 87600,
+          "property": {
+            "id": 194,
+            "name": {
+              "fr": "cta_en_savoir_plus_link_1",
+              "default": "cta_en_savoir_plus_link_1"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.amazonaws.com\/marketplace\/Accords-cadres\/RENAULT\/renault-nouvelles-megane.pdf"
+        },
+        {
+          "id": 87601,
+          "property": {
+            "id": 195,
+            "name": {
+              "fr": "cta_en_savoir_plus_text_2",
+              "default": "cta_en_savoir_plus_text_2"
+            }
+          },
+          "value": "Dossier Essai - Nouvelle ZOE"
+        },
+        {
+          "id": 87602,
+          "property": {
+            "id": 196,
+            "name": {
+              "fr": "cta_en_savoir_plus_link_2",
+              "default": "cta_en_savoir_plus_link_2"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.amazonaws.com\/marketplace\/Accords-cadres\/RENAULT\/renault-nouvelle-zoe.pdf"
+        },
+        {
+          "id": 87603,
+          "property": {
+            "id": 197,
+            "name": {
+              "fr": "cta_en_savoir_plus_text_3",
+              "default": "cta_en_savoir_plus_text_3"
+            }
+          },
+          "value": "Dossier Essai \u2013 Nouveau VU"
+        },
+        {
+          "id": 87604,
+          "property": {
+            "id": 198,
+            "name": {
+              "fr": "cta_en_savoir_plus_link_3",
+              "default": "cta_en_savoir_plus_link_3"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.eu-west-3.amazonaws.com\/qantis-achat\/renault\/renaut-nouveau-vu-2021-qantis.pdf"
+        },
+        {
+          "id": 87605,
+          "property": {
+            "id": 217,
+            "name": {
+              "fr": "Homepage - Mises en avant",
+              "default": "Homepage - Mises en avant"
+            }
+          },
+          "value": "home-accord-cadre"
+        },
+        {
+          "id": 194922,
+          "property": {
+            "id": 322,
+            "name": {
+              "fr": "cta1_mailto_activated",
+              "default": "cta1_mailto_activated"
+            }
+          },
+          "value": "mailto:marketplace@qantis.co?subject=Demande%20pour%20le%20partenaire%20RENAULT"
+        },
+        {
+          "id": 194923,
+          "property": {
+            "id": 324,
+            "name": {
+              "fr": "mises_en_avant_1_cta_mailto",
+              "default": "mises_en_avant_1_cta_mailto"
+            }
+          },
+          "value": "mailto:opcg@qantis.co?subject=(RENAULT)%20Carte%20grise"
+        },
+        {
+          "id": 194924,
+          "property": {
+            "id": 320,
+            "name": {
+              "fr": "cta1_mailto_pending",
+              "default": "cta1_mailto_pending"
+            }
+          },
+          "value": "mailto:marketplace@qantis.co?subject=Demande%20pour%20le%20partenaire%20RENAULT"
+        }
+      ],
+      "orderable": true,
+      "quotable": true,
+      "wishlistable": true,
+      "reference": "fat-renault",
+      "seller_categories": [],
+      "variants": [
+        {
+          "id": 47523,
+          "available_on_demand": true,
+          "sku": null,
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": null,
+          "master_quantity": null
+        },
+        {
+          "id": 47524,
+          "available_on_demand": true,
+          "sku": "fat-renault",
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": 1.0,
+          "master_quantity": null
+        }
+      ],
+      "company": {
+        "id": 58,
+        "name": "RENAULT"
+      },
+      "price_reference": null,
+      "price": {
+        "id": 27489
+      },
+      "base_price": {
+        "id": 27489
+      },
+      "gtin": null
+    },
+    {
+      "id": 19383,
+      "categories": [
+        {
+          "id": 588,
+          "name": {
+            "fr": "FOURNITURES DE BUREAU",
+            "default": "FOURNITURES DE BUREAU"
+          },
+          "image": "d8\/44\/ca8a0c47751c6a56b8eb116f00c8.png"
+        }
+      ],
+      "description": {
+        "fr": "<p>ALDA MAJUSCULE-OFFICE DEPOT vous propose une large gamme de produits sur plus de 10 000 r&eacute;f&eacute;rences pour vos besoins en fournitures de bureau, papeterie, mobilier, informatique etc. ALDA MAJUSCULE, une offre de proximit&eacute; r&eacute;gionale multicanale unique en France : BtoB et magasins Office Depot. PME, ETI, TPE, artisans, administrations, ce fournisseur vous garantit une &eacute;coute et des conseils personnalis&eacute;s.<\/p>",
+        "default": "<p>ALDA MAJUSCULE-OFFICE DEPOT vous propose une large gamme de produits sur plus de 10 000 r&eacute;f&eacute;rences pour vos besoins en fournitures de bureau, papeterie, mobilier, informatique etc. ALDA MAJUSCULE, une offre de proximit&eacute; r&eacute;gionale multicanale unique en France : BtoB et magasins Office Depot. PME, ETI, TPE, artisans, administrations, ce fournisseur vous garantit une &eacute;coute et des conseils personnalis&eacute;s.<\/p>"
+      },
+      "images": [],
+      "name": {
+        "fr": "ALDA MAJUSCULE",
+        "default": "ALDA MAJUSCULE"
+      },
+      "slug": {
+        "fr": "alda-majuscule-fat-alda-majuscule",
+        "default": "alda-majuscule-fat-alda-majuscule"
+      },
+      "properties": [
+        {
+          "id": 87486,
+          "property": {
+            "id": 216,
+            "name": {
+              "fr": "fat_marque",
+              "default": "fat_marque"
+            }
+          },
+          "value": "ALDA MAJUSCULE"
+        },
+        {
+          "id": 87487,
+          "property": {
+            "id": 200,
+            "name": {
+              "fr": "accord_cadre",
+              "default": "accord_cadre"
+            }
+          },
+          "value": "oui"
+        },
+        {
+          "id": 87488,
+          "property": {
+            "id": 218,
+            "name": {
+              "fr": "tarif-id",
+              "default": "tarif-id"
+            }
+          },
+          "value": "7a9c41c0-d04b-11ec-8563-b419a1fe9d67"
+        },
+        {
+          "id": 87489,
+          "property": {
+            "id": 219,
+            "name": {
+              "fr": "accord-id",
+              "default": "accord-id"
+            }
+          },
+          "value": "a99297e4-c179-11ec-ade5-0af08f946010"
+        },
+        {
+          "id": 87490,
+          "property": {
+            "id": 146,
+            "name": {
+              "fr": "logo_partenaire",
+              "default": "logo_partenaire"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.amazonaws.com\/marketplace\/Accords-cadres\/ALDA_MAJUSCULE\/ALDA-MAJUSCULE-Logo-Marketplace.jpg"
+        },
+        {
+          "id": 87491,
+          "property": {
+            "id": 147,
+            "name": {
+              "fr": "banniere_partenaire",
+              "default": "banniere_partenaire"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.amazonaws.com\/marketplace\/Accords-cadres\/ALDA_MAJUSCULE\/Banniere-ALDA-Majuscule.jpg"
+        },
+        {
+          "id": 87492,
+          "property": {
+            "id": 148,
+            "name": {
+              "fr": "points_cles_1",
+              "default": "points_cles_1"
+            }
+          },
+          "value": "Large choix de produits sur plus de 10 000 r\u00e9f\u00e9rences"
+        },
+        {
+          "id": 87493,
+          "property": {
+            "id": 149,
+            "name": {
+              "fr": "points_cles_2",
+              "default": "points_cles_2"
+            }
+          },
+          "value": "Fort de 30 ans d'existence"
+        },
+        {
+          "id": 87494,
+          "property": {
+            "id": 150,
+            "name": {
+              "fr": "points_cles_3",
+              "default": "points_cles_3"
+            }
+          },
+          "value": "Livraison dans toute la France sous 24h \u00e0 48h"
+        },
+        {
+          "id": 87495,
+          "property": {
+            "id": 153,
+            "name": {
+              "fr": "text1_conditions_negocies",
+              "default": "text1_conditions_negocies"
+            }
+          },
+          "value": "Liste de prix n\u00e9goci\u00e9s : -15 % sur le prix public HT sur la fourniture de bureau"
+        },
+        {
+          "id": 87496,
+          "property": {
+            "id": 154,
+            "name": {
+              "fr": "text2_conditions_negocies",
+              "default": "text2_conditions_negocies"
+            }
+          },
+          "value": "Jusqu'\u00e0 10% de remise sur le catalogue Mobilier de bureau (HT)"
+        },
+        {
+          "id": 87497,
+          "property": {
+            "id": 155,
+            "name": {
+              "fr": "text3_conditions_negocies",
+              "default": "text3_conditions_negocies"
+            }
+          },
+          "value": "Jusqu'\u00e0 10% de remise dans vos magasins Office D\u00e9p\u00f4t (TTC et hors promotion)"
+        },
+        {
+          "id": 87498,
+          "property": {
+            "id": 156,
+            "name": {
+              "fr": "cta1_text",
+              "default": "cta1_text"
+            }
+          },
+          "value": "D\u00e9couvrez les conditions n\u00e9goci\u00e9es"
+        },
+        {
+          "id": 87499,
+          "property": {
+            "id": 157,
+            "name": {
+              "fr": "cta1_link",
+              "default": "cta1_link"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.eu-west-3.amazonaws.com\/qantis-achat\/alda-majuscule-office-depot\/alda-od-conditions-negociees-qantis.xlsx"
+        },
+        {
+          "id": 87500,
+          "property": {
+            "id": 160,
+            "name": {
+              "fr": "process_not_activated",
+              "default": "process_not_activated"
+            }
+          },
+          "value": "Vous ne b\u00e9n\u00e9ficiez pas encore des conditions de ce partenaire. Pour b\u00e9n\u00e9ficier des conditions, cliquez sur le bouton ci-dessus."
+        },
+        {
+          "id": 87501,
+          "property": {
+            "id": 161,
+            "name": {
+              "fr": "cta_text_not_activated",
+              "default": "cta_text_not_activated"
+            }
+          },
+          "value": "B\u00e9n\u00e9ficier des conditions"
+        },
+        {
+          "id": 87502,
+          "property": {
+            "id": 163,
+            "name": {
+              "fr": "process_pending",
+              "default": "process_pending"
+            }
+          },
+          "value": "Votre ouverture de compte sera effective sous 5 jours ouvr\u00e9s"
+        },
+        {
+          "id": 87503,
+          "property": {
+            "id": 164,
+            "name": {
+              "fr": "cta1_text_pending",
+              "default": "cta1_text_pending"
+            }
+          },
+          "value": "Contactez le service adh\u00e9rents"
+        },
+        {
+          "id": 87505,
+          "property": {
+            "id": 169,
+            "name": {
+              "fr": "cta1_text_activated",
+              "default": "cta1_text_activated"
+            }
+          },
+          "value": "Votre attestation d'adh\u00e9sion"
+        },
+        {
+          "id": 87506,
+          "property": {
+            "id": 170,
+            "name": {
+              "fr": "cta1_link_activated",
+              "default": "cta1_link_activated"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.eu-west-3.amazonaws.com\/qantis-achat\/alda-majuscule-office-depot\/alda-od-attestation-adhesion-qantis.pdf"
+        },
+        {
+          "id": 87507,
+          "property": {
+            "id": 171,
+            "name": {
+              "fr": "cta2_text_activated",
+              "default": "cta2_text_activated"
+            }
+          },
+          "value": "Contactez le service adh\u00e9rents"
+        },
+        {
+          "id": 87509,
+          "property": {
+            "id": 173,
+            "name": {
+              "fr": "mises_en_avant_1_img",
+              "default": "mises_en_avant_1_img"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.amazonaws.com\/marketplace\/Accords-cadres\/ALDA_MAJUSCULE\/ALDA_MAJUSCULE-MAV1.jpg"
+        },
+        {
+          "id": 87510,
+          "property": {
+            "id": 174,
+            "name": {
+              "fr": "mises_en_avant_1_titre",
+              "default": "mises_en_avant_1_titre"
+            }
+          },
+          "value": "Votre sp\u00e9cialiste de l'\u00e9quipement du bureau"
+        },
+        {
+          "id": 87511,
+          "property": {
+            "id": 175,
+            "name": {
+              "fr": "mises_en_avant_1_txt",
+              "default": "mises_en_avant_1_txt"
+            }
+          },
+          "value": "Tout ce dont vous avez besoin aupr\u00e8s d'un seul fournisseur. Un groupe d'envergure \u00e0 taille humaine sp\u00e9cialis\u00e9 dans la distribution de fournitures de bureau, papier, consommables informatiques, ergonomie au travail et beaux-arts.  Mais aussi des offres exclusives sur des produits verts et de fabrication fran\u00e7aise."
+        },
+        {
+          "id": 87512,
+          "property": {
+            "id": 178,
+            "name": {
+              "fr": "mises_en_avant_2_img",
+              "default": "mises_en_avant_2_img"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.amazonaws.com\/marketplace\/Accords-cadres\/ALDA_MAJUSCULE\/ALDA_MAJUSCULE-MAV2.jpg"
+        },
+        {
+          "id": 87513,
+          "property": {
+            "id": 179,
+            "name": {
+              "fr": "mises_en_avant_2_titre",
+              "default": "mises_en_avant_2_titre"
+            }
+          },
+          "value": "Mobilier de bureau"
+        },
+        {
+          "id": 87514,
+          "property": {
+            "id": 180,
+            "name": {
+              "fr": "mises_en_avant_2_txt",
+              "default": "mises_en_avant_2_txt"
+            }
+          },
+          "value": "Des solutions pour am\u00e9nager, concevoir et \u00e9quiper votre espace de travail, open space, de d\u00e9tente, accueil, multi space, de si\u00e8ges et bureaux ergonomiques et compacts, con\u00e7us par des designers et architectes fran\u00e7ais."
+        },
+        {
+          "id": 87515,
+          "property": {
+            "id": 183,
+            "name": {
+              "fr": "mises_en_avant_3_img",
+              "default": "mises_en_avant_3_img"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.amazonaws.com\/marketplace\/Accords-cadres\/ALDA_MAJUSCULE\/ALDA_MAJUSCULE-MAV3.jpg"
+        },
+        {
+          "id": 87516,
+          "property": {
+            "id": 184,
+            "name": {
+              "fr": "mises_en_avant_3_titre",
+              "default": "mises_en_avant_3_titre"
+            }
+          },
+          "value": "Les Magasins Office DEPOT"
+        },
+        {
+          "id": 87517,
+          "property": {
+            "id": 185,
+            "name": {
+              "fr": "mises_en_avant_3_txt",
+              "default": "mises_en_avant_3_txt"
+            }
+          },
+          "value": "Achetez dans les 50 magasins OFFICE DEPOT en France. Une carte Pro Elite vous sera accord\u00e9e avec son privil\u00e8ge : Remise de 10 % sur le magasin sauf mat\u00e9riel informatique et promos en cours"
+        },
+        {
+          "id": 87518,
+          "property": {
+            "id": 189,
+            "name": {
+              "fr": "texte_rse",
+              "default": "texte_rse"
+            }
+          },
+          "value": "ALDA MAJUSCULE-OFFICE DEPOT participe \u00e0 l'am\u00e9lioration continue des performances \u00e9conomiques, sociales, sant\u00e9 et s\u00e9curit\u00e9 et environnementales."
+        },
+        {
+          "id": 87519,
+          "property": {
+            "id": 190,
+            "name": {
+              "fr": "points_cles_rse_1",
+              "default": "points_cles_rse_1"
+            }
+          },
+          "value": "3 Certifications : \u00c9coute et satisfaction client"
+        },
+        {
+          "id": 87520,
+          "property": {
+            "id": 191,
+            "name": {
+              "fr": "points_cles_rse_2",
+              "default": "points_cles_rse_2"
+            }
+          },
+          "value": "D\u00e9marches soci\u00e9tales : Membre de l'UFIPA et du Pacte Mondial des Nations. Partenaire de l'association Enfance et MAJUSCULE"
+        },
+        {
+          "id": 87521,
+          "property": {
+            "id": 192,
+            "name": {
+              "fr": "points_cles_rse_3",
+              "default": "points_cles_rse_3"
+            }
+          },
+          "value": "Produits \u00e9co responsables Eco Label 45% de Produits Verts et fabrication Fran\u00e7aise NF et Europ\u00e9enne CE"
+        },
+        {
+          "id": 87522,
+          "property": {
+            "id": 217,
+            "name": {
+              "fr": "Homepage - Mises en avant",
+              "default": "Homepage - Mises en avant"
+            }
+          },
+          "value": "home-accord-cadre"
+        },
+        {
+          "id": 114511,
+          "property": {
+            "id": 193,
+            "name": {
+              "fr": "cta_en_savoir_plus_text_1",
+              "default": "cta_en_savoir_plus_text_1"
+            }
+          },
+          "value": "Catalogue 2023"
+        },
+        {
+          "id": 114512,
+          "property": {
+            "id": 194,
+            "name": {
+              "fr": "cta_en_savoir_plus_link_1",
+              "default": "cta_en_savoir_plus_link_1"
+            }
+          },
+          "value": "https:\/\/catalogues.majuscule.fr\/.fournitures-bureau-2023\/?utm_source=site_catalogue&utm_medium=pr\u00e9sentation_catalogues&utm_campaign=majuscule_entreprises_2023#page=1"
+        },
+        {
+          "id": 114555,
+          "property": {
+            "id": 158,
+            "name": {
+              "fr": "cta2_text",
+              "default": "cta2_text"
+            }
+          },
+          "value": "Commandez directement les produits Alda Majuscule"
+        },
+        {
+          "id": 114556,
+          "property": {
+            "id": 159,
+            "name": {
+              "fr": "cta2_link",
+              "default": "cta2_link"
+            }
+          },
+          "value": "https:\/\/marketplace.qantis.co\/products?q=alda+majuscule&page=1"
+        },
+        {
+          "id": 194624,
+          "property": {
+            "id": 323,
+            "name": {
+              "fr": "cta2_mailto_activated",
+              "default": "cta2_mailto_activated"
+            }
+          },
+          "value": "mailto:marketplace@qantis.co?subject=Demande%20pour%20le%20partenaire%20ALDA%20MAJUSCULE"
+        },
+        {
+          "id": 194625,
+          "property": {
+            "id": 320,
+            "name": {
+              "fr": "cta1_mailto_pending",
+              "default": "cta1_mailto_pending"
+            }
+          },
+          "value": "mailto:marketplace@qantis.co?subject=Demande%20pour%20le%20partenaire%20ALDA%20MAJUSCULE"
+        },
+        {
+          "id": 195700,
+          "property": {
+            "id": 168,
+            "name": {
+              "fr": "process_activated",
+              "default": "process_activated"
+            }
+          },
+          "value": "Votre rattachement a bien \u00e9t\u00e9 effectu\u00e9, retrouvez les produits Alda Majuscule disponibles sur la marketplace. Vous pouvez \u00e9galement vous rendre au magasin Office DEPOT le plus proche avec l'attestation d'adh\u00e9sion \u00e0 t\u00e9l\u00e9charger ci-dessous puis \u00e0 remplir afin de b\u00e9n\u00e9ficier d'une carte vous faisant profiter des m\u00eames conditions n\u00e9goci\u00e9es au sein de ce magasin."
+        }
+      ],
+      "orderable": true,
+      "quotable": true,
+      "wishlistable": true,
+      "reference": "fat-alda-majuscule",
+      "seller_categories": [],
+      "variants": [
+        {
+          "id": 47519,
+          "available_on_demand": true,
+          "sku": null,
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": null,
+          "master_quantity": null
+        },
+        {
+          "id": 47520,
+          "available_on_demand": true,
+          "sku": "fat-alda-majuscule",
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": 1.0,
+          "master_quantity": null
+        }
+      ],
+      "company": {
+        "id": 27,
+        "name": "ALDA MAJUSCULE"
+      },
+      "price_reference": null,
+      "price": {
+        "id": 27487
+      },
+      "base_price": {
+        "id": 27487
+      },
+      "gtin": null
+    },
+    {
+      "id": 19382,
+      "categories": [
+        {
+          "id": 678,
+          "name": {
+            "fr": "OUTILLAGE",
+            "default": "OUTILLAGE"
+          },
+          "image": "5c\/80\/1c2c7e512d9cc7bcbc196df9c923.png"
+        }
+      ],
+      "description": {
+        "fr": "<p>BERNER est le&nbsp;distributeur europ&eacute;en sp&eacute;cialis&eacute; dans le conseil et la vente d&#39;outillages, de produits chimiques, de fixation, d&#39;EPI et de consommables techniques pour les professionnels de la construction, de la mobilit&eacute; et de l&#39;industrie. BERNER r&eacute;pond aux attentes les plus exigeantes des professionnels en proposant plus de 25 000 r&eacute;f&eacute;rences de produits et services remarquables.<\/p>",
+        "default": "<p>BERNER est le&nbsp;distributeur europ&eacute;en sp&eacute;cialis&eacute; dans le conseil et la vente d&#39;outillages, de produits chimiques, de fixation, d&#39;EPI et de consommables techniques pour les professionnels de la construction, de la mobilit&eacute; et de l&#39;industrie. BERNER r&eacute;pond aux attentes les plus exigeantes des professionnels en proposant plus de 25 000 r&eacute;f&eacute;rences de produits et services remarquables.<\/p>"
+      },
+      "images": [],
+      "name": {
+        "fr": "BERNER",
+        "default": "BERNER"
+      },
+      "slug": {
+        "fr": "berner-fat-berner-major",
+        "default": "berner-fat-berner-major"
+      },
+      "properties": [
+        {
+          "id": 87453,
+          "property": {
+            "id": 216,
+            "name": {
+              "fr": "fat_marque",
+              "default": "fat_marque"
+            }
+          },
+          "value": "Berner"
+        },
+        {
+          "id": 87454,
+          "property": {
+            "id": 200,
+            "name": {
+              "fr": "accord_cadre",
+              "default": "accord_cadre"
+            }
+          },
+          "value": "oui"
+        },
+        {
+          "id": 87455,
+          "property": {
+            "id": 218,
+            "name": {
+              "fr": "tarif-id",
+              "default": "tarif-id"
+            }
+          },
+          "value": "e8d757d0-39d9-11e9-b930-bf6b6b20a8e0"
+        },
+        {
+          "id": 87456,
+          "property": {
+            "id": 219,
+            "name": {
+              "fr": "accord-id",
+              "default": "accord-id"
+            }
+          },
+          "value": "5e257c68-5c2a-11ec-a281-021d5312eaee"
+        },
+        {
+          "id": 87457,
+          "property": {
+            "id": 146,
+            "name": {
+              "fr": "logo_partenaire",
+              "default": "logo_partenaire"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.eu-west-3.amazonaws.com\/marketplace\/Accords-cadres\/BERNER\/Berner_logo_mktp.jpg"
+        },
+        {
+          "id": 87458,
+          "property": {
+            "id": 147,
+            "name": {
+              "fr": "banniere_partenaire",
+              "default": "banniere_partenaire"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.eu-west-3.amazonaws.com\/marketplace\/Accords-cadres\/BERNER\/Berner_banniere.jpg"
+        },
+        {
+          "id": 87459,
+          "property": {
+            "id": 148,
+            "name": {
+              "fr": "points_cles_1",
+              "default": "points_cles_1"
+            }
+          },
+          "value": "Plus de 25 000 r\u00e9f\u00e9rences de produits et services"
+        },
+        {
+          "id": 87460,
+          "property": {
+            "id": 149,
+            "name": {
+              "fr": "points_cles_2",
+              "default": "points_cles_2"
+            }
+          },
+          "value": "100% r\u00e9serv\u00e9s aux professionnels"
+        },
+        {
+          "id": 87461,
+          "property": {
+            "id": 150,
+            "name": {
+              "fr": "points_cles_3",
+              "default": "points_cles_3"
+            }
+          },
+          "value": "Plus de 50 ans d'expertise"
+        },
+        {
+          "id": 87462,
+          "property": {
+            "id": 153,
+            "name": {
+              "fr": "text1_conditions_negocies",
+              "default": "text1_conditions_negocies"
+            }
+          },
+          "value": "Des tarifs sp\u00e9cifiques sur l'outillage d'atelier"
+        },
+        {
+          "id": 87463,
+          "property": {
+            "id": 154,
+            "name": {
+              "fr": "text2_conditions_negocies",
+              "default": "text2_conditions_negocies"
+            }
+          },
+          "value": "Franco de port sans minimum de commande  (hors express)"
+        },
+        {
+          "id": 87464,
+          "property": {
+            "id": 155,
+            "name": {
+              "fr": "text3_conditions_negocies",
+              "default": "text3_conditions_negocies"
+            }
+          },
+          "value": "Livraison rapide sous 48\/72h"
+        },
+        {
+          "id": 87465,
+          "property": {
+            "id": 156,
+            "name": {
+              "fr": "cta1_text",
+              "default": "cta1_text"
+            }
+          },
+          "value": "Acc\u00e9dez \u00e0 la liste des conditions n\u00e9goci\u00e9es"
+        },
+        {
+          "id": 87466,
+          "property": {
+            "id": 158,
+            "name": {
+              "fr": "cta2_text",
+              "default": "cta2_text"
+            }
+          },
+          "value": "D\u00e9couvrez les produits BERNER"
+        },
+        {
+          "id": 87467,
+          "property": {
+            "id": 160,
+            "name": {
+              "fr": "process_not_activated",
+              "default": "process_not_activated"
+            }
+          },
+          "value": "Vous ne b\u00e9n\u00e9ficiez pas encore des conditions de ce partenaire. Pour b\u00e9n\u00e9ficier des conditions, cliquez sur le bouton ci-dessus."
+        },
+        {
+          "id": 87468,
+          "property": {
+            "id": 161,
+            "name": {
+              "fr": "cta_text_not_activated",
+              "default": "cta_text_not_activated"
+            }
+          },
+          "value": "B\u00e9n\u00e9ficier des conditions"
+        },
+        {
+          "id": 87469,
+          "property": {
+            "id": 163,
+            "name": {
+              "fr": "process_pending",
+              "default": "process_pending"
+            }
+          },
+          "value": "Les produits BERNER sont disponibles directement en ligne sur la marketplace.Vous pouvez \u00e9galement contacter directement votre interlocuteur BERNER habituel pour passer commande en lui pr\u00e9cisant que vous \u00eates adh\u00e9rent QANTIS."
+        },
+        {
+          "id": 87470,
+          "property": {
+            "id": 164,
+            "name": {
+              "fr": "cta1_text_pending",
+              "default": "cta1_text_pending"
+            }
+          },
+          "value": "D\u00e9couvrez les produits BERNER"
+        },
+        {
+          "id": 87471,
+          "property": {
+            "id": 168,
+            "name": {
+              "fr": "process_activated",
+              "default": "process_activated"
+            }
+          },
+          "value": "Les produits BERNER sont disponibles directement en ligne sur la marketplace. Vous pouvez \u00e9galement contacter directement votre interlocuteur BERNER habituel pour passer commande en lui pr\u00e9cisant que vous \u00eates adh\u00e9rent QANTIS."
+        },
+        {
+          "id": 87472,
+          "property": {
+            "id": 169,
+            "name": {
+              "fr": "cta1_text_activated",
+              "default": "cta1_text_activated"
+            }
+          },
+          "value": "D\u00e9couvrez les produits BERNER"
+        },
+        {
+          "id": 87478,
+          "property": {
+            "id": 188,
+            "name": {
+              "fr": "note_rse",
+              "default": "note_rse"
+            }
+          },
+          "value": "8,1\/10"
+        },
+        {
+          "id": 87479,
+          "property": {
+            "id": 189,
+            "name": {
+              "fr": "texte_rse",
+              "default": "texte_rse"
+            }
+          },
+          "value": "QANTIS a co-construit un questionnaire afin de conna\u00eetre la sensibilit\u00e9 et les actions de ses partenaires en mati\u00e8re de RSE (Responsabilit\u00e9 Sociale des Entreprises). Les partenaires ayant r\u00e9pondu au questionnaire ont obtenu une note sur 100 que nous partageons avec nos adh\u00e9rents. QANTIS s'engage sur la v\u00e9racit\u00e9 des informations fournies par chaque partenaire. Les documents justificatifs sont disponibles sur simple demande \u00e0 notre \u00e9quipe."
+        },
+        {
+          "id": 87480,
+          "property": {
+            "id": 190,
+            "name": {
+              "fr": "points_cles_rse_1",
+              "default": "points_cles_rse_1"
+            }
+          },
+          "value": "BERNER France est quadruplement certifi\u00e9e QSEEn : qualit\u00e9 ISO 9001, s\u00e9curit\u00e9 OHSAS 18001, environnement ISO 14001, \u00e9nergie ISO 50001"
+        },
+        {
+          "id": 87481,
+          "property": {
+            "id": 191,
+            "name": {
+              "fr": "points_cles_rse_2",
+              "default": "points_cles_rse_2"
+            }
+          },
+          "value": "BERNER \u0153uvre en faveur du d\u00e9veloppement durable et des achats responsables"
+        },
+        {
+          "id": 87482,
+          "property": {
+            "id": 192,
+            "name": {
+              "fr": "points_cles_rse_3",
+              "default": "points_cles_rse_3"
+            }
+          },
+          "value": "BERNER apporte son soutien en num\u00e9raire ou en produits \u00e0 des projets soci\u00e9taux"
+        },
+        {
+          "id": 87483,
+          "property": {
+            "id": 193,
+            "name": {
+              "fr": "cta_en_savoir_plus_text_1",
+              "default": "cta_en_savoir_plus_text_1"
+            }
+          },
+          "value": "Services Berner en magasin"
+        },
+        {
+          "id": 87484,
+          "property": {
+            "id": 194,
+            "name": {
+              "fr": "cta_en_savoir_plus_link_1",
+              "default": "cta_en_savoir_plus_link_1"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.amazonaws.com\/documents\/berner\/berner-shop-flyer.pdf"
+        },
+        {
+          "id": 87485,
+          "property": {
+            "id": 217,
+            "name": {
+              "fr": "Homepage - Mises en avant",
+              "default": "Homepage - Mises en avant"
+            }
+          },
+          "value": "home-accord-cadre"
+        },
+        {
+          "id": 114549,
+          "property": {
+            "id": 157,
+            "name": {
+              "fr": "cta1_link",
+              "default": "cta1_link"
+            }
+          },
+          "value": "https:\/\/ged-wp-files.s3.amazonaws.com\/marketplace\/Accords-cadres\/BERNER\/Tarifs_BERNER-QANTIS.xlsx"
+        },
+        {
+          "id": 114552,
+          "property": {
+            "id": 159,
+            "name": {
+              "fr": "cta2_link",
+              "default": "cta2_link"
+            }
+          },
+          "value": "https:\/\/marketplace.qantis.co\/products?q=berner&page=1"
+        },
+        {
+          "id": 195206,
+          "property": {
+            "id": 170,
+            "name": {
+              "fr": "cta1_link_activated",
+              "default": "cta1_link_activated"
+            }
+          },
+          "value": "https:\/\/marketplace.qantis.co\/products?q=berner&page=1"
+        },
+        {
+          "id": 195207,
+          "property": {
+            "id": 171,
+            "name": {
+              "fr": "cta2_text_activated",
+              "default": "cta2_text_activated"
+            }
+          },
+          "value": "Contactez le service adh\u00e9rent"
+        },
+        {
+          "id": 195208,
+          "property": {
+            "id": 323,
+            "name": {
+              "fr": "cta2_mailto_activated",
+              "default": "cta2_mailto_activated"
+            }
+          },
+          "value": "mailto:marketplace@qantis.co?subject=Demande%20pour%20le%20partenaire%20BERNER"
+        },
+        {
+          "id": 195209,
+          "property": {
+            "id": 165,
+            "name": {
+              "fr": "cta1_link_pending",
+              "default": "cta1_link_pending"
+            }
+          },
+          "value": "https:\/\/marketplace.qantis.co\/products?q=berner&page=1"
+        },
+        {
+          "id": 195210,
+          "property": {
+            "id": 166,
+            "name": {
+              "fr": "cta2_text_pending",
+              "default": "cta2_text_pending"
+            }
+          },
+          "value": "Contactez le service adh\u00e9rent"
+        },
+        {
+          "id": 195211,
+          "property": {
+            "id": 321,
+            "name": {
+              "fr": "cta2_mailto_pending",
+              "default": "cta2_mailto_pending"
+            }
+          },
+          "value": "mailto:marketplace@qantis.co?subject=Demande%20pour%20le%20partenaire%20BERNER"
+        }
+      ],
+      "orderable": true,
+      "quotable": true,
+      "wishlistable": true,
+      "reference": "fat-berner-major",
+      "seller_categories": [],
+      "variants": [
+        {
+          "id": 47517,
+          "available_on_demand": true,
+          "sku": null,
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": null,
+          "master_quantity": null
+        },
+        {
+          "id": 47518,
+          "available_on_demand": true,
+          "sku": "fat-berner-major",
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": 1.0,
+          "master_quantity": null
+        }
+      ],
+      "company": {
+        "id": 22,
+        "name": "BERNER"
+      },
+      "price_reference": null,
+      "price": {
+        "id": 27486
+      },
+      "base_price": {
+        "id": 27486
+      },
+      "gtin": null
+    }
+  ]
+}

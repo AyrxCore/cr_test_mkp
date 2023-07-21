@@ -1,11 +1,9 @@
 <?php
 
-
 declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -32,7 +30,7 @@ class MailerProvider
     #[Required]
     public LoggerInterface $logger;
 
-    //options permet d'overrider des paramétres par défaut
+    // options permet d'overrider des paramétres par défaut
     // (sendAsText => passer un contenu texte brut,
     // cc => passer un destinataire en copie,
     // bcc => passer un destinataire en copie caché,
@@ -49,8 +47,7 @@ class MailerProvider
             ->replyTo($from)
             ->to($to)
             ->subject($subject)
-            ->text($body)
-        ;
+            ->text($body);
 
         if (!isset($options['sendAsText'])) {
             $email->html($body);
@@ -70,12 +67,12 @@ class MailerProvider
 
         // Priorité, de Urgent (1) à Non prioritaire (5), par défaut Normal (3) (header "X-Priority")
         if (isset($options['priority'])) {
-            $email->priority((int)$options['priority']);
+            $email->priority((int) $options['priority']);
         }
 
         // Chemin(s) vers la ou les PJ a intégrer
         if (isset($options['attachments'])) {
-            if (!is_array($options['attachments'])) {
+            if (!\is_array($options['attachments'])) {
                 $options['attachments'] = [$options['attachments']];
             }
             foreach ($options['attachments'] as $attachment) {
@@ -86,11 +83,11 @@ class MailerProvider
         try {
             $this->mailer->send($email);
         } catch (TransportExceptionInterface $exception) {
-            $this->logger->critical("Email non envoyé à " . $to . " : " . $exception->getMessage());
+            $this->logger->critical('Email non envoyé à '.$to.' : '.$exception->getMessage());
+
             return false;
         }
 
         return true;
     }
-
 }

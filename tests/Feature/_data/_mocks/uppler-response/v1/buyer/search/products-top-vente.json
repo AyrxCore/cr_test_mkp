@@ -1,0 +1,1216 @@
+{
+  "filters": {
+    "category": {
+      "864": {
+        "id": 864,
+        "name": "VEHICULES",
+        "parent": null,
+        "count": 1,
+        "checked": null,
+        "display": true,
+        "level": 0,
+        "image": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/f5\/df\/599b044acf3855a383b7a8332e68.png",
+        "banner": null,
+        "child": {
+          "872": {
+            "id": 872,
+            "name": "COVERING",
+            "parent": 864,
+            "count": 1,
+            "checked": null,
+            "display": true,
+            "level": 1,
+            "image": null,
+            "banner": null,
+            "child": {
+              "873": {
+                "id": 873,
+                "name": "ADHESIFS",
+                "parent": 872,
+                "count": 1,
+                "checked": null,
+                "display": true,
+                "level": 2,
+                "image": null,
+                "banner": null
+              }
+            }
+          }
+        }
+      },
+      "588": {
+        "id": 588,
+        "name": "FOURNITURES DE BUREAU",
+        "parent": null,
+        "count": 1,
+        "checked": null,
+        "display": true,
+        "level": 0,
+        "image": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/d8\/44\/ca8a0c47751c6a56b8eb116f00c8.png",
+        "banner": null,
+        "child": {
+          "590": {
+            "id": 590,
+            "name": "CARTOUCHES D'ENCRE & TONERS",
+            "parent": 588,
+            "count": 1,
+            "checked": null,
+            "display": true,
+            "level": 1,
+            "image": null,
+            "banner": null,
+            "child": {
+              "595": {
+                "id": 595,
+                "name": "LASER",
+                "parent": 590,
+                "count": 1,
+                "checked": null,
+                "display": true,
+                "level": 2,
+                "image": null,
+                "banner": null,
+                "child": {
+                  "597": {
+                    "id": 597,
+                    "name": "TONERS & TAMBOURS COMPATIBLES",
+                    "parent": 595,
+                    "count": 1,
+                    "checked": null,
+                    "display": true,
+                    "level": 3,
+                    "image": null,
+                    "banner": null
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "654": {
+        "id": 654,
+        "name": "INFORMATIQUE & BUREAUTIQUE",
+        "parent": null,
+        "count": 1,
+        "checked": null,
+        "display": true,
+        "level": 0,
+        "image": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/78\/4f\/6f24f81df6d5f1b85aafdd5b7052.png",
+        "banner": null,
+        "child": {
+          "657": {
+            "id": 657,
+            "name": "MATERIEL INFORMATIQUE",
+            "parent": 654,
+            "count": 1,
+            "checked": null,
+            "display": true,
+            "level": 1,
+            "image": null,
+            "banner": null,
+            "child": {
+              "665": {
+                "id": 665,
+                "name": "ORDINATEURS PORTABLES",
+                "parent": 657,
+                "count": 1,
+                "checked": null,
+                "display": true,
+                "level": 2,
+                "image": null,
+                "banner": null
+              }
+            }
+          }
+        }
+      },
+      "494": {
+        "id": 494,
+        "name": "ECLAIRAGE",
+        "parent": null,
+        "count": 1,
+        "checked": null,
+        "display": true,
+        "level": 0,
+        "image": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/79\/89\/568d0b54a83479cc1ddffd24c526.png",
+        "banner": null,
+        "child": {
+          "509": {
+            "id": 509,
+            "name": "LAMPES",
+            "parent": 494,
+            "count": 1,
+            "checked": null,
+            "display": true,
+            "level": 1,
+            "image": null,
+            "banner": null,
+            "child": {
+              "511": {
+                "id": 511,
+                "name": "LAMPES FLUOCOMPACTES",
+                "parent": 509,
+                "count": 1,
+                "checked": null,
+                "display": true,
+                "level": 2,
+                "image": null,
+                "banner": null
+              }
+            }
+          }
+        }
+      }
+    },
+    "property": {
+      "117": {
+        "id": 117,
+        "name": "Conditionnement",
+        "type": "choice",
+        "unit": null,
+        "count": 1,
+        "checked": null,
+        "child": {
+          "3651": {
+            "id": 117,
+            "value": 3651,
+            "name": "L'unit\u00e9",
+            "unit": null,
+            "image": null,
+            "count": 1,
+            "checked": null
+          }
+        }
+      },
+      "119": {
+        "id": 119,
+        "name": "Origine (Pays\/R\u00e9gion)",
+        "type": "choice",
+        "unit": null,
+        "count": 1,
+        "checked": null,
+        "child": {
+          "4168": {
+            "id": 119,
+            "value": 4168,
+            "name": "CN",
+            "unit": null,
+            "image": null,
+            "count": 1,
+            "checked": null
+          }
+        }
+      },
+      "135": {
+        "id": 135,
+        "name": "IRC",
+        "type": "choice",
+        "unit": null,
+        "count": 1,
+        "checked": null,
+        "child": {
+          "4705": {
+            "id": 135,
+            "value": 4705,
+            "name": "80",
+            "unit": null,
+            "image": null,
+            "count": 1,
+            "checked": null
+          }
+        }
+      },
+      "136": {
+        "id": 136,
+        "name": "Tension (V)",
+        "type": "choice",
+        "unit": null,
+        "count": 1,
+        "checked": null,
+        "child": {
+          "4735": {
+            "id": 136,
+            "value": 4735,
+            "name": "80",
+            "unit": null,
+            "image": null,
+            "count": 1,
+            "checked": null
+          }
+        }
+      },
+      "137": {
+        "id": 137,
+        "name": "Puissance (W)",
+        "type": "choice",
+        "unit": null,
+        "count": 1,
+        "checked": null,
+        "child": {
+          "4823": {
+            "id": 137,
+            "value": 4823,
+            "name": "18",
+            "unit": null,
+            "image": null,
+            "count": 1,
+            "checked": null
+          }
+        }
+      },
+      "138": {
+        "id": 138,
+        "name": "Culot",
+        "type": "choice",
+        "unit": null,
+        "count": 1,
+        "checked": null,
+        "child": {
+          "4967": {
+            "id": 138,
+            "value": 4967,
+            "name": "GX24D2",
+            "unit": null,
+            "image": null,
+            "count": 1,
+            "checked": null
+          }
+        }
+      },
+      "139": {
+        "id": 139,
+        "name": "Lumen",
+        "type": "choice",
+        "unit": null,
+        "count": 1,
+        "checked": null,
+        "child": {
+          "5026": {
+            "id": 139,
+            "value": 5026,
+            "name": "1200",
+            "unit": null,
+            "image": null,
+            "count": 1,
+            "checked": null
+          }
+        }
+      },
+      "140": {
+        "id": 140,
+        "name": "Gradable",
+        "type": "choice",
+        "unit": null,
+        "count": 1,
+        "checked": null,
+        "child": {
+          "5284": {
+            "id": 140,
+            "value": 5284,
+            "name": "Non",
+            "unit": null,
+            "image": null,
+            "count": 1,
+            "checked": null
+          }
+        }
+      },
+      "207": {
+        "id": 207,
+        "name": "Couleur",
+        "type": "choice",
+        "unit": null,
+        "count": 1,
+        "checked": null,
+        "child": {
+          "5359": {
+            "id": 207,
+            "value": 5359,
+            "name": "noir",
+            "unit": null,
+            "image": null,
+            "count": 1,
+            "checked": null
+          }
+        }
+      },
+      "217": {
+        "id": 217,
+        "name": "Homepage - Mises en avant",
+        "type": "choice",
+        "unit": null,
+        "count": 4,
+        "checked": null,
+        "child": {
+          "5369": {
+            "id": 217,
+            "value": 5369,
+            "name": "home-top-vente",
+            "unit": null,
+            "image": null,
+            "count": 4,
+            "checked": null
+          }
+        }
+      }
+    },
+    "company": {
+      "27": {
+        "id": 27,
+        "name": "ALDA MAJUSCULE",
+        "parent": null,
+        "count": 1,
+        "checked": null
+      },
+      "69": {
+        "id": 69,
+        "name": "ARTO",
+        "parent": null,
+        "count": 1,
+        "checked": null
+      },
+      "23": {
+        "id": 23,
+        "name": "MIEKO",
+        "parent": null,
+        "count": 1,
+        "checked": null
+      },
+      "29": {
+        "id": 29,
+        "name": "SIGNO DECO",
+        "parent": null,
+        "count": 1,
+        "checked": null
+      }
+    },
+    "country": {
+      "83": {
+        "id": 83,
+        "name": "France",
+        "count": 4,
+        "checked": null
+      }
+    },
+    "continent": {
+      "1": {
+        "id": 1,
+        "name": null,
+        "count": 4,
+        "checked": null
+      }
+    },
+    "promotions": {
+      "franco-fourniture-alda": {
+        "id": "franco-fourniture-alda",
+        "name": "Franco de port - ALDA MAJUSCULE",
+        "parent": null,
+        "count": 1,
+        "checked": null
+      },
+      "franco-mieko": {
+        "id": "franco-mieko",
+        "name": "Franco de port - MIEKO",
+        "parent": null,
+        "count": 1,
+        "checked": null
+      },
+      "franco-signo-deco": {
+        "id": "franco-signo-deco",
+        "name": "Franco de port - SIGNO DECO",
+        "parent": null,
+        "count": 1,
+        "checked": null
+      }
+    }
+  },
+  "error": null,
+  "results_count": 4,
+  "page": 1,
+  "results_per_page": 5,
+  "results_pages": 2000,
+  "parameters": {
+    "name": null,
+    "has_promotion": null,
+    "promotion_models": [],
+    "promotion_company_type": null,
+    "in_stock": null,
+    "sort": "score_desc",
+    "categories": [],
+    "properties": [
+      {
+        "property": 217,
+        "value": "5369"
+      }
+    ],
+    "options": [],
+    "companies": []
+  },
+  "results": [
+    {
+      "id": 19372,
+      "categories": [
+        {
+          "id": 654,
+          "name": {
+            "fr": "INFORMATIQUE & BUREAUTIQUE",
+            "default": "INFORMATIQUE & BUREAUTIQUE"
+          },
+          "image": "78\/4f\/6f24f81df6d5f1b85aafdd5b7052.png"
+        },
+        {
+          "id": 657,
+          "name": {
+            "fr": "MATERIEL INFORMATIQUE",
+            "default": "MATERIEL INFORMATIQUE"
+          },
+          "image": null
+        },
+        {
+          "id": 665,
+          "name": {
+            "fr": "ORDINATEURS PORTABLES",
+            "default": "ORDINATEURS PORTABLES"
+          },
+          "image": null
+        }
+      ],
+      "description": {
+        "fr": "<p>Dell Latitude 7480 14&quot; Core i7 2,6 GHz - SSD 512 Go - 16 Go AZERTY - Fran&ccedil;ais<\/p>",
+        "default": "<p>Dell Latitude 7480 14&quot; Core i7 2,6 GHz - SSD 512 Go - 16 Go AZERTY - Fran&ccedil;ais<\/p>"
+      },
+      "images": [
+        {
+          "id": 27672,
+          "path": "80\/16\/454dd5fb0d9c97b9d79f2672e044.jpeg",
+          "position": 0,
+          "url": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/80\/16\/454dd5fb0d9c97b9d79f2672e044.jpeg"
+        },
+        {
+          "id": 27673,
+          "path": "a4\/f3\/4c2352b835cfb04c171954573287.jpeg",
+          "position": 1,
+          "url": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/a4\/f3\/4c2352b835cfb04c171954573287.jpeg"
+        }
+      ],
+      "name": {
+        "fr": "Dell Latitude 7480",
+        "default": "Dell Latitude 7480"
+      },
+      "slug": {
+        "fr": "dell-latitude-7480-pd-l7480-i7-6-s512-16-b",
+        "default": "dell-latitude-7480-pd-l7480-i7-6-s512-16-b"
+      },
+      "properties": [
+        {
+          "id": 87315,
+          "property": {
+            "id": 201,
+            "name": {
+              "fr": "Capacit\u00e9 RAM",
+              "default": "Capacit\u00e9 RAM"
+            }
+          },
+          "value": "16 Go"
+        },
+        {
+          "id": 87316,
+          "property": {
+            "id": 202,
+            "name": {
+              "fr": "Disque dur",
+              "default": "Disque dur"
+            }
+          },
+          "value": "SSD 512 Go"
+        },
+        {
+          "id": 87317,
+          "property": {
+            "id": 204,
+            "name": {
+              "fr": "Taille de l'\u00e9cran",
+              "default": "Taille de l'\u00e9cran"
+            }
+          },
+          "value": "14\""
+        },
+        {
+          "id": 87318,
+          "property": {
+            "id": 205,
+            "name": {
+              "fr": "Processeur",
+              "default": "Processeur"
+            }
+          },
+          "value": "Core i7"
+        },
+        {
+          "id": 87319,
+          "property": {
+            "id": 206,
+            "name": {
+              "fr": "Cadence processeur",
+              "default": "Cadence processeur"
+            }
+          },
+          "value": "2,6 GHz"
+        },
+        {
+          "id": 87320,
+          "property": {
+            "id": 120,
+            "name": {
+              "fr": "Marque",
+              "default": "Marque"
+            }
+          },
+          "value": "Dell"
+        },
+        {
+          "id": 87321,
+          "property": {
+            "id": 207,
+            "name": {
+              "fr": "Couleur",
+              "default": "Couleur"
+            }
+          },
+          "value": "noir"
+        },
+        {
+          "id": 87449,
+          "property": {
+            "id": 217,
+            "name": {
+              "fr": "Homepage - Mises en avant",
+              "default": "Homepage - Mises en avant"
+            }
+          },
+          "value": "home-top-vente"
+        }
+      ],
+      "orderable": true,
+      "quotable": true,
+      "wishlistable": true,
+      "reference": "PD-L7480-i7.6-S512-16-B",
+      "seller_categories": [],
+      "variants": [
+        {
+          "id": 47495,
+          "available_on_demand": true,
+          "sku": "PD-L7480-i7.6-S512-16-B",
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": 1.0,
+          "master_quantity": null
+        },
+        {
+          "id": 47494,
+          "available_on_demand": true,
+          "sku": null,
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": null,
+          "master_quantity": null
+        }
+      ],
+      "company": {
+        "id": 69,
+        "name": "ARTO",
+        "avatar": "79\/4c\/e069dd19cec21d0360ba22a110af.png",
+        "avatar_url": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/79\/4c\/e069dd19cec21d0360ba22a110af.png"
+      },
+      "price_reference": 85000,
+      "price": {
+        "id": 27472,
+        "amount": 34809,
+        "currency": {},
+        "pricelist": null,
+        "display_price": 34809,
+        "formatted_display_price": "348,09\u20ac",
+        "formatted_display_unit_price": "348,09\u20ac"
+      },
+      "base_price": {
+        "id": 27472,
+        "amount": 34809,
+        "currency": {},
+        "pricelist": null,
+        "display_price": 34809,
+        "formatted_display_price": "348,09\u20ac",
+        "formatted_display_unit_price": "348,09\u20ac"
+      },
+      "gtin": null
+    },
+    {
+      "id": 16797,
+      "categories": [
+        {
+          "id": 872,
+          "name": {
+            "fr": "COVERING",
+            "default": "COVERING"
+          },
+          "image": null
+        },
+        {
+          "id": 873,
+          "name": {
+            "fr": "ADHESIFS",
+            "default": "ADHESIFS"
+          },
+          "image": null
+        },
+        {
+          "id": 864,
+          "name": {
+            "fr": "VEHICULES",
+            "default": "VEHICULES"
+          },
+          "image": "f5\/df\/599b044acf3855a383b7a8332e68.png"
+        }
+      ],
+      "description": {
+        "fr": "<p>2 adh&eacute;sifs lat&eacute;raux de 1200 x 400 mm et un adh&eacute;sif 1300 x 400 mm pour la lunette arri&egrave;re. Impression quadri et lamination brillante.<\/p>",
+        "default": "<p>2 adh&eacute;sifs lat&eacute;raux de 1200 x 400 mm et un adh&eacute;sif 1300 x 400 mm pour la lunette arri&egrave;re. Impression quadri et lamination brillante.<\/p>"
+      },
+      "images": [
+        {
+          "id": 16854,
+          "path": "61\/6a\/f6f700e2382da7a7eacdfb1fef05.jpeg",
+          "position": 0,
+          "url": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/61\/6a\/f6f700e2382da7a7eacdfb1fef05.jpeg"
+        },
+        {
+          "id": 16855,
+          "path": "04\/48\/abdd8f62211a17ed9a2ba289b03c.jpeg",
+          "position": 1,
+          "url": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/04\/48\/abdd8f62211a17ed9a2ba289b03c.jpeg"
+        },
+        {
+          "id": 16856,
+          "path": "b0\/8e\/166d92cc5e29826e6d4bdd772c8f.jpeg",
+          "position": 2,
+          "url": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/b0\/8e\/166d92cc5e29826e6d4bdd772c8f.jpeg"
+        },
+        {
+          "id": 16857,
+          "path": "7b\/3e\/704d8b4934a0e636c71cae3d50e4.png",
+          "position": 3,
+          "url": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/7b\/3e\/704d8b4934a0e636c71cae3d50e4.png"
+        }
+      ],
+      "name": {
+        "fr": "Publicit\u00e9 adh\u00e9sive pour v\u00e9hicules taille M",
+        "default": "Publicit\u00e9 adh\u00e9sive pour v\u00e9hicules taille M"
+      },
+      "slug": {
+        "fr": "publicite-adhesive-pour-vehicules-taille-m-pub-adh-m-2",
+        "default": "publicite-adhesive-pour-vehicules-taille-m-pub-adh-m-2"
+      },
+      "properties": [
+        {
+          "id": 87452,
+          "property": {
+            "id": 217,
+            "name": {
+              "fr": "Homepage - Mises en avant",
+              "default": "Homepage - Mises en avant"
+            }
+          },
+          "value": "home-top-vente"
+        }
+      ],
+      "orderable": true,
+      "quotable": true,
+      "wishlistable": true,
+      "reference": "pub-adh-m",
+      "seller_categories": [],
+      "variants": [
+        {
+          "id": 36822,
+          "available_on_demand": true,
+          "sku": "pub-adh-m-3241062234557+3241062234558",
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": 1.0,
+          "master_quantity": null
+        },
+        {
+          "id": 36818,
+          "available_on_demand": true,
+          "sku": "pub-adh-m-3241062234557",
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": 1.0,
+          "master_quantity": null
+        },
+        {
+          "id": 36819,
+          "available_on_demand": true,
+          "sku": "pub-adh-m-3241062234557+3241062234555",
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": 1.0,
+          "master_quantity": null
+        },
+        {
+          "id": 36820,
+          "available_on_demand": true,
+          "sku": "pub-adh-m-3241062234556+3241062234558",
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": 1.0,
+          "master_quantity": null
+        },
+        {
+          "id": 36821,
+          "available_on_demand": true,
+          "sku": "pub-adh-m-3241062234556+3241062234555+3241062234558",
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": 1.0,
+          "master_quantity": null
+        },
+        {
+          "id": 36823,
+          "available_on_demand": true,
+          "sku": "pub-adh-m-3241062234557+3241062234555+3241062234558",
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": 1.0,
+          "master_quantity": null
+        },
+        {
+          "id": 36817,
+          "available_on_demand": true,
+          "sku": "pub-adh-m-3241062234556+3241062234555",
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": 1.0,
+          "master_quantity": null
+        },
+        {
+          "id": 36816,
+          "available_on_demand": true,
+          "sku": "pub-adh-m-3241062234556",
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": 1.0,
+          "master_quantity": null
+        },
+        {
+          "id": 36815,
+          "available_on_demand": true,
+          "sku": null,
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": null,
+          "master_quantity": null
+        }
+      ],
+      "company": {
+        "id": 29,
+        "name": "SIGNO DECO",
+        "avatar": "81\/9a\/50e314a50d57f442d6f23d83d5f5.jpg",
+        "avatar_url": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/81\/9a\/50e314a50d57f442d6f23d83d5f5.jpg"
+      },
+      "price_reference": 50000,
+      "price": {
+        "id": 19362,
+        "amount": 21600,
+        "currency": {},
+        "pricelist": null,
+        "display_price": 21600,
+        "formatted_display_price": "216,00\u20ac",
+        "formatted_display_unit_price": "216,00\u20ac"
+      },
+      "base_price": {
+        "id": 19362,
+        "amount": 21600,
+        "currency": {},
+        "pricelist": null,
+        "display_price": 21600,
+        "formatted_display_price": "216,00\u20ac",
+        "formatted_display_unit_price": "216,00\u20ac"
+      },
+      "gtin": null
+    },
+    {
+      "id": 18018,
+      "categories": [
+        {
+          "id": 588,
+          "name": {
+            "fr": "FOURNITURES DE BUREAU",
+            "default": "FOURNITURES DE BUREAU"
+          },
+          "image": "d8\/44\/ca8a0c47751c6a56b8eb116f00c8.png"
+        },
+        {
+          "id": 590,
+          "name": {
+            "fr": "CARTOUCHES D'ENCRE & TONERS",
+            "default": "CARTOUCHES D'ENCRE & TONERS"
+          },
+          "image": null
+        },
+        {
+          "id": 595,
+          "name": {
+            "fr": "LASER",
+            "default": "LASER"
+          },
+          "image": null
+        },
+        {
+          "id": 597,
+          "name": {
+            "fr": "TONERS & TAMBOURS COMPATIBLES",
+            "default": "TONERS & TAMBOURS COMPATIBLES"
+          },
+          "image": null
+        }
+      ],
+      "description": {
+        "fr": "<p>Cartouche laser compatible &agrave; la marque HP CF294X noir haute capacit&eacute;.<\/p>",
+        "default": "<p>Cartouche laser compatible &agrave; la marque HP CF294X noir haute capacit&eacute;.<\/p>"
+      },
+      "images": [
+        {
+          "id": 24110,
+          "path": "34\/84\/fcc026320411e3c235431d92ea68.jpeg",
+          "position": 0,
+          "url": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/34\/84\/fcc026320411e3c235431d92ea68.jpeg"
+        }
+      ],
+      "name": {
+        "fr": "Cartouche laser compatible \u00e0 la marque HP CF294X noir haute capacit\u00e9",
+        "default": "Cartouche laser compatible \u00e0 la marque HP CF294X noir haute capacit\u00e9"
+      },
+      "slug": {
+        "fr": "cartouche-laser-compatible-a-la-marque-hp-cf294x-noir-haute-capacite-07340",
+        "default": "cartouche-laser-compatible-a-la-marque-hp-cf294x-noir-haute-capacite-07340"
+      },
+      "properties": [
+        {
+          "id": 87250,
+          "property": {
+            "id": 117,
+            "name": {
+              "fr": "Conditionnement",
+              "default": "Conditionnement"
+            }
+          },
+          "value": "L'unit\u00e9"
+        },
+        {
+          "id": 87251,
+          "property": {
+            "id": 119,
+            "name": {
+              "fr": "Origine (Pays\/R\u00e9gion)",
+              "default": "Origine (Pays\/R\u00e9gion)"
+            }
+          },
+          "value": "CN"
+        },
+        {
+          "id": 87252,
+          "property": {
+            "id": 120,
+            "name": {
+              "fr": "Marque",
+              "default": "Marque"
+            }
+          },
+          "value": "OWA"
+        },
+        {
+          "id": 87450,
+          "property": {
+            "id": 217,
+            "name": {
+              "fr": "Homepage - Mises en avant",
+              "default": "Homepage - Mises en avant"
+            }
+          },
+          "value": "home-top-vente"
+        }
+      ],
+      "orderable": true,
+      "quotable": true,
+      "wishlistable": true,
+      "reference": "07340",
+      "seller_categories": [],
+      "variants": [
+        {
+          "id": 40665,
+          "available_on_demand": true,
+          "sku": "07340",
+          "ean": "3112539824648",
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": 1.0,
+          "master_quantity": null
+        },
+        {
+          "id": 40664,
+          "available_on_demand": true,
+          "sku": null,
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": null,
+          "master_quantity": null
+        }
+      ],
+      "company": {
+        "id": 27,
+        "name": "ALDA MAJUSCULE",
+        "avatar": "ab\/b9\/2d7801781d79e920be51e43421e2.jpg",
+        "avatar_url": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/ab\/b9\/2d7801781d79e920be51e43421e2.jpg"
+      },
+      "price_reference": 13632,
+      "price": {
+        "id": 22003,
+        "amount": 8861,
+        "currency": {},
+        "pricelist": null,
+        "display_price": 8861,
+        "formatted_display_price": "88,61\u20ac",
+        "formatted_display_unit_price": "88,61\u20ac"
+      },
+      "base_price": {
+        "id": 22003,
+        "amount": 8861,
+        "currency": {},
+        "pricelist": null,
+        "display_price": 8861,
+        "formatted_display_price": "88,61\u20ac",
+        "formatted_display_unit_price": "88,61\u20ac"
+      },
+      "gtin": null
+    },
+    {
+      "id": 15659,
+      "categories": [
+        {
+          "id": 511,
+          "name": {
+            "fr": "LAMPES FLUOCOMPACTES",
+            "default": "LAMPES FLUOCOMPACTES"
+          },
+          "image": null
+        },
+        {
+          "id": 509,
+          "name": {
+            "fr": "LAMPES",
+            "default": "LAMPES"
+          },
+          "image": null
+        },
+        {
+          "id": 494,
+          "name": {
+            "fr": "ECLAIRAGE",
+            "default": "ECLAIRAGE"
+          },
+          "image": "79\/89\/568d0b54a83479cc1ddffd24c526.png"
+        }
+      ],
+      "description": {
+        "fr": "MIEKO - MINIMUM DE COMMANDE : 40\u20ac HT <br>GX24D2 18W 1200lm 80V 830 MASTER PL-T 2 BROCHES PHILIPS (\u00e0 l'unti\u00e9) <br> Prix net d\u00e9j\u00e0 n\u00e9goci\u00e9  <br> Longueur : 119,2 mm <br> Dur\u00e9e de vie : 10000h <br> Classe \u00e9nerg\u00e9tique : G",
+        "default": "MIEKO - MINIMUM DE COMMANDE : 40\u20ac HT <br>GX24D2 18W 1200lm 80V 830 MASTER PL-T 2 BROCHES PHILIPS (\u00e0 l'unti\u00e9) <br> Prix net d\u00e9j\u00e0 n\u00e9goci\u00e9  <br> Longueur : 119,2 mm <br> Dur\u00e9e de vie : 10000h <br> Classe \u00e9nerg\u00e9tique : G"
+      },
+      "images": [
+        {
+          "id": 14984,
+          "path": "1e\/f2\/73f599b02bc30506a919aec5f4c7.jpeg",
+          "position": 0,
+          "url": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/1e\/f2\/73f599b02bc30506a919aec5f4c7.jpeg"
+        }
+      ],
+      "name": {
+        "fr": "GX24D2 18W 1200lm 80V 830 MASTER PL-T 2 BROCHES PHILIPS",
+        "default": "GX24D2 18W 1200lm 80V 830 MASTER PL-T 2 BROCHES PHILIPS"
+      },
+      "slug": {
+        "fr": "gx24d2-18w-1200lm-80v-830-master-pl-t-2-broches-philips-ca01002",
+        "default": "gx24d2-18w-1200lm-80v-830-master-pl-t-2-broches-philips-ca01002"
+      },
+      "properties": [
+        {
+          "id": 80961,
+          "property": {
+            "id": 125,
+            "name": {
+              "fr": "Document \u00e0 t\u00e9l\u00e9charger",
+              "default": "Document \u00e0 t\u00e9l\u00e9charger"
+            }
+          },
+          "value": "https:\/\/mieko.fr\/fiche-technique\/CA01002.pdf"
+        },
+        {
+          "id": 80962,
+          "property": {
+            "id": 135,
+            "name": {
+              "fr": "IRC",
+              "default": "IRC"
+            }
+          },
+          "value": "80"
+        },
+        {
+          "id": 80963,
+          "property": {
+            "id": 136,
+            "name": {
+              "fr": "Tension (V)",
+              "default": "Tension (V)"
+            }
+          },
+          "value": "80"
+        },
+        {
+          "id": 80964,
+          "property": {
+            "id": 137,
+            "name": {
+              "fr": "Puissance (W)",
+              "default": "Puissance (W)"
+            }
+          },
+          "value": "18"
+        },
+        {
+          "id": 80965,
+          "property": {
+            "id": 138,
+            "name": {
+              "fr": "Culot",
+              "default": "Culot"
+            }
+          },
+          "value": "GX24D2"
+        },
+        {
+          "id": 80966,
+          "property": {
+            "id": 139,
+            "name": {
+              "fr": "Lumen",
+              "default": "Lumen"
+            }
+          },
+          "value": "1200"
+        },
+        {
+          "id": 80967,
+          "property": {
+            "id": 140,
+            "name": {
+              "fr": "Gradable",
+              "default": "Gradable"
+            }
+          },
+          "value": "Non"
+        },
+        {
+          "id": 87451,
+          "property": {
+            "id": 217,
+            "name": {
+              "fr": "Homepage - Mises en avant",
+              "default": "Homepage - Mises en avant"
+            }
+          },
+          "value": "home-top-vente"
+        }
+      ],
+      "orderable": true,
+      "quotable": true,
+      "wishlistable": true,
+      "reference": "CA01002",
+      "seller_categories": [],
+      "variants": [
+        {
+          "id": 34335,
+          "available_on_demand": true,
+          "sku": "CA01002",
+          "ean": "8711500610508",
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": 1.0,
+          "master_quantity": null
+        },
+        {
+          "id": 34334,
+          "available_on_demand": true,
+          "sku": null,
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": null,
+          "master_quantity": null
+        }
+      ],
+      "company": {
+        "id": 23,
+        "name": "MIEKO",
+        "avatar": "5e\/02\/30047130e4c0209670a5bb2e1d42.jpg",
+        "avatar_url": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/5e\/02\/30047130e4c0209670a5bb2e1d42.jpg"
+      },
+      "price_reference": null,
+      "price": {
+        "id": 18030,
+        "amount": 382,
+        "currency": {},
+        "pricelist": null,
+        "display_price": 382,
+        "formatted_display_price": "3,82\u20ac",
+        "formatted_display_unit_price": "3,82\u20ac"
+      },
+      "base_price": {
+        "id": 18030,
+        "amount": 382,
+        "currency": {},
+        "pricelist": null,
+        "display_price": 382,
+        "formatted_display_price": "3,82\u20ac",
+        "formatted_display_unit_price": "3,82\u20ac"
+      },
+      "gtin": null
+    }
+  ]
+}

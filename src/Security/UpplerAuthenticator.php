@@ -50,7 +50,7 @@ class UpplerAuthenticator extends JWTAuthenticator
     public function authenticate(Request $request): Passport
     {
         $session = $this->requestStack->getSession();
-        $session->start();
+
         $datas = json_decode($request->getContent());
 
         if ((is_object($datas)) &&

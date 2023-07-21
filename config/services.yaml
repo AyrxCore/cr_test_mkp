@@ -50,17 +50,10 @@ services:
 
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones
-  App\Tests\Resources\DataFixtures\:
-    resource: '../tests/Resources/DataFixtures'
-    tags: ['doctrine.fixture.orm']
   app.uppler_authenticator:
     class: App\Security\UpplerAuthenticator
     parent: lexik_jwt_authentication.security.jwt_authenticator
     autowire: true
-
-  App\DataFixtures\UserFixtures:
-    arguments:
-      $env: '%uppler_env%'
 
   App\EventListener\MaintenanceListener:
     arguments:
@@ -69,46 +62,15 @@ services:
       - { name: kernel.event_listener, event: kernel.request }
 
   # SERVICES UPPLER
-  App\Service\HttpClientProvider:
-    arguments:
-      $env: '%uppler_env%'
-      $apiUrl: '%uppler_api_url%'
-      $adminClientId: '%uppler_admin_client_id%'
-      $adminClientSecret: '%uppler_admin_client_secret%'
-      $adminTokenFile: '%uppler_admin_token_file%'
-      $httpCachePath: '%http_cache_path%'
-
-  App\Service\UpplerAuthenticationService:
-    parent: App\Service\HttpClientProvider
-
-  App\Service\UpplerSellerService:
-    parent: App\Service\HttpClientProvider
-
-  App\Service\UpplerBuyerCompanyService:
-    parent: App\Service\HttpClientProvider
-
-  App\Service\UpplerRepositoryService:
-    parent: App\Service\HttpClientProvider
-
-  App\Service\UpplerAccountService:
-    parent: App\Service\HttpClientProvider
-
-  App\Service\UpplerCartService:
-    parent: App\Service\HttpClientProvider
-    arguments:
-      $appDomain: '%app_domain%'
-
-  App\Service\UpplerProductService:
-    parent: App\Service\HttpClientProvider
-
-  App\Service\UpplerDynamicEntityService:
-    parent: App\Service\HttpClientProvider
-
-  App\Service\UpplerPageService:
-    parent: App\Service\HttpClientProvider
-
-  App\Service\UpplerOrderService:
-    parent: App\Service\HttpClientProvider
+  _instanceof:
+    App\Service\AbstractUpplerService:
+      bind:
+        $upplerEnv: '%uppler_env%'
+        $adminClientId: '%uppler_admin_client_id%'
+        $adminClientSecret: '%uppler_admin_client_secret%'
+        $adminTokenFile: '%uppler_admin_token_file%'
+        $httpCachePath: '%http_cache_path%'
+        $appDomain: '%app_domain%'
 
   # Voter
   App\Security\Voter\FavoriteVoter:

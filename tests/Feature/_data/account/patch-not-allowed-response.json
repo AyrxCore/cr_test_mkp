@@ -1,0 +1,7 @@
+{
+  "@context": "/api/contexts/Error",
+  "@type": "hydra:Error",
+  "hydra:title": "An error occurred",
+  "hydra:description": "@string@.contains('No route found for \"PATCH http://localhost/api/accounts/8e211f4d-c2c9-4fdb-9031-5414d019b488\"')",
+  "trace": "@array@"
+}

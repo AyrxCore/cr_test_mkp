@@ -2,85 +2,51 @@
 
 namespace App\Security;
 
-use App\Entity\Account;
 use App\Entity\User;
-use App\Service\UpplerAuthenticationService;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAccountStatusException;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Contracts\Service\Attribute\Required;
 
 class UserChecker implements UserCheckerInterface
 {
-
-    #[Required]
-    public RequestStack $requestStack;
-
-    #[Required]
-    public UpplerAuthenticationService $upplerAuthenticationService;
-
     public function checkPreAuth(UserInterface $user): void
     {
         if (!$user instanceof User) {
             return;
         }
 
-        //le compte n'est pas autorisé sur la marketplace
+        if (!$user->isEnabled()) {
+            throw new CustomUserMessageAccountStatusException('user_disabled');
+        }
+
         if (!$user->isAccesMarketPlace()) {
             throw new CustomUserMessageAccountStatusException('user_disabled');
         }
 
-        //le compte n'a pas d'account actif
-        $enable = false;
-        foreach ($user->getAccounts() as $account) {
-            if ($account->isEnabled()) {
-                $enable = true;
-                break;
+        if (!$user->hasRole('ROLE_API')) {
+            if ($user->getAccounts()->isEmpty()) {
+                throw new CustomUserMessageAccountStatusException('user_empty_account');
+            }
+
+            if (!$this->hasEnabledAccount($user)) {
+                throw new CustomUserMessageAccountStatusException('user_disabled');
             }
         }
-        if (!$user->hasRole('ROLE_API') && !$enable) {
-            throw new CustomUserMessageAccountStatusException('user_disabled');
-        }
-
-        //le compte n'est pas actif on refuse l'authentification,l'utilisateur doit passer par 'première connexion'
-        if (!$user->isEnabled()) {
-            throw new CustomUserMessageAccountStatusException('user_disabled');
-        }
     }
 
-    public function checkPostAuth(UserInterface $user): void
+    public function checkPostAuth(UserInterface $user)
     {
-        if (!$user instanceof User) {
-            return;
-        }
-
-        //le user n'est lié à aucun compte, il ne peut pas entrer saufs'il s'agit d'un utilisteur api (bot Neo)
-        if (!$user->hasRole('ROLE_API') && $user->getAccounts()->isEmpty()) {
-            throw new CustomUserMessageAccountStatusException('user_empty_account');
-        }
-//        } else {
-//            $countEnable = 0;
-//            foreach ($user->getAccounts() as $account) {
-//                if ($account->isEnabled()) {
-//                    $countEnable++;
-//                    $accountEnable = $account;
-//                }
-//            }
-//            if (1 === $countEnable) {
-//                //le user est lié à un seul compte actif, on l'identifie automatiquement dessus
-//                $session = $this->requestStack->getSession();
-//                $session->start();
-//
-//                $userAuth = $this->upplerAuthenticationService->authenticateUser(
-//                    $accountEnable
-//                );
-//
-//                if ($userAuth && $session->has('access_token') && !empty($session->get('access_token'))) {
-//                    return;
-//                }
-//            }
-//        }
+        // Nothing
     }
 
+    private function hasEnabledAccount(User $user): bool
+    {
+        foreach ($user->getAccounts() as $account) {
+            if ($account->isEnabled()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

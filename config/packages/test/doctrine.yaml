@@ -1,8 +1,0 @@
-doctrine:
-    dbal:
-        driver: pdo_sqlite
-        user: test
-        dbname: dbTest
-        path: '%kernel.cache_dir%/mkp_db_test.db'
-        url: null
-        memory: false
