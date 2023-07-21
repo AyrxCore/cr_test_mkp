@@ -115,6 +115,11 @@ generate-keypair: ## Generate private/public keys
 	$(dc_exec) php bin/console lexik:jwt:generate-keypair --skip-if-exists
 
 ##
+## Fixtures generation
+fixtures-factory: ## Generate a fixtures Factory in \App\DataFixtures\Factory
+	$(dc_exec) php bin/console make:factory
+
+##
 ## Front
 build-front: ## Build front environment
 	$(dc_exec) js yarn install
