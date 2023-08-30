@@ -59,11 +59,8 @@ class ProductApiController extends AbstractController
     public Environment $twig;
 
     #[Route('/api/products', name: 'search_products', methods: ['POST'])]
-    #[Route('/api/accords-cadre', name: 'search_accords_cadre', methods: ['POST'])]
     public function list(Request $request, NormalizerInterface $normalizer): JsonResponse
     {
-        $session = $this->requestStack->getSession();
-
         $options = $request->request->all();
 
         $showFilters = false;
@@ -88,8 +85,8 @@ class ProductApiController extends AbstractController
         $products = $this->upplerProductService->findProductsByOptions(
             $options,
             ['properties', 'price', 'company', 'images'],
-            $page,
-            $perPage,
+            (int) $page,
+            (int) $perPage,
             $showFilters
         );
 
@@ -99,8 +96,6 @@ class ProductApiController extends AbstractController
     #[Route('/api/home-products', name: 'search_home_products', methods: ['GET'])]
     public function homeProduct(): JsonResponse
     {
-        $session = $this->requestStack->getSession();
-
         $params = ['properties', 'price', 'company', 'images'];
 
         // TODO: make concurrent requests: https://symfony.com/doc/current/http_client.html#concurrent-requests
@@ -143,7 +138,6 @@ class ProductApiController extends AbstractController
         $listMenu = \array_slice($categories, 0, 6);
 
         \usort($categories, function ($a, $b) {
-            //            return strcmp($a->name, $b->name);
             return \strcmp($a['name'], $b['name']);
         });
 
@@ -151,20 +145,16 @@ class ProductApiController extends AbstractController
     }
 
     #[Route('/api/product/{id}', name: 'get_product')]
-    public function product(int $id, NormalizerInterface $normalizer): JsonResponse
+    public function product(int $id): JsonResponse
     {
-        $session = $this->requestStack->getSession();
-
         $product = $this->upplerProductService->findProductById($id);
 
         return new JsonResponse($product);
     }
 
     #[Route('/api/variant/{id}', name: 'get_variant')]
-    public function variant(int $id, NormalizerInterface $normalizer): JsonResponse
+    public function variant(int $id): JsonResponse
     {
-        $session = $this->requestStack->getSession();
-
         $variant = $this->upplerProductService->findVariantById($id);
 
         return new JsonResponse($variant);

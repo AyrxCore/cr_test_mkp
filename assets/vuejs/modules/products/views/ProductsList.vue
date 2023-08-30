@@ -80,14 +80,6 @@
               </div>
             </div>
           </div>
-          <ProductPaginationComponent
-            v-if="count"
-            :number-page-total="numberPageTotal()"
-            :count="count"
-            :page-number="pageNumber"
-            @page-preview="pagePreview"
-            @page-next="pageNext"
-          />
         </div>
         <div
           class="flex h-[50%] flex-col gap-4 text-gray-600 xl:grid xl:grid-cols-4"
@@ -104,7 +96,7 @@
               <div
                 class="flex flex-col text-gray-600 md:grid md:grid-cols-2 md:gap-8 lg:grid-cols-3"
               >
-                <div v-for="(product, key) in products" :key="product.id">
+                <div v-for="product in products" :key="product.id">
                   <AccordCadreComponent
                     v-if="
                       product.isAccordCadre &&
@@ -127,14 +119,22 @@
                 </div>
               </div>
             </div>
-            <ProductPaginationComponent
-              class="!md:mt-10"
-              :number-page-total="numberPageTotal()"
-              :count="count"
-              :page-number="pageNumber"
-              @page-preview="pagePreview"
-              @page-next="pageNext"
-            />
+            <div
+              class="mt-5 flex w-full flex-col items-center justify-center space-y-3"
+            >
+              <div class="flex justify-center">
+                Résultats {{ count > currentCount ? currentCount : count }} sur
+                {{ count }}
+              </div>
+              <button
+                v-if="count > currentCount"
+                class="button w-1/2 border-2 border-secondary !text-secondary hover:!bg-white focus:!bg-white"
+                @click="loadMore"
+              >
+                <LoaderSharedComponent v-if="loadMoreLoading" />
+                <span v-else class="!text-lg"> Chargez plus </span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -147,11 +147,9 @@ import ProductComponent from '@/vuejs/modules/products/components/ProductCompone
 import { useRoute } from 'vue-router'
 import { computed, onBeforeMount, ref, watch } from 'vue'
 import { useProductStore } from '@/vuejs/stores/product'
-import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import AccordCadreComponent from '@/vuejs/modules/home/component/AccordCadreComponent.vue'
-import { toNumber } from '@vue/shared'
 import router from '@/vuejs/router'
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import FiltersComponent from '@/vuejs/modules/products/components/FiltersComponent.vue'
@@ -159,8 +157,9 @@ import SelectedFilterComponent from '@/vuejs/modules/products/components/filters
 import { storeToRefs } from 'pinia'
 import { filterType } from '@/vuejs/modules/products'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
-import ProductPaginationComponent from '@/vuejs/modules/products/components/ProductPaginationComponent.vue'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
+import { Product } from '@/vuejs/types/Product'
+import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 
 const route = useRoute()
 const productStore = useProductStore()
@@ -170,48 +169,64 @@ const resultProducts = ref([])
 const isLoading = ref<boolean>()
 const term = ref<string>('')
 const currentPartenaire = ref<number>(null)
-const perPage = ref<number>(42)
-const pageNumber = ref<number>(1)
+const perPage = ref<number>(30)
+const currentCount = ref<number>(null)
 const resultNotFound = ref<boolean>(false)
 const favoriteStore = useFavoriteStore()
 const breadcrumbUrl = computed(() => {
   return []
 })
+const products = ref<Array<Product>>([])
+const loadMoreLoading = ref<boolean>(false)
+const paramsProducts = ref(null)
 
 onBeforeMount(async () => {
   await favoriteStore.fetchFavorites()
 })
 
-const loadProducts = async (paramsProducts) => {
+const pageLoad = async () => {
   isLoading.value = true
+  currentPartenaire.value = null
+  products.value = []
 
-  try {
-    resultProducts.value = await productStore.fetchProductsByParams(
-      paramsProducts,
-    )
-    pageNumber.value = resultProducts.value.page
-    if (route.query.q) {
-      const eventLabel =
-        resultProducts.value.results_count > 0
-          ? 'view_search_results'
-          : 'no_search_results'
-      await window.dataLayer?.push({
-        event: eventLabel,
-        search_term: route.query.q,
-      })
-    }
-  } catch (e) {
-    resultNotFound.value = true
+  paramsProducts.value = {
+    with_filter: true,
+    page: 1,
+    perPage: perPage.value,
+    sort: null,
   }
-  isLoading.value = false
+
+  currentCount.value = perPage.value
+  await removeFilterAll()
+}
+
+const loadMore = async () => {
+  loadMoreLoading.value = true
+  paramsProducts.value.page++
+  await loadProducts(paramsProducts.value)
+  currentCount.value += currentCount.value
+  loadMoreLoading.value = false
+}
+
+const loadProducts = async (paramsProducts: object) => {
+  resultProducts.value = await productStore.fetchProductsByParams(
+    paramsProducts,
+  )
+  products.value.push(...resultProducts.value.results)
+  if (route.query.q) {
+    const eventLabel =
+      resultProducts.value.results_count > 0
+        ? 'view_search_results'
+        : 'no_search_results'
+    await window.dataLayer?.push({
+      event: eventLabel,
+      search_term: route.query.q,
+    })
+  }
 }
 
 const count = computed(() => {
   return resultProducts.value.results_count
-})
-
-const products = computed(() => {
-  return resultProducts.value.results ?? []
 })
 
 const filters = computed(() => {
@@ -238,7 +253,7 @@ const removeFilterAll = async () => {
   selectedProperties.value = null
 }
 
-const removeFilter = async (type) => {
+const removeFilter = async (type: string) => {
   switch (type) {
     case filterType.name:
       term.value = null
@@ -253,7 +268,6 @@ const removeFilter = async (type) => {
       selectedProperties.value = null
       break
   }
-  pageNumber.value = 1
   await loadPage()
 }
 
@@ -270,34 +284,12 @@ const findPropertyData = (propertyId, value) => {
 }
 
 const filterProduct = async () => {
-  pageNumber.value = 1
-  await loadPage()
-}
-
-const numberPageTotal = () => {
-  return toNumber(Math.ceil(count.value / perPage.value))
-}
-
-const pagePreview = async () => {
-  if (pageNumber.value > 1) {
-    pageNumber.value--
-  } else {
-    pageNumber.value = 1
-  }
-
-  await loadPage()
-}
-
-const pageNext = async () => {
-  if (pageNumber.value >= numberPageTotal()) {
-    return false
-  }
-  pageNumber.value++
   await loadPage()
 }
 
 const loadPage = async () => {
   const queryValue = {}
+
   if (term.value) {
     queryValue.q = term.value
   }
@@ -315,8 +307,6 @@ const loadPage = async () => {
     queryValue.value = selectedProperties.value.value
   }
 
-  queryValue.page = pageNumber.value
-
   await router.replace({
     name: ProductPageList.PRODUCTS,
     query: queryValue,
@@ -326,35 +316,21 @@ const loadPage = async () => {
 watch(
   () => route.query,
   async (routeObject) => {
-    currentPartenaire.value = null
-    if (routeObject.page) {
-      pageNumber.value = routeObject.page
-    } else {
-      pageNumber.value = 1
-    }
-
-    const paramsProducts = {
-      with_filter: true,
-      page: pageNumber.value,
-      perPage: perPage.value,
-      sort: null,
-    }
-
-    await removeFilterAll()
+    await pageLoad()
 
     if (routeObject.q) {
-      term.value = routeObject.q
-      paramsProducts.name = term.value
+      term.value = routeObject.q.toString()
+      paramsProducts.value.name = term.value
     }
 
     if (routeObject.category) {
       productStore.setSelectedCategory(routeObject.category)
-      paramsProducts.categories = [routeObject.category]
+      paramsProducts.value.categories = [routeObject.category]
     }
 
     if (routeObject.company) {
       productStore.setSelectedCompany(routeObject.company)
-      paramsProducts.companies = [routeObject.company]
+      paramsProducts.value.companies = [routeObject.company]
     }
 
     if (routeObject.property_id && routeObject.value) {
@@ -363,10 +339,15 @@ watch(
         value: routeObject.value,
       }
       productStore.setSelectedProperty(properties)
-      paramsProducts.properties = [properties]
+      paramsProducts.value.properties = [properties]
     }
-
-    await loadProducts(paramsProducts)
+    try {
+      await loadProducts(paramsProducts.value)
+    } catch (e) {
+      resultNotFound.value = true
+    } finally {
+      isLoading.value = false
+    }
   },
   { immediate: true },
 )

@@ -16,20 +16,15 @@
 </template>
 
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-
 import MenuComponent from '@/vuejs/modules/shared/header-component/MenuComponent.vue'
 import AccountComponent from '@/vuejs/modules/shared/header-component/AccountComponent.vue'
 import LogoComponent from '@/vuejs/modules/shared/header-component/LogoComponent.vue'
 import SearchComponent from '@/vuejs/modules/shared/header-component/SearchComponent.vue'
 import router from '@/vuejs/router'
-import { useUserStore } from '@/vuejs/stores/user'
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import { useProductStore } from '@/vuejs/stores/product'
 
-const userStore = useUserStore()
 const productStore = useProductStore()
-const { user } = storeToRefs(userStore)
 
 const search = (event) => {
   productStore.setSelectedProperty(null)
@@ -39,7 +34,6 @@ const search = (event) => {
     name: ProductPageList.PRODUCTS,
     query: {
       q: event.term,
-      page: event.page,
     },
   })
 }

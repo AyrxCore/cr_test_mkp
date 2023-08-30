@@ -1,31 +1,28 @@
 <template>
-    <h3
-      class="mt-1 items-center text-left text-primary flex"
+  <h3 class="mt-1 flex items-center text-left text-primary">
+    <RouterLink
+      :to="{ name: ProductPageList.PRODUCTS, query: { category: category.id } }"
+      replace
     >
-      <RouterLink :to="{name: ProductPageList.PRODUCTS, query: { category: category.id, page: 1}}" replace>
-        {{ props.category.name }}
-      </RouterLink>
-      <Chevron2RightIconComponent
-        v-if="props.category.child"
-        class="ml-2"
-        :class="{
-                'font-bold ml-2': props.category.parent === null,
-                'mt-2 rotate-90 ease-in-out': showChildren
-              }"
-        @click="toggleChildren"
-      />
-    </h3>
-    <div
-      v-if="showChildren"
-      class="ml-5"
-    >
-      <MenuCategoryChildComponent
-        v-for="cat in props.category.child"
-        :key="cat.id"
-        :category="cat"
-      />
-    </div>
-
+      {{ props.category.name }}
+    </RouterLink>
+    <Chevron2RightIconComponent
+      v-if="props.category.child"
+      class="ml-2"
+      :class="{
+        'ml-2 font-bold': props.category.parent === null,
+        'mt-2 rotate-90 ease-in-out': showChildren,
+      }"
+      @click="toggleChildren"
+    />
+  </h3>
+  <div v-if="showChildren" class="ml-5">
+    <MenuCategoryChildComponent
+      v-for="cat in props.category.child"
+      :key="cat.id"
+      :category="cat"
+    />
+  </div>
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue'
@@ -45,10 +42,9 @@ const props = defineProps({
 
 const showChildren = ref<boolean>(false)
 
-const toggleChildren = (() =>  {
+const toggleChildren = () => {
   showChildren.value = !showChildren.value
-})
-
+}
 </script>
 
 <style scoped></style>
