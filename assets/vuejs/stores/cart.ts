@@ -170,7 +170,9 @@ export const useCartStore = defineStore({
       return this.productVariantsInCart.length
     },
     hasAllTermsChecked(): boolean {
-      for (const order of this.cart?.orders) {
+      const orders = this.cart?.orders
+      if (!orders || orders.length === 0) return false
+      for (const order of orders) {
         if (!this.termsOfSales.some((e) => e === order.seller.id)) {
           return false
         }
