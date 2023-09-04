@@ -1,0 +1,90 @@
+[
+  {
+    "id": 14,
+    "name": {
+      "fr": "Optimisations MKP 1",
+      "default": "Optimisations MKP 1"
+    },
+    "slug": "optimisations-mkp-1",
+    "external_id": null,
+    "companies_list_criteria": [],
+    "created_at": "2023-07-24T07:40:38+00:00",
+    "updated_at": "2023-07-24T07:48:08+00:00",
+    "owner": null,
+    "dynamic_entity_configuration": {
+      "id": 2,
+      "name": "BANDEAU-FLASH"
+    },
+    "relationships": [],
+    "show_company_matcher": {
+      "id": 3643,
+      "zones": [],
+      "categories": [],
+      "types": [],
+      "companies": [],
+      "in_contact": null,
+      "role": null
+    },
+    "dynamic_fields": [
+      {
+        "id": 2188,
+        "dynamic_field_configuration": {
+          "id": 47,
+          "name": {
+            "fr": "bandeau_flash_text",
+            "default": "bandeau_flash_text"
+          }
+        },
+        "value": "Les derni\u00e8res \u00e9volutions de votre marketplace sont l\u00e0.",
+        "choices": null,
+        "address": null,
+        "company_matcher": null,
+        "product_matcher": null,
+        "date_range": null,
+        "country": null,
+        "files": [],
+        "images": []
+      },
+      {
+        "id": 2189,
+        "dynamic_field_configuration": {
+          "id": 48,
+          "name": {
+            "fr": "bandeau_flash_cta_text",
+            "default": "bandeau_flash_cta_text"
+          }
+        },
+        "value": "D\u00e9couvrez-les \u2192",
+        "choices": null,
+        "address": null,
+        "company_matcher": null,
+        "product_matcher": null,
+        "date_range": null,
+        "country": null,
+        "files": [],
+        "images": []
+      },
+      {
+        "id": 2190,
+        "dynamic_field_configuration": {
+          "id": 49,
+          "name": {
+            "fr": "bandeau_flash_cta_link",
+            "default": "bandeau_flash_cta_link"
+          }
+        },
+        "value": "https:\/\/marketplace.qantis.co\/news\/optimisations-marketplace-1",
+        "choices": null,
+        "address": null,
+        "company_matcher": null,
+        "product_matcher": null,
+        "date_range": null,
+        "country": null,
+        "files": [],
+        "images": []
+      }
+    ],
+    "is_enabled": true,
+    "uuid": "de45b76e-276d-5403-98e3-df704d1eeaf1"
+  }
+]

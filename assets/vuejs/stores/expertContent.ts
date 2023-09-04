@@ -1,76 +1,68 @@
 import { defineStore } from 'pinia'
-import { useAlertStore } from '@/vuejs/stores/alert'
-import { AlertType } from '@/vuejs/types/Alert'
-import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
-import { getErrorMessage } from '@/vuejs/services/login'
 import ExpertContentHttpClient from '@/vuejs/services/httpclient/ExpertContentHttpClient'
 import {
   ExpertContent,
   ExpertContentCategory,
 } from '@/vuejs/types/ExpertContent'
-import { ExpertContentBanner } from '@/vuejs/types/ExpertContentBanner'
 
 export interface ExpertContentStoreState {
-  expertsContentsCategories: ExpertContentCategory[]
-  expertsContents: ExpertContent[]
-  currentExpertContentSlug: string
-  currentExpertContent: ExpertContent
-  banner: ExpertContentBanner
+  categories: ExpertContentCategory[]
+  expertContents: ExpertContent[]
+  slug: string
 }
 
 export const useExpertContentStore = defineStore({
   id: 'expertContent',
 
   state: (): ExpertContentStoreState => ({
-    expertsContentsCategories: [],
-    expertsContents: [],
-    currentExpertContentSlug: null,
-    currentExpertContent: null,
-    banner: null,
+    categories: [],
+    expertContents: [],
+    slug: null,
   }),
 
   actions: {
-    async initActualitePage(slug) {
-      if (!this.expertsContentsCategories.length) {
-        await this.findExpertsContentsCategories()
-      }
-      this.expertsContents.forEach((expertContent) => {
-        if (expertContent.slug === slug) {
-          this.currentExpertContent = expertContent
-        }
-      })
-      if (!this.currentExpertContent) {
-        this.currentExpertContent = await this.initExpertContent(slug)
-      }
-      const category = this.getCategoryColorByName(
-        this.currentExpertContent.categoryName,
-      )
-      this.currentExpertContent.categoryColor = category.color
-      return this.currentExpertContent
-    },
-    async init() {
-      if (!this.expertsContents.length) {
+    async init(): Promise<ExpertContent[]> {
+      if (!this.expertContents.length) {
         await this.findExpertsContents()
       }
-      if (!this.expertsContentsCategories.length) {
+      if (!this.categories.length) {
         await this.findExpertsContentsCategories()
       }
-      this.expertsContents.forEach((expertContent) => {
+      this.expertContents.forEach((expertContent: ExpertContent) => {
         const category = this.getCategoryColorByName(expertContent.categoryName)
         expertContent.categoryColor = category.color
       })
-      return this.expertsContents
+
+      return this.expertContents
     },
-    async initBanner() {
-      if (!this.banner) {
+
+    async initExpertContent(slug: string) {
+      if (!this.categories.length) {
+        await this.findExpertsContentsCategories()
+      }
+      let currentExpertContent = null
+      this.expertContents.forEach((expertContent: ExpertContent) => {
+        if (expertContent.slug === slug) {
+          currentExpertContent = expertContent
+        }
+      })
+      if (!currentExpertContent) {
         try {
-          this.banner = await ExpertContentHttpClient.get().getBanner()
+          currentExpertContent =
+            await ExpertContentHttpClient.get().getExpertContent(slug)
+          const category = this.getCategoryColorByName(
+            currentExpertContent.categoryName,
+          )
+          currentExpertContent.categoryColor = category.color
         } catch (error) {}
       }
+
+      return currentExpertContent
     },
+
     async findExpertsContentsCategories(): Promise<[]> {
       try {
-        this.expertsContentsCategories =
+        this.categories =
           await ExpertContentHttpClient.get().findExpertsContentsCategories()
       } catch (error) {
         return []
@@ -78,27 +70,14 @@ export const useExpertContentStore = defineStore({
     },
     async findExpertsContents(): Promise<[]> {
       try {
-        this.expertsContents =
+        this.expertContents =
           await ExpertContentHttpClient.get().findExpertsContents()
       } catch (error) {
         return []
       }
     },
-    async initExpertContent(slug) {
-      const alertStore = useAlertStore()
-      try {
-        return await ExpertContentHttpClient.get().getExpertContent(slug)
-      } catch (error) {
-        error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow(
-            getErrorMessage(error.response.data.message),
-            AlertType.danger,
-          )
-      }
-      return null
-    },
-    getCategoryColorByName(categoryName) {
-      return this.expertsContentsCategories.find((category) => {
+    getCategoryColorByName(categoryName: string) {
+      return this.categories.find((category: ExpertContentCategory) => {
         if (category.name === categoryName) {
           return category.color
         }
@@ -109,10 +88,10 @@ export const useExpertContentStore = defineStore({
 
   getters: {
     getExpertsContents(): Array<ExpertContent> {
-      return this.expertsContents
+      return this.expertContents
     },
     getExpertsContentsCategories() {
-      return this.expertsContentsCategories
+      return this.categories
     },
   },
 })

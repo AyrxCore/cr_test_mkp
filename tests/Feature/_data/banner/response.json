@@ -1,0 +1,10 @@
+{
+  "@context": "\/api\/contexts\/Banner",
+  "@id": "\/api\/banners\/14",
+  "@type": "Banner",
+  "id": 14,
+  "text": "Les dernières évolutions de votre marketplace sont là.",
+  "slug": "optimisations-mkp-1",
+  "ctaTxt": "Découvrez-les →",
+  "ctaLink": "https:\/\/marketplace.qantis.co\/news\/optimisations-marketplace-1"
+}

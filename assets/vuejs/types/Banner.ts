@@ -1,4 +1,4 @@
-export interface ExpertContentBanner {
+export interface Banner {
   id: number
   slug: string
   text: string

@@ -91,7 +91,7 @@
       </div>
     </div>
 
-    <template v-if="expertsContents.length">
+    <template v-if="expertContents.length">
       <div
         class="my-6 mx-4 mt-10 max-w-screen-2xl flex-1 rounded-md bg-white pb-4 shadow-md xl:mx-auto"
       >
@@ -103,7 +103,7 @@
               <span class="text-gradient ml-2"> communauté QANTIS </span>
             </p>
           </h3>
-          <ContenusExpertComponent :contents="expertsContents" />
+          <ExpertContentsComponent :contents="expertContents" />
           <div class="flex justify-center">
             <p class="mt-10">
               <RouterLink
@@ -125,24 +125,24 @@ import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import PartnersCarousel from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
 import { computed, onBeforeMount, onMounted, ref } from 'vue'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
-import ContenusExpertComponent from '@/vuejs/modules/home/component/ContenusExpertComponent.vue'
+import ExpertContentsComponent from '@/vuejs/modules/home/component/ExpertContentsComponent.vue'
 import ProductHomeComponent from '@/vuejs/modules/home/component/ProductHomeComponent.vue'
 import AccordCadreComponent from '@/vuejs/modules/home/component/AccordsCadreComponent.vue'
-import { useExpertContentStore } from '@/vuejs/stores/expertContent'
 import { storeToRefs } from 'pinia'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import OurCategoriesComponent from '@/vuejs/modules/home/component/OurCategoriesComponent.vue'
 import CarouselActualitesComponent from '@/vuejs/modules/home/component/CarouselActualitesComponent.vue'
 import { NewsPageList, ProductPageList } from '@/vuejs/router/pages-list'
-import { useProductStore } from '@/vuejs/stores/product'
+import { useExpertContentStore } from '@/vuejs/stores/expertContent'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
+import { useProductStore } from '@/vuejs/stores/product'
 
 const favoriteStore = useFavoriteStore()
 const productStore = useProductStore()
 const { productsTopVente, productsSelection } = storeToRefs(productStore)
 const expertContentStore = useExpertContentStore()
 
-const expertsContentsLoaded = ref<boolean>(false)
+const expertContentsLoaded = ref<boolean>(false)
 
 onBeforeMount(async () => {
   await Promise.all([
@@ -153,11 +153,11 @@ onBeforeMount(async () => {
 })
 
 onMounted(async () => {
-  expertsContentsLoaded.value = true
+  expertContentsLoaded.value = true
 })
 
-const expertsContents = computed(() => {
-  return expertContentStore.expertsContents
+const expertContents = computed(() => {
+  return expertContentStore.expertContents
 })
 </script>
 

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Tests;
 
 use App\Controller\Api\Buyer\ProductApiController;
+use App\Dto\Banner;
+use App\Dto\ExpertContent;
 use App\Tests\Feature\Helper\JsonHelper;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,6 +27,11 @@ class MockClientCallback
             return $this->getHomeProductsResponse($options);
         }
 
+        // Dynamic entity
+        if ($path === '/v1/administrator/dynamic-entity') {
+            return $this->getDynamicEntityResponse($url);
+        }
+
         if ($method === 'POST' && \preg_match('/^\/v1\/buyer\/cart\/\d+\/items/', $path, $matches)) {
             return new MockResponse(info: ['http_code' => Response::HTTP_NO_CONTENT]);
         }
@@ -32,11 +39,6 @@ class MockClientCallback
         if ($method === 'PATCH') {
             return new MockResponse(info: ['http_code' => Response::HTTP_NO_CONTENT]);
         }
-
-//        // Cart
-//        if ($path === '/v1/buyer/cart') {
-//            return new MockResponse(JsonHelper::parseJsonDataFile('_mocks/uppler-response/v1/buyer/cart/collection.json'));
-//        }
 
         // match request for an item resource (ex: /v1/buyer/profile/123)
         // match request for an item's sub-resource (ex: /v1/buyer/cart/123/shipping-method)
@@ -69,5 +71,28 @@ class MockClientCallback
         }
 
         return new MockResponse(JsonHelper::parseJsonDataFile('_mocks/uppler-response/v1/buyer/search/products-selection.json'));
+    }
+
+    private function getDynamicEntityResponse(string $url): MockResponse
+    {
+        $parseUrl = \parse_url($url);
+        \parse_str($parseUrl['query'], $queryParams);
+        $basePath = '_mocks/uppler-response/v1/administrator/dynamic-entity/';
+
+        if (isset($queryParams['criteria']['slug'])) {
+            return new MockResponse(JsonHelper::parseJsonDataFile(\sprintf('%s%s.json', $basePath, $queryParams['criteria']['slug'])));
+        }
+
+        $dynamicConfigId = (int) $queryParams['criteria']['dynamic_entity_configuration_id'] ?? null;
+
+        if ($dynamicConfigId === ExpertContent::DYNAMIC_CONFIG_ID) {
+            return new MockResponse(JsonHelper::parseJsonDataFile($basePath.'collection.json'));
+        }
+
+        if ($dynamicConfigId === Banner::DYNAMIC_CONFIG_ID) {
+            return new MockResponse(JsonHelper::parseJsonDataFile(\sprintf('%sbanner.json', $basePath)));
+        }
+
+        return new MockResponse(null);
     }
 }

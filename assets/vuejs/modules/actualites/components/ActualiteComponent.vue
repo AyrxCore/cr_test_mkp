@@ -4,11 +4,11 @@
   >
     <div class="mx-auto items-center">
       <RouterLink
-        :to="{ name: PageList.NEWS_ITEM, params: { slug: contenu.slug } }"
+        :to="{ name: PageList.NEWS_ITEM, params: { slug: content.slug } }"
       >
         <img
-          :src="contenu.page_actus_img_desktop"
-          :alt="`Image ${contenu.articleTitle}`"
+          :src="content.page_actus_img_desktop"
+          :alt="`Image ${content.articleTitle}`"
           class="mx-auto h-[205px!important] w-[334px!important]"
         />
       </RouterLink>
@@ -16,9 +16,9 @@
     <div class="mt-5">
       <p
         class="mb-3 w-max rounded-md px-2 py-1 text-white"
-        :style="{ background: contenu.categoryColor }"
+        :style="{ background: content.categoryColor }"
       >
-        {{ contenu.categoryName }}
+        {{ content.categoryName }}
       </p>
       <span class="text-gray-500">
         {{ formattedDate }}
@@ -26,17 +26,17 @@
     </div>
     <h3 class="mt-2 text-[25px] font-bold text-primary">
       <RouterLink
-        :to="{ name: PageList.NEWS_ITEM, params: { slug: contenu.slug } }"
+        :to="{ name: PageList.NEWS_ITEM, params: { slug: content.slug } }"
         class="truncate-custom truncate-custom-2 text-primary"
       >
-        {{ contenu.articleTitle }}
+        {{ content.articleTitle }}
       </RouterLink>
     </h3>
     <p class="truncate-custom truncate-custom-3 mt-1 text-lg text-gray-400">
-      {{ contenu.articleTeaser }}
+      {{ content.articleTeaser }}
     </p>
     <RouterLink
-      :to="{ name: PageList.NEWS_ITEM, params: { slug: contenu.slug } }"
+      :to="{ name: PageList.NEWS_ITEM, params: { slug: content.slug } }"
       class="text-sm font-medium text-primary underline"
     >
       Lire l'article
@@ -52,14 +52,14 @@ import { PageList } from '@/vuejs/router'
 import { ExpertContent } from '@/vuejs/types/ExpertContent'
 
 const props = defineProps({
-  contenu: {
+  content: {
     type: Object as PropType<ExpertContent>,
     required: true,
   },
 })
 
 const formattedDate = computed((): string => {
-  return format(new Date(props.contenu.date), 'dd/MM/yyyy')
+  return format(new Date(props.content.date), 'dd/MM/yyyy')
 })
 </script>
 

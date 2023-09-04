@@ -4,108 +4,62 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Dto\ExpertContentBanner;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UpplerDynamicEntityService extends AbstractUpplerService
 {
-    public function getDynamicsEntitiesCategories(array $filters = []): array
+    public function getDynamicsEntitiesCategories(array $expands = []): array
     {
-        $filters = empty($filters) ? [] : $filters;
-
-        $urlFilters = null;
-
-        if (!empty($filters)) {
-            foreach ($filters as $filter) {
-                $urlFilters .= $urlFilters === null ? '?expand[]='.$filter : '&expand[]='.$filter;
-            }
-        }
-
-        $res = $this->request(
-            'GET',
-            'v1/administrator/dynamic-field-configuration'.$urlFilters, [], true
-        );
-
-        if ($res->getStatusCode() === Response::HTTP_OK) {
-            $dynamicsEntities = \json_decode($res->getContent(), true);
-        } else {
-            throw new NotFoundHttpException('Aucun champs dynamique trouvé');
-        }
-
-        return $dynamicsEntities;
-    }
-
-    public function getDynamicsEntities(array $expands = [], array $criterias = []): array
-    {
-        $expands = empty($expands) ? [] : $expands;
-
-        $options = null;
+        $urlExpands = null;
 
         if (!empty($expands)) {
             foreach ($expands as $expand) {
-                $options .= $options === null ? '?expand[]='.$expand : '&expand[]='.$expand;
-            }
-        }
-        if (!empty($criterias)) {
-            foreach ($criterias as $criteria => $value) {
-                $options .= ($options === null)
-                    ? ('?criteria['.$criteria.']='.$value)
-                    : ('&criteria['.$criteria.']='.$value);
+                $urlExpands .= $urlExpands === null ? '?expand[]='.$expand : '&expand[]='.$expand;
             }
         }
 
         $res = $this->request(
             'GET',
-            'v1/administrator/dynamic-entity'.$options, [], true
-        );
-
-        if ($res->getStatusCode() === Response::HTTP_OK) {
-            $dynamicsEntities = \json_decode($res->getContent(), true);
-        } else {
-            throw new NotFoundHttpException('Aucune entité dynamique trouvée');
-        }
-
-        return $dynamicsEntities;
-    }
-
-    public function getDynamicEntityBanner(): ?ExpertContentBanner
-    {
-        $res = $this->request(
-            'GET',
-            'v1/administrator/dynamic-entity?expand[]=dynamic_fields&criteria[dynamic_entity_configuration_id]=2&criteria[enabled]=1',
+            'v1/administrator/dynamic-field-configuration'.$urlExpands,
             [],
             true
         );
 
-        if ($res->getStatusCode() === Response::HTTP_OK) {
-            $remoteBanner = \json_decode($res->getContent(), true);
-            if (!empty($remoteBanner[0])) {
-                $banner = new ExpertContentBanner();
-                $banner->setId($remoteBanner[0]['id']);
-                $banner->setSlug($remoteBanner[0]['slug']);
-                foreach ($remoteBanner[0]['dynamic_fields'] as $value) {
-                    $fieldName = $value['dynamic_field_configuration']['name']['default'];
-                    $fieldValue = $value['value'];
-                    switch ($fieldName) {
-                        case 'bandeau_flash_text':
-                            $banner->setText($fieldValue);
-                            break;
-                        case 'bandeau_flash_cta_text':
-                            $banner->setCtaTxt($fieldValue);
-                            break;
-                        case 'bandeau_flash_cta_link':
-                            $banner->setCtaLink($fieldValue);
-                            break;
-                    }
-                }
-
-                return $banner;
-            } else {
-                throw new NotFoundHttpException('Aucune bannière trouvée');
-            }
-        } else {
-            throw new NotFoundHttpException('Aucune bannière trouvée');
+        if ($res->getStatusCode() !== Response::HTTP_OK) {
+            throw new NotFoundHttpException('Aucun champs dynamique trouvé');
         }
+
+        return \json_decode($res->getContent(), true);
+    }
+
+    public function getDynamicsEntities(array $expands = [], array $criteria = []): array
+    {
+        $params = '?sorting[created_at]=DESC';
+
+        if (!empty($expands)) {
+            foreach ($expands as $expand) {
+                $params .= '&expand[]='.$expand;
+            }
+        }
+
+        if (!empty($criteria)) {
+            foreach ($criteria as $key => $value) {
+                $params .= '&criteria['.$key.']='.$value;
+            }
+        }
+
+        $res = $this->request(
+            'GET',
+            'v1/administrator/dynamic-entity'.$params,
+            [],
+            true
+        );
+
+        if (!$res || $res->getStatusCode() !== Response::HTTP_OK) {
+            throw new NotFoundHttpException('Not Found');
+        }
+
+        return \json_decode($res->getContent(), true);
     }
 }

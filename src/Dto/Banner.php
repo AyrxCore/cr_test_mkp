@@ -11,15 +11,14 @@ use ApiPlatform\Core\Annotation\ApiResource;
     collectionOperations: [],
     itemOperations: [
         'get' => [
-            'path'         => '/banner/{id}',
+            'path' => '/banners/{id}',
             'requirements' => ['id' => '\d+'],
         ],
     ],
-    formats: ['json'],
 )]
-class ExpertContentBanner
+class Banner
 {
-
+    public const DYNAMIC_CONFIG_ID = 2;
     #[ApiProperty(identifier: true)]
     private ?int $id = null;
 
@@ -28,86 +27,53 @@ class ExpertContentBanner
     private string $ctaTxt = '';
     private string $ctaLink = '';
 
-    /**
-     * @return int|null
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param int|null $id
-     */
     public function setId(?int $id): void
     {
         $this->id = $id;
     }
 
-
-    /**
-     * @return string
-     */
     public function getText(): string
     {
         return $this->text;
     }
 
-    /**
-     * @param string $text
-     */
     public function setText(string $text): void
     {
         $this->text = $text;
     }
 
-    /**
-     * @return string
-     */
     public function getSlug(): string
     {
         return $this->slug;
     }
 
-    /**
-     * @param string $slug
-     */
     public function setSlug(string $slug): void
     {
         $this->slug = $slug;
     }
 
-    /**
-     * @return string
-     */
     public function getCtaTxt(): string
     {
         return $this->ctaTxt;
     }
 
-    /**
-     * @param string $ctaTxt
-     */
     public function setCtaTxt(string $ctaTxt): void
     {
         $this->ctaTxt = $ctaTxt;
     }
 
-    /**
-     * @return string
-     */
     public function getCtaLink(): string
     {
         return $this->ctaLink;
     }
 
-    /**
-     * @param string $ctaLink
-     */
     public function setCtaLink(string $ctaLink): void
     {
         $this->ctaLink = $ctaLink;
     }
-
 }
-

@@ -1,12 +1,13 @@
 <template>
   <BaseTemplate :title="`${pageTitle} | Qantis - Marketplace`">
+    <LoadingComponent v-if="isLoading" />
     <div
-      v-if="currentExpertContent"
+      v-else-if="currentExpertContent"
       class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 px-5 sm:px-8"
     >
       <BreadcrumbSharedComponent
         :list-url="listUrl"
-        :current-page="'Actualité'"
+        :current-page="currentExpertContent.articleTitle"
       />
       <div class="w-[100%] max-w-screen-2xl">
         <ContactUsButtonComponent />
@@ -76,11 +77,26 @@
       <!-- Bloc articles recommandés -->
       <div v-if="contents.length > 0" class="mt-10 justify-center">
         <h3 class="home-subtitle mb-5 text-primary">Articles recommandés</h3>
-        <ContenusExpertComponent :contents="contents" />
+        <ExpertContentsComponent :contents="contents" />
       </div>
       <!-- Fin Bloc articles recommandés -->
     </div>
-    <LoadingComponent v-else />
+    <div
+      v-else
+      class="xs:w-[100%] m-auto my-4 flex max-w-screen-2xl flex-col items-center bg-orange-200 px-5 py-5 text-orange-500 sm:px-8"
+    >
+      <span class="flex">
+        <WarningIconComponent class="w-5 fill-orange-500 stroke-orange-500" />
+        Aucune news n'a été trouvée
+      </span>
+
+      <RouterLink
+        :to="{ name: NewsPageList.NEWS }"
+        class="mt-5 flex items-center"
+      >
+        Retour à la liste
+      </RouterLink>
+    </div>
   </BaseTemplate>
 </template>
 
@@ -93,15 +109,17 @@ import ArrowRigntIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconC
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
-import ContenusExpertComponent from '@/vuejs/modules/home/component/ContenusExpertComponent.vue'
+import ExpertContentsComponent from '@/vuejs/modules/home/component/ExpertContentsComponent.vue'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 import { useExpertContentStore } from '@/vuejs/stores/expertContent'
 import { ExpertContent } from '@/vuejs/types/ExpertContent'
 import { NewsPageList } from '@/vuejs/router/pages-list'
+import WarningIconComponent from '@/vuejs/modules/shared/icon/WarningIconComponent.vue'
 
 const route = useRoute()
 const expertContent = useExpertContentStore()
 const currentExpertContent = ref<ExpertContent>()
+const isLoading = ref<boolean>(false)
 
 const listUrl = ref([
   {
@@ -125,7 +143,7 @@ const pageTitle = computed(() => {
 })
 
 const contents = computed(() => {
-  return expertContent.expertsContents.filter(
+  return expertContent.expertContents.filter(
     (c) =>
       c.categoryName === currentExpertContent.value.categoryName &&
       c.slug !== currentExpertContent.value.slug,
@@ -135,8 +153,14 @@ const contents = computed(() => {
 watch(
   () => route.params.slug as string,
   async (slug: string) => {
-    if (slug) {
-      currentExpertContent.value = await expertContent.initActualitePage(slug)
+    isLoading.value = true
+    try {
+      if (slug) {
+        currentExpertContent.value = await expertContent.initExpertContent(slug)
+      }
+    } catch (error) {
+    } finally {
+      isLoading.value = false
     }
   },
   { immediate: true },

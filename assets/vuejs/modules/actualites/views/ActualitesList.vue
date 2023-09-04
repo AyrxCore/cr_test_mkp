@@ -1,7 +1,7 @@
 <template>
   <BaseTemplate title="Liste des news | Qantis - MarketPlace">
     <div class="m-auto my-4 w-full max-w-screen-2xl px-5 sm:px-8">
-      <breadcrumb-shared-component :current-page="'Actualités'" />
+      <breadcrumb-shared-component current-page="Actualités" />
       <div class="w-[100%] max-w-screen-2xl">
         <ContactUsButtonComponent />
       </div>
@@ -10,13 +10,13 @@
         <!-- Bloc liste des actus -->
         <div class="m-auto my-2 flex w-full flex-col-reverse lg:flex-row">
           <div class="w-full lg:w-4/5 lg:pr-5">
-            <LoadingComponent v-if="expertsContents.length === 0" />
+            <LoadingComponent v-if="expertContents.length === 0" />
             <div
               v-else
               class="m-auto flex flex-col md:grid md:grid-cols-2 md:gap-4 lg:grid-cols-3"
             >
-              <div v-for="contenu in expertsContents" :key="contenu.id">
-                <ActualiteComponentComponent :contenu="contenu" />
+              <div v-for="content in expertContents" :key="content.id">
+                <ActualiteComponentComponent :content="content" />
               </div>
             </div>
           </div>
@@ -63,10 +63,10 @@ import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 
 const expertContentStore = useExpertContentStore()
 const { getExpertsContentsCategories } = storeToRefs(expertContentStore)
-const expertsContents = ref<Array<ExpertContent>>([])
+const expertContents = ref<ExpertContent[]>([])
 
 onMounted(async () => {
-  expertsContents.value = await expertContentStore.init()
+  expertContents.value = await expertContentStore.init()
 })
 </script>
 

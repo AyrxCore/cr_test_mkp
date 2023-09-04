@@ -42,12 +42,12 @@ import {
   MENTIONS_LEGALES_PAGE_ID,
   POLITIQUE_DE_CONFIDENTIALITE_PAGE_ID,
 } from '@/vuejs/services/const'
-import { useExpertContentStore } from '@/vuejs/stores/expertContent'
+import { useBannerStore } from '@/vuejs/stores/banner'
 
 const cartStore = useCartStore()
 const companyStore = useBuyerCompanyStore()
 const categoryStore = useCategoryStore()
-const expertContentStore = useExpertContentStore()
+const bannerStore = useBannerStore()
 
 const props = defineProps({
   component: {
@@ -62,7 +62,7 @@ onBeforeMount(async () => {
     await Promise.all([
       companyStore.getAddresses(),
       categoryStore.initAllCategories(),
-      expertContentStore.initBanner(),
+      bannerStore.init(),
     ])
   }
 })
