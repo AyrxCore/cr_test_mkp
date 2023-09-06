@@ -1,11 +1,11 @@
-
 import { defineStore } from 'pinia'
 import CategoryHttpClient from '@/vuejs/services/httpclient/CategoryHttpClient'
-import {ref} from 'vue'
+import { ref } from 'vue'
+import { Category } from '@/vuejs/types/Product/Category'
 
 export interface CategoryStoreState {
-  categories: [],
-  listMenu: [],
+  categories: []
+  listMenu: []
 }
 
 export const useCategoryStore = defineStore({
@@ -16,16 +16,14 @@ export const useCategoryStore = defineStore({
   }),
 
   actions: {
-    getCategorieById(id: number, cats: Array) {
-      const cat = ref<Object>()
-      cat.value = cats.find((c) => c.id === id)
-    },
-    async initAllCategories() {
+    async init() {
       try {
         if (this.categories.length === 0) {
-          const result =  await CategoryHttpClient.get().getCategories()
-          this.categories = result.categories
-          this.listMenu = result.menu
+          const result = await CategoryHttpClient.get().getCategories()
+          this.listMenu = result.slice(0, 6)
+          this.categories = result.sort((a: Category, b: Category) => {
+            return a.name.localeCompare(b.name)
+          })
         }
       } catch (error) {
         return []
@@ -35,6 +33,6 @@ export const useCategoryStore = defineStore({
   getters: {
     getAllCategories() {
       return this.categories
-    }
-  }
+    },
+  },
 })

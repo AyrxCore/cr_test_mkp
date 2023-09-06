@@ -125,25 +125,6 @@ class ProductApiController extends AbstractController
         return new JsonResponse($products);
     }
 
-    #[Route('/api/categories-list', name: 'categories_list', methods: ['POST'])]
-    public function categoriesList(): JsonResponse
-    {
-        $session = $this->requestStack->getSession();
-
-        $resultat = $this->upplerProductService->findAllCategories((string) $session->get('account')->getId());
-
-        $resultat = \json_decode(\json_encode($resultat), true);
-
-        $categories = (array) $resultat;
-        $listMenu = \array_slice($categories, 0, 6);
-
-        \usort($categories, function ($a, $b) {
-            return \strcmp($a['name'], $b['name']);
-        });
-
-        return new JsonResponse(['categories' => $categories, 'menu' => $listMenu]);
-    }
-
     #[Route('/api/product/{id}', name: 'get_product')]
     public function product(int $id): JsonResponse
     {

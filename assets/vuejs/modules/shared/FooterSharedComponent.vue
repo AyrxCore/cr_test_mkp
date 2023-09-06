@@ -1,52 +1,5 @@
 <template>
   <div class="footer mt-16">
-    <!-- <div class="bloc-contact-footer flex w-full flex-row">
-      <div
-        class="flex w-[100%] max-w-screen-2xl flex-col pt-5 lg:m-auto lg:my-4 lg:grid lg:grid-cols-3 lg:gap-4"
-      >
-        <div class="flex flex-col text-lg">
-          <div class="items-center">
-            <div class="flex items-center">
-              <PhoneIconComponent class="mr-4 h-[24px] w-[24px]" />
-              <div class="text-sm md:text-base lg:text-lg">
-                {{ PHONE_ANIMATION }}
-              </div>
-            </div>
-            <div class="mt-2 flex items-center">
-              <MailIconComponent class="mr-4 h-[24px] w-[24px]" />
-              <div class="text-sm md:text-base lg:text-lg">
-                {{ MAIL_ANIMATION }}
-              </div>
-            </div>
-            <div class="mt-2 flex">
-              <CalendarCheckIconComponent class="mr-4 h-[24px] w-[24px]" />
-              <div class="text-sm md:text-base lg:text-lg">
-                Rendez-vous avec votre animateur
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-span-2">
-          <h3>Êtes-vous abonné à notre newsletter ?</h3>
-          <p class="mb-4 text-sm md:text-base lg:text-lg">
-            Recevez les actualités de nos partenaires, leurs produits et
-            services
-          </p>
-          <InputButtonComponent
-            placeholder="Votre adresse email"
-            :btn-color="'bg-qantis'"
-          >
-            <span class="text-sm md:text-base lg:text-lg"> S'inscrire</span>
-          </InputButtonComponent>
-          <p class="mt-4 text-sm">
-            Votre adresse email sera uniquement utilisée pour vous envoyer nos
-            newsletters. Vous pourrez vous désabonner à tout moment via le lien
-            intégré dans la newsletter. En savoir plus sur la gestion de vos
-            données et vos droits
-          </p>
-        </div>
-      </div>
-    </div> -->
     <div
       class="second-part mx-5 my-2 flex max-w-screen-2xl flex-col pt-10 md:m-auto lg:my-4 lg:grid lg:grid-flow-col lg:grid-rows-3 lg:gap-4"
     >
@@ -163,7 +116,7 @@
             <RouterLink
               :to="{
                 name: ProductPageList.PRODUCTS,
-                query: { category: category.id, page: 1 },
+                query: { category: category.id },
               }"
               replace
             >

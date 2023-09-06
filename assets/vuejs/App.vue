@@ -61,7 +61,7 @@ onBeforeMount(async () => {
   if (props.component === '') {
     await Promise.all([
       companyStore.getAddresses(),
-      categoryStore.initAllCategories(),
+      categoryStore.init(),
       bannerStore.init(),
     ])
   }

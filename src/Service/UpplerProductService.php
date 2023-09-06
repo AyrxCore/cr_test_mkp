@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Dto\AccountAccordCadre;
 use App\Dto\Product;
 use App\Dto\Property;
 use App\Entity\AccordStatut;
@@ -51,8 +52,6 @@ class UpplerProductService extends AbstractUpplerService
         int $perPage = 10,
         bool $showFilters = false
     ): array|null {
-        $session = $this->requestStack->getSession();
-
         $expandParams = null;
         $params = empty($params) ? ['price', 'properties', 'variants', 'company'] : $params;
 
@@ -105,8 +104,6 @@ class UpplerProductService extends AbstractUpplerService
 
     public function findProductById(int $productId = null, array $filters = [], ?string $accountId = null): Product|null
     {
-        $session = $this->requestStack->getSession();
-
         $filters = empty($filters) ? ['price', 'properties', 'variants', 'company'] : $filters;
         $urlFilters = null;
 
@@ -132,8 +129,6 @@ class UpplerProductService extends AbstractUpplerService
 
     public function findVariantById(int $variantId = null)
     {
-        $session = $this->requestStack->getSession();
-
         $filters = ['price'];
         $urlFilters = null;
 
@@ -155,29 +150,20 @@ class UpplerProductService extends AbstractUpplerService
         return \json_decode($res->getContent());
     }
 
-    public function findAllCategories(string $accountId, int $page = 1, int $perPage = 1): \stdClass|null
+    public function findAllCategories(int $page = 1, int $perPage = 1): \stdClass|null
     {
-        $this->cache->clear();
-        $item = $this->cache->getItem('categories_'.$accountId);
-        if (!$item->isHit()) {
-            $session = $this->requestStack->getSession();
+        $res = $this->request(
+            'POST',
+            'v1/buyer/search/product?page='.$page.'&perPage='.$perPage,
+        );
 
-            $res = $this->request(
-                'POST',
-                'v1/buyer/search/product?page='.$page.'&perPage='.$perPage,
-            );
-
-            if ($res->getStatusCode() !== Response::HTTP_OK) {
-                throw new NotFoundHttpException('Aucune catégorie n\' a été trouvée');
-            }
-            $remoteResults = \json_decode($res->getContent());
-
-            $item->set($remoteResults->filters->category);
-            $item->expiresAfter(new \DateInterval('P1D')); // the item will be cached for 1 day
-            $this->cache->save($item);
+        if ($res->getStatusCode() !== Response::HTTP_OK) {
+            throw new NotFoundHttpException('Category not found');
         }
 
-        return $item->get();
+        $remoteData = \json_decode($res->getContent());
+
+        return $remoteData->filters->category;
     }
 
     /**

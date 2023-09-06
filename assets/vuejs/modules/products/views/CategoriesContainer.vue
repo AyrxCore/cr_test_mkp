@@ -15,7 +15,7 @@
         </p>
       </div>
       <div
-        v-if="categories.length < 1"
+        v-if="!categories.length"
         class="flex h-16 w-full items-center justify-center"
       >
         <LoadingComponent />
