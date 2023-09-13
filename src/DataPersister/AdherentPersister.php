@@ -40,6 +40,7 @@ class AdherentPersister implements ContextAwareDataPersisterInterface
         }
 
         $adh->setReducceCode($data->getReducceCode());
+        $adh->setsiret($data->getsiret());
         foreach ($data->getAttachments() as $key => $attachment) {
             $accordStatut = $this->em->getRepository(AccordStatut::class)->findOneBy([
                 'adherent' => $data->getId(),

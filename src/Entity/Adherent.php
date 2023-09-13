@@ -49,6 +49,9 @@ class Adherent
     #[Groups(["simpleUser", "update"])]
     private ?string $reducceCode = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $siret = null;
+
     #[Groups(["update"])]
     private array $attachments = [];
 
@@ -135,6 +138,18 @@ class Adherent
     public function setReducceCode(?string $reducceCode): self
     {
         $this->reducceCode = $reducceCode;
+
+        return $this;
+    }
+
+    public function getSiret(): ?string
+    {
+        return $this->siret;
+    }
+
+    public function setSiret(?string $siret): self
+    {
+        $this->siret = $siret;
 
         return $this;
     }

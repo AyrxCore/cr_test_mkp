@@ -24,6 +24,28 @@ parameters:
   SUBSCRIPTION_MAIL_SUGAR_LINK: '%env(SUGAR_LINK)%'
   SUBSCRIPTION_MAIL_FROM: '%env(MAIL_FROM)%'
   SUBSCRIPTION_MAIL_TO: '%env(MAIL_TO)%'
+  STELLANTIS_MAILING:
+    ACCORDS_IDS:
+      - '010148ae-5c2b-11ec-bfa4-0af08f946010' #PEUGEOT
+      - 'e7b514bc-d469-11ed-b265-025bcd73cb12' #ALFA ROMEO
+      - '0058a438-5c2b-11ec-b127-0af08f946010' #DS
+      - '00ddfc1e-5c2b-11ec-b75a-0af08f946010' #OPEL
+      - 'b828903e-d469-11ed-8695-067e628b0734' #FIAT
+      - '00477df2-5c2b-11ec-a27b-0af08f946010' #CITROEN
+      - 'd43c8e24-d469-11ed-a959-025bcd73cb12' #JEEP
+    ADHERENT_MAIL:
+      FROM:
+        '%env(MAIL_FROM)%'
+      TO:
+        '%env(ADH_SERV_MAIL_TO)%'
+    STELLANTIS_MAIL:
+      FROM:
+        '%env(MAIL_FROM)%'
+      TO:
+        '%env(STELLANTIS_MAIL_TO)%'
+      CC:
+        '%env(STELLANTIS_MAIL_CC)%'
+
 services:
   # default configuration for services in *this* file
   _defaults:

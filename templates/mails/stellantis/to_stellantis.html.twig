@@ -1,0 +1,18 @@
+<h2>Bonjour, </h2>
+<p></p>
+<p>Merci de bien vouloir rattacher ce client au contrat cadre QANTIS. Ci-dessous les informations nécessaires à la création de son compte</p>
+<ul>
+    <li>Raison Sociale: {{ account.adherent.name }}</li>
+    <li>SIRET: {{ account.adherent.siret }}</li>
+    <li>Nom Prénom: {{ account.user.lastName }} {{ account.user.firstName }}</li>
+    <li>Email: {{ account.user.email }}</li>
+</ul>
+<p></p>
+
+<p>Pour bénéficier de l’accord Stellantis sur les marques Peugeot, Alfa Romeo, DS, Fiat Citroën Jepp et Opel et demander à être rattaché au contrat QANTIS, l’entreprise s’engage :</p>
+<ul>
+    <li>A immatriculer les véhicules en France et les utiliser à titre principal en France.</li>
+    <li>A ce que chacun des véhicules soit utilisé par les salariés principalement pour leurs besoins professionnels</li>
+    <li>A ce que chaque véhicule soit conservé pour une période minimum de douze mois et ne soit pas revendu avant l’expiration de ce délai de conservation, sauf lorsque le véhicule est conservé pour une période plus courte du fait d’un cas de force majeure</li>
+<ul>
+<p>Horodatage : le {{ horodatage | date('d/m/Y à H:i:s', "Europe/Paris") }}</p>

@@ -26,6 +26,7 @@ final class UserStory extends Story
             ->create([
                 'name' => 'GROUPE QANTIS',
                 'reducceCode' => 'KKT26DIB',
+                'siret' => '53849238000026',
             ]));
 
         UserFactory::new()

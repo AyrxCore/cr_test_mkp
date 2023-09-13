@@ -45,6 +45,7 @@ final class AdherentFactory extends ModelFactory
             'id' => self::faker()->uuid(),
             'name' => self::faker()->name(),
             'reducceCode' => self::faker()->regexify('[0-9a-zA-Z]{10}'),
+            'siret' => self::faker()->regexify('[0-9]{14}'),
         ];
     }
 

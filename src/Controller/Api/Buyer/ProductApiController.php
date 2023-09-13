@@ -190,6 +190,32 @@ class ProductApiController extends AbstractController
                     'sugarLink' => $sugarLink.$account->getAdherent()->getId(),
                 ])
             );
+
+            // STELLANTIS
+            $parameters = $this->getParameter('STELLANTIS_MAILING');
+            if (in_array($params['accordId'], $parameters['ACCORDS_IDS'], true)) {
+                // send adherent service mail
+                $mailerProvider->send(
+                    $parameters['ADHERENT_MAIL']['FROM'],
+                    explode(';', $parameters['ADHERENT_MAIL']['TO']),
+                    $account->getAdherent()->getSiret() . ' - Demande de rattachement au contrat STELLANTIS',
+                    $this->twig->render('mails/stellantis/to_adherent_service.html.twig', [
+                        'account' => $account,
+                    ]),
+                );
+
+                // send Stellantis mail
+                $mailerProvider->send(
+                    $parameters['STELLANTIS_MAIL']['FROM'],
+                    explode(';', $parameters['STELLANTIS_MAIL']['TO']),
+                    $account->getAdherent()->getSiret() . ' - Demande de rattachement au contrat STELLANTIS',
+                    $this->twig->render('mails/stellantis/to_stellantis.html.twig', [
+                        'account' => $account,
+                        'horodatage' => new \DateTime('now'),
+                    ]),
+                    ['cc' => explode(',', $parameters['STELLANTIS_MAIL']['CC'])],
+                );
+            }
         } catch (\Exception $exception) {
             $error = true;
             $logger->critical(
@@ -198,7 +224,6 @@ class ProductApiController extends AbstractController
                 $exception->getMessage()
             );
         }
-
         if ($error) {
             $accordStatut = new AccordStatut();
             $accordStatut->setAdherent($account->getAdherent());

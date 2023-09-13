@@ -38,27 +38,32 @@ class MailerProvider
     // priority => passer un degré de priorité,
     // attachments => passer un fichier ou un tableau de fichiers à envoyer
     // avec le chemin d'accès complet sur le serveur)
-    public function send(string $from, string $to, string $subject, string $body, array $options = []): bool
+    public function send(string $from, array|string $to, string $subject, string $body, array $options = []): bool
     {
         $email = new Email();
         $email
             ->from($from)
             ->returnPath($from)
             ->replyTo($from)
-            ->to($to)
             ->subject($subject)
             ->text($body);
+
+        if (\is_array($to)) {
+            $email->to(...$to);
+        } else {
+            $email->to($to);
+        }
 
         if (!isset($options['sendAsText'])) {
             $email->html($body);
         }
 
         if (isset($options['cc'])) {
-            $email->cc($options['cc']);
+            $email->cc(...$options['cc']);
         }
 
         if (isset($options['bcc'])) {
-            $email->bcc($options['bcc']);
+            $email->bcc(...$options['bcc']);
         }
 
         if (isset($options['replyTo'])) {
