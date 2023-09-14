@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\LogAccountConnexionRepository;
+use App\Repository\LogAccountConnectionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: LogAccountConnexionRepository::class)]
-class LogAccountConnexion
+#[ORM\Entity(repositoryClass: LogAccountConnectionRepository::class)]
+class LogAccountConnection
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

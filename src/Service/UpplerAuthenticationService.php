@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Account;
-use App\Entity\LogAccountConnexion;
+use App\Entity\LogAccountConnection;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
@@ -34,7 +34,7 @@ class UpplerAuthenticationService extends AbstractUpplerService
                 $account->setLastConnexion(new DateTime('now'));
                 $this->em->persist($account);
 
-                $log = new LogAccountConnexion();
+                $log = new LogAccountConnection();
                 $log->setAccount($account);
                 $log->setConnectedAt(new \DateTimeImmutable('now'));
                 $this->em->persist($log);
