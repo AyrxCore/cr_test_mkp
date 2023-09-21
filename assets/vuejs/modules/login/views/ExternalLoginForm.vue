@@ -45,12 +45,17 @@
               </span>
             </div>
             <div class="mb-3 mt-3 flex justify-between">
-              <a
-                href="/login/first-signin"
-                class="ml-2 text-sm font-medium text-gray-500"
+              <ButtonComponent
+                :is-loading="isLoading"
+                type="submit"
+                class="button-secondary-outline"
               >
-                Première connexion
+                Me connecter
+              </ButtonComponent>
+              <a href="/login/first-signin" class="button button-gradient">
+                Ma première connexion
               </a>
+
               <a
                 href="/login/reset-password"
                 class="ml-2 text-sm font-medium text-gray-500"
@@ -58,42 +63,12 @@
                 Mot de passe oublié ?
               </a>
             </div>
-            <div
-              class="mt-3 mb-6 flex w-full flex-col space-y-5 lg:mt-6 lg:grid lg:grid-cols-3 lg:items-center lg:justify-items-stretch lg:space-y-0"
-            >
-              <div class="lg:pr-4">
-                <ButtonComponent
-                  :is-loading="isLoading"
-                  type="submit"
-                  class="button-gradient w-full"
-                >
-                  <ArrowRightIcon />
-                  Me connecter
-                </ButtonComponent>
-              </div>
-              <div class="text-gray-500 lg:justify-self-center">
-                Vous n'êtes pas encore adhérent ?<br />
-                <a
-                  href="https://qantis.co/contact"
-                  class="text-secondary underline"
-                  target="_blank"
-                >
-                  Et si on se rencontrait ?
-                </a>
-              </div>
-
-              <div class="flex flex-col text-gray-500 lg:justify-self-end">
-                <span class="lg:text-right">
-                  Ou appelez nous directement au
-                </span>
-                <a
-                  :href="`tel:${PHONE_ANIMATION}`"
-                  class="text-secondary underline lg:text-right"
-                >
-                  {{ PHONE_ANIMATION }}
-                </a>
-              </div>
-            </div>
+            <p class="text-gray-500">
+              Une question ? Appelez-nous :
+              <span class="text-secondary underline">{{
+                PHONE_ANIMATION
+              }}</span>
+            </p>
           </div>
         </form>
       </div>
