@@ -41,6 +41,10 @@ class AdherentPersister implements ContextAwareDataPersisterInterface
 
         $adh->setReducceCode($data->getReducceCode());
         $adh->setsiret($data->getsiret());
+        $adh->setStreet($data->getStreet());
+        $adh->setCity($data->getCity());
+        $adh->setPostalcode($data->getPostalcode());
+        $adh->setCountry($data->getCountry());
         foreach ($data->getAttachments() as $key => $attachment) {
             $accordStatut = $this->em->getRepository(AccordStatut::class)->findOneBy([
                 'adherent' => $data->getId(),

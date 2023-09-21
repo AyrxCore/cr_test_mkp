@@ -100,6 +100,9 @@ class Account
     #[ORM\OneToMany(mappedBy: 'account', targetEntity: SavedCart::class, orphanRemoval: true)]
     private Collection $savedCarts;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $serviceFonction = null;
+
     public function __construct()
     {
         $this->cartSavings = new ArrayCollection();
@@ -396,6 +399,18 @@ class Account
     public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getServiceFonction(): ?string
+    {
+        return $this->serviceFonction;
+    }
+
+    public function setServiceFonction(?string $serviceFonction): self
+    {
+        $this->serviceFonction = $serviceFonction;
 
         return $this;
     }

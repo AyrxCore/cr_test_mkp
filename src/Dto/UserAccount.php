@@ -98,6 +98,8 @@ final class UserAccount
 
     private ?string $phone = '';
 
+    private ?string $serviceFonction = '';
+
     public function getAccountId(): ?Uuid
     {
         return $this->accountId;
@@ -252,5 +254,15 @@ final class UserAccount
     public function setPhone(?string $phone): void
     {
         $this->phone = $phone;
+    }
+
+    public function getServiceFonction(): ?string
+    {
+        return $this->serviceFonction;
+    }
+
+    public function setServiceFonction(?string $serviceFonction): void
+    {
+        $this->serviceFonction = $serviceFonction;
     }
 }
