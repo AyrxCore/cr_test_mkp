@@ -12,4 +12,4 @@
 <p></p>
 <p>{{ account.adherent.name }} - siret : {{ account.adherent.siret }}<br>
 {{ account.user.firstName }} {{ account.user.lastName }} - {{ account.user.email }}</p>
-
+<p>Horodatage : le {{ horodatage | date('d/m/Y à H:i:s', "Europe/Paris") }}</p>
