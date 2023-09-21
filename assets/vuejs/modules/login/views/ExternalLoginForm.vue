@@ -65,9 +65,11 @@
             </div>
             <p class="text-gray-500">
               Une question ? Appelez-nous :
-              <span class="text-secondary underline">{{
-                PHONE_ANIMATION
-              }}</span>
+              <a
+                :href="`tel:${PHONE_ANIMATION}`"
+                class="text-secondary underline lg:text-right"
+                >{{ PHONE_ANIMATION }}</a
+              >
             </p>
           </div>
         </form>
