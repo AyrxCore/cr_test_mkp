@@ -27,6 +27,11 @@ final class UserStory extends Story
                 'name' => 'GROUPE QANTIS',
                 'reducceCode' => 'KKT26DIB',
                 'siret' => '53849238000026',
+                'street' => '185 ALLEE DES CYPRES',
+                'city' => 'LIMONEST',
+                'postalcode' => '69760',
+                'country' => 'FRANCE',
+                'activiteApe' => 'SERVICE',
             ]));
 
         UserFactory::new()
@@ -47,6 +52,8 @@ final class UserStory extends Story
                         'upplerCompanyId' => '72',
                         'adherent' => self::adherentQantis(),
                         'isEnabled' => true,
+                        'phone' => '04 05 06 07 08',
+                        'serviceFonction' => 'service produits'
                     ]),
                     AccountFactory::new([
                         'upplerClientId' => '2483_5z2ipmbh3dgc0w0gkk4oc4o08g44oc4g4swcs44wsks80oggow',
@@ -56,6 +63,8 @@ final class UserStory extends Story
                         'upplerCompanyId' => '575',
                         'adherent' => self::adherentQantis(),
                         'isEnabled' => true,
+                        'phone' => '04 05 06 07 08',
+                        'serviceFonction' => 'service produits'
                     ]),
                 ],
             ]);

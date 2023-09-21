@@ -198,9 +198,10 @@ class ProductApiController extends AbstractController
                 $mailerProvider->send(
                     $parameters['ADHERENT_MAIL']['FROM'],
                     explode(';', $parameters['ADHERENT_MAIL']['TO']),
-                    $account->getAdherent()->getSiret() . ' - Demande de rattachement au contrat STELLANTIS',
+                    $account->getAdherent()->getSiret() . ' - Demande de rattachement au contrat QANTIS/STELLANTIS',
                     $this->twig->render('mails/stellantis/to_adherent_service.html.twig', [
                         'account' => $account,
+                        'horodatage' => new \DateTime('now'),
                     ]),
                 );
 
@@ -208,7 +209,7 @@ class ProductApiController extends AbstractController
                 $mailerProvider->send(
                     $parameters['STELLANTIS_MAIL']['FROM'],
                     explode(';', $parameters['STELLANTIS_MAIL']['TO']),
-                    $account->getAdherent()->getSiret() . ' - Demande de rattachement au contrat STELLANTIS',
+                    $account->getAdherent()->getSiret() . ' - Demande de rattachement au contrat QANTIS/STELLANTIS',
                     $this->twig->render('mails/stellantis/to_stellantis.html.twig', [
                         'account' => $account,
                         'horodatage' => new \DateTime('now'),
