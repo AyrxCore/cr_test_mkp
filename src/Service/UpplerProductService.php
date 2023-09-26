@@ -52,18 +52,23 @@ class UpplerProductService extends AbstractUpplerService
         int $perPage = 10,
         bool $showFilters = false
     ): array|null {
-        $expandParams = null;
         $params = empty($params) ? ['price', 'properties', 'variants', 'company'] : $params;
+        $fields = ['id', 'name', 'images', 'properties', 'company', 'variants', 'slug', 'price', 'price_reference', 'description', 'reference', 'categories'];
+        $urlRequest = \sprintf('v1/buyer/search/product?page=%d&perPage=%d', $page, $perPage);
+
+        foreach ($fields as $field) {
+            $urlRequest .= \sprintf('&fields[product][]=%s', $field);
+        }
 
         if (!empty($params)) {
             foreach ($params as $param) {
-                $expandParams .= '&expand[]='.$param;
+                $urlRequest .= \sprintf('&expand[]=%s', $param);
             }
         }
 
         $res = $this->request(
             'POST',
-            'v1/buyer/search/product?page='.$page.'&perPage='.$perPage.$expandParams,
+            $urlRequest,
             [
                 'json' => $options,
             ]
