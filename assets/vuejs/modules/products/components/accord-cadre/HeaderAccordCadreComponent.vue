@@ -78,15 +78,13 @@ const breadcrumbUrl = computed(() => {
   const breadcrumb = []
 
   if (props.categories) {
-    Object.entries(props.categories).forEach(([key, accordCadre]) => {
-      breadcrumb.push({
-        id: accordCadre.id,
-        name: accordCadre.name,
-        url: {
-          name: ProductPageList.PRODUCTS,
-          query: { category: accordCadre.id, page: 1 },
-        },
-      })
+    breadcrumb.push({
+      id: props.categories[0].id,
+      name: props.categories[0].name,
+      url: {
+        name: ProductPageList.PRODUCTS,
+        query: { category: props.categories[0].id },
+      },
     })
   }
 

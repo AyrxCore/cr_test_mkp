@@ -350,7 +350,7 @@ const breadcrumbUrl = computed(() => {
         name: category.name,
         url: {
           name: ProductPageList.PRODUCTS,
-          query: { category: category.id, page: 1 },
+          query: { category: category.id },
         },
       })
     }

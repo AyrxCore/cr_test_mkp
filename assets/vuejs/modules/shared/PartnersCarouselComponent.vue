@@ -23,7 +23,7 @@
           v-if="showCarouselConnected"
           :to="{
             name: ProductPageList.PRODUCTS,
-            query: { company: seller.id, page: 1 },
+            query: { company: seller.id },
           }"
           replace
         >
