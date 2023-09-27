@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Api;
 
 use App\Entity\Account;
-use App\Entity\UserInfoUpdateRequest;
 use App\Entity\User;
+use App\Entity\UserInfoUpdateRequest;
 use App\Events\UserAcceptCGUEvent;
 use App\Events\UserInfoUpdateEvent;
 use App\Service\UpplerAccountService;
@@ -70,6 +72,7 @@ class UserApiController extends AbstractController
         $response = new Response();
         $token = $this->JWTTokenManager->create($user);
         $response->headers->setCookie(new Cookie('BEARER', $token));
+
         return $this->redirect('/account/details');
     }
 
@@ -79,12 +82,13 @@ class UserApiController extends AbstractController
         $session = $this->requestStack->getSession();
 
         $buyerData = $this->upplerBuyerCompanyService->getUserBuyerDatas();
-        $subAccountData = $this->upplerAccountService->getUserSubAccountDatas();
+        $subAccountData = $this->upplerAccountService->getUserSubAccountData();
         $user = $normalizer->normalize($this->getUser(), 'json', ['groups' => 'simpleUser']);
         $account = $normalizer->normalize($session->get('account'), 'json', ['groups' => 'simpleUser']);
         $user['account'] = $account;
         $user['account']['subaccount'] = $subAccountData;
         $user['account']['buyer'] = $buyerData;
+
         return new JsonResponse($user);
     }
 
@@ -95,16 +99,17 @@ class UserApiController extends AbstractController
         $user = $this->getUser();
         $accounts = [];
 
-        /** @var  Account $account */
+        /** @var Account $account */
         foreach ($user->getAccounts() as $account) {
             if (!$account->isEnabled()) {
                 continue;
             }
-            $datas = $this->upplerBuyerCompanyService->getBuyerByCompanyId($account->getUpplerCompanyId());
+            $data = $this->upplerBuyerCompanyService->getBuyerByCompanyId($account->getUpplerCompanyId());
             $serializeAccount = $normalizer->normalize($account, 'json', ['groups' => 'simpleUser']);
-            $serializeAccount['upplerDatas'] = $datas;
+            $serializeAccount['upplerData'] = $data;
             $accounts[] = $serializeAccount;
         }
+
         return new JsonResponse($accounts);
     }
 
@@ -123,6 +128,7 @@ class UserApiController extends AbstractController
                 $event = new UserAcceptCGUEvent($account);
                 $this->eventDispatcher->dispatch($event);
             }
+
             return new JsonResponse(['status' => 'ok']);
         }
 
@@ -135,6 +141,7 @@ class UserApiController extends AbstractController
         $request->getSession()->invalidate();
         $response = new Response();
         $response->headers->clearCookie('BEARER', '/');
+
         return $response;
     }
 
@@ -144,22 +151,23 @@ class UserApiController extends AbstractController
         UserPasswordHasherInterface $userPasswordHasher,
         EntityManagerInterface $em
     ): JsonResponse {
-        $datas = json_decode($request->getContent());
-        /**@var User $user */
+        $data = \json_decode($request->getContent());
+        /** @var User $user */
         $user = $this->getUser();
 
-        if (!$userPasswordHasher->isPasswordValid($user, $datas->currentPassword)) {
+        if (!$userPasswordHasher->isPasswordValid($user, $data->currentPassword)) {
             return new JsonResponse(['current password invalid'], Response::HTTP_BAD_REQUEST);
         }
 
-        if ($datas->password !== $datas->confirmation) {
+        if ($data->password !== $data->confirmation) {
             return new JsonResponse(['password and its confirmation must be identical'], Response::HTTP_BAD_REQUEST);
         }
 
-        $newHashedPassword = $userPasswordHasher->hashPassword($user, $datas->password);
+        $newHashedPassword = $userPasswordHasher->hashPassword($user, $data->password);
         $user->setPassword($newHashedPassword);
         $em->persist($user);
         $em->flush();
+
         return new JsonResponse(['password changed'], Response::HTTP_OK);
     }
 }

@@ -14,45 +14,45 @@ use Symfony\Component\Validator\Constraints as Assert;
     itemOperations: [
         'get',
         'update' => [
-            "openapi_context" => [
+            'openapi_context' => [
                 'summary' => 'Editer un account',
                 'description' => "Permet d'enregistrer des modifications dans un account uppler",
             ],
-            "method" => "PATCH",
-            "validate" => true,
+            'method' => 'PATCH',
+            'validate' => true,
         ],
     ]
 )]
 final class SubAccount
 {
-
     #[ApiProperty(identifier: true)]
-    private ?Uuid $id = null;
+    private ?int $id = null;
 
-    #[Assert\Type("string", message: "(email) string required")]
+    #[Assert\Type('string', message: '(email) string required')]
     private ?string $email = null;
 
-    #[Assert\Type("string", message: "(lastname) string required")]
+    #[Assert\Type('string', message: '(lastname) string required')]
     private ?string $lastName = null;
 
-    #[Assert\Type("string", message: "(firstname) string required")]
+    #[Assert\Type('string', message: '(firstname) string required')]
     private ?string $firstName = null;
 
     private ?string $phone = '';
 
-    #[Assert\Type("integer", message: "(shipping_address_id) Integer required")]
+    #[Assert\Type('integer', message: '(shipping_address_id) Integer required')]
     private ?int $shippingAddressId = null;
 
-    #[Assert\Type("integer", message: "(billing_address_id) Integer required")]
+    #[Assert\Type('integer', message: '(billing_address_id) Integer required')]
     private ?int $billingAddressId = null;
 
+    private ?Uuid $accountId = null;
 
-    public function getId(): ?Uuid
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId(Uuid $id): self
+    public function setId(?int $id): self
     {
         $this->id = $id;
 
@@ -76,7 +76,7 @@ final class SubAccount
         return $this->lastName;
     }
 
-    public function setLastName(string $lastName): self
+    public function setLastName(?string $lastName): self
     {
         $this->lastName = $lastName;
 
@@ -88,7 +88,7 @@ final class SubAccount
         return $this->firstName;
     }
 
-    public function setFirstName(string $firstName): self
+    public function setFirstName(?string $firstName): self
     {
         $this->firstName = $firstName;
 
@@ -112,7 +112,7 @@ final class SubAccount
         return $this->shippingAddressId;
     }
 
-    public function setShippingAddressId(int $shippingAddressId): ?self
+    public function setShippingAddressId(?int $shippingAddressId): ?self
     {
         $this->shippingAddressId = $shippingAddressId;
 
@@ -124,11 +124,20 @@ final class SubAccount
         return $this->billingAddressId;
     }
 
-    public function setBillingAddressId(int $billingAddressId): ?self
+    public function setBillingAddressId(?int $billingAddressId): ?self
     {
         $this->billingAddressId = $billingAddressId;
 
         return $this;
     }
 
+    public function getAccountId(): ?Uuid
+    {
+        return $this->accountId;
+    }
+
+    public function setAccountId(?Uuid $accountId): void
+    {
+        $this->accountId = $accountId;
+    }
 }

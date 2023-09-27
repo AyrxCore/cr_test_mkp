@@ -37,10 +37,10 @@ class SubAccountPersister implements ContextAwareDataPersisterInterface
     public function persist($data, array $context = [])
     {
         /** @var Account $account */
-        $account = $this->em->getRepository(Account::class)->find($data->getId());
+        $account = $this->em->getRepository(Account::class)->find($data->getAccountId());
         $user = $account->getUser();
 
-        if (null !== $data->getEmail()) {
+        if ($data->getEmail() !== null) {
             $this->em->persist($user);
 
             $log = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy([
@@ -59,7 +59,7 @@ class SubAccountPersister implements ContextAwareDataPersisterInterface
             $log->setCreatedAt(new \DateTimeImmutable('now'));
 
             $log->setEmailChangingRequestedAt(new \DateTime('now'));
-            $token = md5(random_bytes(100));
+            $token = \md5(\random_bytes(100));
             $log->setEmailChangingToken($token);
 
             $this->em->persist($log);
@@ -72,11 +72,11 @@ class SubAccountPersister implements ContextAwareDataPersisterInterface
             return true;
         }
         if (
-            null !== $data->getLastName()
-            || null !== $data->getFirstName()
-            || null !== $data->getPhone()
+            $data->getLastName() !== null
+            || $data->getFirstName() !== null
+            || $data->getPhone() !== null
         ) {
-            if (null !== $data->getLastName() && $user->getLastName() !== $data->getLastName()) {
+            if ($data->getLastName() !== null && $user->getLastName() !== $data->getLastName()) {
                 $log = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy([
                     '_user' => $user,
                     'attribute' => 'lastname',
@@ -94,7 +94,7 @@ class SubAccountPersister implements ContextAwareDataPersisterInterface
                 $this->em->persist($log);
                 $user->setLastName($data->getLastName());
             }
-            if (null !== $data->getFirstName() && $user->getFirstName() !== $data->getFirstName()) {
+            if ($data->getFirstName() !== null && $user->getFirstName() !== $data->getFirstName()) {
                 $log = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy([
                     '_user' => $user,
                     'attribute' => 'firstname',
@@ -112,19 +112,21 @@ class SubAccountPersister implements ContextAwareDataPersisterInterface
                 $this->em->persist($log);
                 $user->setFirstName($data->getFirstName());
             }
-            if (null !== $data->getPhone() && $account->getPhone() !== $data->getPhone()) {
+
+            if (!empty($data->getPhone()) && $account->getPhone() !== $data->getPhone()) {
                 $log = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy([
                     'account' => $account,
                     'attribute' => 'phone',
                     'isIso' => 'false',
                 ]);
+
                 if (!$log) {
                     $log = new UserInfoUpdateRequest();
                     $log->setUser($user);
                     $log->setAccount($account);
                     $log->setAttribute('phone');
                     $log->setIsIso(false);
-                    $log->setOldValue($account->getPhone());
+                    $log->setOldValue($account->getPhone() ?? '');
                 }
                 $log->setValue($data->getPhone());
                 $log->setCreatedAt(new \DateTimeImmutable('now'));
@@ -140,18 +142,21 @@ class SubAccountPersister implements ContextAwareDataPersisterInterface
         }
 
         if (
-            null !== $data->getBillingAddressId()
-            || null !== $data->getShippingAddressId()
+            $data->getBillingAddressId() !== null
+            || $data->getShippingAddressId() !== null
         ) {
             $subAccount = new SubAccount();
             $subAccount->setId($data->getId());
+            $subAccount->setBillingAddressId($data->getBillingAddressId());
+            $subAccount->setShippingAddressId($data->getShippingAddressId());
 
             try {
-                return $this->upplerAccountService->updateUserSubAccountDatas($subAccount);
+                return $this->upplerAccountService->updateUserSubAccountData($subAccount);
             } catch (\Exception $exception) {
-                throw new \Exception('update account error: ' . $exception);
+                throw new \Exception('update account error: '.$exception);
             }
         }
+
         return true;
     }
 

@@ -60,9 +60,9 @@ export default class UserHttpClient extends BaseClientService {
       })
   }
 
-  public updateUserAccountDetails<T extends User>(id, payload): Promise<T> {
+  public updateUserAccountDetails<T extends User>(subAccount): Promise<T> {
     return this.apiClient
-      .patch(`sub_accounts/${id}`, payload)
+      .patch(`sub_accounts/${subAccount.id}`, subAccount)
       .then((response) => response.data)
   }
 

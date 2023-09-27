@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UpplerAccountService extends AbstractUpplerService
 {
-    public function getUserSubAccountDatas(): object|null
+    public function getUserSubAccountData(): object|null
     {
         $session = $this->requestStack->getSession();
         /** @var Account $account */
@@ -34,7 +34,7 @@ class UpplerAccountService extends AbstractUpplerService
         return null;
     }
 
-    public function updateUserSubAccountDatas(SubAccount $subAccount): bool
+    public function updateUserSubAccountData(SubAccount $subAccount): bool
     {
         $data = [];
         if ($subAccount->getBillingAddressId() !== null) {
@@ -56,11 +56,6 @@ class UpplerAccountService extends AbstractUpplerService
         if ($subAccount->getFirstName() !== null) {
             $data['firstname'] = $subAccount->getFirstName();
         }
-
-        // TODO Uppler n'accepte pas ce champ en PATCH, voir avec eux pour faire évoluer cela
-//        if (null !== $subAccount->getPhone()) {
-//            $datas["phone"] = $subAccount->getPhone();
-//        }
 
         $res = $this->request(
             'PATCH',

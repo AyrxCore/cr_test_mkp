@@ -11,6 +11,7 @@ import { AlertType } from '@/vuejs/types/Alert'
 import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
 import { getErrorMessage } from '@/vuejs/services/login'
 import router, { PageList } from '@/vuejs/router'
+import { notifyError, notifySuccess } from '@/vuejs/services/utils'
 
 export const useUserStore = defineStore({
   id: 'user',
@@ -20,10 +21,10 @@ export const useUserStore = defineStore({
   }),
 
   actions: {
-    async authenticate(userDatas: AuthenticateUserData): Promise<[]> {
+    async authenticate(userData: AuthenticateUserData): Promise<[]> {
       const alertStore = useAlertStore()
       try {
-        await UserHttpClient.get().getUserToken(userDatas)
+        await UserHttpClient.get().getUserToken(userData)
         return await UserHttpClient.get().getUserAccounts()
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
@@ -47,7 +48,7 @@ export const useUserStore = defineStore({
         return false
       }
     },
-    async getCurrentUserDatas(): Promise<void> {
+    async getCurrentUserData(): Promise<void> {
       const alertStore = useAlertStore()
       try {
         this.user = await UserHttpClient.get().getUserMe()
@@ -57,7 +58,6 @@ export const useUserStore = defineStore({
       }
     },
     setEditingSubAccount(): void {
-      // this.user.account.editingSubAccount = {...this.user.account.subaccount}
       this.editingInfo = {
         username: this.user.username,
         firstName: this.user.firstName,
@@ -66,82 +66,78 @@ export const useUserStore = defineStore({
       }
     },
     async updateUserDefaultBillingAddress(id: number): Promise<void> {
-      const alertStore = useAlertStore()
-
       try {
         await UserHttpClient.get(true).updateUserAddress({
-          billingAddressId: id,
           id: this.user.account.subaccount.id,
+          accountId: this.user.account.id,
+          billingAddressId: id,
         })
         this.user.account.subaccount.billing_address = id
-        alertStore.setShow(
-          "L'adresse de facturation par défaut a été modifiée avec succès",
-          AlertType.success,
+        notifySuccess(
+          `L'adresse de facturation par défaut a été modifiée avec succès`,
         )
       } catch (error) {
-        error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow('Erreur technique', AlertType.danger)
+        notifyError(
+          'Une erreur est survenue, veuillez contacter le service technique',
+        )
       }
     },
     async updateUserDefaultShippingAddress(id: number): Promise<void> {
-      const alertStore = useAlertStore()
       try {
         await UserHttpClient.get(true).updateUserAddress({
-          shippingAddressId: id,
           id: this.user.account.subaccount.id,
+          accountId: this.user.account.id,
+          shippingAddressId: id,
         })
         this.user.account.subaccount.shipping_address = id
-        alertStore.setShow(
-          "L'adresse de livraison par défaut a été modifiée avec succès",
-          AlertType.success,
+        notifySuccess(
+          `L'adresse de livraison par défaut a été modifiée avec succès`,
         )
       } catch (error) {
-        error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow('Erreur technique', AlertType.danger)
+        notifyError(
+          'Une erreur est survenue, veuillez contacter le service technique',
+        )
       }
     },
     async updateUserAccountEmail(): Promise<void> {
-      const alertStore = useAlertStore()
       try {
-        const response = await UserHttpClient.get(true).updateUserAccountEmail({
+        await UserHttpClient.get(true).updateUserAccountEmail({
           email: this.editingInfo.username,
-          id: this.user.account.id,
+          id: this.user.account.subaccount.id,
+          accountId: this.user.account.id,
         })
-        alertStore.setShow(
-          "La demande de modification d'email de contact a été engegistrée avec succès",
-          AlertType.success,
+        notifySuccess(
+          `La demande de modification d'email de contact a été engegistrée avec succès`,
         )
+        await this.getCurrentUserData()
       } catch (error) {
-        error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow('Erreur technique', AlertType.danger)
+        notifyError(
+          'Une erreur est survenue, veuillez contacter le service technique',
+        )
       }
     },
     async updateUserAccountDetails(): Promise<void> {
-      const alertStore = useAlertStore()
       try {
-        console.log(this.editingInfo.phone)
-        await UserHttpClient.get(true).updateUserAccountDetails(
-          this.user.account.id,
-          {
-            lastName: this.editingInfo.lastName,
-            firstName: this.editingInfo.firstName,
-            phone: this.editingInfo.phone,
-            id: this.user.account.id,
-          },
-        )
+        await UserHttpClient.get(true).updateUserAccountDetails({
+          lastName: this.editingInfo.lastName,
+          firstName: this.editingInfo.firstName,
+          phone: this.editingInfo.phone,
+          id: this.user.account.subaccount.id,
+          accountId: this.user.account.id,
+        })
         this.user.lastName = this.editingInfo.lastName
         this.user.firstName = this.editingInfo.firstName
         this.user.account.phone = this.editingInfo.phone
-        alertStore.setShow(
-          'Les détails du profil ont été modifiés avec succès',
-          AlertType.success,
-        )
-        router.push({
+
+        notifySuccess('Les détails du profil ont été modifiés avec succès')
+
+        await router.push({
           name: PageList.ACCOUNT,
         })
       } catch (error) {
-        error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow('Erreur technique', AlertType.danger)
+        notifyError(
+          'Une erreur est survenue, veuillez contacter le service technique',
+        )
       }
     },
     async logout(): Promise<boolean> {
@@ -154,20 +150,19 @@ export const useUserStore = defineStore({
       }
       return false
     },
-    async updateUserPassword(datas: PasswordChangeRequest): Promise<void> {
-      const alertStore = useAlertStore()
+    async updateUserPassword(data: PasswordChangeRequest): Promise<void> {
       try {
-        await UserHttpClient.get(true).updateUserPassword(datas)
-        alertStore.setShow(
-          'Le mot de passe a été modifié avec succès',
-          AlertType.success,
-        )
-        router.push({
+        await UserHttpClient.get(true).updateUserPassword(data)
+
+        notifySuccess('Le mot de passe a été modifié avec succès')
+
+        await router.push({
           name: PageList.ACCOUNT,
         })
       } catch (error) {
-        error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow('Erreur technique', AlertType.danger)
+        notifyError(
+          'Une erreur est survenue, veuillez contacter le service technique',
+        )
       }
     },
   },

@@ -42,18 +42,21 @@ export interface Account {
 }
 
 export interface DefaultBillingAddressToUpdate {
-  billingAddressId: number
   id: number
+  accountId: string
+  billingAddressId: number
 }
 
 export interface DefaultShippingAddressToUpdate {
-  shippingAddressId: number
   id: number
+  accountId: string
+  shippingAddressId: number
 }
 
 interface AccountToUpdate {
   email: string
   id: number
+  accountId: string
   lastName: string
   firstName: string
   phone: string

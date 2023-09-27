@@ -92,7 +92,7 @@ router.beforeEach(async (to, from, next) => {
   const cartStore = useCartStore()
 
   if (!userStore.isLogged) {
-    await userStore.getCurrentUserDatas()
+    await userStore.getCurrentUserData()
     if (!userStore.isLogged) {
       location.reload()
     }

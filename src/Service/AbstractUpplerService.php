@@ -55,10 +55,7 @@ abstract class AbstractUpplerService
         bool $isAdmin = false,
         bool $withoutToken = false,
         bool $withCache = false
-    ) {
-        // Uncomment to bypass the MockHttpClient used in test environment, and do a real request to Uppler's API
-        // $this->upplerClient = HttpClient::create(['base_uri' => \getenv('UPPLER_API_URL')]);
-
+    ): bool|ResponseInterface {
         if ($withCache) {
             $store = new Store($this->httpCachePath);
             $this->upplerClient = new CachingHttpClient($this->upplerClient, $store);
@@ -78,8 +75,8 @@ abstract class AbstractUpplerService
                 $this->computeHeaders($origUrl, $origOptions, $isAdmin, $withoutToken);
                 $res = $this->upplerClient->request($method, $origUrl, $origOptions);
             } elseif (!\in_array($res->getStatusCode(), self::HTTP_SUCCESS_RESPONSES, true)) {
-                $errorDatas = $res->getContent(false);
-                $this->apiLogger->critical('error '.$errorDatas);
+                $errorData = $res->getContent(false);
+                $this->apiLogger->critical('error '.$errorData);
             }
 
             $this->apiLogger->info($res->getStatusCode().' requete OK url ==>  '.$path);
@@ -220,11 +217,11 @@ abstract class AbstractUpplerService
         array $options,
         bool $isAdmin
     ): void {
-        $errorDatas = \json_decode($res->getContent(false));
+        $errorData = \json_decode($res->getContent(false));
         // le token a expiré
         if (
-            !\is_object($errorDatas->error)
-            && $errorDatas->error === 'invalid_grant'
+            !\is_object($errorData->error)
+            && $errorData->error === 'invalid_grant'
         ) {
             // il s'agit d'une requête admin donc on renégocie un token admin et on relance la requete
             if ($isAdmin) {

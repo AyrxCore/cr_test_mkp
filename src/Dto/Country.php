@@ -6,22 +6,20 @@ namespace App\Dto;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\ORM\Mapping as ORM;
-use phpDocumentor\Reflection\Types\Scalar;
-use Symfony\Component\Validator\Constraints as Assert;
+
 #[ApiResource(
     collectionOperations: [
         'get' => [
-            "openapi_context" => [
+            'openapi_context' => [
                 'summary' => 'Liste des pays',
-                'description' => 'Permet de récupérer la liste des pays paginée et filtrable'
+                'description' => 'Permet de récupérer la liste des pays paginée et filtrable',
             ],
-            "method" => "GET",
-            "validate" => true,
-        ]
+            'method' => 'GET',
+            'validate' => true,
+        ],
     ],
     itemOperations: [
-        'get'
+        'get',
     ]
 )]
 final class Country
@@ -55,4 +53,11 @@ final class Country
         return $this;
     }
 
+    public function hydrate(\stdClass $data): self
+    {
+        $this->id = $data->id;
+        $this->name = $data->name->fr;
+
+        return $this;
+    }
 }
