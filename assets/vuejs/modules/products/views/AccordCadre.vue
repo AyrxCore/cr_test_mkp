@@ -32,6 +32,7 @@
           </h3>
           <ConditionsNotActivatedComponent
             v-if="status.not_activated === currentStatus.status"
+            :label="accord.properties.cta_text_not_activated"
             :text="accord.properties.process_not_activated"
             :current-status="currentStatus"
             :accord-name="accord.name"
