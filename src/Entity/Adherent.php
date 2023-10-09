@@ -69,6 +69,9 @@ class Adherent
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $activiteApe = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $hashkey = null;
+
     public function __construct()
     {
         $this->accordStatuts = new ArrayCollection();
@@ -230,6 +233,18 @@ class Adherent
     public function setActiviteApe(?string $activiteApe): self
     {
         $this->activiteApe = $activiteApe;
+
+        return $this;
+    }
+
+    public function getHashkey(): ?string
+    {
+        return $this->hashkey;
+    }
+
+    public function setHashkey(?string $hashkey): self
+    {
+        $this->hashkey = $hashkey;
 
         return $this;
     }

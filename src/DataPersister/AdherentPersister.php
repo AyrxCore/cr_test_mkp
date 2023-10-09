@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\DataPersister;
 
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 use App\Dto\AccountAccordCadre;
 use App\Entity\AccordStatut;
 use App\Entity\Adherent;
+use App\Repository\AdherentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -14,7 +17,6 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 class AdherentPersister implements ContextAwareDataPersisterInterface
 {
-
     #[Required]
     public EntityManagerInterface $em;
 
@@ -24,18 +26,21 @@ class AdherentPersister implements ContextAwareDataPersisterInterface
     #[Required]
     public NormalizerInterface $normalizer;
 
+    #[Required]
+    public AdherentRepository $adherentRepository;
+
     public function supports($data, array $context = []): bool
     {
         return $data instanceof Adherent;
     }
 
     /**
-     * @param  Adherent  $data
+     * @param Adherent $data
      */
     public function persist($data, array $context = [])
     {
-        $adh = $this->em->getRepository(Adherent::class)->find($data->getId());
-        if (null === $adh) {
+        $adh = $this->adherentRepository->find($data->getId());
+        if ($adh === null) {
             return null;
         }
 
@@ -45,6 +50,7 @@ class AdherentPersister implements ContextAwareDataPersisterInterface
         $adh->setCity($data->getCity());
         $adh->setPostalcode($data->getPostalcode());
         $adh->setCountry($data->getCountry());
+        $adh->setHashkey($data->getHashkey());
         foreach ($data->getAttachments() as $key => $attachment) {
             $accordStatut = $this->em->getRepository(AccordStatut::class)->findOneBy([
                 'adherent' => $data->getId(),
@@ -52,7 +58,7 @@ class AdherentPersister implements ContextAwareDataPersisterInterface
             ]);
             if ($accordStatut) {
                 // ne pas ecraser Pending par NotActivated
-                if (!(AccountAccordCadre::PROCESS_STATUS_PENDING === $accordStatut->getStatus()
+                if (!($accordStatut->getStatus() === AccountAccordCadre::PROCESS_STATUS_PENDING
                     && $attachment === AccountAccordCadre::PROCESS_STATUS_NOT_ACTIVATED)
                 ) {
                     $accordStatut->setStatus($attachment['status']);
@@ -74,5 +80,4 @@ class AdherentPersister implements ContextAwareDataPersisterInterface
     public function remove($data, array $context = [])
     {
     }
-
 }
