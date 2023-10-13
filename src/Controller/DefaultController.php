@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Repository\SettingRepository;
+use App\Service\SettingsService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -16,7 +16,7 @@ class DefaultController extends AbstractController
     public RequestStack $requestStack;
 
     #[Required]
-    public SettingRepository $settingRepository;
+    public SettingsService $settingsService;
 
     #[Route('/', name: 'prehome')]
     #[Route(
@@ -57,9 +57,7 @@ class DefaultController extends AbstractController
     #[Route('/maintenance', name: 'maintenance')]
     public function maintenance(): Response
     {
-        $maintenanceMode = $this->settingRepository->findOneBy(['name' => 'maintenance']);
-
-        if (is_null($maintenanceMode) || (int)$maintenanceMode->getValue() !== 1) {
+        if (!$this->settingsService->isMaintenanceMode()) {
             return $this->redirectToRoute('prehome');
         }
 

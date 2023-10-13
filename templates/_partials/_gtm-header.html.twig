@@ -1,3 +1,4 @@
+{% if settings.useExternalScriptsTags %}
 <!-- Google Tag Manager -->
 <script>
   (function (w, d, s, l, i) {
@@ -18,7 +19,6 @@
 <!-- End Google Tag Manager -->
 
 <!-- Clarity Tag Manager -->
-
 <script type="text/javascript">
   (function (c, l, a, r, i, t, y) {
     c[a] = c[a] || function () {
@@ -32,3 +32,4 @@
   })(window, document, 'clarity', 'script', 'j0lhxqgr3r');
 </script>
 <!-- End Clarity Tag Manager -->
+{% endif %}

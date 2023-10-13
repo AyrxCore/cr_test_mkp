@@ -7,6 +7,20 @@
         integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="icon" href="/pre_home/favicon.png" sizes="32x32" />
+  {% if settings.useExternalScriptsTags %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gravite-widget@latest/dist/index.css" />
+  <script src="https://cdn.jsdelivr.net/npm/gravite-widget@latest/dist/index.umd.js"
+          defer
+          data-color="#9553FF"
+          data-position="500"
+          data-submit-text="Envoyer"
+          data-title-satisfaction="Donnez-nous votre avis !"
+          data-placeholder-feedback="Laissez-nous un commentaire / une question"
+          data-title-contact="Laissez-nous votre adresse email (facultatif)"
+          data-placeholder-contact="email@domaine.fr"
+          data-token="5kUPAZ60UNGlh9GJ4MPybhlduN1d4DXuIFMGZG1O3LC8n21teAic5CrIXFDRE2yUIOtYMhTld3raZiBKtyRhQMUAVEqrYfvaiSJR"
+  ></script>
+  {% endif %}
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   {% block javascripts %}

@@ -85,4 +85,7 @@ body {
   font-family: 'CoText';
   background: #f2f0f6;
 }
+#gravite_widget_button_container {
+  top: 80%!important;
+}
 </style>
