@@ -35,11 +35,11 @@
           <div
             v-for="(category, index) in categories"
             v-show="index < visibleCategoryFilters"
-            :key="category.value.id"
+            :key="category.id"
             class="h-max pt-3 pb-2 text-lg"
           >
             <FilterCategoryComponent
-              :category="category.value"
+              :category="category"
               @change-category="changeFilterCategory"
             />
           </div>
@@ -56,25 +56,25 @@
             Propriétés
           </h3>
           <div
-            v-for="(filter, index) in filters.properties"
+            v-for="(property, index) in filters.properties"
             v-show="index < visiblePropertyFilter"
             :key="index"
             class="h-max bg-white pt-3 pb-2"
           >
             <label class="text-primary"
-              >{{ filter.name }} ({{ filter.count }})</label
+              >{{ property.name }} ({{ property.productCount }})</label
             >
 
             <select
-              v-if="filter.type === 'choice'"
-              v-model="filter.id"
+              v-if="property.type === 'choice'"
+              v-model="property.id"
               class="flex w-full"
-              :data-name="filter.name"
+              :data-name="property.name"
               @change="changeFilterProperties"
             >
-              <option value="">{{ `-- ${filter.name} --` }}</option>
+              <option value="">{{ `-- ${property.name} --` }}</option>
               <option
-                v-for="child in filter.child"
+                v-for="child in property.children"
                 :key="child.id"
                 :value="child.value"
                 :data-key="child.id"
@@ -98,16 +98,17 @@
 <script lang="ts" setup>
 import DropdownListComponent from '@/vuejs/modules/shared/DropdownListComponent.vue'
 import FilterCategoryComponent from '@/vuejs/modules/products/components/filters/FilterCategoryComponent.vue'
-import { computed, ref } from 'vue'
+import { computed, PropType, ref } from 'vue'
 import { useProductStore } from '@/vuejs/stores/product'
 import FilterCompanyComponent from '@/vuejs/modules/products/components/filters/FilterCompanyComponent.vue'
 import { filterType } from '@/vuejs/modules/products'
+import { ProductFilters } from '@/vuejs/types/Product'
 
 const emit = defineEmits(['filter-product'])
 const props = defineProps({
   filters: {
-    required: false,
-    type: Object,
+    required: true,
+    type: Object as PropType<ProductFilters>,
   },
 })
 
@@ -117,7 +118,7 @@ const visibleCategoryFilters = ref<number>(5)
 const visibleCompanyFilter = ref<number>(5)
 const visiblePropertyFilter = ref<number>(10)
 
-const showMoreFilters = (type) => {
+const showMoreFilters = (type: string) => {
   switch (type) {
     case filterType.category:
       visibleCategoryFilters.value += 5
@@ -150,14 +151,7 @@ const changeFilterProperties = (event) => {
 }
 
 const categories = computed(() => {
-  try {
-    return Object.entries(props.filters.categories).map(([key, content]) => ({
-      id: key,
-      value: content,
-    }))
-  } catch (error) {
-    return []
-  }
+  return props.filters.categories
 })
 
 const companies = computed(() => {

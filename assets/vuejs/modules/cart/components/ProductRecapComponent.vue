@@ -129,7 +129,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, computed, PropType, onMounted } from 'vue'
+import { computed, onMounted, PropType, ref } from 'vue'
 
 import { formatPrice } from '@/vuejs/services/utils'
 
@@ -161,7 +161,7 @@ const productNotFound = ref(false)
 const isLoadingOptions = ref<boolean>(false)
 
 onMounted(async (): Promise<void> => {
-  productData.value = await productStore.findProductById(product.value.id)
+  productData.value = await productStore.initProduct(product.value.id)
   if (!productData.value) {
     productNotFound.value = true
   }
@@ -191,8 +191,8 @@ const totalPrice = computed((): number => {
 
 const productId = computed(() => {
   return productData.value
-    ? { id: productData.value.slug + '-' + productData.value.id }
-    : { id: product.value.id }
+    ? { slug: productData.value.slug }
+    : { slug: product.value.id }
 })
 
 const totalPriceDisplayed = computed((): string => {

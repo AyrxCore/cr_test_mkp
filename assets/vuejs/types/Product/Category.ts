@@ -4,5 +4,6 @@ export interface Category {
   parentId: number
   image: string
   productCount: number
+  checked: boolean
   children: Array<Category>
 }

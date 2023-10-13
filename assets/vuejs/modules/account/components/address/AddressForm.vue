@@ -13,11 +13,11 @@
     <div class="md:grid-rows flex flex-col md:grid md:grid-flow-col md:gap-6">
       <div class="mb-6">
         <LabelField title="Nom interlocuteur" />
-        <InputField v-model="currentAddress.last_name" />
+        <InputField v-model="currentAddress.lastName" />
       </div>
       <div class="mb-6">
         <LabelField title="Prénom interlocuteur" />
-        <InputField v-model="currentAddress.first_name" />
+        <InputField v-model="currentAddress.firstName" />
       </div>
     </div>
     <div class="md:grid-rows flex flex-col md:grid md:grid-flow-col md:gap-12">
@@ -63,7 +63,7 @@
       >
         Annuler
       </ButtonComponent>
-      <ButtonComponent class="button-secondary-outline" :is-loading="isloading">
+      <ButtonComponent class="button-secondary-outline" :is-loading="isLoading">
         Enregistrer
       </ButtonComponent>
     </div>
@@ -83,17 +83,16 @@ import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.
 import SelectField from '@/vuejs/modules/shared/formfields/SelectField.vue'
 
 import router, { PageList } from '@/vuejs/router'
-import { useBuyerCompanyStore } from '@/vuejs/stores/buyer_company'
+import { useAddressStore } from '@/vuejs/stores/address'
 import { useRoute } from 'vue-router'
 import { useCountryStore } from '@/vuejs/stores/country'
 
 const route = useRoute()
-const buyerCompanyStore = useBuyerCompanyStore()
-const { currentAddress, isloading } = storeToRefs(buyerCompanyStore)
+const addressStore = useAddressStore()
+const { currentAddress, isLoading } = storeToRefs(addressStore)
 const isEditing = ref<boolean>(false)
 const isEditedLoaded = ref<boolean>(false)
 const countryStore = useCountryStore()
-const { countries } = storeToRefs(countryStore)
 
 const props = defineProps({
   type: {
@@ -110,11 +109,11 @@ watch(
   () => route.params.id as number,
   async (id: number) => {
     if (!id) {
-      buyerCompanyStore.initNewAddress(props.type)
+      addressStore.initNewAddress(props.type)
       isEditedLoaded.value = true
-    } else if (id && buyerCompanyStore.currentAddress === null) {
+    } else if (id && addressStore.currentAddress === null) {
       isEditing.value = true
-      await buyerCompanyStore.getAddress(id)
+      await addressStore.getAddress(id)
       isEditedLoaded.value = true
     } else {
       isEditing.value = true
@@ -125,14 +124,14 @@ watch(
 )
 
 const onAddressFormSubmit = async () => {
-  buyerCompanyStore.isloading = true
+  addressStore.isLoading = true
   if (isEditing.value) {
-    await buyerCompanyStore.updateAddress()
+    await addressStore.updateAddress()
   } else {
-    await buyerCompanyStore.createAddress()
+    await addressStore.createAddress()
   }
 
-  buyerCompanyStore.isloading = false
+  addressStore.isLoading = false
 }
 
 const onCancelClick = () => {

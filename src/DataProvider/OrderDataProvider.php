@@ -17,15 +17,12 @@ use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use Symfony\Contracts\Service\Attribute\Required;
 
 class OrderDataProvider implements RestrictedDataProviderInterface, ItemDataProviderInterface, CollectionDataProviderInterface
 {
-    #[Required]
-    public RequestStack $requestStack;
-
-    #[Required]
-    public UpplerOrderService $upplerOrderService;
+    public function __construct(private RequestStack $requestStack, private UpplerOrderService $upplerOrderService, private OrderFactory $orderFactory)
+    {
+    }
 
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
     {
@@ -51,7 +48,7 @@ class OrderDataProvider implements RestrictedDataProviderInterface, ItemDataProv
             return null;
         }
 
-        return OrderFactory::createFromUpplerResponse($remoteOrder);
+        return $this->orderFactory->create($remoteOrder);
     }
 
     /**
@@ -63,9 +60,8 @@ class OrderDataProvider implements RestrictedDataProviderInterface, ItemDataProv
         $account = $this->requestStack->getSession()->get('account');
 
         try {
-            $orders = \array_map(function ($remoteOrder) {
-                return OrderFactory::createFromUpplerResponse($remoteOrder);
-            }, $this->upplerOrderService->getOrdersByUserId($account->getUpplerUserId()));
+            $remoteOrders = $this->upplerOrderService->getOrdersByUserId($account->getUpplerUserId());
+            $orders = $this->orderFactory->createAndAddToCollection($remoteOrders);
 
             \usort($orders, function (Order $a, Order $b) {
                 return \strtotime($b->getCreatedAt()->format('Y-m-d')) - \strtotime($a->getCreatedAt()->format('Y-m-d'));

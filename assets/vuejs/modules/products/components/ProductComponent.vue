@@ -8,17 +8,17 @@
         class="flex h-[50px] w-[78px] items-center justify-start rounded-md bg-white"
       >
         <img
-          :src="getUpplerImage(props.product.seller.avatar)"
-          :alt="props.product.seller.name"
+          :src="getUpplerImage(product.seller.avatar)"
+          :alt="product.seller.name"
           class="h-full w-full object-contain"
         />
       </div>
       <AddFavoriteComponent
-        v-if="props.product.variants.length === 2"
-        :product-id="props.product.id"
-        :product-name="props.product.name"
+        v-if="product.variants?.length === 2"
+        :product-id="product.id"
+        :product-name="product.name"
         :variant-id="variantId"
-        :favorites-product="props.product.favorites"
+        :favorites-product="product.favorites"
       />
     </div>
     <!-- Fin bloc header -->
@@ -28,16 +28,21 @@
       class="mx-auto flex h-[139px] w-full items-center justify-center rounded-lg px-1 lg:h-[191px]"
     >
       <img
-        :src="getUpplerImage(props.product.images[0])"
-        :alt="props.product.name"
+        v-if="product.images[0]"
+        :src="getUpplerImage(product.images[0])"
+        :alt="product.name"
         class="flex h-full cursor-pointer items-center lg:w-full lg:max-w-max"
         @click="
           $router.push({
             name: ProductPageList.PRODUCT,
-            params: { id: productId },
+            params: { slug: productSlug },
           })
         "
       />
+      <div
+        v-else
+        class="loading flex h-[116px] w-full items-center justify-center rounded-lg px-6 py-2"
+      ></div>
     </div>
     <!-- Fin bloc image -->
 
@@ -49,9 +54,9 @@
         <RouterLink
           :to="{
             name: ProductPageList.PRODUCT,
-            params: { id: productId },
+            params: { slug: productSlug },
           }"
-          >{{ props.product.name }}
+          >{{ product.name }}
         </RouterLink>
       </h3>
       <div class="h-[100px]">
@@ -66,10 +71,10 @@
     <!-- Bloc prix -->
     <div class="flex w-full items-center justify-start xl:mt-1">
       <span
-        v-if="props.product.price"
+        v-if="product.price"
         class="mr-2 text-sm font-bold text-primary md:text-base lg:text-lg"
       >
-        {{ formatPrice(props.product.price) }}€
+        {{ formatPrice(product.price) }}€
       </span>
       <span
         v-if="showLineThroughPrice"
@@ -80,21 +85,18 @@
             product.price === null,
         }"
       >
-        {{ formatPrice(props.product.priceReference) }}€ HT
+        {{ formatPrice(product.priceReference) }}€ HT
       </span>
     </div>
     <!-- Fin bloc prix -->
 
     <!-- Bloc quantité -->
     <div class="mt-1 flex w-full justify-between">
-      <div
-        v-if="props.product.variants.length > 2"
-        class="mx-auto items-center"
-      >
+      <div v-if="product.variants?.length > 2" class="mx-auto items-center">
         <RouterLink
           :to="{
             name: ProductPageList.PRODUCT,
-            params: { id: productId },
+            params: { slug: productSlug },
           }"
           class="button border-2 border-secondary !text-secondary hover:!bg-white focus:!bg-white"
         >
@@ -112,7 +114,7 @@
           />
         </div>
         <ButtonAddToCartComponent
-          :product="props.product"
+          :product="product"
           :quantity="quantity"
           :variant-id="variantId"
         />
@@ -130,6 +132,7 @@ import ButtonAddToCartComponent from '@/vuejs/modules/shared/ButtonAddToCartComp
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import AddFavoriteComponent from '@/vuejs/modules/products/components/AddFavoriteComponent.vue'
 import ProductQuantityComponent from '@/vuejs/modules/shared/ProductQuantityComponent.vue'
+import { Variant } from '@/vuejs/types/Product/Variant'
 
 const props = defineProps({
   product: {
@@ -148,8 +151,8 @@ const showLineThroughPrice = computed(() => {
 })
 
 const variantId = computed(() => {
-  if (props.product.variants.length === 2) {
-    const variant = props.product.variants.filter(function (el) {
+  if (2 === props.product.variants?.length) {
+    const variant = props.product.variants.filter(function (el: Variant) {
       return el.sku != null
     })
     return variant[0].id
@@ -157,12 +160,12 @@ const variantId = computed(() => {
   return null
 })
 
-const productId = computed(() => {
-  return props.product.slug + '-' + props.product.id
+const productSlug = computed(() => {
+  return props.product.slug
 })
 
 const productDescription = computed(() => {
-  if (props.product.description.length > 140) {
+  if (props.product.description?.length > 140) {
     return props.product.description.substring(0, 140) + '...'
   }
   return props.product.description

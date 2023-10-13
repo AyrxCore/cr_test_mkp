@@ -1,38 +1,37 @@
 <template>
   <select
-      v-model="internalValue"
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm
-        rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-      :class="props.classes"
-      :required="props.required"
-      :disabled="props.disabled"
-      @change="onChange($event); updateModel()"
+    v-model="internalValue"
+    class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+    :class="props.classes"
+    :required="props.required"
+    :disabled="props.disabled"
+    @change="onChange($event)"
   >
-    <option value="">{{props.placeholder }}</option>
+    <option value="">{{ props.placeholder }}</option>
     <option
-        v-for="(option, id) in props.options"
-        :key="id"
-        :value="option.value"
+      v-for="(option, id) in props.options"
+      :key="id"
+      :value="option.value"
     >
       {{ option.label }}
     </option>
   </select>
 </template>
 <script lang="ts" setup>
-import {ref, watch, PropType} from 'vue'
-import {SelectOption} from '@/vuejs/types/Select'
+import { PropType, ref, watch } from 'vue'
+import { SelectOption } from '@/vuejs/types/Select'
 
 const internalValue = ref<string>('')
 
 const props = defineProps({
   modelValue: {
     required: true,
-    type: String,
+    type: [String, Number],
   },
   placeholder: {
     required: false,
     type: String,
-    default: 'Sélectionner une valeur'
+    default: 'Sélectionner une valeur',
   },
   classes: {
     required: false,
@@ -42,22 +41,22 @@ const props = defineProps({
   disabled: {
     required: false,
     type: Boolean,
-    default: false
+    default: false,
   },
   options: {
     required: true,
-    type: Object as PropType<SelectOption[]>
+    type: Object as PropType<SelectOption[]>,
   },
   required: {
     required: false,
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void,
-  (eventName: 'change',value: string): void
+  (e: 'update:modelValue', value: string): void
+  (eventName: 'change', value: string): void
 }>()
 
 const updateModel = () => {
@@ -65,14 +64,15 @@ const updateModel = () => {
 }
 
 watch(
-    () => props.modelValue as string,
-    (value: string) => {
-      internalValue.value = value
-    },
-    { immediate: true },
+  () => props.modelValue as string,
+  (value: string) => {
+    internalValue.value = value
+  },
+  { immediate: true },
 )
 
 const onChange = (event: Event): void => {
   emit('change', (event.target as HTMLInputElement).value)
+  emit('update:modelValue', internalValue.value)
 }
 </script>

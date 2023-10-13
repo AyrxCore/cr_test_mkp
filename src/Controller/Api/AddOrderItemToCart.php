@@ -1,36 +1,40 @@
 <?php
 
-namespace App\Controller\Api\Buyer;
+declare(strict_types=1);
+
+namespace App\Controller\Api;
 
 use App\Service\UpplerCartService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Contracts\Service\Attribute\Required;
 
-#[Route('/api/order_items')]
-class OrderApiController extends AbstractController
+#[AsController]
+class AddOrderItemToCart extends AbstractController
 {
-    #[Required]
-    public UpplerCartService $upplerCartService;
+    public function __construct(private UpplerCartService $upplerCartService)
+    {
+    }
 
     /**
-     * @Route("/multiple", name="add_multiple_order_items_to_cart", methods={"POST"})
+     * @Route("/api/order_items", name="add_order_item_to_cart", methods={"POST"})
      */
-    public function __invoke(Request $request, NormalizerInterface $normalizer)
+    public function __invoke(Request $request, NormalizerInterface $normalizer): JsonResponse
     {
         try {
-            $cartId = (int)$request->request->get('cartId');
+            $cartId = (int) $request->request->get('cartId');
             $products = $request->request->get('products');
             foreach ($products as $product) {
-                $result = $this->upplerCartService->addItemToCart(
+                $this->upplerCartService->addItemToCart(
                     $cartId,
-                    $product['variantId'],
-                    $product['quantity'],
+                    (int) $product['variantId'],
+                    (int) $product['quantity'],
                 );
             }
+
             return new JsonResponse(true);
         } catch (\Exception $exception) {
             return new JsonResponse($exception->getMessage());

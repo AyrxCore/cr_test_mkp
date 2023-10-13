@@ -37,22 +37,23 @@
 
 <script lang="ts" setup>
 import EditIconComponent from '@/vuejs/modules/shared/icon/EditIconComponent.vue'
-import { useBuyerCompanyStore } from '@/vuejs/stores/buyer_company'
 import router from '@/vuejs/router'
 import { AccountPageList } from '@/vuejs/router/pages-list'
 import StarIconComponent from '@/vuejs/modules/shared/icon/StarIconComponent.vue'
 import { useUserStore } from '@/vuejs/stores/user'
-import { computed, ref } from 'vue'
+import { computed, PropType, ref } from 'vue'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
+import { useAddressStore } from '@/vuejs/stores/address'
+import { Address } from '@/vuejs/types/Address'
 
 const userStore = useUserStore()
-const buyerCompanyStore = useBuyerCompanyStore()
+const addressStore = useAddressStore()
 const isItemLoading = ref<boolean>(false)
 
 const props = defineProps({
   address: {
     required: true,
-    type: Object,
+    type: Object as PropType<Address>,
   },
   type: {
     required: true,
@@ -71,7 +72,7 @@ const emit = defineEmits<{
 }>()
 
 const onEditAddressClick = async () => {
-  await buyerCompanyStore.setCurrentAddress(props.address)
+  await addressStore.setCurrentAddress(props.address)
   router.push({
     name: AccountPageList.ADDRESS_EDIT,
     params: { id: props.address.id },

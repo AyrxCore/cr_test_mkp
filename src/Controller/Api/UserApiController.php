@@ -81,7 +81,7 @@ class UserApiController extends AbstractController
     {
         $session = $this->requestStack->getSession();
 
-        $buyerData = $this->upplerBuyerCompanyService->getUserBuyerDatas();
+        $buyerData = $this->upplerBuyerCompanyService->getUserBuyerData();
         $subAccountData = $this->upplerAccountService->getUserSubAccountData();
         $user = $normalizer->normalize($this->getUser(), 'json', ['groups' => 'simpleUser']);
         $account = $normalizer->normalize($session->get('account'), 'json', ['groups' => 'simpleUser']);

@@ -6,6 +6,8 @@ namespace App\Service;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class UpplerCartService extends AbstractUpplerService
@@ -31,51 +33,52 @@ class UpplerCartService extends AbstractUpplerService
         );
     }
 
-    public function createCart(): string|null
+    public function createCart(): string
     {
         $res = $this->request(
             'POST',
             'v1/buyer/cart/',
         );
 
-        if ($res->getStatusCode() === Response::HTTP_CREATED) {
-            $headers = $res->getHeaders();
-
-            return $headers['location'][0];
+        if ($res->getStatusCode() !== Response::HTTP_CREATED) {
+            throw new BadRequestHttpException();
         }
 
-        return null;
+        $headers = $res->getHeaders();
+
+        return $headers['location'][0];
     }
 
-    public function getCart(): array|null
+    public function getCart(): array
     {
         $res = $this->request(
             'GET',
             'v1/buyer/cart?&expand[]=orders&expand[]=orderItems&criteria[state][]=new&criteria[state][]=address&criteria[state][]=shipping_method&criteria[state][]=payment&sorting[id]=asc&perPage=1&page=1',
         );
 
-        if (\in_array($res->getStatusCode(), [Response::HTTP_OK, Response::HTTP_PARTIAL_CONTENT], true)) {
-            $carts = \json_decode($res->getContent(), true);
-
-            if (\count($carts) > 0) {
-                $cart = $carts[0];
-
-                if ($cart['state'] === 'payment') {
-                    $this->isPaymentConfirmed($cart['id']);
-                }
-                if (\count($cart['orders']) > 0) {
-                    $cart['paymentMethods'] = $this->getPaymentMethods($cart['id']);
-                }
-
-                return $cart;
-            } else {
-                if ($this->createCart()) {
-                    return $this->getCart();
-                }
-            }
+        if (!\in_array($res->getStatusCode(), [Response::HTTP_OK, Response::HTTP_PARTIAL_CONTENT], true)) {
+            throw new NotFoundHttpException();
         }
 
-        return null;
+        $carts = \json_decode($res->getContent(), true);
+
+        if (\count($carts) > 0) {
+            $cart = $carts[0];
+
+            if ($cart['state'] === 'payment') {
+                $this->isPaymentConfirmed($cart['id']);
+            }
+
+            if (\count($cart['orders']) > 0) {
+                $cart['paymentMethods'] = $this->getPaymentMethods($cart['id']);
+            }
+
+            return $cart;
+        } else {
+            $this->createCart();
+
+            return $this->getCart();
+        }
     }
 
     public function getCartById(int $cartId): array|null
@@ -85,11 +88,11 @@ class UpplerCartService extends AbstractUpplerService
             'v1/buyer/cart/'.$cartId.'?expand[]=orders&expand[]=orderItems',
         );
 
-        if ($res->getStatusCode() === Response::HTTP_OK) {
-            return \json_decode($res->getContent(), true);
+        if ($res->getStatusCode() !== Response::HTTP_OK) {
+            throw new NotFoundHttpException();
         }
 
-        return null;
+        return \json_decode($res->getContent(), true);
     }
 
     public function addItemToCart(int $cartId, int $variantId, int $quantity): bool
@@ -109,7 +112,11 @@ class UpplerCartService extends AbstractUpplerService
             ],
         );
 
-        return $res && $res->getStatusCode() === Response::HTTP_NO_CONTENT;
+        if ($res->getStatusCode() !== Response::HTTP_NO_CONTENT) {
+            throw new BadRequestHttpException('Add item error');
+        }
+
+        return true;
     }
 
     public function updateCartAddress(int|string $cartReference, int $shippingId, int $billingId): bool
@@ -125,7 +132,11 @@ class UpplerCartService extends AbstractUpplerService
             ],
         );
 
-        return $res && $res->getStatusCode() === Response::HTTP_NO_CONTENT;
+        if ($res->getStatusCode() !== Response::HTTP_NO_CONTENT) {
+            throw new BadRequestHttpException();
+        }
+
+        return true;
     }
 
     public function updateOrderItemQuantity(int $id, int $quantity): bool
@@ -138,7 +149,11 @@ class UpplerCartService extends AbstractUpplerService
             ],
         );
 
-        return $res && $res->getStatusCode() === Response::HTTP_NO_CONTENT;
+        if ($res->getStatusCode() !== Response::HTTP_NO_CONTENT) {
+            throw new BadRequestHttpException('Update quantity error');
+        }
+
+        return true;
     }
 
     public function deleteOrderItem(int $id): bool
@@ -148,7 +163,11 @@ class UpplerCartService extends AbstractUpplerService
             'v1/buyer/order-item/'.$id,
         );
 
-        return $res && $res->getStatusCode() === Response::HTTP_NO_CONTENT;
+        if ($res->getStatusCode() !== Response::HTTP_NO_CONTENT) {
+            throw new BadRequestHttpException();
+        }
+
+        return true;
     }
 
     public function getShippingMethods(int $cartId): array|bool
@@ -197,7 +216,11 @@ class UpplerCartService extends AbstractUpplerService
             ],
         );
 
-        return $res && $res->getStatusCode() === Response::HTTP_NO_CONTENT;
+        if ($res->getStatusCode() !== Response::HTTP_NO_CONTENT) {
+            throw new BadRequestHttpException();
+        }
+
+        return true;
     }
 
     public function getPaymentMethods(int $cartId): array
@@ -206,11 +229,11 @@ class UpplerCartService extends AbstractUpplerService
             'GET',
             'v1/buyer/cart/'.$cartId.'/payment-method',
         );
-        if ($res && $res->getStatusCode() === Response::HTTP_OK) {
-            return \json_decode($res->getContent());
+        if ($res && $res->getStatusCode() !== Response::HTTP_OK) {
+            throw new NotFoundHttpException();
         }
 
-        return [];
+        return \json_decode($res->getContent(), true);
     }
 
     public function setPaymentMethod(int $cartId, int $paymentMethodId): array|bool
@@ -252,6 +275,10 @@ class UpplerCartService extends AbstractUpplerService
             'v1/buyer/cart/'.$cartId.'/confirm',
         );
 
-        return $res && $res->getStatusCode() === Response::HTTP_NO_CONTENT;
+        if ($res->getStatusCode() !== Response::HTTP_NO_CONTENT) {
+            throw new BadRequestHttpException();
+        }
+
+        return true;
     }
 }

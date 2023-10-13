@@ -1,23 +1,25 @@
 <template>
   <div>
     <div class="mt-10 sm:w-[45rem]">
-      <h3 class="home-subtitle text-primary">{{ props.title }}</h3>
+      <h3 class="home-subtitle text-primary">{{ title }}</h3>
       <p class="text-sm text-gray-400 sm:text-lg">
-        {{ props.description }}
+        {{ description }}
       </p>
     </div>
-    <ProductsLoadingCarouselComponent v-if="props.products.length === 0" />
-    <ProductsCarouselComponent v-else :products="props.products" />
+    <ProductsLoadingCarouselComponent v-if="!products" />
+    <ProductsCarouselComponent v-else :products="products" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
 import ProductsLoadingCarouselComponent from '@/vuejs/modules/shared/ProductsLoadingCarouselComponent.vue'
+import { PropType } from 'vue'
+import { Product } from '@/vuejs/types/Product'
 
-const props = defineProps({
+defineProps({
   products: {
-    type: Array,
+    type: Array as PropType<Product[]>,
     default: null,
   },
   title: {

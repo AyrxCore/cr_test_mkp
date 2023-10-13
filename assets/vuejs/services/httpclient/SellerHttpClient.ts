@@ -1,8 +1,10 @@
 import BaseClientService from '@/vuejs/services/BaseClientService'
 import { Seller, SellerPromotion } from '@/vuejs/types/Seller'
 export default class SellerHttpClient extends BaseClientService {
-  public fetchSellers<T extends []>(): Promise<T> {
-    return this.apiClient.get<T>('sellers').then((response) => response.data)
+  public getSellers<T extends []>(): Promise<T> {
+    return this.apiClient
+      .get<T>('sellers')
+      .then((response) => response.data['hydra:member'])
   }
 
   public getSeller<T extends []>(id: number): Promise<Seller> {

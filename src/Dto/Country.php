@@ -52,12 +52,4 @@ final class Country
 
         return $this;
     }
-
-    public function hydrate(\stdClass $data): self
-    {
-        $this->id = $data->id;
-        $this->name = $data->name->fr;
-
-        return $this;
-    }
 }

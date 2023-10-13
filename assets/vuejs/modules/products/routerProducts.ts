@@ -19,12 +19,12 @@ export const routes: RouteRecordRaw[] = [
     component: CategoriesPage,
   },
   {
-    path: '/products/:id',
+    path: '/products/:slug',
     component: ProductPage,
     name: ProductPageList.PRODUCT,
   },
   {
-    path: '/accord-cadres/:id',
+    path: '/accord-cadres/:slug',
     name: ProductPageList.ACCORD_CADRE,
     component: AccordCadrePage,
   },

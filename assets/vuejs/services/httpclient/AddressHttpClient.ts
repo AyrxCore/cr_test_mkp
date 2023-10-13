@@ -8,13 +8,13 @@ import {
 export default class AddressHttpClient extends BaseClientService {
   public getAddressesAsBuyer<T extends []>(): Promise<T> {
     return this.apiClient
-      .get<T>('buyer/addresses')
-      .then((response) => response.data)
+      .get<T>('addresses')
+      .then((response) => response.data['hydra:member'])
   }
 
   public getAdressAsAdmin<T extends []>(id: number): Promise<Address> {
     return this.apiClient
-      .get(`buyer/get-address/${id}`)
+      .get(`addresses/${id}`)
       .then((response) => response.data)
   }
 
@@ -22,7 +22,7 @@ export default class AddressHttpClient extends BaseClientService {
     address: AddressToCreate,
   ): Promise<T> {
     return this.apiClient
-      .post<T>('buyer/create-address', address)
+      .post<T>('addresses', address)
       .then((response) => response.data)
   }
 
@@ -30,7 +30,7 @@ export default class AddressHttpClient extends BaseClientService {
     address: AddressToUpdate,
   ): Promise<T> {
     return this.apiClient
-      .put<T>(`buyer/update-address/${address.id}`, address)
+      .put<T>(`addresses/${address.id}`, address)
       .then((response) => response.data)
   }
 }

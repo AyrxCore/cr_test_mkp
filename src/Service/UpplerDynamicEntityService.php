@@ -11,52 +11,68 @@ class UpplerDynamicEntityService extends AbstractUpplerService
 {
     public function getDynamicsEntitiesCategories(array $expands = []): array
     {
-        $urlExpands = null;
+        $path = 'v1/administrator/dynamic-field-configuration';
 
         if (!empty($expands)) {
             foreach ($expands as $expand) {
-                $urlExpands .= $urlExpands === null ? '?expand[]='.$expand : '&expand[]='.$expand;
+                $path .= \sprintf('&expand[]=%s', $expand);
             }
         }
 
         $res = $this->request(
-            'GET',
-            'v1/administrator/dynamic-field-configuration'.$urlExpands,
-            [],
-            true
+            method: 'GET',
+            path: $path,
+            isAdmin: true
         );
 
-        if ($res->getStatusCode() !== Response::HTTP_OK) {
-            throw new NotFoundHttpException('Aucun champs dynamique trouvé');
+        if ($res->getStatusCode() !== Response::HTTP_OK && $res->getStatusCode() !== Response::HTTP_PARTIAL_CONTENT) {
+            throw new NotFoundHttpException('Not found');
         }
 
-        return \json_decode($res->getContent(), true);
+        $dynamicsFields = \json_decode($res->getContent(), true);
+
+        $data = [];
+        // Cet appel API nous retourne une liste de données
+        // mais nous n'avons besoin des propriétés category_name et category_color pour construire la liste des catégories
+        foreach ($dynamicsFields as $dynamicField) {
+            if ($dynamicField['name']['fr'] === 'category_name') {
+                foreach ($dynamicField['dynamic_field_choice'] as $key => $choice) {
+                    $data[$key]['id'][] = $key;
+                    $data[$key]['name'][] = $choice['value'];
+                }
+            } elseif ($dynamicField['name']['fr'] === 'category_color') {
+                foreach ($dynamicField['dynamic_field_choice'] as $key => $choice) {
+                    $data[$key]['color'][] = $choice['value'];
+                }
+            }
+        }
+
+        return $data;
     }
 
     public function getDynamicsEntities(array $expands = [], array $criteria = []): array
     {
-        $params = '?sorting[created_at]=DESC';
+        $path = 'v1/administrator/dynamic-entity?sorting[created_at]=DESC';
 
         if (!empty($expands)) {
             foreach ($expands as $expand) {
-                $params .= '&expand[]='.$expand;
+                $path .= \sprintf('&expand[]=%s', $expand);
             }
         }
 
         if (!empty($criteria)) {
             foreach ($criteria as $key => $value) {
-                $params .= '&criteria['.$key.']='.$value;
+                $path .= \sprintf('&criteria[%s]=%s', $key, $value);
             }
         }
 
         $res = $this->request(
-            'GET',
-            'v1/administrator/dynamic-entity'.$params,
-            [],
-            true
+            method: 'GET',
+            path: $path,
+            isAdmin: true
         );
 
-        if (!$res || $res->getStatusCode() !== Response::HTTP_OK) {
+        if (!$res || $res->getStatusCode() !== Response::HTTP_OK && $res->getStatusCode() !== Response::HTTP_PARTIAL_CONTENT) {
             throw new NotFoundHttpException('Not Found');
         }
 

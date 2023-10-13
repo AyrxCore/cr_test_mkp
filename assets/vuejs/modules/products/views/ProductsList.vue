@@ -42,30 +42,21 @@
                     @remove-filter="removeFilter(filterType.name)"
                   />
                 </div>
-                <div
-                  v-if="parameters.companies.length"
-                  class="mt-2 flex lg:mt-0"
-                >
+                <div v-if="parameters.companies" class="mt-2 flex lg:mt-0">
                   <SelectedFilterComponent
                     title="Partenaire"
                     :label="parameters.companies[0].name"
                     @remove-filter="removeFilter(filterType.company)"
                   />
                 </div>
-                <div
-                  v-if="parameters.categories.length"
-                  class="mt-2 flex lg:mt-0"
-                >
+                <div v-if="parameters.categories" class="mt-2 flex lg:mt-0">
                   <SelectedFilterComponent
                     title="Catégorie"
-                    :label="parameters.categories[0].name.default"
+                    :label="parameters.categories[0].name"
                     @remove-filter="removeFilter(filterType.category)"
                   />
                 </div>
-                <div
-                  v-if="parameters.properties.length"
-                  class="mt-2 flex lg:mt-0"
-                >
+                <div v-if="parameters.properties" class="mt-2 flex lg:mt-0">
                   <SelectedFilterComponent
                     title="Propriété"
                     :property="
@@ -103,8 +94,8 @@
                       (currentPartenaire === null ||
                         currentPartenaire === product.seller.id)
                     "
-                    :accord="product"
                     :key="`ac-${product.id}`"
+                    :accord="product"
                     class="mt-5 md:mt-0"
                   />
                   <ProductComponent
@@ -112,8 +103,8 @@
                       currentPartenaire === product.seller.id ||
                       currentPartenaire === null
                     "
-                    :product="product"
                     :key="`p-{product.id}`"
+                    :product="product"
                     class="mt-5 h-[516px] !w-auto md:mt-0 md:w-[392px]"
                   />
                 </div>
@@ -158,14 +149,14 @@ import { storeToRefs } from 'pinia'
 import { filterType } from '@/vuejs/modules/products'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
-import { Product } from '@/vuejs/types/Product'
+import { Product, ProductCollection } from '@/vuejs/types/Product'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 
 const route = useRoute()
 const productStore = useProductStore()
 const { selectedCategoryId, selectedProperties, selectedCompanyId } =
   storeToRefs(productStore)
-const resultProducts = ref([])
+const resultProducts = ref<ProductCollection>()
 const isLoading = ref<boolean>()
 const term = ref<string>('')
 const currentPartenaire = ref<number>(null)
@@ -190,10 +181,9 @@ const pageLoad = async () => {
   products.value = []
 
   paramsProducts.value = {
-    with_filter: true,
     page: 1,
     perPage: perPage.value,
-    sort: null,
+    withFilters: true,
   }
 
   currentCount.value = perPage.value
@@ -212,10 +202,11 @@ const loadProducts = async (paramsProducts: object) => {
   resultProducts.value = await productStore.fetchProductsByParams(
     paramsProducts,
   )
+
   products.value.push(...resultProducts.value.results)
   if (route.query.q) {
     const eventLabel =
-      resultProducts.value.results_count > 0
+      resultProducts.value.resultsCount > 0
         ? 'view_search_results'
         : 'no_search_results'
     await window.dataLayer?.push({
@@ -226,7 +217,7 @@ const loadProducts = async (paramsProducts: object) => {
 }
 
 const count = computed(() => {
-  return resultProducts.value.results_count
+  return resultProducts.value.resultsCount
 })
 
 const filters = computed(() => {
@@ -239,10 +230,10 @@ const parameters = computed(() => {
 
 const hasParameters = computed(() => {
   return (
-    resultProducts.value.parameters.name ||
-    resultProducts.value.parameters.categories.length ||
-    resultProducts.value.parameters.companies.length ||
-    resultProducts.value.parameters.properties.length
+    resultProducts.value.parameters?.name ||
+    resultProducts.value.parameters.categories?.length ||
+    resultProducts.value.parameters.companies?.length ||
+    resultProducts.value.parameters.properties?.length
   )
 })
 
@@ -271,7 +262,7 @@ const removeFilter = async (type: string) => {
   await loadPage()
 }
 
-const findPropertyData = (propertyId, value) => {
+const findPropertyData = (propertyId: number, value: string) => {
   const parentProperty = resultProducts.value.filters.properties.find(
     (p) => p.id === propertyId,
   )
@@ -279,7 +270,7 @@ const findPropertyData = (propertyId, value) => {
   return {
     id: parentProperty.id,
     label: parentProperty.name,
-    child: parentProperty.child[value],
+    children: parentProperty.children[value],
   }
 }
 
@@ -325,12 +316,12 @@ watch(
 
     if (routeObject.category) {
       productStore.setSelectedCategory(routeObject.category)
-      paramsProducts.value.categories = [routeObject.category]
+      paramsProducts.value.categories = routeObject.category
     }
 
     if (routeObject.company) {
       productStore.setSelectedCompany(routeObject.company)
-      paramsProducts.value.companies = [routeObject.company]
+      paramsProducts.value.companies = routeObject.company
     }
 
     if (routeObject.property_id && routeObject.value) {
@@ -339,7 +330,7 @@ watch(
         value: routeObject.value,
       }
       productStore.setSelectedProperty(properties)
-      paramsProducts.value.properties = [properties]
+      paramsProducts.value.properties = properties
     }
     try {
       await loadProducts(paramsProducts.value)

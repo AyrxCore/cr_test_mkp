@@ -33,13 +33,7 @@ class CartApiController extends AbstractController
     #[Route('', name: 'get_cart')]
     public function getCartAsBuyer(): JsonResponse
     {
-        $session = $this->requestStack->getSession();
-
         $cart = $this->upplerCartService->getCart();
-
-        if ($cart === null) {
-            throw new NotFoundHttpException();
-        }
 
         return new JsonResponse($cart);
     }

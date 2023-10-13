@@ -18,11 +18,13 @@ final class Category
     private ?int $id = null;
 
     private ?int $parentId;
+
     private ?string $name;
 
     private ?string $image;
 
     private ?int $productCount;
+    private ?bool $checked;
 
     private array $children;
 
@@ -88,24 +90,13 @@ final class Category
         $this->children = $children;
     }
 
-    public function hydrate(\stdClass $data): self
+    public function getChecked(): ?bool
     {
-        $this->id = $data->id;
-        $this->name = $data->name;
-        $this->image = $data->image;
-        $this->parentId = $data->parent;
-        $this->productCount = $data->count;
-        $children = [];
+        return $this->checked;
+    }
 
-        if (!empty($data->child)) {
-            foreach ($data->child as $childData) {
-                $child = new self();
-                $children[] = $child->hydrate($childData);
-            }
-        }
-
-        $this->children = $children;
-
-        return $this;
+    public function setChecked(?bool $checked): void
+    {
+        $this->checked = $checked;
     }
 }

@@ -17,7 +17,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\Service\Attribute\Required;
 use Twig\Environment;
@@ -42,9 +41,9 @@ class ProductApiController extends AbstractController
             'value' => '5367',
         ];
 
-    private const PAGE = 1;
+    public const PAGE = 1;
 
-    private const PER_PAGE = 5;
+    public const PER_PAGE = 5;
 
     #[Required]
     public RequestStack $requestStack;
@@ -58,101 +57,12 @@ class ProductApiController extends AbstractController
     #[Required]
     public Environment $twig;
 
-    #[Route('/api/products', name: 'search_products', methods: ['POST'])]
-    public function list(Request $request, NormalizerInterface $normalizer): JsonResponse
-    {
-        $options = $request->request->all();
-
-        $showFilters = false;
-        $page = self::PAGE;
-        $perPage = self::PER_PAGE;
-
-        if (!empty($options['with_filter'])) {
-            $showFilters = true;
-            unset($options['with_filter']);
-        }
-
-        if (!empty($options['page'])) {
-            $page = $options['page'];
-            unset($options['page']);
-        }
-
-        if (!empty($options['perPage'])) {
-            $perPage = $options['perPage'];
-            unset($options['perPage']);
-        }
-
-        $products = $this->upplerProductService->findProductsByOptions(
-            $options,
-            ['properties', 'price', 'company', 'images'],
-            (int) $page,
-            (int) $perPage,
-            $showFilters
-        );
-
-        return new JsonResponse($products);
-    }
-
-    #[Route('/api/home-products', name: 'search_home_products', methods: ['GET'])]
-    public function homeProduct(): JsonResponse
-    {
-        $params = ['properties', 'price', 'company', 'images'];
-
-        // TODO: make concurrent requests: https://symfony.com/doc/current/http_client.html#concurrent-requests
-        $productsTopVente = $this->upplerProductService->findProductsByOptions(
-            ['properties' => [self::HOME_TOP_VENTE_PROPERTY]],
-            $params,
-            self::PAGE,
-            self::PER_PAGE
-        );
-        $accordsCadre = $this->upplerProductService->findProductsByOptions(
-            ['properties' => [self::HOME_ACCORD_CADRE_PROPERTY]],
-            ['properties'],
-            self::PAGE,
-            self::PER_PAGE
-        );
-        $productsSelection = $this->upplerProductService->findProductsByOptions(
-            ['properties' => [self::HOME_SELECTION_PROPERTY]],
-            $params,
-            self::PAGE,
-            self::PER_PAGE
-        );
-        $products = new \stdClass();
-        $products->topVente = $productsTopVente;
-        $products->accordsCadre = $accordsCadre;
-        $products->selection = $productsSelection;
-
-        return new JsonResponse($products);
-    }
-
-    #[Route('/api/product/{id}', name: 'get_product')]
-    public function product(int $id): JsonResponse
-    {
-        $product = $this->upplerProductService->findProductById($id);
-
-        return new JsonResponse($product);
-    }
-
     #[Route('/api/variant/{id}', name: 'get_variant')]
     public function variant(int $id): JsonResponse
     {
         $variant = $this->upplerProductService->findVariantById($id);
 
         return new JsonResponse($variant);
-    }
-
-    #[Route('/api/accord-cadre/{id}', name: 'get_accord_cadre')]
-    public function accordCadre(int $id, NormalizerInterface $normalizer): JsonResponse
-    {
-        $session = $this->requestStack->getSession();
-
-        $accordCadre = $this->upplerProductService->findProductById(
-            $id,
-            ['properties', 'company'],
-            (string) $session->get('account')->getId()
-        );
-
-        return new JsonResponse($accordCadre);
     }
 
     #[Route('/api/accord-cadre-subscription', name: 'accord_cadre_subscription', methods: ['POST'])]
@@ -193,12 +103,12 @@ class ProductApiController extends AbstractController
 
             // STELLANTIS
             $parameters = $this->getParameter('STELLANTIS_MAILING');
-            if (in_array($params['accordId'], $parameters['ACCORDS_IDS'], true)) {
+            if (\in_array($params['accordId'], $parameters['ACCORDS_IDS'], true)) {
                 // send adherent service mail
                 $mailerProvider->send(
                     $parameters['ADHERENT_MAIL']['FROM'],
-                    explode(';', $parameters['ADHERENT_MAIL']['TO']),
-                    $account->getAdherent()->getSiret() . ' - Demande de rattachement au contrat QANTIS/STELLANTIS',
+                    \explode(';', $parameters['ADHERENT_MAIL']['TO']),
+                    $account->getAdherent()->getSiret().' - Demande de rattachement au contrat STELLANTIS',
                     $this->twig->render('mails/stellantis/to_adherent_service.html.twig', [
                         'account' => $account,
                         'horodatage' => new \DateTime('now'),
@@ -208,13 +118,13 @@ class ProductApiController extends AbstractController
                 // send Stellantis mail
                 $mailerProvider->send(
                     $parameters['STELLANTIS_MAIL']['FROM'],
-                    explode(';', $parameters['STELLANTIS_MAIL']['TO']),
-                    $account->getAdherent()->getSiret() . ' - Demande de rattachement au contrat QANTIS/STELLANTIS',
+                    \explode(';', $parameters['STELLANTIS_MAIL']['TO']),
+                    $account->getAdherent()->getSiret().' - Demande de rattachement au contrat STELLANTIS',
                     $this->twig->render('mails/stellantis/to_stellantis.html.twig', [
                         'account' => $account,
                         'horodatage' => new \DateTime('now'),
                     ]),
-                    ['cc' => explode(',', $parameters['STELLANTIS_MAIL']['CC'])],
+                    ['cc' => \explode(',', $parameters['STELLANTIS_MAIL']['CC'])],
                 );
             }
         } catch (\Exception $exception) {

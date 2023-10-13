@@ -22,19 +22,16 @@
           </div>
         </div>
         <div
-          v-if="companyStore.defaultBillingAddress"
+          v-if="addressStore.defaultBillingAddress"
           class="sr-only inline-flex items-center text-xs md:not-sr-only"
         >
           Livré à
-          {{ companyStore.defaultShippingAddress.company }},
-          {{ companyStore.defaultShippingAddress.street }}
-          {{ companyStore.defaultShippingAddress.postcode }}
-          {{ companyStore.defaultShippingAddress.city }}
+          {{ addressStore.defaultShippingAddress.company }},
+          {{ addressStore.defaultShippingAddress.street }}
+          {{ addressStore.defaultShippingAddress.postcode }}
+          {{ addressStore.defaultShippingAddress.city }}
         </div>
       </div>
-      <!-- <a class="ml-4 self-center md:ml-0" href="#">
-        <HeartIcon />
-      </a> -->
       <RouterLink
         :to="{ name: CartPageList.CART_RECAP }"
         class="relative ml-4 self-center"
@@ -57,16 +54,15 @@ import { CartPageList } from '@/vuejs/router/pages-list'
 import UserCheckIcon from '@/vuejs/modules/shared/icon/UserCheckIconComponent.vue'
 import MapInIcon from '@/vuejs/modules/shared/icon/MapInIconComponent.vue'
 import ShoppingCartIcon from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
-import HeartIcon from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
 import MenuAccount from '@/vuejs/modules/shared/header-component/MenuAccountComponent.vue'
 import { useUserStore } from '@/vuejs/stores/user'
 import { useCartStore } from '@/vuejs/stores/cart'
 import { storeToRefs } from 'pinia'
-import { useBuyerCompanyStore } from '@/vuejs/stores/buyer_company'
+import { useAddressStore } from '@/vuejs/stores/address'
 
 const userStore = useUserStore()
 const cartStore = useCartStore()
-const companyStore = useBuyerCompanyStore()
+const addressStore = useAddressStore()
 
 const { user } = storeToRefs(userStore)
 

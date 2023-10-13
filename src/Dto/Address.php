@@ -6,76 +6,86 @@ namespace App\Dto;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\ORM\Mapping as ORM;
-use phpDocumentor\Reflection\Types\Scalar;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+
 #[ApiResource(
     collectionOperations: [
         'create' => [
-            "openapi_context" => [
+            'openapi_context' => [
                 'summary' => 'Créer une nouvelle adresse',
-                'description' => 'Permet de créer une nouvelle adresse pour une company'
+                'description' => 'Permet de créer une nouvelle adresse pour une company',
             ],
-            "method" => "POST",
-            "validate" => true,
-            "path" => "/create-address"
-        ]
+            'method' => 'POST',
+            'validate' => true,
+            'normalization_context' => ['groups' => ['address:create']],
+        ],
+        'get',
     ],
     itemOperations: [
         'get' => [
-            "method" => "GET",
-            "path" => "/get-address/{id}"
+            'method' => 'GET',
         ],
         'update' => [
-            "openapi_context" => [
+            'openapi_context' => [
                 'summary' => 'Editer une adresse',
-                'description' => "Permet d'éditer adresse pour une company"
+                'description' => "Permet d'éditer adresse pour une company",
             ],
-            "method" => "PUT",
-            "validate" => true,
-            "path" => "/update-address/{id}"
-        ]
+            'method' => 'PUT',
+            'validate' => true,
+            'normalization_context' => ['groups' => ['address:update']],
+        ],
     ],
-    routePrefix: '/buyer'
 )]
 final class Address
 {
     #[ApiProperty(identifier: true)]
+    #[Groups(['address:update'])]
     private ?int $id = null;
 
-    #[Assert\Type("integer", message: "(upplerSubAccountId) Integer required", groups: ["create"])]
+    #[Assert\Type('integer', message: '(upplerSubAccountId) Integer required', groups: ['create'])]
+    #[Groups(['address:update'])]
     private int $companyId;
 
-    #[Assert\Type("string", message: "(name) string required")]
+    #[Assert\Type('string', message: '(name) string required')]
+    #[Groups(['address:create', 'address:update'])]
     private ?string $name;
 
+    #[Groups(['address:create', 'address:update'])]
+    private string|null $type;
 
-    private string | null $type;
-
-    #[Assert\NotBlank(message: "company cannot be null", groups: ["create"])]
+    #[Assert\NotBlank(message: 'company cannot be null', groups: ['create'])]
+    #[Groups(['address:create', 'address:update'])]
     private string $company;
 
-    #[Assert\NotBlank(message: "street cannot be null", groups: ["create"])]
+    #[Assert\NotBlank(message: 'street cannot be null', groups: ['create'])]
+    #[Groups(['address:create', 'address:update'])]
     private string $street;
 
-    #[Assert\NotBlank(message: "postcode cannot be null")]
+    #[Assert\NotBlank(message: 'postcode cannot be null')]
+    #[Groups(['address:create', 'address:update'])]
     private string $postcode;
 
-    #[Assert\NotBlank(message: "city cannot be null")]
-    #[Assert\Type("string", message: "(city) string required")]
+    #[Assert\NotBlank(message: 'city cannot be null')]
+    #[Assert\Type('string', message: '(city) string required')]
+    #[Groups(['address:create', 'address:update'])]
     private string $city;
 
-    #[Assert\NotBlank(message: "country cannot be null")]
-    #[Assert\Type("integer", message: "(country) int required")]
+    #[Assert\NotBlank(message: 'country cannot be null')]
+    #[Assert\Type('integer', message: '(country) int required')]
+    #[Groups(['address:create', 'address:update'])]
     private int $country;
 
-    #[Assert\Type("string", message: "(lastName) string required")]
-    private string $lastName;
+    #[Assert\Type('string', message: '(lastName) string required')]
+    #[Groups(['address:create', 'address:update'])]
+    private ?string $lastName;
 
-    #[Assert\Type("string", message: "(firstName) string required")]
+    #[Assert\Type('string', message: '(firstName) string required')]
+    #[Groups(['address:create', 'address:update'])]
     private ?string $firstName;
 
-    #[Assert\Type("string", message: "(phone) string required")]
+    #[Assert\Type('string', message: '(phone) string required')]
+    #[Groups(['address:create', 'address:update'])]
     private ?string $phone;
 
     public function getId(): ?int
@@ -83,7 +93,7 @@ final class Address
         return $this->id;
     }
 
-    public function setId(int $id): self
+    public function setId(?int $id): self
     {
         $this->id = $id;
 
@@ -95,7 +105,7 @@ final class Address
         return $this->companyId;
     }
 
-    public function setCompanyId(int $companyId): ?self
+    public function setCompanyId(?int $companyId): self
     {
         $this->companyId = $companyId;
 
@@ -114,12 +124,12 @@ final class Address
         return $this;
     }
 
-    public function getType(): string | null
+    public function getType(): string|null
     {
         return $this->type;
     }
 
-    public function setType(string | null $type): self
+    public function setType(string|null $type): self
     {
         $this->type = $type;
 
@@ -186,12 +196,12 @@ final class Address
         return $this;
     }
 
-    public function getLastName(): string
+    public function getLastName(): ?string
     {
         return $this->lastName;
     }
 
-    public function setLastName(string $lastName): self
+    public function setLastName(?string $lastName): self
     {
         $this->lastName = $lastName;
 
@@ -203,7 +213,7 @@ final class Address
         return $this->firstName;
     }
 
-    public function setFirstName(string $firstName): self
+    public function setFirstName(?string $firstName): self
     {
         $this->firstName = $firstName;
 
@@ -215,12 +225,10 @@ final class Address
         return $this->phone;
     }
 
-    public function setPhone(string $phone): self
+    public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
 
         return $this;
     }
-
-
 }

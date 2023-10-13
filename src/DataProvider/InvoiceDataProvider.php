@@ -7,6 +7,7 @@ namespace App\DataProvider;
 use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Dto\Invoice;
+use App\Factory\InvoiceFactory;
 use App\Service\UpplerOrderService;
 use Symfony\Contracts\Service\Attribute\Required;
 
@@ -15,26 +16,27 @@ class InvoiceDataProvider implements RestrictedDataProviderInterface, ItemDataPr
     #[Required]
     public UpplerOrderService $upplerOrderService;
 
+    public function __construct(private InvoiceFactory $invoiceFactory)
+    {
+    }
+
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
     {
-        return Invoice::class === $resourceClass;
+        return $resourceClass === Invoice::class;
     }
 
     public function getItem(string $resourceClass, $id, string $operationName = null, array $context = []): Invoice|null
     {
-        ['headers' => $headers, 'content' => $content] = $this->upplerOrderService->getOrderInvoiceByIdAndUserId($id);
-        if (isset($headers['content-disposition'])) {
-            $contentDispositionHeader = $headers['content-disposition'];
-            preg_match('/filename="(.*)"/', $contentDispositionHeader[0], $matches);
+        $data = $this->upplerOrderService->getOrderInvoiceByIdAndUserId($id);
+        $data['id'] = $id;
+
+        if (isset($data['headers']['content-disposition'])) {
+            $contentDispositionHeader = $data['headers']['content-disposition'];
+            \preg_match('/filename="(.*)"/', $contentDispositionHeader[0], $matches);
             if (isset($matches[1])) {
-                $filename = $matches[1];
+                $data['filename'] = $matches[1];
 
-                $invoice = new Invoice();
-                $invoice->setId($id);
-                $invoice->setName($filename);
-                $invoice->setContent($content);
-
-                return $invoice;
+                return $this->invoiceFactory->create($data);
             }
         }
 

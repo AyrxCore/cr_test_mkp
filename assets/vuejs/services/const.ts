@@ -4,6 +4,9 @@ export const MENTIONS_LEGALES_PAGE_ID = 107
 export const CGU_PAGE_ID = 108
 export const POLITIQUE_DE_CONFIDENTIALITE_PAGE_ID = 109
 
+export const ADDRESS_BILLING = 'billing'
+export const ADDRESS_SHIPPING = 'shipping'
+
 export const ORDER_STATUS = {
   new: {
     name: 'En attente',
@@ -69,3 +72,34 @@ export const SHIPPING_STATUS = {
     color: 'bg-red-600',
   },
 }
+
+/**
+ * Those parameters are usefull to get differents products to display on the home page as there label
+ */
+export const HOME_TOP_VENTE_PROPERTY = {
+  perPage: 5,
+  properties: {
+    property_id: 217,
+    value: 5369,
+  },
+}
+
+export const HOME_SELECTION_PROPERTY = {
+  perPage: 5,
+  properties: {
+    property_id: 217,
+    value: 5368,
+  },
+}
+
+export const HOME_ACCORD_CADRE_PROPERTY = {
+  perPage: 5,
+  properties: {
+    property_id: 217,
+    value: 5367,
+  },
+}
+
+/**
+ * End
+ */

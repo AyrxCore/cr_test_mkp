@@ -10,7 +10,6 @@ use App\Dto\OrderItem;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
-
 class OrderItemProvider implements RestrictedDataProviderInterface, ItemDataProviderInterface
 {
     #[Required]
@@ -20,11 +19,12 @@ class OrderItemProvider implements RestrictedDataProviderInterface, ItemDataProv
     {
         $orderItem = new OrderItem();
         $orderItem->setId($id);
+
         return $orderItem;
     }
 
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
     {
-        return OrderItem::class === $resourceClass;
+        return $resourceClass === OrderItem::class;
     }
 }

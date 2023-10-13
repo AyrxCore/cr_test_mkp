@@ -4,64 +4,61 @@ import { AlertType } from '@/vuejs/types/Alert'
 import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
 import { getErrorMessage } from '@/vuejs/services/login'
 import ProductHttpClient from '@/vuejs/services/httpclient/ProductHttpClient'
-import { Product } from '@/vuejs/types/Product'
-import { Filter } from '@/vuejs/types/Filter'
+import {
+  Product,
+  ProductCollection,
+  ProductStoreState,
+} from '@/vuejs/types/Product'
 import { arrayEqual } from '@/vuejs/services/utils'
-import { th } from 'date-fns/locale'
-
-export interface ProductStoreState {
-  products: Product[]
-  filters: Filter[]
-  productsTopVente: Product[]
-  productsAccordsCadre: Product[]
-  productsSelection: Product[]
-  cart: []
-  selectedCategoryId?: string
-  selectedProperties?: object
-  selectedCompanyId?: string
-}
+import {
+  HOME_ACCORD_CADRE_PROPERTY,
+  HOME_SELECTION_PROPERTY,
+  HOME_TOP_VENTE_PROPERTY,
+} from '@/vuejs/services/const'
 
 export const useProductStore = defineStore({
   id: 'product',
   state: (): ProductStoreState => ({
     products: [],
     filters: [],
-    productsTopVente: [],
-    productsAccordsCadre: [],
-    productsSelection: [],
+    productsTopVente: null,
+    productsAccordsCadre: null,
+    productsSelection: null,
     cart: [],
     selectedCategoryId: null,
     selectedProperties: null,
     selectedCompanyId: null,
+    productVariants: [],
+    productVariantsOptions: [],
+    currentVariantOptions: null,
   }),
 
   actions: {
-    async fetchProductsByParams(params): Promise<[]> {
+    async fetchProductsByParams(params): Promise<ProductCollection> {
       try {
         return await ProductHttpClient.get().fetchProductsByParams(params)
-      } catch (error) {
-        return []
-      }
+      } catch (error) {}
     },
     async initHomeProducts() {
       try {
-        const products = await ProductHttpClient.get().fetchHomeProducts()
-        this.productsTopVente = products.topVente
-        this.productsAccordsCadre = products.accordsCadre
-        this.productsSelection = products.selection
+        this.productsTopVente =
+          await ProductHttpClient.get().fetchProductsByParams(
+            HOME_TOP_VENTE_PROPERTY,
+          )
+        this.productsAccordsCadre =
+          await ProductHttpClient.get().fetchProductsByParams(
+            HOME_ACCORD_CADRE_PROPERTY,
+          )
+        this.productsSelection =
+          await ProductHttpClient.get().fetchProductsByParams(
+            HOME_SELECTION_PROPERTY,
+          )
       } catch (error) {}
     },
-    async findProductById(id) {
+    async initProduct(id: number) {
       const alertStore = useAlertStore()
       try {
-        const product = await ProductHttpClient.get().findProductById(id)
-        product.optionVariant = Object.values(
-          Object.values(product.variants)[0],
-        )
-        product.quantity = 1
-        await this.findDefaultVariantProduct(product)
-
-        return product
+        return await ProductHttpClient.get().findProductById(id)
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
           alertStore.setShow(
@@ -70,31 +67,33 @@ export const useProductStore = defineStore({
           )
       }
     },
-    async changeVariant(product: Product) {
+    async changeVariant(product: Product, optionsSelected: Array<number>) {
       let variantSelected = null
       Object.entries(product.variants).find(([key, value], index) => {
-        if (arrayEqual(value, product.optionVariant)) {
-          variantSelected = key
+        if (arrayEqual(value.options, optionsSelected)) {
+          variantSelected = value.id
         }
       })
 
       if (variantSelected) {
-        product.selectedVariantId = parseInt(variantSelected)
-        let variant = await product.selectedVariants.find((v) => {
-          if (v.id === product.selectedVariantId) {
+        product.defaultVariantId = parseInt(variantSelected)
+        let variant = await this.productVariants.find((v) => {
+          if (v.id === product.defaultVariantId) {
             return v
           }
           return null
         })
         if (!variant) {
-          variant = await this.findVariantById(product.selectedVariantId)
-          product.selectedVariants.push(variant)
+          variant = await this.findVariantById(product.defaultVariantId)
+          this.productVariants.push(variant)
         }
 
-        this.updateProductPrice(product, variant)
+        product = this.updateProductVariant(product, variant)
       } else {
-        product.selectedVariantId = null
+        product.defaultVariantId = null
       }
+
+      return product
     },
     async findVariantById(id) {
       const alertStore = useAlertStore()
@@ -124,11 +123,11 @@ export const useProductStore = defineStore({
       const alertStore = useAlertStore()
       try {
         const similarProducts = await this.fetchProductsByParams({
-          perPage: 5,
-          categories: [categoryId],
+          perPage: 8,
+          categories: categoryId,
         })
 
-        return similarProducts.filter(
+        return similarProducts.results.filter(
           (sp) => sp.id !== productId && !sp.isAccordCadre,
         )
       } catch (error) {
@@ -142,13 +141,9 @@ export const useProductStore = defineStore({
     async findDefaultVariantProduct(product: Product) {
       const alertStore = useAlertStore()
       try {
-        product.selectedVariantId = parseInt(Object.keys(product.variants)[0])
-        if (Object.keys(product.variants).length > 2) {
-          const variant = await this.findVariantById(product.selectedVariantId)
-          product.selectedVariants = []
-          product.selectedVariants.push(variant)
-          this.updateProductPrice(product, variant)
-        }
+        const variant = await this.findVariantById(product.defaultVariantId)
+        this.productVariants.push(variant)
+        this.updateProductVariant(product, variant)
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
           alertStore.setShow(
@@ -166,10 +161,13 @@ export const useProductStore = defineStore({
     setSelectedCompany(companyId) {
       this.selectedCompanyId = companyId
     },
-    updateProductPrice(product, variant) {
+    updateProductVariant(product: Product, variant) {
+      product.defaultVariantId = variant.id
       product.price = variant.price?.display_price / 100
       const priceDiff = product.priceReference - product.price
       product.percent = Math.round((priceDiff * 100) / product.priceReference)
+
+      return product
     },
   },
 })

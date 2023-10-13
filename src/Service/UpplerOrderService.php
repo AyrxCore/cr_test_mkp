@@ -38,7 +38,7 @@ class UpplerOrderService extends AbstractUpplerService
             throw new NotFoundHttpException("Aucune commande n'a pas été trouvée");
         }
 
-        return \json_decode($res->getContent());
+        return \json_decode($res->getContent(), true);
     }
 
     /**
@@ -61,7 +61,7 @@ class UpplerOrderService extends AbstractUpplerService
             throw new NotFoundHttpException("La commande avec l'ID ".$orderId." n'a pas été trouvée");
         }
 
-        $remoteOrder = \json_decode($res->getContent());
+        $remoteOrder = \json_decode($res->getContent(), true);
 
         if ($userId !== $remoteOrder->buyer_user->id) {
             throw new AccessDeniedException("Vous n'avez pas de commande avec cet identifiant");

@@ -18,7 +18,7 @@ export const useSellerStore = defineStore({
     async init() {
       try {
         if (this.sellers.length === 0) {
-          this.sellers = await SellerHttpClient.get().fetchSellers()
+          this.sellers = await SellerHttpClient.get().getSellers()
         }
       } catch (error) {
         notifyError(

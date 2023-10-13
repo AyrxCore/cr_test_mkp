@@ -39,14 +39,11 @@ import { computed, onMounted, reactive } from 'vue'
 import HeaderSharedComponent from '@/vuejs/modules/shared/HeaderSharedComponent.vue'
 import FooterSharedComponent from '@/vuejs/modules/shared/FooterSharedComponent.vue'
 import StickyContactButtons from '@/vuejs/modules/shared/StickyContactButtonsComponent.vue'
-import { useUserStore } from '@/vuejs/stores/user'
 import { storeToRefs } from 'pinia'
 import ChevronDownIconComponent from '@/vuejs/modules/shared/icon/ChevronDownIconComponent.vue'
-import { useExpertContentStore } from '@/vuejs/stores/expertContent'
+import { useBannerStore } from '@/vuejs/stores/banner'
 
-const userStore = useUserStore()
-const { user } = storeToRefs(userStore)
-const expertContentStore = useExpertContentStore()
+const expertContentStore = useBannerStore()
 const { banner } = storeToRefs(expertContentStore)
 const props = defineProps({
   title: {

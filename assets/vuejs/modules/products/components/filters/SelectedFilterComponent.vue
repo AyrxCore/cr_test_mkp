@@ -1,55 +1,44 @@
 <template>
-  <div
-    class="flex w-full items-center mr-2"
-  >
-    <span class="flex mr-2"> {{ props.title }}: </span>
-    <div class="bg-primary flex text-white justify-between p-1 rounded text-sm">
-      <span
-        v-if="props.property"
-        class="mr-2"
-      >
-        {{ props.property.label }} =>  {{ props.property.child.name }}
+  <div class="mr-2 flex w-full items-center">
+    <span class="mr-2 flex"> {{ props.title }}: </span>
+    <div class="flex justify-between rounded bg-primary p-1 text-sm text-white">
+      <span v-if="props.property" class="mr-2">
+        {{ props.property.label }} => {{ props.property.children.name }}
       </span>
-      <span
-        v-else
-        class="mr-2"
-      >
+      <span v-else class="mr-2">
         {{ props.label }}
       </span>
-      <span
-        class="cursor-pointer"
-        @click="removeFilter"
-      > <TrashIconComponent class="w-[16px]"/> </span>
+      <span class="cursor-pointer" @click="removeFilter">
+        <span class="w-[16px] font-bold">X</span>
+      </span>
     </div>
-
   </div>
 </template>
 <script lang="ts" setup>
-
 import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
 
 const props = defineProps({
   label: {
+    type: String,
     required: false,
     default: null,
   },
   title: {
+    type: String,
     required: false,
     default: null,
   },
   property: {
     required: false,
     default: null,
-  }
+  },
 })
 
 const emit = defineEmits(['remove-filter'])
 
-const removeFilter = (() =>  {
-    emit('remove-filter')
-})
-
-
+const removeFilter = () => {
+  emit('remove-filter')
+}
 </script>
 
 <style scoped></style>

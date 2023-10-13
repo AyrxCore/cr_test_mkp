@@ -1,52 +1,47 @@
 import BaseClientService from '@/vuejs/services/BaseClientService'
-import {Product} from '@/vuejs/types/Product'
+import { Product, ProductCollection } from '@/vuejs/types/Product'
 
 export default class ProductHttpClient extends BaseClientService {
-  public fetchProductsByParams<T extends []>(params): Promise<T> {
+  public fetchProductsByParams<T extends []>(
+    params,
+  ): Promise<ProductCollection> {
+    const queryString = Object.keys(params)
+      .map((key) => {
+        if (typeof params[key] === 'object') {
+          // Si la valeur est un objet, la sérialiser en JSON
+          return `${encodeURIComponent(key)}=${encodeURIComponent(
+            JSON.stringify(params[key]),
+          )}`
+        } else {
+          // Si la valeur n'est pas un objet, l'inclure telle quelle
+          return `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`
+        }
+      })
+      .join('&')
     return this.apiClient
-      .postForm<T>(
-        'products',
-        params,
-      )
-      .then((response) => response.data)
-  }
-
-  public fetchHomeProducts<T extends []>(): Promise<T> {
-    return this.apiClient
-      .get<T>('home-products')
-      .then((response) => response.data)
+      .get<T>(`products?${queryString}`)
+      .then((response) => response.data['hydra:member'][0])
   }
 
   public findProductById<T extends []>(id: number): Promise<Product> {
     return this.apiClient
-      .get(`product/${id}`)
+      .get(`products/${id}`)
       .then((response) => response.data)
   }
 
   public findVariantById<T extends []>(id: number): Promise<Product> {
-    return this.apiClient
-      .get(`variant/${id}`)
-      .then((response) => response.data)
-  }
-
-  public findAccordsCadresByParams<T extends []>(params): Promise<T> {
-    return this.apiClient
-      .postForm<T>(
-        'accords-cadre',
-        params,
-      )
-      .then((response) => response.data)
+    return this.apiClient.get(`variant/${id}`).then((response) => response.data)
   }
 
   public findAccordCadreById<T extends []>(id: number): Promise<Product> {
     return this.apiClient
-      .get(`accord-cadre/${id}`)
+      .get(`products/${id}`)
       .then((response) => response.data)
   }
 
   public updateAccountAccordsCadresByParams<T extends []>(params): Promise<T> {
     return this.apiClient
-      .post<T>(`accord-cadre-subscription`, params)
+      .post<T>('accord-cadre-subscription', params)
       .then((response) => response.data)
   }
 }

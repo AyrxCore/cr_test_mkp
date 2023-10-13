@@ -16,7 +16,7 @@
               v-if="!isLoading"
               v-model="selectedBillingAddressId"
               class="h-[35px] w-full rounded-md py-0 text-center text-gray-600 placeholder-gray-400"
-              @change="selectAddress('billing')"
+              @change="selectAddress(ADDRESS_BILLING)"
             >
               <option :value="0">Choisir une autre adresse</option>
               <option
@@ -47,7 +47,7 @@
               v-if="!isLoading"
               v-model="selectedShippingAddressId"
               class="h-[35px] w-full rounded-md py-0 text-center text-gray-600 placeholder-gray-400"
-              @change="selectAddress('shipping')"
+              @change="selectAddress(ADDRESS_SHIPPING)"
             >
               <option :value="0">Choisir une autre adresse</option>
               <option
@@ -75,16 +75,13 @@
       <template #title>Récapitulatif</template>
       <template #button-next>
         <ButtonComponent
-          @click="goToShipments"
           :is-loading="isLoading"
           class="button button-gradient mt-3 w-full"
+          @click="goToShipments"
         >
           <ArrowRightIconComponent :stroke-color="'#FFFFFF'" />
           Continuer
         </ButtonComponent>
-        <!-- <div v-if="error" class="mt-2 text-center text-xs text-red-600">
-            {{ error }}
-          </div> -->
       </template>
     </CartRightSideComponent>
   </div>
@@ -100,14 +97,15 @@ import CartRightSideComponent from '@/vuejs/modules/cart/components/CartRightSid
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 
 import { formatAddress, notifyError } from '@/vuejs/services/utils'
-import { useBuyerCompanyStore } from '@/vuejs/stores/buyer_company'
+import { useAddressStore } from '@/vuejs/stores/address'
 import { useCartStore } from '@/vuejs/stores/cart'
 import { Address } from '@/vuejs/types/Address'
 import { PageList } from '@/vuejs/router'
+import { ADDRESS_BILLING, ADDRESS_SHIPPING } from '@/vuejs/services/const'
 
 const router = useRouter()
 const cartStore = useCartStore()
-const companyStore = useBuyerCompanyStore()
+const addressStore = useAddressStore()
 
 const {
   defaultAddress,
@@ -115,7 +113,7 @@ const {
   billingAddresses: storeBillingAddresses,
   defaultBillingAddress,
   defaultShippingAddress,
-} = storeToRefs(companyStore)
+} = storeToRefs(addressStore)
 
 const { cart } = storeToRefs(cartStore)
 
@@ -185,9 +183,9 @@ const selectAddress = async (type: string): Promise<void> => {
     billingAddressId:
       selectedBillingAddress.value?.id || cartStore.cart.billing_address?.id,
   }
-  if (type === 'shipping') {
+  if (type === ADDRESS_SHIPPING) {
     data.shippingAddressId = selectedShippingAddressId.value
-  } else if (type === 'billing') {
+  } else if (type === ADDRESS_BILLING) {
     data.billingAddressId = selectedBillingAddressId.value
   }
   isLoading.value = true

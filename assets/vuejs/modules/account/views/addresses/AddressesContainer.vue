@@ -6,15 +6,11 @@
           <h3 class="mb-2 mt-2 text-title-35 text-primary md:mt-0">Adresses</h3>
         </div>
       </div>
-      <AddressesDefault
-        :address="buyerCompanyStore.defaultBillingAddressFormatted"
-      >
-        <template #title> Votre adresse de facturation par défaut </template>
+      <AddressesDefault :address="addressStore.defaultBillingAddressFormatted">
+        <template #title> Votre adresse de facturation par défaut</template>
       </AddressesDefault>
-      <AddressesDefault
-        :address="buyerCompanyStore.defaultShippingAddressFormatted"
-      >
-        <template #title> Votre adresse de livraison par défaut </template>
+      <AddressesDefault :address="addressStore.defaultShippingAddressFormatted">
+        <template #title> Votre adresse de livraison par défaut</template>
       </AddressesDefault>
       <div class="mb-4 flex justify-between md:mb-8">
         <div>
@@ -25,7 +21,7 @@
         <div>
           <ButtonComponent
             class="button-secondary-outline"
-            @click="onCreateAddressClick('shipping')"
+            @click="onCreateAddressClick(ADDRESS_SHIPPING)"
           >
             <AddIconComponent
               class="!mr-0 flex w-[20px] text-primary md:hidden"
@@ -46,7 +42,7 @@
         <div>
           <ButtonComponent
             class="button-secondary-outline"
-            @click="onCreateAddressClick('billing')"
+            @click="onCreateAddressClick(ADDRESS_BILLING)"
           >
             <AddIconComponent
               class="!mr-0 flex w-[20px] text-primary md:hidden"
@@ -66,19 +62,21 @@
 <script lang="ts" setup>
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import { onMounted } from 'vue'
-import { useBuyerCompanyStore } from '@/vuejs/stores/buyer_company'
+import { useAddressStore } from '@/vuejs/stores/address'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import AddressesList from '@/vuejs/modules/account/components/addresses/AddressesList.vue'
 import AddressesDefault from '@/vuejs/modules/account/components/addresses/AddressesDefault.vue'
 import router from '@/vuejs/router'
 import { AccountPageList } from '@/vuejs/router/pages-list'
 import AddIconComponent from '@/vuejs/modules/shared/icon/AddIconComponent.vue'
-const buyerCompanyStore = useBuyerCompanyStore()
+import { ADDRESS_BILLING, ADDRESS_SHIPPING } from '@/vuejs/services/const'
+
+const addressStore = useAddressStore()
 
 onMounted(async () => {
-  buyerCompanyStore.isloading = !buyerCompanyStore.addresses.length
-  await buyerCompanyStore.getAddresses()
-  buyerCompanyStore.isloading = false
+  addressStore.isLoading = !addressStore.addresses.length
+  await addressStore.getAddresses()
+  addressStore.isLoading = false
 })
 
 const onCreateAddressClick = (type: string) => {

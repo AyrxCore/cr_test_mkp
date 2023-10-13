@@ -34,7 +34,7 @@ import NotifComponent from '@/vuejs/modules/shared/NotifComponent.vue'
 import CmsPageComponent from '@/vuejs/modules/shared/CmsPageComponent.vue'
 
 import { useCategoryStore } from '@/vuejs/stores/category'
-import { useBuyerCompanyStore } from '@/vuejs/stores/buyer_company'
+import { useAddressStore } from '@/vuejs/stores/address'
 import { useCartStore } from '@/vuejs/stores/cart'
 import router from './router'
 import { CartPageList } from './router/pages-list'
@@ -45,7 +45,7 @@ import {
 import { useBannerStore } from '@/vuejs/stores/banner'
 
 const cartStore = useCartStore()
-const companyStore = useBuyerCompanyStore()
+const companyStore = useAddressStore()
 const categoryStore = useCategoryStore()
 const bannerStore = useBannerStore()
 

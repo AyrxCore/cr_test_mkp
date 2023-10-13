@@ -8,7 +8,7 @@
         Profitez de toutes les économies incluses dans votre adhésion !
       </p>
     </div>
-    <div v-if="productsAccordsCadre.length" class="relative mt-5">
+    <div v-if="productsAccordsCadre?.results.length" class="relative mt-5">
       <CarouselListSharedComponent
         :slides-per-view="1"
         :space-between="20"
@@ -28,7 +28,7 @@
         }"
       >
         <SwiperSlide
-          v-for="accord in productsAccordsCadre"
+          v-for="accord in productsAccordsCadre?.results"
           :key="accord.id"
           class="flex h-full items-center justify-center overflow-hidden rounded-lg bg-white"
         >

@@ -1,5 +1,5 @@
 <template>
-  <BaseTemplate :title="`${accordTitle} Qantis - MarketPlace`">
+  <BaseTemplate :title="accordTitle">
     <LoadingComponent v-if="isLoading" />
     <div
       v-else-if="accord && !isLoading"
@@ -132,12 +132,12 @@ const accordTitle = computed(() => {
 })
 
 watch(
-  () => route.params.id as string,
-  async (id: string) => {
+  () => route.params.slug as string,
+  async (slug: string) => {
     isLoading.value = true
     try {
-      if (id) {
-        const accordId = id.split('-')
+      if (slug) {
+        const accordId = slug.split('-')
         accord.value = await accordStore.findAccordCadreById(
           accordId[accordId.length - 1],
         )

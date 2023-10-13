@@ -149,17 +149,12 @@
                   <AddFavoriteComponent
                     :product-id="product.id"
                     :product-name="product.name"
-                    :variant-id="product.selectedVariantId"
+                    :variant-id="product.defaultVariantId"
                     :favorites-product="product.favorites"
                   />
                   Ajouter ce produit à mes favoris
                 </div>
               </div>
-              <p class="mt-1">
-                <span class="text-sm text-gray-500 md:text-base lg:text-lg"
-                  >Conditionnement conseillé : {{ product.conditionnement }}
-                </span>
-              </p>
               <div class="mt-12">
                 <div
                   v-for="(children, key, index) in product.options"
@@ -171,9 +166,9 @@
                   </span>
                   <select
                     v-if="key && children.length > 0"
-                    v-model="product.optionVariant[index]"
+                    v-model="option[index]"
                     class="right-0 float-right ml-2 h-[1.75rem] w-1/2 rounded-md border border-[#5E6875] pt-0"
-                    @change="updateProductPrice"
+                    @change="updateProductVariant"
                   >
                     <option
                       v-for="child in children"
@@ -276,7 +271,7 @@
         Produits de la même catégorie
       </h3>
       <ProductsLoadingCarouselComponent
-        v-if="similarProducts.length === 0 && isLoadingSimilarProducts"
+        v-if="!similarProducts && isLoadingSimilarProducts"
       />
       <div v-else>
         <div v-if="similarProducts.length > 0" class="mt-10 justify-center">
@@ -331,11 +326,12 @@ const favoriteStore = useFavoriteStore()
 const helpImageFile = getImage(helpImage)
 
 const thumbsSwiper = ref(null)
+const option = ref([])
 const isLoading = ref<boolean>(false)
-const product = ref<Product>()
 const isLoadingPrice = ref<boolean>(false)
 const isLoadingSimilarProducts = ref<boolean>(false)
 const similarProducts = ref<Product[]>([])
+const product = ref<Product>()
 
 onMounted(async () => {
   await favoriteStore.fetchFavorites()
@@ -363,9 +359,9 @@ const setThumbsSwiper = (swiper) => {
   thumbsSwiper.value = swiper
 }
 
-const updateProductPrice = async () => {
+const updateProductVariant = async () => {
   isLoadingPrice.value = true
-  await productStore.changeVariant(product.value)
+  product.value = await productStore.changeVariant(product.value, option.value)
   isLoadingPrice.value = false
 }
 
@@ -378,15 +374,21 @@ const updateQuantity = (event) => {
 }
 
 watch(
-  () => route.params.id as string,
-  async (id: string) => {
+  () => route.params.slug as string,
+  async (slug: string) => {
     isLoading.value = true
     isLoadingSimilarProducts.value = true
     try {
-      const productId = id.split('-')
+      const productId = slug.split('-')
       const formattedProductId = parseInt(productId[productId.length - 1])
 
-      product.value = await productStore.findProductById(formattedProductId)
+      product.value = await productStore.initProduct(formattedProductId)
+      if (product.value.variants.length > 2) {
+        await productStore.findDefaultVariantProduct(product.value)
+      }
+
+      option.value = [...product.value.defaultVariantOptions]
+
       isLoading.value = false
 
       if (product.value.categories.length > 0) {

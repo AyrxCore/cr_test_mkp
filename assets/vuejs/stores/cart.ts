@@ -2,14 +2,13 @@ import { defineStore } from 'pinia'
 
 import CartHttpClient from '@/vuejs/services/httpclient/CartHttpClient'
 import {
+  Cart,
   CartAddressesUpdate,
+  CartPaymentMethodUpdated,
   CartStoreState,
-  Order,
   OrderItemQuantityUpdate,
   OrderShippingUpdate,
   PaymentMethod,
-  CartPaymentMethodUpdated,
-  Cart,
 } from '@/vuejs/types/Cart'
 
 import { notifyError, notifySuccess } from '@/vuejs/services/utils'
@@ -42,13 +41,22 @@ export const useCartStore = defineStore({
         if (!this.cart?.id) {
           throw new Error()
         }
-        await CartHttpClient.get().addProductToCartAsBuyer({
-          cartId: this.cart.id,
+
+        const products = []
+        products.push({
           variantId,
           quantity,
         })
+
+        await CartHttpClient.get().addProductsToCartAsBuyer({
+          cartId: this.cart.id,
+          products,
+        })
+
         this.productVariantsInCart.indexOf(variantId) === -1 &&
           this.newlyAddedProducts.push(variantId)
+
+        notifySuccess('La référence du produit été ajoutée au panier')
       } catch (error) {
         notifyError(
           `L'ajout au panier est impossible, merci de contacter un administrateur.`,
@@ -63,7 +71,7 @@ export const useCartStore = defineStore({
         }
         await CartHttpClient.get().addProductsToCartAsBuyer({
           cartId: this.cart.id,
-          products: products,
+          products,
         })
         await products.forEach((product) => {
           this.productVariantsInCart.indexOf(product.variantId) === -1 &&
@@ -92,6 +100,7 @@ export const useCartStore = defineStore({
     async deleteProduct(id: number): Promise<void> {
       try {
         await CartHttpClient.get().deleteProductFromCartAsBuyer(id)
+        notifySuccess('La référence du produit été retirée au panier')
       } catch (error) {
         notifyError(
           `Une erreur est survenue lors de la modification du panier, merci de contacter un administrateur.`,

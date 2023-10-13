@@ -12,7 +12,7 @@
     <RouterLink
       :to="{
         name: ProductPageList.ACCORD_CADRE,
-        params: { id: accord.reference + '-' + accord.id },
+        params: { slug: accord.slug },
       }"
       class="button button-white button-white-primary flex justify-center hover:!text-white"
     >

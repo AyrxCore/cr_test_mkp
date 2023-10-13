@@ -1,7 +1,7 @@
 <template>
   <table class="list-address w-full table-auto">
     <AddressesListHeader />
-    <tbody v-if="!isloading">
+    <tbody v-if="!isLoading">
       <tr
         v-for="(address, key) in addresses.filter(
           (address) => address.type === props.type,
@@ -27,9 +27,10 @@
 import { storeToRefs } from 'pinia'
 
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
-import { useBuyerCompanyStore } from '@/vuejs/stores/buyer_company'
+import { useAddressStore } from '@/vuejs/stores/address'
 import AddressesListItem from '@/vuejs/modules/account/components/addresses/AddressesListItem.vue'
 import AddressesListHeader from '@/vuejs/modules/account/components/addresses/AddressesListHeader.vue'
+
 const props = defineProps({
   type: {
     required: true,
@@ -37,8 +38,8 @@ const props = defineProps({
   },
 })
 
-const buyerCompanyStore = useBuyerCompanyStore()
-const { addresses, isloading } = storeToRefs(buyerCompanyStore)
+const buyerCompanyStore = useAddressStore()
+const { addresses, isLoading } = storeToRefs(buyerCompanyStore)
 </script>
 
 <style scoped lang="postcss">

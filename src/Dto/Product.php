@@ -4,7 +4,30 @@ declare(strict_types=1);
 
 namespace App\Dto;
 
-final class Product implements \JsonSerializable
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+
+#[ApiResource(
+    collectionOperations: [
+        'get' => [
+            'openapi_context' => [
+                'summary' => 'Get remote products list',
+                'description' => 'It gets a list of products from remote data provider',
+            ],
+            'method' => 'GET',
+            'normalization_context' => ['groups' => ['products:get']],
+        ],
+    ],
+    itemOperations: [
+        'get' => [
+            'path' => '/products/{id}',
+            'requirements' => ['id' => '\d+'],
+            'normalization_context' => ['groups' => ['product:get']],
+        ],
+    ],
+)]
+final class Product
 {
     public const PROCESS_STATUS_NOT_ACTIVATED = 'NOT_ACTIVATED';
     public const PROCESS_STATUS_PENDING = 'PENDING';
@@ -19,47 +42,66 @@ final class Product implements \JsonSerializable
     public const HOME_TOP_VENTE = 'home-top-vente';
     public const HOME_SELECTION = 'home-selection';
 
+    #[ApiProperty(identifier: true)]
+    #[Groups(['products:get', 'product:get'])]
     private ?int $id = null;
 
+    #[Groups(['products:get', 'product:get'])]
     private ?string $name;
 
+    #[Groups(['product:get'])]
     private ?string $reference;
 
+    #[Groups(['products:get', 'product:get'])]
     private ?string $slug;
 
+    #[Groups(['products:get', 'product:get'])]
     private ?string $description;
 
-    private ?string $conditionnement;
-
-    private array $livraisons;
-
+    #[Groups(['product:get'])]
     private array $categories;
 
-    private ?int $imageId = null;
-
+    #[Groups(['products:get', 'product:get'])]
     private array $images;
 
+    #[Groups(['product:get'])]
     private array $options;
 
+    #[Groups(['products:get', 'product:get'])]
     private array $properties;
 
+    #[Groups(['products:get', 'product:get'])]
     private array $variants;
 
-    private ?float $priceReference;
+    #[Groups(['products:get', 'product:get'])]
+    private ?int $defaultVariantId;
 
+    #[Groups(['products:get', 'product:get'])]
+    private ?array $defaultVariantOptions;
+
+    #[Groups(['products:get', 'product:get'])]
+    private ?float $priceReference = 0.0;
+
+    #[Groups(['product:get'])]
     private ?float $percent = 0;
 
+    #[Groups(['products:get', 'product:get'])]
     private ?float $price = null;
 
+    #[Groups(['products:get', 'product:get'])]
     private bool $isAccordCadre = false;
 
-    private ?Price $basePrice = null;
-
+    #[Groups(['products:get', 'product:get'])]
     private ?Seller $seller;
 
+    #[Groups(['product:get'])]
     private ?AccountAccordCadre $accountAccordCadre;
 
+    #[Groups(['products:get', 'product:get'])]
     private array $favorites = [];
+
+    #[Groups(['product:get'])]
+    private ?int $quantity = 0;
 
     public function getId(): ?int
     {
@@ -103,7 +145,6 @@ final class Product implements \JsonSerializable
         $this->slug = $slug;
     }
 
-
     public function getDescription(): ?string
     {
         return $this->description;
@@ -123,17 +164,6 @@ final class Product implements \JsonSerializable
     {
         $this->categories = $categories;
     }
-
-    public function getImageId(): ?int
-    {
-        return $this->imageId;
-    }
-
-    public function setImageId(?int $imageId): void
-    {
-        $this->imageId = $imageId;
-    }
-
 
     public function getImages(): array
     {
@@ -175,6 +205,26 @@ final class Product implements \JsonSerializable
         $this->variants = $variants;
     }
 
+    public function getDefaultVariantId(): int
+    {
+        return $this->defaultVariantId;
+    }
+
+    public function setDefaultVariantId(?int $defaultVariantId): void
+    {
+        $this->defaultVariantId = $defaultVariantId;
+    }
+
+    public function getDefaultVariantOptions(): ?array
+    {
+        return $this->defaultVariantOptions;
+    }
+
+    public function setDefaultVariantOptions(?array $defaultVariantOptions): void
+    {
+        $this->defaultVariantOptions = $defaultVariantOptions;
+    }
+
     public function getPriceReference(): ?float
     {
         return $this->priceReference;
@@ -195,16 +245,6 @@ final class Product implements \JsonSerializable
         $this->price = $price;
     }
 
-    public function getBasePrice(): ?Price
-    {
-        return $this->basePrice;
-    }
-
-    public function setBasePrice(?Price $basePrice): void
-    {
-        $this->basePrice = $basePrice;
-    }
-
     public function getSeller(): ?Seller
     {
         return $this->seller;
@@ -213,26 +253,6 @@ final class Product implements \JsonSerializable
     public function setSeller(?Seller $seller): void
     {
         $this->seller = $seller;
-    }
-
-    public function getConditionnement(): ?string
-    {
-        return $this->conditionnement;
-    }
-
-    public function setConditionnement(?string $conditionnement): void
-    {
-        $this->conditionnement = $conditionnement;
-    }
-
-    public function getLivraisons(): array
-    {
-        return $this->livraisons;
-    }
-
-    public function setLivraisons(array $livraisons): void
-    {
-        $this->livraisons = $livraisons;
     }
 
     public function getPercent(): ?float
@@ -245,12 +265,7 @@ final class Product implements \JsonSerializable
         $this->percent = $percent;
     }
 
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
-
-    public function isAccordCadre(): bool
+    public function getIsAccordCadre(): bool
     {
         return $this->isAccordCadre;
     }
@@ -259,7 +274,6 @@ final class Product implements \JsonSerializable
     {
         $this->isAccordCadre = $isAccordCadre;
     }
-
 
     public function getAccountAccordCadre(): ?AccountAccordCadre
     {
@@ -279,5 +293,15 @@ final class Product implements \JsonSerializable
     public function setFavorites(array $favorites): void
     {
         $this->favorites = $favorites;
+    }
+
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(?int $quantity): void
+    {
+        $this->quantity = $quantity;
     }
 }

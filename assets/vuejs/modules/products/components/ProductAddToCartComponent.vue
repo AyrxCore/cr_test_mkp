@@ -33,7 +33,7 @@
         <ButtonAddToCartComponent
           :product="props.product"
           :quantity="props.product.quantity"
-          :variant-id="props.product.selectedVariantId"
+          :variant-id="props.product.defaultVariantId"
           :price="props.product.price"
           class="w-full lg:mt-14"
         />
@@ -41,7 +41,7 @@
           class="ml-5 lg:hidden"
           :product-id="props.product.id"
           :product-name="props.product.name"
-          :variant-id="props.product.selectedVariantId"
+          :variant-id="props.product.defaultVariantId"
           :favorites-product="props.product.favorites"
           @open-favorite="onOpenFavoriteTooltip"
         />

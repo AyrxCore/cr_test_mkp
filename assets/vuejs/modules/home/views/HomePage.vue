@@ -23,10 +23,9 @@
       </div>
 
       <CarouselActualitesComponent />
-
       <!-- Bloc Produits top ventes -->
       <ProductHomeComponent
-        :products="productsTopVente"
+        :products="productsTopVente?.results"
         title="Les meilleures ventes"
         description="D'autres adhérents ont déjà acheté ces produits"
       />
@@ -39,7 +38,7 @@
       <!-- Bloc sélection de produits -->
       <ProductHomeComponent
         class="mt-4"
-        :products="productsSelection"
+        :products="productsSelection?.results"
         title="Sélection de produits"
         description="Ces produits sont susceptibles de vous intéresser"
       />

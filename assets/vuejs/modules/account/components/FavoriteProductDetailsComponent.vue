@@ -26,7 +26,7 @@
       </div>
       <div class="flex w-6/12 flex-col md:ml-5 md:w-7/12">
         <RouterLink
-          :to="{ name: PageList.PRODUCT, params: { id: productId } }"
+          :to="{ name: PageList.PRODUCT, params: { slug: productSlug } }"
           class="text-lg font-bold text-primary lg:text-[22px]"
         >
           {{ productName }}
@@ -157,7 +157,7 @@ const onMoveProduct = async (event) => {
 }
 
 onMounted(async (): Promise<void> => {
-  product.value = await productStore.findProductById(
+  product.value = await productStore.initProduct(
     props.favoriteProduct.upplerProductId,
   )
   if (!product.value) {
@@ -173,9 +173,9 @@ const productImage = computed((): string => {
   return product.value ? product.value.images[0] : null
 })
 
-const productId = computed((): string => {
+const productSlug = computed((): string => {
   return product.value
-    ? product.value.slug + '-' + product.value.id
+    ? product.value.slug
     : props.favoriteProduct.upplerProductId
 })
 

@@ -8,9 +8,9 @@ class UpplerHelper
 {
     public static function getOrderNumber(mixed $upplerResponse): ?string
     {
-        foreach ($upplerResponse->numbers as $number) {
-            if ($number->type === 'order') {
-                return $number->number;
+        foreach ($upplerResponse['numbers'] as $number) {
+            if ($number['type'] === 'order') {
+                return $number['number'];
             }
         }
 

@@ -4,23 +4,27 @@ import { AlertType } from '@/vuejs/types/Alert'
 import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
 import { getErrorMessage } from '@/vuejs/services/login'
 import AddressHttpClient from '@/vuejs/services/httpclient/AddressHttpClient'
-import { BuyerCompanyStoreState } from '@/vuejs/types/BuyerCompany'
-import { Address } from '@/vuejs/types/Address'
-import {
-  getEmptyAddress,
-  setAdressForCreate,
-  setAdressForUpdate,
-} from '@/vuejs/services/company'
+import { Address, AddressStoreState } from '@/vuejs/types/Address'
 import { useUserStore } from '@/vuejs/stores/user'
 import router, { PageList } from '@/vuejs/router'
-import { formatAddress } from '@/vuejs/services/utils'
+import {
+  formatAddress,
+  notifyError,
+  notifySuccess,
+} from '@/vuejs/services/utils'
+import { ADDRESS_BILLING, ADDRESS_SHIPPING } from '@/vuejs/services/const'
+import { v4 as uuidv4 } from 'uuid'
+import {
+  setAddressForCreate,
+  setAddressForUpdate,
+} from '@/vuejs/services/company'
 
-export const useBuyerCompanyStore = defineStore({
-  id: 'company',
-  state: (): BuyerCompanyStoreState => ({
+export const useAddressStore = defineStore({
+  id: 'address',
+  state: (): AddressStoreState => ({
     addresses: [],
     currentAddress: null,
-    isloading: false,
+    isLoading: false,
   }),
 
   actions: {
@@ -41,48 +45,49 @@ export const useBuyerCompanyStore = defineStore({
     },
     initNewAddress(type: string): void {
       const userStore = useUserStore()
-      this.currentAddress = getEmptyAddress(
-        userStore.user.account.buyer.id,
+      this.currentAddress = {
+        id: uuidv4(),
+        name: '',
+        companyId: userStore.user.account.buyer.id,
+        company: '',
         type,
-      )
+        street: '',
+        postcode: '',
+        city: '',
+        country: 83,
+        lastName: '',
+        firstName: '',
+        phone: '',
+      }
     },
     async createAddress(): Promise<void> {
-      const alertStore = useAlertStore()
       try {
-        const addressToCreate = setAdressForCreate(this.currentAddress)
-        await AddressHttpClient.get().createAddressesAsAdmin(addressToCreate)
-        alertStore.setShow(
-          "L'adresse a été créée avec succès",
-          AlertType.success,
+        await AddressHttpClient.get().createAddressesAsAdmin(
+          setAddressForCreate(this.currentAddress),
         )
+        notifySuccess("L'adresse a bien été enregistrée")
+
         router.push({ name: PageList.ADDRESSES })
       } catch (error) {
-        error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow(
-            getErrorMessage(error.response.data.message),
-            AlertType.danger,
-          )
+        notifyError(
+          "Une erreur est survenue lors de l'enregistrement. Veuillez contacter le service adhérent",
+        )
       }
     },
     async updateAddress(): Promise<void> {
       const userStore = useUserStore()
-      const alertStore = useAlertStore()
       try {
         this.currentAddress.companyId = userStore.user.account.buyer.id
         await AddressHttpClient.get().updateAddressesAsAdmin(
-          setAdressForUpdate(this.currentAddress),
+          setAddressForUpdate(this.currentAddress),
         )
-        alertStore.setShow(
-          'Les modifications ont été enregistrées avec succès',
-          AlertType.success,
-        )
+        notifySuccess('Les modifications ont été enregistrées avec succès')
+
         router.push({ name: PageList.ADDRESSES })
       } catch (error) {
-        error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow(
-            getErrorMessage(error.response.data.message),
-            AlertType.danger,
-          )
+        notifyError(
+          "Une erreur est survenue lors de l'enregistrement. Veuillez contacter le service adhérent",
+        )
       }
     },
     async getAddress(id: number): Promise<void> {
@@ -104,13 +109,13 @@ export const useBuyerCompanyStore = defineStore({
       return this.addresses.find((a: Address) => a.type === null)
     },
     shippingAddresses(): Address[] {
-      return this.addresses.filter((a: Address) => a.type === 'shipping')
+      return this.addresses.filter((a: Address) => a.type === ADDRESS_SHIPPING)
     },
     defaultShippingAddress(): Address {
       const userStore = useUserStore()
       if (!userStore.user.account.subaccount) return null
       return this.addresses.find(
-        (address) =>
+        (address: Address) =>
           address.id === userStore.user.account.subaccount.shipping_address,
       )
     },
@@ -118,13 +123,13 @@ export const useBuyerCompanyStore = defineStore({
       return formatAddress(this.defaultShippingAddress)
     },
     billingAddresses(): Address[] {
-      return this.addresses.filter((a: Address) => a.type === 'billing')
+      return this.addresses.filter((a: Address) => a.type === ADDRESS_BILLING)
     },
     defaultBillingAddress(): Address {
       const userStore = useUserStore()
       if (!userStore.user.account.subaccount) return null
       return this.addresses.find(
-        (address) =>
+        (address: Address) =>
           address.id === userStore.user.account.subaccount.billing_address,
       )
     },

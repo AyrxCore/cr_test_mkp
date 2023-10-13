@@ -12,8 +12,8 @@ interface CommonAddress {
 
 export interface Address extends CommonAddress {
   id: string | number | null
-  last_name: string
-  first_name: string
+  lastName: string
+  firstName: string
 }
 
 export interface AddressToCreate extends CommonAddress {
@@ -25,4 +25,10 @@ export interface AddressToUpdate extends CommonAddress {
   id: string | number | null
   lastName: string
   firstName: string
+}
+
+export interface AddressStoreState {
+  addresses: Address[]
+  currentAddress: Address
+  isLoading: boolean
 }

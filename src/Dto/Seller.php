@@ -5,18 +5,58 @@ declare(strict_types=1);
 namespace App\Dto;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\Api\SellerPromotions;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-
-final class Seller implements \JsonSerializable
+#[ApiResource(
+    collectionOperations: [
+        'get' => [
+            'openapi_context' => [
+                'summary' => 'Get remote sellers list',
+                'description' => 'It gets a list of sellers from remote data provider',
+            ],
+            'method' => 'GET',
+            'normalization' => false,
+        ],
+    ],
+    itemOperations: [
+        'get' => [
+            'path' => '/sellers/{id}',
+            'requirements' => ['id' => '\d+'],
+        ],
+        'get_promotions' => [
+            'openapi_context' => [
+                'summary' => 'Add multiple item to cart',
+            ],
+            'method' => 'GET',
+            'path' => '/sellers/{id}/promotions',
+            'requirements' => ['id' => '\d+'],
+            'controller' => SellerPromotions::class,
+        ],
+    ],
+)]
+final class Seller
 {
     #[ApiProperty(identifier: true)]
+    #[Groups(['products:get', 'product:get'])]
     private ?int $id = null;
-
+    #[Groups(['products:get', 'product:get'])]
     private ?string $name;
+    #[Groups(['products:get', 'product:get'])]
     private ?string $corporateName;
+    #[Groups(['products:get', 'product:get'])]
     private ?string $description;
+    #[Groups(['products:get', 'product:get'])]
     private ?string $avatar;
+    #[Groups(['products:get', 'product:get'])]
     private ?array $tos;
+
+    #[Groups(['products:get'])]
+    private ?int $productCount;
+
+    #[Groups(['products:get'])]
+    private ?bool $checked;
 
     public function getId(): ?int
     {
@@ -30,88 +70,73 @@ final class Seller implements \JsonSerializable
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * @param string|null $name
-     */
     public function setName(?string $name): void
     {
         $this->name = $name;
     }
 
-    /**
-     * @return string|null
-     */
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * @param string|null $description
-     */
     public function setDescription(?string $description): void
     {
         $this->description = $description;
     }
 
-    /**
-     * @return string|null
-     */
     public function getCorporateName(): ?string
     {
         return $this->corporateName;
     }
 
-    /**
-     * @param string|null $corporateName
-     */
     public function setCorporateName(?string $corporateName): void
     {
         $this->corporateName = $corporateName;
     }
 
-    /**
-     * @return string|null
-     */
     public function getAvatar(): ?string
     {
         return $this->avatar;
     }
 
-    /**
-     * @param string|null $avatar
-     */
     public function setAvatar(?string $avatar): void
     {
         $this->avatar = $avatar;
     }
 
-    /**
-     * @return array|null
-     */
     public function getTos(): ?array
     {
         return $this->tos;
     }
 
-    /**
-     * @param array|null $avatar
-     */
     public function setTos(?array $tos): void
     {
         $this->tos = $tos;
     }
 
-    public function jsonSerialize()
+    public function getProductCount(): ?int
     {
-        return  get_object_vars($this);
+        return $this->productCount;
+    }
+
+    public function setProductCount(?int $productCount): void
+    {
+        $this->productCount = $productCount;
+    }
+
+    public function getChecked(): ?bool
+    {
+        return $this->checked;
+    }
+
+    public function setChecked(?bool $checked): void
+    {
+        $this->checked = $checked;
     }
 }
