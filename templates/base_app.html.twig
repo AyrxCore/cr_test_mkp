@@ -8,15 +8,15 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="icon" href="/pre_home/favicon.png" sizes="32x32" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  {% block javascripts %}
-    {{ vite_asset('main.ts', ['vuejs']) }}
-  {% endblock %}
   {% if settings.useExternalScriptsTags %}
     {% include '_partials/_gtm-header.html.twig' %}
     {% include '_partials/_gravite-header.html.twig' %}
     {% include '_partials/_clarity-header.html.twig' %}
   {% endif %}
+{# Keep javascripts block at the end of the head to avoid css order problems #}
+  {% block javascripts %}
+    {{ vite_asset('main.ts', ['vuejs']) }}
+  {% endblock %}
 </head>
 <body>
 {% if settings.useExternalScriptsTags %}
