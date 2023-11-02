@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
-use App\Entity\Account;
 use App\Entity\User;
 use App\Events\FirstConnexionEvent;
 use App\Events\ResettingPasswordEvent;
@@ -21,7 +22,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LoginController extends AbstractController
 {
-
     #[Required]
     public RequestStack $requestStack;
 
@@ -46,12 +46,12 @@ class LoginController extends AbstractController
         if ($request->getMethod() == 'POST') {
             $username = $request->request->get('_username');
             $user = $em->getRepository(User::class)->findUserByUsernameOrEmail($username);
-            if (!empty($user) && $user instanceof User && $user->isAccesMarketPlace()) {
+            if (!empty($user) && $user instanceof User && $user->hasEnabledAccount()) {
                 /**
                  * @var User $user
                  */
                 if ($user->getPasswordRequestedAt() !== null) {
-                    if ($user->getPasswordRequestedAt()->getTimestamp() + $this->getParameter('retry_ttl') > time()) {
+                    if ($user->getPasswordRequestedAt()->getTimestamp() + $this->getParameter('retry_ttl') > \time()) {
                         $session->getFlashBag()->add(
                             'warning',
                             $translator->trans(
@@ -60,6 +60,7 @@ class LoginController extends AbstractController
                                 'prehome'
                             )
                         );
+
                         return $this->redirectToRoute($request->attributes->get('_route'));
                     }
                 }
@@ -73,11 +74,12 @@ class LoginController extends AbstractController
                             'prehome'
                         )
                     );
+
                     return $this->redirectToRoute($request->attributes->get('_route'));
                 }
 
                 $user->setPasswordRequestedAt(new \DateTime('now'));
-                $token = md5(random_bytes(100));
+                $token = \md5(\random_bytes(100));
                 $user->setConfirmationToken($token);
 
                 if ($request->attributes->get('_route') === 'reset_password') {
@@ -105,13 +107,13 @@ class LoginController extends AbstractController
                     'warning',
                     $translator->trans('resetting.request.failed', [], 'prehome')
                 );
+
                 return $this->redirectToRoute($request->attributes->get('_route'));
             }
         }
 
-        return $this->render('login/' . $tpl . '.html.twig');
+        return $this->render('login/'.$tpl.'.html.twig');
     }
-
 
     #[Route('/login/reset-password/{token}', name: 'reset_password_action')]
     #[Route('/login/first-signin/{token}', name: 'first_signin_action')]
@@ -151,7 +153,7 @@ class LoginController extends AbstractController
 
             if (
                 $request->attributes->get('_route') === 'first_signin_action'
-                && null !== $user->getFirstConnexionRequestedAt()
+                && $user->getFirstConnexionRequestedAt() !== null
             ) {
                 $user->setFirstConnexionRequestedAt(null);
                 $user->setIsEnabled(true);
@@ -175,9 +177,10 @@ class LoginController extends AbstractController
                     )
                 );
             }
+
             return $this->redirect('/');
         }
 
-        return $this->render('login/' . $tpl . '.html.twig', ['form' => $form->createView()]);
+        return $this->render('login/'.$tpl.'.html.twig', ['form' => $form->createView()]);
     }
 }

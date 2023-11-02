@@ -35,7 +35,6 @@ class UserService
         $user->setUsername($email);
         $user->setEmail($email);
         $user->setIsEnabled(true);
-        $user->setAccesMarketPlace(true);
         $user->setPassword($this->passwordHasher->hashPassword($user, $password));
 
         $this->entityManager->persist($user);

@@ -65,7 +65,6 @@ use App\DataFixtures\Factory\UserFactory;
         'username' => 'some_user',
         'password' => 'password',
         'isEnabled' => true,
-        'accesMarketPlace' => true,
         'accounts' => [
             AccountFactory::new([
                 'adherent' => AdherentFactory::new(),

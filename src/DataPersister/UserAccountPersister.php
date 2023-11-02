@@ -8,8 +8,8 @@ use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 use App\Dto\UserAccount;
 use App\Entity\Account;
 use App\Entity\Adherent;
-use App\Entity\UserInfoUpdateRequest;
 use App\Entity\User;
+use App\Entity\UserInfoUpdateRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -19,7 +19,6 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 class UserAccountPersister implements ContextAwareDataPersisterInterface
 {
-
     #[Required]
     public EntityManagerInterface $em;
 
@@ -35,13 +34,13 @@ class UserAccountPersister implements ContextAwareDataPersisterInterface
     }
 
     /**
-     * @param  UserAccount  $data
+     * @param UserAccount $data
      */
     public function persist($data, array $context = [])
     {
         $adh = $this->em->getRepository(Adherent::class)->find($data->getAdherentId());
 
-        if (null === $adh) {
+        if ($adh === null) {
             $adh = new Adherent();
             $adh->setId(new Uuid($data->getAdherentId()));
             $adh->setName($data->getAdherentName());
@@ -59,39 +58,37 @@ class UserAccountPersister implements ContextAwareDataPersisterInterface
             if (!$user) {
                 $user = new User();
                 $user->setIsEnabled(false);
-                $user->setPassword($this->userPasswordHasher->hashPassword($user, uniqid()));
+                $user->setPassword($this->userPasswordHasher->hashPassword($user, \uniqid()));
             }
             $account = $this->em->getRepository(Account::class)->findOneBy(
                 ['upplerClientId' => $data->getUpplerSubAccountClientId()]
             );
             if ($account) {
-                throw  new BadRequestException("Account with this username already exist");
+                throw new BadRequestException('Account with this username already exist');
             }
             $account = new Account();
         }
 
         $logEmail = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy([
-            '_user'     => $user,
+            '_user' => $user,
             'attribute' => 'email',
-            'isIso'     => false,
+            'isIso' => false,
         ]);
         $logLastname = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy([
-            '_user'     => $user,
+            '_user' => $user,
             'attribute' => 'lastname',
-            'isIso'     => false,
+            'isIso' => false,
         ]);
         $logFirstname = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy([
-            '_user'     => $user,
+            '_user' => $user,
             'attribute' => 'firstname',
-            'isIso'     => false,
+            'isIso' => false,
         ]);
         $logPhone = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy([
-            'account'   => $account,
+            'account' => $account,
             'attribute' => 'phone',
-            'isIso'     => false,
+            'isIso' => false,
         ]);
-
-        $user->setAccesMarketPlace($data->isMarketplace());
 
         if (!$logEmail || ($logEmail->getValue() === $data->getEmail())) {
             $user->setUsername($data->getEmail());
@@ -123,7 +120,6 @@ class UserAccountPersister implements ContextAwareDataPersisterInterface
 
         $this->em->persist($user);
 
-
         $account->setUpplerSubAccountId($data->getUpplerSubAccountId());
         $account->setUpplerClientId($data->getUpplerSubAccountClientId());
         $account->setUpplerClientSecret($data->getUpplerSubAccountClientSecret());
@@ -132,7 +128,7 @@ class UserAccountPersister implements ContextAwareDataPersisterInterface
         $account->setServiceFonction($data->getServiceFonction());
         $account->setPhone($data->getPhone());
         $account->setUser($user);
-        $account->setIsEnabled(true);
+        $account->setIsEnabled($data->isEnabled());
         $account->setAdherent($adh);
 
         if (!$logPhone || ($logPhone->getValue() === $data->getPhone())) {

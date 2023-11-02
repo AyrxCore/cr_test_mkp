@@ -102,11 +102,6 @@ use Symfony\Component\HttpFoundation\Cookie;
             'password' => 'wrong_password',
             'error_message' => 'Identifiants invalides.',
         ],
-        'ROLE_API + marketplace disabled' => [
-            'username' => 'test_role_api_no_marketplace',
-            'password' => '000000',
-            'error_message' => 'user_disabled',
-        ],
         'ROLE_API + user disabled' => [
             'username' => 'test_role_api_user_disabled',
             'password' => '000000',
@@ -115,7 +110,7 @@ use Symfony\Component\HttpFoundation\Cookie;
         'user with disabled account' => [
             'username' => 'test_user_with_disabled_account',
             'password' => '000000',
-            'error_message' => 'user_disabled',
+            'error_message' => 'user_empty_account',
         ],
         'user without account' => [
             'username' => 'test_user_without_account',

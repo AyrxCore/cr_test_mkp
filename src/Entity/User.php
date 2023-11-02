@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\UserRepository;
@@ -7,18 +9,17 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
-use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ORM\HasLifecycleCallbacks]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
@@ -77,9 +78,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $first_connexion_requested_at = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?bool $accesMarketPlace = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $emailChangingToken = null;
 
@@ -132,7 +130,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string)$this->username;
+        return (string) $this->username;
     }
 
     /**
@@ -140,7 +138,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return (string)$this->username;
+        return (string) $this->username;
     }
 
     /**
@@ -152,7 +150,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
-        return array_unique($roles);
+        return \array_unique($roles);
     }
 
     public function setRoles(array $roles): self
@@ -164,9 +162,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addRole($role)
     {
-        $role = strtoupper($role);
+        $role = \strtoupper($role);
 
-        if (!in_array($role, $this->roles, true)) {
+        if (!\in_array($role, $this->roles, true)) {
             $this->roles[] = $role;
         }
 
@@ -175,9 +173,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeRole($role)
     {
-        $role = strtoupper($role);
+        $role = \strtoupper($role);
 
-        $index = array_search($role, $this->roles);
+        $index = \array_search($role, $this->roles, true);
         if ($index >= 0) {
             unset($this->roles[$index]);
         }
@@ -187,7 +185,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function hasRole($role)
     {
-        return in_array(strtoupper($role), $this->getRoles(), true);
+        return \in_array(\strtoupper($role), $this->getRoles(), true);
     }
 
     /**
@@ -370,16 +368,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isAccesMarketPlace(): ?bool
+    public function hasEnabledAccount(): ?bool
     {
-        return $this->accesMarketPlace;
-    }
+        /** @var Account $account */
+        foreach ($this->accounts as $account) {
+            if ($account->isEnabled()) {
+                return true;
+            }
+        }
 
-    public function setAccesMarketPlace(bool $accesMarketPlace): self
-    {
-        $this->accesMarketPlace = $accesMarketPlace;
-
-        return $this;
+        return false;
     }
 
     public function getEmailChangingToken(): ?string
@@ -406,17 +404,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection
-     */
     public function getUserInfoUpdateRequests(): Collection
     {
         return $this->userInfoUpdateRequests;
     }
 
-    /**
-     * @param Collection $userInfoUpdateRequests
-     */
     public function setUserInfoUpdateRequests(Collection $userInfoUpdateRequests): void
     {
         $this->userInfoUpdateRequests = $userInfoUpdateRequests;

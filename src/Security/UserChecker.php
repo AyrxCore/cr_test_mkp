@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security;
 
 use App\Entity\User;
@@ -15,38 +17,19 @@ class UserChecker implements UserCheckerInterface
             return;
         }
 
-        if (!$user->isEnabled()) {
-            throw new CustomUserMessageAccountStatusException('user_disabled');
-        }
-
-        if (!$user->isAccesMarketPlace()) {
-            throw new CustomUserMessageAccountStatusException('user_disabled');
-        }
-
         if (!$user->hasRole('ROLE_API')) {
-            if ($user->getAccounts()->isEmpty()) {
+            if (!$user->hasEnabledAccount()) {
                 throw new CustomUserMessageAccountStatusException('user_empty_account');
             }
+        }
 
-            if (!$this->hasEnabledAccount($user)) {
-                throw new CustomUserMessageAccountStatusException('user_disabled');
-            }
+        if (!$user->isEnabled()) {
+            throw new CustomUserMessageAccountStatusException('user_disabled');
         }
     }
 
     public function checkPostAuth(UserInterface $user)
     {
         // Nothing
-    }
-
-    private function hasEnabledAccount(User $user): bool
-    {
-        foreach ($user->getAccounts() as $account) {
-            if ($account->isEnabled()) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

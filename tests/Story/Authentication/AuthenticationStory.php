@@ -21,23 +21,12 @@ final class AuthenticationStory extends Story
         UserFactory::new()
             ->sequence([
                 [
-                    'email' => 'test_role_api_no_marketplace@qantis.co',
-                    'username' => 'test_role_api_no_marketplace',
-                    'password' => '000000',
-                    'firstName' => 'test_role_api_no_marketplace',
-                    'lastName' => 'TEST',
-                    'isEnabled' => true,
-                    'accesMarketPlace' => false,
-                    'roles' => ['ROLE_API'],
-                ],
-                [
                     'email' => 'test_role_api_user_disabled@qantis.co',
                     'username' => 'test_role_api_user_disabled',
                     'password' => '000000',
                     'firstName' => 'test_role_api_user_disabled',
                     'lastName' => 'TEST',
                     'isEnabled' => false,
-                    'accesMarketPlace' => true,
                     'roles' => ['ROLE_API'],
                 ],
                 [
@@ -47,7 +36,6 @@ final class AuthenticationStory extends Story
                     'firstName' => 'test_user_without_account',
                     'lastName' => 'TEST',
                     'isEnabled' => true,
-                    'accesMarketPlace' => true,
                     'roles' => [],
                 ],
                 [
@@ -57,7 +45,6 @@ final class AuthenticationStory extends Story
                     'firstName' => 'test_user_with_disabled_account',
                     'lastName' => 'TEST',
                     'isEnabled' => true,
-                    'accesMarketPlace' => true,
                     'accounts' => [
                         AccountFactory::new([
                             'isEnabled' => false,

@@ -42,7 +42,6 @@ final class UserStory extends Story
                 'firstName' => 'Gaëtan',
                 'lastName' => 'DE SAINTE MARIE',
                 'isEnabled' => true,
-                'accesMarketPlace' => true,
                 'accounts' => [
                     AccountFactory::new([
                         'upplerClientId' => '101_3l3ueqlt27eog4co400wo0g0kcswg80sk4wocwsgoww4c80ko4',
@@ -53,7 +52,7 @@ final class UserStory extends Story
                         'adherent' => self::adherentQantis(),
                         'isEnabled' => true,
                         'phone' => '04 05 06 07 08',
-                        'serviceFonction' => 'service produits'
+                        'serviceFonction' => 'service produits',
                     ]),
                     AccountFactory::new([
                         'upplerClientId' => '2483_5z2ipmbh3dgc0w0gkk4oc4o08g44oc4g4swcs44wsks80oggow',
@@ -64,7 +63,7 @@ final class UserStory extends Story
                         'adherent' => self::adherentQantis(),
                         'isEnabled' => true,
                         'phone' => '04 05 06 07 08',
-                        'serviceFonction' => 'service produits'
+                        'serviceFonction' => 'service produits',
                     ]),
                 ],
             ]);
@@ -77,7 +76,6 @@ final class UserStory extends Story
                 'firstName' => 'Api',
                 'lastName' => 'User',
                 'isEnabled' => true,
-                'accesMarketPlace' => true,
                 'roles' => ['ROLE_API'],
             ]);
     }

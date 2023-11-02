@@ -6,37 +6,37 @@ namespace App\Dto;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Uid\Uuid;
-use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     collectionOperations: [
         'create' => [
-            "openapi_context" => [
+            'openapi_context' => [
                 'summary' => 'Déclarer un account Uppler',
                 'description' => 'Permet de créer un account Uppler sur la marketplace
             en passant toutes les infos de ce compte. Un compte utilisateur est automatiquement créé si nécessaire',
             ],
-            "method" => "POST",
-            "validate" => true,
+            'method' => 'POST',
+            'validate' => true,
         ],
     ],
     itemOperations: [
         'get' => [
-            "openapi_context" => [
+            'openapi_context' => [
                 'summary' => 'Editer un account',
                 'description' => "Permet d'enregistrer des modifications dans un account uppler",
             ],
         ],
         'update' => [
-            "openapi_context" => [
+            'openapi_context' => [
                 'summary' => 'Modifier un account',
                 'description' => "Permet d'enregistrer des modifications dans un account uppler",
             ],
-            "method" => "PATCH",
-            "validate" => true,
+            'method' => 'PATCH',
+            'validate' => true,
         ],
     ]
 )]
@@ -51,50 +51,47 @@ final class UserAccount
 
     private ?Uuid $userId = null;
 
-    #[Assert\Email(message: "email required", groups: ["create"])]
+    #[Assert\Email(message: 'email required', groups: ['create'])]
     private string $email = '';
 
-    #[Assert\NotBlank(message: "upplerSubAccountId cannot be null", groups: ["create"])]
-    #[Assert\Type("integer", message: "(upplerSubAccountId) Integer required", groups: ["create"])]
+    #[Assert\NotBlank(message: 'upplerSubAccountId cannot be null', groups: ['create'])]
+    #[Assert\Type('integer', message: '(upplerSubAccountId) Integer required', groups: ['create'])]
     private ?int $upplerSubAccountId = null;
 
-    #[Assert\NotBlank(message: "upplerUserId cannot be null", groups: ["create"])]
-    #[Assert\Type("integer", message: "(upplerUserId) integer required", groups: ["create"])]
+    #[Assert\NotBlank(message: 'upplerUserId cannot be null', groups: ['create'])]
+    #[Assert\Type('integer', message: '(upplerUserId) integer required', groups: ['create'])]
     private ?int $upplerUserId = null;
 
-    #[Assert\NotBlank(message: "upplerCompanyId cannot be null")]
-    #[Assert\Type("integer", message: "(upplerCompanyId) integer required")]
+    #[Assert\NotBlank(message: 'upplerCompanyId cannot be null')]
+    #[Assert\Type('integer', message: '(upplerCompanyId) integer required')]
     private ?int $upplerCompanyId = null;
 
-    #[Assert\NotBlank(message: "upplerSubAccountClientId cannot be null")]
-    #[Assert\Type("string", message: "(upplerSubAccountClientId) string required")]
+    #[Assert\NotBlank(message: 'upplerSubAccountClientId cannot be null')]
+    #[Assert\Type('string', message: '(upplerSubAccountClientId) string required')]
     private string $upplerSubAccountClientId = '';
 
-    #[Assert\NotBlank(message: "upplerSubAccountClientSecret cannot be null")]
-    #[Assert\Type("string", message: "(upplerSubAccountClientSecret) string required")]
+    #[Assert\NotBlank(message: 'upplerSubAccountClientSecret cannot be null')]
+    #[Assert\Type('string', message: '(upplerSubAccountClientSecret) string required')]
     private string $upplerSubAccountClientSecret = '';
 
-    #[Assert\NotBlank(message: "adherentId cannot be null")]
-    #[Assert\Type("string", message: "(adherentId) string required")]
+    #[Assert\NotBlank(message: 'adherentId cannot be null')]
+    #[Assert\Type('string', message: '(adherentId) string required')]
     private string $adherentId = '';
 
-    #[Assert\NotBlank(message: "adherentName cannot be null")]
-    #[Assert\Type("string", message: "(adherentName) string required")]
+    #[Assert\NotBlank(message: 'adherentName cannot be null')]
+    #[Assert\Type('string', message: '(adherentName) string required')]
     private string $adherentName = '';
 
-    #[Assert\NotBlank(message: "firstname cannot be null")]
-    #[Assert\Type("string", message: "(firstname) string required")]
+    #[Assert\NotBlank(message: 'firstname cannot be null')]
+    #[Assert\Type('string', message: '(firstname) string required')]
     private string $firstname = '';
 
-    #[Assert\NotBlank(message: "lastname cannot be null")]
-    #[Assert\Type("string", message: "(lastname) string required")]
+    #[Assert\NotBlank(message: 'lastname cannot be null')]
+    #[Assert\Type('string', message: '(lastname) string required')]
     private string $lastname = '';
 
-    #[Assert\Type("array", message: "(accordStatuts) array required")]
-    private array $accordStatuts = [];
-
-    #[Assert\Type("bool", message: "(isMarketplace) bool required")]
-    private bool $isMarketplace = true;
+    #[Assert\Type('bool', message: '(isEnabled) bool required')]
+    private bool $isEnabled = true;
 
     private ?string $phone = '';
 
@@ -236,14 +233,14 @@ final class UserAccount
         $this->lastname = $lastname;
     }
 
-    public function isMarketplace(): bool
+    public function isEnabled(): bool
     {
-        return $this->isMarketplace;
+        return $this->isEnabled;
     }
 
-    public function setIsMarketplace(bool $isMarketplace): void
+    public function setIsEnabled(bool $isEnabled): void
     {
-        $this->isMarketplace = $isMarketplace;
+        $this->isEnabled = $isEnabled;
     }
 
     public function getPhone(): ?string
