@@ -6,7 +6,7 @@
           <h3 class="home-title text-primary">
             Bienvenue sur la
             <span class="text-gradient"> marketplace réservée</span>
-            à nos 30 000 entreprises adhérentes
+            à nos 35 000 entreprises adhérentes
           </h3>
           <p
             class="mt-2.5 text-sm text-gray-400 sm:mt-5 sm:text-base xl:text-lg"
