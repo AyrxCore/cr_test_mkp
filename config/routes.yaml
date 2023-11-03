@@ -1,3 +1,6 @@
 authentication_token:
   path: /api/authentication/token
   methods: ['POST']
+
+login_check:
+  path: /login/auto-login

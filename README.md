@@ -184,3 +184,30 @@ Pour exploiter ce fichier un canal monolog spécifique a ét créé le canal 'ap
 ```
 
 https://symfony.com/doc/5.4/logging/channels_handlers.html
+
+#### Auto Login
+
+Permet l'authentification d'un utilisateur sans passer par le formulaire.
+Une requête GET doit être envoyée à /login/auto-login avec les paramètres suivants :
+
+```
+  "email": EMAIL DE L'UTILISATEUR,
+  "timestamp": TIMESTAMP EN SECONDES,
+  "hash": HASH
+```
+
+Le hash est généré de la manière suivante :
+
+1. Concatener email, timestamp et la _clé_
+2. Hasher le résultat avec SHA256
+3. Convertir le hash en base-64
+
+La clé est un Uuid associé à l'adhérent lors de la synchro depuis Neo
+
+En retour est envoyée une url permettant l'authentification automatique de l'utilisateur et la redirection vers la page d'accueil :
+
+```
+{
+    "url": "URL"
+}
+```

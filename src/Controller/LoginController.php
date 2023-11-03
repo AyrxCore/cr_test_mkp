@@ -8,15 +8,20 @@ use App\Entity\User;
 use App\Events\FirstConnexionEvent;
 use App\Events\ResettingPasswordEvent;
 use App\Form\ResettingType;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\LoginLink\LoginLinkHandlerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -30,6 +35,9 @@ class LoginController extends AbstractController
 
     #[Required]
     public UserPasswordHasherInterface $passwordHasher;
+
+    #[Required]
+    public UserRepository $userRepository;
 
     #[Route('/login/reset-password', name: 'reset_password')]
     #[Route('/login/first-signin', name: 'first_signin')]
@@ -182,5 +190,40 @@ class LoginController extends AbstractController
         }
 
         return $this->render('login/'.$tpl.'.html.twig', ['form' => $form->createView()]);
+    }
+
+    #[Route('/login/auto-login', name: 'generate_auto_login_link')]
+    public function generateAutoLoginLink(
+        Request $request,
+        LoginLinkHandlerInterface $loginLinkHandler,
+    ): JsonResponse {
+        if ($request->isMethod('GET')) {
+            $hash = $request->query->get('hash');
+            $timestamp = (int) $request->query->get('timestamp');
+            $email = $request->query->get('email');
+            $user = $this->userRepository->findOneBy(['email' => $email]);
+            if (!$user) {
+                throw new BadRequestException('email not found');
+            }
+
+            if ($timestamp < \time() && $timestamp > \time() - (60 * 60)) {
+                $account = $user->getAccounts()->first();
+                $adherentId = $account->getAdherent()->getId();
+                $data = $email.$timestamp.\str_replace('-', '', (string) $adherentId);
+                if (\base64_encode(\hash('sha256', $data)) !== $hash) {
+                    throw new BadRequestException();
+                }
+
+                $loginLinkDetails = $loginLinkHandler->createLoginLink($user);
+
+                return new JsonResponse([
+                    'url' => $loginLinkDetails->getUrl(),
+                ]);
+            } else {
+                throw new BadRequestException();
+            }
+        }
+
+        throw new NotFoundHttpException();
     }
 }

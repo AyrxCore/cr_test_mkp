@@ -32,7 +32,12 @@ security:
         failure_handler: lexik_jwt_authentication.handler.authentication_failure
     main:
       lazy: true
-      provider: users_in_memory
+      provider: app_user_provider
+      login_link:
+        check_route: login_check
+        lifetime: 300
+        signature_properties: ['id']
+        success_handler: App\Security\Authentication\AutoLoginSuccessHandler
 
     # activate different ways to authenticate
     # https://symfony.com/doc/current/security.html#the-firewall

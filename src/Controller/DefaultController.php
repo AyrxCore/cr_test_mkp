@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Service\SettingsService;
@@ -34,11 +36,14 @@ class DefaultController extends AbstractController
             || !$session->has('access_token') || empty($session->get('access_token'))
         ) {
             if ($request->attributes->get('_route') !== 'prehome') {
-                $path = substr($request->getRequestUri(), 1);
+                $path = \substr($request->getRequestUri(), 1);
+
                 return $this->redirectToRoute('prehome', ['target' => $path]);
             }
+
             return $this->render('index.html.twig');
         }
+
         return $this->render('index_app.html.twig');
     }
 
