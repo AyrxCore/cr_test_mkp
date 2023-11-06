@@ -9,7 +9,10 @@ use App\Dto\UserAccount;
 use App\Entity\Account;
 use App\Entity\Adherent;
 use App\Entity\User;
-use App\Entity\UserInfoUpdateRequest;
+use App\Repository\AccountRepository;
+use App\Repository\AdherentRepository;
+use App\Repository\UserInfoUpdateRequestRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -20,10 +23,22 @@ use Symfony\Contracts\Service\Attribute\Required;
 class UserAccountPersister implements ContextAwareDataPersisterInterface
 {
     #[Required]
+    public AccountRepository $accountRepository;
+
+    #[Required]
+    public AdherentRepository $adherentRepository;
+
+    #[Required]
     public EntityManagerInterface $em;
 
     #[Required]
+    public UserInfoUpdateRequestRepository $userInfoUpdateRequestRepository;
+
+    #[Required]
     public UserPasswordHasherInterface $userPasswordHasher;
+
+    #[Required]
+    public UserRepository $userRepository;
 
     #[Required]
     public NormalizerInterface $normalizer;
@@ -38,29 +53,28 @@ class UserAccountPersister implements ContextAwareDataPersisterInterface
      */
     public function persist($data, array $context = [])
     {
-        $adh = $this->em->getRepository(Adherent::class)->find($data->getAdherentId());
+        $adh = $this->adherentRepository->find($data->getAdherentId());
 
         if ($adh === null) {
             $adh = new Adherent();
             $adh->setId(new Uuid($data->getAdherentId()));
             $adh->setName($data->getAdherentName());
+            $this->em->persist($adh);
         }
-        $this->em->persist($adh);
 
         if ($data->getAccountId()) {
-            /** @var \App\Entity\Account $account */
-            $account = $this->em->getRepository(Account::class)->findOneBy(
+            $account = $this->accountRepository->findOneBy(
                 ['id' => $data->getAccountId()]
             );
             $user = $account->getUser();
         } else {
-            $user = $this->em->getRepository(User::class)->findOneBy(['username' => $data->getEmail()]);
+            $user = $this->userRepository->findOneBy(['username' => $data->getEmail()]);
             if (!$user) {
                 $user = new User();
                 $user->setIsEnabled(false);
                 $user->setPassword($this->userPasswordHasher->hashPassword($user, \uniqid()));
             }
-            $account = $this->em->getRepository(Account::class)->findOneBy(
+            $account = $this->accountRepository->findOneBy(
                 ['upplerClientId' => $data->getUpplerSubAccountClientId()]
             );
             if ($account) {
@@ -69,28 +83,34 @@ class UserAccountPersister implements ContextAwareDataPersisterInterface
             $account = new Account();
         }
 
-        $logEmail = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy([
+        $logEmail = $this->userInfoUpdateRequestRepository->findOneBy([
             '_user' => $user,
             'attribute' => 'email',
             'isIso' => false,
         ]);
-        $logLastname = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy([
+        $logLastname = $this->userInfoUpdateRequestRepository->findOneBy([
             '_user' => $user,
             'attribute' => 'lastname',
             'isIso' => false,
         ]);
-        $logFirstname = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy([
+        $logFirstname = $this->userInfoUpdateRequestRepository->findOneBy([
             '_user' => $user,
             'attribute' => 'firstname',
             'isIso' => false,
         ]);
-        $logPhone = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy([
+        $logPhone = $this->userInfoUpdateRequestRepository->findOneBy([
             'account' => $account,
             'attribute' => 'phone',
             'isIso' => false,
         ]);
 
         if (!$logEmail || ($logEmail->getValue() === $data->getEmail())) {
+            $sameMailUser = $this->userRepository->findOneBy(['email' => $data->getEmail()]);
+
+            if ($sameMailUser) {
+                $user = $sameMailUser;
+            }
+
             $user->setUsername($data->getEmail());
             $user->setEmail($data->getEmail());
             if ($logEmail) {
