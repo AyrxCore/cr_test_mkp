@@ -9,7 +9,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UpplerSellerService extends AbstractUpplerService
 {
-    public function getSellers($perPage = 16, $page = 1): array
+    public function getSellers($perPage = 200, $page = 1): array
     {
         $res = $this->request(
             'POST',

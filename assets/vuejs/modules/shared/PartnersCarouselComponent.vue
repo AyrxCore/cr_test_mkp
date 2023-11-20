@@ -82,7 +82,7 @@ onMounted(async () => {
   try {
     if (userStore.user) {
       await sellerStore.init()
-      sellers.value = sellerStore.sellers
+      sellers.value = sellerStore.sellers.slice(0, 16)
       showCarouselConnected.value = true
     } else {
       sellers.value = [

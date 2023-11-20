@@ -82,7 +82,13 @@ class UpplerProductService extends AbstractUpplerService
         return \json_decode($res->getContent(), true);
     }
 
-    public function findAllCategories(int $page = 1, int $perPage = 1): array
+    /**
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
+     */
+    private function findAllFilters(int $page = 1, int $perPage = 1): array
     {
         $res = $this->request(
             'POST',
@@ -90,11 +96,35 @@ class UpplerProductService extends AbstractUpplerService
         );
 
         if ($res->getStatusCode() !== Response::HTTP_OK) {
-            throw new NotFoundHttpException('Category not found');
+            throw new NotFoundHttpException('Filters not found');
         }
 
-        $remoteData = \json_decode($res->getContent(), true);
+        return \json_decode($res->getContent(), true);
+    }
 
-        return $remoteData['filters']['category'];
+    /**
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
+     */
+    public function findAllCategories(int $page = 1, int $perPage = 1): array
+    {
+        $res = $this->findAllFilters($page, $perPage);
+
+        return $res['filters']['category'];
+    }
+
+    /**
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
+     */
+    public function findAllSellers(int $page = 1, int $perPage = 1): array
+    {
+        $res = $this->findAllFilters($page, $perPage);
+
+        return $res['filters']['company'];
     }
 }

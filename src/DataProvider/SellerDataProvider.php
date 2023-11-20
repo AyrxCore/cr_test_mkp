@@ -9,6 +9,7 @@ use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Dto\Seller;
 use App\Factory\SellerFactory;
+use App\Service\UpplerProductService;
 use App\Service\UpplerSellerService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -17,7 +18,8 @@ class SellerDataProvider implements
     ContextAwareCollectionDataProviderInterface,
     ItemDataProviderInterface
 {
-    public function __construct(public UpplerSellerService $upplerSellerService, private SellerFactory $sellerFactory)
+    public function __construct(public UpplerSellerService $upplerSellerService, private SellerFactory $sellerFactory, private
+    UpplerProductService $upplerProductService)
     {
     }
 
@@ -27,9 +29,14 @@ class SellerDataProvider implements
     public function getCollection(string $resourceClass, string $operationName = null, array $context = []): array
     {
         try {
-            $sellers = $this->upplerSellerService->getSellers();
+            $allUpplerSellers = $this->upplerSellerService->getSellers();
+            $allAdherentSellers = $this->upplerProductService->findAllSellers();
 
-            return $this->sellerFactory->createAndAddToCollection($sellers['results']);
+            $sellers = \array_filter($allUpplerSellers['results'], function ($seller) use ($allAdherentSellers) {
+                return array_key_exists($seller['id'], $allAdherentSellers);
+            });
+
+            return $this->sellerFactory->createAndAddToCollection($sellers);
         } catch (BadRequestHttpException $badRequestException) {
             return [
                 'error' => [
