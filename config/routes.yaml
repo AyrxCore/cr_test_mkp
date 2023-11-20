@@ -3,4 +3,4 @@ authentication_token:
   methods: ['POST']
 
 login_check:
-  path: /login/auto-login
+  path: /login/auto-login/authenticate
