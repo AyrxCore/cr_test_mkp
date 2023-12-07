@@ -39,7 +39,7 @@ class UpplerCountryService extends AbstractUpplerService
         $totalItems = $paginationArgs[1];
         $paginationOffset = \explode('-', $paginationArgs[0])[1];
 
-        $newCountries = \json_decode($res->getContent());
+        $newCountries = \json_decode($res->getContent(), true);
         $countries = \array_merge($countries, $newCountries);
         if ($totalItems > $paginationOffset) {
             ++$page;
