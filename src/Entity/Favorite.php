@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
@@ -16,12 +18,12 @@ use Symfony\Component\Uid\Uuid;
     collectionOperations: [
         'get',
         'create' => [
-            "openapi_context" => [
+            'openapi_context' => [
                 'summary' => 'Créer une nouvelle liste de favori',
-                'description' => 'Permet de créer une nouvelle liste de favori'
+                'description' => 'Permet de créer une nouvelle liste de favori',
             ],
-            "method" => "POST",
-            "validate" => true,
+            'method' => 'POST',
+            'validate' => true,
         ],
     ],
     itemOperations: [
@@ -30,12 +32,12 @@ use Symfony\Component\Uid\Uuid;
             'security' => "is_granted('VIEW_FAVORITE', object)",
         ],
         'update' => [
-            "openapi_context" => [
+            'openapi_context' => [
                 'summary' => 'Modifier une liste de favori',
                 'description' => "Permet de mettre a jour le nom et la visibilité d'une liste de favoris",
             ],
-            "method" => "PATCH",
-            "validate" => true,
+            'method' => 'PATCH',
+            'validate' => true,
             'normalization_context' => ['groups' => ['update']],
             'security' => "is_granted('EDIT_FAVORITE', object)",
         ],
@@ -98,6 +100,11 @@ class Favorite
         $this->favoriteProducts = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->name;
+    }
+
     #[ORM\PrePersist]
     public function onPrePersist(): void
     {
@@ -111,14 +118,6 @@ class Favorite
         $this->updatedAt = new \DateTimeImmutable('now');
     }
 
-    public function __toString(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @return Uuid|null
-     */
     public function getId(): ?Uuid
     {
         return $this->id;
@@ -196,7 +195,7 @@ class Favorite
     {
         foreach ($this->favoriteProducts as $product) {
             if ($favoriteProduct->getUpplerVariantId() === $product->getUpplerVariantId()) {
-                throw new \Exception(sprintf("Le produit %s existe déjà dans la liste %s", $favoriteProduct->getUpplerProductName(), $this->name));
+                throw new \Exception(\sprintf('Le produit %s existe déjà dans la liste %s', $favoriteProduct->getUpplerProductName(), $this->name));
             }
         }
 

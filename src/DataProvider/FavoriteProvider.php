@@ -7,32 +7,28 @@ namespace App\DataProvider;
 use ApiPlatform\Core\DataProvider\CollectionDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Entity\Favorite;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\FavoriteRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Security;
-use Symfony\Contracts\Service\Attribute\Required;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class FavoriteProvider implements RestrictedDataProviderInterface, CollectionDataProviderInterface
 {
+    public function __construct(private FavoriteRepository $favoriteRepository, private RequestStack $requestStack)
+    {
+    }
 
-    #[Required]
-    public EntityManagerInterface $em;
-
-    #[Required]
-    public RequestStack $requestStack;
-
-    #[Required]
-    public Security $security;
-
-
-    public function getCollection(string $resourceClass, string $operationName = null)
+    public function getCollection(string $resourceClass, string $operationName = null): array
     {
         $account = $this->requestStack->getSession()->get('account');
-        return $this->em->getRepository(Favorite::class)->findFavorites($account);
+        if (!$account) {
+            throw new AccessDeniedException('You must be logged in to access this resource.');
+        }
+
+        return $this->favoriteRepository->findFavorites($account);
     }
 
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
     {
-        return Favorite::class === $resourceClass;
+        return $resourceClass === Favorite::class;
     }
 }
