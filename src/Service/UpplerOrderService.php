@@ -48,14 +48,14 @@ class UpplerOrderService extends AbstractUpplerService
      * @throws ClientExceptionInterface
      * @throws \Exception
      */
-    public function getOrderByIdAndUserId(int $orderId, int $userId): \stdClass
+    public function getOrderByIdAndUserId(int $orderId, int $userId): array
     {
         $res = $this->request(
             'GET',
             'v1/buyer/order/'.$orderId.'?expand[]=items&expand[]=shipments',
         );
 
-        if ($res->getStatusCode() !== Response::HTTP_OK) {
+        if ($res && $res->getStatusCode() !== Response::HTTP_OK) {
             $this->apiLogger->error($res->getStatusCode()." La commande avec l'ID: ".$orderId.' du User '.$userId." n'a pas été trouvée");
 
             throw new NotFoundHttpException("La commande avec l'ID ".$orderId." n'a pas été trouvée");
@@ -63,7 +63,7 @@ class UpplerOrderService extends AbstractUpplerService
 
         $remoteOrder = \json_decode($res->getContent(), true);
 
-        if ($userId !== $remoteOrder->buyer_user->id) {
+        if ($userId !== $remoteOrder['buyer_user']['id']) {
             throw new AccessDeniedException("Vous n'avez pas de commande avec cet identifiant");
         }
 

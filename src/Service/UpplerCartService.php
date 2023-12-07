@@ -229,11 +229,13 @@ class UpplerCartService extends AbstractUpplerService
             'GET',
             'v1/buyer/cart/'.$cartId.'/payment-method',
         );
-        if ($res && $res->getStatusCode() !== Response::HTTP_OK) {
-            throw new NotFoundHttpException();
+
+        $payments = [];
+        if ($res && $res->getStatusCode() === Response::HTTP_OK) {
+            $payments = \json_decode($res->getContent(), true);
         }
 
-        return \json_decode($res->getContent(), true);
+        return $payments;
     }
 
     public function setPaymentMethod(int $cartId, int $paymentMethodId): array|bool
