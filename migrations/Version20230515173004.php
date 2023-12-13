@@ -22,7 +22,7 @@ final class Version20230515173004 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE TABLE setting (id UUID NOT NULL, name VARCHAR(255) NOT NULL, value TEXT NOT NULL, PRIMARY KEY(id))');
         $this->addSql('COMMENT ON COLUMN setting.id IS \'(DC2Type:uuid)\'');
-        $this->addSql('INSERT INTO public.setting (id, name, value) VALUES (\'35989576-24c4-4af5-87e9-88f2e6631623\', \'maintenance\', \'0\')');
+        $this->addSql('INSERT INTO public.setting (id, name, value) VALUES (\'35989576-24c4-4af5-87e9-88f2e6631623\', \'maintenance_mode\', \'0\')');
     }
 
     public function down(Schema $schema): void
