@@ -16,7 +16,7 @@
       Vous bénéficiez des conditions
       <CheckIconComponent class="stroke-green-qantis" />
     </div>
-    <div class="condition-beneficiaire mt-4 text-white">
+    <div class="condition-beneficiaire mt-4">
       <p v-html="text" />
     </div>
 
