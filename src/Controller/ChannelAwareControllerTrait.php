@@ -23,7 +23,7 @@ trait ChannelAwareControllerTrait
             return $this->channel;
         }
 
-        $host = $request->headers->get('host');
+        $host = $request->headers->get('host', '');
 
         $this->channel = $this->channelRepository->findOneBy([
             'hostname' => \preg_replace('/(.*):\d+/', '$1', $host),
