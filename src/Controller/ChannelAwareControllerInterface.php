@@ -9,5 +9,5 @@ use Symfony\Component\HttpFoundation\Request;
 
 interface ChannelAwareControllerInterface extends ChannelRepositoryAwareControllerInterface
 {
-    public function getChannel(Request $request): Channel;
+    public function getChannel(Request $request): ?Channel;
 }

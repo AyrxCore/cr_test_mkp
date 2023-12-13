@@ -13,7 +13,7 @@ trait ChannelAwareControllerTrait
     private ?Channel $channel = null;
     private ?ChannelRepository $channelRepository = null;
 
-    public function getChannel(Request $request): Channel
+    public function getChannel(Request $request): ?Channel
     {
         if ($this->channelRepository === null) {
             throw new \RuntimeException('channelRepository is not set. Did you forget to implement ChannelRepositoryAwareControllerInterface?');

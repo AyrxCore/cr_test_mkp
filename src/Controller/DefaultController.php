@@ -31,6 +31,10 @@ class DefaultController extends AbstractController implements ChannelAwareContro
     {
         $channel = $this->getChannel($request);
 
+        if ($channel === null) {
+            return new Response('no channel specified');
+        }
+
         $session = $this->requestStack->getSession();
 
         if (
