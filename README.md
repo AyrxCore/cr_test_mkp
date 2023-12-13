@@ -53,8 +53,7 @@ $ make exec php bin/console user:demote {email} {role}
 
 ## Test unitaires et fonctionnelles
 
-Afin de lancer les tests
-`sh runtest.sh`
+La documentation sur les tests unitaires et fonctionnels se trouve ici : https://qantis.atlassian.net/wiki/spaces/M2/pages/413859841/Test+Unitaires+et+fonctionnels
 
 # Authentification / Login /
 
@@ -74,33 +73,14 @@ Ces informations ne sont pas stockées en base, uniquement dans le store VueJS e
 
 ## Jeu de données de test / Fixtures
 
-Pour fonctionner correctement l'authentification en mode DEV a besoin d'un jeu de test.
-Ce jeu de test est délivré par la mécanisme standard sur Symfony des Fixtures.
-Le jeu de fixtures est disponible dans le fichier app/DataFixtures/UserFixtures.
-Les fixtures doivent être injectées automatiquement au docker_compose build grâce à une ligne dans le docker_compose.yaml (d:f:l --group=dev -q)
-Si toutefois les fixtures ne sont pas injectées il suffit de lancer cette en cli.
+Pour fonctionner correctement l'authentification en mode DEV a besoin d'un jeu de données.
+Ce jeu de données est délivré par la mécanisme standard sur Symfony des Fixtures.
 
-```
-services:
-  php-fpm:
-    build:
-      context: .
-      target: php
-    command: sh -c "composer i -o ; bin/console doctrine:migrations:migrate -n; bin/console d:f:l --group=dev -q;  bin/console lexik:jwt:generate-keypair --overwrite -n; php-fpm"
-    volumes:
-      - ./:/var/www
-      - ./docker/php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-      - ./docker/php-fpm/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
-    extra_hosts:
-      - 'host.docker.internal:host-gateway'
-    networks:
-      - dev-marketplace
-```
+Les fixtures peuvent être créées via la commande suivante :
 
-2 users sont créés :
+`make database-fixtures`
 
-- mfrebet@qantis.co / 000000 => attaché à un seul compte Acheteur et actif
-- buyer@qantis.oc / 000000 => attaché à 2 comptes acheteurs et inactif donc nécessité de passer par première connexion
+La liste des utilisateurs créés se trouvent de la classe [`App\DataFixtures\Story\UserStory`](src/DataFixtures/Story/UserStory.php)
 
 https://symfony.com/bundles/DoctrineFixturesBundle/current/index.html
 
