@@ -1,7 +1,7 @@
 <template>
   <svg
-    width="28"
-    height="28"
+    :width="sizeWidth"
+    :height="sizeHeight"
     viewBox="0 0 28 28"
     fill="none"
     :stroke="stroke"
@@ -33,7 +33,15 @@ const props = defineProps({
   stroke: {
     required: false,
     type: String,
-    default: '#ffffff',
+    default: '#000000',
+  },
+  sizeWidth: {
+    type: Number,
+    default: 28,
+  },
+  sizeHeight: {
+    type: Number,
+    default: 28,
   },
 })
 </script>

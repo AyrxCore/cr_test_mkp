@@ -1,39 +1,70 @@
 <template>
-  <div
-    v-if="props.modelValue"
-    v-click-outside="closeMenu"
-    class="flex absolute left-0 z-10 w-full bg-white px-5 py-2.5 text-sm
-    text-primary shadow flex-wrap h-[80vh] overflow-auto sm:w-auto sm:rounded !lg:h-auto c-scrollbar"
-  >
-    <div class="flex items-center">
-      <router-link
-        :to="{name: ProductPageList.CATEGORIES}"
-        class="font-bold hover:bg-gray-200 uppercase">
-        Voir toutes les catégories
-      </router-link>
-      <CloseIcon
-        class="ml-auto cursor-pointer hover:text-secondary"
-        @click.stop="closeMenu"
-      />
-    </div>
-    <hr class="my-2.5"/>
+  <div class="modal-overlay">
     <div
-      v-for="category in categories"
-      :key="category.id"
-      class="w-[100%] items-center py-1 !text-sm"
+      v-if="modelValue"
+      v-click-outside="closeMenu"
+      class="!lg:h-auto c-scrollbar absolute top-0 left-0 z-10 flex h-[80vh] w-4/5 flex-col overflow-auto bg-white px-5 py-2.5 text-sm shadow sm:top-36 sm:left-24 sm:w-auto sm:rounded"
     >
-      <MenuCategoryChildComponent :category="category"/>
+      <div v-if="showAllCategories">
+        <div class="mt-3">
+          <CloseIcon
+            class="cursor-pointer hover:text-secondary"
+            @click.stop="closeMenu"
+          />
+        </div>
+        <div class="my-4">
+          <router-link
+            :to="{ name: ProductPageList.CATEGORIES }"
+            class="text-2xl font-bold tracking-wide hover:bg-gray-200"
+          >
+            Toutes les catégories
+          </router-link>
+        </div>
+        <div
+          v-for="category in categories"
+          :key="category.id"
+          class="w-[100%] items-center py-1 !text-base !leading-7"
+        >
+          <MenuCategoryChildComponent
+            :category="category"
+            @select-category="showSelectedCategoryChildrens($event)"
+            @close-menu="closeMenu"
+          />
+        </div>
+      </div>
+      <div v-else>
+        <div
+          class="mt-3 flex cursor-pointer items-center"
+          @click.stop="backMenuCategories"
+        >
+          <ChevronLeftIconComponent class="mr-4 hover:text-secondary" />
+          <span class="text-lg">Retour</span>
+        </div>
+        <div class="my-4 text-2xl font-bold tracking-wide">
+          {{ selectedCategory.name }}
+        </div>
+        <div class="w-[100%] py-1 !text-base !leading-9">
+          <MenuCategoryChildComponent
+            v-for="cat in selectedCategory.children"
+            :key="cat.id"
+            :category="cat"
+            @close-menu="closeMenu"
+            @select-category="showSelectedCategoryChildrens($event)"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
-
+import { computed, ref } from 'vue'
 import CloseIcon from '@/vuejs/modules/shared/icon/CloseIconComponent.vue'
+import MenuCategoryChildComponent from '@/vuejs/modules/shared/header-component/MenuCategoryChildComponent.vue'
+import ChevronLeftIconComponent from '@/vuejs/modules/shared/icon/ChevronLeftIconComponent.vue'
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import { useCategoryStore } from '@/vuejs/stores/category'
-import MenuCategoryChildComponent from '@/vuejs/modules/shared/header-component/MenuCategoryChildComponent.vue'
+import { Category } from '@/vuejs/types/Product/Category'
 
 const emit = defineEmits(['update:modelValue'])
 
@@ -44,14 +75,33 @@ const props = defineProps({
   },
 })
 
+const showAllCategories = ref<boolean>(true)
+const selectedCategory = ref<Category>(null)
 
 const categoryStore = useCategoryStore()
 
-const categories = computed(() => {
+const categories = computed((): Category[] => {
   return categoryStore.categories
 })
 const closeMenu = (): void => {
   emit('update:modelValue', false)
+  backMenuCategories()
+}
+
+const showSelectedCategoryChildrens = (category) => {
+  showAllCategories.value = false
+  selectedCategory.value = category
+}
+
+const backMenuCategories = () => {
+  if (selectedCategory.value && selectedCategory.value.parentId) {
+    selectedCategory.value = categories.value.find(
+      (c) => c.id === selectedCategory.value.parentId,
+    )
+  } else {
+    showAllCategories.value = true
+    selectedCategory.value = null
+  }
 }
 </script>
 

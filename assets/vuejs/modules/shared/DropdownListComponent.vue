@@ -35,7 +35,7 @@ const toggle = ref<boolean>(false)
   flex-wrap overflow-auto
   rounded-lg
   bg-white
-  p-5 text-left
+  text-left
   shadow-xl
   xl:relative
   xl:mt-0 xl:flex xl:h-auto

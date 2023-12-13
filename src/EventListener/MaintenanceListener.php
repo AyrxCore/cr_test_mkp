@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\EventListener;
 
-use App\Repository\SettingRepository;
+use App\Service\SettingsService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,7 +13,9 @@ use Symfony\Component\Routing\RouterInterface;
 
 class MaintenanceListener
 {
-    public function __construct(private RouterInterface $router, private SettingRepository $settingRepository)
+    public function __construct(
+        private RouterInterface $router,
+        private SettingsService $settingService)
     {
     }
 
@@ -20,15 +24,12 @@ class MaintenanceListener
         $request = $event->getRequest();
         $target = $request->attributes->get('_route');
 
-        if ($target === 'maintenance' || is_null($target)) {
+        if ($target === 'maintenance' || $target === null) {
             return;
         }
 
-        $maintenanceMode = $this->settingRepository->findOneBy(['name' => 'maintenance']);
-
-        if (!is_null($maintenanceMode) && (int)$maintenanceMode->getValue() === 1) {
-
-            if (str_contains($request->getRequestUri(), '/api/')) {
+        if ($this->settingService->isMaintenanceMode()) {
+            if (\str_contains($request->getRequestUri(), '/api/')) {
                 $response = new JsonResponse(
                     ['maintenance' => true],
                     Response::HTTP_SERVICE_UNAVAILABLE,

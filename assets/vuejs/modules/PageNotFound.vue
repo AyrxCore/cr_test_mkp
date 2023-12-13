@@ -1,13 +1,13 @@
 <template>
-  <BaseTemplate title="Qantis - MarketPlace">
+  <BaseTemplate>
     <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 px-5 sm:px-8">
-      <breadcrumb-shared-component :current-page="'Page non trouvée'" />
+      <breadcrumb-shared-component current-page="Page non trouvée" />
       <div class="w-[100%] max-w-screen-2xl">
         <ContactUsButtonComponent />
       </div>
       <div class="m-auto my-2 w-[100%] max-w-screen-2xl">
         <div class="mt-10 flex">
-          <div class="">
+          <div>
             <h3 class="mb-1 flex-col text-title-35 text-primary">
               <span class="flex">Erreur 404</span>
               <span class="flex font-bold">Page introuvable</span>
@@ -40,7 +40,7 @@
                 <div class="flex flex-col items-center md:items-start">
                   <LayersIconComponent class="flex h-10 w-10" />
                   <h4
-                    class="mt-3 flex text-base text-gray-500 md:mt-7 md:w-[176px] md:text-xl"
+                    class="mt-3 flex text-gray-500 md:mt-7 md:w-[176px] md:text-xl"
                   >
                     Réalisez 27% d'économies
                   </h4>
@@ -54,9 +54,7 @@
                   class="flex w-[122px] flex-col items-center md:w-[154px] md:items-start"
                 >
                   <FolderSearchIconComponent class="flex h-10 w-10" />
-                  <h4
-                    class="mt-3 flex text-base text-gray-500 md:mt-7 md:text-xl"
-                  >
+                  <h4 class="mt-3 flex text-gray-500 md:mt-7 md:text-xl">
                     Gagnez du temps
                   </h4>
                   <p class="mt-3 flex text-sm text-gray-400 md:text-base">
@@ -67,9 +65,7 @@
                   class="flex flex-col items-center md:items-start lg:w-[176px]"
                 >
                   <ExpandIconComponent class="flex h-10 w-10" />
-                  <h4
-                    class="mt-3 flex text-base text-gray-500 md:mt-7 md:text-xl"
-                  >
+                  <h4 class="mt-3 flex text-gray-500 md:mt-7 md:text-xl">
                     Structurez et optimisez vos achats
                   </h4>
                   <p class="mt-3 text-sm text-gray-400 md:text-base">
@@ -79,7 +75,7 @@
                 <div class="flex flex-col items-center md:items-start">
                   <LeafIconComponent class="flex h-10 w-10" />
                   <h4
-                    class="mt-3 text-base text-gray-500 md:mt-7 md:w-[185px] md:text-xl"
+                    class="mt-3 text-gray-500 md:mt-7 md:w-[185px] md:text-xl"
                   >
                     Commencez votre démarche RSE par vos achats
                   </h4>

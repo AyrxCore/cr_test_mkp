@@ -114,6 +114,9 @@ database-migrations: ## Run doctrine migrations
 generate-keypair: ## Generate private/public keys
 	$(dc_exec) php bin/console lexik:jwt:generate-keypair --skip-if-exists
 
+generate-hosts: ## Generate the list of channels' hosts to be added to the /etc/hosts file
+	$(dc_exec) php bin/console generate:hosts
+
 ##
 ## Fixtures generation
 fixtures-factory: ## Generate a fixtures Factory in \App\DataFixtures\Factory

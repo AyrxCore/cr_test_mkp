@@ -43,19 +43,19 @@
     <div class="md:w-4/12 lg:w-3/12">
       <div class="md:justify-end">
         <div
-          class="flex w-full flex-row flex-wrap items-center items-center justify-between md:w-auto"
+          class="flex w-full flex-row flex-wrap items-center justify-between md:w-auto"
         >
           <span
-            class="flex items-start items-center text-sm font-bold text-primary md:text-base lg:text-lg"
+            class="flex items-center text-sm font-bold text-primary md:text-base lg:text-lg"
           >
             {{ productPrice }}€ HT
           </span>
           <div class="bottom-0 flex items-start justify-between space-x-3">
             <button @click="openMoveProductForm">
-              <ChangeIconComponent :stroke-color="'#9866ff'" />
+              <ChangeIconComponent :stroke-color="channelPrimaryColor" />
             </button>
             <button @click="openRemoveForm">
-              <TrashIconComponent :stroke-color="'#9866ff'" />
+              <TrashIconComponent :stroke-color="channelPrimaryColor" />
             </button>
           </div>
           <ProductDeleteModal
@@ -90,6 +90,8 @@ import ChangeIconComponent from '@/vuejs/modules/shared/icon/ChangeIconComponent
 import ProductDeleteModal from '@/vuejs/modules/account/components/favorite/ProductRemoveModal.vue'
 import ProductMoveModal from '@/vuejs/modules/account/components/favorite/ProductMoveModal.vue'
 import { FavoriteProduct } from '@/vuejs/types/Favorite'
+import { storeToRefs } from 'pinia'
+import { useChannelStore } from '@/vuejs/stores/channel'
 
 const emit = defineEmits([
   'removeProduct',
@@ -107,6 +109,8 @@ const price = ref()
 const percent = ref()
 const removeProduct = ref<boolean>(false)
 const moveProduct = ref<boolean>(false)
+
+const { channelPrimaryColor } = storeToRefs(useChannelStore())
 
 const props = defineProps({
   favoriteProduct: {

@@ -1,7 +1,8 @@
 <template>
   <div class="mt-8 mb-2 flex items-center justify-between">
     <h3 class="text-title-35 text-primary">
-      Panier <span class="uppercase">{{ user.account.buyer.name }}</span>
+      Panier
+      <span class="uppercase">{{ user.externalApiData.buyer.name }}</span>
     </h3>
     <ButtonComponent
       v-if="cart.orders && cart.orders.length > 0"

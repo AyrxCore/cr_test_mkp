@@ -1,8 +1,8 @@
 <template>
-  <div v-if="showCarousel" class="relative">
+  <div v-if="showCarousel" class="relative m-auto max-w-screen-94">
     <CarouselListSharedComponent
-      :slides-per-view="2"
-      :space-between="5"
+      :slides-per-view="1"
+      :space-between="10"
       :breakpoints="{
         640: {
           slidesPerView: 6,
@@ -13,6 +13,7 @@
           spaceBetween: 20,
         },
       }"
+      class="swiper-nav-outside"
     >
       <SwiperSlide
         v-for="(seller, key) in sellers"

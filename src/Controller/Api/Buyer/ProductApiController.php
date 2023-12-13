@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Uid\Uuid;
-use Symfony\Contracts\Service\Attribute\Required;
 use Twig\Environment;
 
 class ProductApiController extends AbstractController
@@ -41,21 +40,16 @@ class ProductApiController extends AbstractController
             'value' => '5367',
         ];
 
-    public const PAGE = 1;
+    public const DEFAULT_PAGE_NUMBER = 1;
+    public const DEFAULT_PER_PAGE = 5;
 
-    public const PER_PAGE = 5;
-
-    #[Required]
-    public RequestStack $requestStack;
-
-    #[Required]
-    public EntityManagerInterface $em;
-
-    #[Required]
-    public UpplerProductService $upplerProductService;
-
-    #[Required]
-    public Environment $twig;
+    public function __construct(
+        private RequestStack $requestStack,
+        private EntityManagerInterface $em,
+        private UpplerProductService $upplerProductService,
+        private Environment $twig
+    ) {
+    }
 
     #[Route('/api/variant/{id}', name: 'get_variant')]
     public function variant(int $id): JsonResponse

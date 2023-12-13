@@ -31,17 +31,12 @@ use Zenstruck\Foundry\RepositoryProxy;
  */
 final class AccountFactory extends ModelFactory
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     protected function getDefaults(): array
     {
         return [
             'acceptCGU' => self::faker()->boolean(),
             'createdAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'isEnabled' => false,
+            'enabled' => false,
             'lastConnexion' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'updatedAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'upplerClientId' => self::faker()->regexify('[0-9]{3,4}_[0-9a-z]{50}'),

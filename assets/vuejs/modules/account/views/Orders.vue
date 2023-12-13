@@ -1,7 +1,7 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="primary my-2 text-title-35 lg:mb-2">
+      <h3 class="my-2 text-title-35 text-primary lg:mb-2">
         Historiques de commandes
       </h3>
       <span class="flex text-sm text-gray-500 md:text-base">
@@ -46,11 +46,8 @@ import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
 import { useAlertStore } from '@/vuejs/stores/alert'
 import { storeToRefs } from 'pinia'
-import InformationIconComponent from '@/vuejs/modules/shared/icon/InformationIconComponent.vue'
 import { useOrderStore } from '@/vuejs/stores/order'
 import OrderComponent from '@/vuejs/modules/account/components/OrderComponent.vue'
-import { Invoice } from '@/vuejs/types/Order'
-import { hexToBinary } from '@/vuejs/services/utils'
 
 const orderStore = useOrderStore()
 const alertStore = useAlertStore()

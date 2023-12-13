@@ -13,7 +13,7 @@
             X
           </ButtonComponent>
         </div>
-        <h3 class="home-subtitle mb-3 flex flex-col px-5 text-white">
+        <h3 class="home-title mb-3 flex flex-col px-5 text-white">
           <slot name="title" />
         </h3>
         <slot name="content" />

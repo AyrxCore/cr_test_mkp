@@ -1,18 +1,86 @@
 <template>
-  <div class="footer mt-16">
+  <div
+    class="footer"
+    :style="{
+      color: betterTextColor('primary'),
+    }"
+  >
     <div
-      class="second-part mx-5 my-2 flex max-w-screen-2xl flex-col pt-10 md:m-auto lg:my-4 lg:grid lg:grid-flow-col lg:grid-rows-3 lg:gap-4"
+      class="second-part md:px-15 mx-5 flex flex-wrap justify-between gap-5 py-10 md:m-auto md:px-10 lg:flex-nowrap lg:px-20"
     >
-      <div class="row-span-3 md:px-6 lg:px-3">
+      <div class="mb-4 sm:w-full md:w-5/12 md:flex-1 lg:w-1/5">
+        <h3 class="mb-6 md:mb-4 lg:mb-7">La marketplace QANTIS</h3>
+        <p>
+          Depuis 2001, QANTIS accompagne les entreprises françaises dans leur
+          performance et leur croissance durable en s'appuyant sur 3 moteurs :
+          la centrale d'achat, l'expertise humaine et la marketplace.
+        </p>
+      </div>
+      <div class="mb-4 sm:w-full md:w-5/12 lg:w-1/5">
+        <h3 class="mb-6 lg:mb-7">À propos</h3>
+        <ul>
+          <li>
+            <RouterLink
+              :to="{ name: PageList.CONTACT_PAGE }"
+              @click="gtmEvent('click_footer_contact')"
+            >
+              Nous contacter
+            </RouterLink>
+          </li>
+          <li>
+            <a
+              target="_blank"
+              :href="currentChannel.documents.generalTermsOfUse"
+              @click="gtmEvent('click_footer_cgu')"
+            >
+              Conditions générales d'utilisation
+            </a>
+          </li>
+          <li>
+            <a
+              target="_blank"
+              :href="currentChannel.documents.legalTerms"
+              @click="gtmEvent('click_footer_mentions_legales')"
+            >
+              Mentions légales
+            </a>
+          </li>
+          <li>
+            <a
+              target="_blank"
+              :href="currentChannel.documents.privacyPolicy"
+              @click="gtmEvent('click_footer_politique_confidentialite')"
+            >
+              Politique de confidentialité
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="mb-4 sm:w-full md:mr-4 md:w-5/12 lg:w-1/5">
+        <h3 class="mb-6 lg:mb-7">Votre espace adhérents</h3>
+        <ul>
+          <li>
+            <RouterLink
+              :to="{ name: AccountPageList.ACCOUNT }"
+              @click="gtmEvent('click_footer_account')"
+            >
+              Mon compte
+            </RouterLink>
+          </li>
+          <li>
+            <RouterLink
+              :to="{ name: AccountPageList.ORDERS }"
+              @click="gtmEvent('click_footer_mes_commandes')"
+            >
+              Mes commandes
+            </RouterLink>
+          </li>
+        </ul>
+      </div>
+      <div class="mb-4 sm:w-full md:w-5/12 lg:w-1/5">
         <div class="flex flex-col md:flex-row md:justify-between lg:flex-col">
-          <img :src="qantisLogoImg" alt="header" class="logo-qantis" />
-          <img
-            :src="ecologieLogoImg"
-            alt="header"
-            class="logo-ecolo mt-[3rem] md:mt-0 lg:mt-[3rem]"
-          />
-          <div class="mt-12 md:mt-0 lg:mt-12">
-            <p>Paiment sécurisé par :</p>
+          <div class="md:mt-0">
+            <h3 class="mb-6 lg:mb-7">Paiement sécurisé par&nbsp;:</h3>
             <img
               :src="lemonwayLogoImg"
               alt="header"
@@ -20,150 +88,41 @@
             />
           </div>
         </div>
-        <div
-          class="mt-[3.5rem] flex w-[241px] flex-col md:w-full md:flex-row md:items-center lg:w-[241px] lg:flex-col lg:items-start"
-        >
-          <p class="mb-5 w-full md:w-3/6 lg:w-full">
-            Retrouvez l'actualité économique de la communauté QANTIS sur nos
-            réseaux :
-          </p>
-          <div class="social-network-logo mb-2 inline">
-            <div>
-              <a
-                href="https://www.linkedin.com/company/qantis-co/"
-                target="_blank"
-              >
-                <img :src="linkedInLogoImg" alt="Linkedin" />
-              </a>
-            </div>
-            <div>
-              <a href="https://www.facebook.com/QANTIS.co" target="_blank">
-                <img :src="facebookLogoImg" alt="Facebook" />
-              </a>
-            </div>
-            <div>
-              <a href="https://twitter.com/QANTIS_co" target="_blank">
-                <img :src="twitterLogoImg" alt="Twitter" />
-              </a>
-            </div>
-            <div>
-              <a
-                href="https://www.youtube.com/channel/UCP-ZzEGFZ4rtW0Yx8u1ZDMQ"
-                target="_blank"
-              >
-                <img :src="youtubeLogoImg" alt="Youtube" class="mt-0.5" />
-              </a>
-            </div>
-          </div>
-        </div>
       </div>
-      <div
-        class="mt-6 flex flex-col md:col-span-2 md:grid md:grid-cols-3 md:gap-4 md:px-6 lg:mt-0 lg:px-3"
-      >
-        <div class="px-2 md:px-0 lg:px-2">
-          <h3 class="mb-7 md:mb-4 lg:mb-7">Votre espace adhérents</h3>
-          <ul>
-            <li>
-              <RouterLink :to="{ name: AccountPageList.ACCOUNT }">
-                Mon compte
-              </RouterLink>
-            </li>
-            <!-- <li><a href="#">Mes économies</a></li>
-            <li>
-              <a href="/app/account/orders-history">Historique de commandes</a>
-            </li>
-            <li><a href="#">Factures</a></li> -->
-          </ul>
-        </div>
-        <div class="mt-6 px-2 md:mt-0 md:px-0 lg:px-2">
-          <h3 class="mb-7 md:mb-10 lg:mb-7">À propos</h3>
-          <ul>
-            <li>
-              <RouterLink :to="{ name: PageList.CONTACT_PAGE }">
-                Nous contacter
-              </RouterLink>
-            </li>
-            <li>
-              <RouterLink :to="{ name: PageList.CGU_PAGE }"
-                >Conditions générales d'utilisation
-              </RouterLink>
-            </li>
-            <li>
-              <RouterLink :to="{ name: PageList.MENTIONS_LEGALES_PAGE }"
-                >Mentions légales
-              </RouterLink>
-            </li>
-            <li>
-              <RouterLink :to="{ name: PageList.POLITIQUE_DE_CONFIDENTIALITE }"
-                >Politique de confidentialité
-              </RouterLink>
-            </li>
-          </ul>
-        </div>
-        <div class="mt-6 px-2 md:mt-0 md:px-0 lg:px-2">
-          <h3 class="mb-7 md:mb-4 lg:mb-7">La marketplace QANTIS</h3>
-          <p>
-            Depuis 2001, QANTIS accompagne les entreprises françaises dans leur
-            performance et leur croissance durable en s'appuyant sur 3 moteurs :
-            la centrale d'achat, l'expertise humaine et la marketplace.
-          </p>
-        </div>
-      </div>
-      <div class="mt-4 md:col-span-2 md:row-span-2">
-        <h3 class="mb-5 px-2 md:mb-4 lg:mb-7">Nos catégories d'achats</h3>
-        <ul class="three-column-list">
-          <li v-for="category in categories" :key="category.id" class="px-2">
-            <RouterLink
-              :to="{
-                name: ProductPageList.PRODUCTS,
-                query: { category: category.id },
-              }"
-              replace
-            >
-              {{ category.name }}
-            </RouterLink>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <hr class="m-auto w-11/12 border md:max-w-screen-2xl" />
-    <div
-      class="m-auto mt-7 py-10 px-5 text-left text-sm md:max-w-screen-2xl md:text-center lg:mt-10 lg:px-0 lg:text-lg"
-    >
-      © QANTIS. Tous droits réservés - QANTIS, 185, allée des Cyprès, 69760
-      LIMONEST, FRANCE
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { getImage } from '@/vuejs/services/utils'
-import qantisLogo from '@/vuejs/assets/img/logo_qantis_footer.png'
-import ecologieLogo from '@/vuejs/assets/img/coq_vert_footer_logo.png'
-import lemonwayLogo from '@/vuejs/assets/img/lemonway_footer_logo.png'
-import linkedInLogo from '@/vuejs/assets/img/Pictos/linkedin_logo.png'
-import twitterLogo from '@/vuejs/assets/img/Pictos/twitter_logo.png'
-import youtubeLogo from '@/vuejs/assets/img/Pictos/youtube_logo.png'
-import facebookLogo from '@/vuejs/assets/img/Pictos/facebook_social_logo.png'
-import { useCategoryStore } from '@/vuejs/stores/category'
 import { computed } from 'vue'
-import { AccountPageList, ProductPageList } from '@/vuejs/router/pages-list'
-import { PageList } from '@/vuejs/router'
 
-const qantisLogoImg = getImage(qantisLogo)
-const ecologieLogoImg = getImage(ecologieLogo)
+import lemonwayLogo from '@/vuejs/assets/img/lemonway_footer_logo.png'
+import { betterTextColor, getImage } from '@/vuejs/services/utils'
+import { useCategoryStore } from '@/vuejs/stores/category'
+import { useUserStore } from '@/vuejs/stores/user'
+import { useChannelStore } from '@/vuejs/stores/channel'
+import { AccountPageList } from '@/vuejs/router/pages-list'
+import { PageList } from '@/vuejs/router'
+import { buildStandardGtmData, gtmMixinPushEvent } from '@/vuejs/services/gtm'
+
 const lemonwayLogoImg = getImage(lemonwayLogo)
 
-const linkedInLogoImg = getImage(linkedInLogo)
-const twitterLogoImg = getImage(twitterLogo)
-const youtubeLogoImg = getImage(youtubeLogo)
-const facebookLogoImg = getImage(facebookLogo)
-
 const categoryStore = useCategoryStore()
+const userStore = useUserStore()
+const channelStore = useChannelStore()
 
 const categories = computed(() => {
   return categoryStore.categories
 })
+
+const currentChannel = channelStore.currentChannel
+
+const gtmEvent = (eventName: string) => {
+  gtmMixinPushEvent(
+    eventName,
+    buildStandardGtmData(userStore.user['@id'], currentChannel.name),
+  )
+}
 </script>
 
 <style lang="scss">
@@ -171,17 +130,15 @@ const categories = computed(() => {
   @apply m-0 columns-1 p-0 md:columns-2 lg:columns-3;
 }
 
-@import 'assets/style/_variables.scss';
 .footer {
-  background-color: $primary;
-  color: #ffffff;
+  background-color: var(--primary-color);
   width: 100%;
 }
 
 .footer h3 {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 700;
-  line-height: 26px;
+  line-height: 28px;
   text-align: left;
 }
 
@@ -198,17 +155,6 @@ const categories = computed(() => {
   @apply m-5 sm:mx-12 xl:mx-24;
 }
 
-.footer .logo-qantis {
-  height: 98px;
-  width: 202px;
-}
-
-.footer .logo-ecolo {
-  height: 69px;
-  width: 202px;
-  top: 144px;
-}
-
 .footer .logo-lemway {
   height: 48px;
   width: 209px;
@@ -216,7 +162,7 @@ const categories = computed(() => {
 }
 
 .footer ul li a:hover {
-  border-bottom: 2px solid $secondary;
+  @apply border-b-2 border-secondary;
 }
 
 .footer .social-network-logo div {

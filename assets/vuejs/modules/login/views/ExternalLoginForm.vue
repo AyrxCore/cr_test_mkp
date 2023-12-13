@@ -48,7 +48,7 @@
               <ButtonComponent
                 :is-loading="isLoading"
                 type="submit"
-                class="button-secondary-outline"
+                class="button-secondary-outline hover:bg-secondary"
               >
                 Me connecter
               </ButtonComponent>
@@ -66,9 +66,9 @@
             <p class="text-gray-500">
               Une question ? Appelez-nous :
               <a
-                :href="`tel:${PHONE_ANIMATION}`"
+                :href="`tel:${channel?.phoneNumber}`"
                 class="text-secondary underline lg:text-right"
-                >{{ PHONE_ANIMATION }}</a
+                >{{ channelPhoneNumber }}</a
               >
             </p>
           </div>
@@ -87,9 +87,8 @@
             <AlertSharedComponent />
           </div>
           <div class="mb-5">
-            <h1 class="home-subtitle text-gradient">
-              Bonjour
-              {{ userAccounts[0]._user?.firstName || '' }}
+            <h1 class="home-title text-gradient">
+              Bonjour {{ userFirstName }}
             </h1>
             <h3 class="text-gray-500">
               Veuillez sélectionner le compte acheteur avec lequel vous
@@ -98,27 +97,27 @@
           </div>
           <div v-for="(account, id) in userAccounts" :key="id">
             <label
-              v-if="account.upplerData"
+              v-if="account.externalApiData"
               :for="`account-radio-${id}`"
               class="mb-3 flex cursor-pointer items-center rounded-md bg-white px-4 py-2"
             >
               <input
+                :id="`account-radio-${id}`"
                 v-model="accountSelectedId"
                 :value="account.id"
-                :id="`account-radio-${id}`"
                 type="radio"
                 class="mr-4"
                 @change="onChangeBuyer(account.acceptCGU)"
               />
               <div>
                 <div class="font-bold uppercase text-primary">
-                  {{ account.upplerData?.name }}
+                  {{ account.externalApiData.name }}
                 </div>
                 <div
-                  v-if="account.upplerData?.number"
+                  v-if="account.externalApiData.number"
                   class="font-bold text-gray-500"
                 >
-                  SIRET : {{ account.upplerData?.number }}
+                  SIRET : {{ account.externalApiData.number }}
                 </div>
               </div>
             </label>
@@ -144,7 +143,7 @@
   <CGUModal v-if="showCGUModal" class="modal" @valid-cgu="valideCGU" />
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import AchetonsEnsembleComponent from '@/vuejs/modules/shared/AchetonsEnsembleComponent.vue'
@@ -157,14 +156,17 @@ import EyeSlashIcon from '@/vuejs/modules/shared/icon/EyeSlashIconComponent.vue'
 import MailIcon from '@/vuejs/modules/shared/icon/MailIconComponent.vue'
 
 import { getUrlParam } from '@/vuejs/services/utils'
-import { PHONE_ANIMATION } from '@/vuejs/services/const'
 import { AlertType } from '@/vuejs/types/Alert'
 import { useAlertStore } from '@/vuejs/stores/alert'
 import { useUserStore } from '@/vuejs/stores/user'
+import { useChannelStore } from '@/vuejs/stores/channel'
+import { Account } from '@/vuejs/types/Account'
+import { getErrorMessage } from '@/vuejs/services/login'
+import { LoginResponse } from '@/vuejs/types/User'
 
 const username = ref<string>('')
 const password = ref<string>('')
-const userAccounts = ref<any[]>([])
+const userAccounts = ref<Account[]>([])
 const isLoading = ref<boolean>(false)
 const userStore = useUserStore()
 const alertStore = useAlertStore()
@@ -175,6 +177,10 @@ const showCGUModal = ref<boolean>(false)
 
 const { show: showAlert } = storeToRefs(alertStore)
 
+const { channel, formattedPhoneNumber: channelPhoneNumber } = storeToRefs(
+  useChannelStore(),
+)
+
 const loginSubmit = async () => {
   if (isLoading.value) return
   alertStore.setClose()
@@ -184,16 +190,25 @@ const loginSubmit = async () => {
     password: password.value,
   })
 
-  if (accounts.length === 0) {
+  if (!accounts.length) {
     isLoading.value = false
+
+    alertStore.setShow(
+      getErrorMessage(LoginResponse.UserEmptyAccount),
+      AlertType.danger,
+    )
+
     return false
   }
 
   if (accounts.length > 1) {
     userAccounts.value = accounts
   } else {
-    accountSelectedId.value = accounts[0].id
-    if (accounts[0].acceptCGU) {
+    const [firstAccount] = accounts
+
+    accountSelectedId.value = firstAccount.id
+
+    if (firstAccount.acceptCGU) {
       await selectAccount(accountSelectedId.value)
     } else {
       showCGUModal.value = true
@@ -207,24 +222,26 @@ const toggleShowPassword = () => {
 }
 
 const selectAccount = async (accountId) => {
-  isLoading.value = true
-  if (accountId) {
-    const select = await userStore.selectUserAccount(accountId)
-    window.dataLayer?.push({
-      event: 'login',
-    })
-
-    const target = getUrlParam('target')
-    select && (document.location.href = target ? `/${target}` : '/')
-
-    isLoading.value = false
-  } else {
-    isLoading.value = false
+  if (!accountId) {
     alertStore.setShow(
       'Vous devez sélectionner un compte acheteur pour vous connecter',
       AlertType.danger,
     )
+
+    return
   }
+
+  isLoading.value = true
+
+  const select = await userStore.selectUserAccount(accountId)
+  window.dataLayer?.push({
+    event: 'login',
+  })
+
+  const target = getUrlParam('target')
+  select && (document.location.href = target ? `/${target}` : '/')
+
+  isLoading.value = false
 }
 const onAccountClick = async () => {
   if (!accountAcceptCGU.value && accountSelectedId.value) {
@@ -242,4 +259,10 @@ const valideCGU = async () => {
   showCGUModal.value = false
   await selectAccount(accountSelectedId.value)
 }
+
+const userFirstName = computed(() => {
+  const [firstUserAccount] = userAccounts.value
+
+  return firstUserAccount.user?.firstName || ''
+})
 </script>

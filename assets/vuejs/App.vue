@@ -36,6 +36,7 @@ import CmsPageComponent from '@/vuejs/modules/shared/CmsPageComponent.vue'
 import { useCategoryStore } from '@/vuejs/stores/category'
 import { useAddressStore } from '@/vuejs/stores/address'
 import { useCartStore } from '@/vuejs/stores/cart'
+import { useChannelStore } from '@/vuejs/stores/channel'
 import router from './router'
 import { CartPageList } from './router/pages-list'
 import {
@@ -45,6 +46,7 @@ import {
 import { useBannerStore } from '@/vuejs/stores/banner'
 
 const cartStore = useCartStore()
+const channelStore = useChannelStore()
 const companyStore = useAddressStore()
 const categoryStore = useCategoryStore()
 const bannerStore = useBannerStore()
@@ -58,6 +60,9 @@ const props = defineProps({
 })
 
 onBeforeMount(async () => {
+  // The channel must be the first thing to fetch because we need to send every other requests with the "X-Channel" header
+  await channelStore.getChannel(window.location.hostname)
+
   if (props.component === '') {
     await Promise.all([
       companyStore.getAddresses(),
@@ -83,9 +88,18 @@ onMounted(async () => {
 <style lang="postcss">
 body {
   font-family: 'CoText';
-  background: #f2f0f6;
+  background: var(--body-background);
+  //color: var(--default-text-color);
 }
+h3 {
+  font-family: 'CoText';
+}
+
+.ff-roboto {
+  font-family: 'Roboto';
+}
+
 #gravite_widget_button_container {
-  top: 80%!important;
+  top: 80% !important;
 }
 </style>

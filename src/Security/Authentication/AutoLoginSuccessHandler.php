@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Security\Authentication;
 
+use App\Controller\ChannelAwareControllerInterface;
+use App\Controller\ChannelAwareControllerTrait;
 use App\Events\UserAcceptCGUEvent;
 use App\Service\UpplerAuthenticationService;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -16,30 +19,19 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
-use Symfony\Contracts\Service\Attribute\Required;
 
-class AutoLoginSuccessHandler implements AuthenticationSuccessHandlerInterface
+class AutoLoginSuccessHandler implements AuthenticationSuccessHandlerInterface, ChannelAwareControllerInterface
 {
-    #[Required]
-    public EventDispatcherInterface $eventDispatcher;
+    use ChannelAwareControllerTrait;
 
-    #[Required]
-    public EntityManagerInterface $entityManager;
-
-    #[Required]
-    public RequestStack $requestStack;
-
-    #[Required]
-    public JWTTokenManagerInterface $JWTManager;
-
-    #[Required]
-    public UrlGeneratorInterface $router;
-
-    #[Required]
-    public UpplerAuthenticationService $upplerAuthenticationService;
-
-    public function __construct()
-    {
+    public function __construct(
+        public EventDispatcherInterface $eventDispatcher,
+        public EntityManagerInterface $entityManager,
+        public JWTTokenManagerInterface $JWTManager,
+        public RequestStack $requestStack,
+        public UpplerAuthenticationService $upplerAuthenticationService,
+        public UrlGeneratorInterface $router,
+    ) {
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token): RedirectResponse
@@ -48,18 +40,17 @@ class AutoLoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         /** @var User $user */
         $user = $token->getUser();
         $token = $this->JWTManager->create($user);
-        $selectedAccount = null;
-        foreach ($user->getAccounts() as $account) {
-            if (!$account->isEnabled()) {
-                continue;
+
+        try {
+            $response = new RedirectResponse($this->router->generate('prehome'));
+
+            if (!$channel = $this->getChannel($request)) {
+                throw new \Exception();
             }
-            $selectedAccount = $account;
-            break;
-        }
 
-        $response = new RedirectResponse($this->router->generate('prehome'));
-
-        if ($selectedAccount !== null) {
+            if (!$account = $user->getFirstEnabledAccount($channel)) {
+                throw new \Exception('No account available');
+            }
             $authSuccess = $this->upplerAuthenticationService->authenticateUser(
                 $account
             );
@@ -69,14 +60,16 @@ class AutoLoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                     $event = new UserAcceptCGUEvent($account);
                     $this->eventDispatcher->dispatch($event);
                 }
-                $user->setIsEnabled(true);
+                $user->setEnabled(true);
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();
 
                 $response->headers->setCookie(new Cookie('BEARER', $token));
             }
-        }
 
-        return $response;
+            return $response;
+        } catch (Exception) {
+            return $response;
+        }
     }
 }

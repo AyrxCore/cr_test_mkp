@@ -1,0 +1,197 @@
+{
+  "@context": "\/api\/contexts\/Product",
+  "@id": "\/api\/products",
+  "@type": "hydra:Collection",
+  "hydra:member": [
+    {
+      "results": [
+        {
+          "id": 19365,
+          "name": "Transpalette manuel, charge max 2500kg",
+          "slug": "transpalette-manuel-charge-max-2500kg-17-tpm-25-5-19365",
+          "description": "\u003Cp\u003ETranspalette manuel, charge max 2500kg\u003C\/p\u003E",
+          "images": [
+            "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/64\/a9\/202f54ac84b1df960d2269ec4a3d.jpeg"
+          ],
+          "variants": [
+            {
+              "id": 47478,
+              "sku": "17-TPM-25"
+            },
+            {
+              "id": 47477,
+              "sku": null
+            }
+          ],
+          "defaultVariantId": 47478,
+          "defaultVariantOptions": [],
+          "priceReference": 548,
+          "price": 274,
+          "isAccordCadre": false,
+          "seller": {
+            "id": 26,
+            "name": "KRÖMM",
+            "avatar": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/d4\/0f\/e751ba2240d6697e744a20f21d08.jpg"
+          },
+          "favorites": []
+        },
+        {
+          "id": 16797,
+          "name": "Publicité adhésive pour véhicules taille M",
+          "slug": "publicite-adhesive-pour-vehicules-taille-m-pub-adh-m-2-16797",
+          "description": "\u003Cp\u003E2 adh\u0026eacute;sifs lat\u0026eacute;raux de 1200 x 400 mm et un adh\u0026eacute;sif 1300 x 400 mm pour la lunette arri\u0026egrave;re. Impression quadri et lamination brillante.\u003C\/p\u003E",
+          "images": [
+            "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/61\/6a\/f6f700e2382da7a7eacdfb1fef05.jpeg",
+            "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/04\/48\/abdd8f62211a17ed9a2ba289b03c.jpeg",
+            "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/b0\/8e\/166d92cc5e29826e6d4bdd772c8f.jpeg",
+            "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/7b\/3e\/704d8b4934a0e636c71cae3d50e4.png"
+          ],
+          "variants": [
+            {
+              "id": 36823,
+              "sku": "pub-adh-m-3241062234557+3241062234555+3241062234558"
+            },
+            {
+              "id": 36818,
+              "sku": "pub-adh-m-3241062234557"
+            },
+            {
+              "id": 36819,
+              "sku": "pub-adh-m-3241062234557+3241062234555"
+            },
+            {
+              "id": 36820,
+              "sku": "pub-adh-m-3241062234556+3241062234558"
+            },
+            {
+              "id": 36821,
+              "sku": "pub-adh-m-3241062234556+3241062234555+3241062234558"
+            },
+            {
+              "id": 36822,
+              "sku": "pub-adh-m-3241062234557+3241062234558"
+            },
+            {
+              "id": 36816,
+              "sku": "pub-adh-m-3241062234556"
+            },
+            {
+              "id": 36817,
+              "sku": "pub-adh-m-3241062234556+3241062234555"
+            },
+            {
+              "id": 36815,
+              "sku": null
+            }
+          ],
+          "defaultVariantId": 36823,
+          "defaultVariantOptions": [],
+          "priceReference": 500,
+          "price": 216,
+          "isAccordCadre": false,
+          "seller": {
+            "id": 29,
+            "name": "SIGNO DECO",
+            "avatar": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/81\/9a\/50e314a50d57f442d6f23d83d5f5.jpg"
+          },
+          "favorites": []
+        },
+        {
+          "id": 18018,
+          "name": "Cartouche laser compatible à la marque HP CF294X noir haute capacité",
+          "slug": "cartouche-laser-compatible-a-la-marque-hp-cf294x-noir-haute-capacite-07340-18018",
+          "description": "\u003Cp\u003ECartouche laser compatible \u0026agrave; la marque HP CF294X noir haute capacit\u0026eacute;.\u003C\/p\u003E",
+          "images": [
+            "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/34\/84\/fcc026320411e3c235431d92ea68.jpeg"
+          ],
+          "variants": [
+            {
+              "id": 40665,
+              "sku": "07340"
+            },
+            {
+              "id": 40664,
+              "sku": null
+            }
+          ],
+          "defaultVariantId": 40665,
+          "defaultVariantOptions": [],
+          "priceReference": 136.32,
+          "price": 103.66,
+          "isAccordCadre": false,
+          "seller": {
+            "id": 27,
+            "name": "ALDA MAJUSCULE",
+            "avatar": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/ab\/b9\/2d7801781d79e920be51e43421e2.jpg"
+          },
+          "favorites": []
+        },
+        {
+          "id": 24501,
+          "name": "VISSEUSE PLACO CARTON 18V",
+          "slug": "visseuse-placo-carton-18v-366308-24501",
+          "description": "\u003Cp\u003EVisseuse plaque de pl\u0026acirc;tre BL 18V, Carton\u003C\/p\u003E",
+          "images": [
+            "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/3c\/0c\/3b79483329df4139851a49100edf.jpeg"
+          ],
+          "variants": [
+            {
+              "id": 57756,
+              "sku": "366308"
+            },
+            {
+              "id": 57755,
+              "sku": null
+            }
+          ],
+          "defaultVariantId": 57756,
+          "defaultVariantOptions": [],
+          "priceReference": 469,
+          "price": 328.3,
+          "isAccordCadre": false,
+          "seller": {
+            "id": 22,
+            "name": "BERNER",
+            "avatar": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/1c\/f6\/905138fcfe98f4f0cc450b09bd02.png"
+          },
+          "favorites": []
+        },
+        {
+          "id": 12260,
+          "name": "Energizer Ultimate ultra lithium AAA E92",
+          "slug": "energizer-ultimate-ultra-lithium-aaa-e92-lr3lthb4ener-12260",
+          "description": "\u003Cp\u003EBlisters de 4 piles Energizer Ultimate Lithium - AAA E92\u003C\/p\u003E",
+          "images": [
+            "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/07\/22\/a21df9f7744b54d473103bfe59ea.jpeg"
+          ],
+          "variants": [
+            {
+              "id": 24546,
+              "sku": "LR3LTHB4ENER"
+            },
+            {
+              "id": 24545,
+              "sku": null
+            }
+          ],
+          "defaultVariantId": 24546,
+          "defaultVariantOptions": [],
+          "priceReference": 13,
+          "price": 6.5,
+          "isAccordCadre": false,
+          "seller": {
+            "id": 25,
+            "name": "AEA - AIN ENERGIE AUTONOME",
+            "avatar": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/e3\/31\/a5a46ca53be781498b44085ca9ce.jpg"
+          },
+          "favorites": []
+        }
+      ]
+    }
+  ],
+  "hydra:totalItems":1,
+  "hydra:view":{
+    "@id":"\/api\/products?perPage=5",
+    "@type":"hydra:PartialCollectionView"
+  }
+}

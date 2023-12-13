@@ -11,20 +11,23 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     itemOperations: [
-        'get',
+        'get' => [
+            'normalization_context' => ['groups' => ['user:simple', 'adherent:get']],
+        ],
         'update' => [
             'openapi_context' => [
                 'summary' => 'Modifier un adherent',
-                'description' => 'Permet de mettre a jour le code bonuus et les rattachements',
+                'description' => 'Permet de mettre à jour le channel, le code bonuus et les rattachements',
             ],
             'method' => 'PATCH',
             'validate' => true,
             'denormalizationContext' => ['groups' => 'update'],
         ],
-    ]
+    ],
 )]
 #[ORM\Entity(repositoryClass: AdherentRepository::class)]
 class Adherent
@@ -32,10 +35,11 @@ class Adherent
     // DO NOT AUTO GENERATE IDs AS THEY'RE FROM NEO/SUGAR
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
-    #[Groups(['update'])]
+    #[Groups(['update', 'adherent:get'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['adherent:get'])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'adherent', targetEntity: AccordStatut::class, orphanRemoval: true)]
@@ -45,10 +49,11 @@ class Adherent
     private Collection $accounts;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['simpleUser', 'update'])]
+    #[Groups(['user:simple', 'update', 'adherent:get'])]
     private ?string $reducceCode = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['adherent:get'])]
     private ?string $siret = null;
 
     #[Groups(['update'])]
@@ -71,6 +76,19 @@ class Adherent
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $hashkey = null;
+
+    #[Groups(['user:simple', 'adherent:get'])]
+    #[ORM\Column(nullable: true)]
+    #[Assert\Url(
+        message: 'A channel logo must be an URL',
+    )]
+    private ?string $logo = null;
+
+    #[ORM\ManyToOne(inversedBy: 'adherents')]
+    private ?Channel $channel = null;
+
+    #[Groups(['update'])]
+    private ?string $channelCode = null;
 
     public function __construct()
     {
@@ -100,9 +118,6 @@ class Adherent
         return $this;
     }
 
-    /**
-     * @return Collection<int, AccordStatut>
-     */
     public function getAccordStatuts(): Collection
     {
         return $this->accordStatuts;
@@ -113,9 +128,6 @@ class Adherent
         $this->accordStatuts = $accordStatuts;
     }
 
-    /**
-     * @return Collection<int, Account>
-     */
     public function getAccounts(): Collection
     {
         return $this->accounts;
@@ -134,7 +146,6 @@ class Adherent
     public function removeAccount(Account $account): self
     {
         if ($this->accounts->removeElement($account)) {
-            // set the owning side to null (unless already changed)
             if ($account->getAdherent() === $this) {
                 $account->setAdherent(null);
             }
@@ -247,5 +258,39 @@ class Adherent
         $this->hashkey = $hashkey;
 
         return $this;
+    }
+
+    public function getLogo(): ?string
+    {
+        return $this->logo;
+    }
+
+    public function setLogo(?string $logo): self
+    {
+        $this->logo = $logo;
+
+        return $this;
+    }
+
+    public function getChannel(): ?Channel
+    {
+        return $this->channel;
+    }
+
+    public function setChannel(?Channel $channel): self
+    {
+        $this->channel = $channel;
+
+        return $this;
+    }
+
+    public function getChannelCode(): ?string
+    {
+        return $this->channelCode;
+    }
+
+    public function setChannelCode(?string $channelCode): void
+    {
+        $this->channelCode = $channelCode;
     }
 }

@@ -7,52 +7,40 @@ namespace App\Controller\Api;
 use App\Entity\Account;
 use App\Entity\User;
 use App\Entity\UserInfoUpdateRequest;
-use App\Events\UserAcceptCGUEvent;
 use App\Events\UserInfoUpdateEvent;
 use App\Service\UpplerAccountService;
 use App\Service\UpplerAuthenticationService;
 use App\Service\UpplerBuyerCompanyService;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Contracts\Service\Attribute\Required;
 
 #[Route('/api/user')]
 class UserApiController extends AbstractController
 {
-    #[Required]
-    public RequestStack $requestStack;
-
-    #[Required]
-    public EntityManagerInterface $em;
-
-    #[Required]
-    public UpplerAuthenticationService $upplerAuthenticationService;
-
-    #[Required]
-    public UpplerBuyerCompanyService $upplerBuyerCompanyService;
-
-    #[Required]
-    public UpplerAccountService $upplerAccountService;
-
-    #[Required]
-    public EventDispatcherInterface $eventDispatcher;
-
-    #[Required]
-    public JWTTokenManagerInterface $JWTTokenManager;
+    public function __construct(
+        public RequestStack $requestStack,
+        public UpplerAuthenticationService $upplerAuthenticationService,
+        public UpplerBuyerCompanyService $upplerBuyerCompanyService,
+        public UpplerAccountService $upplerAccountService,
+        private EntityManagerInterface $em,
+        public EventDispatcherInterface $eventDispatcher,
+        public JWTTokenManagerInterface $JWTTokenManager,
+    ) {
+    }
 
     #[Route('/email-change/{token}', name: 'changing_email_action')]
-    public function emailChanging(string $token)
+    public function emailChanging(string $token): RedirectResponse
     {
         $log = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy(['emailChangingToken' => $token]);
         $user = $log->getUser();
@@ -76,22 +64,6 @@ class UserApiController extends AbstractController
         return $this->redirect('/account/details');
     }
 
-    #[Route('/me', name: 'get_me')]
-    public function me(NormalizerInterface $normalizer): JsonResponse
-    {
-        $session = $this->requestStack->getSession();
-
-        $buyerData = $this->upplerBuyerCompanyService->getUserBuyerData();
-        $subAccountData = $this->upplerAccountService->getUserSubAccountData();
-        $user = $normalizer->normalize($this->getUser(), 'json', ['groups' => 'simpleUser']);
-        $account = $normalizer->normalize($session->get('account'), 'json', ['groups' => 'simpleUser']);
-        $user['account'] = $account;
-        $user['account']['subaccount'] = $subAccountData;
-        $user['account']['buyer'] = $buyerData;
-
-        return new JsonResponse($user);
-    }
-
     #[Route('/accounts')]
     public function accounts(NormalizerInterface $normalizer): JsonResponse
     {
@@ -105,7 +77,7 @@ class UserApiController extends AbstractController
                 continue;
             }
             $data = $this->upplerBuyerCompanyService->getBuyerByCompanyId($account->getUpplerCompanyId());
-            $serializeAccount = $normalizer->normalize($account, 'json', ['groups' => 'simpleUser']);
+            $serializeAccount = $normalizer->normalize($account, 'json', ['groups' => 'user:simple']);
             $serializeAccount['upplerData'] = $data;
             $accounts[] = $serializeAccount;
         }
@@ -113,30 +85,8 @@ class UserApiController extends AbstractController
         return new JsonResponse($accounts);
     }
 
-    #[Route('/account/{id}/select')]
-    #[ParamConverter('id', Account::class)]
-    public function selectAccount(NormalizerInterface $normalizer, Account $account): JsonResponse
-    {
-        $session = $this->requestStack->getSession();
-
-        $userAuth = $this->upplerAuthenticationService->authenticateUser(
-            $account
-        );
-
-        if ($userAuth && $session->has('access_token') && !empty($session->get('access_token'))) {
-            if (empty($account->isAcceptCGU())) {
-                $event = new UserAcceptCGUEvent($account);
-                $this->eventDispatcher->dispatch($event);
-            }
-
-            return new JsonResponse(['status' => 'ok']);
-        }
-
-        throw new \Exception('Vous n\'avez pas accès à ce compte');
-    }
-
     #[Route('/logout')]
-    public function logout(Request $request)
+    public function logout(Request $request): Response
     {
         $request->getSession()->invalidate();
         $response = new Response();
@@ -145,6 +95,7 @@ class UserApiController extends AbstractController
         return $response;
     }
 
+    // TODO: replace with a custom operation => https://api-platform.com/docs/v2.6/core/controllers/
     #[Route('/change-password')]
     public function changePassword(
         Request $request,

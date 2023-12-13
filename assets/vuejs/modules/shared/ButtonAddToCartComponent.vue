@@ -1,10 +1,18 @@
 <template>
   <ButtonComponent
-    class="button-gradient"
+    class="button-primary"
+    :style="{
+      color: betterTextColor('primary'),
+    }"
     :is-loading="isLoading"
     @click="addToCart"
   >
-    <ShoppingCartIconComponent class="mr-2 w-4" />
+    <ShoppingCartIconComponent
+      class="mr-2 w-4"
+      :style="{
+        stroke: betterTextColor('primary'),
+      }"
+    />
     Ajouter
   </ButtonComponent>
 </template>
@@ -16,6 +24,7 @@ import { PropType, ref } from 'vue'
 import { useCartStore } from '@/vuejs/stores/cart'
 import { Product } from '@/vuejs/types/Product'
 import { addProductToCartGoogleAnalytics } from '@/vuejs/modules/products'
+import { betterTextColor } from '@/vuejs/services/utils'
 
 const cartStore = useCartStore()
 const props = defineProps({

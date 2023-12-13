@@ -5,7 +5,7 @@
     <slot name="method-icon" />
     <ButtonComponent
       :is-loading="isLoading"
-      class="button-gradient mt-4 !whitespace-normal"
+      class="button button-gradient mt-4 !whitespace-normal"
       @click="emit('selectMethod')"
     >
       Choisir le paiement par {{ method.name.default }}

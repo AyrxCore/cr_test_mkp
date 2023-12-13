@@ -67,9 +67,7 @@
           v-else
           class="xs:w-full m-auto my-4 flex max-w-screen-2xl flex-col items-center justify-center p-10"
         >
-          <div class="text-gray-500">
-            Aucune liste avec cet identifiant n'a été trouvée
-          </div>
+          <div>Aucune liste avec cet identifiant n'a été trouvée</div>
           <RouterLink
             class="button button-gradient mt-10 w-auto md:w-auto"
             :to="{ name: PageList.FAVORITES_LIST }"
@@ -221,6 +219,5 @@ watch(
   { immediate: true },
 )
 </script>
-OK
 
 <style scoped></style>

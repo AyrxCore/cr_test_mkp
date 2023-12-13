@@ -26,7 +26,7 @@ final class AuthenticationStory extends Story
                     'password' => '000000',
                     'firstName' => 'test_role_api_user_disabled',
                     'lastName' => 'TEST',
-                    'isEnabled' => false,
+                    'enabled' => false,
                     'roles' => ['ROLE_API'],
                 ],
                 [
@@ -35,7 +35,7 @@ final class AuthenticationStory extends Story
                     'password' => '000000',
                     'firstName' => 'test_user_without_account',
                     'lastName' => 'TEST',
-                    'isEnabled' => true,
+                    'enabled' => true,
                     'roles' => [],
                 ],
                 [
@@ -44,11 +44,9 @@ final class AuthenticationStory extends Story
                     'password' => '000000',
                     'firstName' => 'test_user_with_disabled_account',
                     'lastName' => 'TEST',
-                    'isEnabled' => true,
+                    'enabled' => true,
                     'accounts' => [
-                        AccountFactory::new([
-                            'isEnabled' => false,
-                        ]),
+                        AccountFactory::new(),
                     ],
                 ],
             ])

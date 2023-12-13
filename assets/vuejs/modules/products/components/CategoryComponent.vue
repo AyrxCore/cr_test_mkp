@@ -1,6 +1,6 @@
 <template>
   <h3
-    class="mt-6 inline flex items-center text-left text-primary"
+    class="mt-6 flex items-center text-left text-primary"
     :class="{
       'text-sm font-bold md:text-base lg:text-lg': !category.parentId,
       'flex justify-between': category.parentId !== null,

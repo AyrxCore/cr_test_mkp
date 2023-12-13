@@ -11,16 +11,18 @@ use Zenstruck\Foundry\Story;
 
 /**
  * @method static UserStory adherentQantis()
+ * @method static UserStory adherentMoulinPierre()
  */
 final class UserStory extends Story
 {
     public function build(): void
     {
-        AdherentFactory::new()
+        $this->addState('adherentMoulinPierre', AdherentFactory::new()
             ->create([
                 'id' => 'ea83cae0-57fa-11ec-9a30-025bcd73cb12',
                 'name' => 'LE MOULIN DE PIERRE EURL',
-            ]);
+                'channel' => ChannelStory::channelCedap(),
+            ]));
 
         $this->addState('adherentQantis', AdherentFactory::new()
             ->create([
@@ -32,6 +34,7 @@ final class UserStory extends Story
                 'postalcode' => '69760',
                 'country' => 'FRANCE',
                 'activiteApe' => 'SERVICE',
+                'channel' => ChannelStory::channelQantisAchat(),
             ]));
 
         UserFactory::new()
@@ -41,7 +44,7 @@ final class UserStory extends Story
                 'password' => '23AP4DF8',
                 'firstName' => 'Gaëtan',
                 'lastName' => 'DE SAINTE MARIE',
-                'isEnabled' => true,
+                'enabled' => true,
                 'accounts' => [
                     AccountFactory::new([
                         'upplerClientId' => '101_3l3ueqlt27eog4co400wo0g0kcswg80sk4wocwsgoww4c80ko4',
@@ -50,7 +53,7 @@ final class UserStory extends Story
                         'upplerSubAccountId' => '23',
                         'upplerCompanyId' => '72',
                         'adherent' => self::adherentQantis(),
-                        'isEnabled' => true,
+                        'enabled' => true,
                         'phone' => '04 05 06 07 08',
                         'serviceFonction' => 'service produits',
                     ]),
@@ -60,8 +63,8 @@ final class UserStory extends Story
                         'upplerUserId' => '1654',
                         'upplerSubAccountId' => '867',
                         'upplerCompanyId' => '575',
-                        'adherent' => self::adherentQantis(),
-                        'isEnabled' => true,
+                        'adherent' => self::adherentMoulinPierre(),
+                        'enabled' => true,
                         'phone' => '04 05 06 07 08',
                         'serviceFonction' => 'service produits',
                     ]),
@@ -75,7 +78,7 @@ final class UserStory extends Story
                 'password' => '23AP4DF8',
                 'firstName' => 'Api',
                 'lastName' => 'User',
-                'isEnabled' => true,
+                'enabled' => true,
                 'roles' => ['ROLE_API'],
             ]);
     }

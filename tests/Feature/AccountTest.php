@@ -3,31 +3,17 @@
 declare(strict_types=1);
 
 use App\DataFixtures\Factory\AccountFactory;
-use App\DataFixtures\Factory\AdherentFactory;
 use App\DataFixtures\Factory\UserFactory;
+use App\Tests\Story\Account\UserStory;
 
-\it('returns an error on collection operations', function (
-    string $method,
-    string $expectedResponse
-) {
+\it('returns an error on collection operations', function () {
     $client = $this::createClientWithCredentials();
 
-    $client->request($method, '/api/accounts');
+    $client->request('POST', '/api/accounts');
 
-    $this->assertResponseStatusCodeSame(404);
-    $this->assertJsonResponseMatches($expectedResponse);
-})
-    ->with([
-        'GET' => [
-            'method' => 'GET',
-            'expectedResponse' => 'account/get-collection-not-found-response.json',
-        ],
-        'POST' => [
-            'method' => 'POST',
-            'expectedResponse' => 'account/post-not-found-response.json',
-        ],
-    ])
-    ->group('accounts');
+    $this->assertResponseStatusCodeSame(405);
+    $this->assertJsonResponseMatches('account/post-not-found-response.json');
+})->group('accounts');
 
 \it('returns a 405 Method Not Allowed when trying to PATCH an account', function () {
     $client = $this::createClientWithCredentials();
@@ -60,15 +46,16 @@ use App\DataFixtures\Factory\UserFactory;
     $this->assertJsonResponseMatches('account/delete-not-allowed-response.json');
 })->group('accounts');
 
-\it('returns a 403 Forbidden when trying to GET an account which belongs to another user', function () {
+\it('returns a 404 Forbidden when trying to GET an account which belongs to another user', function () {
     UserFactory::new([
         'username' => 'some_user',
         'password' => 'password',
-        'isEnabled' => true,
+        'enabled' => true,
+        'roles' => ['ROLE_USER'],
         'accounts' => [
             AccountFactory::new([
-                'adherent' => AdherentFactory::new(),
-                'isEnabled' => true,
+                'adherent' => UserStory::adherentQantisTest(),
+                'enabled' => true,
             ]),
         ],
     ])->create();
@@ -76,21 +63,37 @@ use App\DataFixtures\Factory\UserFactory;
     $client = $this::createClientWithCredentials('some_user', 'password');
 
     $user = UserFactory::find(['username' => $this::DEFAULT_USER_LOGIN]);
-    $accounts = $user->getAccounts();
-    $accountId = $accounts->first()->getId();
+    $accountId = $this::getUserFirstAccount($user->object())->getId();
 
     $client->request('GET', \sprintf('/api/accounts/%s', $accountId));
 
-    $this->assertResponseStatusCodeSame(403);
-    $this->assertJsonContains(['hydra:description' => 'Access Denied.']);
+    $this->assertResponseStatusCodeSame(404);
+    $this->assertJsonContains(['hydra:description' => 'Not Found']);
 })->group('accounts');
 
-\it('GETs an account', function ($username) {
-    $client = $this::createClientWithCredentials(username: $username);
+\it('GETs a collection of accounts logged in user has role ROLE_API and can access another user\'s accounts', function () {
+    $client = $this::createClientWithCredentials(username: 'api_user');
 
-    $user = UserFactory::find(['username' => $this::DEFAULT_USER_LOGIN]);
-    $accounts = $user->getAccounts();
-    $accountId = $accounts->first()->getId();
+    $client->request('GET', '/api/accounts');
+
+    $this->assertResponseStatusCodeSame(200);
+})->group('accounts');
+
+\it('GETs a collection of accounts Account belongs to logged in user', function () {
+    $client = $this::createClientWithCredentials(username: 'gsm@qantis.co');
+
+    $client->request('GET', '/api/accounts');
+
+    $this->assertResponseStatusCodeSame(200);
+
+    $this->assertJsonResponseMatches('account/get-collection-response.json');
+})->group('accounts');
+
+\it('GETs an account', function (string $loggedInUsername, string $otherUsername) {
+    $client = $this::createClientWithCredentials(username: $loggedInUsername);
+
+    $user = UserFactory::find(['username' => $otherUsername]);
+    $accountId = $this::getUserFirstAccount($user->object())->getId();
 
     $client->request('GET', \sprintf('/api/accounts/%s', $accountId));
 
@@ -99,15 +102,17 @@ use App\DataFixtures\Factory\UserFactory;
     $this->assertJsonResponseMatches('account/get-account-success-response.json');
     $this->assertJsonContains([
         'id' => (string) $accountId,
-        '_user' => ['id' => (string) $user->getId()],
+        'user' => ['id' => (string) $user->getId()],
     ]);
 })
     ->with([
         'Account belongs to logged in user' => [
-            'username' => 'gsm@qantis.co',
+            'loggedInUsername' => 'gsm@qantis.co',
+            'otherUsername' => 'gsm@qantis.co',
         ],
-        "logged in user has role ROLE_API and can access another user' account" => [
-            'username' => 'api_user',
+        "logged in user has role ROLE_API and can access another user's account" => [
+            'loggedInUsername' => 'api_user',
+            'otherUsername' => 'gsm@qantis.co',
         ],
     ])
     ->group('accounts');

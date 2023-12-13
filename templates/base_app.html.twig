@@ -1,30 +1,40 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>{% block title %}{% endblock %}</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
-        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="icon" href="/pre_home/favicon.png" sizes="32x32" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  {% if settings.useExternalScriptsTags %}
-    {% include '_partials/_gtm-header.html.twig' %}
-    {% include '_partials/_gravite-header.html.twig' %}
-    {% include '_partials/_clarity-header.html.twig' %}
-  {% endif %}
-{# Keep javascripts block at the end of the head to avoid css order problems #}
-  {% block javascripts %}
-    {{ vite_asset('main.ts', ['vuejs']) }}
-  {% endblock %}
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			{% block title %}{% endblock %}
+		</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+		<link rel="icon" href="{{ channel.channelParameter.favicon }}" sizes="32x32"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<style>:root
+		{
+			--primary-color: {{channel_primary_color(channel)}}
+			;
+			--secondary-color: {{channel_secondary_color(channel)}}
+			;
+			--body-background: #f2f0f6;
+			--default-text-color: {{channel_text_color(channel)}}
+			;
+		}
+	</style>
+
+	{% if settings.useExternalScriptsTags %}
+		{% include '_partials/_gtm-header.html.twig' %}
+		{% include '_partials/_gravite-header.html.twig' %}
+		{% include '_partials/_clarity-header.html.twig' %}
+	{% endif %}
+	{# Keep javascripts block at the end of the head to avoid css order problems #}
+	{% block javascripts %}
+		{{ vite_asset('main.ts', ['vuejs']) }}
+	{% endblock %}
 </head>
 <body>
-{% if settings.useExternalScriptsTags %}
-  {% include '_partials/_gtm-body.html.twig' %}
-{% endif %}
+	{% if settings.useExternalScriptsTags %}
+		{% include '_partials/_gtm-body.html.twig' %}
+	{% endif %}
 
-{% block body %}
-
-{% endblock %}
-</body>
-</html>
+	{% block body %}{% endblock %}
+</body></html>

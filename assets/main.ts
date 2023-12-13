@@ -4,12 +4,12 @@ import 'floating-vue/dist/style.css'
 
 import { createHead } from '@vueuse/head'
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
 import App from './vuejs/App.vue'
 import router from '@/vuejs/router'
 import VueUniversalModal from 'vue-universal-modal'
 import FloatingVue from 'floating-vue'
 import clickOutside from '@/vuejs/directives/click-outside'
+import store from '@/vuejs/store'
 
 const rootElements = document.querySelectorAll('.vue-app')
 // Permet de gérer des multi-composants vue intégrées dans twig
@@ -20,7 +20,7 @@ if (rootElements.length) {
     if ('component' in rootElement.dataset) {
       const component = rootElement.dataset.component
       const app = createApp(App, { component })
-      app.use(createPinia())
+      app.use(store)
       app.mount(rootElement)
     }
   })
@@ -31,9 +31,9 @@ if (document.getElementById('app')) {
   // Lancement de l'App compléte depuis un point d'entré twig
   const app = createApp(App)
   const head = createHead()
+  app.use(store).directive('click-outside', clickOutside)
   app.use(router)
   app.use(head)
-  app.use(createPinia()).directive('click-outside', clickOutside)
   app.use(VueUniversalModal, {
     teleportTarget: '#modals',
   })

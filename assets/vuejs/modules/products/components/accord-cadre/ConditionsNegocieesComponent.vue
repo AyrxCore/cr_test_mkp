@@ -1,19 +1,13 @@
 <template>
   <div class="bloc-content col-span-5 flex h-full flex-col">
     <h3
-      class="text-title-35 mb-[1.563rem] font-bold leading-9 text-primary xl:w-3/4"
+      class="mb-[1.563rem] text-title-35 font-bold leading-9 text-primary xl:w-3/4"
     >
       Vos conditions négociées
     </h3>
-    <p
-      class="mb-10 flex"
-      v-html="properties.mentions_legales_conditions"
-    />
+    <p class="mb-10 flex" v-html="properties.mentions_legales_conditions" />
     <div class="relative">
-      <div
-        v-if="images.length"
-        class="partner-carousel relative"
-      >
+      <div v-if="images.length" class="partner-carousel relative">
         <CarouselListSharedComponent
           class="mx-auto mb-10 items-center rounded-xl bg-white px-4 py-4 lg:h-[443px]"
           :slides-per-view="1"
@@ -29,15 +23,11 @@
           <SwiperSlide v-for="(image, key) in images" :key="key">
             <img :src="image" alt="Picture" class="items-center" />
           </SwiperSlide>
-          </CarouselListSharedComponent>
+        </CarouselListSharedComponent>
       </div>
       <div v-else>
         <ul class="mx-7 flex list-disc flex-col">
-          <li
-            v-for="(condition, key) in textes"
-            :key="key"
-            class="mb-5"
-          >
+          <li v-for="(condition, key) in textes" :key="key" class="mb-5">
             {{ condition }}
           </li>
         </ul>
@@ -47,14 +37,13 @@
         <ButtonComponent
           v-for="(button, key) in buttons"
           :key="key"
-          class="button-gradient md:mr-5 mb-5 !whitespace-normal lg:whitespace-nowrap h-auto lg:h-12"
+          class="button-gradient mb-5 h-auto !whitespace-normal md:mr-5 lg:h-12 lg:whitespace-nowrap"
           @click="openInNewTab(button.url)"
         >
           <span class="w-full">{{ button.name }}</span>
         </ButtonComponent>
       </div>
     </div>
-
   </div>
 </template>
 <script lang="ts" setup>
@@ -64,15 +53,14 @@ import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListShar
 import { SwiperSlide } from 'swiper/vue'
 import { openInNewTab } from '@/vuejs/services/utils'
 
-
 const props = defineProps({
   mentionsLegales: {
     type: String,
-    default: null
+    default: null,
   },
   properties: {
     type: Object,
-    default: null
+    default: null,
   },
 })
 
@@ -104,7 +92,7 @@ const buttons = computed(() => {
     {
       name: props.properties.cta2_text,
       url: props.properties.cta2_link,
-    }
+    },
   ]
 
   return buttons.filter(function (el) {

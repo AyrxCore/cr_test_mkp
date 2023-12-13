@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\AccordStatut;
@@ -9,14 +11,13 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @extends ServiceEntityRepository<AccordStatut>
  *
- * @method AccordStatut|null find($id, $lockMode = null, $lockVersion = null)
- * @method AccordStatut|null findOneBy(array $criteria, array $orderBy = null)
+ * @method null|AccordStatut find($id, $lockMode = null, $lockVersion = null)
+ * @method null|AccordStatut findOneBy(array $criteria, array $orderBy = null)
  * @method AccordStatut[]    findAll()
  * @method AccordStatut[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class AccordStatutRepository extends ServiceEntityRepository
 {
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, AccordStatut::class);
@@ -39,5 +40,4 @@ class AccordStatutRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-
 }

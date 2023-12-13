@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\DataFixtures\Factory;
 
+use App\DataFixtures\Factory\Trait\BeforeInstantiateTrait;
 use App\Entity\Adherent;
 use App\Repository\AdherentRepository;
-use Symfony\Component\Uid\Uuid;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
 use Zenstruck\Foundry\RepositoryProxy;
@@ -34,10 +34,7 @@ use Zenstruck\Foundry\RepositoryProxy;
  */
 final class AdherentFactory extends ModelFactory
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
+    use BeforeInstantiateTrait;
 
     protected function getDefaults(): array
     {
@@ -51,14 +48,7 @@ final class AdherentFactory extends ModelFactory
 
     protected function initialize(): self
     {
-        return $this
-            ->beforeInstantiate(function (array $attributes): array {
-                if (\is_string($attributes['id'])) {
-                    $attributes['id'] = Uuid::fromString($attributes['id']);
-                }
-
-                return $attributes;
-            });
+        return $this->beforeInstantiate($this->convertIdAttributes());
     }
 
     protected static function getClass(): string

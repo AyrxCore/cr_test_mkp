@@ -1,29 +1,32 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
-import { routes as productsRoutes } from '@/vuejs/modules/products/routerProducts'
-
-import { routes as actualitesRoutes } from '@/vuejs/modules/actualites/routerActualites'
-
-import { routes as cartRoutes } from '@/vuejs/modules/cart/routerCart'
-
-import { routes as accountRoutes } from '@/vuejs/modules/account/routerAccount'
-
 import Home from '@/vuejs/modules/home/views/HomePage.vue'
 import Contact from '@/vuejs/modules/contact/views/ContactPage.vue'
-import MentionsLegales from '@/vuejs/modules/MentionsLegales.vue'
-import PolitiqueDeConfidentialite from '@/vuejs/modules/PolitiqueDeConfidentialite.vue'
-import CGU from '@/vuejs/modules/CGU.vue'
 import NotFoundPage from '@/vuejs/modules/PageNotFound.vue'
-import { useUserStore } from '@/vuejs/stores/user'
+import LegalDocument from '@/vuejs/modules/LegalDocument.vue'
+
+import { routes as productsRoutes } from '@/vuejs/modules/products/routerProducts'
+import { routes as actualitesRoutes } from '@/vuejs/modules/actualites/routerActualites'
+import { routes as cartRoutes } from '@/vuejs/modules/cart/routerCart'
+import { routes as accountRoutes } from '@/vuejs/modules/account/routerAccount'
+
 import { useCartStore } from '@/vuejs/stores/cart'
+import { useChannelStore } from '@/vuejs/stores/channel'
+import { useUserStore } from '@/vuejs/stores/user'
 
 import {
-  MainPageList,
-  ProductPageList,
-  NewsPageList,
-  CartPageList,
   AccountPageList,
+  CartPageList,
+  MainPageList,
+  NewsPageList,
+  ProductPageList,
 } from '@/vuejs/router/pages-list'
+
+import {
+  CGU_PAGE_ID,
+  MENTIONS_LEGALES_PAGE_ID,
+  POLITIQUE_DE_CONFIDENTIALITE_PAGE_ID,
+} from '@/vuejs/services/const'
 
 export const PageList = {
   ...MainPageList,
@@ -51,17 +54,30 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/mentions-legales',
     name: PageList.MENTIONS_LEGALES_PAGE,
-    component: MentionsLegales,
+    component: LegalDocument,
+    props: {
+      title: 'Mentions légales',
+      pageId: MENTIONS_LEGALES_PAGE_ID,
+    },
   },
   {
     path: '/politique-de-confidentialite',
     name: PageList.POLITIQUE_DE_CONFIDENTIALITE,
-    component: PolitiqueDeConfidentialite,
+    component: LegalDocument,
+    props: {
+      title: 'Politique de confidentialité',
+      pageId: POLITIQUE_DE_CONFIDENTIALITE_PAGE_ID,
+    },
   },
   {
-    path: '/conditions-generales-d-utilisations',
+    path: '/conditions-generales-d-utilisation',
     name: PageList.CGU_PAGE,
-    component: CGU,
+    component: LegalDocument,
+    props: {
+      /* eslint-disable-next-line quotes */
+      title: "Conditions générales d'utilisation",
+      pageId: CGU_PAGE_ID,
+    },
   },
   {
     path: '/page-not-found',
@@ -82,7 +98,10 @@ const router = createRouter({
   history: createWebHistory(),
   linkActiveClass: 'current-route',
   routes,
-  scrollBehavior() {
+  scrollBehavior(to) {
+    if (to.hash) {
+      return { el: to.hash }
+    }
     window.scrollTo(0, 0)
   },
 })
@@ -90,10 +109,14 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore()
   const cartStore = useCartStore()
+  const channelStore = useChannelStore()
 
   if (!userStore.isLogged) {
+    await channelStore.getChannel(window.location.hostname)
     await userStore.getCurrentUserData()
     if (!userStore.isLogged) {
+      document.cookie = 'BEARER=; Max-Age=0'
+      document.cookie = 'PHPSESSID=; Max-Age=0'
       location.reload()
     }
 

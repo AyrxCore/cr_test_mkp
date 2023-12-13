@@ -17,6 +17,7 @@ module.exports = {
       // here's how to extend fonts if needed
       fontFamily: {
         sans: [...defaultTheme.fontFamily.sans],
+        cotext: '"Cotext"',
       },
       fontSize: {
         'title-35': '35px',
@@ -26,13 +27,22 @@ module.exports = {
         8.5: '2.125rem',
       },
       colors: {
-        primary: '#050056',
-        secondary: '#9553ff',
+        primary: 'var(--primary-color)',
+        secondary: 'var(--secondary-color)',
         tertiary: '#0bb0fa',
         'gradient-1': '#404fe6',
         'gradient-2': '#00c7ff',
-        // gray: '#5E6875',
         'green-qantis': '#65AC5D',
+      },
+      screens: {
+        90: '90%',
+        92: '92%',
+        94: '94%',
+        98: '98%',
+      },
+      boxShadow: {
+        'inner-lighter': 'inset 0 0 100px 100px rgba(255, 255, 255, 0.15)',
+        'inner-darker': 'inset 0 0 100px 100px rgba(0, 0, 0, 0.1)',
       },
     },
   },

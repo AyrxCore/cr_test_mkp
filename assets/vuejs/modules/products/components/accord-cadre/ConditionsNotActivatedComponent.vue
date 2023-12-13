@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="text-white">
     <div>
       <ButtonComponent
         class="button-gradient mb-7"

@@ -48,7 +48,6 @@ import { storeToRefs } from 'pinia'
 import { useSavedCartStore } from '@/vuejs/stores/savedCart'
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
 import { useCartStore } from '@/vuejs/stores/cart'
-import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 
 const cartStore = useCartStore()

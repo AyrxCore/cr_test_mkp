@@ -1,19 +1,24 @@
 <template>
-  <div v-click-outside="onOutsideBlock" class="flex items-center justify-end">
+  <div
+    v-if="channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.FAVORITES)"
+    v-click-outside="onOutsideBlock"
+    class="flex items-center justify-end"
+  >
     <button class="flex text-gray-500" @click="onOpenFavorite">
       <HeartIconComponent
-        class="... h-[40px] w-[40px] stroke-gray-500 lg:h-auto lg:w-auto"
-        :class="{
-          'fill-secondary !stroke-secondary':
-            currentSelectedFavorites.length > 0,
-        }"
-        :stroke-color="'#000000'"
+        class="lg:h-auto lg:w-auto"
+        :stroke-color="
+          currentSelectedFavorites.length > 0 ? '#9553FF' : '#000000'
+        "
+        :fill-color="
+          currentSelectedFavorites.length > 0 ? '#9553FF' : '#FFFFFF'
+        "
       />
     </button>
 
-    <div v-if="showTooltip" class="modal-overlay !absolute">
+    <div v-if="showTooltip" class="modal-overlay">
       <div class="z-[9] mx-3 rounded p-3 md:p-0 lg:mx-0">
-        <div v-if="showTooltip" class="flex w-full">
+        <div class="flex w-full">
           <div class="tooltip">
             <form
               v-if="showList"
@@ -60,7 +65,7 @@
 
               <div class="!mt-5 flex justify-end">
                 <ButtonComponent
-                  class="button-gradient flex !h-10 justify-end !py-2"
+                  class="button-primary flex !h-10 justify-end !py-2"
                   :disabled="
                     disableAddButton &&
                     (newFavorite === null || newFavorite === '')
@@ -87,9 +92,11 @@
 import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
+import { useChannelStore } from '@/vuejs/stores/channel'
 import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import { arrayEqual, notifySuccess } from '@/vuejs/services/utils'
+import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
 
 const props = defineProps({
   productId: {
@@ -110,6 +117,7 @@ const props = defineProps({
   },
 })
 
+const channelStore = useChannelStore()
 const favoriteStore = useFavoriteStore()
 const { favorites } = storeToRefs(favoriteStore)
 const showTooltip = ref<boolean>(false)
@@ -215,7 +223,7 @@ const addProductToFavorite = async () => {
 
 <style scoped>
 .tooltip {
-  @apply flex w-[350px] flex-col items-center justify-center rounded-lg border border-2 border-primary bg-white p-2.5 shadow-[0_20px_250px_25px] shadow-gray-600;
+  @apply flex flex-col items-center justify-center rounded-lg border border-2 border-primary bg-white p-2.5 shadow-[0_20px_250px_25px] shadow-gray-600;
 }
 
 .c-scrollbar::-webkit-scrollbar {

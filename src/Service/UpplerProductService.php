@@ -38,7 +38,7 @@ class UpplerProductService extends AbstractUpplerService
             ]
         );
 
-        if ($res->getStatusCode() !== Response::HTTP_OK) {
+        if (!$res || $res->getStatusCode() !== Response::HTTP_OK) {
             throw new BadRequestHttpException();
         }
 

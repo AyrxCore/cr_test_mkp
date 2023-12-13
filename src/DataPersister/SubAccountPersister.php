@@ -7,24 +7,26 @@ namespace App\DataPersister;
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 use App\Dto\SubAccount;
 use App\Entity\Account;
+use App\Entity\Channel;
 use App\Entity\UserInfoUpdateRequest;
 use App\Events\ChangingEmailEvent;
 use App\Events\UserInfoUpdateEvent;
+use App\Repository\ChannelRepository;
 use App\Service\UpplerAccountService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Contracts\Service\Attribute\Required;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class SubAccountPersister implements ContextAwareDataPersisterInterface
 {
-    #[Required]
-    public EntityManagerInterface $em;
-
-    #[Required]
-    public UpplerAccountService $upplerAccountService;
-
-    #[Required]
-    public EventDispatcherInterface $eventDispatcher;
+    public function __construct(
+        private EntityManagerInterface $em,
+        private UpplerAccountService $upplerAccountService,
+        private EventDispatcherInterface $eventDispatcher,
+        private RequestStack $requestStack,
+        private ChannelRepository $channelRepository,
+    ) {
+    }
 
     public function supports($data, array $context = []): bool
     {
@@ -33,6 +35,8 @@ class SubAccountPersister implements ContextAwareDataPersisterInterface
 
     /**
      * @param SubAccount $data
+     *
+     * @throws \Exception
      */
     public function persist($data, array $context = [])
     {
@@ -66,8 +70,13 @@ class SubAccountPersister implements ContextAwareDataPersisterInterface
 
             $this->em->flush();
 
-            $event = new ChangingEmailEvent($user);
-            $this->eventDispatcher->dispatch($event);
+            $host = $this->requestStack->getMainRequest()->headers->get('host');
+
+            $channel = $this->channelRepository->findOneBy([
+                'hostname' => \preg_replace('/(.*):\d+/', '$1', $host),
+            ]);
+
+            $this->eventDispatcher->dispatch(new ChangingEmailEvent($user, $channel));
 
             return true;
         }

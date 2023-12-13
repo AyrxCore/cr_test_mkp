@@ -4,7 +4,6 @@
     height="24"
     viewBox="0 0 30 30"
     fill="none"
-    stroke="currentColor"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
@@ -12,6 +11,9 @@
       stroke-width="2.5"
       stroke-linecap="round"
       stroke-linejoin="round"
+      stroke="currentColor"
     />
   </svg>
 </template>
+
+<script setup></script>

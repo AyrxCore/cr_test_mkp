@@ -7,13 +7,15 @@
   "upplerSubAccountId": 23,
   "upplerCompanyId": 72,
   "upplerUsername": "@string@",
-  "_user": {
+  "user": {
+    "@id": "\/api\/users\/@uuid@",
     "@type": "User",
     "id": "@uuid@",
     "email": "gsm@qantis.co",
     "username": "gsm@qantis.co",
     "firstName": "Gaëtan",
     "lastName": "DE SAINTE MARIE",
-    "isEnabled": true
-  }
+    "enabled": true
+  },
+  "enabled": true
 }

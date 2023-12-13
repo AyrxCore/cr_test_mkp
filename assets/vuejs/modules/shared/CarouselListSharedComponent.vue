@@ -1,22 +1,24 @@
 <template>
   <Swiper
     :modules="defaultModules"
-    :loop="loop"
     :navigation="{
+      enabled: showNav,
       prevEl: '.swiper-button-direction-prev',
       nextEl: '.swiper-button-direction-next',
     }"
     :pagination="pagination"
-    class="mx-auto"
     @swiper="emit('on-swipe')"
     @slide-change="emit('on-slide-change')"
   >
     <slot />
     <template v-if="showNav">
-      <button class="swiper-button-direction-prev">
+      <button class="swiper-button-direction-prev" @click="$emit('click-left')">
         <ChevronLeftIconComponent />
       </button>
-      <button class="swiper-button-direction-next">
+      <button
+        class="swiper-button-direction-next"
+        @click="$emit('click-right')"
+      >
         <ChevronLeftIconComponent />
       </button>
     </template>
@@ -39,30 +41,20 @@ import 'swiper/scss/navigation'
 import 'swiper/scss/pagination'
 import 'swiper/scss/scrollbar'
 import 'swiper/scss/thumbs'
+
 import ChevronLeftIconComponent from '@/vuejs/modules/shared/icon/ChevronLeftIconComponent.vue'
 
-const emit = defineEmits(['on-swipe', 'on-slide-change'])
+const emit = defineEmits([
+  'on-swipe',
+  'on-slide-change',
+  'click-left',
+  'click-right',
+])
 
 const props = defineProps({
-  nbSlidesPerView: {
-    required: false,
-    type: Number,
-    default: 4,
-  },
-
-  spaceBetween: {
-    required: false,
-    type: Number,
-    default: 50,
-  },
   modules: {
     required: false,
     type: Array,
-  },
-  loop: {
-    required: false,
-    type: Boolean,
-    default: true,
   },
   pagination: {
     required: false,
@@ -115,26 +107,42 @@ const defaultModules = computed(
 
 .swiper {
   position: unset;
-
   &-button-direction {
     &-prev,
     &-next {
       @apply absolute top-0 bottom-0 z-10 flex cursor-pointer items-center text-primary;
 
       svg {
-        @apply h-12 w-12 rounded-full bg-white xl:bg-transparent;
+        @apply h-8 w-8 rounded-full border-2 border-primary bg-white md:h-12 md:w-12 md:border-none md:bg-transparent;
       }
     }
-
     &-prev {
-      @apply -left-4 xl:-left-12;
+      @apply left-[-16px] md:left-0;
     }
 
     &-next {
-      @apply -right-4 xl:-right-12;
+      @apply right-[-16px] md:right-0;
 
       svg {
         @apply rotate-180;
+      }
+    }
+  }
+  &-button {
+    &-disabled {
+      opacity: 0.2;
+    }
+    &-lock {
+      display: none;
+    }
+  }
+  &-nav-outside {
+    .swiper-button-direction {
+      &-prev {
+        @apply md:left-[-48px];
+      }
+      &-next {
+        @apply md:right-[-48px];
       }
     }
   }

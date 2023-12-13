@@ -17,14 +17,30 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\Entity(repositoryClass: AccountRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ApiResource(
-    collectionOperations: [],
+    collectionOperations: [
+        'get' => [
+            'normalization_context' => [
+                'groups' => [
+                    'user:simple',
+                    'account:get',
+                    'account:external_api_data:buyer',
+                ],
+            ],
+        ],
+    ],
     itemOperations: [
         'get' => [
             'security' => 'is_granted("ROLE_API") or object.getUser() == user',
             'normalization_context' => ['groups' => ['account:get']],
         ],
+        'select' => [
+            'route_name' => 'account_select',
+            'openapi_context' => [
+                'summary' => 'Select an Account',
+                'description' => 'Select an Account to use when communicating with Uppler',
+            ],
+        ],
     ],
-    normalizationContext: ['groups' => ['account:get']]
 )]
 class Account
 {
@@ -32,11 +48,11 @@ class Account
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    #[Groups(['simpleUser', 'account:list', 'account:get'])]
+    #[Groups(['user:simple', 'account:list', 'account:get'])]
     private ?Uuid $id = null;
 
     #[ORM\Column()]
-    #[Groups(['simpleUser', 'account:list', 'account:get'])]
+    #[Groups(['user:simple', 'account:list', 'account:get'])]
     private ?int $upplerUserId = null;
 
     #[ORM\Column()]
@@ -55,7 +71,7 @@ class Account
     private ?string $upplerPassword = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups('simpleUser')]
+    #[Groups('user:simple')]
     private ?\DateTimeInterface $lastConnexion = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -72,26 +88,27 @@ class Account
 
     #[ORM\ManyToOne(inversedBy: 'accounts', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['account:get', 'simpleUser'])]
-    private ?User $_user = null;
+    #[Groups(['account:get'])]
+    private ?User $user = null;
 
     #[ORM\Column]
-    private ?bool $isEnabled = null;
+    #[Groups(['account:get', 'user:simple'])]
+    private ?bool $enabled = null;
 
     #[ORM\ManyToOne(inversedBy: 'accounts', fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups(['simpleUser'])]
+    #[Groups(['user:simple'])]
     private ?Adherent $adherent = null;
 
     #[ORM\OneToMany(mappedBy: 'account', targetEntity: CartSavings::class)]
     private Collection $cartSavings;
 
     #[ORM\Column(nullable: true)]
-    #[Groups('simpleUser')]
+    #[Groups('user:simple')]
     private ?bool $acceptCGU = false;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups('simpleUser')]
+    #[Groups('user:simple')]
     private ?string $phone = null;
 
     #[ORM\OneToMany(mappedBy: 'account', targetEntity: Favorite::class)]
@@ -255,24 +272,24 @@ class Account
 
     public function getUser(): ?User
     {
-        return $this->_user;
+        return $this->user;
     }
 
-    public function setUser(?User $_user): self
+    public function setUser(?User $user): self
     {
-        $this->_user = $_user;
+        $this->user = $user;
 
         return $this;
     }
 
     public function isEnabled(): ?bool
     {
-        return $this->isEnabled;
+        return $this->enabled;
     }
 
-    public function setIsEnabled(bool $isEnabled): self
+    public function setEnabled(bool $enabled): self
     {
-        $this->isEnabled = $isEnabled;
+        $this->enabled = $enabled;
 
         return $this;
     }
@@ -414,5 +431,4 @@ class Account
 
         return $this;
     }
-
 }

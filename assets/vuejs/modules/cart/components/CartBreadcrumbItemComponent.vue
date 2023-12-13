@@ -9,7 +9,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { useRouter, RouteRecordName } from 'vue-router'
+import { RouteRecordName, useRouter } from 'vue-router'
 
 const router = useRouter()
 

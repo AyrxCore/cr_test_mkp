@@ -11,10 +11,8 @@ use App\Entity\Account;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
-
 class UserAccountProvider implements RestrictedDataProviderInterface, ItemDataProviderInterface
 {
-
     #[Required]
     public EntityManagerInterface $em;
 
@@ -27,7 +25,6 @@ class UserAccountProvider implements RestrictedDataProviderInterface, ItemDataPr
 
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
     {
-        return UserAccount::class === $resourceClass;
+        return $resourceClass === UserAccount::class;
     }
-
 }

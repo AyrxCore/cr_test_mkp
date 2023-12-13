@@ -1,7 +1,10 @@
 <template>
   <div
-    class="sticky bottom-1 flex w-full items-center border bg-white p-4 lg:relative lg:bottom-0 lg:border-0 lg:bg-transparent"
-    :class="{ '!bottom-[400px] lg:bottom-1': tooltipFavoriteIsOpened }"
+    class="sticky bottom-1 flex w-full items-center border bg-white lg:relative lg:bottom-0 lg:border-0 lg:bg-transparent"
+    :class="{
+      '!bottom-[400px] lg:bottom-1': tooltipFavoriteIsOpened,
+      'p-4': showPrice,
+    }"
   >
     <div class="flex w-full flex-col">
       <div
@@ -35,7 +38,7 @@
           :quantity="props.product.quantity"
           :variant-id="props.product.defaultVariantId"
           :price="props.product.price"
-          class="w-full lg:mt-14"
+          :class="{ 'w-full': showPrice }"
         />
         <AddFavoriteComponent
           class="ml-5 lg:hidden"

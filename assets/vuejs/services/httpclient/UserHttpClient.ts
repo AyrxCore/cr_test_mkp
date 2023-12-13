@@ -6,6 +6,8 @@ import {
   User,
 } from '@/vuejs/types/User'
 import {
+  Account,
+  AccountCollectionResponse,
   AccountEmail,
   DefaultBillingAddressToUpdate,
   DefaultShippingAddressToUpdate,
@@ -23,20 +25,20 @@ export default class UserHttpClient extends BaseClientService {
       .then((response) => response.data)
   }
 
-  public getUserAccounts<T extends []>(): Promise<T> {
-    return this.apiClient
-      .get<T>('user/accounts')
-      .then((response) => response.data)
+  public async getUserAccounts<T extends AccountCollectionResponse>(): Promise<Account[]> {
+    const { data: { 'hydra:member': accounts } } = await this.apiClient.get<T>('accounts')
+
+    return accounts
   }
 
   public selectUserAccount<T extends []>(id: string): Promise<T> {
     return this.apiClient
-      .get<T>(`user/account/${id}/select`)
+      .get<T>(`accounts/${id}/select`)
       .then((response) => response.data)
   }
 
   public getUserMe<T extends User>(): Promise<T> {
-    return this.apiClient.get('user/me').then((response) => response.data)
+    return this.apiClient.get('me').then((response) => response.data)
   }
 
   public updateUserAddress<T extends User>(

@@ -3,6 +3,9 @@ import { notify } from 'notiwind'
 import { Address } from '../types/Address'
 import imgDefault from '@/vuejs/assets/img/default-image.png'
 import { format } from 'date-fns'
+import { useChannelStore } from '@/vuejs/stores/channel'
+
+const channelStore = useChannelStore()
 
 export function getImage(urlImage: string): string {
   return new URL(urlImage, import.meta.url).href
@@ -31,7 +34,7 @@ export function formatAddress(address: Address): string {
 }
 
 export function getUrlParam(name: string): string | null {
-  let params = new URLSearchParams(document.location.search)
+  const params = new URLSearchParams(document.location.search)
   return params.get(name)
 }
 
@@ -41,7 +44,7 @@ export function notifyError(text: string, time: number = 10000): void {
       group: 'notif',
       type: 'error',
       title: 'Une erreur est survenue',
-      text: text,
+      text,
     },
     time,
   )
@@ -53,7 +56,7 @@ export function notifySuccess(text: string, time: number = 10000): void {
       group: 'notif',
       type: 'success',
       title: 'Succès!',
-      text: text,
+      text,
     },
     time,
   )
@@ -91,4 +94,24 @@ export function hexToBinary(hexString) {
     buffer[i / 2] = parseInt(hexString.substr(i, 2), 16)
   }
   return buffer
+}
+
+function getColorBrightness(hexColor) {
+  const r = parseInt(hexColor.slice(1, 3), 16)
+  const g = parseInt(hexColor.slice(3, 5), 16)
+  const b = parseInt(hexColor.slice(5, 7), 16)
+  return Math.round((r * 299 + g * 587 + b * 114) / 1000)
+}
+
+export const betterTextColor = (bgColor: 'primary' | 'secondary') => {
+  const hexColor =
+    bgColor === 'primary'
+      ? channelStore.channelPrimaryColor
+      : channelStore.channelSecondaryColor
+  if (hexColor) {
+    const brightness = getColorBrightness(hexColor)
+    return brightness > 170 ? 'black' : 'white'
+  } else {
+    return 'black'
+  }
 }

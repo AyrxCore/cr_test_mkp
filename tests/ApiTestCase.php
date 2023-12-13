@@ -7,8 +7,12 @@ namespace App\Tests;
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase as ApiPlatformTestCase;
 use ApiPlatform\Symfony\Bundle\Test\Client;
 use App\DataFixtures\Factory\UserFactory;
-use App\DataFixtures\Story\UserStory;
+use App\Entity\Account;
+use App\Entity\User;
 use App\Tests\Constraint\MatchesJson;
+use App\Tests\Story\Account\UserStory;
+use App\Tests\Story\Channel\ChannelParameterStory;
+use App\Tests\Story\Channel\ChannelStory;
 
 class ApiTestCase extends ApiPlatformTestCase
 {
@@ -22,12 +26,19 @@ class ApiTestCase extends ApiPlatformTestCase
 
     protected static function createClientWithCredentials(
         string $username = self::DEFAULT_USER_LOGIN,
-        string $password = self::DEFAULT_USER_PASSWORD
+        string $password = self::DEFAULT_USER_PASSWORD,
+        string $channel = 'QANTIS_TEST',
     ): Client {
         // load dev fixtures
         UserStory::load();
+        ChannelStory::load();
+        ChannelParameterStory::load();
 
-        $client = self::createClient();
+        $client = self::createClient(defaultOptions: [
+            'headers' => [
+                'X-Channel' => $channel,
+            ],
+        ]);
 
         $client->request('POST', '/api/authentication/token', [
             'json' => [
@@ -41,14 +52,26 @@ class ApiTestCase extends ApiPlatformTestCase
             return $client;
         }
 
-        $accounts = $user->getAccounts();
-        if ($accounts->isEmpty()) {
-            throw new \RuntimeException('Cannot create client. User has no account');
+        // get the user's account matching current channel
+        $account = self::getUserFirstAccount($user->object(), $channel);
+
+        if (!$account) {
+            return $client;
         }
 
         // select an account to initialize the session
-        $client->request('GET', "/api/user/account/{$accounts->first()->getId()}/select");
+        $client->request('GET', "/api/accounts/{$account->getId()}/select");
 
         return $client;
+    }
+
+    protected static function getUserFirstAccount(User $user, string $channel = 'QANTIS_TEST'): ?Account
+    {
+        // get the account matching the channel
+        return $user->getAccounts()
+            ->filter(function (Account $account) use ($channel) {
+                return $account->getAdherent()->getChannel()->getCode() === $channel;
+            })
+            ->first() ?: null;
     }
 }

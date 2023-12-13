@@ -1,0 +1,273 @@
+parameters:
+  channels:
+    - name: QANTIS Marketplace
+      code: QANTIS_ACHAT
+      hostname: marketplace.qantis.co
+      channelParameter:
+        email: marketplace@qantis.co
+        phoneNumber: '+33437650621'
+        logo: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/logo-qantis.png
+        favicon: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/favicon-qantis.svg
+        primaryColor: '#050056'
+        secondaryColor: '#9553ff'
+        textColor: '#6b7280'
+        privacyPolicy: '/politique-de-confidentialite'
+        legalTerms: '/mentions-legales'
+        generalTermsOfUse: '/conditions-generales-d-utilisation'
+        whiteLabel: false
+
+    - name: Cedap Service Achats
+      code: CEDAP
+      hostname: achats.cedap.asso.fr
+      channelParameter:
+        email: serviceachats@cedap.asso.fr
+        phoneNumber: '+33487254542'
+        logo: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/logo-cedap.png
+        favicon: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/favicon-cedap.png
+        primaryColor: '#a10d59'
+        secondaryColor: '#4e0126'
+        textColor: '#000000'
+        privacyPolicy: ~
+        legalTerms: 'https://cedap.asso.fr/fr/module/99999618/32/mentions-legales'
+        generalTermsOfUse: ~
+        whiteLabel: true
+
+    - name: OPTEAM ACHATS
+      code: OPTEAM
+      hostname: opteamachats.fr
+      channelParameter:
+        email: achats@groupe-opteam.fr
+        phoneNumber: '+33497047227'
+        logo: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/logo-opteam-achats.png
+        favicon: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/favicon-opteam-achats.jpeg
+        primaryColor: '#7f92b1'
+        secondaryColor: '#2d4053'
+        textColor: '#000000'
+        privacyPolicy: ~
+        legalTerms: ~
+        generalTermsOfUse: ~
+        whiteLabel: true
+
+    - name: FSPF Privilèges
+      code: Privilèges
+      hostname: privileges.fspf.fr
+      channelParameter:
+        email: privileges@fspf.fr
+        phoneNumber: '+33487254544'
+        logo: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/logo-privileges-fspf.png
+        favicon: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/favicon-privileges-fspf.png
+        primaryColor: '#004174'
+        secondaryColor: '#00a7e5'
+        textColor: '#000000'
+        privacyPolicy: 'http://www.fspf.fr/donnees-personnelles'
+        legalTerms: 'http://www.fspf.fr/mentions-legales'
+        generalTermsOfUse: ~
+        whiteLabel: true
+
+    - name: Service Achats de l'Unep
+      code: UNEP
+      hostname: catalogue.lesentreprisesdupaysage.fr
+      channelParameter:
+        email: serviceachats@unep-fr.org
+        phoneNumber: '+33437651626'
+        logo: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/logo-unep.png
+        favicon: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/favicon-unep.png
+        primaryColor: '#004855'
+        secondaryColor: '#00323b'
+        textColor: '#000000'
+        privacyPolicy: ~
+        legalTerms: 'https://www.lesentreprisesdupaysage.fr/mentions-legales/'
+        generalTermsOfUse: ~
+        whiteLabel: true
+
+    - name: CAPER ACHATS
+      code: CAPER
+      hostname: caper-achats.fr
+      channelParameter:
+        email: caper@reseaux-menuiseries.fr
+        phoneNumber: '+33487254537'
+        logo: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/logo-caper.jpg
+        favicon: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/favicon-caper.jpg
+        primaryColor: '#54574e'
+        secondaryColor: '#a6aa99'
+        textColor: '#000000'
+        privacyPolicy: ~
+        legalTerms: 'https://caper-achats.fr/mentions-legales/'
+        generalTermsOfUse: ~
+        whiteLabel: true
+
+    - name: VERDIR Avantages
+      code: FNPHP
+      hostname: avantages.verdir.fr
+      channelParameter:
+        email: avantages@verdir.fr
+        phoneNumber: '+33437651625'
+        logo: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/logo-verdir.png
+        favicon: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/favicon-verdir.png
+        primaryColor: '#ec683e'
+        secondaryColor: '#ec683e'
+        textColor: '#000000'
+        privacyPolicy: ~
+        legalTerms: 'https://verdir.fr/mentions-legales/'
+        generalTermsOfUse: ~
+        whiteLabel: true
+
+    - name: VETINWEB
+      code: VETINWEB
+      hostname: avantagesentreprises.vetinweb.fr
+      channelParameter:
+        email: avantagesentreprises@vetinweb.fr
+        phoneNumber: '+33487254540'
+        logo: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/logo-vetinweb.png
+        favicon: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/favicon-vetinweb.png
+        primaryColor: '#23b9d6'
+        secondaryColor: '#252e38'
+        textColor: '#000000'
+        privacyPolicy: ~
+        legalTerms: 'https://www.myvetzen.fr/mentions-legales'
+        generalTermsOfUse: ~
+        whiteLabel: true
+
+    - name: FFP Avantages
+      code: FFP
+      hostname: avantages.f-f-p.org
+      channelParameter:
+        email: ffpavantages@f-f-p.org
+        phoneNumber: '+33487254541'
+        logo: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/logo-ffp-avantages.jpg
+        favicon: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/favicon-ffp-avantages.jpg
+        primaryColor: '#0000a0'
+        secondaryColor: '#877364'
+        textColor: '#000000'
+        privacyPolicy: ~
+        legalTerms: 'https://www.f-f-p.org/mentions-legales/'
+        generalTermsOfUse: ~
+        whiteLabel: true
+
+    - name: SYNETAM Achats
+      code: SYNEG
+      hostname: achats.syneg.org
+      channelParameter:
+        email: achats@synetam.fr
+        phoneNumber: '+33487254538'
+        logo: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/logo-synetam.jpg
+        favicon: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/favicon-synetam.jpg
+        primaryColor: '#00509f'
+        secondaryColor: '#e80d11'
+        textColor: '#000000'
+        privacyPolicy: ~
+        legalTerms: 'https://syneg.org/mentions-legales/'
+        generalTermsOfUse: ~
+        whiteLabel: true
+
+    - name: BATIMAN Synergie
+      code: BATIMAN
+      hostname: synergie.batiman.fr
+      channelParameter:
+        email: synergie@batiman.fr
+        phoneNumber: '+33487254536'
+        logo: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/logo-batiman.png
+        favicon: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/favicon-batiman.png
+        primaryColor: '#adadad'
+        secondaryColor: '#f80376'
+        textColor: '#000000'
+        privacyPolicy: ~
+        legalTerms: 'https://www.batiman.fr/mentions-legales'
+        generalTermsOfUse: ~
+        whiteLabel: true
+
+    - name: Service Achats DLR
+      code: DLR
+      hostname: achats.dlr.fr
+      channelParameter:
+        email: serviceachats@dlr.fr
+        phoneNumber: '+33437651632'
+        logo: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/logo-dlr-service-achats.png
+        favicon: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/favicon-dlr-service-achats.png
+        primaryColor: '#a8a8a7'
+        secondaryColor: '#da3731'
+        textColor: '#000000'
+        privacyPolicy: ~
+        legalTerms: 'https://www.dlr.fr/Default.aspx?lid=1&rid=203&rvid=203'
+        generalTermsOfUse: ~
+        whiteLabel: true
+
+    - name: Service Achats UNGE
+      code: UNGE
+      hostname: achats.unge.net
+      channelParameter:
+        email: serviceachats@unge.net
+        phoneNumber: '+33437651631'
+        logo: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/logo-unge.jpg
+        favicon: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/favicon-unge.png
+        primaryColor: '#006788'
+        secondaryColor: '#c4d203'
+        textColor: '#000000'
+        privacyPolicy: ~
+        legalTerms: 'https://www.unge.net/23-mentions-legales'
+        generalTermsOfUse: ~
+        whiteLabel: true
+
+    - name: ARTEMA Achats
+      code: ARTEMA
+      hostname: achats.artema-france.org
+      channelParameter:
+        email: serviceachats@unge.net
+        phoneNumber: '+33487629675'
+        logo: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/logo-artema.png
+        favicon: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/favicon-artema.jpeg
+        primaryColor: '#004e9e'
+        secondaryColor: '#22ac70'
+        textColor: '#000000'
+        privacyPolicy: 'http://www.artema-france.org/confidentialite/'
+        legalTerms: 'https://www.artema-france.org/mentions-legales/'
+        generalTermsOfUse: ~
+        whiteLabel: true
+
+    - name: Plateforme CDL
+      code: CDL
+      hostname: plateforme.cl-btp.com
+      channelParameter:
+        email: animation@qantis.co
+        phoneNumber: '+33437650621'
+        logo: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/logo-cdl.png
+        favicon: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/favicon-cdl.png
+        primaryColor: '#ff7800'
+        secondaryColor: '#6a7174'
+        textColor: '#000000'
+        privacyPolicy: ~
+        legalTerms: 'https://www.cl-btp.com/page/37/mentions-legales.html'
+        generalTermsOfUse: ~
+        whiteLabel: true
+
+    - name: QANTIS Achats Publics
+      code: QACHATSPUBLICS
+      hostname: achats-publics.qantis.co
+      channelParameter:
+        email: collectivites@qantis.co
+        phoneNumber: '+33487629676'
+        logo: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/logo-qantis-achats-publics.png
+        favicon: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/favicon-qantis-achats-publics.jpeg
+        primaryColor: '#cc3333'
+        secondaryColor: '#060050'
+        textColor: '#000000'
+        privacyPolicy: ~
+        legalTerms: 'https://achats-publics.qantis.co/mentions-legales/'
+        generalTermsOfUse: ~
+        whiteLabel: true
+
+    - name: UITS Centrale d'Achats
+      code: UITS
+      hostname: achats.uits-france.org
+      channelParameter:
+        email: achats@uits-france.org
+        phoneNumber: '+33412010197'
+        logo: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/logo-uits.jpg
+        favicon: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/favicon-uits.jpg
+        primaryColor: '#ed700f'
+        secondaryColor: '#363636'
+        textColor: '#000000'
+        privacyPolicy: 'https://www.uits-france.org/politique-de-confidentialite'
+        legalTerms: 'https://www.uits-france.org/mentions-legales'
+        generalTermsOfUse: ~
+        whiteLabel: true

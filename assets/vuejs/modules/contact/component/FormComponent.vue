@@ -2,10 +2,11 @@
   <!-- Bloc formulaire -->
   <div v-if="contact">
     <MessageSquareIconComponent
-      :stroke-color="'#9553FF'"
-      class="mx-auto mb-2 w-full"
+      class="mx-auto mb-2 w-full stroke-secondary"
+      :size-width="40"
+      :size-height="40"
     />
-    <h4 class="mb-3 text-center font-bold text-primary">
+    <h4 class="mb-3 text-center text-2xl font-bold text-primary">
       Directement en nous laissant un message
     </h4>
     <div v-if="alertStore.show" class="text-left">
@@ -17,7 +18,7 @@
           <input type="hidden" name="_token" :value="contact._token" />
           <select
             v-model="contact.motif"
-            class="border-1 relative h-[55px] w-full rounded-md border-gray-200 text-gray-600 placeholder-gray-400"
+            class="border-1 relative h-[55px] w-full rounded-md border-gray-200"
             required
           >
             <option disabled value="" class="text-gray-500">
@@ -27,19 +28,24 @@
               v-for="(motif, index) in motifs"
               :key="index"
               :value="index"
+              @input="
+                gtmEvent('click_contact_demande_type', {
+                  demande_value: motif[index],
+                })
+              "
             >
               {{ motif }}
             </option>
           </select>
         </div>
         <div class="flex flex-col lg:flex-row lg:space-x-2">
-          <div class="h-[255px] w-full lg:w-1/2">
+          <div class="w-full lg:w-1/2">
             <div class="mb-3 pt-0">
               <input
                 v-model="contact.lastName"
                 type="text"
                 placeholder="Votre nom *"
-                class="border-1 relative h-[55px] w-full rounded-lg border-gray-200 bg-white px-3 text-gray-600 placeholder-gray-400"
+                class="border-1 relative h-[55px] w-full rounded-lg border-gray-200 bg-white px-3 placeholder-gray-400"
                 required
               />
             </div>
@@ -48,7 +54,7 @@
                 v-model="contact.firstName"
                 type="text"
                 placeholder="Votre prénom *"
-                class="border-1 relative h-[55px] w-full rounded-lg border-gray-200 bg-white px-3 text-gray-600 placeholder-gray-400"
+                class="border-1 relative h-[55px] w-full rounded-lg border-gray-200 bg-white px-3 placeholder-gray-400"
                 required
               />
             </div>
@@ -57,16 +63,16 @@
                 v-model="contact.email"
                 type="email"
                 placeholder="Votre email *"
-                class="border-1 relative h-[55px] w-full rounded-lg border-gray-200 bg-white px-3 text-gray-600 placeholder-gray-400"
+                class="border-1 relative h-[55px] w-full rounded-lg border-gray-200 bg-white px-3 placeholder-gray-400"
                 required
               />
             </div>
-            <div class="mb-3 flex flex-col pt-0">
+            <div class="flex flex-col pt-0">
               <input
                 v-model="contact.phone"
                 type="tel"
                 placeholder="Votre téléphone (Optionnel)"
-                class="border-1 relative h-[55px] w-full rounded-lg border-gray-200 bg-white px-3 text-gray-600 placeholder-gray-400"
+                class="border-1 relative h-[55px] w-full rounded-lg border-gray-200 bg-white px-3 placeholder-gray-400"
                 @blur="checkPhoneNumber"
               />
               <span
@@ -83,14 +89,14 @@
                 v-model="contact.accordCadreName"
                 type="text"
                 placeholder="Nom partenaire / accord-cadre (Optionnel)"
-                class="border-1 relative h-[55px] w-full rounded-lg border-gray-200 bg-white px-3 text-gray-600 placeholder-gray-400"
+                class="border-1 relative h-[55px] w-full rounded-lg border-gray-200 bg-white px-3 placeholder-gray-400"
               />
             </div>
             <div class="pt-0">
               <textarea
                 v-model="contact.description"
                 placeholder="Votre message *"
-                class="border-1 relative h-full w-full resize-none rounded-lg border-gray-200 bg-white px-3 py-3 text-gray-600 placeholder-gray-400"
+                class="border-1 relative h-full w-full resize-none rounded-lg border-gray-200 bg-white px-3 py-3 placeholder-gray-400"
                 rows="7"
                 required
               />
@@ -100,12 +106,13 @@
         <div class="mt-2 flex justify-end">
           <ButtonComponent
             type="submit"
-            class="button button-gradient mt-2 md:w-auto"
+            class="button-primary mt-2 md:w-auto"
             :is-loading="isLoading"
+            @click="gtmEvent('click_contact_send')"
           >
             <ArrowRightIconComponent
-              :stroke-color="'#FFFFFF'"
               class="mr-2 w-4"
+              :stroke-color="betterTextColor('primary')"
             />
             Envoyer
           </ButtonComponent>
@@ -124,6 +131,10 @@ import { useContactStore } from '@/vuejs/stores/contact'
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
 import { useAlertStore } from '@/vuejs/stores/alert'
 import { AlertType } from '@/vuejs/types/Alert'
+import { buildStandardGtmData, gtmMixinPushEvent } from '@/vuejs/services/gtm'
+import { useUserStore } from '@/vuejs/stores/user'
+import { useChannelStore } from '@/vuejs/stores/channel'
+import { betterTextColor } from '@/vuejs/services/utils'
 
 onMounted(async () => {
   await contactStore.init()
@@ -131,8 +142,11 @@ onMounted(async () => {
 
 const alertStore = useAlertStore()
 const contactStore = useContactStore()
+const userStore = useUserStore()
+const channelStore = useChannelStore()
 const isLoading = ref<boolean>(false)
 
+const currentChannel = channelStore.currentChannel
 const isNotValidPhoneNumber = ref<boolean>(false)
 
 const contact = computed(() => {
@@ -171,6 +185,12 @@ const sendEmail = async () => {
 
     isLoading.value = false
   }, 500)
+}
+
+const gtmEvent = (eventName: string, additionalData = null) => {
+  let data = buildStandardGtmData(userStore.user['@id'], currentChannel.name)
+  data = additionalData ? { ...data, ...additionalData } : data
+  gtmMixinPushEvent(eventName, data)
 }
 </script>
 

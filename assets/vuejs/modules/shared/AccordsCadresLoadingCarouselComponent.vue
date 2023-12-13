@@ -4,6 +4,10 @@
       :slides-per-view="1"
       :space-between="20"
       :breakpoints="{
+        1600: {
+          slidesPerView: 5,
+          spaceBetween: 20,
+        },
         1280: {
           slidesPerView: 4,
           spaceBetween: 20,
@@ -21,7 +25,7 @@
       <SwiperSlide
         v-for="number in props.accordsCadresNumber"
         :key="number"
-        class="flex h-full items-center justify-center overflow-hidden rounded-lg bg-primary"
+        class="flex h-full items-center justify-center overflow-hidden rounded-lg border-4 border-solid border-secondary bg-primary bg-white"
       >
         <AccordCadreLoadingComponent />
       </SwiperSlide>
@@ -36,7 +40,7 @@ import AccordCadreLoadingComponent from '@/vuejs/modules/products/components/Acc
 const props = defineProps({
   accordsCadresNumber: {
     type: Number,
-    default: 4,
+    default: 5,
   },
 })
 </script>

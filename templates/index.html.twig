@@ -1,271 +1,223 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Qantis Marketplace{% endblock %}
+{% block title %}
+	{{ channel.name }}
+{% endblock %}
 
 {% block body %}
-  <div class="w-full">
-    <div class="px-4 bg-gradient-to-b from-primary to-gradient-1">
-      <div class="container m-auto sm:py-9 py-6 border-t border-t-gray-800 text-white">
-        <div class="xl:w-1/2 sm:w-3/4">
-          <h1 class="xl:text-[42px] xl:leading-[3rem] sm:text-4xl text-2xl font-bold">
-            Bienvenue sur la <span class="text-secondary">marketplace réservée</span>
-            à nos 35 000 entreprises adhérentes
-          </h1>
-        </div>
-        <div class="sm:flex sm:flex-row-reverse mt-6">
-          <div class="flex sm:w-1/2 items-end justify-center sm:-mt-32">
-            <img
-              class="2xl:w-[280px] 2xl:h-[255px] sm:w-[180px] sm:h-[180px] w-2/5 object-cover rounded-md"
-              src="/pre_home/equipe_qantis.jpeg"
-              alt="Équipe Qantis">
-            <img
-              class="2xl:w-[400px] 2xl:h-[300px] sm:w-[220px] sm:h-[230px] w-3/5 object-cover md:ml-4 xl:ml-8 ml-1 rounded-md"
-              src="/pre_home/journee_ensemble.jpeg"
-              alt="Journée Ensemble">
-          </div>
-          <ul class="sm:w-1/2 mt-4 sm:mt-0">
-            <li class="pt-4 flex items-center">
-              {{ include('_partials/_checkicon.html.twig') }}
-              Faites des économies
-            </li>
-            <li class="pt-4 flex items-center">
-              {{ include('_partials/_checkicon.html.twig') }}
-              Gagnez du temps en quelques clics
-            </li>
-            <li class="pt-4 flex items-center">
-              {{ include('_partials/_checkicon.html.twig') }}
-              Simplifiez vos achats
-            </li>
-            <li class="pt-4 flex items-center">
-              {{ include('_partials/_checkicon.html.twig') }}
-              Accédez rapidement aux fournisseurs référencés
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="container px-4 sm:flex mx-auto sm:my-12 my-4" id="connection-form">
-      <div class="vue-app w-full" data-component="login"></div>
-    </div>
-    <div class="bg-gradient-to-r from-primary to-gradient-1">
-      <div class="container px-4 mx-auto sm:pt-16 pt-8 sm:pb-24 pb-12 text-white">
-        <h2 class="sm:text-4xl text-xl font-bold text-center sm:text-left">Découvrez la <span class="text-secondary">Communauté QANTIS</span>
-        </h2>
-        <div class="flex flex-col md:flex-row md:flex-wrap xl:flex-nowrap gap-4 mt-10 xl:mt-16">
-          <div class="flex flex-col mb-4 sm:mb-0 sm:flex-row items-center xl:w-1/3">
-            <img
-              class="h-[208px] w-[208px] object-cover rounded-md"
-              src="/pre_home/home_banner_1.jpeg"
-              alt="Banner 1">
-            <div class="mt-4 sm:mt-0 ml-5">
-              <h3 class="font-bold text-xl">Nos Commissions d'adhérents</h3>
-              <div class="mt-3">Participez à une commission QANTIS avec nos adhérents pour partager les bonnes
-                pratiques
-              </div>
-              <a href="https://qantis.co/nos-clubs-dadherents/" class="underline font-bold mt-3" target="_blank">
-                Découvrez nos Commissions
-              </a>
-            </div>
-          </div>
-          <div class="flex flex-col mb-4 sm:mb-0 sm:flex-row items-center xl:w-1/3">
-            <img
-              class="h-[208px] w-[208px] object-cover rounded-md"
-              src="/pre_home/home_banner_2.jpeg"
-              alt="Banner 2">
-            <div class="mt-4 sm:mt-0 ml-5">
-              <h3 class="font-bold text-xl">Fournisseurs et avant tout partenaires</h3>
-              <div class="mt-3">Des contrats-cadres pour des relations durables et un volume d'affaires pérenne</div>
-              <a href="https://qantis.co/contact/" class="underline font-bold mt-3" target="_blank">
-                Devenez partenaire
-              </a>
-            </div>
-          </div>
-          <div class="flex flex-col sm:flex-row items-center xl:w-1/3">
-            <img
-              class="h-[208px] w-[208px] object-cover rounded-md"
-              src="/pre_home/home_banner_3.jpeg"
-              alt="Banner 3">
-            <div class="mt-4 sm:mt-0 ml-5">
-              <h3 class="font-bold text-xl">Nos événements collaboratifs</h3>
-              <div class="mt-3">Un réseau convivial et professionel pour faire mieux ensemble</div>
-              <a href="https://qantis.co/nos-evenements-collaboratifs/" class="underline font-bold mt-3"
-                 target="_blank">
-                Découvrez nos événements
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="container px-4 mx-auto py-6 sm:py-11">
-      <h2 class="text-primary text-xl sm:text-4xl font-bold">
-        <span class="text-gradient">
-          35 000 PME françaises et 200 partenaires
-        </span><br />
-        <span class="text-secondary">fournisseurs</span> nous font déjà confiance
-      </h2>
-      <div class="flex flex-col md:flex-row md:flex-wrap xl:flex-nowrap gap-4 mt-10">
-        <div class="bg-white rounded-xl shadow-xl shadow-gradient-1/10 p-14 xl:w-1/3">
-          <div class="flex">
-            <img
-              class="w-12 h-12 rounded"
-              src="/pre_home/rebollo.jpeg"
-              alt="Hervé REBOLLO">
-            <figcaption class="font-medium ml-4">
-              <div class="text-primary font-bold">
-                Hervé REBOLLO
-              </div>
-              <div class="text-gray-500">
-                Directeur général DLR la Fédération nationale des distributeurs, loueurs et réparateurs de matériels de
-                construction et de manutention.
-              </div>
-            </figcaption>
-          </div>
-          <div class="mt-6">
-            <h4 class="text-primary text-xl font-bold">Témoignage d'un réseau d'entreprises</h4>
-            <blockquote>
-              <p class="text-lg text-gray-500 mt-5">
-                “Grâce à QANTIS, nous mettons à disposition de nos adhérents un service achats conçus spécifiquement
-                pour eux. Nos adhérents bénéficient de tarifs négociés chez des fournisseurs déjà référencés.
-                QANTIS propose un service individualisé aux couleurs de notre fédération pour que nos dirigeants
-                gagnent du temps et réalisent des économies.”
-              </p>
-            </blockquote>
-          </div>
-        </div>
-        <div class="bg-white rounded-xl shadow-xl shadow-gradient-1/10 p-14 xl:w-1/3">
-          <div class="flex">
-            <img
-              class="w-12 h-12 rounded"
-              src="/pre_home/tetard.jpeg"
-              alt="Cyril TETARD REBOLLO">
-            <figcaption class="font-medium ml-4">
-              <div class="text-primary font-bold">
-                Cyril TETARD
-              </div>
-              <div class="text-gray-500">
-                BOISSET TP, spécialiste du terrassement, des réseaux humides et des aménagements de surfaces
-              </div>
-            </figcaption>
-          </div>
-          <div class="mt-6">
-            <h4 class="text-primary text-xl font-bold">Témoignage d'une PME</h4>
-            <blockquote>
-              <p class="text-lg text-gray-500 mt-5">
-                “QANTIS nous permet de réaliser de très belles économies sur différents domaines.
-                C'est aussi une équipe dynamique qui répond très rapidement à toutes nos questions
-                grâce au Service Adhérents et à notre animateur dédié.”
-              </p>
-            </blockquote>
-          </div>
-        </div>
-        <div class="bg-white rounded-xl shadow-xl shadow-gradient-1/10 p-14 xl:w-1/3">
-          <div class="flex">
-            <img
-              class="w-12 h-12 rounded"
-              src="/pre_home/peugeot.png"
-              alt="Peugeot">
-            <figcaption class="font-medium ml-4">
-              <div class="text-primary font-bold">
-                Peugeot
-              </div>
-              <div class="text-gray-500">
-                Partenaire fournisseurs de QANTIS
-              </div>
-            </figcaption>
-          </div>
-          <div class="mt-6">
-            <h4 class="text-primary text-xl font-bold">Témoignage d'un réseau d'entreprises</h4>
-            <blockquote>
-              <p class="text-lg text-gray-500 mt-5">
-                “Véritable relais de nos produits sur le terrain, QANTIS nous permet de découvrir
-                de nouveaux clients et de conquérir de nouveaux marchés. L'équipe d'animation de QANTIS
-                représente une valeur ajoutée. Elle renforce la dynamique que nous développons en région
-                avec nos équipes.”
-              </p>
-            </blockquote>
-          </div>
-        </div>
-      </div>
-      <h2 class="text-primary text-xl sm:text-4xl font-bold sm:mt-11 mt-7">
-        Fournisseurs et avant tout
-        <span class="bg-gradient-to-r bg-clip-text from-gradient-1 to-gradient-2 text-transparent">
-          partenaires
-        </span>
-      </h2>
-      <p class="mt-5 text-gray-500 text-sm sm:text-lg sm:max-w-[66%]">
-        Nos adhérents participent aux négociations pour la conclusion des accords-cadres.
-        C'est la garantie pour vous et nos adhérents d'avoir des contrats personnalisés,
-        aux meilleures conditions tarifaires et adaptés à vos besoins
-      </p>
-      <div class="vue-app mt-8" data-component="partners-carousel"></div>
-      <div class="flex flex-col sm:flex-row sm:mt-11 mt-7">
-        <div class="sm:w-1/2">
-          <h2 class="text-gradient text-xl sm:text-4xl font-bold">
-            Qui sommes-nous ?
-          </h2>
-          <div class="sm:text-lg text-sm text-gray-500 mt-5">
-            <p>
-              Depuis 2001, QANTIS a développé une méthode unique basée sur 3 savoir-faire :
-            </p>
-            <ul>
-              <li class="pt-4 flex items-center">
-                {{ include('_partials/_checkicon.html.twig') }}
-                la mutualisation pour se regrouper
-              </li>
-              <li class="pt-4 flex items-center">
-                {{ include('_partials/_checkicon.html.twig') }}
-                le collaboratif pour faire ensemble
-              </li>
-              <li class="pt-4 flex items-center">
-                {{ include('_partials/_checkicon.html.twig') }}
-                la personnalisation pour s'adapter
-              </li>
-            </ul>
-            <p class="mt-7">
-              La centrale d'achats, le conseil et nos outils digitaux sont des accélérateurs de performance
-              pour nos 35 000 entreprises adhérents
-            </p>
-            <p class="mt-7">
-              QANTIS accompagne également chaque jour ses adhérents et partenaires fournisseurs sur le chemin
-              d'une politique RSE efficace, rentable et impactante.
-            </p>
-            <a href="https://qantis.co/" class="button button-gradient mt-5 sm:mt-10" target="_blank">
-              <svg width="15" height="14" viewBox="0 0 15 14" fill="none" stroke="currentColor"
-                   xmlns="http://www.w3.org/2000/svg">
-                <path d="M14 7.00002L7.52 13.48M0.5 7.00002H14H0.5ZM14 7.00002L7.52 0.52002L14 7.00002Z" stroke="white"
-                      stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-              En savoir plus sur QANTIS
-            </a>
-          </div>
-        </div>
-        <div class="relative w-full min-h-[270px] sm:w-1/2 mt-6 sm:mt-0">
-          <img
-            class="w-[155px] h-[52px] sm:w-[340px] sm:h-[114px] object-cover rounded-md absolute left-[5%] top-0"
-            src="/pre_home/coq_vert_footer_logo.png"
-            alt="Coq Vert">
-          <div class="flex">
-            <img
-              class="w-[118px] h-[137px] md:hidden lg:block xl:w-[200px] xl:h-[300px] 2xl:w-[260px] 2xl:h-[300px] object-cover rounded-md shadow-2xl shadow-secondary/20 absolute bottom-[40px] left-[5%] xl:left-[15%]"
-              src="/pre_home/ensemble.jpeg"
-              alt="Équipe Ensemble">
-            <img
-              class="w-[168px] h-[160px] md:w-[240px] md:h-[450px] xl:w-[250px] xl:h-[350px] 2xl:w-[360px] 2xl:h-[350px] object-cover rounded-md shadow-2xl shadow-secondary/20 absolute bottom-[40px] right-[5%] xl:right-0"
-              src="/pre_home/equipe_qantis_2.jpeg"
-              alt="Équipe Qantis">
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="bg-gradient-1 text-white text-sm sm:text-lg py-4">
-      <div class="container sm:flex text-center mx-auto sm:justify-center">
-        <div>Entrez dans votre espace adhérent.</div>
-        <span onclick="document.getElementById('login-email').focus()"
-              class="underline font-bold cursor-pointer sm:ml-2">
-          Se connecter
-        </span>
-      </div>
-    </div>
-  </div>
+	<div class="w-full">
+		<div class="px-4 bg-gradient-to-b from-primary to-gradient-1">
+			<div class="container m-auto sm:py-9 py-6 border-t border-t-gray-800 text-white">
+				<div class="xl:w-1/2 sm:w-3/4">
+					<h1 class="xl:text-[42px] xl:leading-[3rem] sm:text-4xl text-2xl font-bold">
+						Bienvenue sur la
+						<span class="text-secondary">marketplace réservée</span>
+						à nos 35 000 entreprises adhérentes
+					</h1>
+				</div>
+				<div class="sm:flex sm:flex-row-reverse mt-6">
+					<div class="flex sm:w-1/2 items-end justify-center sm:-mt-32">
+						<img class="2xl:w-[280px] 2xl:h-[255px] sm:w-[180px] sm:h-[180px] w-2/5 object-cover rounded-md" src="/pre_home/equipe_qantis.jpeg" alt="Équipe Qantis">
+						<img class="2xl:w-[400px] 2xl:h-[300px] sm:w-[220px] sm:h-[230px] w-3/5 object-cover md:ml-4 xl:ml-8 ml-1 rounded-md" src="/pre_home/journee_ensemble.jpeg" alt="Journée Ensemble">
+					</div>
+					<ul class="sm:w-1/2 mt-4 sm:mt-0">
+						<li class="pt-4 flex items-center">
+							{{ include('_partials/_checkicon.html.twig') }}
+							Faites des économies
+						</li>
+						<li class="pt-4 flex items-center">
+							{{ include('_partials/_checkicon.html.twig') }}
+							Gagnez du temps en quelques clics
+						</li>
+						<li class="pt-4 flex items-center">
+							{{ include('_partials/_checkicon.html.twig') }}
+							Simplifiez vos achats
+						</li>
+						<li class="pt-4 flex items-center">
+							{{ include('_partials/_checkicon.html.twig') }}
+							Accédez rapidement aux fournisseurs référencés
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="container px-4 sm:flex mx-auto sm:my-12 my-4" id="connection-form">
+			<div class="vue-app w-full" data-component="login"></div>
+		</div>
+		<div class="bg-gradient-to-r from-primary to-gradient-1">
+			<div class="container px-4 mx-auto sm:pt-16 pt-8 sm:pb-24 pb-12 text-white">
+				<h2 class="sm:text-4xl text-xl font-bold text-center sm:text-left">
+					Découvrez la
+					<span class="text-secondary">Communauté QANTIS</span>
+				</h2>
+
+				<div class="flex flex-col md:flex-row md:flex-wrap xl:flex-nowrap gap-4 mt-10 xl:mt-16">
+					<div class="flex flex-col mb-4 sm:mb-0 sm:flex-row items-center xl:w-1/3">
+						<img class="h-[208px] w-[208px] object-cover rounded-md" src="/pre_home/home_banner_1.jpeg" alt="Banner 1">
+						<div class="mt-4 sm:mt-0 ml-5">
+							<h3 class="font-bold text-xl">Nos Commissions d'adhérents</h3>
+							<div class="mt-3">Participez à une commission QANTIS avec nos adhérents pour partager les bonnes pratiques
+							</div>
+							<a href="https://qantis.co/nos-clubs-dadherents/" class="underline font-bold mt-3" target="_blank">
+								Découvrez nos Commissions
+							</a>
+						</div>
+					</div>
+					<div class="flex flex-col mb-4 sm:mb-0 sm:flex-row items-center xl:w-1/3">
+						<img class="h-[208px] w-[208px] object-cover rounded-md" src="/pre_home/home_banner_2.jpeg" alt="Banner 2">
+						<div class="mt-4 sm:mt-0 ml-5">
+							<h3 class="font-bold text-xl">Fournisseurs et avant tout partenaires</h3>
+							<div class="mt-3">Des contrats-cadres pour des relations durables et un volume d'affaires pérenne</div>
+							<a href="https://qantis.co/contact/" class="underline font-bold mt-3" target="_blank">
+								Devenez partenaire
+							</a>
+						</div>
+					</div>
+					<div class="flex flex-col sm:flex-row items-center xl:w-1/3">
+						<img class="h-[208px] w-[208px] object-cover rounded-md" src="/pre_home/home_banner_3.jpeg" alt="Banner 3">
+						<div class="mt-4 sm:mt-0 ml-5">
+							<h3 class="font-bold text-xl">Nos événements collaboratifs</h3>
+							<div class="mt-3">Un réseau convivial et professionel pour faire mieux ensemble</div>
+							<a href="https://qantis.co/nos-evenements-collaboratifs/" class="underline font-bold mt-3" target="_blank">
+								Découvrez nos événements
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container px-4 mx-auto py-6 sm:py-11">
+			<h2 class="text-primary text-xl sm:text-4xl font-bold">
+				<span class="text-gradient">
+					35 000 PME françaises et 200 partenaires</span>
+				<br/>
+				<span class="text-secondary">fournisseurs</span>
+				nous font déjà confiance
+			</h2>
+			<div class="flex flex-col md:flex-row md:flex-wrap xl:flex-nowrap gap-4 mt-10">
+				<div class="bg-white rounded-xl shadow-xl shadow-gradient-1/10 p-14 xl:w-1/3">
+					<div class="flex">
+						<img class="w-12 h-12 rounded" src="/pre_home/rebollo.jpeg" alt="Hervé REBOLLO">
+						<figcaption class="font-medium ml-4">
+							<div class="text-primary font-bold">
+								Hervé REBOLLO
+							</div>
+							<div class="text-gray-500">
+								Directeur général DLR la Fédération nationale des distributeurs, loueurs et réparateurs de matériels de construction et de manutention.
+							</div>
+						</figcaption>
+					</div>
+					<div class="mt-6">
+						<h4 class="text-primary text-xl font-bold">Témoignage d'un réseau d'entreprises</h4>
+						<blockquote>
+							<p class="text-lg text-gray-500 mt-5">
+								“Grâce à QANTIS, nous mettons à disposition de nos adhérents un service achats conçus spécifiquement pour eux. Nos adhérents bénéficient de tarifs négociés chez des fournisseurs déjà référencés. QANTIS propose un service individualisé aux couleurs de notre fédération pour que nos dirigeants gagnent du temps et réalisent des économies.”
+							</p>
+						</blockquote>
+					</div>
+				</div>
+				<div class="bg-white rounded-xl shadow-xl shadow-gradient-1/10 p-14 xl:w-1/3">
+					<div class="flex">
+						<img class="w-12 h-12 rounded" src="/pre_home/tetard.jpeg" alt="Cyril TETARD REBOLLO">
+						<figcaption class="font-medium ml-4">
+							<div class="text-primary font-bold">
+								Cyril TETARD
+							</div>
+							<div class="text-gray-500">
+								BOISSET TP, spécialiste du terrassement, des réseaux humides et des aménagements de surfaces
+							</div>
+						</figcaption>
+					</div>
+					<div class="mt-6">
+						<h4 class="text-primary text-xl font-bold">Témoignage d'une PME</h4>
+						<blockquote>
+							<p class="text-lg text-gray-500 mt-5">
+								“QANTIS nous permet de réaliser de très belles économies sur différents domaines. C'est aussi une équipe dynamique qui répond très rapidement à toutes nos questions grâce au Service Adhérents et à notre animateur dédié.”
+							</p>
+						</blockquote>
+					</div>
+				</div>
+				<div class="bg-white rounded-xl shadow-xl shadow-gradient-1/10 p-14 xl:w-1/3">
+					<div class="flex">
+						<img class="w-12 h-12 rounded" src="/pre_home/peugeot.png" alt="Peugeot">
+						<figcaption class="font-medium ml-4">
+							<div class="text-primary font-bold">
+								Peugeot
+							</div>
+							<div class="text-gray-500">
+								Partenaire fournisseurs de QANTIS
+							</div>
+						</figcaption>
+					</div>
+					<div class="mt-6">
+						<h4 class="text-primary text-xl font-bold">Témoignage d'un réseau d'entreprises</h4>
+						<blockquote>
+							<p class="text-lg text-gray-500 mt-5">
+								“Véritable relais de nos produits sur le terrain, QANTIS nous permet de découvrir de nouveaux clients et de conquérir de nouveaux marchés. L'équipe d'animation de QANTIS représente une valeur ajoutée. Elle renforce la dynamique que nous développons en région avec nos équipes.”
+							</p>
+						</blockquote>
+					</div>
+				</div>
+			</div>
+			<h2 class="text-primary text-xl sm:text-4xl font-bold sm:mt-11 mt-7">
+				Fournisseurs et avant tout
+				<span class="bg-gradient-to-r bg-clip-text from-gradient-1 to-gradient-2 text-transparent">partenaires</span>
+			</h2>
+			<p class="mt-5 text-gray-500 text-sm sm:text-lg sm:max-w-[66%]">
+				Nos adhérents participent aux négociations pour la conclusion des accords-cadres. C'est la garantie pour vous et nos adhérents d'avoir des contrats personnalisés, aux meilleures conditions tarifaires et adaptés à vos besoins
+			</p>
+			<div class="vue-app mt-8" data-component="partners-carousel"></div>
+			<div class="flex flex-col sm:flex-row sm:mt-11 mt-7">
+				<div class="sm:w-1/2">
+					<h2 class="text-gradient text-xl sm:text-4xl font-bold">Qui sommes-nous ?</h2>
+					<div class="sm:text-lg text-sm text-gray-500 mt-5">
+						<p>
+							Depuis 2001, QANTIS a développé une méthode unique basée sur 3 savoir-faire :
+						</p>
+						<ul>
+							<li class="pt-4 flex items-center">
+								{{ include('_partials/_checkicon.html.twig') }}
+								la mutualisation pour se regrouper
+							</li>
+							<li class="pt-4 flex items-center">
+								{{ include('_partials/_checkicon.html.twig') }}
+								le collaboratif pour faire ensemble
+							</li>
+							<li class="pt-4 flex items-center">
+								{{ include('_partials/_checkicon.html.twig') }}
+								la personnalisation pour s'adapter
+							</li>
+						</ul>
+						<p class="mt-7">
+							La centrale d'achats, le conseil et nos outils digitaux sont des accélérateurs de performance pour nos 35 000 entreprises adhérents
+						</p>
+						<p class="mt-7">
+							QANTIS accompagne également chaque jour ses adhérents et partenaires fournisseurs sur le chemin d'une politique RSE efficace, rentable et impactante.
+						</p>
+						<a href="https://qantis.co/" class="button button-gradient mt-5 sm:mt-10" target="_blank">
+							<svg width="15" height="14" viewbox="0 0 15 14" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+								<path d="M14 7.00002L7.52 13.48M0.5 7.00002H14H0.5ZM14 7.00002L7.52 0.52002L14 7.00002Z" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
+							</svg>
+							En savoir plus sur QANTIS
+						</a>
+					</div>
+				</div>
+				<div class="relative w-full min-h-[270px] sm:w-1/2 mt-6 sm:mt-0">
+					<img class="w-[155px] h-[52px] sm:w-[340px] sm:h-[114px] object-cover rounded-md absolute left-[5%] top-0" src="/pre_home/coq_vert_footer_logo.png" alt="Coq Vert">
+					<div class="flex">
+						<img class="w-[118px] h-[137px] md:hidden lg:block xl:w-[200px] xl:h-[300px] 2xl:w-[260px] 2xl:h-[300px] object-cover rounded-md shadow-2xl shadow-secondary/20 absolute bottom-[40px] left-[5%] xl:left-[15%]" src="/pre_home/ensemble.jpeg" alt="Équipe Ensemble">
+						<img class="w-[168px] h-[160px] md:w-[240px] md:h-[450px] xl:w-[250px] xl:h-[350px] 2xl:w-[360px] 2xl:h-[350px] object-cover rounded-md shadow-2xl shadow-secondary/20 absolute bottom-[40px] right-[5%] xl:right-0" src="/pre_home/equipe_qantis_2.jpeg" alt="Équipe Qantis">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="bg-gradient-1 text-white text-sm sm:text-lg py-4">
+			<div class="container sm:flex text-center mx-auto sm:justify-center">
+				<div>Entrez dans votre espace adhérent.</div>
+				<span onclick="document.getElementById('login-email').focus()" class="underline font-bold cursor-pointer sm:ml-2">
+					Se connecter
+				</span>
+			</div>
+		</div>
+	</div>
 {% endblock %}

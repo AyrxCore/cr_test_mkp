@@ -67,10 +67,7 @@
               v-if="isLoadingOptions"
               class="mt-1 flex h-10 w-full items-center justify-start"
             >
-              <LoaderSharedComponent
-                class="text-gray-500"
-                classes="loader-lg loader"
-              />
+              <LoaderSharedComponent class="loader-lg loader text-gray-500" />
             </div>
             <div v-else>
               <ul v-if="isOpen && options.length > 0">
@@ -111,7 +108,7 @@
             </span>
           </div>
           <div class="flex">
-            <!-- <button class="flex text-gray-500">
+            <!-- <button class="flex ">
               <HeartIconComponent class="mr-2 stroke-gray-500" />
             </button> -->
             <button

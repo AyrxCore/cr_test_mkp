@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
 use App\Entity\Setting;
@@ -7,7 +9,9 @@ use App\Repository\SettingRepository;
 
 class SettingsService
 {
-    public function __construct(private SettingRepository $settingRepository){}
+    public function __construct(private SettingRepository $settingRepository)
+    {
+    }
 
     public function getSetting(string $settingName): ?Setting
     {
@@ -16,11 +20,11 @@ class SettingsService
 
     public function useExternalScriptsTags(): bool|string|null
     {
-        return !$this->getSetting('external_scripts_tags') ? false : $this->getSetting('external_scripts_tags')->getValue();
+        return !$this->getSetting(Setting::EXTERNAL_SCRIPTS_TAGS) ? false : $this->getSetting(Setting::EXTERNAL_SCRIPTS_TAGS)->getValue();
     }
 
     public function isMaintenanceMode(): bool|string|null
     {
-        return !$this->getSetting('maintenance_mode') ? false : $this->getSetting('maintenance_mode')->getValue();
+        return !$this->getSetting(Setting::MAINTENANCE_MODE) ? false : $this->getSetting(Setting::MAINTENANCE_MODE)->getValue();
     }
 }

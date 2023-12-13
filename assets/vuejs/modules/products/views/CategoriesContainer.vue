@@ -1,7 +1,7 @@
 <template>
-  <BaseTemplate title="Qantis - MarketPlace - Liste des catégrories">
+  <BaseTemplate title="Liste des catégories">
     <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl px-5 sm:px-8">
-      <BreadcrumbSharedComponent :current-page="'Catégories'" />
+      <BreadcrumbSharedComponent current-page="Catégories" />
       <div class="w-[100%] max-w-screen-2xl justify-end">
         <ContactUsButtonComponent />
       </div>
@@ -30,7 +30,7 @@
               v-if="category.image"
               :src="category.image"
               :alt="category.name"
-              class="h-[210px]"
+              class="m-auto h-[210px]"
             />
             <CategoryComponent :category="category" />
           </div>

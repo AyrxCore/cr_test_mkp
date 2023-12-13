@@ -13,11 +13,16 @@ use Symfony\Component\HttpFoundation\Cookie;
     $expectedStatusCode,
     $expectedRoles,
     $expectedResponse = null,
+    $channel = 'QANTIS_MARKETPLACE',
 ) {
     // load dev fixtures
     UserStory::load();
 
-    $client = $this::createClient();
+    $client = $this::createClient(defaultOptions: [
+        'headers' => [
+            'X-Channel' => $channel,
+        ],
+    ]);
 
     $response = $client->request('POST', '/api/authentication/token', [
         'json' => [
@@ -41,21 +46,21 @@ use Symfony\Component\HttpFoundation\Cookie;
             'roles' => $expectedRoles,
         ]);
 
-    $accounts = UserFactory::find(['username' => $username])->getAccounts();
-    if ($accounts->isEmpty()) {
-        return;
+    if (!\in_array('ROLE_API', $expectedRoles, true)) {
+        $user = UserFactory::find(['username' => $username])->object();
+        $account = $this::getUserFirstAccount($user, $channel);
+        $this->assertNotNull($account);
+        // Select an account to initialize the session
+        $client->request('GET', "/api/accounts/{$account->getId()}/select");
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(200);
+
+        // get current user info
+        $client->request('GET', '/api/me');
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertJsonResponseMatches($expectedResponse);
     }
-
-    // Select an account to initialize the session
-    $client->request('GET', "/api/user/account/{$accounts->first()->getId()}/select");
-    $this->assertResponseIsSuccessful();
-    $this->assertResponseStatusCodeSame(200);
-
-    // get current user info
-    $client->request('GET', '/api/user/me');
-    $this->assertResponseIsSuccessful();
-    $this->assertResponseStatusCodeSame(200);
-    $this->assertJsonResponseMatches($expectedResponse);
 })
     ->with([
         'user with ROLE_USER' => [
@@ -63,7 +68,7 @@ use Symfony\Component\HttpFoundation\Cookie;
             'password' => '23AP4DF8',
             'expectedStatusCode' => 204,
             'roles' => ['ROLE_USER'],
-            'expectedResponse' => 'user/me/response_user_with_marketplace_access.json',
+            'expectedResponse' => 'me/response_user_with_marketplace_access.json',
         ],
         'user with ROLE_API' => [
             'username' => 'api_user',

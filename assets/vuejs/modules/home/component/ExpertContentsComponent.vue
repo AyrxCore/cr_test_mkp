@@ -1,11 +1,10 @@
 <template>
   <div class="relative mt-5 p-8">
     <CarouselListSharedComponent
-      class="nav-mobile-only"
+      class="nav-mobile-only swiper-nav-outside"
       :slides-per-view="1"
       :space-between="20"
       :show-nav="true"
-      :loop="false"
       :breakpoints="{
         1280: {
           slidesPerView: 3,
@@ -22,45 +21,44 @@
         :key="contenu.id"
         class="flex h-full items-center justify-center overflow-hidden rounded-lg"
       >
-        <div class="grid lg:grid-cols-2">
-          <div
-            class="flex rounded-lg border-[#F3EDFE] md:h-[259px] md:w-[207px]"
-          >
+        <div
+          class="mx-auto flex h-[500px] w-[392px] flex-col justify-start rounded-md bg-white px-6 py-4"
+        >
+          <!-- Bloc image -->
+          <div class="mx-auto flex h-[191px] justify-center rounded-lg px-1">
             <img
               :src="contenu.mise_en_avant_homepage_img_desktop"
               alt="Picture"
               class="w-full items-center sm:mx-auto"
             />
           </div>
-          <div class="mt-5 h-[250px] text-left md:mt-0 md:px-6">
+          <!-- Fin bloc image -->
+
+          <!-- Bloc nom et description -->
+          <div class="mt-6 flex w-full flex-col justify-start">
             <h3
-              class="truncate-custom truncate-custom-2 text-[23px] font-bold text-primary"
+              class="truncate-custom truncate-custom-2 mb-5 text-[23px] font-bold text-primary"
             >
               {{ contenu.articleTitle }}
             </h3>
-            <p class="my-4">
-              <span
-                class="mr-2 mb-2 w-auto items-center rounded-md bg-purple-600 px-5 py-2.5 text-sm text-white"
-                :style="{ background: contenu.categoryColor }"
-              >
-                {{ contenu.categoryName }}
-              </span>
-            </p>
-            <p class="truncate-custom truncate-custom-3 text-lg">
-              {{ contenu.articleTeaser }}
-            </p>
-            <div class="bottom-0">
-              <RouterLink
-                :to="{
-                  name: PageList.NEWS_ITEM,
-                  params: { slug: contenu.slug },
-                }"
-                class="bottom-0 flex items-center text-sm font-medium text-primary underline"
-              >
-                Lire l'article
-              </RouterLink>
+            <div class="h-[100px]">
+              <p class="truncate-custom truncate-custom-3 text-lg">
+                {{ contenu.articleTeaser }}
+              </p>
             </div>
           </div>
+          <div class="bottom-0">
+            <RouterLink
+              :to="{
+                name: PageList.NEWS_ITEM,
+                params: { slug: contenu.slug },
+              }"
+              class="button border-2 border-primary text-sm font-medium !text-primary shadow-none hover:scale-105 hover:!border-primary hover:!bg-white hover:!shadow-inner-darker focus:!bg-white"
+            >
+              Découvrir les commissions
+            </RouterLink>
+          </div>
+          <!-- Fin bloc nom et description -->
         </div>
       </SwiperSlide>
     </CarouselListSharedComponent>
@@ -71,6 +69,12 @@
 import { SwiperSlide } from 'swiper/vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
 import { PageList } from '@/vuejs/router'
+import { formatPrice, getUpplerImage } from '@/vuejs/services/utils'
+import { ProductPageList } from '@/vuejs/router/pages-list'
+import ProductQuantityComponent from '@/vuejs/modules/shared/ProductQuantityComponent.vue'
+import ButtonAddToCartComponent from '@/vuejs/modules/shared/ButtonAddToCartComponent.vue'
+import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
+import AddFavoriteComponent from '@/vuejs/modules/products/components/AddFavoriteComponent.vue'
 
 const props = defineProps({
   contents: {

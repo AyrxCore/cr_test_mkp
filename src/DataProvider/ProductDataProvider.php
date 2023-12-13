@@ -31,8 +31,8 @@ class ProductDataProvider implements
         try {
             $filters = $context['filters'] ?? [];
 
-            $page = $filters['page'] ?? ProductApiController::PAGE;
-            $perPage = $filters['perPage'] ?? ProductApiController::PER_PAGE;
+            $page = $filters['page'] ?? ProductApiController::DEFAULT_PAGE_NUMBER;
+            $perPage = $filters['perPage'] ?? ProductApiController::DEFAULT_PER_PAGE;
             $withFilters = $filters['withFilters'] ?? false;
 
             $apiResponse = $this->upplerProductService->findProducts(

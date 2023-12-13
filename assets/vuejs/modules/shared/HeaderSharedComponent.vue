@@ -1,5 +1,5 @@
 <template>
-  <nav class="sticky top-0 z-30 w-full bg-primary px-4 py-1 lg:pt-5 lg:pb-3">
+  <nav class="sticky top-0 z-30 w-full bg-white py-1 shadow-md lg:pb-3">
     <div class="mx-auto items-center px-4 lg:flex">
       <div class="flex justify-between">
         <MenuComponent class="lg:hidden" />
@@ -11,7 +11,7 @@
       </div>
       <AccountComponent class="hidden lg:flex" />
     </div>
-    <MenuComponent class="hidden lg:flex" />
+    <MenuComponent :icon-color="channelSecondaryColor" class="hidden lg:flex" />
   </nav>
 </template>
 
@@ -23,8 +23,12 @@ import SearchComponent from '@/vuejs/modules/shared/header-component/SearchCompo
 import router from '@/vuejs/router'
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import { useProductStore } from '@/vuejs/stores/product'
+import { useChannelStore } from '@/vuejs/stores/channel'
+import { storeToRefs } from 'pinia'
 
 const productStore = useProductStore()
+
+const { channelSecondaryColor } = storeToRefs(useChannelStore())
 
 const search = (event) => {
   productStore.setSelectedProperty(null)
@@ -40,8 +44,6 @@ const search = (event) => {
 </script>
 
 <style lang="scss">
-@import 'assets/style/_variables.scss';
-
 .overlay {
   display: none;
   height: 100vh;
@@ -83,7 +85,7 @@ const search = (event) => {
       display: flex;
       padding: 10px;
       height: 2em;
-      color: $primary;
+      color: #000000;
       font-size: 1em;
       line-height: 1em;
       text-decoration: none;

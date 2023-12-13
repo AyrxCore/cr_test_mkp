@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\CartSavings;
@@ -9,8 +11,8 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @extends ServiceEntityRepository<CartSavings>
  *
- * @method CartSavings|null find($id, $lockMode = null, $lockVersion = null)
- * @method CartSavings|null findOneBy(array $criteria, array $orderBy = null)
+ * @method null|CartSavings find($id, $lockMode = null, $lockVersion = null)
+ * @method null|CartSavings findOneBy(array $criteria, array $orderBy = null)
  * @method CartSavings[]    findAll()
  * @method CartSavings[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
@@ -38,29 +40,4 @@ class CartSavingsRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-
-//    /**
-//     * @return CartSavings[] Returns an array of CartSavings objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?CartSavings
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }

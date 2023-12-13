@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\SettingRepository;
@@ -11,6 +13,9 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\Entity(repositoryClass: SettingRepository::class)]
 class Setting
 {
+    public const EXTERNAL_SCRIPTS_TAGS = 'external_scripts_tags';
+    public const MAINTENANCE_MODE = 'maintenance_mode';
+
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]

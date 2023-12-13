@@ -4,18 +4,22 @@
       :slides-per-view="1"
       :space-between="10"
       :breakpoints="{
+        1600: {
+          slidesPerView: 5,
+          spaceBetween: 20,
+        },
         1280: {
           slidesPerView: 4,
           spaceBetween: 20,
         },
         1024: {
-            slidesPerView: 3,
-            spaceBetween: 20,
-          },
+          slidesPerView: 3,
+          spaceBetween: 20,
+        },
         640: {
-            slidesPerView: 2,
-            spaceBetween: 20,
-          },
+          slidesPerView: 2,
+          spaceBetween: 20,
+        },
       }"
     >
       <SwiperSlide
@@ -36,7 +40,7 @@ import ProductLoadingComponent from '@/vuejs/modules/products/components/Product
 const props = defineProps({
   productsNumber: {
     type: Number,
-    default: 4,
+    default: 5,
   },
 })
 </script>

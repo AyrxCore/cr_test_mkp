@@ -72,7 +72,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { PropType, computed, ref, onMounted } from 'vue'
+import { computed, onMounted, PropType, ref } from 'vue'
 import { Order } from '@/vuejs/types/Cart'
 
 import { formatPrice } from '@/vuejs/services/utils'

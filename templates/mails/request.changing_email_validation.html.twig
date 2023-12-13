@@ -775,9 +775,9 @@
                                                                                                     <ul style="margin: 0; list-style-type: disc;">
                                                                                                         <li>
                                                                                                             <span style="color: #3b3f44;">Par téléphone au </span>
-                                                                                                            <a href=tel:0437650621 title="04 37 65 06 21" target="_blank" style="color: #1f2d3d; text-decoration: underline;">
+                                                                                                            <a href=tel:{{ channel_phone_number(channel)}} title="{{ channel_formatted_phone_number(channel) }}" target="_blank" style="color: #1f2d3d; text-decoration: underline;">
                                                                                                             <span style="color: #3b3f44;">
-                                                                                                                <strong>0437650621</strong>
+                                                                                                                <strong>{{ channel_formatted_phone_number(channel) }}</strong>
                                                                                                             </span>
                                                                                                             </a>
                                                                                                         </li>

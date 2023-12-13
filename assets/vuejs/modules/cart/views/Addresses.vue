@@ -64,7 +64,7 @@
       </div>
       <div class="col-span-2 m-auto mt-4 lg:mt-0">
         <RouterLink
-          class="button button-secondary"
+          class="button button-gradient"
           :to="{ name: PageList.ADDRESSES }"
         >
           Gérer mes adresses
@@ -76,7 +76,7 @@
       <template #button-next>
         <ButtonComponent
           :is-loading="isLoading"
-          class="button button-gradient mt-3 w-full"
+          class="button button-secondary mt-3 w-full"
           @click="goToShipments"
         >
           <ArrowRightIconComponent :stroke-color="'#FFFFFF'" />

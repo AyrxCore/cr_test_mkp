@@ -1,8 +1,8 @@
 @import 'node_modules/tailwindcss/base';
 @import 'node_modules/tailwindcss/components';
 @import 'node_modules/tailwindcss/utilities';
-@import '_variables';
 @import 'form';
+@import 'tabs';
 
 @font-face {
   font-family: 'CoText';
@@ -11,29 +11,18 @@
     url('/fonts/CoTextCorp-Regular.ttf') format('truetype');
 }
 
-.bg-qantis {
-  background-color: $primary;
+@font-face {
+  font-family: 'Roboto';
+  src: url('/fonts/Roboto-Regular.ttf') format('truetype');
 }
 
-.secondary {
-  color: $secondary;
+.default-button-gradient {
+  background: linear-gradient(90deg, var(--secondary-color) 0%, #404FE6 52.08%, #00C7FF 100%);
+  border-radius: 25px;
 }
-
-.primary {
-  color: $primary;
-}
-
-.gray {
-  color: $gray;
-}
-
- .default-button-gradient {
-   background: linear-gradient(90deg, $secondary 0%, #404FE6 52.08%, #00C7FF 100%);
-   border-radius: 25px;
- }
 
 .default-button-gradient:hover {
-  background: $secondary;
+  background: var(--secondary-color);
 }
 
 .bg-gradient {
@@ -82,7 +71,8 @@
   right: 0;
   display: flex;
   justify-content: center;
-  background-color: #000000da;
+  background-color: #00000080;
+  z-index: 1000;
 }
 
 .loading {

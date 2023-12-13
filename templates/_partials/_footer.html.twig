@@ -18,10 +18,9 @@
             d="M20.9807 17.3775L15.8332 18.375C12.3557 16.63 10.2082 14.625 8.95824 11.5L9.92074 6.3375L8.10199 1.5H3.41324C2.00324 1.5 0.893243 2.665 1.10449 4.05875C1.62949 7.5375 3.17949 13.8463 7.70824 18.375C12.4645 23.1313 19.3157 25.195 23.0857 26.0163C24.542 26.3325 25.8332 25.1975 25.8332 23.7062V19.2262L20.9807 17.3775V17.3775Z"
             stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
-        <a href="tel:04 37 65 06 21">
-          04 37 65 06 21
+        <a href="tel:{{ channel_phone_number(channel) }}">
+          {{ channel_formatted_phone_number(channel) }}
         </a>
-
       </div>
       <div class="text-sm mt-6">
         <span class="font-bold">© QANTIS. Tous droits réservés</span>
@@ -46,14 +45,16 @@
           >Nous contacter</a>
           {% include '_partials/_contact-modal.html.twig' %}
         </li>
-        <li>
-          <a
-            href="/mentions-legales"
-          >Mentions légales</a>
-        </li>
-        <li>
-          <a href="/politique-de-confidentialite">Politique de confidentialité</a>
-        </li>
+        {% if channel.channelParameter.legalTerms is not null %}
+          <li>
+            <a target="_blank" href="{{ channel.channelParameter.legalTerms }}">Mentions légales</a>
+          </li>
+        {% endif %}
+        {% if channel.channelParameter.privacyPolicy is not null %}
+          <li>
+            <a target="_blank" href="{{ channel.channelParameter.privacyPolicy }}">Politique de confidentialité</a>
+          </li>
+        {% endif %}
         <li>
           <a href="#">Cookies</a>
         </li>

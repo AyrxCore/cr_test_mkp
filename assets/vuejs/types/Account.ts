@@ -1,3 +1,7 @@
+import { CollectionResponse } from '@/vuejs/types/HttpClient'
+import { ExternalApiDataEntity } from '@/vuejs/types/ExternalApiDataEntity'
+import { User } from '@/vuejs/types/User'
+
 interface BuyerDefaultAddress {
   id: number
   street: string
@@ -29,9 +33,10 @@ export interface SubAccount {
 
 export interface Adherent {
   reducceCode: string | null
+  logo: string | null
 }
 
-export interface Account {
+export interface Account extends ExternalApiDataEntity {
   id: string
   lastConnexion: Date
   upplerUserId: number
@@ -39,6 +44,8 @@ export interface Account {
   adherent: Adherent
   subaccount: SubAccount
   editingSubAccount: SubAccount
+  acceptCGU: boolean
+  user: User
 }
 
 export interface DefaultBillingAddressToUpdate {
@@ -60,6 +67,10 @@ interface AccountToUpdate {
   lastName: string
   firstName: string
   phone: string
+}
+
+export interface AccountCollectionResponse extends CollectionResponse {
+  'hydra:member': Account[]
 }
 
 export type AccountEmail = Omit<

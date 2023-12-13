@@ -10,25 +10,27 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Service\Attribute\Required;
 
-class DefaultController extends AbstractController
+class DefaultController extends AbstractController implements ChannelAwareControllerInterface
 {
-    #[Required]
-    public RequestStack $requestStack;
+    use ChannelAwareControllerTrait;
 
-    #[Required]
-    public SettingsService $settingsService;
+    public function __construct(
+        private RequestStack $requestStack,
+        private SettingsService $settingsService,
+    ) {
+    }
 
     #[Route('/', name: 'prehome')]
     #[Route(
         '/{route}',
         name: 'app',
         requirements: ['route' => '^(?!.*_wdt|_profiler|login|mentions-legales|politique-de-confidentialite|maintenance|api).+']
-    )
-    ]
+    )]
     public function index(Request $request): Response
     {
+        $channel = $this->getChannel($request);
+
         $session = $this->requestStack->getSession();
 
         if (
@@ -41,31 +43,43 @@ class DefaultController extends AbstractController
                 return $this->redirectToRoute('prehome', ['target' => $path]);
             }
 
-            return $this->render('index.html.twig');
+            // Clear local cookie as user is not connected anymore
+            $response = new Response();
+            $response->headers->clearCookie('BEARER', '/');
+
+            return $this->render(
+                'index.html.twig',
+                [
+                    'channel' => $channel,
+                ],
+                $response
+            );
         }
 
-        return $this->render('index_app.html.twig');
+        return $this->render('index_app.html.twig', [
+            'channel' => $channel,
+        ]);
     }
 
     #[Route('/mentions-legales', name: 'mentions_legales')]
-    public function mentionsLegales(): Response
+    public function mentionsLegales(Request $request): Response
     {
-        return $this->render('mentions-legales.html.twig');
+        return $this->render('mentions-legales.html.twig', ['channel' => $this->getChannel($request)]);
     }
 
     #[Route('/politique-de-confidentialite', name: 'politique_de_confidentialite')]
-    public function politiqueConfidentialite(): Response
+    public function politiqueConfidentialite(Request $request): Response
     {
-        return $this->render('politique-de-confidentialite.html.twig');
+        return $this->render('politique-de-confidentialite.html.twig', ['channel' => $this->getChannel($request)]);
     }
 
     #[Route('/maintenance', name: 'maintenance')]
-    public function maintenance(): Response
+    public function maintenance(Request $request): Response
     {
         if (!$this->settingsService->isMaintenanceMode()) {
             return $this->redirectToRoute('prehome');
         }
 
-        return $this->render('maintenance.html.twig');
+        return $this->render('maintenance.html.twig', ['channel' => $this->getChannel($request)]);
     }
 }

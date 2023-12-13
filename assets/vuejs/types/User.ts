@@ -1,7 +1,8 @@
 import { Account } from '@/vuejs/types/Account'
+import { ExternalApiDataEntity } from '@/vuejs/types/ExternalApiDataEntity'
 
 // Décrit l'objet user
-export interface User {
+export interface User extends ExternalApiDataEntity {
   email: string
   roles: string[]
   account: Account

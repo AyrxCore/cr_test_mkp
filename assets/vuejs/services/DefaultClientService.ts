@@ -1,4 +1,14 @@
-import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
+import axios, {
+  AxiosError,
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+} from 'axios'
+
+import store from '@/vuejs/store'
+import { useCommonStore } from '@/vuejs/stores/common'
+
+const commonStore = useCommonStore(store)
 
 class DefaultClientService {
   public client: AxiosInstance
@@ -15,6 +25,19 @@ class DefaultClientService {
       withCredentials: true,
       headers,
     })
+
+    this.client.interceptors.request.use(
+      (config: AxiosRequestConfig): AxiosRequestConfig => {
+        if (!config.url.includes('/channels/by-host/')) {
+          config.headers['X-channel'] = commonStore.channelCode
+        }
+
+        return config
+      },
+      (error: AxiosError): Promise<AxiosError> => {
+        return Promise.reject(error)
+      },
+    )
 
     this.client.interceptors.response.use(
       (response: Promise<AxiosResponse> | AxiosResponse | undefined) => {

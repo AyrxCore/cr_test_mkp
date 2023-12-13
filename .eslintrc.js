@@ -34,7 +34,7 @@ module.exports = {
         math: 'always',
       },
     ],
-    quotes: ['warn', 'single'],
+    quotes: ['warn', 'single', { 'avoidEscape': true }],
     'vue/max-len': [
       'error',
       {

@@ -1,0 +1,1359 @@
+{
+  "filters": {
+    "category": {
+      "864": {
+        "id": 864,
+        "name": "VEHICULES",
+        "parent": null,
+        "count": 1,
+        "checked": null,
+        "display": true,
+        "level": 0,
+        "image": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/f5\/df\/599b044acf3855a383b7a8332e68.png",
+        "banner": null,
+        "child": {
+          "872": {
+            "id": 872,
+            "name": "COVERING",
+            "parent": 864,
+            "count": 1,
+            "checked": null,
+            "display": true,
+            "level": 1,
+            "image": null,
+            "banner": null,
+            "child": {
+              "873": {
+                "id": 873,
+                "name": "ADHESIFS",
+                "parent": 872,
+                "count": 1,
+                "checked": null,
+                "display": true,
+                "level": 2,
+                "image": null,
+                "banner": null
+              }
+            }
+          }
+        }
+      },
+      "588": {
+        "id": 588,
+        "name": "FOURNITURES DE BUREAU",
+        "parent": null,
+        "count": 3,
+        "checked": null,
+        "display": true,
+        "level": 0,
+        "image": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/d8\/44\/ca8a0c47751c6a56b8eb116f00c8.png",
+        "banner": null,
+        "child": {
+          "630": {
+            "id": 630,
+            "name": "CONSOMMABLE DE BUREAU",
+            "parent": 588,
+            "count": 2,
+            "checked": null,
+            "display": true,
+            "level": 1,
+            "image": null,
+            "banner": null,
+            "child": {
+              "631": {
+                "id": 631,
+                "name": "PILES",
+                "parent": 630,
+                "count": 2,
+                "checked": null,
+                "display": true,
+                "level": 2,
+                "image": null,
+                "banner": null
+              }
+            }
+          },
+          "590": {
+            "id": 590,
+            "name": "CARTOUCHES D'ENCRE & TONERS",
+            "parent": 588,
+            "count": 1,
+            "checked": null,
+            "display": true,
+            "level": 1,
+            "image": null,
+            "banner": null,
+            "child": {
+              "595": {
+                "id": 595,
+                "name": "LASER",
+                "parent": 590,
+                "count": 1,
+                "checked": null,
+                "display": true,
+                "level": 2,
+                "image": null,
+                "banner": null,
+                "child": {
+                  "597": {
+                    "id": 597,
+                    "name": "TONERS & TAMBOURS COMPATIBLES",
+                    "parent": 595,
+                    "count": 1,
+                    "checked": null,
+                    "display": true,
+                    "level": 3,
+                    "image": null,
+                    "banner": null
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "905": {
+        "id": 905,
+        "name": "CADEAUX CLIENTS & FOURNISSEURS",
+        "parent": null,
+        "count": 1,
+        "checked": null,
+        "display": true,
+        "level": 0,
+        "image": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/5f\/91\/8dbc4ecabe7df9544673649f04a5.png",
+        "banner": null,
+        "child": {
+          "906": {
+            "id": 906,
+            "name": "VINS",
+            "parent": 905,
+            "count": 1,
+            "checked": null,
+            "display": true,
+            "level": 1,
+            "image": null,
+            "banner": null
+          }
+        }
+      },
+      "893": {
+        "id": 893,
+        "name": "EQUIPEMENTS DE CHANTIER",
+        "parent": null,
+        "count": 1,
+        "checked": null,
+        "display": true,
+        "level": 0,
+        "image": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/3d\/51\/bc669c75ccf37bde6f6a98da634b.png",
+        "banner": null,
+        "child": {
+          "897": {
+            "id": 897,
+            "name": "MATERIEL DE LEVAGE & MANUTENTION",
+            "parent": 893,
+            "count": 1,
+            "checked": null,
+            "display": true,
+            "level": 1,
+            "image": null,
+            "banner": null
+          }
+        }
+      },
+      "678": {
+        "id": 678,
+        "name": "OUTILLAGE",
+        "parent": null,
+        "count": 1,
+        "checked": null,
+        "display": true,
+        "level": 0,
+        "image": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/5c\/80\/1c2c7e512d9cc7bcbc196df9c923.png",
+        "banner": null,
+        "child": {
+          "699": {
+            "id": 699,
+            "name": "ELECTROPORTATIF",
+            "parent": 678,
+            "count": 1,
+            "checked": null,
+            "display": true,
+            "level": 1,
+            "image": null,
+            "banner": null,
+            "child": {
+              "705": {
+                "id": 705,
+                "name": "PERCEUSES, VISSEUSES, CLOUEUSES",
+                "parent": 699,
+                "count": 1,
+                "checked": null,
+                "display": true,
+                "level": 2,
+                "image": null,
+                "banner": null
+              }
+            }
+          }
+        }
+      },
+      "654": {
+        "id": 654,
+        "name": "INFORMATIQUE & BUREAUTIQUE",
+        "parent": null,
+        "count": 1,
+        "checked": null,
+        "display": true,
+        "level": 0,
+        "image": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/78\/4f\/6f24f81df6d5f1b85aafdd5b7052.png",
+        "banner": null,
+        "child": {
+          "657": {
+            "id": 657,
+            "name": "MATERIEL INFORMATIQUE",
+            "parent": 654,
+            "count": 1,
+            "checked": null,
+            "display": true,
+            "level": 1,
+            "image": null,
+            "banner": null,
+            "child": {
+              "665": {
+                "id": 665,
+                "name": "ORDINATEURS PORTABLES",
+                "parent": 657,
+                "count": 1,
+                "checked": null,
+                "display": true,
+                "level": 2,
+                "image": null,
+                "banner": null
+              }
+            }
+          }
+        }
+      },
+      "634": {
+        "id": 634,
+        "name": "HYGIENE & PRODUITS D'ENTRETIEN",
+        "parent": null,
+        "count": 2,
+        "checked": null,
+        "display": true,
+        "level": 0,
+        "image": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/4a\/55\/98d1aebf16ff8257ae4ca623bc0c.png",
+        "banner": null,
+        "child": {
+          "644": {
+            "id": 644,
+            "name": "ENTRETIEN",
+            "parent": 634,
+            "count": 1,
+            "checked": null,
+            "display": true,
+            "level": 1,
+            "image": null,
+            "banner": null,
+            "child": {
+              "650": {
+                "id": 650,
+                "name": "SACS POUBELLES",
+                "parent": 644,
+                "count": 1,
+                "checked": null,
+                "display": true,
+                "level": 2,
+                "image": null,
+                "banner": null
+              }
+            }
+          },
+          "641": {
+            "id": 641,
+            "name": "PRODUITS ENTRETIEN",
+            "parent": 634,
+            "count": 1,
+            "checked": null,
+            "display": true,
+            "level": 1,
+            "image": null,
+            "banner": null,
+            "child": {
+              "649": {
+                "id": 649,
+                "name": "NETTOYANT MAINS",
+                "parent": 641,
+                "count": 1,
+                "checked": null,
+                "display": true,
+                "level": 2,
+                "image": null,
+                "banner": null
+              }
+            }
+          }
+        }
+      },
+      "494": {
+        "id": 494,
+        "name": "ECLAIRAGE",
+        "parent": null,
+        "count": 2,
+        "checked": null,
+        "display": true,
+        "level": 0,
+        "image": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/79\/89\/568d0b54a83479cc1ddffd24c526.png",
+        "banner": null,
+        "child": {
+          "515": {
+            "id": 515,
+            "name": "PANELS",
+            "parent": 494,
+            "count": 1,
+            "checked": null,
+            "display": true,
+            "level": 1,
+            "image": null,
+            "banner": null
+          },
+          "509": {
+            "id": 509,
+            "name": "LAMPES",
+            "parent": 494,
+            "count": 1,
+            "checked": null,
+            "display": true,
+            "level": 1,
+            "image": null,
+            "banner": null,
+            "child": {
+              "513": {
+                "id": 513,
+                "name": "LAMPES LED",
+                "parent": 509,
+                "count": 1,
+                "checked": null,
+                "display": true,
+                "level": 2,
+                "image": null,
+                "banner": null
+              }
+            }
+          }
+        }
+      }
+    },
+    "property": {
+      "117": {
+        "id": 117,
+        "name": "Conditionnement",
+        "type": "choice",
+        "unit": null,
+        "count": 1,
+        "checked": null,
+        "child": {
+          "3651": {
+            "id": 117,
+            "value": 3651,
+            "name": "L'unit\u00e9",
+            "unit": null,
+            "image": null,
+            "count": 1,
+            "checked": null
+          }
+        }
+      },
+      "119": {
+        "id": 119,
+        "name": "Origine (Pays\/R\u00e9gion)",
+        "type": "choice",
+        "unit": null,
+        "count": 1,
+        "checked": null,
+        "child": {
+          "4168": {
+            "id": 119,
+            "value": 4168,
+            "name": "CN",
+            "unit": null,
+            "image": null,
+            "count": 1,
+            "checked": null
+          }
+        }
+      },
+      "120": {
+        "id": 120,
+        "name": "Marque",
+        "type": "choice",
+        "unit": null,
+        "count": 4,
+        "checked": null,
+        "child": {
+          "5355": {
+            "id": 120,
+            "value": 5355,
+            "name": "Dell",
+            "unit": null,
+            "image": null,
+            "count": 1,
+            "checked": null
+          },
+          "4587": {
+            "id": 120,
+            "value": 4587,
+            "name": "Energizer",
+            "unit": null,
+            "image": null,
+            "count": 1,
+            "checked": null
+          },
+          "4233": {
+            "id": 120,
+            "value": 4233,
+            "name": "OWA",
+            "unit": null,
+            "image": null,
+            "count": 1,
+            "checked": null
+          },
+          "4586": {
+            "id": 120,
+            "value": 4586,
+            "name": "Varta",
+            "unit": null,
+            "image": null,
+            "count": 1,
+            "checked": null
+          }
+        }
+      },
+      "122": {
+        "id": 122,
+        "name": "Format",
+        "type": "choice",
+        "unit": null,
+        "count": 2,
+        "checked": null,
+        "child": {
+          "4525": {
+            "id": 122,
+            "value": 4525,
+            "name": "E91 - AA",
+            "unit": null,
+            "image": null,
+            "count": 1,
+            "checked": null
+          },
+          "4524": {
+            "id": 122,
+            "value": 4524,
+            "name": "E92 - AAA",
+            "unit": null,
+            "image": null,
+            "count": 1,
+            "checked": null
+          }
+        }
+      },
+      "123": {
+        "id": 123,
+        "name": "Blister de",
+        "type": "choice",
+        "unit": null,
+        "count": 2,
+        "checked": null,
+        "child": {
+          "4575": {
+            "id": 123,
+            "value": 4575,
+            "name": "4 piles",
+            "unit": null,
+            "image": null,
+            "count": 2,
+            "checked": null
+          }
+        }
+      },
+      "135": {
+        "id": 135,
+        "name": "IRC",
+        "type": "choice",
+        "unit": null,
+        "count": 2,
+        "checked": null,
+        "child": {
+          "4705": {
+            "id": 135,
+            "value": 4705,
+            "name": "80",
+            "unit": null,
+            "image": null,
+            "count": 2,
+            "checked": null
+          }
+        }
+      },
+      "136": {
+        "id": 136,
+        "name": "Tension (V)",
+        "type": "choice",
+        "unit": null,
+        "count": 2,
+        "checked": null,
+        "child": {
+          "4744": {
+            "id": 136,
+            "value": 4744,
+            "name": "220-240",
+            "unit": null,
+            "image": null,
+            "count": 2,
+            "checked": null
+          }
+        }
+      },
+      "137": {
+        "id": 137,
+        "name": "Puissance (W)",
+        "type": "choice",
+        "unit": null,
+        "count": 1,
+        "checked": null,
+        "child": {
+          "4947": {
+            "id": 137,
+            "value": 4947,
+            "name": "33",
+            "unit": null,
+            "image": null,
+            "count": 1,
+            "checked": null
+          }
+        }
+      },
+      "138": {
+        "id": 138,
+        "name": "Culot",
+        "type": "choice",
+        "unit": null,
+        "count": 1,
+        "checked": null,
+        "child": {
+          "4983": {
+            "id": 138,
+            "value": 4983,
+            "name": "E27",
+            "unit": null,
+            "image": null,
+            "count": 1,
+            "checked": null
+          }
+        }
+      },
+      "139": {
+        "id": 139,
+        "name": "Lumen",
+        "type": "choice",
+        "unit": null,
+        "count": 2,
+        "checked": null,
+        "child": {
+          "8744": {
+            "id": 139,
+            "value": 8744,
+            "name": "3630",
+            "unit": null,
+            "image": null,
+            "count": 1,
+            "checked": null
+          },
+          "5100": {
+            "id": 139,
+            "value": 5100,
+            "name": "810",
+            "unit": null,
+            "image": null,
+            "count": 1,
+            "checked": null
+          }
+        }
+      },
+      "140": {
+        "id": 140,
+        "name": "Gradable",
+        "type": "choice",
+        "unit": null,
+        "count": 2,
+        "checked": null,
+        "child": {
+          "5284": {
+            "id": 140,
+            "value": 5284,
+            "name": "Non",
+            "unit": null,
+            "image": null,
+            "count": 2,
+            "checked": null
+          }
+        }
+      },
+      "141": {
+        "id": 141,
+        "name": "Type de vin",
+        "type": "choice",
+        "unit": null,
+        "count": 1,
+        "checked": null,
+        "child": {
+          "5286": {
+            "id": 141,
+            "value": 5286,
+            "name": "VINS BLANCS",
+            "unit": null,
+            "image": null,
+            "count": 1,
+            "checked": null
+          }
+        }
+      },
+      "207": {
+        "id": 207,
+        "name": "Couleur",
+        "type": "choice",
+        "unit": null,
+        "count": 1,
+        "checked": null,
+        "child": {
+          "5359": {
+            "id": 207,
+            "value": 5359,
+            "name": "noir",
+            "unit": null,
+            "image": null,
+            "count": 1,
+            "checked": null
+          }
+        }
+      },
+      "217": {
+        "id": 217,
+        "name": "Homepage - Mises en avant",
+        "type": "choice",
+        "unit": null,
+        "count": 12,
+        "checked": null,
+        "child": {
+          "5369": {
+            "id": 217,
+            "value": 5369,
+            "name": "home-top-vente",
+            "unit": null,
+            "image": null,
+            "count": 12,
+            "checked": null
+          }
+        }
+      }
+    },
+    "company": {
+      "25": {
+        "id": 25,
+        "name": "AEA - AIN ENERGIE AUTONOME",
+        "parent": null,
+        "count": 2,
+        "checked": null
+      },
+      "27": {
+        "id": 27,
+        "name": "ALDA MAJUSCULE",
+        "parent": null,
+        "count": 1,
+        "checked": null
+      },
+      "69": {
+        "id": 69,
+        "name": "ARTO",
+        "parent": null,
+        "count": 1,
+        "checked": null
+      },
+      "22": {
+        "id": 22,
+        "name": "BERNER",
+        "parent": null,
+        "count": 1,
+        "checked": null
+      },
+      "1745": {
+        "id": 1745,
+        "name": "DOMAINE DE SAINTE MARIE",
+        "parent": null,
+        "count": 1,
+        "checked": null
+      },
+      "111": {
+        "id": 111,
+        "name": "GROUPE PIERRE LE GOFF",
+        "parent": null,
+        "count": 2,
+        "checked": null
+      },
+      "26": {
+        "id": 26,
+        "name": "KR\u00d6MM",
+        "parent": null,
+        "count": 1,
+        "checked": null
+      },
+      "23": {
+        "id": 23,
+        "name": "MIEKO",
+        "parent": null,
+        "count": 2,
+        "checked": null
+      },
+      "29": {
+        "id": 29,
+        "name": "SIGNO DECO",
+        "parent": null,
+        "count": 1,
+        "checked": null
+      }
+    },
+    "country": {
+      "83": {
+        "id": 83,
+        "name": "France",
+        "count": 12,
+        "checked": null
+      }
+    },
+    "continent": {
+      "1": {
+        "id": 1,
+        "name": null,
+        "count": 12,
+        "checked": null
+      }
+    },
+    "promotions": {
+      "franco-fourniture-alda": {
+        "id": "franco-fourniture-alda",
+        "name": "Franco de port - ALDA MAJUSCULE",
+        "parent": null,
+        "count": 1,
+        "checked": null
+      },
+      "franco-kromm": {
+        "id": "franco-kromm",
+        "name": "Franco de port - KR\u00d6MM",
+        "parent": null,
+        "count": 1,
+        "checked": null
+      },
+      "franco-signo-deco": {
+        "id": "franco-signo-deco",
+        "name": "Franco de port - SIGNO DECO",
+        "parent": null,
+        "count": 1,
+        "checked": null
+      }
+    }
+  },
+  "error": null,
+  "results_count": 12,
+  "page": 1,
+  "results_per_page": 5,
+  "results_pages": 2000,
+  "parameters": {
+    "name": null,
+    "has_promotion": null,
+    "promotion_models": [],
+    "promotion_company_type": null,
+    "in_stock": null,
+    "sort": [
+      {
+        "_script": {
+          "order": "desc",
+          "type": "number",
+          "script": {
+            "source": "if (params._source.properties.length > 0) {\n                    for (prop in params._source.properties) {\n                        if (prop.property_id == params.property_id && prop.value_exact == params.property_value) {\n                            return 1\n                        }\n                    }\n                }\n                return 0",
+            "lang": "painless",
+            "params": {
+              "property_value": "oui",
+              "property_id": 200
+            }
+          }
+        }
+      },
+      {
+        "_score": "desc"
+      }
+    ],
+    "categories": [],
+    "properties": [
+      {
+        "property": 217,
+        "value": "5369"
+      }
+    ],
+    "options": [],
+    "companies": []
+  },
+  "results": [
+    {
+      "id": 19365,
+      "description": {
+        "fr": "<p>Transpalette manuel, charge max 2500kg<\/p>",
+        "default": "<p>Transpalette manuel, charge max 2500kg<\/p>"
+      },
+      "images": [
+        {
+          "id": 27654,
+          "path": "64\/a9\/202f54ac84b1df960d2269ec4a3d.jpeg",
+          "position": 0,
+          "url": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/64\/a9\/202f54ac84b1df960d2269ec4a3d.jpeg"
+        }
+      ],
+      "name": {
+        "fr": "Transpalette manuel, charge max 2500kg",
+        "default": "Transpalette manuel, charge max 2500kg"
+      },
+      "slug": {
+        "fr": "transpalette-manuel-charge-max-2500kg-17-tpm-25-5",
+        "default": "transpalette-manuel-charge-max-2500kg-17-tpm-25-5"
+      },
+      "properties": [
+        {
+          "id": 87448,
+          "property": {
+            "id": 217,
+            "name": {
+              "fr": "Homepage - Mises en avant",
+              "default": "Homepage - Mises en avant"
+            }
+          },
+          "value": "home-top-vente"
+        }
+      ],
+      "variants": [
+        {
+          "id": 47478,
+          "available_on_demand": true,
+          "sku": "17-TPM-25",
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": 1,
+          "master_quantity": null
+        },
+        {
+          "id": 47477,
+          "available_on_demand": true,
+          "sku": null,
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": null,
+          "master_quantity": null
+        }
+      ],
+      "company": {
+        "id": 26,
+        "name": "KR\u00d6MM",
+        "avatar": "d4\/0f\/e751ba2240d6697e744a20f21d08.jpg",
+        "avatar_url": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/d4\/0f\/e751ba2240d6697e744a20f21d08.jpg"
+      },
+      "price_reference": 54800,
+      "price": {
+        "id": 27462,
+        "amount": 27400,
+        "currency": [],
+        "pricelist": null,
+        "display_price": 27400,
+        "formatted_display_price": "274,00\u20ac",
+        "formatted_display_unit_price": "274,00\u20ac"
+      }
+    },
+    {
+      "id": 16797,
+      "description": {
+        "fr": "<p>2 adh&eacute;sifs lat&eacute;raux de 1200 x 400 mm et un adh&eacute;sif 1300 x 400 mm pour la lunette arri&egrave;re. Impression quadri et lamination brillante.<\/p>",
+        "default": "<p>2 adh&eacute;sifs lat&eacute;raux de 1200 x 400 mm et un adh&eacute;sif 1300 x 400 mm pour la lunette arri&egrave;re. Impression quadri et lamination brillante.<\/p>"
+      },
+      "images": [
+        {
+          "id": 16854,
+          "path": "61\/6a\/f6f700e2382da7a7eacdfb1fef05.jpeg",
+          "position": 0,
+          "url": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/61\/6a\/f6f700e2382da7a7eacdfb1fef05.jpeg"
+        },
+        {
+          "id": 16855,
+          "path": "04\/48\/abdd8f62211a17ed9a2ba289b03c.jpeg",
+          "position": 1,
+          "url": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/04\/48\/abdd8f62211a17ed9a2ba289b03c.jpeg"
+        },
+        {
+          "id": 16856,
+          "path": "b0\/8e\/166d92cc5e29826e6d4bdd772c8f.jpeg",
+          "position": 2,
+          "url": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/b0\/8e\/166d92cc5e29826e6d4bdd772c8f.jpeg"
+        },
+        {
+          "id": 16857,
+          "path": "7b\/3e\/704d8b4934a0e636c71cae3d50e4.png",
+          "position": 3,
+          "url": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/7b\/3e\/704d8b4934a0e636c71cae3d50e4.png"
+        }
+      ],
+      "name": {
+        "fr": "Publicit\u00e9 adh\u00e9sive pour v\u00e9hicules taille M",
+        "default": "Publicit\u00e9 adh\u00e9sive pour v\u00e9hicules taille M"
+      },
+      "slug": {
+        "fr": "publicite-adhesive-pour-vehicules-taille-m-pub-adh-m-2",
+        "default": "publicite-adhesive-pour-vehicules-taille-m-pub-adh-m-2"
+      },
+      "properties": [
+        {
+          "id": 87452,
+          "property": {
+            "id": 217,
+            "name": {
+              "fr": "Homepage - Mises en avant",
+              "default": "Homepage - Mises en avant"
+            }
+          },
+          "value": "home-top-vente"
+        }
+      ],
+      "variants": [
+        {
+          "id": 36823,
+          "available_on_demand": true,
+          "sku": "pub-adh-m-3241062234557+3241062234555+3241062234558",
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": 1,
+          "master_quantity": null
+        },
+        {
+          "id": 36818,
+          "available_on_demand": true,
+          "sku": "pub-adh-m-3241062234557",
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": 1,
+          "master_quantity": null
+        },
+        {
+          "id": 36819,
+          "available_on_demand": true,
+          "sku": "pub-adh-m-3241062234557+3241062234555",
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": 1,
+          "master_quantity": null
+        },
+        {
+          "id": 36820,
+          "available_on_demand": true,
+          "sku": "pub-adh-m-3241062234556+3241062234558",
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": 1,
+          "master_quantity": null
+        },
+        {
+          "id": 36821,
+          "available_on_demand": true,
+          "sku": "pub-adh-m-3241062234556+3241062234555+3241062234558",
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": 1,
+          "master_quantity": null
+        },
+        {
+          "id": 36822,
+          "available_on_demand": true,
+          "sku": "pub-adh-m-3241062234557+3241062234558",
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": 1,
+          "master_quantity": null
+        },
+        {
+          "id": 36816,
+          "available_on_demand": true,
+          "sku": "pub-adh-m-3241062234556",
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": 1,
+          "master_quantity": null
+        },
+        {
+          "id": 36817,
+          "available_on_demand": true,
+          "sku": "pub-adh-m-3241062234556+3241062234555",
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": 1,
+          "master_quantity": null
+        },
+        {
+          "id": 36815,
+          "available_on_demand": true,
+          "sku": null,
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": null,
+          "master_quantity": null
+        }
+      ],
+      "company": {
+        "id": 29,
+        "name": "SIGNO DECO",
+        "avatar": "81\/9a\/50e314a50d57f442d6f23d83d5f5.jpg",
+        "avatar_url": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/81\/9a\/50e314a50d57f442d6f23d83d5f5.jpg"
+      },
+      "price_reference": 50000,
+      "price": {
+        "id": 19362,
+        "amount": 21600,
+        "currency": [],
+        "pricelist": null,
+        "display_price": 21600,
+        "formatted_display_price": "216,00\u20ac",
+        "formatted_display_unit_price": "216,00\u20ac"
+      }
+    },
+    {
+      "id": 18018,
+      "description": {
+        "fr": "<p>Cartouche laser compatible &agrave; la marque HP CF294X noir haute capacit&eacute;.<\/p>",
+        "default": "<p>Cartouche laser compatible &agrave; la marque HP CF294X noir haute capacit&eacute;.<\/p>"
+      },
+      "images": [
+        {
+          "id": 24110,
+          "path": "34\/84\/fcc026320411e3c235431d92ea68.jpeg",
+          "position": 0,
+          "url": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/34\/84\/fcc026320411e3c235431d92ea68.jpeg"
+        }
+      ],
+      "name": {
+        "fr": "Cartouche laser compatible \u00e0 la marque HP CF294X noir haute capacit\u00e9",
+        "default": "Cartouche laser compatible \u00e0 la marque HP CF294X noir haute capacit\u00e9"
+      },
+      "slug": {
+        "fr": "cartouche-laser-compatible-a-la-marque-hp-cf294x-noir-haute-capacite-07340",
+        "default": "cartouche-laser-compatible-a-la-marque-hp-cf294x-noir-haute-capacite-07340"
+      },
+      "properties": [
+        {
+          "id": 87250,
+          "property": {
+            "id": 117,
+            "name": {
+              "fr": "Conditionnement",
+              "default": "Conditionnement"
+            }
+          },
+          "value": "L'unit\u00e9"
+        },
+        {
+          "id": 87251,
+          "property": {
+            "id": 119,
+            "name": {
+              "fr": "Origine (Pays\/R\u00e9gion)",
+              "default": "Origine (Pays\/R\u00e9gion)"
+            }
+          },
+          "value": "CN"
+        },
+        {
+          "id": 87252,
+          "property": {
+            "id": 120,
+            "name": {
+              "fr": "Marque",
+              "default": "Marque"
+            }
+          },
+          "value": "OWA"
+        },
+        {
+          "id": 87450,
+          "property": {
+            "id": 217,
+            "name": {
+              "fr": "Homepage - Mises en avant",
+              "default": "Homepage - Mises en avant"
+            }
+          },
+          "value": "home-top-vente"
+        }
+      ],
+      "variants": [
+        {
+          "id": 40665,
+          "available_on_demand": true,
+          "sku": "07340",
+          "ean": "3112539824648",
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": 1,
+          "master_quantity": null
+        },
+        {
+          "id": 40664,
+          "available_on_demand": true,
+          "sku": null,
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": null,
+          "master_quantity": null
+        }
+      ],
+      "company": {
+        "id": 27,
+        "name": "ALDA MAJUSCULE",
+        "avatar": "ab\/b9\/2d7801781d79e920be51e43421e2.jpg",
+        "avatar_url": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/ab\/b9\/2d7801781d79e920be51e43421e2.jpg"
+      },
+      "price_reference": 13632,
+      "price": {
+        "id": 22003,
+        "amount": 10366,
+        "currency": [],
+        "pricelist": null,
+        "display_price": 10366,
+        "formatted_display_price": "103,66\u20ac",
+        "formatted_display_unit_price": "103,66\u20ac"
+      }
+    },
+    {
+      "id": 24501,
+      "description": {
+        "fr": "<p>Visseuse plaque de pl&acirc;tre BL 18V, Carton<\/p>",
+        "default": "<p>Visseuse plaque de pl&acirc;tre BL 18V, Carton<\/p>"
+      },
+      "images": [
+        {
+          "id": 33200,
+          "path": "3c\/0c\/3b79483329df4139851a49100edf.jpeg",
+          "position": 0,
+          "url": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/3c\/0c\/3b79483329df4139851a49100edf.jpeg"
+        }
+      ],
+      "name": {
+        "fr": "VISSEUSE PLACO CARTON 18V",
+        "default": "VISSEUSE PLACO CARTON 18V"
+      },
+      "slug": {
+        "fr": "visseuse-placo-carton-18v-366308",
+        "default": "visseuse-placo-carton-18v-366308"
+      },
+      "properties": [
+        {
+          "id": 108737,
+          "property": {
+            "id": 125,
+            "name": {
+              "fr": "Document \u00e0 t\u00e9l\u00e9charger",
+              "default": "Document \u00e0 t\u00e9l\u00e9charger"
+            }
+          },
+          "value": "https:\/\/mediaserver.berner.eu\/datasheets\/DATASHEET_30464117[P]_FR15_frFR.pdf"
+        },
+        {
+          "id": 199344,
+          "property": {
+            "id": 217,
+            "name": {
+              "fr": "Homepage - Mises en avant",
+              "default": "Homepage - Mises en avant"
+            }
+          },
+          "value": "home-top-vente"
+        }
+      ],
+      "variants": [
+        {
+          "id": 57756,
+          "available_on_demand": true,
+          "sku": "366308",
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": 1,
+          "master_quantity": null
+        },
+        {
+          "id": 57755,
+          "available_on_demand": true,
+          "sku": null,
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": null,
+          "master_quantity": null
+        }
+      ],
+      "company": {
+        "id": 22,
+        "name": "BERNER",
+        "avatar": "1c\/f6\/905138fcfe98f4f0cc450b09bd02.png",
+        "avatar_url": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/1c\/f6\/905138fcfe98f4f0cc450b09bd02.png"
+      },
+      "price_reference": 46900,
+      "price": {
+        "id": 32605,
+        "amount": 32830,
+        "currency": [],
+        "pricelist": null,
+        "display_price": 32830,
+        "formatted_display_price": "328,30\u20ac",
+        "formatted_display_unit_price": "328,30\u20ac"
+      }
+    },
+    {
+      "id": 12260,
+      "description": {
+        "fr": "<p>Blisters de 4 piles Energizer Ultimate Lithium - AAA E92<\/p>",
+        "default": "<p>Blisters de 4 piles Energizer Ultimate Lithium - AAA E92<\/p>"
+      },
+      "images": [
+        {
+          "id": 12176,
+          "path": "07\/22\/a21df9f7744b54d473103bfe59ea.jpeg",
+          "position": 0,
+          "url": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/07\/22\/a21df9f7744b54d473103bfe59ea.jpeg"
+        }
+      ],
+      "name": {
+        "fr": "Energizer Ultimate ultra lithium AAA E92",
+        "default": "Energizer Ultimate ultra lithium AAA E92"
+      },
+      "slug": {
+        "fr": "energizer-ultimate-ultra-lithium-aaa-e92-lr3lthb4ener",
+        "default": "energizer-ultimate-ultra-lithium-aaa-e92-lr3lthb4ener"
+      },
+      "properties": [
+        {
+          "id": 80229,
+          "property": {
+            "id": 122,
+            "name": {
+              "fr": "Format",
+              "default": "Format"
+            }
+          },
+          "value": "E92 - AAA"
+        },
+        {
+          "id": 80230,
+          "property": {
+            "id": 123,
+            "name": {
+              "fr": "Blister de",
+              "default": "Blister de"
+            }
+          },
+          "value": "4 piles"
+        },
+        {
+          "id": 80231,
+          "property": {
+            "id": 120,
+            "name": {
+              "fr": "Marque",
+              "default": "Marque"
+            }
+          },
+          "value": "Energizer"
+        },
+        {
+          "id": 199603,
+          "property": {
+            "id": 217,
+            "name": {
+              "fr": "Homepage - Mises en avant",
+              "default": "Homepage - Mises en avant"
+            }
+          },
+          "value": "home-top-vente"
+        }
+      ],
+      "variants": [
+        {
+          "id": 24546,
+          "available_on_demand": true,
+          "sku": "LR3LTHB4ENER",
+          "ean": "7638900273267",
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": 1,
+          "master_quantity": null
+        },
+        {
+          "id": 24545,
+          "available_on_demand": true,
+          "sku": null,
+          "ean": null,
+          "upc": null,
+          "hs": null,
+          "uid": null,
+          "unit_quantity": null,
+          "master_quantity": null
+        }
+      ],
+      "company": {
+        "id": 25,
+        "name": "AEA - AIN ENERGIE AUTONOME",
+        "avatar": "e3\/31\/a5a46ca53be781498b44085ca9ce.jpg",
+        "avatar_url": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/e3\/31\/a5a46ca53be781498b44085ca9ce.jpg"
+      },
+      "price_reference": 1300,
+      "price": {
+        "id": 11788,
+        "amount": 650,
+        "currency": [],
+        "pricelist": null,
+        "display_price": 650,
+        "formatted_display_price": "6,50\u20ac",
+        "formatted_display_unit_price": "6,50\u20ac"
+      }
+    }
+  ]
+}

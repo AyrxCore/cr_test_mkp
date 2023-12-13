@@ -14,14 +14,14 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType, computed, onMounted } from 'vue'
+import { computed, onMounted, PropType } from 'vue'
 
 import { Order } from '@/vuejs/types/Cart'
 import { Seller, SellerPromotion } from '@/vuejs/types/Seller'
 
 import { formatPrice } from '@/vuejs/services/utils'
 
-import { useSellerStore, SELLER_IDS } from '@/vuejs/stores/seller'
+import { SELLER_IDS, useSellerStore } from '@/vuejs/stores/seller'
 
 const sellerStore = useSellerStore()
 

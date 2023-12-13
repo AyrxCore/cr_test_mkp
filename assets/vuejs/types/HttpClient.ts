@@ -13,3 +13,10 @@ export enum HttpStatusCodes {
   not_implemented = 501,
   bad_gateway = 502,
 }
+
+export interface CollectionResponse {
+  '@context': string,
+  '@id': string,
+  '@type': string,
+  'hydra:member': object[]
+}

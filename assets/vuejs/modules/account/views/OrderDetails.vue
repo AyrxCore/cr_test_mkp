@@ -59,9 +59,9 @@
               >
             </div>
             <div>
-              <span class="flex text-gray-500"
-                >{{ formatPrice(order.total) }} € TTC</span
-              >
+              <span class="flex text-gray-500">
+                {{ formatPrice(order.total) }} € TTC
+              </span>
             </div>
           </div>
         </div>
@@ -140,7 +140,6 @@ import { useRoute } from 'vue-router'
 import { Order } from '@/vuejs/types/Order'
 import { formatDateFr, formatPrice } from '@/vuejs/services/utils'
 import { ORDER_STATUS, SHIPPING_STATUS } from '@/vuejs/services/const'
-import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 import { storeToRefs } from 'pinia'
 import { useAlertStore } from '@/vuejs/stores/alert'
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'

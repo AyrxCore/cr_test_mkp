@@ -1,5 +1,5 @@
 <template>
-  <BaseTemplate title="Qantis - MarketPlace">
+  <BaseTemplate>
     <RouterView />
   </BaseTemplate>
 </template>

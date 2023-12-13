@@ -93,6 +93,8 @@ final class UserAccount
     #[Assert\Type('bool', message: '(isEnabled) bool required')]
     private bool $isEnabled = true;
 
+    private ?string $channelCode = null;
+
     private ?string $phone = '';
 
     private ?string $serviceFonction = '';
@@ -261,5 +263,15 @@ final class UserAccount
     public function setServiceFonction(?string $serviceFonction): void
     {
         $this->serviceFonction = $serviceFonction;
+    }
+
+    public function getChannelCode(): ?string
+    {
+        return $this->channelCode;
+    }
+
+    public function setChannelCode(?string $channelCode): void
+    {
+        $this->channelCode = $channelCode;
     }
 }

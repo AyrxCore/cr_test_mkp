@@ -38,6 +38,7 @@ security:
         lifetime: 300
         signature_properties: ['id']
         success_handler: App\Security\Authentication\AutoLoginSuccessHandler
+        failure_handler: App\Security\Authentication\AutoLoginFailureHandler
 
     # activate different ways to authenticate
     # https://symfony.com/doc/current/security.html#the-firewall
@@ -52,6 +53,7 @@ security:
     - { path: ^/api/docs, roles: PUBLIC_ACCESS }
     - { path: ^/api/contact, roles: PUBLIC_ACCESS }
     - { path: ^/api/cms, roles: PUBLIC_ACCESS }
+    - { path: ^/api/channels/by-host/, roles: PUBLIC_ACCESS }
     - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
     - { path: ^/app, roles: PUBLIC_ACCESS }
     - { path: ^/, roles: PUBLIC_ACCESS }

@@ -1016,11 +1016,11 @@
                                                                                                     <ul style="margin: 0; list-style-type: disc;">
                                                                                                         <li>
                                                                                                             <span style="color: #ffffff;">Par téléphone au </span><a
-                                                                                                                    href="tel:0437650621"
-                                                                                                                    title="04 37 65 06 21"
+                                                                                                                    href="tel:{{ channel_phone_number(channel)}}"
+                                                                                                                    title="{{ channel_formatted_phone_number(channel) }}"
                                                                                                                     target="_blank"
                                                                                                                     style="color: #1f2d3d; text-decoration: underline;"><span
-                                                                                                                        style="color: #ffffff;"><strong>0437650621</strong></span></a>
+                                                                                                                        style="color: #ffffff;"><strong>{{ channel_formatted_phone_number(channel) }}</strong></span></a>
                                                                                                         </li>
                                                                                                         <li>
                                                                                                             <span style="color: #ffffff;">Par email à </span><a

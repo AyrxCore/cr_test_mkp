@@ -46,6 +46,11 @@ parameters:
       CC:
         '%env(STELLANTIS_MAIL_CC)%'
 
+
+imports:
+  - { resource: services/ }
+  - { resource: channels.yaml }
+
 services:
   # default configuration for services in *this* file
   _defaults:
@@ -56,10 +61,7 @@ services:
   # this creates a service per class whose id is the fully-qualified class name
   App\:
     resource: '../src/'
-    exclude:
-      - '../src/DependencyInjection/'
-      - '../src/Entity/'
-      - '../src/Kernel.php'
+    exclude: '../src/{DependencyInjection,Entity,Kernel.php,Serializer}'
   App\Twig\ViteAssetExtension:
     arguments:
       $env: '%env(APP_ENV)%'
@@ -83,8 +85,12 @@ services:
     tags:
       - { name: kernel.event_listener, event: kernel.request }
 
-  # SERVICES UPPLER
   _instanceof:
+    \App\Controller\ChannelRepositoryAwareControllerInterface:
+      calls:
+        - setChannelRepository: [ '@App\Repository\ChannelRepository' ]
+
+    # SERVICES UPPLER
     App\Service\AbstractUpplerService:
       bind:
         $upplerEnv: '%uppler_env%'
@@ -96,7 +102,7 @@ services:
 
   # Voter
   App\Security\Voter\FavoriteVoter:
-    tags: [{ name: security.voter }]
+    tags: [ { name: security.voter } ]
 
   App\Security\Voter\SavedCartVoter:
     tags: [ { name: security.voter } ]
@@ -107,3 +113,15 @@ services:
         ignore_exceptions:
           - Symfony\Component\HttpKernel\Exception\NotFoundHttpException
           - Symfony\Component\Security\Core\Exception\AuthenticationException
+
+  App\DataFixtures\Story\ChannelStory:
+    arguments:
+      $channels: '%channels%'
+
+  App\DataProvider\AccountCollectionDataProvider:
+    arguments:
+      $collectionExtensions: !tagged api_platform.doctrine.orm.query_extension.collection
+
+  App\DataProvider\UserMeItemDataProvider:
+    arguments:
+      $itemExtensions: !tagged api_platform.doctrine.orm.query_extension.item

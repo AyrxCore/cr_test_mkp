@@ -63,8 +63,8 @@ const props = defineProps({
 
 const selectedAddress = computed((): number => {
   return props.type === 'billing'
-    ? userStore.user.account.subaccount.billing_address
-    : userStore.user.account.subaccount.shipping_address
+    ? userStore.user.externalApiData.billing_address
+    : userStore.user.externalApiData.shipping_address
 })
 
 const emit = defineEmits<{

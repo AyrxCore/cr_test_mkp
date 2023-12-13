@@ -48,7 +48,7 @@ export const useAddressStore = defineStore({
       this.currentAddress = {
         id: uuidv4(),
         name: '',
-        companyId: userStore.user.account.buyer.id,
+        companyId: userStore.user.externalApiData?.buyer.id,
         company: '',
         type,
         street: '',
@@ -77,7 +77,7 @@ export const useAddressStore = defineStore({
     async updateAddress(): Promise<void> {
       const userStore = useUserStore()
       try {
-        this.currentAddress.companyId = userStore.user.account.buyer.id
+        this.currentAddress.companyId = userStore.user.externalApiData?.buyer.id
         await AddressHttpClient.get().updateAddressesAsAdmin(
           setAddressForUpdate(this.currentAddress),
         )
@@ -113,10 +113,14 @@ export const useAddressStore = defineStore({
     },
     defaultShippingAddress(): Address {
       const userStore = useUserStore()
-      if (!userStore.user.account.subaccount) return null
+      if (!userStore.user?.externalApiData?.subaccount) {
+        return null
+      }
+
       return this.addresses.find(
         (address: Address) =>
-          address.id === userStore.user.account.subaccount.shipping_address,
+          address.id ===
+          userStore.user.externalApiData.subaccount.shipping_address,
       )
     },
     defaultShippingAddressFormatted(): string {
@@ -127,10 +131,14 @@ export const useAddressStore = defineStore({
     },
     defaultBillingAddress(): Address {
       const userStore = useUserStore()
-      if (!userStore.user.account.subaccount) return null
+      if (!userStore.user?.externalApiData?.subaccount) {
+        return null
+      }
+
       return this.addresses.find(
         (address: Address) =>
-          address.id === userStore.user.account.subaccount.billing_address,
+          address.id ===
+          userStore.user.externalApiData.subaccount.billing_address,
       )
     },
     defaultBillingAddressFormatted(): string {

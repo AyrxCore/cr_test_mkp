@@ -9,7 +9,6 @@
         {{ favorite.name }}
         <MultipleUserComponent
           v-if="favorite.public"
-          :stroke-color="canDelete ? '#9866ff' : '#b9b7b7'"
           class="ml-2 w-8 fill-secondary"
         />
       </RouterLink>
@@ -31,13 +30,7 @@
         }"
         @click="openFavoriteForm"
       >
-        <EditIconComponent
-          class="mr-2"
-          :class="{
-            'stroke-[#b9b7b7]': !canDelete,
-          }"
-          :stroke-color="canDelete ? '#9866ff' : '#b9b7b7'"
-        />
+        <EditIconComponent class="mr-2" :icon-color="strokeColor" />
       </button>
       <button
         :class="{
@@ -45,7 +38,7 @@
         }"
         @click="openDeleteFavoriteForm"
       >
-        <TrashIconComponent :stroke-color="canDelete ? '#9866ff' : '#b9b7b7'" />
+        <TrashIconComponent :stroke-color="strokeColor" />
       </button>
     </div>
     <FavoriteFormModal
@@ -68,7 +61,7 @@
 <script lang="ts" setup>
 import EditIconComponent from '@/vuejs/modules/shared/icon/EditIconComponent.vue'
 import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
-import { computed, PropType, ref } from 'vue'
+import { computed, ComputedRef, PropType, Ref, ref } from 'vue'
 import { Favorite } from '@/vuejs/types/Favorite'
 import { format } from 'date-fns'
 import { PageList } from '@/vuejs/router'
@@ -77,9 +70,13 @@ import FavoriteDeleteModal from '@/vuejs/modules/account/components/favorite/Fav
 import { useAlertStore } from '@/vuejs/stores/alert'
 import { AlertType } from '@/vuejs/types/Alert'
 import MultipleUserComponent from '@/vuejs/modules/shared/icon/MultipleUserComponent.vue'
+import { storeToRefs } from 'pinia'
+import { useChannelStore } from '@/vuejs/stores/channel'
 
 const alertStore = useAlertStore()
 const emit = defineEmits(['submitFavorite', 'deleteFavorite'])
+
+const { channelSecondaryColor } = storeToRefs(useChannelStore())
 
 const showFormFavorite = ref<boolean>(false)
 const deleteFavorite = ref<boolean>(false)
@@ -93,6 +90,10 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+})
+
+const strokeColor = computed(() => {
+  return props.canDelete ? channelSecondaryColor.value : '#b9b7b7'
 })
 
 const createdAd = computed(() => {

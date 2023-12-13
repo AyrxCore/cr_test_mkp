@@ -1,7 +1,5 @@
 <template>
-  <BaseTemplate
-    title="Résultat de recherche de produits | Qantis - MarketPlace"
-  >
+  <BaseTemplate title="Résultat de recherche de produits">
     <div
       v-if="isLoading"
       class="my-20 flex h-20 w-full flex-col items-center justify-center text-primary"
@@ -30,7 +28,7 @@
         >
           <div
             v-if="hasParameters"
-            class="mr-2 flex w-full flex-row flex-col items-start rounded-md border bg-white p-2 lg:flex-row"
+            class="mr-2 flex w-full flex-col items-start rounded-md border bg-white p-2 lg:flex-row"
           >
             <div class="flex flex-col text-sm md:text-base lg:text-lg">
               Les résultats trouvés pour votre recherche
@@ -72,20 +70,16 @@
             </div>
           </div>
         </div>
-        <div
-          class="flex h-[50%] flex-col gap-4 text-gray-600 xl:grid xl:grid-cols-4"
-        >
+        <div class="flex h-[50%] flex-col gap-4 xl:grid xl:grid-cols-4">
           <FiltersComponent
             v-if="filters"
             :filters="filters"
             @filter-product="filterProduct"
           />
-          <div
-            class="col-span-3 flex flex-col rounded-lg pb-4 text-gray-500 md:mt-5"
-          >
-            <div class="">
+          <div class="col-span-3 flex flex-col rounded-lg pb-4 md:mt-5">
+            <div>
               <div
-                class="flex flex-col text-gray-600 md:grid md:grid-cols-2 md:gap-8 lg:grid-cols-3"
+                class="flex flex-col md:grid md:grid-cols-2 md:gap-8 lg:grid-cols-3"
               >
                 <div v-for="product in products" :key="product.id">
                   <AccordCadreComponent
@@ -96,7 +90,7 @@
                     "
                     :key="`ac-${product.id}`"
                     :accord="product"
-                    class="mt-5 md:mt-0"
+                    class="mt-5 rounded-lg border-4 border-solid border-secondary bg-white md:mt-0"
                   />
                   <ProductComponent
                     v-else-if="
@@ -134,7 +128,7 @@
 </template>
 <script lang="ts" setup>
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
-import ProductComponent from '@/vuejs/modules/products/components/ProductComponent.vue'
+import ProductComponent from '@/vuejs/modules/products/components/ProductCardComponent.vue'
 import { useRoute } from 'vue-router'
 import { computed, onBeforeMount, ref, watch } from 'vue'
 import { useProductStore } from '@/vuejs/stores/product'
@@ -217,23 +211,23 @@ const loadProducts = async (paramsProducts: object) => {
 }
 
 const count = computed(() => {
-  return resultProducts.value.resultsCount
+  return resultProducts.value?.resultsCount
 })
 
 const filters = computed(() => {
-  return resultProducts.value.filters
+  return resultProducts.value?.filters
 })
 
 const parameters = computed(() => {
-  return resultProducts.value.parameters
+  return resultProducts.value?.parameters
 })
 
 const hasParameters = computed(() => {
   return (
-    resultProducts.value.parameters?.name ||
-    resultProducts.value.parameters.categories?.length ||
-    resultProducts.value.parameters.companies?.length ||
-    resultProducts.value.parameters.properties?.length
+    resultProducts.value?.parameters?.name ||
+    resultProducts.value?.parameters.categories?.length ||
+    resultProducts.value?.parameters.companies?.length ||
+    resultProducts.value?.parameters.properties?.length
   )
 })
 
@@ -263,7 +257,7 @@ const removeFilter = async (type: string) => {
 }
 
 const findPropertyData = (propertyId: number, value: string) => {
-  const parentProperty = resultProducts.value.filters.properties.find(
+  const parentProperty = resultProducts.value?.filters.properties.find(
     (p) => p.id === propertyId,
   )
 

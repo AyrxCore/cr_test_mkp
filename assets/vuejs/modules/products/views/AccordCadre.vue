@@ -20,7 +20,7 @@
       />
 
       <div
-        class="mt-10 mt-5 flex flex-col text-sm md:text-base lg:grid lg:grid-cols-9 lg:gap-4 lg:text-lg"
+        class="mt-5 flex flex-col text-sm md:text-base lg:grid lg:grid-cols-9 lg:gap-4 lg:text-lg"
       >
         <ConditionsNegocieesComponent :properties="accord.properties" />
 
@@ -54,7 +54,7 @@
       />
       <EnSavoirPlusComponent :properties="accord.properties" />
       <div class="mt-11">
-        <h3 class="home-subtitle text-primary">
+        <h3 class="home-title text-primary">
           Ces partenaires peuvent aussi
           <span class="text-gradient">vous intéresser</span>
         </h3>

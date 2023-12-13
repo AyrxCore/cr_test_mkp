@@ -11,7 +11,9 @@ import { AlertType } from '@/vuejs/types/Alert'
 import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
 import { getErrorMessage } from '@/vuejs/services/login'
 import router, { PageList } from '@/vuejs/router'
+import { Account } from '@/vuejs/types/Account'
 import { notifyError, notifySuccess } from '@/vuejs/services/utils'
+import { Account } from '@/vuejs/types/Account'
 
 export const useUserStore = defineStore({
   id: 'user',
@@ -21,7 +23,7 @@ export const useUserStore = defineStore({
   }),
 
   actions: {
-    async authenticate(userData: AuthenticateUserData): Promise<[]> {
+    async authenticate(userData: AuthenticateUserData): Promise<Account[]> {
       const alertStore = useAlertStore()
       try {
         await UserHttpClient.get().getUserToken(userData)
@@ -35,10 +37,12 @@ export const useUserStore = defineStore({
         return []
       }
     },
+
     async selectUserAccount(id: string): Promise<boolean> {
       const alertStore = useAlertStore()
       try {
         await UserHttpClient.get().selectUserAccount(id)
+
         return true
       } catch (error) {
         alertStore.setShow(
@@ -68,11 +72,11 @@ export const useUserStore = defineStore({
     async updateUserDefaultBillingAddress(id: number): Promise<void> {
       try {
         await UserHttpClient.get(true).updateUserAddress({
-          id: this.user.account.subaccount.id,
+          id: this.user.externalApiData.subaccount.id,
           accountId: this.user.account.id,
           billingAddressId: id,
         })
-        this.user.account.subaccount.billing_address = id
+        this.user.externalApiData.subaccount.billing_address = id
         notifySuccess(
           `L'adresse de facturation par défaut a été modifiée avec succès`,
         )
@@ -85,11 +89,11 @@ export const useUserStore = defineStore({
     async updateUserDefaultShippingAddress(id: number): Promise<void> {
       try {
         await UserHttpClient.get(true).updateUserAddress({
-          id: this.user.account.subaccount.id,
+          id: this.user.externalApiData.subaccount.id,
           accountId: this.user.account.id,
           shippingAddressId: id,
         })
-        this.user.account.subaccount.shipping_address = id
+        this.user.externalApiData.subaccount.shipping_address = id
         notifySuccess(
           `L'adresse de livraison par défaut a été modifiée avec succès`,
         )

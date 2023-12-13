@@ -2,19 +2,21 @@
   <div>
     <div
       v-if="currentStatus.status === status.pending"
-      class="border border-orange-500 text-orange-500 p-2 flex justify-center lg:w-2/3"
+      class="flex justify-center border border-orange-500 p-2 text-orange-500 lg:w-2/3"
     >
       Votre rattachement est en cours
-      <PendingIconComponent class="text-orange-700 w-5 stroke-gray-500 fill-orange-400 ml-1" />
+      <PendingIconComponent
+        class="ml-1 w-5 fill-orange-400 stroke-gray-500 text-orange-700"
+      />
     </div>
     <div
       v-else
-      class="border border-green-qantis text-green-qantis p-2 flex justify-around lg:w-2/3"
+      class="flex justify-around border border-green-qantis p-2 text-green-qantis lg:w-2/3"
     >
       Vous bénéficiez des conditions
       <CheckIconComponent class="stroke-green-qantis" />
     </div>
-    <div class="condition-beneficiaire mt-4">
+    <div class="condition-beneficiaire mt-4 text-white">
       <p v-html="text" />
     </div>
 
@@ -23,7 +25,7 @@
     >
       <ButtonComponent
         v-if="cta1.name && cta1.url"
-        class="button-secondary md:mr-5"
+        class="button-secondary focus:!bg-white focus:text-secondary md:mr-5"
         :class="{
           'md:w-1/2': cta2.name && (cta2.url || cta2.mailto),
         }"
@@ -79,7 +81,6 @@ import { computed, PropType } from 'vue'
 import { AccountAccordCadre } from '@/vuejs/types/AccountAccordCadre'
 import PendingIconComponent from '@/vuejs/modules/shared/icon/PendingIconComponent.vue'
 
-
 const props = defineProps({
   currentStatus: {
     type: Object as PropType<AccountAccordCadre>,
@@ -92,7 +93,9 @@ const props = defineProps({
 })
 
 const text = computed(() => {
-  return props.currentStatus.status === status.value.pending ? props.properties.process_pending : props.properties.process_activated
+  return props.currentStatus.status === status.value.pending
+    ? props.properties.process_pending
+    : props.properties.process_activated
 })
 
 const cta1 = computed(() => {

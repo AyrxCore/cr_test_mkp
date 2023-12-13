@@ -1,174 +1,139 @@
 <template>
-  <BaseTemplate :title="`${productTitle} Qantis - MarketPlace`">
-    <LoadingComponent v-if="isLoading" />
+  <BaseTemplate :title="productTitle" class="ff-roboto">
+    <LoadingComponent v-if="isLoading" class="my-12" />
     <div
       v-else-if="product && !isLoading"
-      class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 px-5 sm:px-8"
+      class="xs:w-[100%] m-auto mt-4 max-w-screen-2xl flex-1 px-5 sm:px-8"
     >
       <BreadcrumbSharedComponent
         :list-url="breadcrumbUrl"
         :current-page="product.name"
       />
-      <div class="flex w-[100%] max-w-screen-2xl justify-end">
-        <ContactUsButtonComponent />
-      </div>
-      <div
-        class="m-auto my-3.5 flex w-[100%] max-w-screen-2xl flex-col lg:grid lg:grid-cols-2 lg:gap-4"
-      >
-        <!-- Bloc image produit -->
-        <div>
-          <ProductTitleComponent
-            class="mb-5 flex rounded-lg bg-white p-5 lg:hidden"
+      <div class="m-auto mt-4 flex flex-col">
+        <div class="flex flex-col md:flex-row">
+          <!-- Slider all pictures, hidden on mobile -->
+          <CarouselListSharedComponent
+            v-if="product.images?.length > 1"
+            direction="vertical"
+            :space-between="10"
+            :pagination="false"
+            :show-nav="false"
+            :breakpoints="{
+              640: {
+                slidesPerView: 4,
+                slidesPerGroup: 4,
+                slidesPerColumn: 4,
+                spaceBetween: 20,
+              },
+            }"
+            loop
+            watch-slides-progress
+            class="!ml-0 !mr-4 hidden xl:flex xl:h-[450px]"
+            @swiper="setThumbsSwiper"
           >
-            <template #name> {{ product.name }}</template>
-            <template #partner> {{ product.seller.name }}</template>
-            <template #reference> {{ product.reference }}</template>
-          </ProductTitleComponent>
-
-          <div class="relative">
+            <SwiperSlide
+              v-for="(img, key) in product.images"
+              :key="key"
+              class="cursor-pointer"
+            >
+              <img
+                :src="getUpplerImage(img)"
+                :alt="`${product.name} image ${key}`"
+                class="bg-white p-1"
+              />
+            </SwiperSlide>
+          </CarouselListSharedComponent>
+          <!-- Fin slider all pictures -->
+          <!-- Slider picture -->
+          <div
+            class="relative flex w-[100%] items-center bg-white md:!mr-6 md:!ml-0 md:h-[450px] md:max-w-[50%] xl:max-w-[40%]"
+          >
             <CarouselListSharedComponent
-              class="nav-mobile-only mx-auto h-[303px] items-center rounded-xl bg-white px-4 md:h-[590px]"
               :slides-per-view="1"
               :space-between="20"
-              :breakpoints="{
-                640: {
-                  slidesPerView: 1,
-                  spaceBetween: 20,
-                },
-              }"
-              :navigation="true"
-              :show-nav="true"
+              :show-nav="product.images?.length > 1"
               :thumbs="{
                 swiper:
                   thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null,
               }"
+              loop
+              class="h-[303px]"
             >
               <SwiperSlide
                 v-for="(img, key) in product.images"
                 :key="key"
-                class="flex items-center justify-center p-8 md:h-auto"
+                class="flex w-[100%] justify-center p-4 md:h-auto"
               >
                 <img
                   :src="getUpplerImage(img)"
-                  alt="Picture"
-                  class="h-auto items-center sm:mx-auto"
+                  :alt="`${product.name} main image ${key}`"
+                  class="h-auto sm:mx-auto"
+                  @click.stop="
+                    sendGtmEvent('click_product_img', {
+                      product_name: product.name,
+                      partner_name: product.seller.name,
+                      partner_id: product.seller.id,
+                    })
+                  "
+                />
+              </SwiperSlide>
+              <SwiperSlide v-if="!product.images?.length">
+                <img
+                  :src="getUpplerImage(sampleImg)"
+                  alt="Produit sans image"
+                  class="h-auto sm:mx-auto"
                 />
               </SwiperSlide>
             </CarouselListSharedComponent>
           </div>
-          <div class="relative">
-            <CarouselListSharedComponent
-              class="mx-auto mt-5 hidden h-[150px] items-center px-4 py-4 md:flex md:justify-center"
-              :space-between="10"
-              watch-slides-progress
-              :pagination="false"
-              :loop="false"
-              :navigation="false"
-              :show-nav="false"
-              :breakpoints="{
-                640: {
-                  slidesPerView: 4,
-                  spaceBetween: 20,
-                },
-              }"
-              @swiper="setThumbsSwiper"
-            >
-              <SwiperSlide
-                v-for="(img, key) in product.images"
-                :key="key"
-                class="flex items-center rounded-xl bg-white"
-              >
-                <img
-                  :src="getUpplerImage(img)"
-                  alt="Picture"
-                  class="items-center rounded-xl bg-white"
-                />
-              </SwiperSlide>
-            </CarouselListSharedComponent>
-          </div>
-        </div>
-        <!-- Fin Bloc image produit -->
-
-        <!-- Bloc détails produit -->
-        <div>
-          <div
-            class="mt-5 flex flex-col rounded-lg bg-white p-5 md:p-7 lg:mt-0"
-          >
-            <ProductTitleComponent class="hidden lg:flex">
-              <template #name> {{ product.name }}</template>
-              <template #partner> {{ product.seller.name }}</template>
-              <template #reference> {{ product.reference }}</template>
-            </ProductTitleComponent>
-            <div
-              v-if="isLoadingPrice"
-              class="mt-5 flex h-10 w-full items-center justify-start"
-            >
-              <LoaderSharedComponent
-                class="text-secondary"
-                classes="loader-lg loader"
+          <!-- Fin slider picture -->
+          <div class="flex flex-col">
+            <!-- Product details -->
+            <div class="mt-4 md:mt-0">
+              <img
+                :src="getUpplerImage(product.seller.avatar)"
+                :alt="`${product.seller.name} logo`"
+                class="mb-1 h-10"
               />
-            </div>
-            <div v-else class="mt-14 hidden flex-col lg:flex">
-              <div>
-                <span
-                  v-if="product.priceReference"
-                  :class="{
-                    'text-sm text-gray-500 line-through  md:text-base lg:text-lg':
-                      product.price,
-                    'text-[25px] font-bold text-primary':
-                      product.price === null,
-                  }"
-                  >{{ product.priceReference }}€ HT
-                </span>
-                <span
-                  v-if="product.percent > 0"
-                  class="ml-2 rounded-lg bg-secondary px-2.5 py-1.5 text-white"
-                  >{{ product.percent }}%</span
-                >
-              </div>
-              <div
-                v-if="product.price"
-                class="mt-3 text-[25px] font-bold text-primary"
+              <h3
+                class="flex items-center text-xl text-primary md:mb-3 md:text-3xl"
               >
-                {{ product.price }}€ HT
-              </div>
-            </div>
-            <div class="lg:mt-12">
-              <div class="inline-flex items-center text-gray-500">
-                <span
-                  class="mr-2 text-sm text-gray-500 md:text-base lg:text-lg"
-                >
-                  Quantité
-                </span>
-                <ProductQuantityComponent
-                  :quantity="product.quantity"
-                  @update-quantity="updateQuantity"
+                {{ product.name }}
+                <AddFavoriteComponent
+                  :product-id="product.id"
+                  :product-name="product.name"
+                  :variant-id="product.defaultVariantId"
+                  :favorites-product="product.favorites"
+                  class="ml-2 inline-flex"
                 />
-
-                <div class="relative ml-5 hidden lg:flex">
-                  <AddFavoriteComponent
-                    :product-id="product.id"
-                    :product-name="product.name"
-                    :variant-id="product.defaultVariantId"
-                    :favorites-product="product.favorites"
-                  />
-                  Ajouter ce produit à mes favoris
+              </h3>
+              Référence : {{ product.reference }}
+              <!-- Bloc options -->
+              <div v-if="hasOptions" class="my-4">
+                <div class="mb-2 text-lg font-bold text-primary md:text-xl">
+                  Mes options
                 </div>
-              </div>
-              <div class="mt-12">
                 <div
                   v-for="(children, key, index) in product.options"
                   :key="key"
-                  class="mt-2 w-full items-center text-gray-500"
+                  class="mt-2 flex w-full items-center justify-between bg-white px-4 py-2"
                 >
-                  <span class="text-sm text-gray-500 md:text-base lg:text-lg">
+                  <span class="text-sm md:text-base lg:text-lg">
                     {{ key }}
                   </span>
                   <select
                     v-if="key && children.length > 0"
                     v-model="option[index]"
-                    class="right-0 float-right ml-2 h-[1.75rem] w-1/2 rounded-md border border-[#5E6875] pt-0"
+                    class="h-[1.75rem] w-1/2 border-none p-0"
                     @change="updateProductVariant"
+                    @input="
+                      sendGtmEvent('click_product_options', {
+                        product_name: product.name,
+                        partner_name: product.seller.name,
+                        partner_id: product.seller.id,
+                        option_id: option[index],
+                      })
+                    "
                   >
                     <option
                       v-for="child in children"
@@ -180,105 +145,120 @@
                   </select>
                 </div>
               </div>
+              <!-- End Bloc options -->
             </div>
+            <!-- Fin product details -->
+            <!-- Quantité + prix -->
+            <div class="flex justify-between md:flex-col">
+              <div class="lg:my-6">
+                <div class="relative inline-flex items-center">
+                  <span class="mr-2 hidden md:block"> Quantité </span>
+                  <ProductQuantityComponent
+                    :quantity="product.quantity"
+                    @update-quantity="updateQuantity"
+                  />
+                </div>
+              </div>
+              <LoaderSharedComponent
+                v-if="isLoadingPrice"
+                class="text-secondary"
+                classes="loader-lg loader"
+              />
+              <div v-else class="mb-4 flex items-end">
+                <div
+                  v-if="product.price"
+                  class="mr-2 text-xl font-bold text-primary md:text-3xl"
+                >
+                  {{ product.price }}€ HT
+                </div>
+                <div
+                  v-if="product.priceReference"
+                  :class="{
+                    'text-sm text-gray-500 line-through md:text-base lg:text-lg':
+                      product.price,
+                    'text-xl font-bold text-primary': product.price === null,
+                  }"
+                >
+                  {{ product.priceReference }}€ HT
+                </div>
+              </div>
+            </div>
+            <!-- Fin Quantité + prix -->
+            <!-- Bloc livraison -->
+            <div v-if="product.seller.description" class="mt-2">
+              <h4 class="text-lg md:text-xl">Infos livraison</h4>
+              <div class="mt-2 flex items-center">
+                <TruckIconComponent class="mr-4 w-8 shrink-0 md:w-6" />
+                {{ product.seller.description }}
+              </div>
+            </div>
+            <!-- Fin Livraison -->
             <ProductAddToCartComponent
               v-if="product"
-              class="hidden lg:flex"
+              class="mt-4 hidden lg:flex"
               :product="product"
             />
           </div>
-          <div
-            v-if="product.seller.description"
-            class="mt-[25px] h-[auto] rounded-lg bg-white p-5 md:p-7"
-          >
-            <h3 class="text-[19px] text-primary md:text-[25px] xl:text-[35px]">
-              Livraison et retour
-            </h3>
-            <ul class="list-disc text-gray-500">
-              <li class="mt-1 ml-7 text-sm md:text-base lg:text-lg">
-                {{ product.seller.description }}
-              </li>
-            </ul>
-          </div>
-          <div
-            class="mt-[20px] flex w-full flex-col rounded-lg bg-white p-5 text-center md:h-[158px] md:flex-row md:p-7 md:text-left"
-          >
-            <div class="flex justify-center md:w-[20%]">
-              <img
-                :src="helpImageFile"
-                alt="Picture"
-                class="h-[98px] w-[98px] items-center sm:mx-auto"
-              />
-            </div>
-            <div class="flex flex-col justify-center md:w-[80%]">
-              <h3 class="text-[19px] text-primary md:text-[25px]">
-                Besoin d'aide pour votre commande ?
-              </h3>
-              <RouterLink
-                :to="{ name: PageList.CONTACT_PAGE }"
-                class="button button-gradient"
-              >
-                <ArrowRigntIconComponent
-                  class="mt-1 mr-2 w-4 items-center"
-                  :stroke-color="'#FFFFFF'"
-                />
-                Contactez notre Service Adhérents
-              </RouterLink>
-            </div>
-          </div>
         </div>
-        <!-- Fin Bloc détails produit -->
       </div>
 
-      <!-- Bloc description -->
-      <div class="mt-10 justify-center">
-        <h3 class="home-subtitle mb-5 text-primary">Description</h3>
-        <p
-          class="whitespace-pre-line text-sm text-gray-500 md:text-base lg:text-lg"
-          v-html="product.description"
-        />
-      </div>
-      <!-- Fin Bloc description -->
-
-      <!-- Bloc Caractéristiques techniques -->
-
-      <div v-if="product.properties.length !== 0" class="mt-10 justify-center">
-        <h3 class="home-subtitle mb-5 text-primary">
-          Caractéristiques techniques
-        </h3>
-        <table class="w-full table-auto border bg-white p-8">
-          <tbody>
-            <tr
-              v-for="(property, key, index) in product.properties"
-              :key="index"
-              class="border text-sm text-primary md:text-base lg:text-lg"
-            >
-              <td class="w-[20%] border p-2">{{ key }}</td>
-              <td class="p-2">
-                <a v-if="isUrl(property)" :href="property" target="_blank">
-                  Cliquez-ici</a
-                >
-                <span v-else>{{ property }}</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <!-- Fin du bloc caractéristiques techniques -->
+      <Tabs class="mt-4" :options="{ disableScrollBehavior: true }">
+        <Tab
+          name="Description"
+          @click.native="
+            sendGtmEvent('click_product_view_description', {
+              product_name: product.name,
+            })
+          "
+        >
+          <p
+            class="whitespace-pre-line py-4 text-sm md:text-base"
+            v-html="product.description"
+          />
+        </Tab>
+        <Tab
+          v-if="product.properties.length !== 0"
+          name="Caractéristiques technique"
+          @click.native="
+            sendGtmEvent('click_product_view_caracteristics', {
+              product_name: product.name,
+            })
+          "
+        >
+          <table class="w-full table-auto">
+            <tbody>
+              <tr
+                v-for="(property, key, index) in product.properties"
+                :key="index"
+                class="border text-sm text-primary md:text-base lg:text-lg"
+              >
+                <td class="w-[20%] border p-2">{{ key }}</td>
+                <td class="p-2">
+                  <a v-if="isUrl(property)" :href="property" target="_blank">
+                    Cliquez-ici
+                  </a>
+                  <span v-else>{{ property }}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Tab>
+      </Tabs>
 
       <!-- Bloc produits similaire -->
-      <h3 class="home-subtitle mt-10 text-primary">
-        Produits de la même catégorie
-      </h3>
-      <ProductsLoadingCarouselComponent
-        v-if="!similarProducts && isLoadingSimilarProducts"
-      />
-      <div v-else>
-        <div v-if="similarProducts.length > 0" class="mt-10 justify-center">
-          <ProductsCarouselComponent :products="similarProducts" class="mt-4" />
-        </div>
-      </div>
-
+      <template v-if="isLoadingSimilarProducts || similarProducts?.length >= 5">
+        <h3 class="mt-4 mb-2 text-lg text-primary md:text-xl">
+          Sélection de produits similaires
+        </h3>
+        <ProductsLoadingCarouselComponent
+          v-if="!similarProducts && isLoadingSimilarProducts"
+        />
+        <ProductsCarouselComponent
+          v-else-if="similarProducts.length > 0"
+          :products="similarProducts"
+          class="mt-4 mb-12"
+        />
+      </template>
       <!-- Fin bloc produits similaire -->
     </div>
     <div
@@ -296,34 +276,37 @@
   />
 </template>
 <script lang="ts" setup>
-import BaseTemplate from '@/vuejs/BaseTemplate.vue'
-import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
-import { getImage, getUpplerImage, isUrl } from '@/vuejs/services/utils'
-import helpImage from '@/vuejs/assets/img/samples/img-help-product.png'
 import { computed, onMounted, ref, watch } from 'vue'
-import { SwiperSlide } from 'swiper/vue'
-import ArrowRigntIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
-import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
-import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
-import ProductAddToCartComponent from '@/vuejs/modules/products/components/ProductAddToCartComponent.vue'
-import ProductTitleComponent from '@/vuejs/modules/products/components/ProductTitleComponent.vue'
 import { useRoute } from 'vue-router'
-import { useProductStore } from '@/vuejs/stores/product'
-import { Product } from '@/vuejs/types/Product'
-import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
-import { PageList } from '@/vuejs/router'
-import { ProductPageList } from '@/vuejs/router/pages-list'
+import { SwiperSlide } from 'swiper/vue'
+import { Tab, Tabs } from 'vue3-tabs-component'
+
 import AddFavoriteComponent from '@/vuejs/modules/products/components/AddFavoriteComponent.vue'
-import { useFavoriteStore } from '@/vuejs/stores/favorite'
-import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
-import ProductQuantityComponent from '../../shared/ProductQuantityComponent.vue'
+import BaseTemplate from '@/vuejs/BaseTemplate.vue'
+import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
+import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
+import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
+import ProductAddToCartComponent from '@/vuejs/modules/products/components/ProductAddToCartComponent.vue'
+import ProductQuantityComponent from '@/vuejs/modules/shared/ProductQuantityComponent.vue'
+import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
 import ProductsLoadingCarouselComponent from '@/vuejs/modules/shared/ProductsLoadingCarouselComponent.vue'
+import TruckIconComponent from '@/vuejs/modules/shared/icon/TruckIconComponent.vue'
+
+import { getUpplerImage, isUrl } from '@/vuejs/services/utils'
+import { PageList } from '@/vuejs/router'
+import { Product } from '@/vuejs/types/Product'
+import { useFavoriteStore } from '@/vuejs/stores/favorite'
+import { useProductStore } from '@/vuejs/stores/product'
+import { useChannelStore } from '@/vuejs/stores/channel'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
+import sampleImg from '@/vuejs/assets/img/sample_product_img.png'
+import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
 
 const route = useRoute()
 const productStore = useProductStore()
 const favoriteStore = useFavoriteStore()
-const helpImageFile = getImage(helpImage)
+const channelStore = useChannelStore()
 
 const thumbsSwiper = ref(null)
 const option = ref([])
@@ -345,7 +328,7 @@ const breadcrumbUrl = computed(() => {
         id: category.id,
         name: category.name,
         url: {
-          name: ProductPageList.PRODUCTS,
+          name: PageList.PRODUCTS,
           query: { category: category.id },
         },
       })
@@ -355,6 +338,26 @@ const breadcrumbUrl = computed(() => {
   return breadcrumb
 })
 
+const productTitle = computed(() => {
+  return product.value ? product.value.name + ' | ' : ''
+})
+
+const hasOptions = computed((): boolean => {
+  return Object.keys(product?.value.options)[0].length > 0
+})
+
+const updateQuantity = (event) => {
+  let gtmEvent = 'click_product_plus_qty'
+  if (product.value.quantity > event.quantity) {
+    gtmEvent = 'click_product_moins_qty'
+  }
+  sendGtmEvent(gtmEvent, {
+    product_name: product.value.name,
+    qty_value: event.quantity,
+  })
+  product.value.quantity = event.quantity
+}
+
 const setThumbsSwiper = (swiper) => {
   thumbsSwiper.value = swiper
 }
@@ -363,14 +366,6 @@ const updateProductVariant = async () => {
   isLoadingPrice.value = true
   product.value = await productStore.changeVariant(product.value, option.value)
   isLoadingPrice.value = false
-}
-
-const productTitle = computed(() => {
-  return product.value ? product.value.name + ' | ' : ''
-})
-
-const updateQuantity = (event) => {
-  product.value.quantity = event.quantity
 }
 
 watch(

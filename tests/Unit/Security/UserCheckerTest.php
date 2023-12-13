@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\Exception\CustomUserMessageAccountStatusExce
 
 \it('throws an exception if api user is disabled', function () {
     $user = UserFactory::new([
-        'isEnabled' => false,
+        'enabled' => false,
         'roles' => ['ROLE_API'],
     ])
         ->withoutPersisting()
@@ -25,7 +25,7 @@ use Symfony\Component\Security\Core\Exception\CustomUserMessageAccountStatusExce
     $this->expectNotToPerformAssertions();
 
     $user = UserFactory::new([
-        'isEnabled' => true,
+        'enabled' => true,
         'roles' => ['ROLE_API'],
     ])
         ->withoutPersisting()
@@ -38,7 +38,7 @@ use Symfony\Component\Security\Core\Exception\CustomUserMessageAccountStatusExce
 
 \it('throws an exception if user has no account', function () {
     $user = UserFactory::new([
-        'isEnabled' => true,
+        'enabled' => true,
     ])
         ->withoutPersisting()
         ->create();
@@ -50,12 +50,12 @@ use Symfony\Component\Security\Core\Exception\CustomUserMessageAccountStatusExce
     ->throws(CustomUserMessageAccountStatusException::class, 'user_empty_account');
 
 \it('throws an exception if user has no enabled account', function () {
-    $account = AccountFactory::new(['isEnabled' => false])
+    $account = AccountFactory::new(['enabled' => false])
         ->withoutPersisting()
         ->create();
 
     $user = UserFactory::new([
-        'isEnabled' => true,
+        'enabled' => true,
     ])
         ->withoutPersisting()
         ->create();
@@ -68,12 +68,12 @@ use Symfony\Component\Security\Core\Exception\CustomUserMessageAccountStatusExce
     ->throws(CustomUserMessageAccountStatusException::class, 'user_empty_account');
 
 \it('throws an exception if user with account is disabled', function () {
-    $account = AccountFactory::new(['isEnabled' => true])
+    $account = AccountFactory::new(['enabled' => true])
         ->withoutPersisting()
         ->create();
 
     $user = UserFactory::new([
-        'isEnabled' => false,
+        'enabled' => false,
     ])
         ->withoutPersisting()
         ->create();
@@ -88,16 +88,16 @@ use Symfony\Component\Security\Core\Exception\CustomUserMessageAccountStatusExce
 \it('should not throw an exception if user is enabled and has at least one enabled accounts', function () {
     $this->expectNotToPerformAssertions();
 
-    $account = AccountFactory::new(['isEnabled' => true])
+    $account = AccountFactory::new(['enabled' => true])
         ->withoutPersisting()
         ->create();
 
-    $account2 = AccountFactory::new(['isEnabled' => true])
+    $account2 = AccountFactory::new(['enabled' => false])
         ->withoutPersisting()
         ->create();
 
     $user = UserFactory::new([
-        'isEnabled' => true,
+        'enabled' => true,
         'roles' => [],
     ])
         ->withoutPersisting()

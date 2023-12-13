@@ -38,7 +38,7 @@ const listOrders = ref([
     date: '01/01/2023',
     statut: {
       name: 'En cours',
-      color: 'bg-qantis',
+      color: 'bg-primary',
     },
   },
   {

@@ -1,7 +1,7 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="primary mb-4 mt-2 text-title-35 md:mt-0">
+      <h3 class="mb-4 mt-2 text-title-35 text-primary md:mt-0">
         Modifier mon mot de passe
       </h3>
       <div

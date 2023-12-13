@@ -1,4 +1,13 @@
-import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios'
+import axios, {
+  AxiosError,
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+} from 'axios'
+import store from '@/vuejs/store'
+import { useCommonStore } from '@/vuejs/stores/common'
+
+const commonStore = useCommonStore(store)
 
 class BaseClientService {
   public apiClient: AxiosInstance
@@ -11,12 +20,9 @@ class BaseClientService {
 
     const headers = {
       accept: 'application/json',
-    }
-
-    headers['Content-Type'] = 'application/json'
-
-    if (isPatch) {
-      headers['Content-Type'] = 'application/merge-patch+json'
+      'Content-Type': isPatch
+        ? 'application/merge-patch+json'
+        : 'application/json',
     }
 
     this.apiClient = axios.create({
@@ -24,6 +30,19 @@ class BaseClientService {
       withCredentials: true,
       headers,
     })
+
+    this.apiClient.interceptors.request.use(
+      (config: AxiosRequestConfig): AxiosRequestConfig => {
+        if (!config.url.includes('/channels/by-host/')) {
+          config.headers['X-channel'] = commonStore.channelCode
+        }
+
+        return config
+      },
+      (error: AxiosError): Promise<AxiosError> => {
+        return Promise.reject(error)
+      },
+    )
 
     this.apiClient.interceptors.response.use(
       (response: Promise<AxiosResponse> | AxiosResponse | undefined) => {
@@ -33,6 +52,8 @@ class BaseClientService {
         const originalConfig = error.config
         if (error.response?.status === 401 && !originalConfig._retry) {
           if (error.config.url !== 'authentication/token') {
+            document.cookie = 'BEARER=; Max-Age=0'
+            document.cookie = 'PHPSESSID=; Max-Age=0'
             location.reload()
           } else {
             console.log(error.config.url)

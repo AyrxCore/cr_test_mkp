@@ -9,25 +9,23 @@ use App\Dto\AccountAccordCadre;
 use App\Entity\AccordStatut;
 use App\Entity\Adherent;
 use App\Repository\AdherentRepository;
+use App\Repository\ChannelRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Uid\Uuid;
-use Symfony\Contracts\Service\Attribute\Required;
 
 class AdherentPersister implements ContextAwareDataPersisterInterface
 {
-    #[Required]
-    public EntityManagerInterface $em;
-
-    #[Required]
-    public UserPasswordHasherInterface $userPasswordHasher;
-
-    #[Required]
-    public NormalizerInterface $normalizer;
-
-    #[Required]
-    public AdherentRepository $adherentRepository;
+    public function __construct(
+        private AdherentRepository $adherentRepository,
+        private ChannelRepository $channelRepository,
+        private EntityManagerInterface $em,
+        private NormalizerInterface $normalizer,
+        private UserPasswordHasherInterface $userPasswordHasher,
+    ) {
+    }
 
     public function supports($data, array $context = []): bool
     {
@@ -44,6 +42,13 @@ class AdherentPersister implements ContextAwareDataPersisterInterface
             return null;
         }
 
+        $channel = $this->channelRepository->findOneByCode($data->getChannelCode());
+
+        if (!$channel) {
+            throw new BadRequestHttpException('Channel not found');
+        }
+
+        $adh->setChannel($channel);
         $adh->setReducceCode($data->getReducceCode());
         $adh->setsiret($data->getsiret());
         $adh->setStreet($data->getStreet());
@@ -51,7 +56,7 @@ class AdherentPersister implements ContextAwareDataPersisterInterface
         $adh->setPostalcode($data->getPostalcode());
         $adh->setCountry($data->getCountry());
         $adh->setHashkey($data->getHashkey());
-        foreach ($data->getAttachments() as $key => $attachment) {
+        foreach ($data->getAttachments() as $attachment) {
             $accordStatut = $this->em->getRepository(AccordStatut::class)->findOneBy([
                 'adherent' => $data->getId(),
                 'accordId' => $attachment['accordId'],
@@ -59,7 +64,7 @@ class AdherentPersister implements ContextAwareDataPersisterInterface
             if ($accordStatut) {
                 // ne pas ecraser Pending par NotActivated
                 if (!($accordStatut->getStatus() === AccountAccordCadre::PROCESS_STATUS_PENDING
-                    && $attachment === AccountAccordCadre::PROCESS_STATUS_NOT_ACTIVATED)
+                    && $attachment['status'] === AccountAccordCadre::PROCESS_STATUS_NOT_ACTIVATED)
                 ) {
                     $accordStatut->setStatus($attachment['status']);
                     $this->em->persist($accordStatut);

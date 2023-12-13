@@ -23,11 +23,11 @@
   }
   50% {
     transform: scale(1.5);
-    box-shadow: 0 0 7px #9553ff;
+    box-shadow: 0 0 7px var(--primary-color);
   }
   100% {
     transform: scale(1);
-    box-shadow: 0 0 5px #9553ff;
+    box-shadow: 0 0 5px var(--primary-color);
   }
 }
 

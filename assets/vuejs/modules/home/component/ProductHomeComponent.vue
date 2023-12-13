@@ -1,13 +1,15 @@
 <template>
-  <div>
+  <div class="m-auto max-w-screen-94">
     <div class="mt-10 sm:w-[45rem]">
-      <h3 class="home-subtitle text-primary">{{ title }}</h3>
-      <p class="text-sm text-gray-400 sm:text-lg">
+      <h3 class="home-title mb-3 text-primary">{{ title }}</h3>
+      <p class="text-lg">
         {{ description }}
       </p>
     </div>
-    <ProductsLoadingCarouselComponent v-if="!products" />
-    <ProductsCarouselComponent v-else :products="products" />
+    <div class="m-auto max-w-screen-94">
+      <ProductsLoadingCarouselComponent v-if="!products" />
+      <ProductsCarouselComponent v-else :products="products" />
+    </div>
   </div>
 </template>
 

@@ -13,13 +13,13 @@
       </div>
       <div class="ml-2 w-[45%]">
         <h3 class="primary text-[22px] font-bold">{{ product.name }}</h3>
-        <span class="text-lg text-gray-500"
-          >Vendu par: {{ product.seller }}</span
-        >
+        <span class="text-lg text-gray-500">
+          Vendu par: {{ product.seller }}
+        </span>
         <br />
-        <span class="text-lg text-gray-500"
-          >Référence: {{ product.reference }}</span
-        >
+        <span class="text-lg text-gray-500">
+          Référence: {{ product.reference }}
+        </span>
         <br />
         <span class="mt-2 text-lg text-green-400">En stock</span>
       </div>
@@ -43,9 +43,11 @@
       </div>
       <div class="float-right inline-flex flex-1">
         <a href="#">
-          <HeartIconComponent :stroke-color="'#5E6875'" class="mr-2"
-        /></a>
-        <a href="#"> <TrashIconComponent :stroke-color="'#5E6875'" /></a>
+          <HeartIconComponent :stroke-color="'#5E6875'" class="mr-2" />
+        </a>
+        <a href="#">
+          <TrashIconComponent :stroke-color="'#5E6875'" />
+        </a>
       </div>
     </div>
   </div>

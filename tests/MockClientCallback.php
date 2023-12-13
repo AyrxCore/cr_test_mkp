@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use App\Controller\Api\Buyer\ProductApiController;
 use App\Dto\Banner;
 use App\Dto\ExpertContent;
 use App\Tests\Feature\Helper\JsonHelper;
@@ -24,7 +23,7 @@ class MockClientCallback
 
         // Home products
         if ($path === '/v1/buyer/search/product') {
-            return $this->getHomeProductsResponse($options);
+            return $this->getProductsResponse($options);
         }
 
         // Dynamic entity
@@ -58,19 +57,9 @@ class MockClientCallback
         return new MockResponse(null);
     }
 
-    private function getHomeProductsResponse(array $options): MockResponse
+    private function getProductsResponse(array $options): MockResponse
     {
-        $requestBody = $options['body'];
-
-        if (\str_contains($requestBody, \json_encode(ProductApiController::HOME_TOP_VENTE_PROPERTY))) {
-            return new MockResponse(JsonHelper::parseJsonDataFile('_mocks/uppler-response/v1/buyer/search/products-top-vente.json'));
-        }
-
-        if (\str_contains($requestBody, \json_encode(ProductApiController::HOME_ACCORD_CADRE_PROPERTY))) {
-            return new MockResponse(JsonHelper::parseJsonDataFile('_mocks/uppler-response/v1/buyer/search/products-accord-cadre.json'));
-        }
-
-        return new MockResponse(JsonHelper::parseJsonDataFile('_mocks/uppler-response/v1/buyer/search/products-selection.json'));
+        return new MockResponse(JsonHelper::parseJsonDataFile('_mocks/uppler-response/v1/buyer/search/products-list.json'));
     }
 
     private function getDynamicEntityResponse(string $url): MockResponse

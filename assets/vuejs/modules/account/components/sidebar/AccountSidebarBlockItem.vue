@@ -1,5 +1,5 @@
 <template>
-  <p class="mb-3 flex flex items-center">
+  <p class="mb-3 flex items-center">
     <ChevronRightIconComponent :stroke-color="'#5E6875'" />
     <RouterLink :to="{ name: props.item.url }">
       <span

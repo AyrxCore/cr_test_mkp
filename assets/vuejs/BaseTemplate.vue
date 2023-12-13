@@ -3,11 +3,19 @@
     <StickyContactButtons />
     <HeaderSharedComponent />
     <div
-      v-if="banner"
-      class="bg-gradient flex h-[59px] flex-row items-center justify-center py-4 text-white"
+      v-if="
+        banner &&
+        channelStore.isAllowedToShow(
+          OPTIONAL_FRONT_BLOCKS.BANNER_FLASH_HOMEPAGE_QANTIS,
+        )
+      "
+      class="flex flex-row items-center justify-center bg-primary py-4 lg:h-[59px]"
+      :style="{
+        color: betterTextColor('primary'),
+      }"
     >
       <p
-        class="flex w-[305px] flex-col items-center py-2 text-sm md:w-auto md:text-base lg:flex-row lg:text-lg"
+        class="flex w-[305px] flex-col items-center text-sm md:w-auto md:py-2 md:text-base lg:flex-row lg:text-lg"
       >
         <span class="mr-0 lg:mr-2">
           {{ banner.text }}
@@ -17,7 +25,7 @@
         </a>
       </p>
     </div>
-    <main class="">
+    <main>
       <slot />
     </main>
 
@@ -27,7 +35,12 @@
       class="fixed right-1 bottom-10 z-10 cursor-pointer rounded bg-secondary p-1"
       @click="toTop"
     >
-      <ChevronDownIconComponent class="rotate-180 stroke-white" />
+      <ChevronDownIconComponent
+        class="rotate-180"
+        :style="{
+          color: betterTextColor('secondary'),
+        }"
+      />
     </div>
     <FooterSharedComponent />
   </div>
@@ -35,16 +48,24 @@
 
 <script lang="ts" setup>
 import { useHead } from '@vueuse/head'
-import { computed, onMounted, reactive } from 'vue'
+import { onMounted, reactive } from 'vue'
+import { storeToRefs } from 'pinia'
+
 import HeaderSharedComponent from '@/vuejs/modules/shared/HeaderSharedComponent.vue'
 import FooterSharedComponent from '@/vuejs/modules/shared/FooterSharedComponent.vue'
 import StickyContactButtons from '@/vuejs/modules/shared/StickyContactButtonsComponent.vue'
-import { storeToRefs } from 'pinia'
 import ChevronDownIconComponent from '@/vuejs/modules/shared/icon/ChevronDownIconComponent.vue'
-import { useBannerStore } from '@/vuejs/stores/banner'
 
+import { useBannerStore } from '@/vuejs/stores/banner'
+import { useChannelStore } from '@/vuejs/stores/channel'
+import { betterTextColor } from '@/vuejs/services/utils'
+import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
+
+const channelStore = useChannelStore()
+const { channel } = storeToRefs(channelStore)
 const expertContentStore = useBannerStore()
 const { banner } = storeToRefs(expertContentStore)
+
 const props = defineProps({
   title: {
     required: false,
@@ -57,8 +78,13 @@ onMounted(() => {
   window.addEventListener('scroll', handleScroll)
 })
 
-const scTimer = reactive({ value: 0 })
+const scTimer = reactive({ value: null })
 const scY = reactive({ value: 0 })
+const pageTitle = reactive({
+  value:
+    (props.title.length && `${props.title} | ${channel.value.name}`) ||
+    channel.value.name,
+})
 
 const handleScroll = () => {
   if (scTimer.value) return
@@ -76,7 +102,8 @@ const toTop = () => {
   })
 }
 useHead({
-  title: computed(() => props.title),
+  title: pageTitle.value,
+
   meta: [
     {
       property: 'og:title',

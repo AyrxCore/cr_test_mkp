@@ -31,7 +31,7 @@
           </div>
         </div>
         <div
-          class="primary mb-2 inline-flex w-full justify-between text-sm font-bold md:text-base xl:text-lg"
+          class="mb-2 inline-flex w-full justify-between text-sm font-bold text-primary md:text-base xl:text-lg"
         >
           <div>TOTAL HT :</div>
           <div class="float-right">

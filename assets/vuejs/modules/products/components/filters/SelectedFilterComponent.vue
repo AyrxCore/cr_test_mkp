@@ -15,8 +15,6 @@
   </div>
 </template>
 <script lang="ts" setup>
-import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
-
 const props = defineProps({
   label: {
     type: String,

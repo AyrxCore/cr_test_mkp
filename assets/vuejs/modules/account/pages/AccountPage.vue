@@ -1,7 +1,7 @@
 <template>
-  <BaseTemplate title="Qantis - MarketPlace">
+  <BaseTemplate>
     <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 px-4 sm:px-8">
-      <breadcrumb-shared-component :current-page="'Mon compte'" />
+      <breadcrumb-shared-component current-page="Mon compte" />
       <div class="w-[100%] max-w-screen-2xl">
         <ContactUsButtonComponent />
       </div>
@@ -21,7 +21,7 @@
                       <span class="uppercase">{{ user.lastName }}</span>
                     </h3>
                     <p class="font-bold text-gray-500">
-                      {{ user.account.buyer.name }}
+                      {{ user.externalApiData.buyer.name }}
                     </p>
                     <p
                       v-if="user.account.adherent.reducceCode"
@@ -55,15 +55,15 @@
                         <ChevronRightIconComponent :stroke-color="'#5E6875'" />
                         Service adhérents
                       </span>
-                      <a class="ml-6" :href="`tel:${PHONE_ANIMATION}`">
-                        {{ PHONE_ANIMATION }}
+                      <a class="ml-6" :href="`tel:${channel.phoneNumber}`">
+                        {{ channelPhoneNumber }}
                       </a>
                       <span class="mt-2 flex">
                         <ChevronRightIconComponent :stroke-color="'#5E6875'" />
                         Contactez-nous
                       </span>
-                      <a class="ml-6" :href="`mailto:${MAIL_ANIMATION}`">
-                        {{ MAIL_ANIMATION }}
+                      <a class="ml-6" :href="`mailto:${channel.email}`">
+                        {{ channel.email }}
                       </a>
                     </div>
                   </div>
@@ -96,6 +96,7 @@
 
 <script lang="ts" setup>
 import { useUserStore } from '@/vuejs/stores/user'
+import { useChannelStore } from '@/vuejs/stores/channel'
 import { storeToRefs } from 'pinia'
 
 import AccountSidebar from '@/vuejs/modules/account/components/sidebar/AccountSidebar.vue'
@@ -105,12 +106,15 @@ import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightI
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import DisconnectIconComponent from '@/vuejs/modules/shared/icon/DisconnectIconComponent.vue'
 import DropdownListComponent from '@/vuejs/modules/shared/DropdownListComponent.vue'
-
-import { MAIL_ANIMATION, PHONE_ANIMATION } from '@/vuejs/services/const'
 import { PageList } from '@/vuejs/router'
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
+
+const { channel, formattedPhoneNumber: channelPhoneNumber } = storeToRefs(
+  useChannelStore(),
+)
+
 const onLogout = async (e: Event): Promise<void> => {
   e.preventDefault()
   ;(await userStore.logout()) && location.reload()
@@ -118,7 +122,7 @@ const onLogout = async (e: Event): Promise<void> => {
 </script>
 
 <style lang="postcss">
-.text-title-35 {
-  @apply text-[23px] md:text-[29px] lg:text-[35px];
+.text-title-34 {
+  @apply text-[30px] lg:text-[34px];
 }
 </style>

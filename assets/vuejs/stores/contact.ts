@@ -37,7 +37,7 @@ export const useContactStore = defineStore({
           this.contact.lastName = userStore.user.lastName
           this.contact.firstName = userStore.user.firstName
           this.contact.email = userStore.user.email
-          this.contact.companyName = userStore.user.account.buyer.name
+          this.contact.companyName = userStore.user.externalApiData.buyer.name
         }
         this.contact.motif = ''
         this.contact.description = ''

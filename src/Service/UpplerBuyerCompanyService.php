@@ -28,11 +28,11 @@ class UpplerBuyerCompanyService extends AbstractUpplerService
             isAdmin: true
         );
 
-        if ($res->getStatusCode() === Response::HTTP_OK) {
+        if ($res && $res->getStatusCode() === Response::HTTP_OK) {
             return \json_decode($res->getContent());
         }
 
-        return null;
+        throw new \Exception('Error while getting buyer company');
     }
 
     public function getUserBuyerData(): object|null

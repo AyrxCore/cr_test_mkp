@@ -24,15 +24,15 @@ class UserInfoUpdateRequest
     private ?Account $account = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['simpleUser'])]
+    #[Groups(['user:simple'])]
     private ?string $attribute = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['simpleUser'])]
+    #[Groups(['user:simple'])]
     private ?string $value = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['simpleUser'])]
+    #[Groups(['user:simple'])]
     private ?string $oldValue = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -45,7 +45,7 @@ class UserInfoUpdateRequest
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    #[Groups(['simpleUser'])]
+    #[Groups(['user:simple'])]
     private ?bool $isIso = null;
 
     #[ORM\Column(nullable: true)]

@@ -1,0 +1,56 @@
+{
+  "@context": {
+    "@vocab": "http:\/\/localhost\/api\/docs.jsonld#",
+    "hydra": "http:\/\/www.w3.org\/ns\/hydra\/core#",
+    "id": "ChannelOutput\/id",
+    "name": "ChannelOutput\/name",
+    "code": "ChannelOutput\/code",
+    "hostname": "ChannelOutput\/hostname",
+    "email": "ChannelOutput\/email",
+    "phoneNumber": "ChannelOutput\/phoneNumber",
+    "whiteLabel": "ChannelOutput\/whiteLabel",
+    "design": "ChannelOutput\/design",
+    "documents": "ChannelOutput\/documents"
+  },
+  "@type": "Channel",
+  "@id": "\/api\/channels\/@uuid@",
+  "id": "@uuid@",
+  "name": "QANTIS Test",
+  "code": "QANTIS_TEST",
+  "hostname": "test.qantis.local",
+  "email": "test@qantis.co",
+  "phoneNumber": "+33123456789",
+  "whiteLabel": false,
+  "design": {
+    "@context": {
+      "@vocab": "http:\/\/localhost\/api\/docs.jsonld#",
+      "hydra": "http:\/\/www.w3.org\/ns\/hydra\/core#",
+      "primaryColor": "ChannelDesignOutput\/primaryColor",
+      "secondaryColor": "ChannelDesignOutput\/secondaryColor",
+      "textColor": "ChannelDesignOutput\/textColor",
+      "logo": "ChannelDesignOutput\/logo",
+      "favicon": "ChannelDesignOutput\/favicon"
+    },
+    "@type": "ChannelDesignOutput",
+    "@id": "\/api\/.well-known\/genid\/@string@",
+    "primaryColor": "#FF0000",
+    "secondaryColor": "#FFFFFF",
+    "textColor": "#000000",
+    "logo": "https:\/\/path.to-logo.com\/logo.png",
+    "favicon": "https:\/\/path.to-favicon.com\/favicon.png"
+  },
+  "documents": {
+    "@context": {
+      "@vocab": "http:\/\/localhost\/api\/docs.jsonld#",
+      "hydra": "http:\/\/www.w3.org\/ns\/hydra\/core#",
+      "privacyPolicy": "ChannelDocumentsOutput\/privacyPolicy",
+      "legalTerms": "ChannelDocumentsOutput\/legalTerms",
+      "generalTermsOfUse": "ChannelDocumentsOutput\/generalTermsOfUse"
+    },
+    "@type": "ChannelDocumentsOutput",
+    "@id": "\/api\/.well-known\/genid\/@string@",
+    "privacyPolicy": "https:\/\/privacy-policy.qantis.co",
+    "legalTerms": "https:\/\/legal-terms.qantis.co",
+    "generalTermsOfUse": "https:\/\/general-terms-of-use.qantis.co"
+  }
+}

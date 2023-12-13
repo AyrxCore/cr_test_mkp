@@ -1,6 +1,7 @@
 <template>
   <h2 class="mb-5 text-base text-primary md:text-xl">
-    Livraison {{ seller.name }} <slot name="order-index" />
+    Livraison {{ seller.name }}
+    <slot name="order-index" />
   </h2>
   <div class="mb-5 rounded-lg bg-white p-5">
     <CartFrancoComponent :order="order" class="mb-4" />
@@ -44,7 +45,7 @@
       {{ order.items.length }} référence(s)
       <span class="ml-2 flex items-center font-bold text-secondary underline">
         <Chevron2RightIconComponent
-          class="mr-1 text-sm lg:text-lg"
+          class="mr-1 fill-secondary stroke-secondary text-sm lg:text-lg"
           :class="{
             'rotate-90 ease-in-out': isDetailsOpen,
           }"
@@ -78,13 +79,13 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType, computed, ref, onMounted } from 'vue'
+import { computed, onMounted, PropType, ref } from 'vue'
 
 import CartFrancoComponent from '@/vuejs/modules/cart/components/CartFrancoComponent.vue'
 import Chevron2RightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
 
 import { useCartStore } from '@/vuejs/stores/cart'
-import { useSellerStore, SELLER_IDS } from '@/vuejs/stores/seller'
+import { SELLER_IDS, useSellerStore } from '@/vuejs/stores/seller'
 import { Order, ShippingMethod } from '@/vuejs/types/Cart'
 import { Seller } from '@/vuejs/types/Seller'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'

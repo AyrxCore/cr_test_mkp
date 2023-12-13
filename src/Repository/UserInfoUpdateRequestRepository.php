@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\UserInfoUpdateRequest;
@@ -9,8 +11,8 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @extends ServiceEntityRepository<UserInfoUpdateRequest>
  *
- * @method UserInfoUpdateRequest|null find($id, $lockMode = null, $lockVersion = null)
- * @method UserInfoUpdateRequest|null findOneBy(array $criteria, array $orderBy = null)
+ * @method null|UserInfoUpdateRequest find($id, $lockMode = null, $lockVersion = null)
+ * @method null|UserInfoUpdateRequest findOneBy(array $criteria, array $orderBy = null)
  * @method UserInfoUpdateRequest[]    findAll()
  * @method UserInfoUpdateRequest[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
@@ -41,6 +43,5 @@ class UserInfoUpdateRequestRepository extends ServiceEntityRepository
 
     public function get()
     {
-
     }
 }

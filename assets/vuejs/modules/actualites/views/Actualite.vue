@@ -1,5 +1,5 @@
 <template>
-  <BaseTemplate :title="`${pageTitle} | Qantis - Marketplace`">
+  <BaseTemplate :title="pageTitle">
     <LoadingComponent v-if="isLoading" />
     <div
       v-else-if="currentExpertContent"
@@ -17,7 +17,7 @@
       >
         <!-- Bloc text actualité -->
         <div>
-          <h3 class="home-subtitle mb-2 text-primary">
+          <h3 class="home-title mb-2 text-primary">
             {{ currentExpertContent.articleTitle }}
           </h3>
           <span
@@ -76,7 +76,7 @@
 
       <!-- Bloc articles recommandés -->
       <div v-if="contents.length > 0" class="mt-10 justify-center">
-        <h3 class="home-subtitle mb-5 text-primary">Articles recommandés</h3>
+        <h3 class="home-title mb-5 text-primary">Articles recommandés</h3>
         <ExpertContentsComponent :contents="contents" />
       </div>
       <!-- Fin Bloc articles recommandés -->

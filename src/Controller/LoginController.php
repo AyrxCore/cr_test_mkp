@@ -22,22 +22,19 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\LoginLink\LoginLinkHandlerInterface;
-use Symfony\Contracts\Service\Attribute\Required;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class LoginController extends AbstractController
+class LoginController extends AbstractController implements ChannelAwareControllerInterface
 {
-    #[Required]
-    public RequestStack $requestStack;
+    use ChannelAwareControllerTrait;
 
-    #[Required]
-    public EventDispatcherInterface $eventDispatcher;
-
-    #[Required]
-    public UserPasswordHasherInterface $passwordHasher;
-
-    #[Required]
-    public UserRepository $userRepository;
+    public function __construct(
+        private EventDispatcherInterface $eventDispatcher,
+        private RequestStack $requestStack,
+        private UserPasswordHasherInterface $passwordHasher,
+        private UserRepository $userRepository,
+    ) {
+    }
 
     #[Route('/login/reset-password', name: 'reset_password')]
     #[Route('/login/first-signin', name: 'first_signin')]
@@ -51,10 +48,15 @@ class LoginController extends AbstractController
             $tpl = 'first_connexion.request';
         }
 
+        $channel = $this->getChannel($request);
+        $routeParams = [
+            'channel' => $channel,
+        ];
+
         if ($request->getMethod() == 'POST') {
             $username = $request->request->get('_username');
             $user = $em->getRepository(User::class)->findUserByUsernameOrEmail($username);
-            if (!empty($user) && $user instanceof User && $user->hasEnabledAccount()) {
+            if (!empty($user) && $user instanceof User && (bool) $user->getFirstEnabledAccount($channel)) {
                 /**
                  * @var User $user
                  */
@@ -69,7 +71,7 @@ class LoginController extends AbstractController
                             )
                         );
 
-                        return $this->redirectToRoute($request->attributes->get('_route'));
+                        return $this->redirectToRoute($request->attributes->get('_route'), $routeParams);
                     }
                 }
 
@@ -83,22 +85,23 @@ class LoginController extends AbstractController
                         )
                     );
 
-                    return $this->redirectToRoute($request->attributes->get('_route'));
+                    return $this->redirectToRoute($request->attributes->get('_route'), $routeParams);
                 }
 
                 $user->setPasswordRequestedAt(new \DateTime('now'));
                 $token = \md5(\random_bytes(100));
                 $user->setConfirmationToken($token);
 
+                $event = null;
                 if ($request->attributes->get('_route') === 'reset_password') {
-                    $event = new ResettingPasswordEvent($user);
+                    $event = new ResettingPasswordEvent($user, $channel);
                     $session->getFlashBag()->add(
                         'success',
                         $translator->trans('resetting.request.success', [], 'prehome')
                     );
                 } elseif ($request->attributes->get('_route') == 'first_signin') {
                     $user->setFirstConnexionRequestedAt(new \DateTime('now'));
-                    $event = new FirstConnexionEvent($user);
+                    $event = new FirstConnexionEvent($user, $channel);
                     $session->getFlashBag()->add(
                         'success',
                         $translator->trans('resetting.request.first_connexion.success', [], 'prehome')
@@ -107,20 +110,25 @@ class LoginController extends AbstractController
 
                 $em->persist($user);
                 $em->flush();
-                $this->eventDispatcher->dispatch($event);
 
-                return $this->redirectToRoute($request->attributes->get('_route'));
+                if ($event) {
+                    $this->eventDispatcher->dispatch($event);
+                }
+
+                return $this->redirectToRoute($request->attributes->get('_route'), $routeParams);
             } else {
                 $session->getFlashBag()->add(
                     'warning',
                     $translator->trans('resetting.request.failed', [], 'prehome')
                 );
 
-                return $this->redirectToRoute($request->attributes->get('_route'));
+                return $this->redirectToRoute($request->attributes->get('_route'), $routeParams);
             }
         }
 
-        return $this->render('login/'.$tpl.'.html.twig');
+        return $this->render(\sprintf('login/%s.html.twig', $tpl), [
+            'channel' => $this->getChannel($request),
+        ]);
     }
 
     #[Route('/login/reset-password/{token}', name: 'reset_password_action')]
@@ -139,6 +147,7 @@ class LoginController extends AbstractController
 
         $session = new Session();
         $user = $em->getRepository(User::class)->findOneBy(['confirmation_token' => $token]);
+        $channel = $this->getChannel($request);
 
         if (empty($user)) {
             $session->getFlashBag()->add(
@@ -164,7 +173,7 @@ class LoginController extends AbstractController
                 && $user->getFirstConnexionRequestedAt() !== null
             ) {
                 $user->setFirstConnexionRequestedAt(null);
-                $user->setIsEnabled(true);
+                $user->setEnabled(true);
             }
 
             $user->setPassword($encodedPassword);
@@ -189,7 +198,10 @@ class LoginController extends AbstractController
             return $this->redirect('/');
         }
 
-        return $this->render('login/'.$tpl.'.html.twig', ['form' => $form->createView()]);
+        return $this->render('login/'.$tpl.'.html.twig', [
+            'form' => $form->createView(),
+            'channel' => $channel,
+        ]);
     }
 
     #[Route('/login/auto-login', name: 'generate_auto_login_link')]
@@ -202,14 +214,22 @@ class LoginController extends AbstractController
             $timestamp = (int) $request->query->get('timestamp');
             $email = $request->query->get('email');
             $user = $this->userRepository->findOneBy(['email' => $email]);
+
             if (!$user) {
                 throw new BadRequestException('email not found');
             }
 
+            if (!$channel = $this->getChannel($request)) {
+                throw new BadRequestException();
+            }
+
+            if (!$account = $user->getFirstEnabledAccount($channel)) {
+                throw new BadRequestException('No account available');
+            }
+
             if ($timestamp < \time() && $timestamp > \time() - (60 * 60)) {
-                $account = $user->getAccounts()->first();
-                $adherentId = $account->getAdherent()->getId();
-                $data = $email.$timestamp.\str_replace('-', '', (string) $adherentId);
+                $hashkey = $account->getAdherent()?->getHashkey() ?: '';
+                $data = $email.$timestamp.$hashkey;
                 if (\base64_encode(\hash('sha256', $data)) !== $hash) {
                     throw new BadRequestException();
                 }

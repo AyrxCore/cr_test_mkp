@@ -1,25 +1,25 @@
 <template>
-  <div class="flex h-full flex-col rounded-md bg-primary p-8">
+  <div class="flex h-full flex-col rounded-md px-6 pb-8 pt-5">
     <div
       class="loading mx-auto flex h-[250px] w-full items-center justify-center px-6 py-2"
     ></div>
-    <p
-      class="my-8 text-center text-sm font-normal uppercase text-white sm:text-lg"
-    >
+    <p class="mb-8 mt-6 text-center text-sm font-normal uppercase sm:text-lg">
       Accord cadre
     </p>
 
     <a
       href="#"
-      class="button button-white button-white-primary flex justify-center hover:!text-white"
+      class="button button-primary flex justify-center"
+      :style="{
+        color: betterTextColor('primary'),
+      }"
     >
-      <ArrowRightIconComponent />
-      Découvrir l'accord-cadre
+      Profiter de l'accord-cadre
     </a>
   </div>
 </template>
 <script lang="ts" setup>
-import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
+import { betterTextColor } from '@/vuejs/services/utils'
 </script>
 
 <style scoped>

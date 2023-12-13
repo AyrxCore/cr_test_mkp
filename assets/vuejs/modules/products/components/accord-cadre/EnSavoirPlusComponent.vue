@@ -1,14 +1,12 @@
 <template>
-  <div
-    v-if="listButtons.length"
-  >
+  <div v-if="listButtons.length">
     <div class="mt-10 flex flex-col">
-      <h3 class="home-subtitle text-primary">
-        En savoir plus sur ce partenaire
-      </h3>
+      <h3 class="home-title text-primary">En savoir plus sur ce partenaire</h3>
     </div>
-    <div class="bg-white p-4 text-gray-500 md:p-7.5 mt-5 lg:mt-2 lg:w-auto rounded-xl">
-      <div class="flex flex-col lg:flex-row justify-around">
+    <div
+      class="mt-5 rounded-xl bg-white p-4 text-gray-500 md:p-7.5 lg:mt-2 lg:w-auto"
+    >
+      <div class="flex flex-col justify-around lg:flex-row">
         <ButtonComponent
           v-for="(button, key) in listButtons"
           :key="key"
@@ -31,7 +29,7 @@ import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconC
 const props = defineProps({
   properties: {
     type: Object,
-    default: null
+    default: null,
   },
 })
 
@@ -55,7 +53,6 @@ const listButtons = computed(() => {
     return el.text != null
   })
 })
-
 </script>
 
 <style scoped></style>

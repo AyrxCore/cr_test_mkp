@@ -4,9 +4,9 @@
       <h3 class="mb-2 mt-2 text-title-35 text-primary md:mt-0">
         Validations de commandes
       </h3>
-      <span class="flex text-sm text-gray-500 md:text-base lg:text-lg"
-        >La commande la plus récente apparaît en premier</span
-      >
+      <span class="flex text-sm text-gray-500 md:text-base lg:text-lg">
+        La commande la plus récente apparaît en premier
+      </span>
       <div
         class="mt-5 mb-3 flex w-full flex-col md:mb-0 md:flex-row lg:w-11/12"
       >
@@ -19,7 +19,7 @@
         <select
           class="mr-2 mb-3 h-[28px] w-full rounded-md py-0 text-sm text-gray-600 placeholder-gray-400 md:mb-0 md:text-center md:text-base lg:w-3/12 lg:text-lg"
         >
-          <option>Etat de la commande</option>
+          <option>État de la commande</option>
         </select>
         <select
           class="mr-2 mb-3 h-[28px] w-full rounded-md py-0 text-sm text-gray-600 placeholder-gray-400 md:mb-0 md:text-center md:text-base lg:w-3/12 lg:text-lg"
@@ -37,7 +37,7 @@
       >
         <div class="md:w-2/12 lg:w-3/12">Date de la commande</div>
         <div class="w-4/12 md:w-5/12">Détails de la commande</div>
-        <div class="w-2/12">Etat</div>
+        <div class="w-2/12">État</div>
         <div class="w-3/12">Livraison</div>
         <div class="w-3/12">Total de la commande</div>
         <div class="w-1/12"></div>
@@ -54,7 +54,6 @@
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import { computed } from 'vue'
 import { AccountPageList } from '@/vuejs/router/pages-list'
-import OrderComponent from '@/vuejs/modules/account/components/OrderComponent.vue'
 import InputButtonComponent from '@/vuejs/modules/shared/InputButtonComponent.vue'
 import CalendarCheckIconComponent from '@/vuejs/modules/shared/icon/CalendarCheckIconComponent.vue'
 

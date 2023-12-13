@@ -7,6 +7,9 @@
         :class="{
           '!cursor-not-allowed': qte == 1,
         }"
+        :style="{
+          color: betterTextColor('secondary'),
+        }"
         @click="decrement"
         >-</span
       >
@@ -17,13 +20,21 @@
         @input="onInput"
         @blur="onBlur"
       />
-      <span class="plus rounded-r-md" @click="increment">+</span>
+      <span
+        class="plus rounded-r-md"
+        :style="{
+          color: betterTextColor('secondary'),
+        }"
+        @click="increment"
+        >+</span
+      >
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
+import { betterTextColor } from '@/vuejs/services/utils'
 
 const emit = defineEmits(['updateQuantity'])
 const props = defineProps({

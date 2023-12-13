@@ -1,35 +1,36 @@
 {% extends "base.html.twig" %}
-{% block title %}Première connexion{% endblock %}
+{% block title %}Première connexion
+{% endblock %}
 {% block header %}
-  {% include '_partials/_header.html.twig' with { 'back_url': true} %}
+	{% include '_partials/_header.html.twig' with { 'back_url': true} %}
 {% endblock %}
 
 {% block body %}
-  <div class="container mx-auto mt-[5%] px-5 lg:px-0">
-    <h1 class="text-2xl font-bold text-primary xl:text-4xl flex">
-      Bienvenue sur la marketplace QANTIS
-    </h1>
-    <div class="flex my-10 md:my-[7%] justify-center">
-      <div class="p-3 lg:p-8 bg-white rounded-lg">
-        {% include '_partials/_alert.html.twig' %}
-        {{ form_start(form) }}
-          <h1 class="text-lg font-bold xl:text-2xl text-primary">
-            Veuillez saisir <span class="text-gradient"> votre nouveau mot de passe</span>
-          </h1>
-          <div class="mt-5">
-            {{ form_row(form.password) }}
-            <div class="flex space-x-2 mt-5 justify-end w-full">
-              <button
-                type="submit"
-                class="flex text-white button button-gradient mt-2 md:mt-0 right-0">
-                <div class="vue-app" data-component="arrow-right-icon"></div>
-                Valider
-              </button>
-            </div>
-          </div>
-        {{ form_end(form) }}
-      </div>
-    </div>
-  </div>
+	<div class="container mx-auto mt-[5%] px-5 lg:px-0">
+		<h1 class="text-2xl font-bold text-primary xl:text-4xl flex">
+			Bienvenue sur la marketplace QANTIS
+		</h1>
+		<div class="flex my-10 md:my-[7%] justify-center">
+			<div class="p-3 lg:p-8 bg-white rounded-lg">
+				{% include '_partials/_alert.html.twig' %}
+				{{ form_start(form) }}
+				<h1 class="text-lg font-bold xl:text-2xl text-primary">
+					Veuillez saisir
+					<span class="text-gradient">
+						votre nouveau mot de passe</span>
+				</h1>
+				<div class="mt-5">
+					{{ form_row(form.password) }}
+					<div class="flex space-x-2 mt-5 justify-end w-full">
+						<button type="submit" class="flex text-white button button-gradient mt-2 md:mt-0 right-0">
+							<div class="vue-app" data-component="arrow-right-icon"></div>
+							Valider
+						</button>
+					</div>
+				</div>
+				{{ form_end(form) }}
+			</div>
+		</div>
+	</div>
 
 {% endblock %}

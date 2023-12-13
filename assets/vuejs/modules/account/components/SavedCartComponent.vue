@@ -7,7 +7,8 @@
           params: { id: savedCart.id },
         }"
         class="text-purple-600 underline"
-        >{{ savedCart.name }}
+      >
+        {{ savedCart.name }}
       </RouterLink>
     </div>
     <div class="md:w-2/12">
@@ -17,10 +18,6 @@
       {{ nbProducts }}
       {{ nbProducts > 1 ? 'articles' : 'article' }}
     </div>
-    <!--    <div class="md:w-2/12">-->
-    <!--      &lt;!&ndash;      <span class="primary flex font-bold">{{ cart.total }}€ HT</span>&ndash;&gt;-->
-    <!--      &lt;!&ndash;      <span class="flex text-gray-500">({{ cart.total }}€ HT)</span>&ndash;&gt;-->
-    <!--    </div>-->
     <div class="flex justify-end md:w-2/12">
       <div class="flex">
         <RouterLink
@@ -45,7 +42,7 @@
           title="Supprimez ce panier sauvegardé"
           @click="openDeleteForm"
         >
-          <TrashIconComponent :stroke-color="'#9866ff'" />
+          <TrashIconComponent :stroke-color="channelPrimaryColor" />
         </button>
       </div>
       <SavedCartModal
@@ -84,6 +81,8 @@ import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartI
 import { PageList } from '@/vuejs/router'
 import SavedCartDeleteModal from '@/vuejs/modules/account/components/savedCart/SavedCartDeleteModal.vue'
 import SavedCartAddToCartModal from '@/vuejs/modules/account/components/savedCart/SavedCartAddToCartModal.vue'
+import { storeToRefs } from 'pinia'
+import { useChannelStore } from '@/vuejs/stores/channel'
 
 const props = defineProps({
   savedCart: {
@@ -93,6 +92,9 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['submit', 'delete', 'addToCart'])
+
+const { channelPrimaryColor } = storeToRefs(useChannelStore())
+
 const showForm = ref<boolean>(false)
 const showDeleteForm = ref<boolean>(false)
 const showAddToCartConfirm = ref<boolean>(false)

@@ -1,5 +1,3 @@
-export const MAIL_ANIMATION = 'marketplace@qantis.co'
-export const PHONE_ANIMATION = '04 37 65 06 21'
 export const MENTIONS_LEGALES_PAGE_ID = 107
 export const CGU_PAGE_ID = 108
 export const POLITIQUE_DE_CONFIDENTIALITE_PAGE_ID = 109
@@ -10,11 +8,11 @@ export const ADDRESS_SHIPPING = 'shipping'
 export const ORDER_STATUS = {
   new: {
     name: 'En attente',
-    color: 'bg-qantis',
+    color: 'bg-primary',
   },
   pending: {
     name: 'En attente',
-    color: 'bg-qantis',
+    color: 'bg-primary',
   },
   confirmed: {
     name: 'Confirmée',
@@ -22,7 +20,7 @@ export const ORDER_STATUS = {
   },
   edited: {
     name: 'Modification transmise',
-    color: 'bg-qantis',
+    color: 'bg-primary',
   },
   refused: {
     name: 'Refusée',
@@ -41,7 +39,7 @@ export const ORDER_STATUS = {
 export const SHIPPING_STATUS = {
   pending: {
     name: 'En attente',
-    color: 'bg-qantis',
+    color: 'bg-primary',
   },
   preparation: {
     name: 'En préparation',
@@ -65,7 +63,7 @@ export const SHIPPING_STATUS = {
   },
   returned: {
     name: 'Retourné',
-    color: 'bg-qantis',
+    color: 'bg-primary',
   },
   cancelled: {
     name: 'Annulé',
@@ -98,6 +96,15 @@ export const HOME_ACCORD_CADRE_PROPERTY = {
     property_id: 217,
     value: 5367,
   },
+}
+
+export const OPTIONAL_FRONT_BLOCKS = {
+  BANNER_FLASH_HOMEPAGE_QANTIS: 'BANNER_FLASH_HOMEPAGE_QANTIS',
+  BANNER_SLIDER_HOMEPAGE_QANTIS: 'BANNER_SLIDER_HOMEPAGE_QANTIS',
+  RSE_HOMEPAGE_QANTIS: 'RSE_HOMEPAGE_QANTIS',
+  EXPERT_CONTENT_HOMEPAGE_QANTIS: 'EXPERT_CONTENT_HOMEPAGE_QANTIS',
+  SUPPLIER_PARTNERS_HOMEPAGE_QANTIS: 'SUPPLIER_PARTNERS_HOMEPAGE_QANTIS',
+  FAVORITES: 'FAVORITES',
 }
 
 /**

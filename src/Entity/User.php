@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Action\NotFoundAction;
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -13,8 +15,38 @@ use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Uid\Uuid;
 
+#[ApiResource(
+    collectionOperations: [],
+    itemOperations: [
+        'get' => [
+            'controller' => NotFoundAction::class,
+            'read' => false,
+            'output' => false,
+        ],
+        'get_me' => [
+            'method' => 'GET',
+            'path' => '/me',
+            'defaults' => [
+                'id' => '7de7d979-b89a-4ea7-bb98-2772cf91fa84',
+            ],
+            'normalization_context' => [
+                'groups' => [
+                    'user:simple',
+                    'user:me',
+                    'user:external_api_data:subaccount',
+                    'user:external_api_data:buyer',
+                ],
+            ],
+            'openapi_context' => [
+                'summary' => 'Get current user info',
+                'description' => 'Get current user info',
+            ],
+        ],
+    ],
+)]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ORM\HasLifecycleCallbacks]
@@ -28,11 +60,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 180)]
-    #[Groups(['account:get', 'simpleUser'])]
+    #[Groups(['account:get', 'user:simple'])]
     private ?string $email = null;
 
     #[ORM\Column]
-    #[Groups('simpleUser')]
+    #[Groups('user:simple')]
     private array $roles = [];
 
     /**
@@ -42,15 +74,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255, unique: true)]
-    #[Groups(['account:get', 'simpleUser'])]
+    #[Groups(['account:get', 'user:simple'])]
     private ?string $username = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['account:get', 'simpleUser'])]
+    #[Groups(['account:get', 'user:simple'])]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['account:get', 'simpleUser'])]
+    #[Groups(['account:get', 'user:simple'])]
     private ?string $lastName = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
@@ -62,12 +94,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
 
-    #[ORM\OneToMany(mappedBy: '_user', targetEntity: Account::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Account::class)]
     private Collection $accounts;
 
+    #[SerializedName('account')]
+    #[Groups(['user:me'])]
+    private ?Account $currentAccount = null;
+
     #[ORM\Column]
-    #[Groups(['account:get'])]
-    private ?bool $isEnabled = null;
+    #[Groups(['account:get', 'user:simple'])]
+    private ?bool $enabled = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $confirmation_token = null;
@@ -85,7 +121,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeInterface $emailChangingRequestedAt = null;
 
     #[ORM\OneToMany(mappedBy: '_user', targetEntity: UserInfoUpdateRequest::class)]
-    #[Groups(['simpleUser'])]
+    #[Groups(['user:simple'])]
     private Collection $userInfoUpdateRequests;
 
     public function __construct()
@@ -322,12 +358,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function isEnabled(): ?bool
     {
-        return $this->isEnabled;
+        return $this->enabled;
     }
 
-    public function setIsEnabled(bool $isEnabled): self
+    public function setEnabled(bool $enabled): self
     {
-        $this->isEnabled = $isEnabled;
+        $this->enabled = $enabled;
 
         return $this;
     }
@@ -368,16 +404,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function hasEnabledAccount(): ?bool
+    public function getFirstEnabledAccount(Channel $channel = null): ?Account
     {
         /** @var Account $account */
         foreach ($this->accounts as $account) {
-            if ($account->isEnabled()) {
-                return true;
+            if ((!$channel || $account->getAdherent()?->getChannel() === $channel) && $account->isEnabled()) {
+                return $account;
             }
         }
 
-        return false;
+        return null;
     }
 
     public function getEmailChangingToken(): ?string
@@ -412,5 +448,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUserInfoUpdateRequests(Collection $userInfoUpdateRequests): void
     {
         $this->userInfoUpdateRequests = $userInfoUpdateRequests;
+    }
+
+    public function getCurrentAccount(): ?Account
+    {
+        return $this->currentAccount;
+    }
+
+    public function setCurrentAccount(?Account $currentAccount): void
+    {
+        $this->currentAccount = $currentAccount;
     }
 }

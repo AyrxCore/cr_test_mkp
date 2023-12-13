@@ -16,20 +16,22 @@ class UserChecker implements UserCheckerInterface
         if (!$user instanceof User) {
             return;
         }
+    }
 
-        if (!$user->hasRole('ROLE_API')) {
-            if (!$user->hasEnabledAccount()) {
-                throw new CustomUserMessageAccountStatusException('user_empty_account');
-            }
+    public function checkPostAuth(UserInterface $user)
+    {
+        if (!$user instanceof User) {
+            return;
         }
 
         if (!$user->isEnabled()) {
             throw new CustomUserMessageAccountStatusException('user_disabled');
         }
-    }
 
-    public function checkPostAuth(UserInterface $user)
-    {
-        // Nothing
+        if (!$user->hasRole('ROLE_API')) {
+            if (!$user->getFirstEnabledAccount()) {
+                throw new CustomUserMessageAccountStatusException('user_empty_account');
+            }
+        }
     }
 }

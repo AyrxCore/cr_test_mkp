@@ -1,7 +1,7 @@
 <template>
-  <BaseTemplate title="Qantis - MarketPlace">
+  <BaseTemplate>
     <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 px-5 sm:px-8">
-      <BreadcrumbSharedComponent :current-page="'Panier'" />
+      <BreadcrumbSharedComponent current-page="Panier" />
       <div class="w-[100%] max-w-screen-2xl">
         <ContactUsButtonComponent />
       </div>

@@ -1,0 +1,56 @@
+services:
+  # default configuration for services in *this* file
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  app.serializer.normalizer.user.jsonld:
+    class: App\Serializer\UserNormalizer
+    arguments:
+      $normalizer: '@api_platform.jsonld.normalizer.item'
+    tags:
+      - { name: serializer.normalizer, priority: 100 }
+
+  app.serializer.normalizer.user.json:
+    class: App\Serializer\UserNormalizer
+    arguments:
+      $normalizer: '@api_platform.serializer.normalizer.item'
+    tags:
+      - { name: serializer.normalizer, priority: 100 }
+
+  app.serializer.normalizer.account.jsonld:
+    class: App\Serializer\AccountNormalizer
+    arguments:
+      $normalizer: '@api_platform.jsonld.normalizer.item'
+    tags:
+      - { name: serializer.normalizer, priority: 100 }
+
+  app.serializer.normalizer.account.json:
+    class: App\Serializer\AccountNormalizer
+    arguments:
+      $normalizer: '@api_platform.serializer.normalizer.item'
+    tags:
+      - { name: serializer.normalizer, priority: 100 }
+
+  app.serializer.normalizer.adherent.jsonld:
+    class: App\Serializer\AdherentNormalizer
+    arguments:
+      $normalizer: '@api_platform.jsonld.normalizer.item'
+    tags:
+      - { name: serializer.normalizer, priority: 100 }
+
+  app.serializer.normalizer.adherent.json:
+    class: App\Serializer\AdherentNormalizer
+    arguments:
+      $normalizer: '@api_platform.serializer.normalizer.item'
+    tags:
+      - { name: serializer.normalizer, priority: 100 }
+
+  App\DataProvider\AccountCollectionDataProvider:
+    arguments:
+      $collectionExtensions: !tagged api_platform.doctrine.orm.query_extension.collection
+
+  App\DataProvider\UserMeItemDataProvider:
+    arguments:
+      $itemExtensions: !tagged api_platform.doctrine.orm.query_extension.item

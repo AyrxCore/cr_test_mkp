@@ -1,19 +1,17 @@
 <template>
-  <div
-    class="mb-5 flex flex-col rounded-lg bg-white text-sm text-gray-500 lg:text-[15px]"
-  >
+  <div class="mb-5 flex flex-col rounded-lg bg-white text-sm lg:text-[15px]">
     <div class="flex w-full flex-col px-5 py-2.5 md:flex-row md:px-2.5">
       <div class="flex w-full justify-start md:w-2/12 lg:w-3/12">
-        <span class="flex text-gray-500"
-          ><CalendarCheckIconComponent
+        <span class="flex text-gray-500">
+          <CalendarCheckIconComponent
             class="mr-1 h-[18px] w-[18px] stroke-gray-500"
           />
           {{ formatDateFr(order.createdAt) }}</span
         >
       </div>
       <div class="mt-5 w-full md:mt-0 md:w-5/12 lg:w-4/12">
-        <span class="flex text-gray-500"
-          >Commande : {{ order.orderNumber }}</span
+        <span class="flex text-gray-500">
+          Commande : {{ order.orderNumber }}</span
         >
         <span class="flex text-gray-500">
           Articles : {{ order.items.length }}

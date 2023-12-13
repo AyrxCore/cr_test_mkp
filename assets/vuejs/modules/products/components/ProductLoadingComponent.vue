@@ -7,12 +7,15 @@
       <div
         class="loading flex h-[40px] w-[40px] items-center justify-start rounded-md"
       ></div>
+      <div
+        class="loading flex h-[40px] w-[40px] items-center justify-start rounded-md"
+      ></div>
     </div>
     <!-- Fin bloc header -->
 
     <!-- Bloc image -->
     <div
-      class="loading mx-auto flex h-auto h-[150px] w-full items-center justify-center rounded-lg px-6 py-2"
+      class="loading mx-auto flex h-[150px] w-full items-center justify-center rounded-lg px-6 py-2"
     ></div>
     <!-- Fin bloc image -->
 
@@ -35,8 +38,13 @@
         <ProductQuantityComponent :quantity="1" />
       </div>
       <div class="flex items-center justify-end">
-        <ButtonComponent class="button-gradient">
-          <ShoppingCartIconComponent class="w-4" />
+        <ButtonComponent
+          class="button-primary"
+          :style="{
+            color: betterTextColor('primary'),
+          }"
+        >
+          <ShoppingCartIconComponent class="w-4" stroke="#FFFFFF" />
           Ajouter
         </ButtonComponent>
       </div>
@@ -48,4 +56,6 @@
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
 import ProductQuantityComponent from '@/vuejs/modules/shared/ProductQuantityComponent.vue'
+
+import { betterTextColor } from '@/vuejs/services/utils'
 </script>

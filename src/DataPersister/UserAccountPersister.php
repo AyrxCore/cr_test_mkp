@@ -11,6 +11,7 @@ use App\Entity\Adherent;
 use App\Entity\User;
 use App\Repository\AccountRepository;
 use App\Repository\AdherentRepository;
+use App\Repository\ChannelRepository;
 use App\Repository\UserInfoUpdateRequestRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,30 +19,20 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Uid\Uuid;
-use Symfony\Contracts\Service\Attribute\Required;
 
 class UserAccountPersister implements ContextAwareDataPersisterInterface
 {
-    #[Required]
-    public AccountRepository $accountRepository;
-
-    #[Required]
-    public AdherentRepository $adherentRepository;
-
-    #[Required]
-    public EntityManagerInterface $em;
-
-    #[Required]
-    public UserInfoUpdateRequestRepository $userInfoUpdateRequestRepository;
-
-    #[Required]
-    public UserPasswordHasherInterface $userPasswordHasher;
-
-    #[Required]
-    public UserRepository $userRepository;
-
-    #[Required]
-    public NormalizerInterface $normalizer;
+    public function __construct(
+        private AccountRepository $accountRepository,
+        private AdherentRepository $adherentRepository,
+        private ChannelRepository $channelRepository,
+        private EntityManagerInterface $em,
+        private NormalizerInterface $normalizer,
+        private UserInfoUpdateRequestRepository $userInfoUpdateRequestRepository,
+        private UserPasswordHasherInterface $userPasswordHasher,
+        private UserRepository $userRepository,
+    ) {
+    }
 
     public function supports($data, array $context = []): bool
     {
@@ -59,6 +50,7 @@ class UserAccountPersister implements ContextAwareDataPersisterInterface
             $adh = new Adherent();
             $adh->setId(new Uuid($data->getAdherentId()));
             $adh->setName($data->getAdherentName());
+            $adh->setChannel($this->channelRepository->findOneByCode($data->getChannelCode()));
             $this->em->persist($adh);
         }
 
@@ -71,7 +63,7 @@ class UserAccountPersister implements ContextAwareDataPersisterInterface
             $user = $this->userRepository->findOneBy(['username' => $data->getEmail()]);
             if (!$user) {
                 $user = new User();
-                $user->setIsEnabled(false);
+                $user->setEnabled(false);
                 $user->setPassword($this->userPasswordHasher->hashPassword($user, \uniqid()));
             }
             $account = $this->accountRepository->findOneBy(
@@ -148,7 +140,7 @@ class UserAccountPersister implements ContextAwareDataPersisterInterface
         $account->setServiceFonction($data->getServiceFonction());
         $account->setPhone($data->getPhone());
         $account->setUser($user);
-        $account->setIsEnabled($data->isEnabled());
+        $account->setEnabled($data->isEnabled());
         $account->setAdherent($adh);
 
         if (!$logPhone || ($logPhone->getValue() === $data->getPhone())) {

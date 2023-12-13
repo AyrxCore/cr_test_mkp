@@ -1,48 +1,37 @@
 <template>
-  <nav class="bg-grey-light w-full rounded-md text-xs">
-    <ol class="list-reset text-xs hidden lg:flex">
-      <li>
-        <RouterLink :to="{ name: PageList.HOME_PAGE }" class="text-gray-400">
-          Accueil
-        </RouterLink>
+  <nav class="w-full text-sm text-black">
+    <ol class="list-reset hidden text-xs lg:flex">
+      <li class="inline-flex items-center">
+        <RouterLink :to="{ name: PageList.HOME_PAGE }">Accueil</RouterLink>
+        <ChevronRightIconComponent class="mx-1 h-3" />
       </li>
-      <ChevronRightIconComponent
-        class="ml-1 h-4 text-gray-500"
-        :stroke-color="'#A4A4A4'"
-      />
-      <li v-for="(list, key) in listUrl" :key="key" class="inline-flex">
-        <RouterLink :to="list.url ?? '#'" class="text-gray-400">{{
-            list.name
-          }}
-        </RouterLink>
-        <ChevronRightIconComponent
-          class="ml-1 h-4 text-gray-500"
-          :stroke-color="'#A4A4A4'"
-        />
+      <li
+        v-for="(list, key) in listUrl"
+        :key="key"
+        class="inline-flex items-center"
+      >
+        <RouterLink :to="list.url ?? '#'">{{ list.name }}</RouterLink>
+        <ChevronRightIconComponent class="mx-1 h-3" />
       </li>
-      <li class="text-gray-400">{{ currentPage }}</li>
+      <li class="font-extrabold">{{ currentPage }}</li>
     </ol>
-    <div
+    <RouterLink
       v-if="lastBreadcrumbUrl"
-      class="flex lg:hidden"
+      class="inline-flex items-center lg:hidden"
+      :to="lastBreadcrumbUrl.url ?? '#'"
     >
-      <ChevronRightIconComponent
-        class="mr-1 h-4 text-gray-500 rotate-180"
-        :stroke-color="'#A4A4A4'"
-      />
-      <RouterLink :to="lastBreadcrumbUrl.url ?? '#'" class="text-gray-400">{{
-          lastBreadcrumbUrl.name
-        }}
-      </RouterLink>
-    </div>
-
+      <ChevronRightIconComponent class="mr-1 h-3 rotate-180" />
+      {{ lastBreadcrumbUrl.name }}
+    </RouterLink>
   </nav>
 </template>
 
 <script lang="ts" setup>
-import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightIconComponent.vue'
 import { computed, PropType } from 'vue'
-import { PageList } from '@/vuejs/router';
+
+import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
+
+import { PageList } from '@/vuejs/router'
 
 const props = defineProps({
   listUrl: {
@@ -64,5 +53,3 @@ const lastBreadcrumbUrl = computed(() => {
   return null
 })
 </script>
-
-<style scoped></style>

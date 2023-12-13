@@ -61,3 +61,17 @@ export interface ProductStoreState {
   productVariantsOptions: []
   currentVariantOptions?: number
 }
+
+export interface SearchProductsResponse {
+  filters: Array<any>
+  results_count: number
+  page: number
+  results: Array<Product>
+  parameters: any
+}
+
+export interface HomeProductsResponse {
+  topVente: Product[]
+  accordsCadre: Product[]
+  selection: Product[]
+}
