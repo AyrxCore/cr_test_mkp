@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Cookie;
     $expectedStatusCode,
     $expectedRoles,
     $expectedResponse = null,
-    $channel = 'QANTIS_MARKETPLACE',
+    $channel = 'QANTIS_ACHAT',
 ) {
     // load dev fixtures
     UserStory::load();

@@ -41,7 +41,7 @@ use App\DataFixtures\Factory\UserFactory;
 })->group('adherents');
 
 \it('gets an adherent on a existing channel', function () {
-    $client = $this::createClientWithCredentials(channel: 'QANTIS_MARKETPLACE');
+    $client = $this::createClientWithCredentials(channel: 'QANTIS_ACHAT');
 
     $user = UserFactory::find(['username' => $this::DEFAULT_USER_LOGIN]);
     $accounts = $user->getAccounts();
