@@ -1,29 +1,27 @@
 <template>
-  <div class="text-white">
-    <div>
-      <ButtonComponent
-        class="button-gradient mb-7"
-        :is-loading="isLoading"
-        @click="sendSubmission"
-      >
-        <ArrowRightIconComponent />
-        {{ label ?? 'Bénéficiez des conditions' }}
-      </ButtonComponent>
-      <ModalValidationBeneficePartnerModal
-        v-if="showSuccesModal"
-        class="modal"
-        @cancel="closeModal"
-      />
-      <ModalValidationBeneficeErrorModal
-        v-if="showErrorModal"
-        class="modal"
-        @cancel="closeModal"
-      />
-    </div>
+  <div>
+    <ButtonComponent
+      class="button-gradient mb-7"
+      :is-loading="isLoading"
+      @click="sendSubmission"
+    >
+      <ArrowRightIconComponent />
+      {{ label ?? 'Bénéficiez des conditions' }}
+    </ButtonComponent>
+    <ModalValidationBeneficePartnerModal
+      v-if="showSuccesModal"
+      class="modal"
+      @cancel="closeModal"
+    />
+    <ModalValidationBeneficeErrorModal
+      v-if="showErrorModal"
+      class="modal"
+      @cancel="closeModal"
+    />
+  </div>
 
-    <div class="condition-beneficiaire">
-      <p v-html="text" />
-    </div>
+  <div class="condition-beneficiaire">
+    <p v-html="text" />
   </div>
 </template>
 <script lang="ts" setup>

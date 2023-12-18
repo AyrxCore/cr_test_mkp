@@ -218,7 +218,7 @@
         </Tab>
         <Tab
           v-if="product.properties.length !== 0"
-          name="Caractéristiques technique"
+          name="Caractéristiques techniques"
           @click.native="
             sendGtmEvent('click_product_view_caracteristics', {
               product_name: product.name,
