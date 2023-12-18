@@ -123,7 +123,7 @@ export const useProductStore = defineStore({
       const alertStore = useAlertStore()
       try {
         const similarProducts = await this.fetchProductsByParams({
-          perPage: 8,
+          perPage: 20,
           categories: categoryId,
         })
 
