@@ -1,49 +1,48 @@
 <template>
-  <BreadcrumbSharedComponent :list-url="breadcrumbUrl" :current-page="name" />
-  <ContactUsButtonComponent />
-  <div class="text-green mt-3.5 flex flex-col lg:flex-row lg:items-center">
-    <h3 class="text-title-35 text-primary">
-      {{ name }}
-    </h3>
-    <div v-if="note" class="flex flex-row items-center">
-      <LeafIconComponent class="mx-2" />
-      <span class="mr-2 flex text-sm font-bold text-green-qantis md:text-lg">
-        {{ note }}
-      </span>
-      <span class="flex text-xs text-gray-500">
-        Selon notre référentiel RSE
-      </span>
-      <span
-        class="flex cursor-pointer items-center"
-        title="Message explicatif du référentiel RSE"
-        @click.prevent="scrollTo"
-      >
-        <InformationIconComponent class="ml-1 text-gray-500" />
-      </span>
+  <div class="px-8">
+    <BreadcrumbSharedComponent
+      :list-url="breadcrumbUrl"
+      :current-page="name"
+      gtm-event-name="click_fat_breadcrumbs"
+    />
+    <div class="text-green my-4 flex flex-col lg:flex-row lg:items-center">
+      <h3 class="text-title-35 font-bold text-primary">
+        {{ name }}
+      </h3>
+      <div v-if="note" class="ml-4 flex flex-row items-center">
+        <LeafIconComponent class="mx-2" />
+        <span class="text-md mr-2 flex font-bold text-green-qantis md:text-lg">
+          {{ note }}
+        </span>
+        <span class="flex text-sm"> Selon notre référentiel RSE </span>
+        <span
+          class="flex cursor-pointer items-center"
+          title="Message explicatif du référentiel RSE"
+          @click.prevent="scrollTo"
+        >
+          <InformationIconComponent class="ml-1 text-gray-500" />
+        </span>
+      </div>
     </div>
   </div>
 
-  <div class="mt-10 flex flex-col md:grid md:grid-cols-4 md:gap-4">
-    <div class="flex items-center justify-center rounded-lg bg-white">
-      <img
-        :src="logo"
-        :alt="'Logo ' + name"
-        class="items-center rounded-lg sm:mx-auto"
-      />
-    </div>
-    <div class="col-span-3 mt-5 hidden rounded-lg bg-white md:mt-0 md:flex">
-      <img
-        :src="barner"
-        :alt="'Bannière ' + name"
-        class="items-center rounded-lg sm:mx-auto"
-      />
+  <div class="relative col-span-3 mt-5 px-0 md:px-8 lg:mt-0">
+    <div
+      class="h-[260px] bg-cover bg-center"
+      :style="{ backgroundImage: `url(${bannerDesktop})` }"
+    >
+      <h3
+        v-if="bannerText"
+        class="flex h-full w-full items-center justify-center bg-white/50 px-6 text-center text-2xl font-bold sm:text-4xl"
+      >
+        {{ bannerText }}
+      </h3>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
-import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
-import { computed } from 'vue'
+import { computed, onBeforeMount, onUnmounted, ref } from 'vue'
 import LeafIconComponent from '@/vuejs/modules/shared/icon/LeafIconComponent.vue'
 import InformationIconComponent from '@/vuejs/modules/shared/icon/InformationIconComponent.vue'
 import { ProductPageList } from '@/vuejs/router/pages-list'
@@ -60,19 +59,20 @@ const props = defineProps({
     type: String,
     default: null,
   },
-  logo: {
-    required: true,
-    type: String,
-  },
-  barner: {
-    required: true,
-    type: String,
-  },
   categories: {
     required: true,
     type: Object,
   },
+  bannerDesktop: {
+    required: true,
+    type: String,
+  },
+  bannerText: {
+    type: String,
+  },
 })
+
+const windowWidth = ref<number>(null)
 
 const breadcrumbUrl = computed(() => {
   const breadcrumb = []
@@ -94,6 +94,19 @@ const breadcrumbUrl = computed(() => {
 const scrollTo = () => {
   emit('scroll-to')
 }
+
+const onResize = () => {
+  windowWidth.value = window.innerWidth
+}
+
+onBeforeMount(() => {
+  windowWidth.value = window.innerWidth
+  window.addEventListener('resize', onResize)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', onResize)
+})
 </script>
 
 <style scoped></style>

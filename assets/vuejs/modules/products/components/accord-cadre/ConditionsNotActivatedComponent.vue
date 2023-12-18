@@ -1,27 +1,28 @@
 <template>
-  <div>
-    <ButtonComponent
-      class="button-gradient mb-7"
-      :is-loading="isLoading"
-      @click="sendSubmission"
-    >
-      <ArrowRightIconComponent />
-      {{ label ?? 'Bénéficiez des conditions' }}
-    </ButtonComponent>
-    <ModalValidationBeneficePartnerModal
-      v-if="showSuccesModal"
-      class="modal"
-      @cancel="closeModal"
-    />
-    <ModalValidationBeneficeErrorModal
-      v-if="showErrorModal"
-      class="modal"
-      @cancel="closeModal"
-    />
-  </div>
-
-  <div class="condition-beneficiaire">
-    <p v-html="text" />
+  <div class="text-center text-lg leading-5 text-white">
+    <div class="condition-beneficiaire mb-7">
+      <p v-html="text" />
+    </div>
+    <div>
+      <ButtonComponent
+        class="button-primary mb-7 border-2 border-solid !border-white"
+        :is-loading="isLoading"
+        @click="sendSubmission"
+      >
+        <ArrowRightIconComponent />
+        {{ label ?? 'Bénéficiez des conditions' }}
+      </ButtonComponent>
+      <ModalValidationBeneficePartnerModal
+        v-if="showSuccesModal"
+        class="modal"
+        @cancel="closeModal"
+      />
+      <ModalValidationBeneficeErrorModal
+        v-if="showErrorModal"
+        class="modal"
+        @cancel="closeModal"
+      />
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -30,10 +31,11 @@ import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconC
 import ModalValidationBeneficePartnerModal from '@/vuejs/modules/products/components/accord-cadre/ValidationBeneficeModal.vue'
 import ModalValidationBeneficeErrorModal from '@/vuejs/modules/products/components/accord-cadre/ValidationBeneficeErrorModal.vue'
 
-import { PropType, ref } from 'vue'
+import { computed, PropType, ref } from 'vue'
 import { AccountAccordCadre } from '@/vuejs/types/AccountAccordCadre'
 import { status } from '@/vuejs/modules/products'
 import ProductHttpClient from '@/vuejs/services/httpclient/ProductHttpClient'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
 
 const showSuccesModal = ref<boolean>(false)
 const showErrorModal = ref<boolean>(false)
@@ -78,6 +80,9 @@ const sendSubmission = async () => {
   } catch (error) {
     isLoading.value = false
   }
+  sendGtmEvent('click_fat_cta_not_activated', {
+    product_name: props.accordName,
+  })
 }
 
 const closeModal = () => {

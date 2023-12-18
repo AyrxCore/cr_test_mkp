@@ -10,6 +10,7 @@
       <breadcrumb-shared-component
         :list-url="breadcrumbUrl"
         :current-page="`Listes des produits`"
+        gtm-event-name="click_list_products_breadcrumb"
       />
       <ContactUsButtonComponent />
       <div

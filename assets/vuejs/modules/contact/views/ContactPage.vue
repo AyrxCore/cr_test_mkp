@@ -3,7 +3,10 @@
     <div
       class="xs:w-[100%] m-auto mt-4 mb-24 max-w-screen-2xl flex-1 px-5 sm:px-8"
     >
-      <BreadcrumbSharedComponent current-page="Contact" />
+      <BreadcrumbSharedComponent
+        current-page="Contact"
+        gtm-event-name="click_contact_breadcrumbs"
+      />
       <h3 class="text-title-34 my-4 font-bold text-primary">Contactez-nous</h3>
       <span class="mb-5 text-lg">
         Notre Service adhérent est disponible du lundi au vendredi de 8h30 à 18h

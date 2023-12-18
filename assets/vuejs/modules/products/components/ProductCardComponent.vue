@@ -42,7 +42,7 @@
         :src="getUpplerImage(product.images[0])"
         :alt="product.name"
         class="flex h-full cursor-pointer items-center lg:w-full lg:max-w-max"
-        @click="goToProductPage('click_slider_home_products_img')"
+        @click="goToProductPage('click-img')"
       />
       <div
         v-else
@@ -61,7 +61,7 @@
             name: ProductPageList.PRODUCT,
             params: { slug: productSlug },
           }"
-          @click="gtmEvent('click_slider_home_products_title')"
+          @click="emitEvent('click-title')"
           >{{ product.name }}
         </RouterLink>
       </h3>
@@ -118,7 +118,7 @@
           :quantity="quantity"
           :variant-id="variantId"
           @click="
-            gtmEvent('click_slider_home_products_cta', {
+            $emit('click-add-cart', {
               partenaire_name: product.seller.name,
               partenaire_id: product.seller.id,
               product_name: product.name,
@@ -158,6 +158,8 @@ const userStore = useUserStore()
 const channelStore = useChannelStore()
 
 const currentChannel = channelStore.currentChannel
+
+const emit = defineEmits(['click-add-cart', 'click-title', 'click-img'])
 
 const props = defineProps({
   product: {
@@ -200,23 +202,21 @@ const updateQuantity = (event) => {
   quantity.value = event.quantity
 }
 
-const gtmEvent = (eventName: string, additionalData = null) => {
-  let data = buildStandardGtmData(userStore.user['@id'], currentChannel.name)
-  data = additionalData ? { ...data, ...additionalData } : data
-  gtmMixinPushEvent(eventName, data)
-}
-
-const goToProductPage = (eventName: string) => {
-  router.push({
-    name: ProductPageList.PRODUCT,
-    params: { slug: productSlug.value },
-  })
-  gtmEvent(eventName, {
+const emitEvent = (eventName) => {
+  emit(eventName, {
     partenaire_name: props.product.seller.name,
     partenaire_id: props.product.seller.id,
     product_name: props.product.name,
     product_id: props.product.id,
   })
+}
+
+const goToProductPage = (eventName) => {
+  router.push({
+    name: ProductPageList.PRODUCT,
+    params: { slug: productSlug.value },
+  })
+  emitEvent(eventName)
 }
 </script>
 

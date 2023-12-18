@@ -10,7 +10,15 @@
         :key="key"
         class="inline-flex items-center"
       >
-        <RouterLink :to="list.url ?? '#'">{{ list.name }}</RouterLink>
+        <RouterLink
+          :to="list.url ?? '#'"
+          @click="
+            sendGtmEvent(gtmEventName, {
+              product_name: list.name,
+            })
+          "
+          >{{ list.name }}</RouterLink
+        >
         <ChevronRightIconComponent class="mx-1 h-3" />
       </li>
       <li class="font-extrabold">{{ currentPage }}</li>
@@ -19,6 +27,11 @@
       v-if="lastBreadcrumbUrl"
       class="inline-flex items-center lg:hidden"
       :to="lastBreadcrumbUrl.url ?? '#'"
+      @click="
+        sendGtmEvent(gtmEventName, {
+          product_name: lastBreadcrumbUrl.name,
+        })
+      "
     >
       <ChevronRightIconComponent class="mr-1 h-3 rotate-180" />
       {{ lastBreadcrumbUrl.name }}
@@ -32,6 +45,7 @@ import { computed, PropType } from 'vue'
 import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
 
 import { PageList } from '@/vuejs/router'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
 
 const props = defineProps({
   listUrl: {
@@ -40,6 +54,10 @@ const props = defineProps({
     default: null,
   },
   currentPage: {
+    required: true,
+    type: String,
+  },
+  gtmEventName: {
     required: true,
     type: String,
   },

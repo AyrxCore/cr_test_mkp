@@ -15,10 +15,12 @@ export const useSellerStore = defineStore({
   }),
 
   actions: {
-    async init() {
+    async init(params = {}) {
       try {
         if (this.sellers.length === 0) {
-          this.sellers = await SellerHttpClient.get().getSellers()
+          this.sellers = await SellerHttpClient.get().fetchSellersByParams(
+            params,
+          )
         }
       } catch (error) {
         notifyError(

@@ -88,11 +88,12 @@ class UpplerProductService extends AbstractUpplerService
      * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
      */
-    private function findAllFilters(int $page = 1, int $perPage = 1): array
+    private function findAllFilters(int $page = 1, int $perPage = 1, array $params = []): array
     {
         $res = $this->request(
             'POST',
             'v1/buyer/search/product?page='.$page.'&perPage='.$perPage,
+            $params
         );
 
         if ($res->getStatusCode() !== Response::HTTP_OK) {
@@ -121,9 +122,16 @@ class UpplerProductService extends AbstractUpplerService
      * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
      */
-    public function findAllSellers(int $page = 1, int $perPage = 1): array
+    public function findAllSellers(int $page = 1, int $perPage = 1, array $params = []): array
     {
-        $res = $this->findAllFilters($page, $perPage);
+        $filters = [];
+        if(count($params) > 0) {
+            foreach ($params as $key => $param) {
+                $filters['json'][$key] = \json_decode($param);
+            }
+        }
+
+        $res = $this->findAllFilters($page, $perPage, $filters);
 
         return $res['filters']['company'];
     }

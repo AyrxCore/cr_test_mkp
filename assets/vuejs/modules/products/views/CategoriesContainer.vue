@@ -1,7 +1,10 @@
 <template>
   <BaseTemplate title="Liste des catégories">
     <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl px-5 sm:px-8">
-      <BreadcrumbSharedComponent current-page="Catégories" />
+      <BreadcrumbSharedComponent
+        current-page="Catégories"
+        gtm-event-name="click_categories_breadcrumbs"
+      />
       <div class="w-[100%] max-w-screen-2xl justify-end">
         <ContactUsButtonComponent />
       </div>

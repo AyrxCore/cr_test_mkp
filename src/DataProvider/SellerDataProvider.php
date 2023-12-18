@@ -29,8 +29,10 @@ class SellerDataProvider implements
     public function getCollection(string $resourceClass, string $operationName = null, array $context = []): array
     {
         try {
+            $params = $context['filters'] ?? [];
+
             $allUpplerSellers = $this->upplerSellerService->getSellers();
-            $allAdherentSellers = $this->upplerProductService->findAllSellers();
+            $allAdherentSellers = $this->upplerProductService->findAllSellers(params: $params);
 
             $sellers = \array_filter($allUpplerSellers['results'], function ($seller) use ($allAdherentSellers) {
                 return array_key_exists($seller['id'], $allAdherentSellers);

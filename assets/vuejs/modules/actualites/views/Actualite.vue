@@ -8,6 +8,7 @@
       <BreadcrumbSharedComponent
         :list-url="listUrl"
         :current-page="currentExpertContent.articleTitle"
+        gtm-event-name="click_actualite_breadcrumbs"
       />
       <div class="w-[100%] max-w-screen-2xl">
         <ContactUsButtonComponent />

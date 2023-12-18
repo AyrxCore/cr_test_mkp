@@ -1,0 +1,41 @@
+<template>
+  <div
+    v-if="channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.PROMOTIONNAL_FAT)"
+    class="flex flex-col rounded-md bg-secondary p-6 lg:flex-row"
+    :class="'text-' + betterTextColor('secondary')"
+  >
+    <div class="max-w-screen-md">
+      <img :src="properties.fat_promo_img" alt="Image promo" />
+    </div>
+    <div class="my-8 flex flex-col justify-center lg:pl-6">
+      <h3 class="mb-8 text-3xl font-bold">{{ properties.fat_promo_titre }}</h3>
+      <div class="mb-8 text-lg">
+        {{ properties.fat_promo_txt }}
+      </div>
+      <ButtonComponent
+        class="button button-primary mx-auto border-2 border-solid !border-white !bg-transparent"
+        @click="openInNewTab(properties.fat_promo_cta_link)"
+      >
+        <span class="w-full">{{ properties.fat_promo_cta_txt }}</span>
+      </ButtonComponent>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { betterTextColor, openInNewTab } from '@/vuejs/services/utils'
+import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
+import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
+import { useChannelStore } from '@/vuejs/stores/channel'
+
+const props = defineProps({
+  properties: {
+    type: Object,
+    default: null,
+  },
+})
+
+const channelStore = useChannelStore()
+</script>
+
+<style scoped></style>

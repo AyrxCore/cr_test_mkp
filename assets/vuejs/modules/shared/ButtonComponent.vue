@@ -57,7 +57,7 @@ const onClick = ($event: PointerEvent): void => {
   &-primary {
     @apply bg-primary text-white;
     &:hover:not(:disabled):not(:focus) {
-      @apply scale-105 border-none bg-primary shadow-inner-lighter;
+      @apply scale-105 bg-primary shadow-inner-lighter;
     }
   }
   &-secondary {
@@ -65,6 +65,12 @@ const onClick = ($event: PointerEvent): void => {
     svg,
     path {
       @apply stroke-white;
+    }
+  }
+  &-secondary-definitive {
+    @apply border-2 border-primary bg-white text-primary shadow-none;
+    &:hover:not(:disabled):not(:focus) {
+      @apply scale-105 border-primary bg-white shadow-inner-darker;
     }
   }
   &-secondary-outline {

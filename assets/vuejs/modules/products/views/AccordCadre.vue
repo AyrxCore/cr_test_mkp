@@ -1,39 +1,36 @@
 <template>
-  <BaseTemplate :title="accordTitle">
+  <BaseTemplate :title="accordTitle" class="ff-roboto">
     <LoadingComponent v-if="isLoading" />
-    <div
-      v-else-if="accord && !isLoading"
-      class="xs:w-[100%] m-auto my-4 max-w-screen-2xl px-5 sm:px-8"
-    >
+    <div v-else-if="accord && !isLoading" class="m-auto my-4">
       <HeaderPartnerComponent
         :name="accord.name"
         :note="accord.properties.note_rse ?? null"
-        :logo="accord.properties.logo_partenaire"
-        :barner="accord.properties.banniere_partenaire"
+        :banner-desktop="accord.properties.banniere_partenaire"
+        :banner-text="accord.properties.texte_banniere"
         :categories="accord.categories"
         @scroll-to="scrollTo('#sectionRse')"
       />
 
-      <PointsClesComponent
-        :description="accord.description"
-        :points-cles="pointsCles"
-      />
+      <div class="mt-12 flex flex-col text-sm md:text-base lg:text-lg">
+        <ConditionsNegocieesComponent
+          :properties="accord.properties"
+          :accord-name="accord.name"
+        />
 
-      <div
-        class="mt-5 flex flex-col text-sm md:text-base lg:grid lg:grid-cols-9 lg:gap-4 lg:text-lg"
-      >
-        <ConditionsNegocieesComponent :properties="accord.properties" />
-
-        <div class="bloc-content col-span-4 mt-5 lg:mt-0">
+        <div class="mt-5 flex flex-col items-center bg-primary p-6 lg:mt-0">
           <h3
-            class="mb-[1.563rem] mt-5 text-title-35 font-bold leading-9 text-primary xl:w-3/4"
+            class="mb-6 mt-5 text-center text-3xl font-bold leading-6 text-white xl:w-3/4"
           >
-            Comment bénéficier des conditions ?
+            Comment bénéficier des conditions négociées&nbsp;?
           </h3>
           <ConditionsNotActivatedComponent
             v-if="status.not_activated === currentStatus.status"
             :label="accord.properties.cta_text_not_activated"
-            :text="accord.properties.process_not_activated"
+            :text="
+              currentChannel.code === 'QANTIS_ACHAT'
+                ? accord.properties.process_not_activated
+                : accord.properties.process_not_activated_mb
+            "
             :current-status="currentStatus"
             :accord-name="accord.name"
           />
@@ -41,25 +38,54 @@
             v-else
             :current-status="currentStatus"
             :properties="accord.properties"
+            :accord-name="accord.name"
           />
         </div>
       </div>
-      <div id="sectionRse" />
-      <MiseEnAvantComponent :properties="accord.properties" />
-      <PointsClesRSEComponent
-        v-if="accord.properties.texte_rse"
-        :description="accord.properties.texte_rse"
-        :note="accord.properties.note_rse"
-        :points-cles-rse="pointsClesRSE"
-      />
-      <EnSavoirPlusComponent :properties="accord.properties" />
-      <div class="mt-11">
-        <h3 class="home-title text-primary">
-          Ces partenaires peuvent aussi
-          <span class="text-gradient">vous intéresser</span>
-        </h3>
+      <div v-if="partnerProducts.length > 0" class="m-auto max-w-screen-94">
+        <div class="mt-10 sm:w-[45rem]">
+          <h3 class="home-title text-primary">
+            Sélection de produits du partenaire
+          </h3>
+        </div>
+        <div class="m-auto max-w-screen-94">
+          <ProductsCarouselComponent
+            :products="partnerProducts"
+            @click-left="sendGtmEvent('click_fat_slider_left')"
+            @click-right="sendGtmEvent('click_fat_slider_right')"
+            @click-add-cart="
+              sendGtmEvent('click_fat_slider_product_add_cart', $event)
+            "
+            @click-title="
+              sendGtmEvent('click_fat_slider_product_click', $event)
+            "
+            @click-img="sendGtmEvent('click_fat_slider_product_img', $event)"
+          />
+        </div>
       </div>
-      <PartnersCarouselComponent class="mt-5" />
+      <div class="mx-auto my-8 max-w-screen-2xl md:px-5">
+        <PromotionnalComponent :properties="accord.properties" />
+      </div>
+      <EnSavoirPlusComponent
+        :properties="accord.properties"
+        :accord-name="accord.name"
+      />
+      <div id="sectionRse" />
+      <RseEngagementComponent :properties="accord.properties" />
+      <div class="mb-12 mt-8 px-6 lg:px-12">
+        <h3 class="text-3xl font-bold text-primary">
+          Ces partenaires peuvent aussi vous intéresser
+        </h3>
+        <PartnersCarouselComponent
+          class="mt-5"
+          :params="sellersByCategoryParam"
+          @click-partner-slider="
+            sendGtmEvent('click_fat_frise_logos', {
+              partenaire_name: $event,
+            })
+          "
+        />
+      </div>
     </div>
     <div
       v-else
@@ -77,20 +103,35 @@ import PartnersCarouselComponent from '@/vuejs/modules/shared/PartnersCarouselCo
 import { Product } from '@/vuejs/types/Product'
 import { useRoute } from 'vue-router'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
-import MiseEnAvantComponent from '@/vuejs/modules/products/components/accord-cadre/CarouselMiseEnAvantComponent.vue'
 import ConditionsNegocieesComponent from '@/vuejs/modules/products/components/accord-cadre/ConditionsNegocieesComponent.vue'
 import { status } from '@/vuejs/modules/products'
 import ConditionsNotActivatedComponent from '@/vuejs/modules/products/components/accord-cadre/ConditionsNotActivatedComponent.vue'
 import ConditionsPendingOrActivated from '@/vuejs/modules/products/components/accord-cadre/ConditionsPendingOrActivatedComponent.vue'
-import PointsClesComponent from '@/vuejs/modules/products/components/accord-cadre/PointsClesComponent.vue'
-import PointsClesRSEComponent from '@/vuejs/modules/products/components/accord-cadre/PointsClesRSEComponent.vue'
 import EnSavoirPlusComponent from '@/vuejs/modules/products/components/accord-cadre/EnSavoirPlusComponent.vue'
 import { useProductStore } from '@/vuejs/stores/product'
+import { useChannelStore } from '@/vuejs/stores/channel'
+import { storeToRefs } from 'pinia'
+import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
+import PromotionnalComponent from '@/vuejs/modules/products/components/accord-cadre/PromotionnalComponent.vue'
+import RseEngagementComponent from '@/vuejs/modules/products/components/accord-cadre/RseEngagementComponent.vue'
 
 const route = useRoute()
 const accordStore = useProductStore()
+const channelStore = useChannelStore()
+const productStore = useProductStore()
 const accord = ref<Product>()
 const isLoading = ref<boolean>(false)
+const partnerProducts = ref<Product[]>()
+
+const currentChannel = channelStore.currentChannel
+const { productsSelection } = storeToRefs(productStore)
+
+const sellersByCategoryParam = computed(() => {
+  return {
+    categories: [accord.value.categories[0].id],
+  }
+})
 
 const pointsCles = computed(() => {
   const list = [
@@ -140,6 +181,9 @@ watch(
         const accordId = slug.split('-')
         accord.value = await accordStore.findAccordCadreById(
           accordId[accordId.length - 1],
+        )
+        partnerProducts.value = await productStore.findPartnerProducts(
+          accord.value.seller.id,
         )
       }
     } catch (error) {

@@ -21,15 +21,20 @@
         },
       }"
       class="swiper-nav-outside"
-      @click-left="gtmEvent('click_slider_home_products_left')"
-      @click-right="gtmEvent('click_slider_home_products_right')"
+      @click-left="$emit('click-left')"
+      @click-right="$emit('click-right')"
     >
       <SwiperSlide
         v-for="product in props.products"
         :key="product.id"
         class="flex h-full items-center justify-center overflow-hidden rounded-lg bg-white"
       >
-        <ProductComponent :product="product" />
+        <ProductComponent
+          :product="product"
+          @click-add-cart="$emit('click-add-cart', $event)"
+          @click-title="$emit('click-title', $event)"
+          @click-img="$emit('click-img', $event)"
+        />
       </SwiperSlide>
     </CarouselListSharedComponent>
   </div>
@@ -48,17 +53,18 @@ const channelStore = useChannelStore()
 
 const currentChannel = channelStore.currentChannel
 
+const emit = defineEmits([
+  'click-left',
+  'click-right',
+  'click-add-cart',
+  'click-title',
+  'click-img',
+])
+
 const props = defineProps({
   products: {
     required: true,
     type: Array,
   },
 })
-
-const gtmEvent = (eventName: string) => {
-  gtmMixinPushEvent(
-    eventName,
-    buildStandardGtmData(userStore.user['@id'], currentChannel.name),
-  )
-}
 </script>

@@ -10,12 +10,35 @@
       <!-- Fin Bloc accords cadre -->
 
       <!-- Bloc sélection de produits -->
-      <ProductHomeComponent
-        class="mt-4"
-        :products="productsSelection?.results"
-        title="Notre sélection de produits"
-        description="Nous vous proposons une sélection de produits pour répondre à vos besoins."
-      />
+      <div class="m-auto mt-4 max-w-screen-94">
+        <div class="mt-10 sm:w-[45rem]">
+          <h3 class="home-title mb-3 text-primary">
+            Notre sélection de produits
+          </h3>
+          <p class="text-lg">
+            Nous vous proposons une sélection de produits pour répondre à vos
+            besoins.
+          </p>
+        </div>
+        <div class="m-auto max-w-screen-94">
+          <ProductsLoadingCarouselComponent
+            v-if="!productsSelection?.results"
+          />
+          <ProductsCarouselComponent
+            v-else
+            :products="productsSelection?.results"
+            @click-left="sendGtmEvent('click_slider_home_products_left')"
+            @click-right="sendGtmEvent('click_slider_home_products_right')"
+            @click-add-cart="
+              sendGtmEvent('click_slider_home_products_cta', $event)
+            "
+            @click-title="
+              sendGtmEvent('click_slider_home_products_title', $event)
+            "
+            @click-img="sendGtmEvent('click_slider_home_products_img', $event)"
+          />
+        </div>
+      </div>
       <!-- Fin bloc sélection de produits -->
 
       <div
@@ -121,7 +144,6 @@ import CarouselActualitesComponent from '@/vuejs/modules/home/component/Carousel
 import ExpertContentsComponent from '@/vuejs/modules/home/component/ExpertContentsComponent.vue'
 import OurCategoriesComponent from '@/vuejs/modules/home/component/OurCategoriesComponent.vue'
 import PartnersCarousel from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
-import ProductHomeComponent from '@/vuejs/modules/home/component/ProductHomeComponent.vue'
 import QantisIconComponent from '@/vuejs/modules/shared/icon/QantisIconComponent.vue'
 
 import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
@@ -131,6 +153,9 @@ import { useExpertContentStore } from '@/vuejs/stores/expertContent'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { useProductStore } from '@/vuejs/stores/product'
+import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
+import ProductsLoadingCarouselComponent from '@/vuejs/modules/shared/ProductsLoadingCarouselComponent.vue'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
 
 const favoriteStore = useFavoriteStore()
 const productStore = useProductStore()

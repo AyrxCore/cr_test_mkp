@@ -138,6 +138,23 @@ export const useProductStore = defineStore({
           )
       }
     },
+    async findPartnerProducts(partnerId: number) {
+      const alertStore = useAlertStore()
+      try {
+        const partnerProducts = await this.fetchProductsByParams({
+          perPage: 8,
+          companies: partnerId,
+        })
+
+        return partnerProducts.results.filter((sp) => !sp.isAccordCadre)
+      } catch (error) {
+        error.response.status === HttpStatusCodes.unauthorized &&
+          alertStore.setShow(
+            getErrorMessage(error.response.data.message),
+            AlertType.danger,
+          )
+      }
+    },
     async findDefaultVariantProduct(product: Product) {
       const alertStore = useAlertStore()
       try {

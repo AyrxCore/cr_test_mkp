@@ -1,57 +1,77 @@
 <template>
-  <div v-if="listButtons.length">
-    <div class="mt-10 flex flex-col">
-      <h3 class="home-title text-primary">En savoir plus sur ce partenaire</h3>
-    </div>
-    <div
-      class="mt-5 rounded-xl bg-white p-4 text-gray-500 md:p-7.5 lg:mt-2 lg:w-auto"
-    >
-      <div class="flex flex-col justify-around lg:flex-row">
-        <ButtonComponent
-          v-for="(button, key) in listButtons"
+  <div
+    v-if="properties.img_en_savoir_plus && properties.txt_en_savoir_plus"
+    class="my-8 bg-white p-6"
+  >
+    <div class="flex flex-col items-center justify-center lg:flex-row">
+      <div
+        class="flex max-w-screen-md justify-center rounded-lg px-2 lg:ml-10 lg:items-center lg:border lg:px-0"
+      >
+        <img
+          :src="properties.img_en_savoir_plus"
+          alt="Picture"
+          class="object-cover"
+        />
+      </div>
+      <div
+        class="mt-5 flex flex-col rounded-lg bg-white p-5 text-lg lg:ml-6 lg:mt-0 lg:w-1/2 lg:pr-12"
+      >
+        <h3 class="mb-6 text-3xl font-bold text-primary">
+          En savoir plus sur ce partenaire
+        </h3>
+
+        <p class="mb-5" v-html="properties.txt_en_savoir_plus" />
+
+        <a
+          v-for="(cta, key) in allCta"
           :key="key"
-          class="button-white button-white-secondary mb-5 lg:mb-0"
-          @click="openInNewTab(button.url)"
+          target="_blank"
+          :href="cta.link"
+          class="underline"
+          @click="
+            sendGtmEvent(cta.eventName, {
+              product_name: props.accordName,
+            })
+          "
+          >{{ cta.text }}</a
         >
-          <ArrowRightIconComponent />
-          {{ button.text }}
-        </ButtonComponent>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import { openInNewTab } from '@/vuejs/services/utils'
-import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import { computed } from 'vue'
-import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
 
 const props = defineProps({
   properties: {
     type: Object,
     default: null,
   },
+  accordName: {
+    type: String,
+    default: null,
+  },
 })
 
-const listButtons = computed(() => {
-  const list = [
-    {
-      text: props.properties.cta_en_savoir_plus_text_1,
-      url: props.properties.cta_en_savoir_plus_link_1,
-    },
-    {
-      text: props.properties.cta_en_savoir_plus_text_2,
-      url: props.properties.cta_en_savoir_plus_link_2,
-    },
-    {
-      text: props.properties.cta_en_savoir_plus_text_3,
-      url: props.properties.cta_en_savoir_plus_link_3,
-    },
-  ]
+const allCta = computed(() => {
+  const data = []
 
-  return list.filter(function (el) {
-    return el.text != null
-  })
+  for (let i = 1; i <= 3; i++) {
+    const textKey = `mises_en_avant_${i}_cta_txt`
+    const linkKey = `mises_en_avant_${i}_cta_link`
+    const gtmEventName = `click_savoir_plus_cta${i}`
+
+    if (props.properties[textKey] && props.properties[linkKey]) {
+      data.push({
+        text: props.properties[textKey],
+        link: props.properties[linkKey],
+        eventName: gtmEventName,
+      })
+    }
+  }
+
+  return data
 })
 </script>
 

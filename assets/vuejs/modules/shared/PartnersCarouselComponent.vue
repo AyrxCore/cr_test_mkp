@@ -1,6 +1,7 @@
 <template>
   <div v-if="showCarousel" class="relative m-auto max-w-screen-94">
     <CarouselListSharedComponent
+      v-if="sellers.length > 6"
       :slides-per-view="1"
       :space-between="10"
       :breakpoints="{
@@ -32,6 +33,7 @@
             :src="getUpplerImage(seller.avatar)"
             :alt="seller.name"
             class="pointer h-[107px] w-full cursor-pointer object-contain"
+            @click="emit('click-partner-slider', seller.name)"
           />
         </RouterLink>
         <img
@@ -42,6 +44,35 @@
         />
       </SwiperSlide>
     </CarouselListSharedComponent>
+    <div v-else class="flex justify-around">
+      <div
+        v-for="(seller, key) in sellers"
+        :key="key"
+        class="flex h-full items-center justify-center overflow-hidden rounded-lg bg-white p-1.5"
+      >
+        <RouterLink
+          v-if="showCarouselConnected"
+          :to="{
+            name: ProductPageList.PRODUCTS,
+            query: { company: seller.id },
+          }"
+          replace
+        >
+          <img
+            :src="getUpplerImage(seller.avatar)"
+            :alt="seller.name"
+            class="pointer h-[107px] w-full cursor-pointer object-contain"
+            @click="emit('click-partner-slider', seller.name)"
+          />
+        </RouterLink>
+        <img
+          v-else
+          :src="seller.avatar"
+          :alt="seller.name"
+          class="h-[107px] w-full object-contain"
+        />
+      </div>
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -73,6 +104,14 @@ import { useSellerStore } from '@/vuejs/stores/seller'
 import { useUserStore } from '@/vuejs/stores/user'
 import { ProductPageList } from '@/vuejs/router/pages-list'
 
+const props = defineProps({
+  params: {
+    type: Object,
+  },
+})
+
+const emit = defineEmits(['click-partner-slider'])
+
 const sellerStore = useSellerStore()
 const userStore = useUserStore()
 const showCarousel = ref(false)
@@ -82,7 +121,7 @@ const sellers = ref([])
 onMounted(async () => {
   try {
     if (userStore.user) {
-      await sellerStore.init()
+      await sellerStore.init(props.params)
       sellers.value = sellerStore.sellers.slice(0, 16)
       showCarouselConnected.value = true
     } else {

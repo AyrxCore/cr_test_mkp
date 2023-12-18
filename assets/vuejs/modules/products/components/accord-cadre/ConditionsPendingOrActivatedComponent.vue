@@ -1,35 +1,44 @@
 <template>
-  <div>
+  <div class="text-center text-lg leading-5">
     <div
       v-if="currentStatus.status === status.pending"
-      class="flex justify-center border border-orange-500 p-2 text-orange-500 lg:w-2/3"
+      class="mx-auto flex justify-center border p-2 lg:w-2/3"
+      :class="
+        'border-' +
+        betterTextColor('primary') +
+        ' text-' +
+        betterTextColor('primary')
+      "
     >
       Votre rattachement est en cours
       <PendingIconComponent
-        class="ml-1 w-5 fill-orange-400 stroke-gray-500 text-orange-700"
+        class="ml-1 w-5"
+        :fill="betterTextColor('primary')"
+        :stroke="betterTextColor('primary')"
       />
     </div>
     <div
       v-else
-      class="flex justify-around border border-green-qantis p-2 text-green-qantis lg:w-2/3"
+      class="mx-auto flex justify-center border p-2 lg:w-2/3"
+      :class="
+        'border-' +
+        betterTextColor('primary') +
+        ' text-' +
+        betterTextColor('primary')
+      "
     >
+      <CheckIconComponent :stroke="betterTextColor('primary')" class="mr-4" />
       Vous bénéficiez des conditions
-      <CheckIconComponent class="stroke-green-qantis" />
     </div>
     <div class="condition-beneficiaire mt-4">
       <p v-html="text" />
     </div>
 
-    <div
-      class="mt-6 flex flex-col justify-center md:flex-row md:justify-between"
-    >
+    <div class="mt-6 flex flex-col items-center">
       <ButtonComponent
         v-if="cta1.name && cta1.url"
-        class="button-secondary focus:!bg-white focus:text-secondary md:mr-5"
-        :class="{
-          'md:w-1/2': cta2.name && (cta2.url || cta2.mailto),
-        }"
-        @click="openInNewTab(cta1.url)"
+        class="button button-primary mx-auto mb-6 border-2 border-solid !border-white"
+        @click="clickOnCta(cta1.url, 1)"
       >
         <span>
           {{ cta1.name }}
@@ -37,11 +46,9 @@
       </ButtonComponent>
       <a
         v-else-if="cta1.name && cta1.mailto"
-        class="button button-secondary md:mr-5"
-        :class="{
-          'md:w-1/2': cta2.name && (cta2.url || cta2.mailto),
-        }"
+        class="button button-primary mx-auto mb-6 border-2 border-solid !border-white"
         :href="cta1.mailto"
+        @click="gtmEvent(1)"
       >
         <span>
           {{ cta1.name }}
@@ -49,21 +56,16 @@
       </a>
       <ButtonComponent
         v-if="cta2.name && cta2.url"
-        class="button-secondary md:mr-5"
-        :class="{
-          'md:w-1/2': cta1.name && (cta1.url || cta1.mailto),
-        }"
-        @click="openInNewTab(cta2.url)"
+        class="button-primary mx-auto mb-6 border-2 border-solid !border-white"
+        @click="clickOnCta(cta2.url, 2)"
       >
         {{ cta2.name }}
       </ButtonComponent>
       <a
         v-else-if="cta2.name && cta2.mailto"
-        class="button button-secondary md:mr-5"
-        :class="{
-          'md:w-1/2': cta1.name && (cta1.url || cta1.mailto),
-        }"
+        class="button button-primary mx-auto mb-6 border-2 border-solid !border-white"
         :href="cta2.mailto"
+        @click="gtmEvent(2)"
       >
         <span>
           {{ cta2.name }}
@@ -74,12 +76,14 @@
 </template>
 <script lang="ts" setup>
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import { openInNewTab } from '@/vuejs/services/utils'
+import { betterTextColor, openInNewTab } from '@/vuejs/services/utils'
 import { status } from '@/vuejs/modules/products'
 import CheckIconComponent from '@/vuejs/modules/shared/icon/CheckIconComponent.vue'
 import { computed, PropType } from 'vue'
 import { AccountAccordCadre } from '@/vuejs/types/AccountAccordCadre'
 import PendingIconComponent from '@/vuejs/modules/shared/icon/PendingIconComponent.vue'
+import { useChannelStore } from '@/vuejs/stores/channel'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
 
 const props = defineProps({
   currentStatus: {
@@ -90,12 +94,26 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  accordName: {
+    type: String,
+    default: null,
+  },
 })
 
+const channelStore = useChannelStore()
+
+const currentChannel = channelStore.currentChannel
+
 const text = computed(() => {
-  return props.currentStatus.status === status.value.pending
-    ? props.properties.process_pending
-    : props.properties.process_activated
+  if (currentChannel.code === 'QANTIS_ACHAT') {
+    return props.currentStatus.status === status.value.pending
+      ? props.properties.process_pending
+      : props.properties.process_activated
+  } else {
+    return props.currentStatus.status === status.value.pending
+      ? props.properties.process_pending_mb
+      : props.properties.process_activated_mb
+  }
 })
 
 const cta1 = computed(() => {
@@ -129,6 +147,19 @@ const cta2 = computed(() => {
     }
   }
 })
+
+const clickOnCta = (buttonUrl: string, ctaNumber: number) => {
+  openInNewTab(buttonUrl)
+  gtmEvent(ctaNumber)
+}
+
+const gtmEvent = (ctaNumber) => {
+  const eventName = ctaNumber === 1 ? 'click_fat_cta_1' : 'click_fat_cta_2'
+  sendGtmEvent(eventName, {
+    product_name: props.accordName,
+    state_rattachement: props.currentStatus.status,
+  })
+}
 </script>
 
 <style scoped></style>

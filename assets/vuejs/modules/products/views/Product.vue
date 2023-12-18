@@ -8,6 +8,7 @@
       <BreadcrumbSharedComponent
         :list-url="breadcrumbUrl"
         :current-page="product.name"
+        gtm-event-name="click_product_breadcrumb"
       />
       <div class="m-auto mt-4 flex flex-col">
         <div class="flex flex-col md:flex-row">
