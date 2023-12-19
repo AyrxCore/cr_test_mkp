@@ -1,23 +1,25 @@
 <template>
   <div
-    class="footer"
+    class="footer pb-4"
     :style="{
       color: betterTextColor('primary'),
     }"
   >
     <div
-      class="second-part md:px-15 mx-5 flex flex-wrap justify-between gap-5 py-10 md:m-auto md:px-10 lg:flex-nowrap lg:px-20"
+      class="second-part grid grid-cols-1 gap-4 px-8 pt-10 pb-5 md:grid-cols-2 md:gap-8 md:px-16 xl:grid-cols-4 xl:gap-16"
     >
-      <div class="mb-4 sm:w-full md:w-5/12 md:flex-1 lg:w-1/5">
-        <h3 class="mb-6 md:mb-4 lg:mb-7">La marketplace QANTIS</h3>
+      <!-- TODO: use channel options instead -->
+      <div class="mb-2 md:mb-4">
+        <h3 class="mb-2 md:mb-6 lg:mb-7">La marketplace QANTIS</h3>
         <p>
           Depuis 2001, QANTIS accompagne les entreprises françaises dans leur
           performance et leur croissance durable en s'appuyant sur 3 moteurs :
           la centrale d'achat, l'expertise humaine et la marketplace.
         </p>
       </div>
-      <div class="mb-4 sm:w-full md:w-5/12 lg:w-1/5">
-        <h3 class="mb-6 lg:mb-7">À propos</h3>
+      <!-- End TODO -->
+      <div class="mb-2 md:mb-4">
+        <h3 class="mb-2 md:mb-6 lg:mb-7">À propos</h3>
         <ul>
           <li>
             <RouterLink
@@ -56,8 +58,8 @@
           </li>
         </ul>
       </div>
-      <div class="mb-4 sm:w-full md:mr-4 md:w-5/12 lg:w-1/5">
-        <h3 class="mb-6 lg:mb-7">Votre espace adhérents</h3>
+      <div class="mb-2 md:mb-4">
+        <h3 class="mb-2 md:mb-6 lg:mb-7">Votre espace adhérents</h3>
         <ul>
           <li>
             <RouterLink
@@ -77,7 +79,7 @@
           </li>
         </ul>
       </div>
-      <div class="mb-4 sm:w-full md:w-5/12 lg:w-1/5">
+      <div class="mb-2 md:mb-4">
         <div class="flex flex-col md:flex-row md:justify-between lg:flex-col">
           <div class="md:mt-0">
             <h3 class="mb-6 lg:mb-7">Paiement sécurisé par&nbsp;:</h3>
@@ -90,30 +92,83 @@
         </div>
       </div>
     </div>
+    <div v-if="!currentChannel?.whiteLabel">
+      <div
+        class="mt-4 flex flex-col-reverse px-8 pb-5 md:grid md:grid-cols-2 md:gap-8 md:px-16 md:pb-20 xl:mt-0 xl:grid-cols-4 xl:gap-16"
+      >
+        <div class="flex">
+          <QantisLogoComponent class="mt-[0.5rem] fill-primary stroke-white" />
+        </div>
+        <div class="hidden xl:flex">
+          <img
+            :src="coqVertLogoImg"
+            alt="header"
+            class="mt-[0.5rem] h-20 object-contain"
+          />
+        </div>
+        <div class="mb-6 md:mb-0">
+          <h3 class="mb-6 md:mb-4 lg:mb-7">Retrouvez l'actualité de QANTIS</h3>
+          <div class="flex space-x-5 md:space-x-10">
+            <a
+              href="https://www.youtube.com/channel/UCP-ZzEGFZ4rtW0Yx8u1ZDMQ"
+              class="flex h-10 w-10 items-center justify-center rounded-full bg-white"
+              target="_blank"
+            >
+              <YoutubeIconComponent class="fill-primary stroke-white" />
+            </a>
+            <a
+              href="https://twitter.com/QANTIS_co"
+              class="flex h-10 w-10 items-center justify-center rounded-full bg-white"
+              target="_blank"
+            >
+              <TwitterIconComponent class="fill-primary stroke-white" />
+            </a>
+            <a
+              href="https://www.facebook.com/QANTIS.co"
+              class="flex h-10 w-10 items-center justify-center rounded-full bg-white"
+              target="_blank"
+            >
+              <FacebookIconComponent class="fill-primary stroke-primary" />
+            </a>
+            <a
+              href="https://www.linkedin.com/company/qantis-co/mycompany/"
+              class="flex h-10 w-10 items-center justify-center rounded-full bg-white"
+              target="_blank"
+            >
+              <LinkedinIconComponent class="fill-primary stroke-primary" />
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="hidden py-6 md:mx-16 md:flex md:justify-center md:border-t">
+        <p class="mt-2">
+          QANTIS, 185, allée des Cyprès, 69760 LIMONEST, FRANCE
+        </p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
-
 import lemonwayLogo from '@/vuejs/assets/img/lemonway_footer_logo.png'
+import coqVertLogo from '@/vuejs/assets/img/coq_vert_footer_logo.png'
 import { betterTextColor, getImage } from '@/vuejs/services/utils'
-import { useCategoryStore } from '@/vuejs/stores/category'
 import { useUserStore } from '@/vuejs/stores/user'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { AccountPageList } from '@/vuejs/router/pages-list'
 import { PageList } from '@/vuejs/router'
 import { buildStandardGtmData, gtmMixinPushEvent } from '@/vuejs/services/gtm'
+import FacebookIconComponent from '@/vuejs/modules/shared/icon/FacebookIconComponent.vue'
+import YoutubeIconComponent from '@/vuejs/modules/shared/icon/YoutubeIconComponent.vue'
+import TwitterIconComponent from '@/vuejs/modules/shared/icon/TwitterIconComponent.vue'
+import LinkedinIconComponent from '@/vuejs/modules/shared/icon/LinkedinIconComponent.vue'
+import QantisLogoComponent from '@/vuejs/modules/shared/icon/QantisLogoComponent.vue'
 
 const lemonwayLogoImg = getImage(lemonwayLogo)
+const coqVertLogoImg = getImage(coqVertLogo)
 
-const categoryStore = useCategoryStore()
 const userStore = useUserStore()
 const channelStore = useChannelStore()
-
-const categories = computed(() => {
-  return categoryStore.categories
-})
 
 const currentChannel = channelStore.currentChannel
 
@@ -131,20 +186,16 @@ const gtmEvent = (eventName: string) => {
 }
 
 .footer {
-  background-color: var(--primary-color);
-  width: 100%;
+  @apply w-full bg-primary;
 }
 
 .footer h3 {
-  font-size: 24px;
-  font-weight: 700;
-  line-height: 28px;
-  text-align: left;
+  @apply text-left text-[18px] font-bold leading-6 md:text-[20px] md:leading-7 lg:text-[24px] lg:leading-8;
 }
 
 .footer .second-part p,
 .footer li {
-  @apply text-left text-sm font-normal leading-6 md:text-base xl:text-lg;
+  @apply text-left text-base font-normal leading-6 md:text-lg;
 }
 
 .bloc-contact-footer {
