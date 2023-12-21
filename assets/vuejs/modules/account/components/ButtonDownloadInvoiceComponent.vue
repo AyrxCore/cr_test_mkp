@@ -3,11 +3,11 @@
     <LoaderSharedComponent v-if="isLoadingDownload" />
     <button
       v-else
-      class="rounded-lg border border-primary p-0.5"
+      class="flex items-center rounded-lg p-0.5"
       title="Télécharger la facture"
       @click="downloadInvoice"
     >
-      <DownloadIconComponent class="h-[18px] w-[18px] stroke-primary" />
+      <DownloadIconComponent class="h-[24px] w-[24px] stroke-primary" />
     </button>
   </div>
 </template>

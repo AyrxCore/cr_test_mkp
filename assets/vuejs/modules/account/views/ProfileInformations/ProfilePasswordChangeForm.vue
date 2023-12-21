@@ -1,7 +1,7 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="mb-4 mt-2 text-title-35 text-primary md:mt-0">
+      <h3 class="mb-4 mt-2 text-3xl font-bold text-primary md:mt-0">
         Modifier mon mot de passe
       </h3>
       <div
@@ -43,16 +43,13 @@
         </div>
         <div class="flex justify-end">
           <ButtonComponent
-            class="button-secondary-outline mr-2"
+            class="button-secondary-definitive mr-2"
             type="button"
             @click="onCancelClick"
           >
             Annuler
           </ButtonComponent>
-          <ButtonComponent
-            class="button-secondary-outline"
-            :is-loading="isLoading"
-          >
+          <ButtonComponent class="button-primary" :is-loading="isLoading">
             Enregistrer
           </ButtonComponent>
         </div>

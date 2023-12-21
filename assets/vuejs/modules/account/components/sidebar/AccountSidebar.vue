@@ -2,33 +2,14 @@
   <AccountSidebarBlock
     :items="[
       {
-        name: 'Historique de commandes',
+        name: 'Mes commandes',
         id: AccountPageList.ORDERS,
         url: AccountPageList.ORDERS,
       },
-      {
-        name: 'Paniers sauvegardés',
-        id: AccountPageList.SAVED_CARTS,
-        url: AccountPageList.SAVED_CARTS,
-      },
     ]"
-    :title="'Mes Commandes'"
+    :title="'Ma consommation'"
   />
-  <AccountSidebarBlock
-    :items="[
-      {
-        name: 'Coordonnées',
-        id: AccountPageList.ACCOUNT,
-        url: AccountPageList.ACCOUNT,
-      },
-      {
-        name: 'Listes de produits favoris',
-        id: AccountPageList.FAVORITES_LIST,
-        url: AccountPageList.FAVORITES_LIST,
-      },
-    ]"
-    title="Mon profil"
-  />
+  <AccountSidebarBlock :items="listProfilMenu" title="Mon profil" />
   <AccountSidebarBlock
     :items="[
       {
@@ -43,4 +24,35 @@
 <script lang="ts" setup>
 import { AccountPageList } from '@/vuejs/router/pages-list'
 import AccountSidebarBlock from '@/vuejs/modules/account/components/sidebar/AccountSidebarBlock.vue'
+import { computed, ref } from 'vue'
+import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
+import { useChannelStore } from '@/vuejs/stores/channel'
+
+const channelStore = useChannelStore()
+
+const listProfilMenuGlobal = ref<any[]>([
+  {
+    name: 'Mes coordonnées',
+    id: AccountPageList.ACCOUNT,
+    url: AccountPageList.ACCOUNT,
+  },
+  {
+    name: 'Mes listes de produits favoris',
+    id: AccountPageList.FAVORITES_LIST,
+    url: AccountPageList.FAVORITES_LIST,
+    condition: OPTIONAL_FRONT_BLOCKS.FAVORITES,
+  },
+  {
+    name: 'Mes paniers sauvegardés',
+    id: AccountPageList.SAVED_CARTS,
+    url: AccountPageList.SAVED_CARTS,
+    condition: OPTIONAL_FRONT_BLOCKS.SAVED_CARTS,
+  },
+])
+
+const listProfilMenu = computed(() => {
+  return listProfilMenuGlobal.value.filter(
+    (x) => !x.condition || channelStore.isAllowedToShow(x.condition),
+  )
+})
 </script>

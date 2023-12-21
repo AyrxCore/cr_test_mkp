@@ -1,6 +1,6 @@
 <template>
   <div
-    class="mb-2.5 flex flex-col rounded-lg bg-white p-2.5 text-lg text-gray-500 md:flex-row"
+    class="mb-2.5 flex flex-col rounded-lg bg-white p-2.5 text-lg md:flex-row"
   >
     <div class="flex md:w-8/12 lg:w-9/12">
       <div class="flex h-fit w-6/12 md:w-3/12">
@@ -17,7 +17,7 @@
         >
           {{ productName }}
         </RouterLink>
-        <span class="flex flex-col text-sm text-gray-500 lg:text-lg">
+        <span class="flex flex-col text-sm lg:text-lg">
           <span>Vendu par: {{ productSeller }}</span>
           <span>Référence: {{ productReference }}</span>
           <span>Quantité: {{ item.quantity }}</span>
@@ -30,19 +30,19 @@
     <div class="md:w-4/12 lg:w-3/12">
       <div class="flex md:justify-between">
         <div
-          class="flex w-full flex-row flex-wrap items-center items-center justify-between md:w-auto"
+          class="flex w-full flex-row flex-wrap items-center justify-between md:w-auto"
         >
           <span
-            class="flex items-start items-center text-sm font-bold text-primary md:text-base lg:text-lg"
+            class="flex items-start text-sm font-bold text-primary md:text-base lg:text-lg"
           >
             {{ productPrice }}€ HT
           </span>
         </div>
         <div
-          class="flex w-full flex-row flex-wrap items-center items-center justify-between md:w-auto"
+          class="flex w-full flex-row flex-wrap items-center justify-between md:w-auto"
         >
           <span
-            class="flex items-start items-center text-sm font-bold md:text-base lg:text-lg"
+            class="flex items-start text-sm font-bold md:text-base lg:text-lg"
           >
             {{ productTotalPrice }}€ HT
           </span>

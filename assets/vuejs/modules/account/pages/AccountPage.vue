@@ -1,40 +1,35 @@
 <template>
   <BaseTemplate>
-    <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 px-4 sm:px-8">
-      <breadcrumb-shared-component current-page="Mon compte" />
-      <div class="w-[100%] max-w-screen-2xl">
-        <ContactUsButtonComponent />
-      </div>
-      <div class="m-auto max-w-screen-2xl">
+    <div class="xs:w-full ff-roboto m-auto mt-4 mb-16 flex-1 px-4 sm:px-8">
+      <BreadcrumbSharedComponent
+        current-page="Mon compte"
+        gtm-event-name="click_account_details_breadcrumb"
+      />
+      <div class="sm:pr-12">
         <slot name="header" />
-        <div class="mt-10 gap-11 xl:grid xl:grid-cols-4">
+        <div class="mt-7 gap-11 xl:grid xl:grid-cols-4">
           <DropdownListComponent>
             <template #button-label>Mon compte</template>
             <template #content>
-              <div class="flex flex-col-reverse gap-4 xl:grid">
+              <div class="flex flex-col-reverse gap-4 p-4 xl:grid xl:p-0">
                 <div class="rounded-lg bg-white pt-2 xl:p-7">
                   <div class="hidden xl:flex xl:flex-col">
-                    <h3
-                      class="text-md mb-2 font-bold text-primary xl:text-[20px]"
-                    >
+                    <h3 class="text-md mb-2 font-bold xl:text-2xl">
                       {{ user.firstName }}
                       <span class="uppercase">{{ user.lastName }}</span>
                     </h3>
-                    <p class="font-bold text-gray-500">
+                    <p class="mb-2 text-lg">
                       {{ user.externalApiData.buyer.name }}
-                    </p>
-                    <p
-                      v-if="user.account.adherent.reducceCode"
-                      class="font-bold text-gray-500"
-                    >
-                      Code Bonuus {{ user.account.adherent.reducceCode }}
                     </p>
                   </div>
                   <div class="sticky bottom-0 flex">
-                    <DisconnectIconComponent class="mr-2 xl:hidden" />
+                    <DisconnectIconComponent
+                      class="mr-2"
+                      :icon-color="channelPrimaryColor"
+                    />
                     <a
                       href="#"
-                      class="w-fit border-b-2 border-gray-500 text-gray-500 hover:border-b-2 hover:border-purple-600"
+                      class="w-fit border-b-2 border-primary hover:border-secondary"
                       @click="onLogout"
                     >
                       Déconnexion
@@ -42,52 +37,48 @@
                   </div>
                 </div>
                 <div class="grid gap-4">
-                  <div class="rounded-lg bg-white xl:p-7">
-                    <h3
-                      class="text-md mb-2 font-bold text-primary xl:text-[20px]"
-                    >
-                      Mes contacts
-                    </h3>
-                    <div
-                      class="items-center text-sm text-gray-500 md:text-base"
-                    >
-                      <span class="flex">
-                        <ChevronRightIconComponent :stroke-color="'#5E6875'" />
-                        Service adhérents
-                      </span>
-                      <a class="ml-6" :href="`tel:${channel.phoneNumber}`">
-                        {{ channelPhoneNumber }}
-                      </a>
-                      <span class="mt-2 flex">
-                        <ChevronRightIconComponent :stroke-color="'#5E6875'" />
-                        Contactez-nous
-                      </span>
-                      <a class="ml-6" :href="`mailto:${channel.email}`">
-                        {{ channel.email }}
-                      </a>
-                    </div>
+                  <div
+                    v-if="user.account.adherent.reducceCode"
+                    class="rounded-lg bg-secondary xl:p-7"
+                    :class="'text-' + betterTextColor('secondary')"
+                  >
+                    Code Bonuus {{ user.account.adherent.reducceCode }}
                   </div>
                   <AccountSidebar />
+                  <div class="rounded-lg bg-white xl:p-7">
+                    <h3 class="mb-2 text-lg font-bold xl:text-2xl">
+                      Mes contacts
+                    </h3>
+                    <div class="items-center text-sm md:text-base xl:text-lg">
+                      <span>
+                        Le service adhérents sera ravi de répondre à vos
+                        questions du lundi au vendredi de 8h30 à 18h
+                      </span>
+                      <div class="mt-4 text-primary underline">
+                        <a
+                          :href="`tel:${channel.phoneNumber}`"
+                          class="hover:font-bold"
+                        >
+                          {{ channelPhoneNumber }}
+                        </a>
+                      </div>
+                      <div class="mt-2 text-primary underline">
+                        <a
+                          :href="`mailto:${channel.email}`"
+                          class="hover:font-bold"
+                        >
+                          {{ channel.email }}
+                        </a>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </template>
           </DropdownListComponent>
-
           <div class="col-span-3">
             <slot name="right-side" />
           </div>
-        </div>
-        <div class="items-center p-6 text-center">
-          <p class="text-sm text-gray-500 md:text-base lg:text-lg">
-            Les informations liées à votre compte restent strictement
-            confidentielles et ne sont utilisées que conformément à notre
-            <RouterLink
-              :to="{ name: PageList.POLITIQUE_DE_CONFIDENTIALITE }"
-              class="font-bold underline decoration-2"
-            >
-              Politique de confidentialité
-            </RouterLink>
-          </p>
         </div>
       </div>
     </div>
@@ -103,17 +94,20 @@ import AccountSidebar from '@/vuejs/modules/account/components/sidebar/AccountSi
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightIconComponent.vue'
-import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import DisconnectIconComponent from '@/vuejs/modules/shared/icon/DisconnectIconComponent.vue'
 import DropdownListComponent from '@/vuejs/modules/shared/DropdownListComponent.vue'
 import { PageList } from '@/vuejs/router'
+import { betterTextColor } from '@/vuejs/services/utils'
+import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
 
-const { channel, formattedPhoneNumber: channelPhoneNumber } = storeToRefs(
-  useChannelStore(),
-)
+const {
+  channel,
+  formattedPhoneNumber: channelPhoneNumber,
+  channelPrimaryColor,
+} = storeToRefs(useChannelStore())
 
 const onLogout = async (e: Event): Promise<void> => {
   e.preventDefault()

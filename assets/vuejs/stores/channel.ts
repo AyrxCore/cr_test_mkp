@@ -54,8 +54,9 @@ export const useChannelStore = defineStore({
         )
       }
     },
-    isAllowedToShow(block: string) {
+    isAllowedToShow(block: string | undefined) {
       return (
+        block !== undefined &&
         block in this.currentChannel.options &&
         this.currentChannel.options[block] === 'true'
       )

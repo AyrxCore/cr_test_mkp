@@ -1,14 +1,14 @@
 <template>
   <div class="rounded-lg bg-white xl:py-7 xl:pl-7 xl:pr-4">
-    <h3 class="mb-2 text-md font-bold text-primary xl:text-[20px]">
+    <h3 class="mb-2 text-lg font-bold xl:text-2xl">
       {{ props.title }}
     </h3>
     <p
       v-for="(item, keyItem) in props.items"
       :key="keyItem"
-      class="flex items-center xl:mb-3 text-sm md:text-base"
+      class="flex items-center md:text-base xl:mb-3"
     >
-      <AccountSidebarBlockItem :item="item"/>
+      <AccountSidebarBlockItem :item="item" />
     </p>
   </div>
 </template>
