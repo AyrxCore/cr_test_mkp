@@ -1,7 +1,7 @@
 <template>
   <table class="list-address w-full table-auto">
     <AddressesListHeader />
-    <tbody v-if="!isLoading">
+    <tbody v-if="!isLoading" class="bg-white">
       <tr
         v-for="(address, key) in addresses.filter(
           (address) => address.type === props.type,
@@ -15,7 +15,7 @@
       <tr>
         <td class="mx-auto pt-2 pb-4" colspan="6">
           <LoaderSharedComponent
-            class="mx-auto text-purple-600"
+            class="mx-auto text-secondary"
             classes="loader-xl loader"
           />
         </td>

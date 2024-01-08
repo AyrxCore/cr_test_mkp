@@ -5,7 +5,7 @@
     <slot name="method-icon" />
     <ButtonComponent
       :is-loading="isLoading"
-      class="button button-gradient mt-4 !whitespace-normal"
+      class="button-primary mt-4 !whitespace-normal"
       @click="emit('selectMethod')"
     >
       Choisir le paiement par {{ method.name.default }}
@@ -13,7 +13,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { PropType, ref } from 'vue'
+import { PropType } from 'vue'
 
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 

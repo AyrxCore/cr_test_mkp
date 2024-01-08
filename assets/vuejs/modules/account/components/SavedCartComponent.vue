@@ -6,7 +6,8 @@
           name: PageList.SAVED_CARTS_DETAILS,
           params: { id: savedCart.id },
         }"
-        class="text-purple-600 underline"
+        @click="sendGaEvent('click_saved_carts_details')"
+        class="font-bold text-primary underline"
       >
         {{ savedCart.name }}
       </RouterLink>
@@ -16,7 +17,6 @@
     </div>
     <div class="md:w-3/12">
       {{ nbProducts }}
-      {{ nbProducts > 1 ? 'articles' : 'article' }}
     </div>
     <div class="flex justify-end md:w-2/12">
       <div class="flex">
@@ -27,22 +27,26 @@
           }"
           class="flex"
           title="Visualisez le contenu du panier sauvegardé"
+          @click="sendGaEvent('click_saved_carts_details')"
         >
-          <EyeIconComponent class="mr-2 stroke-secondary" />
+          <EyeIconComponent class="mr-2" :stroke="channelPrimaryColor" />
         </RouterLink>
         <button
           class="flex"
           title="Ajoutez ce panier sauvegardé à votre panier actuel"
           @click="openAddToCartConfirm"
         >
-          <ShoppingCartIconComponent class="mr-2 !stroke-secondary stroke-2" />
+          <ShoppingCartIconComponent
+            class="mr-2"
+            :stroke="channelPrimaryColor"
+          />
         </button>
         <button
           class="flex"
           title="Supprimez ce panier sauvegardé"
           @click="openDeleteForm"
         >
-          <TrashIconComponent :stroke-color="channelPrimaryColor" />
+          <TrashIconComponent :stroke="channelPrimaryColor" />
         </button>
       </div>
       <SavedCartModal
@@ -83,6 +87,7 @@ import SavedCartDeleteModal from '@/vuejs/modules/account/components/savedCart/S
 import SavedCartAddToCartModal from '@/vuejs/modules/account/components/savedCart/SavedCartAddToCartModal.vue'
 import { storeToRefs } from 'pinia'
 import { useChannelStore } from '@/vuejs/stores/channel'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const props = defineProps({
   savedCart: {
@@ -110,10 +115,12 @@ const nbProducts = computed(() => {
 
 const openDeleteForm = () => {
   showDeleteForm.value = true
+  sendGaEvent('click_saved_carts_delete')
 }
 
 const openAddToCartConfirm = () => {
   showAddToCartConfirm.value = true
+  sendGaEvent('click_saved_carts_edit')
 }
 const onSubmitSavedCart = async (event) => {
   await emit('submit', {
@@ -140,6 +147,6 @@ const onAddToCart = async (event) => {
 </script>
 <style scoped>
 .bloc-cart-saved {
-  @apply mb-2.5 flex w-[48.5%] flex-col rounded-lg bg-white p-2.5 text-sm text-gray-500 md:w-full md:flex-row md:text-base lg:text-lg;
+  @apply mb-4 flex w-[48.5%] flex-col rounded-lg bg-white p-2.5 text-sm md:w-full md:flex-row md:text-base lg:text-lg;
 }
 </style>

@@ -8,21 +8,21 @@
           <slot name="title" />
         </h3>
         <div
-          class="mb-2 inline-flex w-full justify-between text-sm text-gray-500 md:text-base xl:text-lg"
+          class="mb-2 inline-flex w-full justify-between text-sm md:text-base xl:text-lg"
         >
           <div>Sous-total HT :</div>
           <div class="float-right">{{ subTotalWithoutTaxesDisplayed }}€</div>
         </div>
         <div
-          class="mb-2 inline-flex w-full justify-between text-sm text-gray-500 md:text-base xl:text-lg"
+          class="mb-2 inline-flex w-full justify-between text-sm md:text-base xl:text-lg"
         >
           <div>Frais de livraison HT :</div>
           <div class="float-right flex items-center">
             <template v-if="showShipmentPrice">
               {{ shipmentPrice }} €
             </template>
-            <VTooltip :triggers="['hover', 'focus']" v-else>
-              <InformationIconComponent class="text-secondary" />
+            <VTooltip v-else :triggers="['hover', 'focus']">
+              <InformationIconComponent class="text-primary" />
               <template #popper>
                 Le montant des frais de livraison sera indiqué <br />lors de
                 l'étape "livraison"
@@ -44,7 +44,7 @@
         </div>
         <div
           v-if="showShipmentPrice"
-          class="inline-flex w-full justify-between text-sm text-gray-500 md:text-base xl:text-lg"
+          class="inline-flex w-full justify-between text-sm md:text-base xl:text-lg"
         >
           <div>TOTAL TTC :</div>
           <div class="float-right">{{ totalDisplayed }}€</div>

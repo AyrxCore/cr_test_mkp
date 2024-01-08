@@ -55,7 +55,7 @@
               }"
               class="button border-2 border-primary text-sm font-medium !text-primary shadow-none hover:scale-105 hover:!border-primary hover:!bg-white hover:!shadow-inner-darker focus:!bg-white"
             >
-              Découvrir les commissions
+              En savoir plus
             </RouterLink>
           </div>
           <!-- Fin bloc nom et description -->
@@ -69,12 +69,6 @@
 import { SwiperSlide } from 'swiper/vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
 import { PageList } from '@/vuejs/router'
-import { formatPrice, getUpplerImage } from '@/vuejs/services/utils'
-import { ProductPageList } from '@/vuejs/router/pages-list'
-import ProductQuantityComponent from '@/vuejs/modules/shared/ProductQuantityComponent.vue'
-import ButtonAddToCartComponent from '@/vuejs/modules/shared/ButtonAddToCartComponent.vue'
-import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
-import AddFavoriteComponent from '@/vuejs/modules/products/components/AddFavoriteComponent.vue'
 
 const props = defineProps({
   contents: {

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="mb-2.5 flex flex-col rounded-lg bg-white p-2.5 text-lg text-gray-500 md:flex-row"
+    class="mb-2.5 flex flex-col rounded-lg bg-white p-2.5 text-lg md:flex-row"
   >
     <div class="flex md:w-8/12 lg:w-9/12">
       <div class="mr-2">
@@ -27,11 +27,11 @@
       <div class="flex w-6/12 flex-col md:ml-5 md:w-7/12">
         <RouterLink
           :to="{ name: PageList.PRODUCT, params: { slug: productSlug } }"
-          class="text-lg font-bold text-primary lg:text-[22px]"
+          class="mt-4 text-lg font-bold text-primary lg:text-2xl"
         >
           {{ productName }}
         </RouterLink>
-        <span class="flex flex-col text-sm text-gray-500 lg:text-lg">
+        <span class="mt-4 flex flex-col text-sm lg:text-lg">
           <span>Vendu par: {{ productSeller }}</span>
           <span>Référence: {{ productReference }}</span>
         </span>
@@ -46,16 +46,16 @@
           class="flex w-full flex-row flex-wrap items-center justify-between md:w-auto"
         >
           <span
-            class="flex items-center text-sm font-bold text-primary md:text-base lg:text-lg"
+            class="mt-4 flex items-center text-sm font-bold text-primary md:text-base lg:text-xl"
           >
             {{ productPrice }}€ HT
           </span>
           <div class="bottom-0 flex items-start justify-between space-x-3">
             <button @click="openMoveProductForm">
-              <ChangeIconComponent :stroke-color="channelPrimaryColor" />
+              <ChangeIconComponent :fill="channelPrimaryColor" />
             </button>
             <button @click="openRemoveForm">
-              <TrashIconComponent :stroke-color="channelPrimaryColor" />
+              <TrashIconComponent :stroke="channelPrimaryColor" />
             </button>
           </div>
           <ProductDeleteModal
@@ -66,7 +66,6 @@
             @cancel="removeProduct = false"
             @remove-product="onRemoveProduct"
           />
-
           <ProductMoveModal
             v-if="moveProduct"
             class="modal"
@@ -92,6 +91,7 @@ import ProductMoveModal from '@/vuejs/modules/account/components/favorite/Produc
 import { FavoriteProduct } from '@/vuejs/types/Favorite'
 import { storeToRefs } from 'pinia'
 import { useChannelStore } from '@/vuejs/stores/channel'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const emit = defineEmits([
   'removeProduct',
@@ -126,10 +126,12 @@ const props = defineProps({
 
 const openRemoveForm = () => {
   removeProduct.value = true
+  sendGaEvent('click_favorite_details_delete')
 }
 
 const openMoveProductForm = () => {
   moveProduct.value = true
+  sendGaEvent('click_favorite_details_update_product')
 }
 
 const onSelectProduct = async () => {

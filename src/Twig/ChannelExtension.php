@@ -33,6 +33,8 @@ class ChannelExtension extends AbstractExtension
             new TwigFunction('channel_phone_number', [$this, 'getChannelPhoneNumber']),
             new TwigFunction('channel_formatted_phone_number', [$this, 'getChannelFormattedPhoneNumber']),
             new TwigFunction('channel_email', [$this, 'getChannelEmail']),
+            new TwigFunction('channel_option_by_key', [$this, 'getChannelOptionByKey']),
+            new TwigFunction('channel_convert_option_to_array_by_key', [$this, 'convertOptionToArrayByKey']),
         ];
     }
 
@@ -88,5 +90,25 @@ class ChannelExtension extends AbstractExtension
     public function getChannelEmail(Channel $channel): string
     {
         return $channel->getChannelParameter()->getEmail() ?? Defaults::DEFAULT_CHANNEL_EMAIL;
+    }
+
+    public function getChannelOptionByKey(Channel $channel, string $key): string
+    {
+        $channelOption = $channel->getChannelOptions()->filter(fn ($channelOption) => $channelOption->getName() === $key)->first();
+        if (!$channelOption || !$channelOption->getValue()) {
+            return '';
+        }
+
+        return $channelOption->getValue();
+    }
+
+    public function convertOptionToArrayByKey(Channel $channel, string $key, string $separator = ';'): array
+    {
+        $channelOption = $channel->getChannelOptions()->filter(fn ($channelOption) => $channelOption->getName() === $key)->first();
+        if (!$channelOption || !$channelOption->getValue()) {
+            return [];
+        }
+
+        return \explode($separator, $channelOption->getValue());
     }
 }

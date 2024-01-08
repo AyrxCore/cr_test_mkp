@@ -11,7 +11,7 @@
       <div
         class="mt-5 flex flex-col rounded-lg p-5 text-lg lg:ml-6 lg:mt-0 lg:w-1/2 lg:pr-12"
       >
-        <h3 class="mb-6 text-3xl font-bold text-primary">Engagement RSE</h3>
+        <h3 class="text-title-primary mb-6">Engagement RSE</h3>
 
         <p class="mb-5" v-html="properties.texte_rse" />
       </div>
@@ -19,9 +19,6 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { computed } from 'vue'
-import { sendGtmEvent } from '@/vuejs/services/gtm'
-
 const props = defineProps({
   properties: {
     type: Object,

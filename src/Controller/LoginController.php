@@ -139,15 +139,10 @@ class LoginController extends AbstractController implements ChannelAwareControll
         TranslatorInterface $translator,
         string $token
     ) {
-        if ($request->attributes->get('_route') === 'reset_password_action') {
-            $tpl = 'reset';
-        } else {
-            $tpl = 'first_connexion.reset';
-        }
-
         $session = new Session();
         $user = $em->getRepository(User::class)->findOneBy(['confirmation_token' => $token]);
         $channel = $this->getChannel($request);
+        $passwordChanged = false;
 
         if (empty($user)) {
             $session->getFlashBag()->add(
@@ -195,12 +190,13 @@ class LoginController extends AbstractController implements ChannelAwareControll
                 );
             }
 
-            return $this->redirect('/');
+            $passwordChanged = true;
         }
 
-        return $this->render('login/'.$tpl.'.html.twig', [
+        return $this->render('login/reset.html.twig', [
             'form' => $form->createView(),
             'channel' => $channel,
+            'passwordChanged' => $passwordChanged,
         ]);
     }
 

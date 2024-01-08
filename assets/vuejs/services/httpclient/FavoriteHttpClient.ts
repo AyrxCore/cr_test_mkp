@@ -1,6 +1,5 @@
 import { Favorite } from '@/vuejs/types/Favorite'
 import BaseClientService from '@/vuejs/services/BaseClientService'
-import { User } from '@/vuejs/types/User'
 
 export default class FavoriteHttpClient extends BaseClientService {
   public fetchList<T extends []>(): Promise<T> {

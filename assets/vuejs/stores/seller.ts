@@ -4,7 +4,7 @@ import SellerHttpClient from '@/vuejs/services/httpclient/SellerHttpClient'
 import { notifyError } from '@/vuejs/services/utils'
 
 export const SELLER_IDS = {
-  KRÖMM: 26,
+  KROMM: 26,
 }
 
 export const useSellerStore = defineStore({

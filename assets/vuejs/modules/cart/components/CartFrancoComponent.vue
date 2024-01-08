@@ -1,5 +1,5 @@
 <template>
-  <div class="text-sm italic text-gray-500 lg:text-base">
+  <div class="text-sm italic lg:text-base">
     <p v-if="notDisplayedPromotion || !promotions.length">
       {{ seller?.description }}
     </p>
@@ -46,7 +46,7 @@ const seller = computed((): Seller => {
 })
 
 const notDisplayedPromotion = computed((): boolean => {
-  const SELLERS_NO_DISPLAY_PROMOTION = [SELLER_IDS.KRÖMM]
+  const SELLERS_NO_DISPLAY_PROMOTION = [SELLER_IDS.KROMM]
   return SELLERS_NO_DISPLAY_PROMOTION.includes(seller.value?.id)
 })
 

@@ -3,7 +3,7 @@
     <RouterLink
       :to="{ name: PageList.HOME_PAGE }"
       class="flex justify-between text-xl font-bold"
-      @click="gtmEvent('click_header_logo')"
+      @click="sendGaEvent('click_header_logo')"
     >
       <img
         :src="primaryLogo"
@@ -28,24 +28,16 @@ import { useChannelStore } from '@/vuejs/stores/channel'
 import { useUserStore } from '@/vuejs/stores/user'
 import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
-import { buildStandardGtmData, gtmMixinPushEvent } from '@/vuejs/services/gtm'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const channelStore = useChannelStore()
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
 const primaryLogo = getImage(channelStore.channel.design.logo)
-const currentChannel = channelStore.currentChannel
 
 const adherentLogoImg = computed(() => {
   const logo = user.value.account?.adherent.logo
   if (!logo) return null
   return getImage(logo)
 })
-
-const gtmEvent = (eventName: string) => {
-  gtmMixinPushEvent(
-    eventName,
-    buildStandardGtmData(userStore.user['@id'], currentChannel.name),
-  )
-}
 </script>

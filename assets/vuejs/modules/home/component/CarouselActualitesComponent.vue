@@ -4,7 +4,7 @@
       v-if="
         expertContents.length > 0 &&
         channelStore.isAllowedToShow(
-          OPTIONAL_FRONT_BLOCKS.BANNER_SLIDER_HOMEPAGE_QANTIS,
+          OPTIONAL_FRONT_BLOCKS.BANNER_SLIDER_HOMEPAGE,
         )
       "
     >

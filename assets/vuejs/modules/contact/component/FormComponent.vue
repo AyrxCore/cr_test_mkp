@@ -3,8 +3,8 @@
   <div v-if="contact">
     <MessageSquareIconComponent
       class="mx-auto mb-2 w-full stroke-secondary"
-      :size-width="40"
-      :size-height="40"
+      :width="40"
+      :height="40"
     />
     <h4 class="mb-3 text-center text-2xl font-bold text-primary">
       Directement en nous laissant un message
@@ -20,6 +20,11 @@
             v-model="contact.motif"
             class="border-1 relative h-[55px] w-full rounded-md border-gray-200"
             required
+            @change="
+              sendGaEvent('click_contact_demande_type', {
+                demande_value: motifs[contact.motif],
+              })
+            "
           >
             <option disabled value="" class="text-gray-500">
               Votre demande concerne *
@@ -28,11 +33,6 @@
               v-for="(motif, index) in motifs"
               :key="index"
               :value="index"
-              @input="
-                gtmEvent('click_contact_demande_type', {
-                  demande_value: motif[index],
-                })
-              "
             >
               {{ motif }}
             </option>
@@ -108,11 +108,11 @@
             type="submit"
             class="button-primary mt-2 md:w-auto"
             :is-loading="isLoading"
-            @click="gtmEvent('click_contact_send')"
+            @click="sendGaEvent('click_contact_send')"
           >
             <ArrowRightIconComponent
               class="mr-2 w-4"
-              :stroke-color="betterTextColor('primary')"
+              :stroke="betterTextColor('primary')"
             />
             Envoyer
           </ButtonComponent>
@@ -131,7 +131,7 @@ import { useContactStore } from '@/vuejs/stores/contact'
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
 import { useAlertStore } from '@/vuejs/stores/alert'
 import { AlertType } from '@/vuejs/types/Alert'
-import { buildStandardGtmData, gtmMixinPushEvent } from '@/vuejs/services/gtm'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { useUserStore } from '@/vuejs/stores/user'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { betterTextColor } from '@/vuejs/services/utils'
@@ -185,12 +185,6 @@ const sendEmail = async () => {
 
     isLoading.value = false
   }, 500)
-}
-
-const gtmEvent = (eventName: string, additionalData = null) => {
-  let data = buildStandardGtmData(userStore.user['@id'], currentChannel.name)
-  data = additionalData ? { ...data, ...additionalData } : data
-  gtmMixinPushEvent(eventName, data)
 }
 </script>
 

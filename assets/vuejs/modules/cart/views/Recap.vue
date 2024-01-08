@@ -1,12 +1,12 @@
 <template>
   <div class="mt-8 mb-2 flex items-center justify-between">
-    <h3 class="text-title-35 text-primary">
+    <h3 class="text-title-primary">
       Panier
       <span class="uppercase">{{ user.externalApiData.buyer.name }}</span>
     </h3>
     <ButtonComponent
       v-if="cart.orders && cart.orders.length > 0"
-      class="button-secondary-outline"
+      class="button-primary-outline"
       type="button"
       @click="openSaveCartForm"
     >
@@ -43,11 +43,8 @@
     >
       <template #title>Récapitulatif panier</template>
       <template #button-next>
-        <ButtonComponent
-          class="button button-gradient mt-3 w-full"
-          @click="goToAdress"
-        >
-          <ArrowRightIconComponent :stroke-color="'#FFFFFF'" />
+        <ButtonComponent class="button-primary mt-3 w-full" @click="goToAdress">
+          <ArrowRightIconComponent class="h-4 w-4" />
           Passer la commande
         </ButtonComponent>
         <div v-if="error" class="mt-2 text-center text-xs text-red-600">

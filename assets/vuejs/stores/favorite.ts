@@ -31,7 +31,12 @@ export const useFavoriteStore = defineStore({
         notifySuccess('Votre liste a été créée')
         return newFavorite
       } catch (error) {
-        notifyError(`Le libellé ${favorite.name} existe déjà`)
+        if (error.response.status === 409) {
+          notifyError(`Le libellé ${favorite.name} est déjà utilisé`)
+          throw error
+        } else {
+          notifyError(`La liste ${favorite.name} n'a pas pu être mise à jour`)
+        }
       }
     },
     async findFavoriteById(id) {
@@ -48,7 +53,12 @@ export const useFavoriteStore = defineStore({
         notifySuccess(`La liste ${favorite.name} a été mise à jour`)
         return updatedFavorite
       } catch (error) {
-        notifyError(`La liste ${favorite.name} n'a pas pu être mise à jour`)
+        if (error.response.status === 422) {
+          notifyError(`Le libellé ${favorite.name} est déjà utilisé`)
+          throw error
+        } else {
+          notifyError(`La liste ${favorite.name} n'a pas pu être mise à jour`)
+        }
       }
     },
     async delete(id): Promise<void> {

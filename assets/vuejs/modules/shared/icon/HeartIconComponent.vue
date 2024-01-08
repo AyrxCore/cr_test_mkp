@@ -1,11 +1,11 @@
 <template>
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    :width="sizeWidth"
-    :height="sizeHeight"
+    width="24"
+    height="24"
     viewBox="0 0 24 24"
-    :fill="fillColor"
-    :stroke="strokeColor"
+    fill="none"
+    stroke="#000000"
     stroke-width="2"
     stroke-linecap="round"
     stroke-linejoin="round"
@@ -15,24 +15,3 @@
     ></path>
   </svg>
 </template>
-
-<script lang="ts" setup>
-const props = defineProps({
-  fillColor: {
-    type: String,
-    default: 'none',
-  },
-  strokeColor: {
-    type: String,
-    default: '#000000',
-  },
-  sizeHeight: {
-    type: Number,
-    default: 24,
-  },
-  sizeWidth: {
-    type: Number,
-    default: 24,
-  },
-})
-</script>

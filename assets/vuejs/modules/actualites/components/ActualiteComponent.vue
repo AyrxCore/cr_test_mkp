@@ -32,12 +32,12 @@
         {{ content.articleTitle }}
       </RouterLink>
     </h3>
-    <p class="truncate-custom truncate-custom-3 mt-1 text-lg text-gray-400">
+    <p class="truncate-custom truncate-custom-3 mt-1 text-lg">
       {{ content.articleTeaser }}
     </p>
     <RouterLink
       :to="{ name: PageList.NEWS_ITEM, params: { slug: content.slug } }"
-      class="text-sm font-medium text-primary underline"
+      class="mt-4 text-sm font-medium text-primary underline"
     >
       Lire l'article
     </RouterLink>

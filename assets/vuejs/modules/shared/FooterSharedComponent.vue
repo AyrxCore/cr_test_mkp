@@ -8,23 +8,21 @@
     <div
       class="second-part grid grid-cols-1 gap-4 px-8 pt-10 pb-5 md:grid-cols-2 md:gap-8 md:px-16 xl:grid-cols-4 xl:gap-16"
     >
-      <!-- TODO: use channel options instead -->
       <div class="mb-2 md:mb-4">
-        <h3 class="mb-2 md:mb-6 lg:mb-7">La marketplace QANTIS</h3>
+        <h3 class="mb-2 md:mb-6 lg:mb-7">
+          {{ currentChannel.name }}
+        </h3>
         <p>
-          Depuis 2001, QANTIS accompagne les entreprises françaises dans leur
-          performance et leur croissance durable en s'appuyant sur 3 moteurs :
-          la centrale d'achat, l'expertise humaine et la marketplace.
+          {{ currentChannel.options['TEXT_FOOTER'] }}
         </p>
       </div>
-      <!-- End TODO -->
       <div class="mb-2 md:mb-4">
         <h3 class="mb-2 md:mb-6 lg:mb-7">À propos</h3>
         <ul>
           <li>
             <RouterLink
               :to="{ name: PageList.CONTACT_PAGE }"
-              @click="gtmEvent('click_footer_contact')"
+              @click="sendGaEvent('click_footer_contact')"
             >
               Nous contacter
             </RouterLink>
@@ -33,7 +31,7 @@
             <a
               target="_blank"
               :href="currentChannel.documents.generalTermsOfUse"
-              @click="gtmEvent('click_footer_cgu')"
+              @click="sendGaEvent('click_footer_cgu')"
             >
               Conditions générales d'utilisation
             </a>
@@ -42,7 +40,7 @@
             <a
               target="_blank"
               :href="currentChannel.documents.legalTerms"
-              @click="gtmEvent('click_footer_mentions_legales')"
+              @click="sendGaEvent('click_footer_mentions_legales')"
             >
               Mentions légales
             </a>
@@ -51,7 +49,7 @@
             <a
               target="_blank"
               :href="currentChannel.documents.privacyPolicy"
-              @click="gtmEvent('click_footer_politique_confidentialite')"
+              @click="sendGaEvent('click_footer_politique_confidentialite')"
             >
               Politique de confidentialité
             </a>
@@ -64,7 +62,7 @@
           <li>
             <RouterLink
               :to="{ name: AccountPageList.ACCOUNT }"
-              @click="gtmEvent('click_footer_account')"
+              @click="sendGaEvent('click_footer_account')"
             >
               Mon compte
             </RouterLink>
@@ -72,7 +70,7 @@
           <li>
             <RouterLink
               :to="{ name: AccountPageList.ORDERS }"
-              @click="gtmEvent('click_footer_mes_commandes')"
+              @click="sendGaEvent('click_footer_mes_commandes')"
             >
               Mes commandes
             </RouterLink>
@@ -157,12 +155,15 @@ import { useUserStore } from '@/vuejs/stores/user'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { AccountPageList } from '@/vuejs/router/pages-list'
 import { PageList } from '@/vuejs/router'
-import { buildStandardGtmData, gtmMixinPushEvent } from '@/vuejs/services/gtm'
+
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+
 import FacebookIconComponent from '@/vuejs/modules/shared/icon/FacebookIconComponent.vue'
 import YoutubeIconComponent from '@/vuejs/modules/shared/icon/YoutubeIconComponent.vue'
 import TwitterIconComponent from '@/vuejs/modules/shared/icon/TwitterIconComponent.vue'
 import LinkedinIconComponent from '@/vuejs/modules/shared/icon/LinkedinIconComponent.vue'
 import QantisLogoComponent from '@/vuejs/modules/shared/icon/QantisLogoComponent.vue'
+import { OPTIONAL_FRONT_BLOCKS } from '../../services/const'
 
 const lemonwayLogoImg = getImage(lemonwayLogo)
 const coqVertLogoImg = getImage(coqVertLogo)
@@ -171,13 +172,6 @@ const userStore = useUserStore()
 const channelStore = useChannelStore()
 
 const currentChannel = channelStore.currentChannel
-
-const gtmEvent = (eventName: string) => {
-  gtmMixinPushEvent(
-    eventName,
-    buildStandardGtmData(userStore.user['@id'], currentChannel.name),
-  )
-}
 </script>
 
 <style lang="scss">

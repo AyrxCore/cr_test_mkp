@@ -16,21 +16,8 @@
   src: url('/fonts/Roboto-Regular.ttf') format('truetype');
 }
 
-.default-button-gradient {
-  background: linear-gradient(90deg, var(--secondary-color) 0%, #404FE6 52.08%, #00C7FF 100%);
-  border-radius: 25px;
-}
-
-.default-button-gradient:hover {
-  background: var(--secondary-color);
-}
-
-.bg-gradient {
-  @apply bg-gradient-to-r from-secondary via-gradient-1 to-gradient-2;
-}
-
-.text-gradient {
-  @apply bg-gradient-to-r from-secondary via-gradient-1 to-gradient-2 bg-clip-text text-transparent w-fit;
+.text-title-primary {
+  @apply text-3xl font-bold text-primary font-cotext
 }
 
 .badge {
@@ -75,14 +62,14 @@
   z-index: 1000;
 }
 
+.checkbox-secondary {
+  @apply cursor-pointer appearance-none rounded border border-gray-400 text-secondary checked:bg-secondary focus:ring-secondary;
+}
+
 .loading {
   background: linear-gradient(-90deg, #e8e8e8, #d0cfcf, #e8e8e8);
   background-size: 300% 300%;
   animation: gradient 1s ease infinite;
-}
-
-.checkbox-secondary {
-  @apply cursor-pointer appearance-none rounded border border-gray-400 text-secondary checked:bg-secondary focus:ring-secondary;
 }
 
 @keyframes gradient {

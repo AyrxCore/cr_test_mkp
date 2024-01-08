@@ -1,8 +1,8 @@
 <template>
-  <div class="num-block skin-7">
+  <div class="skin-7">
     <div class="num-in">
       <span
-        class="minus dis rounded-l-md"
+        class="minus rounded-l-md"
         :disabled="qte == 1"
         :class="{
           '!cursor-not-allowed': qte == 1,
@@ -36,7 +36,7 @@
 import { ref } from 'vue'
 import { betterTextColor } from '@/vuejs/services/utils'
 
-const emit = defineEmits(['updateQuantity'])
+const emit = defineEmits(['updateQuantity', 'updateQuantityInput'])
 const props = defineProps({
   quantity: {
     type: Number,
@@ -57,6 +57,9 @@ const onInput = (event: InputEvent): void => {
   } else {
     qte.value = parseInt(onlyNumbers)
   }
+  emit('updateQuantityInput', {
+    quantity: qte.value,
+  })
 }
 
 const onBlur = (): void => {

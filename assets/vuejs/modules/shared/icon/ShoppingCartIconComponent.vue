@@ -1,10 +1,10 @@
 <template>
   <svg
-    :width="sizeWidth"
-    :height="sizeHeight"
+    width="28"
+    height="28"
     viewBox="0 0 28 28"
     fill="none"
-    :stroke="stroke"
+    stroke="#000000"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
@@ -27,21 +27,3 @@
     />
   </svg>
 </template>
-
-<script lang="ts" setup>
-const props = defineProps({
-  stroke: {
-    required: false,
-    type: String,
-    default: '#000000',
-  },
-  sizeWidth: {
-    type: Number,
-    default: 28,
-  },
-  sizeHeight: {
-    type: Number,
-    default: 28,
-  },
-})
-</script>

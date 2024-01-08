@@ -16,7 +16,7 @@
       <div
         class="mt-5 flex flex-col rounded-lg bg-white p-5 text-lg lg:ml-6 lg:mt-0 lg:w-1/2 lg:pr-12"
       >
-        <h3 class="mb-6 text-3xl font-bold text-primary">
+        <h3 class="text-title-primary mb-6">
           En savoir plus sur ce partenaire
         </h3>
 
@@ -29,7 +29,7 @@
           :href="cta.link"
           class="underline"
           @click="
-            sendGtmEvent(cta.eventName, {
+            sendGaEvent(cta.eventName, {
               product_name: props.accordName,
             })
           "
@@ -41,7 +41,7 @@
 </template>
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { sendGtmEvent } from '@/vuejs/services/gtm'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const props = defineProps({
   properties: {

@@ -19,9 +19,6 @@ module.exports = {
         sans: [...defaultTheme.fontFamily.sans],
         cotext: '"Cotext"',
       },
-      fontSize: {
-        'title-35': '35px',
-      },
       spacing: {
         7.5: '1.875rem',
         8.5: '2.125rem',
@@ -30,8 +27,6 @@ module.exports = {
         primary: 'var(--primary-color)',
         secondary: 'var(--secondary-color)',
         tertiary: '#0bb0fa',
-        'gradient-1': '#404fe6',
-        'gradient-2': '#00c7ff',
         'green-qantis': '#65AC5D',
       },
       screens: {

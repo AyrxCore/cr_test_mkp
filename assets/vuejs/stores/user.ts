@@ -13,7 +13,6 @@ import { getErrorMessage } from '@/vuejs/services/login'
 import router, { PageList } from '@/vuejs/router'
 import { Account } from '@/vuejs/types/Account'
 import { notifyError, notifySuccess } from '@/vuejs/services/utils'
-import { Account } from '@/vuejs/types/Account'
 
 export const useUserStore = defineStore({
   id: 'user',
@@ -107,11 +106,11 @@ export const useUserStore = defineStore({
       try {
         await UserHttpClient.get(true).updateUserAccountEmail({
           email: this.editingInfo.username,
-          id: this.user.account.subaccount.id,
+          id: this.user.externalApiData.subaccount.id,
           accountId: this.user.account.id,
         })
         notifySuccess(
-          `La demande de modification d'email de contact a été engegistrée avec succès`,
+          `La demande de modification d'email de contact a été enregistrée avec succès`,
         )
         await this.getCurrentUserData()
       } catch (error) {
@@ -126,7 +125,7 @@ export const useUserStore = defineStore({
           lastName: this.editingInfo.lastName,
           firstName: this.editingInfo.firstName,
           phone: this.editingInfo.phone,
-          id: this.user.account.subaccount.id,
+          id: this.user.externalApiData.subaccount.id,
           accountId: this.user.account.id,
         })
         this.user.lastName = this.editingInfo.lastName

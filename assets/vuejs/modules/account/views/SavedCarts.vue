@@ -1,26 +1,23 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="mb-2 mt-2 text-title-35 text-primary md:mt-0">
-        Paniers sauvegardés
-      </h3>
+      <h3 class="text-title-primary mb-4 mt-2 xl:mt-0">Paniers sauvegardés</h3>
       <div v-if="showAlert" class="lg:w-5/6">
         <AlertSharedComponent />
       </div>
       <div
-        class="mb-2.5 hidden items-center text-sm text-gray-500 md:flex lg:text-base"
+        class="mb-2.5 hidden items-center text-sm font-bold md:flex lg:text-base"
       >
         <div class="w-5/12">Nom du panier</div>
         <div class="w-2/12">Créé le</div>
         <div class="w-3/12">Nombre d'articles</div>
-        <!--        <div class="w-2/12"></div>-->
-        <div class="w-2/12"></div>
+        <div class="w-2/12" />
       </div>
       <LoadingComponent v-if="isLoading" />
       <div v-else>
         <div
           v-if="savedCarts.length === 0"
-          class="mt-5 flex flex-row flex-wrap justify-center rounded-lg bg-white py-2 text-sm text-gray-600 md:text-base lg:text-lg"
+          class="mt-5 flex flex-row flex-wrap justify-center rounded-lg bg-white py-2 text-sm md:text-base lg:text-lg"
         >
           Aucun panier n'a été sauvegardé
         </div>

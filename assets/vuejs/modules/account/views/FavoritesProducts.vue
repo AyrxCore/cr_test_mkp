@@ -1,18 +1,9 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <div class="mt-2 flex flex-col md:mt-5 md:flex-row md:justify-between">
-        <h3 class="mb-2 mt-2 text-title-35 text-primary md:mt-0">
-          Mes produits favoris
-        </h3>
-        <ButtonComponent
-          class="button-white button-white-secondary mb-2 md:mb-0"
-          @click="openFavoriteForm"
-        >
-          Nouvelle liste
-        </ButtonComponent>
-      </div>
-
+      <h3 class="text-title-primary mb-2 mt-2 md:mt-0">
+        Mes listes de produits favoris
+      </h3>
       <FavoriteFormModal
         v-if="showFormFavorite"
         class="modal"
@@ -24,19 +15,19 @@
         <AlertSharedComponent />
       </div>
       <div
-        class="mt-10 mb-2.5 hidden items-center px-2.5 text-sm text-gray-500 md:flex lg:text-base"
+        class="mt-8 mb-2.5 hidden items-center px-2.5 text-sm md:flex lg:text-base"
       >
         <div class="w-5/12">Nom de la liste</div>
         <div class="w-2/12">Créée le</div>
         <div class="w-2/12">Modifiée le</div>
         <div class="w-2/12">Nombre d'articles</div>
-        <div class="w-1/12"></div>
+        <div class="w-1/12" />
       </div>
       <LoadingComponent v-if="isLoading" />
       <div v-else>
         <div
           v-if="favorites.length === 0"
-          class="mt-5 flex flex-row flex-wrap justify-center rounded-lg bg-white py-2 text-sm text-gray-600 md:text-base lg:text-lg"
+          class="mt-5 flex flex-row flex-wrap justify-center rounded-lg bg-white py-2 text-sm md:text-base lg:text-lg"
         >
           Aucune liste de favori n'a été créée
         </div>
@@ -50,6 +41,14 @@
             @delete-favorite="onDeleteFavorite"
             @cancel="showFormFavorite = false"
           />
+        </div>
+        <div class="mt-4 flex w-full justify-end">
+          <ButtonComponent
+            class="button-primary mb-2 md:mb-0"
+            @click="openFavoriteForm"
+          >
+            Ajouter une liste de favoris
+          </ButtonComponent>
         </div>
       </div>
     </template>
@@ -67,6 +66,7 @@ import { useAlertStore } from '@/vuejs/stores/alert'
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
 import { useUserStore } from '@/vuejs/stores/user'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
@@ -84,6 +84,7 @@ onMounted(async () => {
 })
 const openFavoriteForm = () => {
   showFormFavorite.value = true
+  sendGaEvent('click_favorites_add')
 }
 
 const onSubmitFavorite = async (event) => {

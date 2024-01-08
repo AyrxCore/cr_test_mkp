@@ -21,13 +21,13 @@
         },
       }"
       class="swiper-nav-outside"
-      @click-left="$emit('click-left')"
-      @click-right="$emit('click-right')"
+      @click-left="sendGaEvent('click_slider_home_products_left')"
+      @click-right="sendGaEvent('click_slider_home_products_right')"
     >
       <SwiperSlide
         v-for="product in props.products"
         :key="product.id"
-        class="flex h-full items-center justify-center overflow-hidden rounded-lg bg-white"
+        class="flex !h-auto items-stretch justify-center overflow-hidden rounded-lg bg-white"
       >
         <ProductComponent
           :product="product"
@@ -44,14 +44,8 @@ import { SwiperSlide } from 'swiper/vue'
 
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
 import ProductComponent from '@/vuejs/modules/products/components/ProductCardComponent.vue'
-import { buildStandardGtmData, gtmMixinPushEvent } from '@/vuejs/services/gtm'
-import { useUserStore } from '@/vuejs/stores/user'
-import { useChannelStore } from '@/vuejs/stores/channel'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
-const userStore = useUserStore()
-const channelStore = useChannelStore()
-
-const currentChannel = channelStore.currentChannel
 
 const emit = defineEmits([
   'click-left',

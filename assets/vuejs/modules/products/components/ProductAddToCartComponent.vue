@@ -39,6 +39,11 @@
           :variant-id="props.product.defaultVariantId"
           :price="props.product.price"
           :class="{ 'w-full': showPrice }"
+          @click="
+            sendGaEvent('click_product_add_cart', {
+              product_name: product.name,
+            })
+          "
         />
         <AddFavoriteComponent
           class="ml-5 lg:hidden"
@@ -46,7 +51,24 @@
           :product-name="props.product.name"
           :variant-id="props.product.defaultVariantId"
           :favorites-product="props.product.favorites"
-          @open-favorite="onOpenFavoriteTooltip"
+          @toggle-favorite="onToggleFavoriteTooltip"
+          @open-favorite="
+            sendGaEvent('click_product_favorite', {
+              product_name: props.product.name,
+            })
+          "
+          @select-favorite="
+            sendGaEvent('click_product_select_favorite_list', {
+              product_name: props.product.name,
+              favorite_list_name: $event,
+            })
+          "
+          @add-favorite-list="
+            sendGaEvent('type_product_favorite_list', {
+              product_name: props.product.name,
+              favorite_list_name: $event,
+            })
+          "
         />
       </div>
     </div>
@@ -58,6 +80,7 @@ import ButtonAddToCartComponent from '@/vuejs/modules/shared/ButtonAddToCartComp
 import { PropType, ref } from 'vue'
 import { Product } from '@/vuejs/types/Product'
 import AddFavoriteComponent from '@/vuejs/modules/products/components/AddFavoriteComponent.vue'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const tooltipFavoriteIsOpened = ref(false)
 const props = defineProps({
@@ -72,7 +95,7 @@ const props = defineProps({
   },
 })
 
-const onOpenFavoriteTooltip = (event) => {
+const onToggleFavoriteTooltip = (event) => {
   tooltipFavoriteIsOpened.value = event.showTooltip
 }
 </script>

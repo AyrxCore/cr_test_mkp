@@ -4,6 +4,8 @@
     <NotifComponent />
   </template>
   <LoginForm v-else-if="props.component === 'login'" />
+  <PrehomeRightPart v-else-if="props.component === 'prehome-right-part'" />
+  <FooterPrehome v-else-if="props.component === 'footer-prehome'" />
   <PartnersCarousel v-else-if="props.component === 'partners-carousel'" />
   <ArrowRightIconComponent v-else-if="props.component === 'arrow-right-icon'" />
   <ArrowLeftIconComponent v-else-if="props.component === 'arrow-left-icon'" />
@@ -18,6 +20,10 @@
   <CmsPageComponent
     v-else-if="props.component === 'politique-de-confidentialite'"
     :page-id="POLITIQUE_DE_CONFIDENTIALITE_PAGE_ID"
+  />
+  <CmsPageComponent
+    v-else-if="props.component === 'conditions-generales-d-utilisation'"
+    :page-id="CGU_PAGE_ID"
   />
 </template>
 
@@ -40,10 +46,13 @@ import { useChannelStore } from '@/vuejs/stores/channel'
 import router from './router'
 import { CartPageList } from './router/pages-list'
 import {
+  CGU_PAGE_ID,
   MENTIONS_LEGALES_PAGE_ID,
   POLITIQUE_DE_CONFIDENTIALITE_PAGE_ID,
 } from '@/vuejs/services/const'
 import { useBannerStore } from '@/vuejs/stores/banner'
+import PrehomeRightPart from '@/vuejs/modules/login/component/PrehomeRightPart.vue'
+import FooterPrehome from '@/vuejs/modules/login/component/FooterPrehome.vue'
 
 const cartStore = useCartStore()
 const channelStore = useChannelStore()
@@ -87,16 +96,13 @@ onMounted(async () => {
 
 <style lang="postcss">
 body {
-  font-family: 'CoText';
+  font-family: 'Roboto';
   background: var(--body-background);
   //color: var(--default-text-color);
 }
+
 h3 {
   font-family: 'CoText';
-}
-
-.ff-roboto {
-  font-family: 'Roboto';
 }
 
 #gravite_widget_button_container {

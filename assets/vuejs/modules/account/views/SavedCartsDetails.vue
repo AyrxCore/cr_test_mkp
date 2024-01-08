@@ -7,10 +7,10 @@
           <div v-if="showAlert" class="lg:w-5/6">
             <AlertSharedComponent />
           </div>
-          <div class="mt-2 mb-2 flex justify-between md:mt-0 md:mb-0">
-            <h3 class="mb-2 text-title-35 text-primary">{{ name }}</h3>
+          <div class="my-4 flex justify-between xl:mt-0">
+            <h3 class="text-title-primary mb-2">{{ name }}</h3>
             <ButtonComponent
-              class="button button-white button-white-secondary"
+              class="button-primary-outline"
               @click="openSavedCartForm"
             >
               <EditIconComponent />
@@ -29,11 +29,10 @@
           <div
             class="mb-2.5 hidden items-center text-sm text-gray-500 md:flex lg:text-base"
           >
-            <div class="md:w-8/12 lg:w-9/12">Description des articles</div>
-            <div class="flex w-full items-center justify-between md:w-4/12">
-              <div class="flex">Quantité</div>
-              <div class="flex">Sous-total</div>
-            </div>
+            <div class="md:w-6/12">Description des articles</div>
+            <div class="flex md:w-2/12">Prix unitaire</div>
+            <div class="flex md:w-2/12">Quantité</div>
+            <div class="flex md:w-2/12">Sous-total</div>
           </div>
           <SavedCartDetailsComponent
             v-for="(savedCartProduct, key) in savedCart.savedCartProducts"
@@ -47,14 +46,11 @@
           </p>
           <div class="mt-6 flex flex-col justify-end md:flex-row">
             <ButtonComponent
-              class="button-gradient mt-5 md:mt-0"
+              class="button-primary mt-5 md:mt-0"
               :is-loading="isAddToCartLoading"
               @click="addToCart"
             >
-              <ShoppingCartIconComponent
-                :stroke-color="'#FFFFFF'"
-                class="mr-2 w-4"
-              />
+              <ShoppingCartIconComponent :stroke="'#FFFFFF'" class="mr-2 w-4" />
               Ajouter au panier
             </ButtonComponent>
           </div>
@@ -66,7 +62,6 @@
 <script lang="ts" setup>
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import { computed, onMounted, ref, watch } from 'vue'
-import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
 import { useRoute } from 'vue-router'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import { useAlertStore } from '@/vuejs/stores/alert'
@@ -78,8 +73,10 @@ import SavedCartModal from '@/vuejs/modules/account/components/savedCart/SavedCa
 import { SavedCart } from '@/vuejs/types/SavedCart'
 import { useSavedCartStore } from '@/vuejs/stores/savedCart'
 import SavedCartDetailsComponent from '@/vuejs/modules/account/components/SavedCartDetailsComponent.vue'
-import EditIconComponent from '@/vuejs/modules/shared/icon/EditIconComponent.vue'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
+import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
+import EditIconComponent from '@/vuejs/modules/shared/icon/EditIconComponent.vue'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const cartStore = useCartStore()
 const route = useRoute()
@@ -101,6 +98,7 @@ const name = computed(() => {
 })
 const openSavedCartForm = () => {
   showForm.value = true
+  sendGaEvent('click_saved_cart_details_rename')
 }
 
 onMounted(async () => {
@@ -159,6 +157,7 @@ watch(
     }
 
     isLoading.value = false
+    sendGaEvent('click_saved_cart_order')
   },
 
   { immediate: true },

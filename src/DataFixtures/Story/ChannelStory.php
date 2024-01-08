@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\DataFixtures\Story;
 
 use App\DataFixtures\Factory\ChannelFactory;
+use App\DataFixtures\Factory\ChannelOptionFactory;
 use App\DataFixtures\Factory\ChannelParameterFactory;
 use Doctrine\Inflector\InflectorFactory;
 use Zenstruck\Foundry\Story;
@@ -41,6 +42,11 @@ class ChannelStory extends Story
         foreach ($this->channels as $channel) {
             $channelParameter = $channel['channelParameter'];
             unset($channel['channelParameter']);
+            $channelOptions = [];
+            if (isset($channel['channelOptions'])) {
+                $channelOptions = $channel['channelOptions'];
+                unset($channel['channelOptions']);
+            }
             // store channel in a state with a camelized key "channelCode" (ex: channelQantisAchat)
             $channelName = $inflector->camelize(\sprintf('channel_%s', \strtolower($channel['code'])));
             $createdChannel = ChannelFactory::new()->create($channel);
@@ -51,6 +57,11 @@ class ChannelStory extends Story
 
             $channelParameter['channel'] = $createdChannel;
             ChannelParameterFactory::new()->create($channelParameter);
+
+            foreach ($channelOptions as $channelOption) {
+                $channelOption['channel'] = $createdChannel;
+                ChannelOptionFactory::new()->create($channelOption);
+            }
         }
     }
 }

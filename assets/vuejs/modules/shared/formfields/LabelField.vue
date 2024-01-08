@@ -1,5 +1,5 @@
 <template>
-  <label class="pr-4 text-gray-500" :class="props.classes">
+  <label class="pr-4 font-cotext font-bold" :class="props.classes">
     {{ props.title }}
   </label>
 </template>

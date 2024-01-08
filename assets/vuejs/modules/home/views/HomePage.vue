@@ -1,5 +1,5 @@
 <template>
-  <BaseTemplate title="Page d'accueil" class="ff-roboto">
+  <BaseTemplate title="Page d'accueil">
     <div class="m-auto mt-4 flex-1 xl:!pt-5">
       <div class="m-auto max-w-screen-90">
         <CarouselActualitesComponent />
@@ -12,9 +12,7 @@
       <!-- Bloc sélection de produits -->
       <div class="m-auto mt-4 max-w-screen-94">
         <div class="mt-10 sm:w-[45rem]">
-          <h3 class="home-title mb-3 text-primary">
-            Notre sélection de produits
-          </h3>
+          <h3 class="text-title-primary mb-3">Notre sélection de produits</h3>
           <p class="text-lg">
             Nous vous proposons une sélection de produits pour répondre à vos
             besoins.
@@ -27,15 +25,15 @@
           <ProductsCarouselComponent
             v-else
             :products="productsSelection?.results"
-            @click-left="sendGtmEvent('click_slider_home_products_left')"
-            @click-right="sendGtmEvent('click_slider_home_products_right')"
+            @click-left="sendGaEvent('click_slider_home_products_left')"
+            @click-right="sendGaEvent('click_slider_home_products_right')"
             @click-add-cart="
-              sendGtmEvent('click_slider_home_products_cta', $event)
+              sendGaEvent('click_slider_home_products_cta', $event)
             "
             @click-title="
-              sendGtmEvent('click_slider_home_products_title', $event)
+              sendGaEvent('click_slider_home_products_title', $event)
             "
-            @click-img="sendGtmEvent('click_slider_home_products_img', $event)"
+            @click-img="sendGaEvent('click_slider_home_products_img', $event)"
           />
         </div>
       </div>
@@ -44,13 +42,13 @@
       <div
         v-if="
           channelStore.isAllowedToShow(
-            OPTIONAL_FRONT_BLOCKS.SUPPLIER_PARTNERS_HOMEPAGE_QANTIS,
+            OPTIONAL_FRONT_BLOCKS.SUPPLIER_PARTNERS_HOMEPAGE,
           )
         "
         class="m-auto max-w-screen-94"
       >
         <div class="mt-10">
-          <h3 class="home-title text-primary">Nos partenaires fournisseurs</h3>
+          <h3 class="text-title-primary">Nos partenaires fournisseurs</h3>
           <p class="text-sm sm:text-lg">
             Plus de 200 partenaires fournisseurs, répartis en 26 catégories,
             sont référencés pour vos achats.
@@ -69,13 +67,13 @@
         v-if="
           expertContents.length &&
           channelStore.isAllowedToShow(
-            OPTIONAL_FRONT_BLOCKS.EXPERT_CONTENT_HOMEPAGE_QANTIS,
+            OPTIONAL_FRONT_BLOCKS.EXPERT_CONTENT_HOMEPAGE,
           )
         "
       >
         <div class="m-auto max-w-screen-94">
           <div class="mt-10">
-            <h3 class="home-title text-primary">
+            <h3 class="text-title-primary">
               Contenus experts spécialement conçus pour la communauté QANTIS
             </h3>
           </div>
@@ -101,9 +99,7 @@
     </div>
 
     <div
-      v-if="
-        channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.RSE_HOMEPAGE_QANTIS)
-      "
+      v-if="channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.RSE_HOMEPAGE)"
       class="text-cotext relative m-auto flex-1 bg-secondary py-14 text-white"
     >
       <div class="px-5 text-center">
@@ -155,7 +151,7 @@ import { useChannelStore } from '@/vuejs/stores/channel'
 import { useProductStore } from '@/vuejs/stores/product'
 import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
 import ProductsLoadingCarouselComponent from '@/vuejs/modules/shared/ProductsLoadingCarouselComponent.vue'
-import { sendGtmEvent } from '@/vuejs/services/gtm'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const favoriteStore = useFavoriteStore()
 const productStore = useProductStore()
@@ -183,10 +179,6 @@ const expertContents = computed(() => {
 </script>
 
 <style lang="scss">
-.home-title {
-  @apply text-left font-cotext text-[23px] font-bold leading-[27px] sm:text-[29px] sm:leading-[33px] xl:text-[24px] xl:leading-[38.11px];
-}
-
 .list-categories {
   @apply h-[366px] flex-wrap
   overflow-auto

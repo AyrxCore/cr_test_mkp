@@ -3,8 +3,9 @@
     <div class="md:w-5/12">
       <RouterLink
         :to="{ name: PageList.FAVORITES_DETAILS, params: { id: favorite.id } }"
-        class="flex items-center text-purple-600 underline"
+        class="flex items-center font-bold text-primary underline"
         :title="favorite.public ? 'Liste partagée' : ''"
+        @click="sendGaEvent('click_favorites_details')"
       >
         {{ favorite.name }}
         <MultipleUserComponent
@@ -21,7 +22,6 @@
     </div>
     <div class="md:w-2/12">
       {{ favorite.nbFavoriteProducts }}
-      {{ favorite.nbFavoriteProducts > 1 ? 'articles' : 'article' }}
     </div>
     <div class="flex justify-end md:w-1/12">
       <button
@@ -30,7 +30,7 @@
         }"
         @click="openFavoriteForm"
       >
-        <EditIconComponent class="mr-2" :icon-color="strokeColor" />
+        <EditIconComponent class="mr-2" :stroke="channelPrimaryColor" />
       </button>
       <button
         :class="{
@@ -38,7 +38,7 @@
         }"
         @click="openDeleteFavoriteForm"
       >
-        <TrashIconComponent :stroke-color="strokeColor" />
+        <TrashIconComponent :stroke="channelPrimaryColor" />
       </button>
     </div>
     <FavoriteFormModal
@@ -61,7 +61,7 @@
 <script lang="ts" setup>
 import EditIconComponent from '@/vuejs/modules/shared/icon/EditIconComponent.vue'
 import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
-import { computed, ComputedRef, PropType, Ref, ref } from 'vue'
+import { computed, PropType, ref } from 'vue'
 import { Favorite } from '@/vuejs/types/Favorite'
 import { format } from 'date-fns'
 import { PageList } from '@/vuejs/router'
@@ -72,11 +72,12 @@ import { AlertType } from '@/vuejs/types/Alert'
 import MultipleUserComponent from '@/vuejs/modules/shared/icon/MultipleUserComponent.vue'
 import { storeToRefs } from 'pinia'
 import { useChannelStore } from '@/vuejs/stores/channel'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const alertStore = useAlertStore()
 const emit = defineEmits(['submitFavorite', 'deleteFavorite'])
 
-const { channelSecondaryColor } = storeToRefs(useChannelStore())
+const { channelPrimaryColor } = storeToRefs(useChannelStore())
 
 const showFormFavorite = ref<boolean>(false)
 const deleteFavorite = ref<boolean>(false)
@@ -92,10 +93,6 @@ const props = defineProps({
   },
 })
 
-const strokeColor = computed(() => {
-  return props.canDelete ? channelSecondaryColor.value : '#b9b7b7'
-})
-
 const createdAd = computed(() => {
   return format(new Date(props.favorite.createdAt), 'dd/MM/yyyy')
 })
@@ -106,10 +103,12 @@ const updatedAt = computed(() => {
 
 const openFavoriteForm = () => {
   showFormFavorite.value = true
+  sendGaEvent('click_favorites_edit')
 }
 
 const openDeleteFavoriteForm = () => {
   deleteFavorite.value = true
+  sendGaEvent('click_favorites_delete')
 }
 const onSubmitFavorite = async (event) => {
   await emit('submitFavorite', {
@@ -137,6 +136,6 @@ const onDeleteFavorite = async (event) => {
 </script>
 <style scoped>
 .bloc-item-favoris {
-  @apply mb-2.5 flex w-[48.5%] flex-col rounded-lg bg-white p-2.5 text-sm text-gray-500 md:w-full md:flex-row md:text-base lg:text-lg;
+  @apply mb-4 flex w-[48.5%] flex-col rounded-lg bg-white p-2.5 text-sm md:w-full md:flex-row md:text-base lg:text-lg;
 }
 </style>

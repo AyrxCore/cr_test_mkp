@@ -1,6 +1,10 @@
 <template>
   <div
-    v-if="channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.PROMOTIONNAL_FAT)"
+    v-if="
+      channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.PROMOTIONAL_FAT) &&
+      properties.fat_promo_img &&
+      properties.fat_promo_txt
+    "
     class="flex flex-col rounded-md bg-secondary p-6 lg:flex-row"
     :class="'text-' + betterTextColor('secondary')"
   >
@@ -13,7 +17,7 @@
         {{ properties.fat_promo_txt }}
       </div>
       <ButtonComponent
-        class="button button-primary mx-auto border-2 border-solid !border-white !bg-transparent"
+        class="button-primary-outline mx-auto"
         @click="openInNewTab(properties.fat_promo_cta_link)"
       >
         <span class="w-full">{{ properties.fat_promo_cta_txt }}</span>

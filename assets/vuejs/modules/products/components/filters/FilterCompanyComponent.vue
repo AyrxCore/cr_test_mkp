@@ -1,15 +1,18 @@
 <template>
-  <div class="mt-2 flex items-center text-left text-sm text-primary">
+  <div class="my-2 flex cursor-pointer items-center text-left text-sm">
     <input
       v-model="companyRadio"
+      :value="props.company.id"
+      :checked="props.company.checked"
+      :id="`companyRadio-${props.company.id}`"
       name="companyRadio"
       type="radio"
-      :value="props.company.id"
-      class="mr-1"
-      :checked="props.company.checked"
+      class="mr-3 cursor-pointer"
       @change="handleCompanySelection(props.company)"
     />
-    <label> {{ props.company.name }} ({{ props.company.productCount }}) </label>
+    <label :for="`companyRadio-${props.company.id}`" class="cursor-pointer">
+      {{ props.company.name }} ({{ props.company.productCount }})
+    </label>
   </div>
 </template>
 <script lang="ts" setup>

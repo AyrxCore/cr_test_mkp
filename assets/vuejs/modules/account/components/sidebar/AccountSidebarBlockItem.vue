@@ -3,10 +3,10 @@
     <ChevronRightIconComponent
       v-if="isActive"
       :stroke="channelPrimaryColor"
-      :size-width="40"
-      :size-height="30"
+      :width="40"
+      :height="30"
     />
-    <RouterLink :to="{ name: props.item.url }">
+    <RouterLink :to="{ name: props.item.url }" @click="emit('clickLink')">
       <span
         class="text-sm text-primary underline decoration-2 underline-offset-4 hover:font-bold md:text-base xl:text-lg"
       >
@@ -21,6 +21,7 @@ import { onMounted, ref } from 'vue'
 import router from '@/vuejs/router'
 import { storeToRefs } from 'pinia'
 import { useChannelStore } from '@/vuejs/stores/channel'
+import { click } from 'dom7'
 
 const isActive = ref<boolean>(false)
 const props = defineProps({
@@ -29,6 +30,8 @@ const props = defineProps({
     type: Object,
   },
 })
+
+const emit = defineEmits(['clickLink'])
 
 const { channelPrimaryColor } = storeToRefs(useChannelStore())
 

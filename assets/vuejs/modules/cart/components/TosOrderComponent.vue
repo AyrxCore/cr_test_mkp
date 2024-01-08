@@ -10,7 +10,7 @@
       <div v-if="seller.tos?.content" v-html="seller.tos.content" />
       <div v-else class="italic">Conditions générales indisponibles</div>
       <div class="mt-4 text-center">
-        <ButtonComponent class="button-gradient" @click="$emit('close')">
+        <ButtonComponent class="button-primary" @click="$emit('close')">
           Fermer
         </ButtonComponent>
       </div>

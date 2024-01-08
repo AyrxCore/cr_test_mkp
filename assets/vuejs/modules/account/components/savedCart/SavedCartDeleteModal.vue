@@ -12,14 +12,14 @@
 
         <div class="mt-5 flex justify-end">
           <ButtonComponent
-            class="button-secondary !hover:border mr-2 !border"
+            class="button-primary-outline mr-2"
             type="button"
             @click="onCancelClick"
           >
             Annuler
           </ButtonComponent>
           <ButtonComponent
-            class="button-primary !border-0 hover:!bg-primary focus:!bg-primary"
+            class="button-primary"
             :is-loading="isLoading"
             @click="onDeleteSavedCart"
           >

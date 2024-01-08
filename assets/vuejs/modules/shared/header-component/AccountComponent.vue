@@ -18,7 +18,7 @@
       <RouterLink
         :to="{ name: CartPageList.CART_RECAP }"
         class="relative z-10 ml-4 self-center"
-        @click="gtmEvent('click_header_cart')"
+        @click="sendGaEvent('click_header_cart')"
       >
         <div
           v-if="cartStore.nbProducts > 0"
@@ -44,29 +44,18 @@ import ArrowDownIconComponent from '@/vuejs/modules/shared/icon/ArrowDownIconCom
 import { CartPageList } from '@/vuejs/router/pages-list'
 import { useUserStore } from '@/vuejs/stores/user'
 import { useCartStore } from '@/vuejs/stores/cart'
-import { useAddressStore } from '@/vuejs/stores/address'
-import { useChannelStore } from '@/vuejs/stores/channel'
-import { buildStandardGtmData, gtmMixinPushEvent } from '@/vuejs/services/gtm'
+
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const userStore = useUserStore()
 const cartStore = useCartStore()
-const addressStore = useAddressStore()
-const channelStore = useChannelStore()
 
 const { user } = storeToRefs(userStore)
 
 const isMenuOpen = ref<boolean>(false)
-const currentChannel = channelStore.currentChannel
 
 const toggleMenu = (): void => {
   isMenuOpen.value = !isMenuOpen.value
-  gtmEvent('click_header_account')
-}
-
-const gtmEvent = (eventName: string) => {
-  gtmMixinPushEvent(
-    eventName,
-    buildStandardGtmData(userStore.user['@id'], currentChannel.name),
-  )
+  sendGaEvent('click_header_account')
 }
 </script>

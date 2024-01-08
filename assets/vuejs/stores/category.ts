@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import CategoryHttpClient from '@/vuejs/services/httpclient/CategoryHttpClient'
-import { ref } from 'vue'
 import { Category } from '@/vuejs/types/Product/Category'
 
 export interface CategoryStoreState {

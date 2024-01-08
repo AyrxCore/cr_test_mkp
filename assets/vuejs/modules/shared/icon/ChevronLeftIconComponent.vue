@@ -13,5 +13,3 @@
     <polyline points="15 18 9 12 15 6"></polyline>
   </svg>
 </template>
-
-<script lang="ts" setup></script>

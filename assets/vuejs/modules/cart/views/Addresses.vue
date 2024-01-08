@@ -1,12 +1,12 @@
 <template>
-  <h3 class="mt-8 mb-2 text-title-35 text-primary">Adresses</h3>
+  <h3 class="text-title-primary mt-8 mb-2">Adresses</h3>
   <div class="flex flex-col-reverse lg:grid lg:grid-cols-4 lg:gap-4 lg:px-0">
     <div class="col-span-3 flex flex-col lg:grid lg:grid-cols-2 lg:gap-2">
       <div>
         <h3 class="mb-5 text-[19px] text-primary md:text-[25px]">
           Adresse de facturation
         </h3>
-        <div class="mt-5 items-center rounded-lg bg-white p-5 text-gray-500">
+        <div class="mt-5 items-center rounded-lg bg-white p-5">
           {{
             formatAddress(selectedBillingAddress) ||
             'Aucune adresse sélectionnée'
@@ -15,7 +15,7 @@
             <select
               v-if="!isLoading"
               v-model="selectedBillingAddressId"
-              class="h-[35px] w-full rounded-md py-0 text-center text-gray-600 placeholder-gray-400"
+              class="h-[35px] w-full rounded-md py-0 text-center placeholder-gray-400"
               @change="selectAddress(ADDRESS_BILLING)"
             >
               <option :value="0">Choisir une autre adresse</option>
@@ -37,7 +37,7 @@
         >
           Adresse de livraison
         </h3>
-        <div class="mt-5 items-center rounded-lg bg-white p-5 text-gray-500">
+        <div class="mt-5 items-center rounded-lg bg-white p-5">
           {{
             formatAddress(selectedShippingAddress) ||
             'Aucune adresse sélectionnée'
@@ -46,7 +46,7 @@
             <select
               v-if="!isLoading"
               v-model="selectedShippingAddressId"
-              class="h-[35px] w-full rounded-md py-0 text-center text-gray-600 placeholder-gray-400"
+              class="h-[35px] w-full rounded-md py-0 text-center placeholder-gray-400"
               @change="selectAddress(ADDRESS_SHIPPING)"
             >
               <option :value="0">Choisir une autre adresse</option>
@@ -64,7 +64,7 @@
       </div>
       <div class="col-span-2 m-auto mt-4 lg:mt-0">
         <RouterLink
-          class="button button-gradient"
+          class="button button-primary-outline"
           :to="{ name: PageList.ADDRESSES }"
         >
           Gérer mes adresses
@@ -72,14 +72,14 @@
       </div>
     </div>
     <CartRightSideComponent :show-shipment-price="false">
-      <template #title>Récapitulatif</template>
+      <template #title>Récapitulatif panier</template>
       <template #button-next>
         <ButtonComponent
           :is-loading="isLoading"
-          class="button button-secondary mt-3 w-full"
+          class="button-primary mt-3 w-full"
           @click="goToShipments"
         >
-          <ArrowRightIconComponent :stroke-color="'#FFFFFF'" />
+          <ArrowRightIconComponent class="h-4 w-4" />
           Continuer
         </ButtonComponent>
       </template>

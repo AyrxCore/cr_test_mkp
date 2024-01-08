@@ -7,10 +7,7 @@
           class="flex items-center rounded border-b-2 border-b-transparent py-1 hover:opacity-75"
           @click.stop="toggleMenu"
         >
-          <MenuIconComponent
-            class="mr-0.5 text-xl lg:w-auto"
-            stroke-color="#000000"
-          />
+          <MenuIconComponent class="mr-0.5 text-xl lg:w-auto" />
           <span class="ml-4 hidden lg:block"> Toutes les catégories </span>
         </button>
 
@@ -34,7 +31,7 @@
         replace
         class="border-b-2 border-b-transparent px-0.5 text-sm hover:border-primary"
         @click="
-          gtmEvent('click_header_category', {
+          sendGaEvent('click_header_category', {
             category_name: category.name,
           })
         "
@@ -52,32 +49,19 @@ import MenuCategoryComponent from '@/vuejs/modules/shared/header-component/MenuC
 import MenuIconComponent from '@/vuejs/modules/shared/icon/MenuIconComponent.vue'
 
 import { ProductPageList } from '@/vuejs/router/pages-list'
-import { buildStandardGtmData, gtmMixinPushEvent } from '@/vuejs/services/gtm'
-import { useUserStore } from '@/vuejs/stores/user'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { useCategoryStore } from '@/vuejs/stores/category'
-import { useChannelStore } from '@/vuejs/stores/channel'
-
-const userStore = useUserStore()
 
 const isMenuOpen = ref<boolean>(false)
 
 const toggleMenu = (): void => {
   isMenuOpen.value = !isMenuOpen.value
-  gtmEvent('click_header_all_categories')
+  sendGaEvent('click_header_all_categories')
 }
 
 const categoryStore = useCategoryStore()
-const channelStore = useChannelStore()
-
-const currentChannel = channelStore.currentChannel
 
 const listMenu = computed(() => {
   return categoryStore.listMenu
 })
-
-const gtmEvent = (eventName: string, additionalData = null) => {
-  let data = buildStandardGtmData(userStore.user['@id'], currentChannel.name)
-  data = additionalData ? { ...data, ...additionalData } : data
-  gtmMixinPushEvent(eventName, data)
-}
 </script>

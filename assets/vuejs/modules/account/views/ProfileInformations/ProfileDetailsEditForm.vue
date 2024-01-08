@@ -1,7 +1,7 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="mb-4 mt-2 text-3xl font-bold text-primary md:mt-0">
+      <h3 class="text-title-primary mb-4 mt-2 md:mt-0">
         Modifier mes coordonnées
       </h3>
       <form @submit.prevent="onDetailsFormSubmit">
@@ -33,7 +33,7 @@
         </div>
         <div class="flex justify-between md:justify-end">
           <ButtonComponent
-            class="button-secondary-definitive mr-2"
+            class="button-primary-outline mr-2"
             type="button"
             @click="onCancelClick"
           >

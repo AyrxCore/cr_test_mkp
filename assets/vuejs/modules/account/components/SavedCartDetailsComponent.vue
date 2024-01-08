@@ -1,9 +1,9 @@
 <template>
   <div
-    class="mb-2.5 flex flex-col rounded-lg bg-white p-2.5 text-lg text-gray-500 md:flex-row"
+    class="mb-2.5 flex flex-col rounded-lg bg-white p-2.5 text-lg md:flex-row"
   >
-    <div class="flex md:w-8/12 lg:w-9/12">
-      <div class="flex w-6/12 md:w-3/12">
+    <div class="flex flex-col items-center md:w-6/12 md:flex-row">
+      <div class="flex md:w-5/12">
         <img
           v-if="productImage"
           :src="productImage"
@@ -13,16 +13,16 @@
         <div
           v-else
           class="loading flex h-[116px] w-full items-center justify-center rounded-lg px-6 py-2"
-        ></div>
+        />
       </div>
-      <div class="flex w-6/12 flex-col md:ml-5 md:w-7/12">
+      <div class="flex flex-col pr-4 md:ml-5 md:w-7/12">
         <RouterLink
           :to="{ name: PageList.PRODUCT, params: { slug: productSlug } }"
-          class="text-lg font-bold text-primary lg:text-[22px]"
+          class="mt-4 font-cotext text-lg font-bold text-primary lg:text-2xl"
         >
           {{ productName }}
         </RouterLink>
-        <span class="flex flex-col text-sm text-gray-500 lg:text-lg">
+        <span class="flex flex-col text-sm lg:text-lg">
           <span>Vendu par: {{ productSeller }}</span>
           <span>Référence: {{ productReference }}</span>
         </span>
@@ -31,39 +31,36 @@
         >
       </div>
     </div>
-    <div
-      class="flex w-full items-center justify-between px-2 md:w-4/12 md:px-0 md:pr-2"
-    >
-      <div class="flex">
+    <div class="mt-4 flex w-full justify-end md:w-2/12 md:justify-start">
+      <span class="text-sm font-bold text-primary md:text-base lg:text-lg">
+        <span class="mr-2 text-base md:hidden">Prix unitaire : </span
+        >{{ productUnitPrice }}€ HT
+      </span>
+    </div>
+    <div class="flex w-full justify-between md:w-4/12">
+      <div class="mt-4 flex justify-end md:w-6/12 md:justify-start">
         <ProductQuantityComponent
           :quantity="quantity"
           @update-quantity="changeQuantity"
         />
       </div>
-      <div class="flex">
-        <div class="md:justify-end">
-          <div
-            class="flex w-full flex-row flex-wrap items-center justify-between md:w-auto"
-          >
-            <span
-              class="flex items-center text-sm font-bold text-primary md:text-base lg:text-lg"
-            >
-              {{ productPrice }}€ HT
-            </span>
-          </div>
-        </div>
+      <div class="mt-4 flex justify-end md:w-6/12 md:justify-start">
+        <span class="mr-4 text-lg font-bold text-primary md:mr-0">
+          {{ productPrice }}€ HT
+        </span>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import { computed, onMounted, PropType, ref } from 'vue'
+import { computed, onBeforeMount, onMounted, PropType, ref } from 'vue'
 import { formatPrice } from '@/vuejs/services/utils'
 import { Product } from '@/vuejs/types/Product'
 import { useProductStore } from '@/vuejs/stores/product'
 import { PageList } from '@/vuejs/router'
 import ProductQuantityComponent from '../../shared/ProductQuantityComponent.vue'
 import { SavedCartProduct } from '@/vuejs/types/SavedCart'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const emit = defineEmits(['changeQuantity'])
 const props = defineProps({
@@ -91,16 +88,22 @@ onMounted(async (): Promise<void> => {
         props.savedCartProduct.upplerVariantId,
       )
     }
+    await emit('changeQuantity', {
+      variantId: props.savedCartProduct.upplerVariantId,
+      quantity: quantity.value,
+      price: product.value.price * quantity.value,
+    })
   }
 })
 
 const changeQuantity = async (event) => {
   quantity.value = event.quantity
-
   await emit('changeQuantity', {
     variantId: props.savedCartProduct.upplerVariantId,
     quantity: quantity.value,
+    price: product.value.price * quantity.value,
   })
+  sendGaEvent('click_saved_cart_qty')
 }
 
 const productImage = computed((): string => {
@@ -133,6 +136,10 @@ const productPrice = computed((): number | string => {
   }
 
   return formatPrice(price)
+})
+
+const productUnitPrice = computed((): number | string => {
+  return product.value ? product.value.price : ''
 })
 
 const productSeller = computed((): string => {

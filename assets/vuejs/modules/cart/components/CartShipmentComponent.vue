@@ -8,19 +8,17 @@
     <p class="mb-4 font-bold text-primary">
       Sélectionnez votre méthode de livraison
     </p>
-    <p class="mb-2 font-bold text-gray-500">
-      Méthode(s) de livraison disponible(s) :
-    </p>
-    <div v-show="!isLoading" class="text-gray-500">
+    <p class="mb-2 font-bold">Méthode(s) de livraison disponible(s) :</p>
+    <div v-show="!isLoading">
       <div
         v-for="method in filteredShipmentMethods"
         class="flex items-center pb-2"
       >
         <input
+          :id="`shipmentMethod-${method.shipping_method.id}`"
           v-model="selectedShippingMethod"
           type="radio"
           :name="`shipmentMethod-${order.id}`"
-          :id="`shipmentMethod-${method.shipping_method.id}`"
           :value="method.shipping_method.id"
           class="checked:bg-secondary checked:hover:bg-secondary focus:bg-secondary focus:outline-none focus:ring-1 focus:ring-secondary checked:focus:bg-secondary checked:active:bg-secondary"
           @change="selectShippingMethod"
@@ -54,20 +52,24 @@
       </span>
     </div>
     <table v-if="isDetailsOpen" class="mt-4 w-full">
-      <thead class="text-left font-bold text-gray-700">
+      <thead class="text-left font-bold">
         <tr>
           <th class="pb-2">Description de l'article</th>
           <th class="pb-2">Quantité</th>
         </tr>
       </thead>
-      <tbody class="text-gray-500">
+      <tbody>
         <tr
           v-for="(item, key) in order.items"
-          :class="`bg-gray-${key % 2 === 0 ? '50' : '100'}`"
+          :key="key"
+          class="odd:bg-gray-50 even:bg-gray-100"
         >
           <td class="px-4 py-2">
-            {{ item.variant.product.name.default }}<br />
-            <span class="text-sm text-gray-400">
+            <span class="text-primary">{{
+              item.variant.product.name.default
+            }}</span
+            ><br />
+            <span class="text-sm">
               Référence : {{ item.variant.product.reference }}
             </span>
           </td>
@@ -108,7 +110,7 @@ const shipmentMethods = cartStore.shippingMethods.filter((e) => {
 
 const filteredShipmentMethods = ref<ShippingMethod[]>(
   shipmentMethods.filter((e) => {
-    if (props.order.seller.id === SELLER_IDS.KRÖMM) {
+    if (props.order.seller.id === SELLER_IDS.KROMM) {
       // LIVRAISON VOLUMINEUX KRÖMM
       if (shipmentMethods.find((s) => s.shipping_method.id === 15)) {
         return e.shipping_method.id !== 14

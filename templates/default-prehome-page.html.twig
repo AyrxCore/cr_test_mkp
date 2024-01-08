@@ -1,0 +1,65 @@
+{% extends "base.html.twig" %}
+{% block title %}{% endblock %}
+{% block metas %}
+  <meta name="robots" content="noindex">
+{% endblock %}
+
+{% block body %}
+  <div class="container mx-auto mt-5 lg:px-0 w-full md:w-3/5 flex flex-col h-full justify-between md:h-auto  ">
+    <div class="flex flex-col mx-6 md:mx-0">
+      {% include '_partials/_header.html.twig' with {'show_back': true, 'back_url': '/', 'back_label': 'Retour'} %}
+
+      <div class="flex flex-col my-10 md:my-[5%] lg:space-x-2 justify-center ">
+        <div class="mx-auto xs:w-full md:w-[34rem] lg:w-[35rem] xl:w-[39rem] flex p-8 bg-white rounded-lg">
+          {% block content %}{% endblock %}
+        </div>
+        <div class="vue-app hidden sm:flex justify-center bg-primary sm:bg-transparent bottom-0 pb-10"
+             data-component="footer-prehome"></div>
+      </div>
+    </div>
+    <div class="vue-app flex justify-center bg-primary sm:bg-transparent bottom-0 pb-10 sm:hidden"
+         data-component="footer-prehome"></div>
+  </div>
+  {% block gtmJavascripts %}
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var form = document.querySelector('form');
+        var btnGoBack = document.querySelector('#btn-go-back');
+        btnGoBack.addEventListener('click', function (event) {
+          event.preventDefault();
+          sendEvent('prehome_click_back');
+          if(document.getElementById('baseHtml').dataset.externalScripts === '1') {
+            gtag('event', 'click_prehome_back', buildStandardGaData());
+          }
+          window.location.href = btnGoBack.attributes.href.value;
+        })
+        form.addEventListener('submit', function (event) {
+          event.preventDefault();
+          sendEvent('prehome_click_valider');
+          if(document.getElementById('baseHtml').dataset.externalScripts === '1') {
+            gtag('event', form.dataset.eventName, buildStandardGaData());
+          }
+          form.submit();
+        });
+
+      });
+
+      function sendEvent(event) {
+        var marketplace = {{ channel.name|json_encode|raw }};
+        var data = {
+          device: Screen.orientation > 1 ? 'phone' : 'desktop',
+          screen_size: window.innerWidth + 'x' + window.innerHeight,
+          page_url: window.location.href,
+          marketplace: marketplace,
+        };
+
+        if (!window.dataLayer) return;
+
+        window.dataLayer.push({
+          event: event,
+          ...data,
+        });
+      }
+    </script>
+  {% endblock %}
+{% endblock %}

@@ -10,6 +10,7 @@ import VueUniversalModal from 'vue-universal-modal'
 import FloatingVue from 'floating-vue'
 import clickOutside from '@/vuejs/directives/click-outside'
 import store from '@/vuejs/store'
+import VueGtag from 'vue-gtag'
 
 const rootElements = document.querySelectorAll('.vue-app')
 // Permet de gérer des multi-composants vue intégrées dans twig
@@ -26,11 +27,17 @@ if (rootElements.length) {
   })
 }
 
+const twigEntryPoint = document.getElementById('app')
 // Permet de lancer l'application compléte en mode SPA
-if (document.getElementById('app')) {
-  // Lancement de l'App compléte depuis un point d'entré twig
+if (twigEntryPoint) {
+  // Lancement de l'App compléte depuis un point d'entrée twig
   const app = createApp(App)
   const head = createHead()
+  if (twigEntryPoint.dataset.externalScriptTags === '1') {
+    app.use(VueGtag, {
+      config: { id: 'G-049GVLE2VX' },
+    })
+  }
   app.use(store).directive('click-outside', clickOutside)
   app.use(router)
   app.use(head)

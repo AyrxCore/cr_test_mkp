@@ -5,6 +5,7 @@
         name: 'Mes commandes',
         id: AccountPageList.ORDERS,
         url: AccountPageList.ORDERS,
+        gaEventName: 'click_account_orders',
       },
     ]"
     :title="'Ma consommation'"
@@ -16,6 +17,7 @@
         name: 'Adresses',
         id: AccountPageList.ADDRESSES,
         url: AccountPageList.ADDRESSES,
+        gaEventName: 'click_account_adresses',
       },
     ]"
     title="Mon organisation"
@@ -35,18 +37,21 @@ const listProfilMenuGlobal = ref<any[]>([
     name: 'Mes coordonnées',
     id: AccountPageList.ACCOUNT,
     url: AccountPageList.ACCOUNT,
+    gaEventName: 'click_account_contact_detail',
   },
   {
     name: 'Mes listes de produits favoris',
     id: AccountPageList.FAVORITES_LIST,
     url: AccountPageList.FAVORITES_LIST,
     condition: OPTIONAL_FRONT_BLOCKS.FAVORITES,
+    gaEventName: 'click_account_favorites',
   },
   {
     name: 'Mes paniers sauvegardés',
     id: AccountPageList.SAVED_CARTS,
     url: AccountPageList.SAVED_CARTS,
     condition: OPTIONAL_FRONT_BLOCKS.SAVED_CARTS,
+    gaEventName: 'click_account_saved_carts',
   },
 ])
 

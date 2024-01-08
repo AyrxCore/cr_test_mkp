@@ -1,7 +1,7 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="mb-2 mt-2 text-title-35 text-primary md:mt-0">
+      <h3 class="text-title-primary mb-2 mt-2 md:mt-0">
         Validations de commandes
       </h3>
       <span class="flex text-sm text-gray-500 md:text-base lg:text-lg">

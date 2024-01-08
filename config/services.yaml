@@ -50,6 +50,7 @@ parameters:
 imports:
   - { resource: services/ }
   - { resource: channels.yaml }
+  - { resource: channel_option_keys.yaml }
 
 services:
   # default configuration for services in *this* file
@@ -84,6 +85,10 @@ services:
       - '@router'
     tags:
       - { name: kernel.event_listener, event: kernel.request }
+
+  App\EventListener\ChannelListener:
+    tags:
+      - { name: doctrine.event_listener, event: postLoad }
 
   _instanceof:
     \App\Controller\ChannelRepositoryAwareControllerInterface:
@@ -125,3 +130,7 @@ services:
   App\DataProvider\UserMeItemDataProvider:
     arguments:
       $itemExtensions: !tagged api_platform.doctrine.orm.query_extension.item
+
+  App\Service\Channel\ChannelOptionsBuilder:
+    arguments:
+      $validKeys: '%channel_option_valid_keys%'

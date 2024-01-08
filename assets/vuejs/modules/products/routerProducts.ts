@@ -1,5 +1,7 @@
 import { RouteRecordRaw } from 'vue-router'
-import ProductsPage from '@/vuejs/modules/products/views/ProductsList.vue'
+
+const ProductsPage = () =>
+  import('@/vuejs/modules/products/views/ProductsList.vue')
 import CategoriesPage from '@/vuejs/modules/products/views/CategoriesContainer.vue'
 import ProductPage from '@/vuejs/modules/products/views/Product.vue'
 import AccordCadrePage from '@/vuejs/modules/products/views/AccordCadre.vue'

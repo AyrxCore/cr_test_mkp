@@ -2,7 +2,7 @@
   <form v-if="isEditedLoaded" @submit.prevent="onAddressFormSubmit">
     <div class="md:grid-rows flex flex-col md:grid md:grid-flow-col md:gap-6">
       <div class="mb-6">
-        <LabelField title="Nom *" />
+        <LabelField title="Nom de l'adresse *" />
         <InputField v-model="currentAddress.name" required />
       </div>
       <div class="mb-6">
@@ -40,8 +40,10 @@
         <InputField v-model="currentAddress.city" required />
       </div>
     </div>
-    <div class="md:grid-rows flex flex-col md:grid md:grid-flow-col md:gap-6">
-      <div class="mb-6">
+    <div
+      class="md:grid-rows flex grid-cols-2 flex-col border-none md:grid md:grid-flow-col md:gap-6"
+    >
+      <div class="mb-6 w-full">
         <LabelField title="Pays *" />
         <SelectField
           v-model="currentAddress.country"
@@ -52,18 +54,25 @@
       </div>
       <div class="mb-6">
         <LabelField title="Téléphone" />
-        <InputField v-model="currentAddress.phone" />
+        <InputField
+          v-model="currentAddress.phone"
+          pattern="^((\+)33|0)[1-9](\d{2}){4}$"
+        />
       </div>
     </div>
     <div class="flex justify-between md:justify-end">
       <ButtonComponent
-        class="button-secondary-outline mr-2"
+        class="button-primary-outline mr-2"
         type="button"
         @click="onCancelClick"
       >
         Annuler
       </ButtonComponent>
-      <ButtonComponent class="button-secondary-outline" :is-loading="isLoading">
+      <ButtonComponent
+        class="button-primary"
+        :is-loading="isLoading"
+        @click="emit('submitAddress')"
+      >
         Enregistrer
       </ButtonComponent>
     </div>
@@ -101,6 +110,8 @@ const props = defineProps({
   },
 })
 
+const emit = defineEmits(['submitAddress', 'cancelCreateAddress'])
+
 onMounted(async () => {
   await countryStore.getCountries()
 })
@@ -135,6 +146,7 @@ const onAddressFormSubmit = async () => {
 }
 
 const onCancelClick = () => {
+  emit('cancelCreateAddress')
   router.push({
     name: PageList.ADDRESSES,
   })

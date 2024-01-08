@@ -6,7 +6,7 @@ import { getErrorMessage } from '@/vuejs/services/login'
 import ProductHttpClient from '@/vuejs/services/httpclient/ProductHttpClient'
 import {
   Product,
-  ProductCollection,
+  ProductFilters,
   ProductStoreState,
 } from '@/vuejs/types/Product'
 import { arrayEqual } from '@/vuejs/services/utils'
@@ -19,8 +19,13 @@ import {
 export const useProductStore = defineStore({
   id: 'product',
   state: (): ProductStoreState => ({
-    products: [],
-    filters: [],
+    products: {
+      filters: {},
+      parameters: {},
+      results: [],
+      page: 1,
+      resultsCount: 0,
+    },
     productsTopVente: null,
     productsAccordsCadre: null,
     productsSelection: null,
@@ -34,9 +39,12 @@ export const useProductStore = defineStore({
   }),
 
   actions: {
-    async fetchProductsByParams(params): Promise<ProductCollection> {
+    async fetchProductsByParams(params): Promise<void> {
       try {
-        return await ProductHttpClient.get().fetchProductsByParams(params)
+        this.products = await ProductHttpClient.get().fetchProductsByParams(
+          params,
+        )
+        return this.products
       } catch (error) {}
     },
     async initHomeProducts() {
@@ -169,6 +177,11 @@ export const useProductStore = defineStore({
           )
       }
     },
+    clearFilters() {
+      this.selectedCategoryId = null
+      this.selectedProperties = null
+      this.selectedCompanyId = null
+    },
     setSelectedCategory(categoryId) {
       this.selectedCategoryId = categoryId
     },
@@ -185,6 +198,18 @@ export const useProductStore = defineStore({
       product.percent = Math.round((priceDiff * 100) / product.priceReference)
 
       return product
+    },
+  },
+  getters: {
+    filters(): ProductFilters {
+      return this.products.filters
+    },
+    hasFilters(): boolean {
+      return (
+        !!this.selectedCategoryId ||
+        !!this.selectedProperties ||
+        !!this.selectedCompanyId
+      )
     },
   },
 })

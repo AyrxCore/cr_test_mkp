@@ -1,21 +1,17 @@
 import { useUserStore } from '@/vuejs/stores/user'
 import { useChannelStore } from '@/vuejs/stores/channel'
+import { event } from 'vue-gtag'
 
 /**
  * envoie un événement personnalisé à la couche de données (dataLayer) avec les données fournies
- * @param {String} eventName - Le nom de l'événement à pousser.
- * @param {Object} eventData - Les données incluses dans l'événémént.
+ * @param userId
+ * @param channelName
  */
-export const gtmMixinPushEvent = (eventName: string, eventData = {}) => {
-  if (typeof window !== 'undefined' && window.dataLayer) {
-    window.dataLayer.push({
-      event: eventName,
-      ...eventData,
-    })
-  }
-}
 
-export const buildStandardGtmData = (userId, channelName): Record<any, any> => {
+export const buildStandardGaData = (
+  userId: any | null,
+  channelName: string,
+): Record<any, any> => {
   return {
     device: Screen.orientation > 1 ? 'phone' : 'desktop',
     screen_size: window.innerWidth + 'x' + window.innerHeight,
@@ -26,16 +22,16 @@ export const buildStandardGtmData = (userId, channelName): Record<any, any> => {
   }
 }
 
-export const sendGtmEvent = (eventName: string, additionalData = null) => {
+export const sendGaEvent = (eventName: string, additionalData = null) => {
   const userStore = useUserStore()
   const channelStore = useChannelStore()
 
-  let data = buildStandardGtmData(
-    userStore.user['@id'],
+  let data = buildStandardGaData(
+    userStore.user?.['@id'],
     channelStore.currentChannel.name,
   )
   data = additionalData ? { ...data, ...additionalData } : data
-  gtmMixinPushEvent(eventName, data)
+  event(eventName, data)
 }
 
 const userBrowser = () => {

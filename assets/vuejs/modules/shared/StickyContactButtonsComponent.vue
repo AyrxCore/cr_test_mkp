@@ -8,30 +8,23 @@
       class="sticky-right-button button-primary button-email flex items-center self-start border-none"
       :style="channelEmailButtonStyle"
       @mouseover.once="getEmailButtonWidth"
-      @click="gtmEvent('click_widget_email')"
+      @click="sendGaEvent('click_widget_email')"
     >
       <MailIconComponent
         class="mr-4"
-        :size-width="21.21"
-        :size-height="17.36"
-        :style="{
-          fill: betterTextColor('primary'),
-        }"
+        :width="21.21"
+        :height="17.36"
+        :fill="betterTextColor('primary')"
       />
       <span>{{ channel?.email }}</span>
     </RouterLink>
     <a
       :href="`tel:${channel?.phoneNumber}`"
       class="button-primary sticky-right-button mt-4 flex items-center self-start border-none hover:right-[195px]"
-      @click="gtmEvent('click_widget_tel')"
-      @mouseover.once="gtmEvent('hover_widget_tel')"
+      @click="sendGaEvent('click_widget_tel')"
+      @mouseover.once="sendGaEvent('hover_widget_tel')"
     >
-      <PhoneIconComponent
-        class="mr-4"
-        :style="{
-          fill: betterTextColor('primary'),
-        }"
-      />
+      <PhoneIconComponent class="mr-4" :fill="betterTextColor('primary')" />
       <span>{{ channelPhoneNumber }}</span>
     </a>
   </div>
@@ -44,7 +37,11 @@ import { PageList } from '@/vuejs/router'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { computed, onUpdated, ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import { buildStandardGtmData, gtmMixinPushEvent } from '@/vuejs/services/gtm'
+import {
+  buildStandardGaData,
+  gtmMixinPushEvent,
+  sendGaEvent,
+} from '@/vuejs/services/googleAnalytics'
 import { useUserStore } from '@/vuejs/stores/user'
 import { betterTextColor } from '@/vuejs/services/utils'
 
@@ -67,7 +64,7 @@ function getEmailButtonWidth() {
   }
 
   emailButtonWidth.value = emailButton.value.$el.clientWidth
-  gtmEvent('hover_widget_email')
+  sendGaEvent('hover_widget_email')
 }
 
 onUpdated(() => {
@@ -79,13 +76,6 @@ const channelEmailButtonStyle = computed(() => {
     '--email-right': `${emailButtonWidth.value || 100}px`,
   }
 })
-
-const gtmEvent = (eventName: string) => {
-  gtmMixinPushEvent(
-    eventName,
-    buildStandardGtmData(userStore.user['@id'], currentChannel.name),
-  )
-}
 </script>
 
 <style lang="postcss">

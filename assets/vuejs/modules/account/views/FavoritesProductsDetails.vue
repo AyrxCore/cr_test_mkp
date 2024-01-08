@@ -7,13 +7,15 @@
           <div v-if="showAlert" class="lg:w-5/6">
             <AlertSharedComponent />
           </div>
-          <div class="mt-2 mb-2 flex justify-between md:mt-0 md:mb-0">
-            <h3 class="mb-2 text-title-35 text-primary">{{ favoriteName }}</h3>
+          <div class="my-6 mt-2 flex justify-between md:mt-0">
+            <h3 class="text-title-primary">
+              {{ favoriteName }}
+            </h3>
             <ButtonComponent
-              class="button button-white button-white-secondary"
+              class="button-primary-outline"
               @click="openFavoriteForm"
             >
-              Renommer
+              Renommer la liste
             </ButtonComponent>
           </div>
           <FavoriteFormModal
@@ -26,11 +28,11 @@
             @submit-favorite="onSubmitFavorite"
           />
 
-          <div
-            class="mb-2.5 hidden items-center text-sm text-gray-500 md:flex lg:text-base"
-          >
+          <div class="mb-2.5 hidden items-center text-sm md:flex lg:text-base">
             <div class="md:w-8/12 lg:w-9/12">Description des articles</div>
-            <div class="flex justify-start md:w-4/12 lg:w-3/12">Sous-total</div>
+            <div class="flex justify-start md:w-4/12 lg:w-3/12">
+              Prix unitaire
+            </div>
           </div>
           <FavoritesProductsDetailsComponent
             v-for="(favoriteProduct, key) in favorite.favoriteProducts"
@@ -42,25 +44,25 @@
             @selected-product="addProductSelectedToList"
             @remove-selected-product="removeProductSelectedToList"
           />
-          <div class="mt-6 flex flex-col justify-between md:flex-row">
+          <div class="mt-6 flex flex-col md:flex-row md:justify-end">
             <ButtonComponent
-              class="button-white-secondary !text-secondary hover:!bg-white focus:!bg-white"
+              class="button-primary-outline"
               @click="refreshFavoriteItems(favorite.id)"
             >
               Mettre à jour la liste
             </ButtonComponent>
             <ButtonComponent
-              class="button-gradient mt-5 md:mt-0"
+              class="button-primary mt-5 ml-8 md:mt-0"
               :disabled="listItemToAddCart.length === 0"
               :is-loading="isAddToCartLoading"
               @click="addToCart"
             >
-              <ShoppingCartIconComponent
-                :stroke-color="'#FFFFFF'"
-                class="mr-2 w-4"
-              />
               Ajouter au panier
             </ButtonComponent>
+          </div>
+          <div class="mt-6">
+            Les prix affichés sont donnés à titre indicatif et peuvent être mis
+            à jour par les vendeurs
           </div>
         </div>
         <div
@@ -69,11 +71,11 @@
         >
           <div>Aucune liste avec cet identifiant n'a été trouvée</div>
           <RouterLink
-            class="button button-gradient mt-10 w-auto md:w-auto"
+            class="button button-primary mt-10 w-auto md:w-auto"
             :to="{ name: PageList.FAVORITES_LIST }"
           >
             <ArrowLeftIconComponent
-              :stroke-color="'#FFFFFF'"
+              stroke="#FFFFFF"
               class="mr-2 w-4 !stroke-white"
             />
             Retour à la liste des favoris
@@ -87,7 +89,6 @@
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import FavoritesProductsDetailsComponent from '@/vuejs/modules/account/components/FavoriteProductDetailsComponent.vue'
-import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
 import { useRoute } from 'vue-router'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import { Favorite } from '@/vuejs/types/Favorite'
@@ -101,6 +102,7 @@ import { useCartStore } from '@/vuejs/stores/cart'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 import { PageList } from '@/vuejs/router'
 import ArrowLeftIconComponent from '@/vuejs/modules/shared/icon/ArrowLeftIconComponent.vue'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const cartStore = useCartStore()
 const route = useRoute()
@@ -121,12 +123,14 @@ const favoriteName = computed(() => {
 })
 const openFavoriteForm = () => {
   showFormFavorite.value = true
+  sendGaEvent('click_favorite_details_rename')
 }
 
 const refreshFavoriteItems = async (id) => {
   isLoading.value = true
   favorite.value = await favoriteStore.findFavoriteById(id)
   isLoading.value = false
+  sendGaEvent('click_favorite_details_update_list')
 }
 
 onMounted(async () => {
@@ -135,15 +139,15 @@ onMounted(async () => {
 
 const onSubmitFavorite = async (event) => {
   isEditLoading.value = true
-
+  const previousFavoriteName = favorite.value.name
   try {
     await favoriteStore.update(event.favorite)
     favorite.value.name = event.favorite.name
-    isEditLoading.value = false
-    showFormFavorite.value = false
   } catch (error) {
+    favorite.value.name = previousFavoriteName
   } finally {
     isEditLoading.value = false
+    showFormFavorite.value = false
   }
 }
 
@@ -205,7 +209,10 @@ const addToCart = async () => {
   }
   isAddToCartLoading.value = false
 
-  await refreshFavoriteItems(favorite.value.id)
+  isLoading.value = true
+  favorite.value = await favoriteStore.findFavoriteById(favorite.value.id)
+  isLoading.value = false
+  sendGaEvent('click_favorite_details_add_cart')
 }
 
 watch(

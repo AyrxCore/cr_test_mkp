@@ -13,7 +13,7 @@
         <RouterLink
           :to="list.url ?? '#'"
           @click="
-            sendGtmEvent(gtmEventName, {
+            sendGaEvent(gtmEventName, {
               product_name: list.name,
             })
           "
@@ -28,7 +28,7 @@
       class="inline-flex items-center lg:hidden"
       :to="lastBreadcrumbUrl.url ?? '#'"
       @click="
-        sendGtmEvent(gtmEventName, {
+        sendGaEvent(gtmEventName, {
           product_name: lastBreadcrumbUrl.name,
         })
       "
@@ -45,7 +45,7 @@ import { computed, PropType } from 'vue'
 import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
 
 import { PageList } from '@/vuejs/router'
-import { sendGtmEvent } from '@/vuejs/services/gtm'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const props = defineProps({
   listUrl: {
@@ -58,8 +58,8 @@ const props = defineProps({
     type: String,
   },
   gtmEventName: {
-    required: true,
     type: String,
+    default: '',
   },
 })
 

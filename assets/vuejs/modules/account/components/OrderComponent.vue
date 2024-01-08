@@ -1,28 +1,17 @@
 <template>
   <div class="mb-5 flex flex-col rounded-lg bg-white text-sm lg:text-[15px]">
-    <div class="flex w-full flex-col px-5 py-2.5 md:flex-row md:px-2.5">
+    <div class="flex w-full flex-col px-5 py-2.5 md:flex-row md:py-5">
       <div class="flex w-full justify-start md:w-2/12 lg:w-3/12">
-        <span class="flex text-gray-500">
-          <CalendarCheckIconComponent
-            class="mr-1 h-[18px] w-[18px] stroke-gray-500"
-          />
-          {{ formatDateFr(order.createdAt) }}</span
-        >
+        <span class="flex"> {{ formatDateFr(order.createdAt) }}</span>
       </div>
       <div class="mt-5 w-full md:mt-0 md:w-5/12 lg:w-4/12">
-        <span class="flex text-gray-500">
-          Commande : {{ order.orderNumber }}</span
-        >
-        <span class="flex text-gray-500">
-          Articles : {{ order.items.length }}
-        </span>
+        <span class="flex"> Commande : {{ order.orderNumber }}</span>
+        <span class="flex"> Articles : {{ order.items.length }} </span>
 
-        <div
-          class="flex items-center space-x-2 md:my-2 md:flex-col md:items-start md:justify-start md:space-x-0"
-        >
-          <span>Statut:</span>
+        <div class="flex items-center space-x-2 md:my-2">
+          <span>Statut :</span>
           <span
-            class="mt-1 w-fit rounded-md px-1 py-1 text-[14px] text-white"
+            class="mt-1 ml-2 w-fit rounded-md px-1 py-1 text-[14px] text-white"
             :class="ORDER_STATUS[order.state].color"
             :title="ORDER_STATUS[order.state].name"
             >{{ ORDER_STATUS[order.state].name }}</span
@@ -32,17 +21,14 @@
       <div class="mt-5 w-full md:mt-0 md:w-5/12">
         <span class="md:hidden">Livraison</span>
         <div class="flex flex-col">
-          <span class="flex text-gray-500">
-            <MapInIconComponent class="mr-1 hidden stroke-gray-500 md:block" />
+          <span class="flex md:pr-4">
             {{ order.shippingAddress }}
           </span>
-          <div class="my-2 flex flex-col md:pl-5">
-            <div
-              class="flex items-center space-x-2 md:flex-col md:items-start md:space-x-0"
-            >
-              <span>Statut:</span>
+          <div class="my-2 flex flex-col">
+            <div class="flex items-center space-x-2">
+              <span>Statut :</span>
               <span
-                class="mt-1 w-fit rounded-md px-1 py-1 text-[14px] text-white"
+                class="ml-2 w-fit rounded-md px-1 py-1 text-[14px] text-white"
                 :class="SHIPPING_STATUS[order.shippingState].color"
                 :title="SHIPPING_STATUS[order.shippingState].name"
                 >{{ SHIPPING_STATUS[order.shippingState].name }}</span
@@ -59,24 +45,27 @@
         <span class="mr-2 flex font-bold text-primary md:mr-0"
           >{{ formatPrice(order.totalExcludingTaxes) }} € HT</span
         >
-        <span class="flex text-gray-500"
-          >({{ formatPrice(order.total) }} € TTC)</span
-        >
+        <span class="flex">({{ formatPrice(order.total) }} € TTC)</span>
       </div>
-      <div class="flex items-end justify-between md:w-1/12 md:flex-col">
+      <div class="flex items-start justify-between md:w-1/12">
+        <ButtonDownloadInvoiceComponent
+          v-if="order.paymentId"
+          :payment-id="order.paymentId"
+          @click="sendGaEvent('click_orders_download')"
+        />
         <RouterLink
           :to="{
             name: PageList.ORDER_DETAILS,
             params: { id: order.id },
           }"
           class="rounded-lg border border-primary p-0.5"
+          @click="sendGaEvent('click_orders_details')"
         >
-          <EyeIconComponent class="h-[18px] w-[18px] stroke-primary" />
+          <EyeIconComponent
+            class="h-[18px] w-[18px]"
+            :stroke="channelPrimaryColor"
+          />
         </RouterLink>
-        <ButtonDownloadInvoiceComponent
-          v-if="order.paymentId"
-          :payment-id="order.paymentId"
-        />
       </div>
     </div>
   </div>
@@ -86,11 +75,12 @@ import { computed, PropType } from 'vue'
 import { Order } from '@/vuejs/types/Order'
 import { formatDateFr, formatPrice } from '@/vuejs/services/utils'
 import { ORDER_STATUS, SHIPPING_STATUS } from '@/vuejs/services/const'
-import CalendarCheckIconComponent from '@/vuejs/modules/shared/icon/CalendarCheckIconComponent.vue'
-import MapInIconComponent from '@/vuejs/modules/shared/icon/MapInIconComponent.vue'
 import EyeIconComponent from '@/vuejs/modules/shared/icon/EyeIconComponent.vue'
 import { PageList } from '@/vuejs/router'
 import ButtonDownloadInvoiceComponent from '@/vuejs/modules/account/components/ButtonDownloadInvoiceComponent.vue'
+import { storeToRefs } from 'pinia'
+import { useChannelStore } from '@/vuejs/stores/channel'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const props = defineProps({
   order: {
@@ -98,6 +88,8 @@ const props = defineProps({
     type: Object as PropType<Order>,
   },
 })
+
+const { channelPrimaryColor } = storeToRefs(useChannelStore())
 
 const shippingStateDate = computed(() => {
   switch (props.order.shippingState) {

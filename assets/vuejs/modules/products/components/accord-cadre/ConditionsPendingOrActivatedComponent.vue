@@ -1,5 +1,5 @@
 <template>
-  <div class="text-center text-lg leading-5">
+  <div class="text-center text-lg leading-5 text-white">
     <div
       v-if="currentStatus.status === status.pending"
       class="mx-auto flex justify-center border p-2 lg:w-2/3"
@@ -37,7 +37,7 @@
     <div class="mt-6 flex flex-col items-center">
       <ButtonComponent
         v-if="cta1.name && cta1.url"
-        class="button button-primary mx-auto mb-6 border-2 border-solid !border-white"
+        class="button-primary mx-auto mb-6 border-2 border-solid !border-white"
         @click="clickOnCta(cta1.url, 1)"
       >
         <span>
@@ -82,8 +82,8 @@ import CheckIconComponent from '@/vuejs/modules/shared/icon/CheckIconComponent.v
 import { computed, PropType } from 'vue'
 import { AccountAccordCadre } from '@/vuejs/types/AccountAccordCadre'
 import PendingIconComponent from '@/vuejs/modules/shared/icon/PendingIconComponent.vue'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { useChannelStore } from '@/vuejs/stores/channel'
-import { sendGtmEvent } from '@/vuejs/services/gtm'
 
 const props = defineProps({
   currentStatus: {
@@ -155,7 +155,7 @@ const clickOnCta = (buttonUrl: string, ctaNumber: number) => {
 
 const gtmEvent = (ctaNumber) => {
   const eventName = ctaNumber === 1 ? 'click_fat_cta_1' : 'click_fat_cta_2'
-  sendGtmEvent(eventName, {
+  sendGaEvent(eventName, {
     product_name: props.accordName,
     state_rattachement: props.currentStatus.status,
   })

@@ -1,70 +1,69 @@
 <!DOCTYPE html>
 <html lang="fr">
-	<head>
-		<meta charset="UTF-8">
-		<title>
-			{% block title %}{% endblock %}
-		</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1"> {% block metas %}{% endblock %}
-		<link rel="icon" href="{{ channel.channelParameter.favicon }}" sizes="32x32"/>
-		<style>:root
-		{
-			--primary-color: {{channel_primary_color(channel)}}
-			;
-			--secondary-color: {{channel_secondary_color(channel)}}
-			;
-			--body-background: #f2f0f6;
-		}
-	</style>
-	{% block javascripts %}
-		{{ vite_asset('main.ts', []) }}
-		{# Hamburger menu logic #}
-		<script type="text/javascript">
-			const initApp = () => {
-const openMenuBtn = document.getElementById('open-menu-button')
-const closeMenuBtn = document.getElementById('close-menu-button')
-const mobileMenu = document.getElementById('mobile-menu')
-const toggleMenu = () => {
-openMenuBtn.classList.toggle('hidden')
-openMenuBtn.classList.toggle('flex')
-closeMenuBtn.classList.toggle('hidden')
-closeMenuBtn.classList.toggle('flex')
-mobileMenu.classList.toggle('hidden')
-mobileMenu.classList.toggle('fixed')
-mobileMenu.classList.toggle('flex')
-document.body.classList.toggle('overflow-hidden')
-document.body.classList.toggle('fixed')
-};
-openMenuBtn.addEventListener('click', toggleMenu)
-closeMenuBtn.addEventListener('click', toggleMenu)
-}
-document.addEventListener('DOMContentLoaded', initApp)
-function openModal(id) {
-document.getElementById(id).style.display = 'block';
-}
-function closeModal(id) {
-document.getElementById(id).style.display = 'none';
-}
-		</script>
+<head>
+  <meta charset="UTF-8">
+  <title>
+    {% block title %}{% endblock %}
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"> {% block metas %}{% endblock %}
+  <link rel="icon" href="{{ channel.channelParameter.favicon }}" sizes="32x32" />
+  <style>:root {
+      --primary-color: {{channel_primary_color(channel)}};
+      --secondary-color: {{channel_secondary_color(channel)}};
+      --body-background: #f2f0f6;
+    }
+  </style>
+  {% block javascripts %}
+    {{ vite_asset('main.ts', []) }}
+    {# Hamburger menu logic #}
+    <script type="text/javascript">
+      const initApp = () => {
+        const openMenuBtn = document.getElementById('open-menu-button')
+        const closeMenuBtn = document.getElementById('close-menu-button')
+        const mobileMenu = document.getElementById('mobile-menu')
+        const toggleMenu = () => {
+          openMenuBtn.classList.toggle('hidden')
+          openMenuBtn.classList.toggle('flex')
+          closeMenuBtn.classList.toggle('hidden')
+          closeMenuBtn.classList.toggle('flex')
+          mobileMenu.classList.toggle('hidden')
+          mobileMenu.classList.toggle('fixed')
+          mobileMenu.classList.toggle('flex')
+          document.body.classList.toggle('overflow-hidden')
+          document.body.classList.toggle('fixed')
+        };
 
-	{% endblock %}
-	{% if settings.useExternalScriptsTags %}
-		{% include '_partials/_gtm-header.html.twig' %}
-		{% include '_partials/_clarity-header.html.twig' %}
-	{% endif %}
+        if (openMenuBtn) {
+          openMenuBtn.addEventListener('click', toggleMenu)
+        }
+        if (closeMenuBtn) {
+          closeMenuBtn.addEventListener('click', toggleMenu)
+        }
+      }
+      document.addEventListener('DOMContentLoaded', initApp)
+
+      function openModal(id) {
+        document.getElementById(id).style.display = 'block';
+      }
+
+      function closeModal(id) {
+        document.getElementById(id).style.display = 'none';
+      }
+    </script>
+  {% endblock %}
+  {% if settings.useExternalScriptsTags %}
+    {% include '_partials/_gtm-header.html.twig' %}
+    {% include '_partials/_clarity-header.html.twig' %}
+    {% include '_partials/_ga-header.html.twig' %}
+  {% endif %}
 
 </head>
 <body>
-	{% if settings.useExternalScriptsTags %}
-		{% include '_partials/_gtm-body.html.twig' %}
-	{% endif %}
-	{% block header %}
-		{% include '_partials/_header.html.twig' with {'back_url': false} %}
-	{% endblock %}
-
-	{% block body %}{% endblock %}
-
-	{% block footer %}
-		{{ include('_partials/_footer.html.twig') }}
-	{% endblock %}
-</body></html></head></html>
+{% if settings.useExternalScriptsTags %}
+  {% include '_partials/_gtm-body.html.twig' %}
+{% endif %}
+<div id="baseHtml" class="min-h-screen flex" data-external-scripts="{{ settings.useExternalScriptsTags }}">
+  {% block body %}{% endblock %}
+</div>
+</body>
+</html>

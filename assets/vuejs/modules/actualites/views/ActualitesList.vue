@@ -2,11 +2,8 @@
   <BaseTemplate title="Liste des news">
     <div class="m-auto my-4 w-full max-w-screen-2xl px-5 sm:px-8">
       <breadcrumb-shared-component current-page="Actualités" />
-      <div class="w-[100%] max-w-screen-2xl">
-        <ContactUsButtonComponent />
-      </div>
       <div class="mt-O mt-10">
-        <h3 class="home-title mb-5 text-primary">Nos contenus experts</h3>
+        <h3 class="text-title-primary mb-5">Nos contenus experts</h3>
         <!-- Bloc liste des actus -->
         <div class="m-auto my-2 flex w-full flex-col-reverse lg:flex-row">
           <div class="w-full lg:w-4/5 lg:pr-5">
@@ -52,7 +49,6 @@
 <script lang="ts" setup>
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
-import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import { onMounted, ref } from 'vue'
 import ActualiteComponentComponent from '@/vuejs/modules/actualites/components/ActualiteComponent.vue'
 import { useExpertContentStore } from '@/vuejs/stores/expertContent'

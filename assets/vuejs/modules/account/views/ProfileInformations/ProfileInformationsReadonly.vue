@@ -1,9 +1,7 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="mb-4 mt-2 text-3xl font-bold text-primary md:mt-0">
-        Mes coordonnées
-      </h3>
+      <h3 class="text-title-primary mb-4 mt-2 md:mt-0">Mes coordonnées</h3>
       <!-- Bloc email -->
       <div class="bloc-contact-information">
         <div>
@@ -20,7 +18,7 @@
         <div>
           <div class="float-right w-fit px-2 py-1 text-white">
             <RouterLink :to="{ name: PageList.CONTACT_INFORMATION_EMAIL_EDIT }">
-              <EditIconComponent :icon-color="channelPrimaryColor" />
+              <EditIconComponent :stroke="channelPrimaryColor" />
             </RouterLink>
           </div>
         </div>
@@ -38,7 +36,10 @@
             <RouterLink
               :to="{ name: PageList.CONTACT_INFORMATION_PASSWORD_CHANGE }"
             >
-              <EditIconComponent :icon-color="channelPrimaryColor" />
+              <EditIconComponent
+                :stroke="channelPrimaryColor"
+                @click="sendGaEvent('click_account_edit_password')"
+              />
             </RouterLink>
           </div>
         </div>
@@ -60,7 +61,10 @@
             <RouterLink
               :to="{ name: PageList.CONTACT_INFORMATION_DETAILS_EDIT }"
             >
-              <EditIconComponent :icon-color="channelPrimaryColor" />
+              <EditIconComponent
+                :stroke="channelPrimaryColor"
+                @click="sendGaEvent('click_account_edit_info')"
+              />
             </RouterLink>
           </div>
         </div>
@@ -77,6 +81,7 @@ import { storeToRefs } from 'pinia'
 import { PageList } from '@/vuejs/router'
 import { computed } from 'vue'
 import { useChannelStore } from '@/vuejs/stores/channel'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)

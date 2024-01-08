@@ -25,7 +25,7 @@ class DefaultController extends AbstractController implements ChannelAwareContro
     #[Route(
         '/{route}',
         name: 'app',
-        requirements: ['route' => '^(?!.*_wdt|_profiler|login|mentions-legales|politique-de-confidentialite|maintenance|api).+']
+        requirements: ['route' => '^(?!.*_wdt|_profiler|login|conditions-generales-d-utilisation|mentions-legales|politique-de-confidentialite|maintenance|api).+']
     )]
     public function index(Request $request): Response
     {
@@ -75,6 +75,12 @@ class DefaultController extends AbstractController implements ChannelAwareContro
     public function politiqueConfidentialite(Request $request): Response
     {
         return $this->render('politique-de-confidentialite.html.twig', ['channel' => $this->getChannel($request)]);
+    }
+
+    #[Route('/conditions-generales-d-utilisation', name: 'conditions_generales_d_utilisation')]
+    public function conditionsGeneralesUtilisation(Request $request): Response
+    {
+        return $this->render('conditions-generales-d-utilisation.html.twig', ['channel' => $this->getChannel($request)]);
     }
 
     #[Route('/maintenance', name: 'maintenance')]

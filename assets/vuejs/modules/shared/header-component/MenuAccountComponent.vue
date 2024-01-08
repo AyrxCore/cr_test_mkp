@@ -9,9 +9,9 @@
         <RouterLink
           :to="{ name: AccountPageList.ACCOUNT }"
           class="flex items-center py-2.5 font-bold hover:text-secondary"
-          @click="sendGtmEvent('click_header_mon_compte')"
+          @click="sendGaEvent('click_header_mon_compte')"
         >
-          <UserIcon :icon-color="channelPrimaryColor" class="mr-3" />
+          <UserIcon :stroke="channelPrimaryColor" class="mr-3" />
           <span>Mon compte</span>
         </RouterLink>
         <CloseIcon
@@ -25,7 +25,7 @@
         :key="key"
         :to="{ name: value.routeName }"
         class="flex items-center py-2.5 hover:text-secondary"
-        @click="sendGtmEvent(value.gtmEventName)"
+        @click="sendGaEvent(value.gtmEventName)"
       >
         <ChevronRightIcon
           class="mr-4 fill-primary stroke-primary hover:stroke-secondary"
@@ -44,7 +44,7 @@
         class="inline-flex pt-5 font-bold hover:text-secondary"
         @click="onLogout($event)"
       >
-        <DisconnectIcon :icon-color="channelPrimaryColor" class="mr-2" />
+        <DisconnectIcon :stroke="channelPrimaryColor" class="mr-2" />
         Se déconnecter
       </a>
     </div>
@@ -62,7 +62,7 @@ import DisconnectIcon from '@/vuejs/modules/shared/icon/DisconnectIconComponent.
 import { useUserStore } from '@/vuejs/stores/user'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { AccountPageList } from '@/vuejs/router/pages-list'
-import { sendGtmEvent } from '@/vuejs/services/gtm'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
 import ChevronRightIcon from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
 
@@ -79,7 +79,7 @@ const props = defineProps({
 
 const listAccountGlobal = ref<any[]>([
   {
-    label: 'Historique des commandes',
+    label: 'Mes commandes',
     routeName: AccountPageList.ORDERS,
     gtmEventName: 'click_header_mes_commandes',
   },
@@ -88,21 +88,20 @@ const listAccountGlobal = ref<any[]>([
     routeName: AccountPageList.ACCOUNT,
   },
   {
-    label: 'Listes de produits favoris',
+    label: 'Mes listes de produits favoris',
     routeName: AccountPageList.FAVORITES_LIST,
     condition: OPTIONAL_FRONT_BLOCKS.FAVORITES,
   },
   {
-    label: 'Paniers sauvegardés',
+    label: 'Mes paniers sauvegardés',
     routeName: AccountPageList.SAVED_CARTS,
+    condition: OPTIONAL_FRONT_BLOCKS.SAVED_CARTS,
   },
 ])
 
 const listAccount = computed(() => {
   return listAccountGlobal.value.filter(
-    (x) =>
-      !x.condition ||
-      (x.condition && channelStore.isAllowedToShow(x.condition)),
+    (x) => !x.condition || channelStore.isAllowedToShow(x.condition),
   )
 })
 
@@ -110,15 +109,14 @@ const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
 const channelStore = useChannelStore()
 
-const currentChannel = channelStore.currentChannel
-
 const closeMenu = (): void => {
   emit('update:modelValue', false)
 }
 
 const onLogout = async (e: Event): Promise<void> => {
   e.preventDefault()
-  ;(await userStore.logout()) && location.reload()
-  sendGtmEvent('click_header_log_out')
+  sendGaEvent('click_header_log_out')
+  await userStore.logout()
+  location.reload()
 }
 </script>

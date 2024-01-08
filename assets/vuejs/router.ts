@@ -112,7 +112,6 @@ router.beforeEach(async (to, from, next) => {
   const channelStore = useChannelStore()
 
   if (!userStore.isLogged) {
-    await channelStore.getChannel(window.location.hostname)
     await userStore.getCurrentUserData()
     if (!userStore.isLogged) {
       document.cookie = 'BEARER=; Max-Age=0'
@@ -129,6 +128,19 @@ router.beforeEach(async (to, from, next) => {
       !cartStore.hasAllTermsChecked
     ) {
       router.push({ name: CartPageList.CART_RECAP })
+    }
+
+    const optionnalPages = [
+      PageList.FAVORITES_LIST,
+      PageList.FAVORITES_DETAILS,
+      PageList.SAVED_CARTS,
+      PageList.SAVED_CARTS_DETAILS,
+    ]
+    if (optionnalPages.includes(to.name)) {
+      const option = optionnalPages.find((x) => channelStore.isAllowedToShow(x))
+      if (option === undefined) {
+        router.push({ name: PageList.PAGE_NOT_FOUND })
+      }
     }
   }
 

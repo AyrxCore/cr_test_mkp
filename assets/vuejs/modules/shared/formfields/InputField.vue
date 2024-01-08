@@ -1,37 +1,35 @@
 <template>
   <template v-if="props.pattern === ''">
     <input
-        v-model="internalValue"
-        :type="props.type"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm
-        rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        :class="props.classes"
-        :disabled="props.disabled"
-        :readonly="props.readonly"
-        :required="props.required"
-        :placeholder="props.placeholder"
-        @change="onChange($event); updateModel()"
+      v-model="internalValue"
+      :type="props.type"
+      class="block w-full rounded-lg border-none p-2.5 text-sm focus:border-primary focus:ring-primary"
+      :class="props.classes"
+      :disabled="props.disabled"
+      :readonly="props.readonly"
+      :required="props.required"
+      :placeholder="props.placeholder"
+      @change="actionOnChange($event)"
     />
   </template>
   <template v-else>
     <input
-        v-model="internalValue"
-        :type="props.type"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm
-        rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        :class="props.classes"
-        :disabled="props.disabled"
-        :readonly="props.readonly"
-        :required="props.required"
-        :pattern="props.pattern"
-        :placeholder="props.placeholder"
-        @change="onChange($event); updateModel()"
+      v-model="internalValue"
+      :type="props.type"
+      class="block w-full rounded-lg border-none p-2.5 text-sm focus:border-primary focus:ring-primary"
+      :class="props.classes"
+      :disabled="props.disabled"
+      :readonly="props.readonly"
+      :required="props.required"
+      :pattern="props.pattern"
+      :placeholder="props.placeholder"
+      @change="actionOnChange($event)"
     />
   </template>
 </template>
 
 <script lang="ts" setup>
-import {ref, watch} from 'vue'
+import { ref, watch } from 'vue'
 
 const internalValue = ref<string>('')
 
@@ -58,28 +56,28 @@ const props = defineProps({
   disabled: {
     required: false,
     type: Boolean,
-    default: false
+    default: false,
   },
   readonly: {
     required: false,
     type: Boolean,
-    default: false
+    default: false,
   },
   required: {
     required: false,
     type: Boolean,
-    default: false
+    default: false,
   },
   pattern: {
     required: false,
     type: String,
-    default: ''
-  }
+    default: '',
+  },
 })
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void,
-  (eventName: 'change',value: string): void
+  (e: 'update:modelValue', value: string): void
+  (eventName: 'change', value: string): void
 }>()
 
 const updateModel = () => {
@@ -87,14 +85,19 @@ const updateModel = () => {
 }
 
 watch(
-    () => props.modelValue as string,
-    (value: string) => {
-      internalValue.value = value
-    },
-    { immediate: true },
+  () => props.modelValue as string,
+  (value: string) => {
+    internalValue.value = value
+  },
+  { immediate: true },
 )
 
 const onChange = (event: Event): void => {
   emit('change', (event.target as HTMLInputElement).value)
+}
+
+const actionOnChange = (event) => {
+  onChange(event)
+  updateModel()
 }
 </script>

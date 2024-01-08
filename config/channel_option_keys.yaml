@@ -1,0 +1,20 @@
+parameters:
+  channel_option_valid_keys:
+    - 'BANNER_HOMEPAGE'
+    - 'BANNER_TITLE_HOMEPAGE'
+    - 'TEXT_FOOTER'
+    - 'BANNER_FLASH_HOMEPAGE'
+    - 'BANNER_SLIDER_HOMEPAGE'
+    - 'RSE_HOMEPAGE'
+    - 'SUPPLIER_PARTNERS_HOMEPAGE'
+    - 'EXPERT_CONTENT_HOMEPAGE'
+    - 'FAVORITES'
+    - 'PRE_HOME_IMAGE'
+    - 'PRE_HOME_TITLE'
+    - 'PRE_HOME_SUBTITLE'
+    - 'PRE_HOME_LIST'
+    - 'PRE_HOME_NOTATION'
+    - 'SAVED_CARTS'
+    - 'PROMOTIONAL_FAT'
+
+# Mettre un lien confluence pour expliquer les différentes clés

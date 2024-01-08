@@ -6,7 +6,7 @@
       v-if="
         banner &&
         channelStore.isAllowedToShow(
-          OPTIONAL_FRONT_BLOCKS.BANNER_FLASH_HOMEPAGE_QANTIS,
+          OPTIONAL_FRONT_BLOCKS.BANNER_FLASH_HOMEPAGE,
         )
       "
       class="flex flex-row items-center justify-center bg-primary py-4 lg:h-[59px]"

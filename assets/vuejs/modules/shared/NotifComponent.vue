@@ -85,6 +85,5 @@ import { Notification, NotificationGroup } from 'notiwind'
 
 import InformationIconComponent from '@/vuejs/modules/shared/icon/InformationIconComponent.vue'
 import WarningIconComponent from '@/vuejs/modules/shared/icon/WarningIconComponent.vue'
-import CheckIconComponent from '@/vuejs/modules/shared/icon/CheckIconComponent.vue'
 import CheckCircleIconComponent from '@/vuejs/modules/shared/icon/CheckCircleIconComponent.vue'
 </script>

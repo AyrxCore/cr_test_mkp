@@ -21,8 +21,8 @@
           >
             <PhoneIconComponent
               class="mx-auto mb-4 w-full stroke-secondary"
-              :size-width="40"
-              :size-height="40"
+              :width="40"
+              :height="40"
             />
             <h4 class="mb-2 text-2xl font-bold text-primary">Par téléphone</h4>
             <div class="flex justify-center">
@@ -31,7 +31,7 @@
                 <a
                   class="underline"
                   :href="`tel:${channel.phoneNumber}`"
-                  @click="gtmEvent('click_contact_tel')"
+                  @click="sendGaEvent('click_contact_tel')"
                   >{{ formattedPhoneNumber }}</a
                 >
                 <br />
@@ -44,8 +44,8 @@
           >
             <MailIconComponent
               class="mx-auto mb-4 w-full stroke-secondary text-secondary"
-              :size-width="40"
-              :size-height="40"
+              :width="40"
+              :height="40"
             />
             <h4 class="mb-2 text-2xl font-bold text-primary">Par email</h4>
             <div class="flex justify-center">
@@ -54,7 +54,7 @@
                 <RouterLink
                   to="#topFormContact"
                   class="ml-1 underline"
-                  @click="gtmEvent('click_contact_mail')"
+                  @click="sendGaEvent('click_contact_mail')"
                   >{{ channel.email }}</RouterLink
                 >
               </span>
@@ -84,21 +84,9 @@ import PhoneIconComponent from '@/vuejs/modules/shared/icon/PhoneIconComponent.v
 
 import { storeToRefs } from 'pinia'
 import { useChannelStore } from '@/vuejs/stores/channel'
-import { buildStandardGtmData, gtmMixinPushEvent } from '@/vuejs/services/gtm'
-import { useUserStore } from '@/vuejs/stores/user'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
-const userStore = useUserStore()
-const channelStore = useChannelStore()
 const { channel, formattedPhoneNumber } = storeToRefs(useChannelStore())
-
-const currentChannel = channelStore.currentChannel
-
-const gtmEvent = (eventName: string) => {
-  gtmMixinPushEvent(
-    eventName,
-    buildStandardGtmData(userStore.user['@id'], currentChannel.name),
-  )
-}
 </script>
 
 <style scoped>

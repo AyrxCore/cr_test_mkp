@@ -7,11 +7,15 @@
     <button class="flex text-gray-500" @click="onOpenFavorite">
       <HeartIconComponent
         class="lg:h-auto lg:w-auto"
-        :stroke-color="
-          currentSelectedFavorites.length > 0 ? '#9553FF' : '#000000'
+        :stroke="
+          currentSelectedFavorites.length > 0
+            ? channelSecondaryColor
+            : '#000000'
         "
-        :fill-color="
-          currentSelectedFavorites.length > 0 ? '#9553FF' : '#FFFFFF'
+        :fill="
+          currentSelectedFavorites.length > 0
+            ? channelSecondaryColor
+            : '#FFFFFF'
         "
       />
     </button>
@@ -47,7 +51,7 @@
                       type="checkbox"
                       class="checkbox-secondary"
                       :value="favoriteItem.id"
-                      :checked="isChecked(favoriteItem.id)"
+                      :checked="isChecked(favoriteItem)"
                       @change="handleChange"
                     />
                     <span class="ml-2">{{ favoriteItem.name }}</span>
@@ -65,7 +69,7 @@
 
               <div class="!mt-5 flex justify-end">
                 <ButtonComponent
-                  class="button-primary flex !h-10 justify-end !py-2"
+                  class="button-primary !h-10"
                   :disabled="
                     disableAddButton &&
                     (newFavorite === null || newFavorite === '')
@@ -76,7 +80,7 @@
                 </ButtonComponent>
                 <ButtonComponent
                   type="button"
-                  class="button-white-secondary ml-2 flex !h-10 justify-end !py-2 !text-secondary hover:!bg-white focus:!bg-white"
+                  class="button-primary-outline ml-2 flex !h-10 justify-end !py-2"
                   @click="onOutsideBlock"
                   >Annuler
                 </ButtonComponent>
@@ -130,21 +134,31 @@ const isLoading = ref<boolean>(false)
 const showErrorNotSelected = ref<boolean>(false)
 const disableAddButton = ref<boolean>(true)
 
-const emit = defineEmits(['openFavorite', 'updateSelectedFavoritesList'])
+const { channelSecondaryColor } = storeToRefs(useChannelStore())
+
+const emit = defineEmits([
+  'toggleFavorite',
+  'updateSelectedFavoritesList',
+  'openFavorite',
+  'selectFavorite',
+  'addFavoriteList',
+])
 
 const onOpenFavorite = () => {
   showTooltip.value = true
-  emit('openFavorite', { showTooltip: showTooltip.value })
+  emit('toggleFavorite', { showTooltip: showTooltip.value })
+  emit('openFavorite')
 }
 const onOutsideBlock = () => {
   showTooltip.value = false
   showErrorNotSelected.value = false
   newFavorite.value = null
-  emit('openFavorite', { showTooltip: showTooltip.value })
+  emit('toggleFavorite', { showTooltip: showTooltip.value })
 }
 
-const isChecked = (favoriteId) => {
-  return Object.entries(props.favoritesProduct).includes(favoriteId)
+const isChecked = (favorite) => {
+  emit('selectFavorite', favorite.name)
+  return Object.entries(props.favoritesProduct).includes(favorite.id)
 }
 
 const handleChange = () => {
@@ -209,6 +223,7 @@ const addProductToFavorite = async () => {
       }
 
       currentSelectedFavorites.value = newSelectedFavorites.value
+      emit('addFavoriteList', newFavorite.value)
       onOutsideBlock()
       await favoriteStore.fetchFavorites()
     } catch (error) {}

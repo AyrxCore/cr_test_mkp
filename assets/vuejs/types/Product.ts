@@ -48,8 +48,7 @@ export interface ProductCollection {
 }
 
 export interface ProductStoreState {
-  products: Product[]
-  filters: Filter[]
+  products: ProductCollection
   productsTopVente: ProductCollection
   productsAccordsCadre: ProductCollection
   productsSelection: ProductCollection

@@ -1,20 +1,21 @@
 <template>
-  <td class="p-3">{{ props.address.name }}</td>
+  <td class="hidden p-3 pl-6 md:table-cell">{{ props.address.name }}</td>
   <td
     class="hidden p-3 md:table-cell"
     :class="{ 'italic text-gray-300': !props.address.company }"
   >
     {{ props.address.company ? props.address.company : 'Non renseignée' }}
   </td>
-  <td class="max-w-xs p-3">
+  <td class="max-w-xs p-3 pt-6">
     <span class="flex">{{ props.address.street }}</span>
-    <span class="flex">{{ props.address.postcode }}</span>
-    <span class="flex">{{ props.address.city }}</span>
+    <span class="flex"
+      >{{ props.address.postcode }} {{ props.address.city }}</span
+    >
   </td>
   <td>
     <div class="flex items-center justify-end">
       <div v-if="isItemLoading">
-        <LoaderSharedComponent class="text-purple-600" />
+        <LoaderSharedComponent class="text-secondary" />
       </div>
       <a
         v-if="props.address.id !== selectedAddress"
@@ -23,13 +24,13 @@
         title="Définir cette adresse par défaut"
         @click="onDefaultAdressSelect($event)"
       >
-        <StarIconComponent class="stroke-secondary" />
+        <StarIconComponent class="stroke-primary" />
       </a>
       <label v-else class="mr-2 rounded px-2" title="Adresse par défaut">
-        <StarIconComponent class="fill-secondary stroke-secondary" />
+        <StarIconComponent class="fill-primary stroke-primary" />
       </label>
       <button @click="onEditAddressClick">
-        <EditIconComponent class="mr-2" />
+        <EditIconComponent class="mr-6" :stroke="channelPrimaryColor" />
       </button>
     </div>
   </td>
@@ -45,6 +46,10 @@ import { computed, PropType, ref } from 'vue'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 import { useAddressStore } from '@/vuejs/stores/address'
 import { Address } from '@/vuejs/types/Address'
+import { storeToRefs } from 'pinia'
+import { useChannelStore } from '@/vuejs/stores/channel'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import { ADDRESS_BILLING, ADDRESS_SHIPPING } from '@/vuejs/services/const'
 
 const userStore = useUserStore()
 const addressStore = useAddressStore()
@@ -61,10 +66,12 @@ const props = defineProps({
   },
 })
 
+const { channelPrimaryColor } = storeToRefs(useChannelStore())
+
 const selectedAddress = computed((): number => {
-  return props.type === 'billing'
-    ? userStore.user.externalApiData.billing_address
-    : userStore.user.externalApiData.shipping_address
+  return props.type === ADDRESS_BILLING
+    ? userStore.user.externalApiData.subaccount.billing_address
+    : userStore.user.externalApiData.subaccount.shipping_address
 })
 
 const emit = defineEmits<{
@@ -77,16 +84,26 @@ const onEditAddressClick = async () => {
     name: AccountPageList.ADDRESS_EDIT,
     params: { id: props.address.id },
   })
+  const gaEventName =
+    props.type === ADDRESS_BILLING
+      ? 'click_adresse_edit_billing'
+      : 'click_adresse_edit_shopping'
+  sendGaEvent(gaEventName)
 }
 
 const onDefaultAdressSelect = async (e: Event) => {
   e.preventDefault()
   isItemLoading.value = true
-  if (props.type === 'billing') {
+  if (props.type === ADDRESS_BILLING) {
     await userStore.updateUserDefaultBillingAddress(props.address.id)
-  } else if (props.type === 'shipping') {
+  } else if (props.type === ADDRESS_SHIPPING) {
     await userStore.updateUserDefaultShippingAddress(props.address.id)
   }
   isItemLoading.value = false
+  const gaEventName =
+    props.type === ADDRESS_BILLING
+      ? 'click_adresse_default_billing'
+      : 'click_adresse_default_shipping'
+  sendGaEvent(gaEventName)
 }
 </script>

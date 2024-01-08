@@ -10,15 +10,12 @@
         :current-page="currentExpertContent.articleTitle"
         gtm-event-name="click_actualite_breadcrumbs"
       />
-      <div class="w-[100%] max-w-screen-2xl">
-        <ContactUsButtonComponent />
-      </div>
       <div
         class="m-auto my-2 flex w-[100%] max-w-screen-2xl flex-col lg:grid lg:grid-cols-2 lg:gap-4"
       >
         <!-- Bloc text actualité -->
         <div>
-          <h3 class="home-title mb-2 text-primary">
+          <h3 class="text-title-primary mb-2">
             {{ currentExpertContent.articleTitle }}
           </h3>
           <span
@@ -32,7 +29,7 @@
           </span>
           <div class="mt-5 h-[auto] rounded-lg">
             <p
-              class="whitespace-pre-line text-gray-500"
+              class="whitespace-pre-line"
               v-html="currentExpertContent.articleContent"
             />
           </div>
@@ -45,11 +42,11 @@
             <a
               :href="currentExpertContent.ctaLink"
               target="_blank"
-              class="button button-gradient mt-4 font-bold text-white"
+              class="button button-primary mt-4 font-bold text-white"
             >
               <ArrowRigntIconComponent
-                class="mt-1 mr-2 w-4 items-center"
-                :stroke-color="'#FFFFFF'"
+                class="mr-2 w-4 items-center"
+                stroke="#FFFFFF"
               />
               {{ currentExpertContent.ctaTxt }}
             </a>
@@ -77,7 +74,7 @@
 
       <!-- Bloc articles recommandés -->
       <div v-if="contents.length > 0" class="mt-10 justify-center">
-        <h3 class="home-title mb-5 text-primary">Articles recommandés</h3>
+        <h3 class="text-title-primary mb-5">Articles recommandés</h3>
         <ExpertContentsComponent :contents="contents" />
       </div>
       <!-- Fin Bloc articles recommandés -->
@@ -109,7 +106,6 @@ import { useRoute } from 'vue-router'
 import ArrowRigntIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
-import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import ExpertContentsComponent from '@/vuejs/modules/home/component/ExpertContentsComponent.vue'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 import { useExpertContentStore } from '@/vuejs/stores/expertContent'

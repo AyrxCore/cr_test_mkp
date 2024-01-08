@@ -1,7 +1,7 @@
 <template>
   <div class="mt-10 bg-white px-12 py-8">
     <div class="m-auto max-w-screen-98">
-      <h3 class="home-title mb-3 text-primary">
+      <h3 class="text-title-primary mb-3">
         Les accords-cadres incontournables
       </h3>
       <p class="text-sm sm:text-lg">
@@ -34,8 +34,8 @@
           },
         }"
         class="swiper-nav-outside"
-        @click-left="gtmEvent('click_slider_home_fat_left')"
-        @click-right="gtmEvent('click_slider_home_fat_right')"
+        @click-left="sendGaEvent('click_slider_home_fat_left')"
+        @click-right="sendGaEvent('click_slider_home_fat_right')"
       >
         <SwiperSlide
           v-for="accord in productsAccordsCadre?.results"
@@ -57,23 +57,10 @@ import AccordCadreComponent from '@/vuejs/modules/home/component/AccordCadreComp
 import { useProductStore } from '@/vuejs/stores/product'
 import { storeToRefs } from 'pinia'
 import AccordsCadresLoadingCarouselComponent from '@/vuejs/modules/shared/AccordsCadresLoadingCarouselComponent.vue'
-import { buildStandardGtmData, gtmMixinPushEvent } from '@/vuejs/services/gtm'
-import { useUserStore } from '@/vuejs/stores/user'
-import { useChannelStore } from '@/vuejs/stores/channel'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const productStore = useProductStore()
 const { productsAccordsCadre } = storeToRefs(productStore)
-const userStore = useUserStore()
-const channelStore = useChannelStore()
-
-const currentChannel = channelStore.currentChannel
-
-const gtmEvent = (eventName: string) => {
-  gtmMixinPushEvent(
-    eventName,
-    buildStandardGtmData(userStore.user['@id'], currentChannel.name),
-  )
-}
 </script>
 
 <style scoped></style>

@@ -6,18 +6,18 @@
       gtm-event-name="click_fat_breadcrumbs"
     />
     <div class="text-green my-4 flex flex-col lg:flex-row lg:items-center">
-      <h3 class="text-title-35 font-bold text-primary">
+      <h3 class="text-title-primary">
         {{ name }}
       </h3>
-      <div v-if="note" class="ml-4 flex flex-row items-center">
-        <LeafIconComponent class="mx-2" />
+      <div v-if="note" class="mt-2 flex flex-row items-center lg:ml-4 lg:mt-0">
+        <LeafIconComponent class="mr-2 lg:ml-2" />
         <span class="text-md mr-2 flex font-bold text-green-qantis md:text-lg">
           {{ note }}
         </span>
         <span class="flex text-sm"> Selon notre référentiel RSE </span>
         <span
           class="flex cursor-pointer items-center"
-          title="Message explicatif du référentiel RSE"
+          title="Pour des achats plus responsables, nous notons nos partenaires à l’aide de notre référentiel RSE (Responsabilité Sociétale des Entreprises)"
           @click.prevent="scrollTo"
         >
           <InformationIconComponent class="ml-1 text-gray-500" />
@@ -33,7 +33,7 @@
     >
       <h3
         v-if="bannerText"
-        class="flex h-full w-full items-center justify-center bg-white/50 px-6 text-center text-2xl font-bold sm:text-4xl"
+        class="flex h-full w-full items-center justify-center bg-black/50 px-6 text-center text-2xl font-bold text-white sm:text-4xl"
       >
         {{ bannerText }}
       </h3>

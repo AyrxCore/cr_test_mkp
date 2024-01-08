@@ -1,5 +1,5 @@
 <template>
-  <BaseTemplate :title="productTitle" class="ff-roboto">
+  <BaseTemplate :title="productTitle">
     <LoadingComponent v-if="isLoading" class="my-12" />
     <div
       v-else-if="product && !isLoading"
@@ -70,7 +70,7 @@
                   :alt="`${product.name} main image ${key}`"
                   class="h-auto sm:mx-auto"
                   @click.stop="
-                    sendGtmEvent('click_product_img', {
+                    sendGaEvent('click_product_img', {
                       product_name: product.name,
                       partner_name: product.seller.name,
                       partner_id: product.seller.id,
@@ -97,7 +97,7 @@
                 class="mb-1 h-10"
               />
               <h3
-                class="flex items-center text-xl text-primary md:mb-3 md:text-3xl"
+                class="flex items-center text-xl font-bold text-primary md:mb-3 md:text-3xl"
               >
                 {{ product.name }}
                 <AddFavoriteComponent
@@ -128,7 +128,7 @@
                     class="h-[1.75rem] w-1/2 border-none p-0"
                     @change="updateProductVariant"
                     @input="
-                      sendGtmEvent('click_product_options', {
+                      sendGaEvent('click_product_options', {
                         product_name: product.name,
                         partner_name: product.seller.name,
                         partner_id: product.seller.id,
@@ -157,6 +157,7 @@
                   <ProductQuantityComponent
                     :quantity="product.quantity"
                     @update-quantity="updateQuantity"
+                    @update-quantity-input="updateQuantityInput"
                   />
                 </div>
               </div>
@@ -207,7 +208,7 @@
         <Tab
           name="Description"
           @click.native="
-            sendGtmEvent('click_product_view_description', {
+            sendGaEvent('click_product_view_description', {
               product_name: product.name,
             })
           "
@@ -221,7 +222,7 @@
           v-if="product.properties.length !== 0"
           name="Caractéristiques techniques"
           @click.native="
-            sendGtmEvent('click_product_view_caracteristics', {
+            sendGaEvent('click_product_view_caracteristics', {
               product_name: product.name,
             })
           "
@@ -248,7 +249,7 @@
 
       <!-- Bloc produits similaire -->
       <template v-if="isLoadingSimilarProducts || similarProducts?.length >= 5">
-        <h3 class="mt-4 mb-2 text-lg text-primary md:text-xl">
+        <h3 class="text-title-primary mt-4 mb-2">
           Sélection de produits similaires
         </h3>
         <ProductsLoadingCarouselComponent
@@ -258,6 +259,15 @@
           v-else-if="similarProducts.length > 0"
           :products="similarProducts"
           class="mt-4 mb-12"
+          @click-left="sendGaEvent('click_product_slider_left')"
+          @click-right="sendGaEvent('click_product_slider_right')"
+          @click-add-cart="
+            sendGaEvent('click_product_slider_product_add_cart', $event)
+          "
+          @click-title="
+            sendGaEvent('click_product_slider_product_title', $event)
+          "
+          @click-img="sendGaEvent('click_product_slider_product_img', $event)"
         />
       </template>
       <!-- Fin bloc produits similaire -->
@@ -299,15 +309,12 @@ import { PageList } from '@/vuejs/router'
 import { Product } from '@/vuejs/types/Product'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import { useProductStore } from '@/vuejs/stores/product'
-import { useChannelStore } from '@/vuejs/stores/channel'
-import { sendGtmEvent } from '@/vuejs/services/gtm'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import sampleImg from '@/vuejs/assets/img/sample_product_img.png'
-import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
 
 const route = useRoute()
 const productStore = useProductStore()
 const favoriteStore = useFavoriteStore()
-const channelStore = useChannelStore()
 
 const thumbsSwiper = ref(null)
 const option = ref([])
@@ -348,11 +355,19 @@ const hasOptions = computed((): boolean => {
 })
 
 const updateQuantity = (event) => {
-  let gtmEvent = 'click_product_plus_qty'
-  if (product.value.quantity > event.quantity) {
-    gtmEvent = 'click_product_moins_qty'
-  }
-  sendGtmEvent(gtmEvent, {
+  const gtmEventName =
+    product.value.quantity > event.quantity
+      ? 'click_product_moins_qty'
+      : 'click_product_plus_qty'
+  sendGaEvent(gtmEventName, {
+    product_name: product.value.name,
+    qty_value: event.quantity,
+  })
+  product.value.quantity = event.quantity
+}
+
+const updateQuantityInput = (event) => {
+  sendGaEvent('type_product_qty', {
     product_name: product.value.name,
     qty_value: event.quantity,
   })

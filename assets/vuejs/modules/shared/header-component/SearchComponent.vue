@@ -10,7 +10,7 @@
       placeholder="De quoi avez-vous besoin ?"
       type="search"
       @keyup.enter="searchProduct"
-      @focus="gtmEvent('focus_header_search_bar')"
+      @focus="sendGaEvent('focus_header_search_bar')"
     />
     <button
       class="flex items-center rounded-r-[15px] bg-white px-5 py-1 hover:opacity-75"
@@ -28,12 +28,7 @@ import { useRoute } from 'vue-router'
 import SearchIconComponent from '@/vuejs/modules/shared/icon/SearchIconComponent.vue'
 
 import { ProductPageList } from '@/vuejs/router/pages-list'
-import { buildStandardGtmData, gtmMixinPushEvent } from '@/vuejs/services/gtm'
-import { useUserStore } from '@/vuejs/stores/user'
-import { useChannelStore } from '@/vuejs/stores/channel'
-
-const userStore = useUserStore()
-const channelStore = useChannelStore()
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const route = useRoute()
 const emit = defineEmits(['searchProduct'])
@@ -41,11 +36,9 @@ const wrapper = ref<HTMLElement>()
 
 const searchTerm = ref('')
 
-const currentChannel = channelStore.currentChannel
-
 const searchProduct = () => {
   emit('searchProduct', { term: searchTerm.value })
-  gtmEvent('action_header_search', { search_value: searchTerm.value })
+  sendGaEvent('action_header_search', { search_value: searchTerm.value })
 }
 
 onMounted(() => {
@@ -58,12 +51,6 @@ const updateSearchTerm = (query) => {
   } else {
     searchTerm.value = null
   }
-}
-
-const gtmEvent = (eventName: string, additionalData = null) => {
-  let data = buildStandardGtmData(userStore.user['@id'], currentChannel.name)
-  data = additionalData ? { ...data, ...additionalData } : data
-  gtmMixinPushEvent(eventName, data)
 }
 
 watch(

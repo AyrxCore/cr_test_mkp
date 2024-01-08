@@ -1,6 +1,6 @@
 <template>
   <BaseTemplate>
-    <div class="xs:w-full ff-roboto m-auto mt-4 mb-16 flex-1 px-4 sm:px-8">
+    <div class="xs:w-full m-auto mt-4 mb-16 flex-1 px-4 sm:px-8">
       <BreadcrumbSharedComponent
         current-page="Mon compte"
         gtm-event-name="click_account_details_breadcrumb"
@@ -25,7 +25,7 @@
                   <div class="sticky bottom-0 flex">
                     <DisconnectIconComponent
                       class="mr-2"
-                      :icon-color="channelPrimaryColor"
+                      :stroke="channelPrimaryColor"
                     />
                     <a
                       href="#"
@@ -39,7 +39,7 @@
                 <div class="grid gap-4">
                   <div
                     v-if="user.account.adherent.reducceCode"
-                    class="rounded-lg bg-secondary xl:p-7"
+                    class="rounded-lg bg-secondary p-2 xl:p-7"
                     :class="'text-' + betterTextColor('secondary')"
                   >
                     Code Bonuus {{ user.account.adherent.reducceCode }}
@@ -58,6 +58,7 @@
                         <a
                           :href="`tel:${channel.phoneNumber}`"
                           class="hover:font-bold"
+                          @click="sendGaEvent('click_account_phone')"
                         >
                           {{ channelPhoneNumber }}
                         </a>
@@ -66,6 +67,7 @@
                         <a
                           :href="`mailto:${channel.email}`"
                           class="hover:font-bold"
+                          @click="sendGaEvent('click_account_email')"
                         >
                           {{ channel.email }}
                         </a>
@@ -93,12 +95,11 @@ import { storeToRefs } from 'pinia'
 import AccountSidebar from '@/vuejs/modules/account/components/sidebar/AccountSidebar.vue'
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
-import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/ChevronRightIconComponent.vue'
 import DisconnectIconComponent from '@/vuejs/modules/shared/icon/DisconnectIconComponent.vue'
 import DropdownListComponent from '@/vuejs/modules/shared/DropdownListComponent.vue'
-import { PageList } from '@/vuejs/router'
 import { betterTextColor } from '@/vuejs/services/utils'
 import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
@@ -112,6 +113,7 @@ const {
 const onLogout = async (e: Event): Promise<void> => {
   e.preventDefault()
   ;(await userStore.logout()) && location.reload()
+  sendGaEvent('click_account_logout')
 }
 </script>
 

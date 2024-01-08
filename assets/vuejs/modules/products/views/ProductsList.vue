@@ -1,109 +1,61 @@
 <template>
-  <BaseTemplate title="Résultat de recherche de produits">
+  <BaseTemplate title="Résultat de recherche de produits" class="ff-roboto">
     <div
       v-if="isLoading"
       class="my-20 flex h-20 w-full flex-col items-center justify-center text-primary"
     >
       <LoadingComponent />
     </div>
-    <div v-else class="m-auto my-4 w-full max-w-screen-2xl px-5 sm:px-8">
-      <breadcrumb-shared-component
+    <div v-else class="my-4 mx-auto w-full px-4 md:px-8 lg:px-10 xl:px-12">
+      <BreadcrumbSharedComponent
         :list-url="breadcrumbUrl"
-        :current-page="`Listes des produits`"
-        gtm-event-name="click_list_products_breadcrumb"
+        current-page="Page de résultat"
       />
-      <ContactUsButtonComponent />
       <div
-        v-if="resultNotFound || count === 0 || products.length === 0"
-        class="mt-10 mb-7.5 flex w-full flex-row items-center justify-between pt-5 text-[14px] text-gray-500"
+        v-if="resultNotFound || count === 0 || internalProducts.length === 0"
+        class="my-12 w-full rounded-md border p-2 text-center text-gray-500"
       >
-        <div
-          class="mr-2 flex w-full flex-row items-start justify-center rounded-md border bg-white p-2"
-        >
-          Aucun résultat n'a été trouvé pour cette recherche
-        </div>
+        Aucun résultat n'a été trouvé pour la recherche ”{{ route.query.q }}“
       </div>
-      <div v-else class="flex w-full flex-col items-center">
-        <div
-          class="flex w-full flex-col items-center justify-between pt-5 text-[14px] text-gray-500"
-        >
-          <div
-            v-if="hasParameters"
-            class="mr-2 flex w-full flex-col items-start rounded-md border bg-white p-2 lg:flex-row"
-          >
-            <div class="flex flex-col text-sm md:text-base lg:text-lg">
-              Les résultats trouvés pour votre recherche
-              <div class="flex">
-                <div v-if="parameters.name" class="flex">
-                  <SelectedFilterComponent
-                    title="Mot clé"
-                    :label="parameters.name"
-                    @remove-filter="removeFilter(filterType.name)"
-                  />
-                </div>
-                <div v-if="parameters.companies" class="mt-2 flex lg:mt-0">
-                  <SelectedFilterComponent
-                    title="Partenaire"
-                    :label="parameters.companies[0].name"
-                    @remove-filter="removeFilter(filterType.company)"
-                  />
-                </div>
-                <div v-if="parameters.categories" class="mt-2 flex lg:mt-0">
-                  <SelectedFilterComponent
-                    title="Catégorie"
-                    :label="parameters.categories[0].name"
-                    @remove-filter="removeFilter(filterType.category)"
-                  />
-                </div>
-                <div v-if="parameters.properties" class="mt-2 flex lg:mt-0">
-                  <SelectedFilterComponent
-                    title="Propriété"
-                    :property="
-                      findPropertyData(
-                        parameters.properties[0].property,
-                        parameters.properties[0].value,
-                      )
-                    "
-                    @remove-filter="removeFilter(filterType.property)"
-                  />
-                </div>
-              </div>
-            </div>
+      <div v-else class="flex w-full flex-col">
+        <h3 class="mt-4 text-xl text-primary md:hidden md:text-3xl">
+          {{ route.query.q }}
+        </h3>
+        <MobileFiltersProductsComponent />
+        <div class="my-2 flex flex-col justify-between lg:flex-row">
+          <div class="hidden w-full max-w-[300px] lg:mr-6 lg:block xl:mr-8">
+            <FiltersProductComponent v-if="filters" class="w-full" />
           </div>
-        </div>
-        <div class="flex h-[50%] flex-col gap-4 xl:grid xl:grid-cols-4">
-          <FiltersComponent
-            v-if="filters"
-            :filters="filters"
-            @filter-product="filterProduct"
-          />
-          <div class="col-span-3 flex flex-col rounded-lg pb-4 md:mt-5">
-            <div>
-              <div
-                class="flex flex-col md:grid md:grid-cols-2 md:gap-8 lg:grid-cols-3"
-              >
-                <div v-for="product in products" :key="product.id">
-                  <AccordCadreComponent
-                    v-if="
-                      product.isAccordCadre &&
-                      (currentPartenaire === null ||
-                        currentPartenaire === product.seller.id)
-                    "
-                    :key="`ac-${product.id}`"
-                    :accord="product"
-                    class="mt-5 rounded-lg border-4 border-solid border-secondary bg-white md:mt-0"
-                  />
-                  <ProductComponent
-                    v-else-if="
-                      currentPartenaire === product.seller.id ||
-                      currentPartenaire === null
-                    "
-                    :key="`p-{product.id}`"
-                    :product="product"
-                    class="mt-5 h-[516px] !w-auto md:mt-0 md:w-[392px]"
-                  />
-                </div>
-              </div>
+          <div class="flex w-full grow-0 flex-col">
+            <h3 class="mb-4 hidden text-xl text-primary md:block md:text-3xl">
+              Votre recherche : {{ route.query.q }}
+            </h3>
+            <div
+              class="flex flex-col justify-items-center md:grid md:grid-cols-2 md:gap-5 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+            >
+              <template v-for="product in internalProducts" :key="product.id">
+                <AccordCadreComponent
+                  v-if="
+                    product.isAccordCadre &&
+                    (currentPartenaire === null ||
+                      currentPartenaire === product.seller.id)
+                  "
+                  :key="`ac-${product.id}`"
+                  :accord="product"
+                  horizontal-on-mobile
+                  class="mt-5 rounded-lg border-4 border-solid border-secondary bg-white md:mt-0 md:max-w-[350px]"
+                />
+                <ProductComponent
+                  v-else-if="
+                    currentPartenaire === product.seller.id ||
+                    currentPartenaire === null
+                  "
+                  :key="`p-${product.id}`"
+                  :product="product"
+                  horizontal-on-mobile
+                  class="!h-auto !w-full md:max-w-[350px]"
+                />
+              </template>
             </div>
             <div
               class="mt-5 flex w-full flex-col items-center justify-center space-y-3"
@@ -112,14 +64,14 @@
                 Résultats {{ count > currentCount ? currentCount : count }} sur
                 {{ count }}
               </div>
-              <button
+              <ButtonComponent
                 v-if="count > currentCount"
-                class="button w-1/2 border-2 border-secondary !text-secondary hover:!bg-white focus:!bg-white"
+                class="button button-primary-outline w-1/2"
                 @click="loadMore"
               >
                 <LoaderSharedComponent v-if="loadMoreLoading" />
-                <span v-else class="!text-lg"> Chargez plus </span>
-              </button>
+                <span v-else class="!text-lg">Charger plus de résultats</span>
+              </ButtonComponent>
             </div>
           </div>
         </div>
@@ -128,30 +80,36 @@
   </BaseTemplate>
 </template>
 <script lang="ts" setup>
-import BaseTemplate from '@/vuejs/BaseTemplate.vue'
-import ProductComponent from '@/vuejs/modules/products/components/ProductCardComponent.vue'
-import { useRoute } from 'vue-router'
 import { computed, onBeforeMount, ref, watch } from 'vue'
-import { useProductStore } from '@/vuejs/stores/product'
-import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
-import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
+import { useRoute } from 'vue-router'
+import { storeToRefs } from 'pinia'
+
 import AccordCadreComponent from '@/vuejs/modules/home/component/AccordCadreComponent.vue'
+import BaseTemplate from '@/vuejs/BaseTemplate.vue'
+import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
+import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
+import FiltersProductComponent from '@/vuejs/modules/products/components/filters/FiltersProductComponent.vue'
+import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
+import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
+import MobileFiltersProductsComponent from '@/vuejs/modules/products/components/filters/MobileFiltersProductsComponent.vue'
+import ProductComponent from '@/vuejs/modules/products/components/ProductCardComponent.vue'
+
 import router from '@/vuejs/router'
 import { ProductPageList } from '@/vuejs/router/pages-list'
-import FiltersComponent from '@/vuejs/modules/products/components/FiltersComponent.vue'
-import SelectedFilterComponent from '@/vuejs/modules/products/components/filters/SelectedFilterComponent.vue'
-import { storeToRefs } from 'pinia'
-import { filterType } from '@/vuejs/modules/products'
+import { Product } from '@/vuejs/types/Product'
+import { useProductStore } from '@/vuejs/stores/product'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
-import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
-import { Product, ProductCollection } from '@/vuejs/types/Product'
-import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const route = useRoute()
 const productStore = useProductStore()
-const { selectedCategoryId, selectedProperties, selectedCompanyId } =
-  storeToRefs(productStore)
-const resultProducts = ref<ProductCollection>()
+const {
+  products,
+  selectedCategoryId,
+  selectedProperties,
+  selectedCompanyId,
+  filters,
+} = storeToRefs(productStore)
 const isLoading = ref<boolean>()
 const term = ref<string>('')
 const currentPartenaire = ref<number>(null)
@@ -162,7 +120,7 @@ const favoriteStore = useFavoriteStore()
 const breadcrumbUrl = computed(() => {
   return []
 })
-const products = ref<Array<Product>>([])
+const internalProducts = ref<Array<Product>>([])
 const loadMoreLoading = ref<boolean>(false)
 const paramsProducts = ref(null)
 
@@ -173,7 +131,7 @@ onBeforeMount(async () => {
 const pageLoad = async () => {
   isLoading.value = true
   currentPartenaire.value = null
-  products.value = []
+  internalProducts.value = []
 
   paramsProducts.value = {
     page: 1,
@@ -191,17 +149,16 @@ const loadMore = async () => {
   await loadProducts(paramsProducts.value)
   currentCount.value += currentCount.value
   loadMoreLoading.value = false
+  sendGaEvent('click_resultats_more')
 }
 
 const loadProducts = async (paramsProducts: object) => {
-  resultProducts.value = await productStore.fetchProductsByParams(
-    paramsProducts,
-  )
+  await productStore.fetchProductsByParams(paramsProducts)
 
-  products.value.push(...resultProducts.value.results)
+  internalProducts.value.push(...products.value.results)
   if (route.query.q) {
     const eventLabel =
-      resultProducts.value.resultsCount > 0
+      products.value?.resultsCount > 0
         ? 'view_search_results'
         : 'no_search_results'
     await window.dataLayer?.push({
@@ -212,24 +169,7 @@ const loadProducts = async (paramsProducts: object) => {
 }
 
 const count = computed(() => {
-  return resultProducts.value?.resultsCount
-})
-
-const filters = computed(() => {
-  return resultProducts.value?.filters
-})
-
-const parameters = computed(() => {
-  return resultProducts.value?.parameters
-})
-
-const hasParameters = computed(() => {
-  return (
-    resultProducts.value?.parameters?.name ||
-    resultProducts.value?.parameters.categories?.length ||
-    resultProducts.value?.parameters.companies?.length ||
-    resultProducts.value?.parameters.properties?.length
-  )
+  return products.value?.resultsCount
 })
 
 const removeFilterAll = async () => {
@@ -237,40 +177,6 @@ const removeFilterAll = async () => {
   selectedCategoryId.value = null
   selectedCompanyId.value = null
   selectedProperties.value = null
-}
-
-const removeFilter = async (type: string) => {
-  switch (type) {
-    case filterType.name:
-      term.value = null
-      break
-    case filterType.category:
-      selectedCategoryId.value = null
-      break
-    case filterType.company:
-      selectedCompanyId.value = null
-      break
-    case filterType.property:
-      selectedProperties.value = null
-      break
-  }
-  await loadPage()
-}
-
-const findPropertyData = (propertyId: number, value: string) => {
-  const parentProperty = resultProducts.value?.filters.properties.find(
-    (p) => p.id === propertyId,
-  )
-
-  return {
-    id: parentProperty.id,
-    label: parentProperty.name,
-    children: parentProperty.children[value],
-  }
-}
-
-const filterProduct = async () => {
-  await loadPage()
 }
 
 const loadPage = async () => {
@@ -298,6 +204,17 @@ const loadPage = async () => {
     query: queryValue,
   })
 }
+
+watch(
+  () => [
+    selectedCategoryId.value,
+    selectedCompanyId.value,
+    selectedProperties.value,
+  ],
+  async () => {
+    await loadPage()
+  },
+)
 
 watch(
   () => route.query,
@@ -338,9 +255,3 @@ watch(
   { immediate: true },
 )
 </script>
-
-<style scoped>
-.bloc-content {
-  @apply rounded-lg bg-white px-7.5 py-7.5 text-gray-500;
-}
-</style>

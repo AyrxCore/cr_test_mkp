@@ -1,46 +1,42 @@
-{% extends "base.html.twig" %}
-{% block title %}Mot de passe oublié
-{% endblock %}
-{% block metas %}
-	<meta name="robots" content="noindex">
-{% endblock %}
-{% block header %}
-	{% include '_partials/_header.html.twig' with { 'back_url': true} %}
-{% endblock %}
-{% block body %}
-	<div class="container mx-auto mt-[5%] px-5 lg:px-0">
-		<h1 class="text-2xl font-bold text-primary xl:text-4xl flex">
-			Bienvenue sur la marketplace QANTIS
-		</h1>
-		<div class="flex my-10 md:my-[7%] justify-center">
-			<div class="flex p-3 lg:p-8 bg-white rounded-lg xl:w-1/2">
-				<form action="{{ path('reset_password') }}" method="post" class="w-full">
-					<h1 class="text-lg font-bold xl:text-2xl text-primary">
-						Vous avez
-						<span class="text-gradient">
-							oublié votre mot de passe ?</span>
-					</h1>
-					<div class="mt-5">
-						<p class="text-gray-500">
-							Veuillez saisir votre adresse email professionnelle dans le cadre ci-dessous afin de recevoir un lien pour
-																																			              définir votre nouveau mot de passe
-						</p>
+{% extends "default-prehome-page.html.twig" %}
 
-						{% include '_partials/_alert.html.twig' %}
+{% block title %}Mot de passe oublié{% endblock %}
 
-						<div class="flex flex-col md:flex-row justify-between space-x-2 mt-5">
-							<input type="email" id="username" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500" name="_username" value="" autocomplete="username" required/>
-							<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-							<button type="submit" class="flex text-white button button-gradient mt-2 md:mt-0">
-								<div class="vue-app" data-component="arrow-right-icon"></div>
-								Valider
-							</button>
-						</div>
-					</div>
+{% block content %}
+  <form action="{{ path('reset_password') }}" method="post" class="w-full" data-event-name="click_forgot_pass_valider">
+    <h1 class="text-md font-bold xl:text-2xl">
+      Vous avez oublié votre mot de passe ?
+    </h1>
+    <div class="mt-5 mx-4">
+      <p class="text-sm xl:text-base">
+        Renseignez ci-dessous votre <span class="font-bold"> adresse email professionnelle</span> utilisée pour vous
+        connecter à la marketplace.
+        <br />
+        Vous recevrez un email avec un lien pour réinitialiser votre mot de passe.
+      </p>
 
-				</form>
-			</div>
-		</div>
-	</div>
+      {% include '_partials/_alert.html.twig' %}
+
+      <div class="flex flex-col sm:flex-row justify-between space-x-2 mt-5 w-full">
+        <input
+          type="email"
+          id="username"
+          class="block w-full rounded-lg !border-solid !border-black !ring-black p-2.5 text-sm"
+          name="_username"
+          value=""
+          placeholder="Saisir votre adresse email professionnelle"
+          autocomplete="username"
+          required
+        />
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        <div class="flex justify-center">
+          <button id="formRequestPassword" type="submit" class="flex button button-primary mt-2 xl:mt-0 justify-center w-auto">
+            Valider
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </form>
 
 {% endblock %}

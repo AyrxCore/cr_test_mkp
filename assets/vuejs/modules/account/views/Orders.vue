@@ -1,10 +1,8 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="my-2 text-title-35 text-primary lg:mb-2">
-        Historiques de commandes
-      </h3>
-      <span class="flex text-sm text-gray-500 md:text-base">
+      <h3 class="text-title-primary my-2 lg:mb-2">Mes commandes</h3>
+      <span class="mb-2 flex text-sm md:text-base">
         La commande la plus récente apparaît en premier
       </span>
       <div
@@ -29,7 +27,7 @@
         >
           Vous n'avez pas encore passé de commande
         </div>
-        <orderComponent
+        <OrderComponent
           v-for="(order, key) in orderStore.orders"
           v-else
           :key="key"

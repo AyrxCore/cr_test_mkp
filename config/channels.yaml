@@ -9,12 +9,27 @@ parameters:
         logo: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/logo-qantis.png
         favicon: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/favicon-qantis.svg
         primaryColor: '#050056'
-        secondaryColor: '#9553ff'
+        secondaryColor: '#404FE6'
         textColor: '#6b7280'
         privacyPolicy: '/politique-de-confidentialite'
         legalTerms: '/mentions-legales'
         generalTermsOfUse: '/conditions-generales-d-utilisation'
         whiteLabel: false
+      channelOptions:
+        - { name: 'BANNER_HOMEPAGE', value: null }
+        - { name: 'BANNER_TITLE_HOMEPAGE', value: null }
+        - { name: 'TEXT_FOOTER', value: null }
+        - { name: 'BANNER_FLASH_HOMEPAGE', value: null }
+        - { name: 'BANNER_SLIDER_HOMEPAGE', value: null }
+        - { name: 'RSE_HOMEPAGE', value: null }
+        - { name: 'SUPPLIER_PARTNERS_HOMEPAGE', value: null }
+        - { name: 'EXPERT_CONTENT_HOMEPAGE', value: null }
+        - { name: 'FAVORITES', value: null }
+        - { name: 'PRE_HOME_IMAGE', value: 'https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/pre-home/qantis-prehome-image.png' }
+        - { name: 'PRE_HOME_TITLE', value: 'Pour tous vos achats, ayez le réflexe QANTIS!' }
+        - { name: 'PRE_HOME_SUBTITLE', value: "Depuis 2001, QANTIS optimise et facilite les achats des entreprises et réseaux d'entreprises" }
+        - { name: 'PRE_HOME_LIST', value: 'Des conditions avantageuses déjà négociées; Un catalogue de plus de 200 partenaires référencés; Des produits et services du quotidien et pour vos achats métier' }
+        - { name: 'PRE_HOME_NOTATION', value: null }
 
     - name: Cedap Service Achats
       code: CEDAP
@@ -63,6 +78,21 @@ parameters:
         legalTerms: 'http://www.fspf.fr/mentions-legales'
         generalTermsOfUse: ~
         whiteLabel: true
+      channelOptions:
+        - { name: 'BANNER_HOMEPAGE', value: null }
+        - { name: 'BANNER_TITLE_HOMEPAGE', value: null }
+        - { name: 'TEXT_FOOTER', value: null }
+        - { name: 'BANNER_FLASH_HOMEPAGE', value: null }
+        - { name: 'BANNER_SLIDER_HOMEPAGE', value: null }
+        - { name: 'RSE_HOMEPAGE', value: null }
+        - { name: 'SUPPLIER_PARTNERS_HOMEPAGE', value: null }
+        - { name: 'EXPERT_CONTENT_HOMEPAGE', value: null }
+        - { name: 'FAVORITES', value: null }
+        - { name: 'PRE_HOME_IMAGE', value: 'https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/pre-home/fspf-prehome-image.png' }
+        - { name: 'PRE_HOME_TITLE', value: 'Optimisez vos achats professionnels grâce à FSPF Privilèges* !' }
+        - { name: 'PRE_HOME_SUBTITLE', value: null }
+        - { name: 'PRE_HOME_LIST', value: 'Réduisez vos coûts grâce à des offres d’achats exclusives;Accédez à un large choix de partenaires adaptés à vos besoins;Achetez mieux et gagnez du temps' }
+        - { name: 'PRE_HOME_NOTATION', value: '*FSPF Privilèges vous permet d’accéder à des conditions avantageuses sur les produits et services essentiels pour votre entreprise. Tout adhérent FSPF bénéficie de ce service, inclus dans le cadre de son adhésion.' }
 
     - name: Service Achats de l'Unep
       code: UNEP
@@ -72,13 +102,29 @@ parameters:
         phoneNumber: '+33437651626'
         logo: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/logo-unep.png
         favicon: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/favicon-unep.png
-        primaryColor: '#004855'
-        secondaryColor: '#00323b'
+        primaryColor: '#97173B'
+        secondaryColor: '#004650'
         textColor: '#000000'
         privacyPolicy: ~
         legalTerms: 'https://www.lesentreprisesdupaysage.fr/mentions-legales/'
         generalTermsOfUse: ~
         whiteLabel: true
+      channelOptions:
+        - { name: 'BANNER_HOMEPAGE', value: null }
+        - { name: 'BANNER_TITLE_HOMEPAGE', value: null }
+        - { name: 'TEXT_FOOTER', value: null }
+        - { name: 'BANNER_FLASH_HOMEPAGE', value: null }
+        - { name: 'BANNER_SLIDER_HOMEPAGE', value: null }
+        - { name: 'RSE_HOMEPAGE', value: null }
+        - { name: 'SUPPLIER_PARTNERS_HOMEPAGE', value: null }
+        - { name: 'EXPERT_CONTENT_HOMEPAGE', value: null }
+        - { name: 'FAVORITES', value: null }
+        - { name: 'PRE_HOME_IMAGE', value: 'https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/pre-home/unep-prehome-image.png' }
+        - { name: 'PRE_HOME_TITLE', value: 'Optimisez vos achats professionnels grâce au service achats Unep* !' }
+        - { name: 'PRE_HOME_SUBTITLE', value: null }
+        - { name: 'PRE_HOME_LIST', value: 'Réduisez vos coûts grâce à des offres d’achats exclusives;Accédez à un large choix de partenaires adaptés à vos besoins;Achetez mieux et gagnez du temps' }
+        - { name: 'PRE_HOME_NOTATION', value: '*Le service achats Unep vous permet d’accéder à des conditions avantageuses sur les produits et services essentiels pour votre entreprise. Tout adhérent Unep bénéficie de ce service, inclus dans le cadre de son adhésion.' }
+
 
     - name: CAPER ACHATS
       code: CAPER

@@ -22,7 +22,7 @@
           class="inline-flex items-center underline decoration-2 underline-offset-4 hover:decoration-purple-600"
         >
           Voir le détail de la commande
-          <ArrowRightIconComponent :stroke-color="'#5E6875'" class="ml-2" />
+          <ArrowRightIconComponent class="ml-2 stroke-gray-500" />
         </a>
       </div>
     </div>

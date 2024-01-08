@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto mt-[5%] px-5 text-primary lg:px-0">
-    <h3 class="home-title my-5 text-primary">MENTIONS LEGALES</h3>
+    <h3 class="text-title-primary my-5">MENTIONS LEGALES</h3>
     <div class="mentions-legales my-5 justify-center">
       <p class="font-bold underline"><b>Editeur</b></p>
       <p>

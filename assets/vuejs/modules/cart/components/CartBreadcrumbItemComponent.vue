@@ -24,7 +24,7 @@ const classes = computed((): string[] => {
   if (props.routeName === currentRouteName.value) {
     return ['border-secondary', 'text-secondary']
   }
-  return ['border-gray-300', 'text-gray-500']
+  return ['border-black', 'text-black']
 })
 
 const currentRouteName = computed(

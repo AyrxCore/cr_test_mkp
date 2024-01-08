@@ -46,13 +46,11 @@
                 />
               </span>
             </h3>
-            <span
-              class="flex flex-col text-sm text-gray-500 lg:flex-row lg:text-lg"
-            >
+            <span class="flex flex-col text-sm lg:flex-row lg:text-lg">
               Référence : {{ product.reference }}
             </span>
             <span
-              class="flex cursor-pointer items-center text-sm text-gray-500 lg:text-lg"
+              class="flex cursor-pointer items-center text-sm lg:text-lg"
               @click="variantOptions"
             >
               <Chevron2RightIconComponent
@@ -67,14 +65,14 @@
               v-if="isLoadingOptions"
               class="mt-1 flex h-10 w-full items-center justify-start"
             >
-              <LoaderSharedComponent class="loader-lg loader text-gray-500" />
+              <LoaderSharedComponent class="loader-lg loader" />
             </div>
             <div v-else>
               <ul v-if="isOpen && options.length > 0">
                 <li
                   v-for="option in options"
                   :key="option.id"
-                  class="ml-3 text-sm text-gray-500 lg:text-base"
+                  class="ml-3 text-sm lg:text-base"
                 >
                   <span v-if="option.option.name.default" class="font-bold">
                     {{ option.option.name.default }} :
@@ -98,7 +96,7 @@
             <LoaderSharedComponent v-else class="text-primary" />
           </div>
           <div class="text-center lg:w-4/12">
-            <span class="mt-2 text-sm text-gray-400 line-through lg:text-lg">
+            <span class="mt-2 text-sm line-through lg:text-lg">
               {{ referencePriceDisplayed }}€ HT
             </span>
           </div>
@@ -108,15 +106,12 @@
             </span>
           </div>
           <div class="flex">
-            <!-- <button class="flex ">
-              <HeartIconComponent class="mr-2 stroke-gray-500" />
-            </button> -->
             <button
               v-if="!cartStore.modifyingCart"
               class="flex text-gray-500"
               @click="deleteProduct"
             >
-              <TrashIconComponent :stroke-color="'#5E6875'" />
+              <TrashIconComponent stroke="#5E6875" />
             </button>
             <LoaderSharedComponent v-else class="text-primary" />
           </div>

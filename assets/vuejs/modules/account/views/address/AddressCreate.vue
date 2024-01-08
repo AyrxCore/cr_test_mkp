@@ -1,12 +1,16 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="mt-2 mb-2 text-title-35 text-primary lg:mt-0">
+      <h3 class="text-title-primary mt-2 mb-6 xl:mt-0">
         Créer une adresse de
         <span v-if="props.type === ADDRESS_BILLING"> facturation </span>
         <span v-else-if="props.type === ADDRESS_SHIPPING"> livraison </span>
       </h3>
-      <AddressForm :type="props.type" />
+      <AddressForm
+        :type="props.type"
+        @submit-address="eventGaSubmitAddress"
+        @abort-cancel-address="eventGaCancelCreateAddress"
+      />
     </template>
   </AccountPage>
 </template>
@@ -16,6 +20,7 @@ import { useHead } from '@vueuse/head'
 import AddressForm from '@/vuejs/modules/account/components/address/AddressForm.vue'
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import { ADDRESS_BILLING, ADDRESS_SHIPPING } from '@/vuejs/services/const'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const title = 'Créer une adresse'
 const props = defineProps({
@@ -34,4 +39,20 @@ useHead({
     },
   ],
 })
+
+const eventGaSubmitAddress = () => {
+  const gaEventName =
+    props.type === ADDRESS_BILLING
+      ? 'click_billing_save'
+      : 'click_shipping_save'
+  sendGaEvent(gaEventName)
+}
+
+const eventGaCancelCreateAddress = () => {
+  const gaEventName =
+    props.type === ADDRESS_BILLING
+      ? 'click_billing_cancel'
+      : 'click_shipping_cancel'
+  sendGaEvent(gaEventName)
+}
 </script>

@@ -14,7 +14,7 @@
       >
         <ChevronLeftIconComponent
           class="ml-1 h-4 stroke-gray-500"
-          :stroke-color="'#626262'"
+          stroke="#626262"
         />
       </button>
       <span>{{ props.pageNumber }} / {{ props.numberPageTotal }}</span>
@@ -25,7 +25,7 @@
         }"
         @click="pageNext"
       >
-        <ChevronRightIconComponent class="ml-1 h-4" :stroke-color="'#626262'" />
+        <ChevronRightIconComponent class="ml-1 h-4" stroke="#626262" />
       </button>
     </div>
     <div class="mr-2 items-center">{{ props.count }} produit(s)</div>

@@ -4,7 +4,7 @@
   >
     <div class="lg:ml-16">
       <h3
-        class="mb-6 text-center text-3xl font-bold leading-9 text-primary lg:text-left xl:w-3/4"
+        class="text-title-primary mb-6 text-center leading-9 lg:text-left xl:w-3/4"
       >
         Conditions négociées
       </h3>
@@ -24,7 +24,7 @@
             :class="
               button.style === 'primary'
                 ? 'button-primary'
-                : 'button-secondary-definitive'
+                : 'button-primary-outline'
             "
             @click="clickOnCta(button.url, button.style)"
           >
@@ -46,12 +46,12 @@
           },
         }"
         @click-left="
-          sendGtmEvent('click_fat_tableau_conditions_left', {
+          sendGaEvent('click_fat_tableau_conditions_left', {
             productName: props.accordName,
           })
         "
         @click-right="
-          sendGtmEvent('click_fat_tableau_conditions_right', {
+          sendGaEvent('click_fat_tableau_conditions_right', {
             productName: props.accordName,
           })
         "
@@ -69,7 +69,7 @@ import { computed } from 'vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
 import { SwiperSlide } from 'swiper/vue'
 import { openInNewTab } from '@/vuejs/services/utils'
-import { sendGtmEvent } from '@/vuejs/services/gtm'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const props = defineProps({
   mentionsLegales: {
@@ -127,7 +127,7 @@ const clickOnCta = (buttonUrl: string, buttonStyle: string) => {
     buttonStyle === 'primary'
       ? 'click_fat_conditions_cta1'
       : 'click_fat_conditions_cta2'
-  sendGtmEvent(eventName, {
+  sendGaEvent(eventName, {
     productName: props.properties.fat_marque,
   })
 }

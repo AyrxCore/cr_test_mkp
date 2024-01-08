@@ -12,7 +12,7 @@
         />
       </div>
       <div class="ml-2 w-[45%]">
-        <h3 class="primary text-[22px] font-bold">{{ product.name }}</h3>
+        <h3 class="text-[22px] font-bold text-primary">{{ product.name }}</h3>
         <span class="text-lg text-gray-500">
           Vendu par: {{ product.seller }}
         </span>
@@ -37,16 +37,16 @@
         >
       </div>
       <div class="w-[10%] text-center">
-        <span class="primary mt-2 text-lg font-bold"
+        <span class="mt-2 text-lg font-bold text-primary"
           >{{ product.price_ttc }}€ HT</span
         >
       </div>
       <div class="float-right inline-flex flex-1">
         <a href="#">
-          <HeartIconComponent :stroke-color="'#5E6875'" class="mr-2" />
+          <HeartIconComponent :stroke="channelSecondaryColor" class="mr-2" />
         </a>
         <a href="#">
-          <TrashIconComponent :stroke-color="'#5E6875'" />
+          <TrashIconComponent :stroke="channelSecondaryColor" />
         </a>
       </div>
     </div>
@@ -55,6 +55,10 @@
 <script lang="ts" setup>
 import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
 import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
+import { storeToRefs } from 'pinia'
+import { useChannelStore } from '@/vuejs/stores/channel'
+
+const { channelSecondaryColor } = storeToRefs(useChannelStore())
 
 const props = defineProps({
   product: {

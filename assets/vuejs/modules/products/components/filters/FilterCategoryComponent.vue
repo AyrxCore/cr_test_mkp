@@ -1,15 +1,18 @@
 <template>
-  <div class="mt-1 flex items-center text-left text-sm text-primary">
+  <div class="my-2 flex items-center text-left text-sm">
     <input
       v-model="catRadio"
+      :checked="category.checked"
+      :value="category.id"
+      :id="`categoryRadio-${category.id}`"
       name="catRadio"
       type="radio"
-      :value="category.id"
-      class="mr-1"
-      :checked="category.checked"
+      class="mr-3 cursor-pointer"
       @change="handleCategorySelection(category)"
     />
-    <label> {{ category.name }} ({{ category.productCount }}) </label>
+    <label :for="`categoryRadio-${category.id}`" class="cursor-pointer">
+      {{ category.name }} ({{ category.productCount }})
+    </label>
     <Chevron2RightIconComponent
       v-if="category.children?.length > 0"
       :class="{
@@ -19,14 +22,14 @@
       }"
       @click="toggleChildren"
     />
-  </div>
-  <div v-if="showChildren" class="ml-5">
-    <FilterCategoryComponent
-      v-for="cat in category.children"
-      :key="cat.id"
-      :category="cat"
-      @change-category="handleCategorySelection(cat)"
-    />
+    <div v-if="showChildren" class="ml-5">
+      <FilterCategoryComponent
+        v-for="cat in category.children"
+        :key="cat.id"
+        :category="cat"
+        @change-category="handleCategorySelection(cat)"
+      />
+    </div>
   </div>
 </template>
 <script lang="ts" setup>

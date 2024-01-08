@@ -1,7 +1,7 @@
 <template>
   <select
     v-model="internalValue"
-    class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+    class="block w-full rounded-lg border-none p-2.5 text-sm focus:border-primary focus:ring-primary"
     :class="props.classes"
     :required="props.required"
     :disabled="props.disabled"

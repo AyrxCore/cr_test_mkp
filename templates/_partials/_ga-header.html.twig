@@ -1,0 +1,44 @@
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-049GVLE2VX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-049GVLE2VX');
+
+  function buildStandardGaData() {
+    return {
+      device: Screen.orientation > 1 ? 'phone' : 'desktop',
+      screen_size: window.innerWidth + 'x' + window.innerHeight,
+      navigateur: userBrowser(),
+      page_url: window.location.href,
+      page_name: window.location.pathname
+    }
+  }
+
+  function userBrowser() {
+    const navigator = window.navigator
+    if (
+      (navigator.userAgent.indexOf('Opera') ||
+        navigator.userAgent.indexOf('OPR')) !== -1
+    ) {
+      return 'opera'
+    } else if (navigator.userAgent.indexOf('Edg') !== -1) {
+      return 'edge'
+    } else if (navigator.userAgent.indexOf('Chrome') !== -1) {
+      return 'chrome'
+    } else if (navigator.userAgent.indexOf('Safari') !== -1) {
+      return 'safari'
+    } else if (navigator.userAgent.indexOf('Firefox') !== -1) {
+      return 'firefox'
+    } else if (
+      navigator.userAgent.indexOf('MSIE') !== -1 ||
+      !!document.documentMode === true
+    ) {
+      return 'IE'
+    } else {
+      return null
+    }
+  }
+
+</script>

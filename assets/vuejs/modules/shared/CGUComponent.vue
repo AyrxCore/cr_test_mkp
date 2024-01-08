@@ -2,7 +2,7 @@
   <div
     :class="{
       'relative mb-3 flex w-2/3 justify-center border p-2 font-bold': !page,
-      'home-title my-10 ': page,
+      'text-title-primary my-10 ': page,
     }"
   >
     CONDITIONS GÉNÉRALES D'UTILISATION

@@ -11,6 +11,11 @@
         name: ProductPageList.PRODUCTS,
         query: { category: category.id },
       }"
+      @click="
+        sendGaEvent('click_all_cat_target', {
+          cat_name: category.name,
+        })
+      "
     >
       {{ category.name }}
     </RouterLink>
@@ -37,6 +42,7 @@ import { PropType, ref } from 'vue'
 import Chevron2RightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import { Category } from '@/vuejs/types/Product/Category'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 defineProps({
   category: {

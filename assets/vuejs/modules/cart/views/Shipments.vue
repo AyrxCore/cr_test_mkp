@@ -1,5 +1,5 @@
 <template>
-  <h3 class="mt-8 mb-2 text-title-35 text-primary">Livraison</h3>
+  <h3 class="text-title-primary mt-8 mb-2">Livraison</h3>
   <div class="flex flex-col-reverse lg:grid lg:grid-cols-4 lg:gap-4 lg:px-0">
     <div class="col-span-3">
       <template v-if="!isLoadingMethods">
@@ -15,13 +15,13 @@
       <LoadingComponent v-else />
     </div>
     <CartRightSideComponent :show-shipment-price="!isLoadingMethods">
-      <template #title>Récapitulatif</template>
+      <template #title>Récapitulatif panier</template>
       <template #button-next>
         <ButtonComponent
-          class="button button-gradient mt-3 w-full"
+          class="button-primary mt-3 w-full"
           @click="goToPayment"
         >
-          <ArrowRightIconComponent :stroke-color="'#FFFFFF'" />
+          <ArrowRightIconComponent class="h-4 w-4" />
           Continuer
         </ButtonComponent>
       </template>

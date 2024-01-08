@@ -21,23 +21,3 @@
 <script lang="ts" setup>
 import { betterTextColor } from '@/vuejs/services/utils'
 </script>
-
-<style scoped>
-.loading {
-  background: linear-gradient(-90deg, #e8e8e8, #d0cfcf, #e8e8e8);
-  background-size: 300% 300%;
-  animation: gradient 1s ease infinite;
-}
-
-@keyframes gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-</style>

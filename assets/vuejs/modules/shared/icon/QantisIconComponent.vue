@@ -1,10 +1,10 @@
 <template>
   <svg
-    :width="sizeWidth"
-    :height="sizeHeight"
+    width="179"
+    height="47"
     viewBox="0 0 179 47"
-    :fill="fillColor"
-    :stroke="strokeColor"
+    fill="#05004F"
+    stroke="#05004F"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
@@ -25,26 +25,3 @@
     />
   </svg>
 </template>
-
-<script setup lang="ts">
-defineProps({
-  fillColor: {
-    type: String,
-    default: '#05004F',
-  },
-  strokeColor: {
-    type: String,
-    default: '#05004F',
-  },
-  sizeWidth: {
-    type: Number,
-    default: 179,
-  },
-  sizeHeight: {
-    type: Number,
-    default: 47,
-  },
-})
-</script>
-
-<style scoped></style>

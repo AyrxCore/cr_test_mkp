@@ -12,26 +12,15 @@ use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
 class FavoritePersister implements ContextAwareDataPersisterInterface
 {
-    #[Required]
-    public EntityManagerInterface $em;
-
-    #[Required]
-    public NormalizerInterface $normalizer;
-
-    #[Required]
-    public Security $security;
-
-    #[Required]
-    public RequestStack $requestStack;
-
-    #[Required]
-    public FavoriteService $favoriteService;
+    public function __construct(public EntityManagerInterface $em, public NormalizerInterface $normalizer, public Security $security, public RequestStack $requestStack, public
+    FavoriteService $favoriteService ) {}
 
     public function supports($data, array $context = []): bool
     {
@@ -55,6 +44,8 @@ class FavoritePersister implements ContextAwareDataPersisterInterface
             $this->em->flush();
 
             return $data;
+        } catch (UniqueConstraintViolationException $uniqueConstraintViolationException) {
+            throw new ConflictHttpException($uniqueConstraintViolationException->getMessage());
         } catch (Exception $exception) {
             throw  new Exception($exception->getMessage());
         }

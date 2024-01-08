@@ -9,9 +9,7 @@
   >
     <ShoppingCartIconComponent
       class="mr-2 w-4"
-      :style="{
-        stroke: betterTextColor('primary'),
-      }"
+      :stroke="betterTextColor('primary')"
     />
     Ajouter
   </ButtonComponent>

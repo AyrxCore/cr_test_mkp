@@ -1,67 +1,45 @@
-{% extends "base.html.twig" %}
+{% extends "default-prehome-page.html.twig" %}
 {% block title %}Première connexion - Marketplace
 {% endblock %}
-{% block metas %}
-	<meta name="robots" content="noindex">
-{% endblock %}
-{% block header %}
-	{% include '_partials/_header.html.twig' with { 'back_url': true} %}
-{% endblock %}
 
-{% block body %}
-	<div class="container mx-auto mt-[5%] px-5 lg:px-0">
-		<h1 class="text-2xl font-bold text-primary xl:text-4xl flex">
-			Bienvenue sur la marketplace QANTIS
-		</h1>
-		<div class="flex flex-col my-10 md:my-[5%] lg:space-x-2 lg:flex-row justify-center">
-			<div class="lg:w-1/2 flex p-3 lg:p-8 bg-white rounded-lg">
-				<form action="{{ path('first_signin') }}" method="post" class="w-full">
-					<h1 class="text-lg font-bold xl:text-2xl text-primary">
-						Activation
-						<span class="text-gradient">de votre compte</span>
-					</h1>
-					<div class="mt-5">
-						<p class="text-gray-500 xl:w-5/6">
-							Rentrez votre adresse email professionnelle dans le cadre ci-dessous afin de définir votre mot de passe
-						</p>
+{% block content %}
+  <form action="{{ path('first_signin') }}" method="post"  data-event-name="click_activate_valider">
+    <h1 class="text-lg font-bold xl:text-2xl w-full text-center">
+      Activation de votre compte
+    </h1>
+    <div class="mt-5">
+      <p>
+        Pour votre première connexion sur la marketplace
+      </p>
+      <ol class="list-decimal ml-6">
+        <li>Entrez ci-dessous votre <span class="font-bold">email professionnel</span></li>
+        <li>Définissez votre <span class="font-bold">mot de passe</span> grâce au lien reçu par email</li>
+        <li>Retournez à la page de connexion, saisissez votre adresse email et votre mot de passe, et connectez-vous!
+        </li>
+      </ol>
 
-						{% include '_partials/_alert.html.twig' %}
+      {% include '_partials/_alert.html.twig' %}
 
-						<div class="flex flex-col md:flex-row justify-between space-x-2 mt-5">
-							<input type="email" id="username" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm
-																																                    text-gray-900 focus:border-blue-500 focus:ring-blue-500" name="_username" value="" autocomplete="username" required/>
-							<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-							<button type="submit" class="flex text-white button button-gradient mt-2 md:mt-0">
-								<div class="vue-app" data-component="arrow-right-icon"></div>
-								Valider
-							</button>
-						</div>
-					</div>
+      <div class="flex flex-col md:flex-row justify-between space-x-2 mt-5 w-full">
+        <input
+          type="email"
+          id="username"
+          class="block w-full rounded-lg !border-solid !border-black !ring-black p-2.5 text-sm"
+          name="_username"
+          value=""
+          placeholder="Saisir votre adresse email professionnelle"
+          autocomplete="username"
+          required
+        />
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        <div class="flex justify-center">
+          <button id="formFirstConnection" type="submit" class="flex button button-primary mt-2 md:mt-0 justify-center w-auto">
+            Valider
+          </button>
+        </div>
+      </div>
+    </div>
 
-				</form>
-			</div>
-
-			<div class="lg:w-1/2 flex flex-col p-3 lg:p-8 bg-white rounded-lg mt-5 lg:mt-0">
-				<h1 class="text-xl font-bold xl:text-2xl text-primary">
-					Besoin d'aide
-					<span class="text-gradient">pour vous connecter ?</span>
-				</h1>
-				<p class="2xl:w-3/4 mt-5 text-gray-500">
-					Notre service adhérents est à votre disposition du
-					<br/>
-					lundi au vendredi de
-					<span class="font-bold">8h30 à 18h.</span>
-				</p>
-				<div class="2xl:w-2/3 mt-5">
-					<button id="btnModal" type="button" data-toggle="modal" onclick="openModal('contactModal')" class="flex text-white button button-gradient w-full">
-						<div class="vue-app" data-component="arrow-right-icon"></div>
-						Contactez le service adhérents QANTIS
-					</button>
-					{% include '_partials/_contact-modal.html.twig' %}
-				</div>
-			</div>
-		</div>
-
-	</div>
+  </form>
 
 {% endblock %}

@@ -5,13 +5,11 @@
         class="mb-4 flex items-center justify-between text-[19px] text-primary md:justify-start md:text-[25px]"
       >
         <span>{{ seller?.name || '-' }}</span>
-        <span class="ml-2 text-sm font-bold text-gray-500">
+        <span class="ml-2 text-sm font-bold text-black">
           {{ order.items.length }} référence(s)
         </span>
       </h3>
-      <div
-        class="hidden justify-between text-sm text-gray-400 lg:flex lg:w-full"
-      >
+      <div class="hidden justify-between text-sm lg:flex lg:w-full">
         <div class="flex lg:w-7/12">Description de l'article</div>
         <div class="flex justify-between lg:w-5/12">
           <div class="w-2/12 text-center">Qté</div>
@@ -31,9 +29,7 @@
       <div class="flex w-full flex-row justify-center lg:justify-end">
         <div class="hidden lg:ml-2 lg:flex lg:w-8/12"></div>
         <div class="w-4/12 text-center lg:w-2/12">
-          <span class="mt-2 text-sm text-gray-400">
-            Sous-total fournisseur
-          </span>
+          <span class="mt-2 text-sm"> Sous-total fournisseur </span>
         </div>
         <div class="w-5/12 text-left lg:w-2/12 lg:text-center">
           <span class="mt-2 text-lg font-bold text-primary">
@@ -45,9 +41,7 @@
       </div>
       <div class="flex w-full flex-col">
         <CartFrancoComponent :order="order" class="mt-5" />
-        <p
-          class="mt-7 flex items-center text-sm text-gray-500 md:items-center lg:text-lg"
-        >
+        <p class="mt-7 flex items-center text-sm md:items-center lg:text-lg">
           <input
             v-model="orderTermsOfSales"
             type="checkbox"
@@ -62,8 +56,8 @@
           </span>
 
           <TosOrderComponent
-            :seller="seller"
             v-if="showTos"
+            :seller="seller"
             @close="showTos = false"
           />
         </p>

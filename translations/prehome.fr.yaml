@@ -1,7 +1,7 @@
 resetting:
   ttl_not_reached: "Une demande est déjà en cours, vous devez patienter %duration% minutes entre chaque demande"
-  request.success: "Un mail contenant un lien de réinitialisation a été envoyé"
-  request.first_connexion.success: "Un mail contenant un lien d'initialisation de votre mot de passe a été envoyé"
+  request.success: "Un email contenant un lien de réinitialisation a été envoyé"
+  request.first_connexion.success: "Un email contenant un lien d'initialisation de votre mot de passe a été envoyé"
   request.failed: "Vous ne semblez pas disposer de compte sur cette plateforme..."
   token.error: "Le token de réinitialisation n'est pas valide ou a déjà été utilisé"
   password.first.label: "Nouveau mot de passe"

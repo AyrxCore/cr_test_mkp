@@ -7,16 +7,13 @@
           <SavedCartForm :saved-cart="savedCart" />
           <div class="flex justify-between md:justify-end">
             <ButtonComponent
-              class="button-secondary mr-2"
+              class="button-primary-outline mr-2"
               type="button"
               @click="onCancelClick"
             >
               Annuler
             </ButtonComponent>
-            <ButtonComponent
-              class="button-primary !border-0 hover:!bg-primary focus:!bg-primary"
-              :is-loading="isLoading"
-            >
+            <ButtonComponent class="button-primary" :is-loading="isLoading">
               Enregistrer
             </ButtonComponent>
           </div>

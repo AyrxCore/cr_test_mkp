@@ -6,18 +6,19 @@
         <AlertSharedComponent
           class="bg-red-200 text-red-800 dark:bg-red-200 dark:text-red-800"
         />
-        <RouterLink :to="{ name: AccountPageList.ORDERS }">
-          <span class="button button-white button-white-secondary">
-            <ArrowLeftIconComponent />
-            Retour à la liste
-          </span>
+        <RouterLink
+          :to="{ name: AccountPageList.ORDERS }"
+          class="button button-primary-outline"
+        >
+          <ArrowLeftIconComponent />
+          Retour à la liste
         </RouterLink>
       </div>
       <div v-else>
-        <h3 class="primary mb-2 mt-2 text-3xl font-bold text-primary lg:mt-0">
+        <h3 class="primary text-title-primary mb-2 mt-2 lg:mt-0">
           Commande {{ order.orderNumber }}
         </h3>
-        <p>
+        <p class="text-gray-500">
           Ci-dessous, vous trouverez des détails sur les articles que vous avez
           commandés. Si vous avez commandé plus d’un article, veuillez noter que
           certains articles peuvent afficher une méthode d’expédition différente
@@ -28,18 +29,22 @@
           v-if="order.paymentId"
           class="mt-5 flex flex-wrap items-center justify-center rounded-lg bg-white py-2 text-sm font-bold text-primary md:text-base lg:text-lg"
         >
-          <span class="mr-1">Télécharger la facture&nbsp;: </span>
+          <span class="mr-1">Télécharger la facture: </span>
           <ButtonDownloadInvoiceComponent :payment-id="order.paymentId" />
         </div>
         <div class="mt-5 flex w-full rounded-lg bg-white p-5">
-          <div class="mr-5 flex flex-col items-end justify-center space-y-4">
+          <div
+            class="mr-5 flex flex-col items-end justify-center space-y-4 text-gray-500"
+          >
             <div>Numéro de la commande:</div>
             <div>Date de la commande:</div>
             <div>Etat de la commande:</div>
             <div>Total de la commande HT :</div>
             <div>Total de la commande TTC:</div>
           </div>
-          <div class="flex flex-col items-center justify-center space-y-4">
+          <div
+            class="flex flex-col items-center justify-center space-y-4 text-gray-500"
+          >
             <div>{{ order.orderNumber }}</div>
             <div>{{ formatDateFr(order.createdAt) }}</div>
             <div
@@ -55,18 +60,18 @@
               >
             </div>
             <div>
-              <span class="flex"> {{ formatPrice(order.total) }} € TTC </span>
+              <span class="flex text-gray-500">
+                {{ formatPrice(order.total) }} € TTC
+              </span>
             </div>
           </div>
         </div>
 
-        <div
-          class="mt-5 flex w-full flex-col items-center md:flex-row md:items-stretch"
-        >
+        <div class="mt-5 flex w-full">
           <div
-            class="mb-6 flex w-full flex-col items-start justify-center space-y-4 rounded-lg bg-white p-5 md:mb-0 md:mr-5"
+            class="mr-5 flex w-1/2 flex-col items-start justify-center space-y-4 rounded-lg bg-white p-5 text-gray-500"
           >
-            <h3 class="text-primary">Adresse de livraison</h3>
+            <h3 class="font-bold text-primary">Adresse de livraison</h3>
             <div>{{ order.shippingAddress }}</div>
             <div class="flex items-center">
               Etat de la livraison:
@@ -80,18 +85,18 @@
             </div>
           </div>
           <div
-            class="flex w-full flex-col items-start justify-center space-y-4 rounded-lg bg-white p-5"
+            class="flex w-1/2 flex-col items-start justify-center space-y-4 rounded-lg bg-white p-5 text-gray-500"
           >
-            <h3 class="text-primary">Adresse de facturation</h3>
+            <h3 class="font-bold text-primary">Adresse de facturation</h3>
             <div>{{ order.billingAddress }}</div>
           </div>
         </div>
         <div class="mt-5 flex w-full flex-col">
-          <div class="flex p-2">
-            <div class="hidden md:flex md:w-8/12 lg:w-9/12">
+          <div class="flex p-2 text-gray-500">
+            <div class="flex md:w-8/12 lg:w-9/12">
               <span>Description d'article</span>
             </div>
-            <div class="hidden justify-between md:flex md:w-4/12 lg:w-3/12">
+            <div class="flex justify-between md:w-4/12 lg:w-3/12">
               <span>Prix unitaire</span>
               <span>Sous total</span>
             </div>
@@ -105,17 +110,17 @@
         </div>
         <div class="mt-5 flex w-full justify-end">
           <div class="flex flex-col">
-            <h4>Récapitulatif</h4>
+            <h4 class="text-gray-500">Récapitulatif</h4>
             <div class="flex rounded-lg bg-white px-2 py-3">
               <div
-                class="mr-2 flex flex-col items-end justify-center space-y-3 text-sm"
+                class="mr-2 flex flex-col items-end justify-center space-y-3 text-sm text-gray-500"
               >
                 <div>Sous-total HT:</div>
                 <div>Frais de livraison HT:</div>
                 <div>Total TTC:</div>
               </div>
               <div
-                class="flex flex-col items-start justify-center space-y-3 text-sm"
+                class="flex flex-col items-start justify-center space-y-3 text-sm text-gray-500"
               >
                 <div>{{ formatPrice(order.totalExcludingTaxes) }} € HT</div>
                 <div>{{ formatPrice(order.shipmentAmount) }} € HT</div>

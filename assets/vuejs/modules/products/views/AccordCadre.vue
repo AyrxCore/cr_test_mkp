@@ -1,5 +1,5 @@
 <template>
-  <BaseTemplate :title="accordTitle" class="ff-roboto">
+  <BaseTemplate :title="accordTitle">
     <LoadingComponent v-if="isLoading" />
     <div v-else-if="accord && !isLoading" class="m-auto my-4">
       <HeaderPartnerComponent
@@ -19,7 +19,7 @@
 
         <div class="mt-5 flex flex-col items-center bg-primary p-6 lg:mt-0">
           <h3
-            class="mb-6 mt-5 text-center text-3xl font-bold leading-6 text-white xl:w-3/4"
+            class="mb-6 mt-5 text-center text-3xl font-bold text-white xl:w-3/4"
           >
             Comment bénéficier des conditions négociées&nbsp;?
           </h3>
@@ -44,22 +44,20 @@
       </div>
       <div v-if="partnerProducts.length > 0" class="m-auto max-w-screen-94">
         <div class="mt-10 sm:w-[45rem]">
-          <h3 class="home-title text-primary">
+          <h3 class="text-title-primary">
             Sélection de produits du partenaire
           </h3>
         </div>
         <div class="m-auto max-w-screen-94">
           <ProductsCarouselComponent
             :products="partnerProducts"
-            @click-left="sendGtmEvent('click_fat_slider_left')"
-            @click-right="sendGtmEvent('click_fat_slider_right')"
+            @click-left="sendGaEvent('click_fat_slider_left')"
+            @click-right="sendGaEvent('click_fat_slider_right')"
             @click-add-cart="
-              sendGtmEvent('click_fat_slider_product_add_cart', $event)
+              sendGaEvent('click_fat_slider_product_add_cart', $event)
             "
-            @click-title="
-              sendGtmEvent('click_fat_slider_product_click', $event)
-            "
-            @click-img="sendGtmEvent('click_fat_slider_product_img', $event)"
+            @click-title="sendGaEvent('click_fat_slider_product_title', $event)"
+            @click-img="sendGaEvent('click_fat_slider_product_img', $event)"
           />
         </div>
       </div>
@@ -73,14 +71,14 @@
       <div id="sectionRse" />
       <RseEngagementComponent :properties="accord.properties" />
       <div class="mb-12 mt-8 px-6 lg:px-12">
-        <h3 class="text-3xl font-bold text-primary">
+        <h3 class="text-title-primary">
           Ces partenaires peuvent aussi vous intéresser
         </h3>
         <PartnersCarouselComponent
           class="mt-5"
           :params="sellersByCategoryParam"
           @click-partner-slider="
-            sendGtmEvent('click_fat_frise_logos', {
+            sendGaEvent('click_fat_frise_logos', {
               partenaire_name: $event,
             })
           "
@@ -109,10 +107,11 @@ import ConditionsNotActivatedComponent from '@/vuejs/modules/products/components
 import ConditionsPendingOrActivated from '@/vuejs/modules/products/components/accord-cadre/ConditionsPendingOrActivatedComponent.vue'
 import EnSavoirPlusComponent from '@/vuejs/modules/products/components/accord-cadre/EnSavoirPlusComponent.vue'
 import { useProductStore } from '@/vuejs/stores/product'
+
+import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { storeToRefs } from 'pinia'
-import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
-import { sendGtmEvent } from '@/vuejs/services/gtm'
 import PromotionnalComponent from '@/vuejs/modules/products/components/accord-cadre/PromotionnalComponent.vue'
 import RseEngagementComponent from '@/vuejs/modules/products/components/accord-cadre/RseEngagementComponent.vue'
 

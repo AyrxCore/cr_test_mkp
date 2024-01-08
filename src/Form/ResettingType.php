@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
@@ -23,17 +25,17 @@ class ResettingType extends AbstractType
                     'required' => true,
                     'invalid_message' => 'Le mot de passe et sa confirmation doivent être identiques',
                     'options' => [
-                        'label_attr' => ['class' => 'text-primary'],
-                        'attr' => ['class' => 'block mt-2 w-full rounded-lg border border-gray-300
-                        bg-gray-50 p-2.5 text-sm text-gray-900 mb-5']
+                        'attr' => [
+                            'class' => 'block mt-2 w-full rounded-lg border !border-black !ring-black p-2.5 text-sm text-gray-900 mb-5',
+                            'placeholder' => '********',
+                        ],
                     ],
                     'first_options' => [
                         'label' => 'Nouveau mot de passe',
                     ],
                     'second_options' => [
-                        'label' => 'Confirmation nouveau mot de passe',
-                    ]
-
+                        'label' => 'Confirmation du nouveau mot de passe',
+                    ],
                 ]
             );
     }
