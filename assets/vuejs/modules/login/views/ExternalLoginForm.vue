@@ -285,6 +285,8 @@ import { Account } from '@/vuejs/types/Account'
 import HelpIconComponent from '@/vuejs/modules/shared/icon/HelpIconComponent.vue'
 import ContactModal from '@/vuejs/modules/contact/component/ContactModal.vue'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import { LoginResponse } from '@/vuejs/types/User'
+import { getErrorMessage } from '@/vuejs/services/login'
 
 const username = ref<string>('')
 const password = ref<string>('')
@@ -315,6 +317,10 @@ const loginSubmit = async () => {
 
   if (!accounts.length) {
     isLoading.value = false
+    alertStore.setShow(
+      getErrorMessage(LoginResponse.UserEmptyAccount),
+      AlertType.danger,
+    )
 
     return false
   }

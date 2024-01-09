@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Controller\Api;
 
-use App\Entity\Account;
 use App\Entity\User;
 use App\Entity\UserInfoUpdateRequest;
 use App\Events\UserInfoUpdateEvent;
@@ -23,7 +22,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 #[Route('/api/user')]
 class UserApiController extends AbstractController
@@ -62,27 +60,6 @@ class UserApiController extends AbstractController
         $response->headers->setCookie(new Cookie('BEARER', $token));
 
         return $this->redirect('/account/details');
-    }
-
-    #[Route('/accounts')]
-    public function accounts(NormalizerInterface $normalizer): JsonResponse
-    {
-        /** @var User $user */
-        $user = $this->getUser();
-        $accounts = [];
-
-        /** @var Account $account */
-        foreach ($user->getAccounts() as $account) {
-            if (!$account->isEnabled()) {
-                continue;
-            }
-            $data = $this->upplerBuyerCompanyService->getBuyerByCompanyId($account->getUpplerCompanyId());
-            $serializeAccount = $normalizer->normalize($account, 'json', ['groups' => 'user:simple']);
-            $serializeAccount['upplerData'] = $data;
-            $accounts[] = $serializeAccount;
-        }
-
-        return new JsonResponse($accounts);
     }
 
     #[Route('/logout')]
