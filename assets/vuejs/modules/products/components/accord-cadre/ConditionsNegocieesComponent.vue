@@ -68,8 +68,11 @@ import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import { computed } from 'vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
 import { SwiperSlide } from 'swiper/vue'
-import { openInNewTab } from '@/vuejs/services/utils'
+import { checkIsAbsoluteUrl, openInNewTab } from '@/vuejs/services/utils'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import { useProductStore } from '@/vuejs/stores/product'
+
+const productStore = useProductStore()
 
 const props = defineProps({
   mentionsLegales: {
@@ -122,7 +125,12 @@ const buttons = computed(() => {
 })
 
 const clickOnCta = (buttonUrl: string, buttonStyle: string) => {
-  openInNewTab(buttonUrl)
+  if (checkIsAbsoluteUrl(buttonUrl)) {
+    openInNewTab(buttonUrl)
+  } else {
+    productStore.downloadPdfFile(buttonUrl)
+  }
+
   const eventName =
     buttonStyle === 'primary'
       ? 'click_fat_conditions_cta1'

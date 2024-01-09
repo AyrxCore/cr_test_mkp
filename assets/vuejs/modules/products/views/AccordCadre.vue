@@ -124,7 +124,6 @@ const isLoading = ref<boolean>(false)
 const partnerProducts = ref<Product[]>()
 
 const currentChannel = channelStore.currentChannel
-const { productsSelection } = storeToRefs(productStore)
 
 const sellersByCategoryParam = computed(() => {
   return {
@@ -132,32 +131,8 @@ const sellersByCategoryParam = computed(() => {
   }
 })
 
-const pointsCles = computed(() => {
-  const list = [
-    accord.value.properties.points_cles_1,
-    accord.value.properties.points_cles_2,
-    accord.value.properties.points_cles_3,
-  ]
-
-  return list.filter(function (el) {
-    return el != null
-  })
-})
-
 const currentStatus = computed(() => {
   return accord.value.accountAccordCadre
-})
-
-const pointsClesRSE = computed(() => {
-  const list = [
-    accord.value.properties.points_cles_rse_1,
-    accord.value.properties.points_cles_rse_2,
-    accord.value.properties.points_cles_rse_3,
-  ]
-
-  return list.filter(function (el) {
-    return el != null
-  })
 })
 
 const scrollTo = (selector) => {

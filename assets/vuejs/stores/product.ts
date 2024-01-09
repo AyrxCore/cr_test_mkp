@@ -9,7 +9,7 @@ import {
   ProductFilters,
   ProductStoreState,
 } from '@/vuejs/types/Product'
-import { arrayEqual } from '@/vuejs/services/utils'
+import { arrayEqual, hexToBinary, notifyError } from '@/vuejs/services/utils'
 import {
   HOME_ACCORD_CADRE_PROPERTY,
   HOME_SELECTION_PROPERTY,
@@ -181,6 +181,20 @@ export const useProductStore = defineStore({
       this.selectedCategoryId = null
       this.selectedProperties = null
       this.selectedCompanyId = null
+    },
+    async downloadPdfFile(url: string) {
+      try {
+        const file = await ProductHttpClient.get().downloadPdfFile(url)
+        const fileContentBinary = hexToBinary(file.content)
+
+        const blob = new Blob([fileContentBinary], { type: 'application/pdf' })
+        const link = document.createElement('a')
+        link.href = URL.createObjectURL(blob)
+        link.download = file.name
+        link.click()
+      } catch (error) {
+        notifyError(error.response.data.message)
+      }
     },
     setSelectedCategory(categoryId) {
       this.selectedCategoryId = categoryId

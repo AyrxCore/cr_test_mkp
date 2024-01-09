@@ -44,4 +44,10 @@ export default class ProductHttpClient extends BaseClientService {
       .post<T>('accord-cadre-subscription', params)
       .then((response) => response.data)
   }
+
+  public downloadPdfFile<T extends []>(url: string): Promise<T> {
+    return this.apiClient
+      .get(`edit-download-pdf-file?url=${url}`)
+      .then((response) => response.data)
+  }
 }

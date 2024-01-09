@@ -115,3 +115,9 @@ export const betterTextColor = (bgColor: 'primary' | 'secondary') => {
     return 'black'
   }
 }
+
+export function checkIsAbsoluteUrl(url: string) {
+  const absoluteUrlRegex = /^(http:\/\/|https:\/\/)/i
+
+  return absoluteUrlRegex.test(url)
+}
