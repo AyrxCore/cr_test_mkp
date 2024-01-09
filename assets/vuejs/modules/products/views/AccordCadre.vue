@@ -24,7 +24,10 @@
             Comment bénéficier des conditions négociées&nbsp;?
           </h3>
           <ConditionsNotActivatedComponent
-            v-if="status.not_activated === currentStatus.status"
+            v-if="
+              status.not_activated === currentStatus.status &&
+              accord.properties.process_fat_client?.length === 0
+            "
             :label="accord.properties.cta_text_not_activated"
             :text="
               currentChannel.code === 'QANTIS_ACHAT'
@@ -34,8 +37,16 @@
             :current-status="currentStatus"
             :accord-name="accord.name"
           />
+          <ConditionsClientComponent
+            v-else-if="
+              status.not_activated === currentStatus.status &&
+              accord.properties.process_fat_client?.length > 0
+            "
+            :properties="accord.properties"
+            :accord-name="accord.name"
+          />
           <ConditionsPendingOrActivated
-            v-else
+            v-else-if="status.not_activated !== currentStatus.status"
             :current-status="currentStatus"
             :properties="accord.properties"
             :accord-name="accord.name"
@@ -105,6 +116,7 @@ import ConditionsNegocieesComponent from '@/vuejs/modules/products/components/ac
 import { status } from '@/vuejs/modules/products'
 import ConditionsNotActivatedComponent from '@/vuejs/modules/products/components/accord-cadre/ConditionsNotActivatedComponent.vue'
 import ConditionsPendingOrActivated from '@/vuejs/modules/products/components/accord-cadre/ConditionsPendingOrActivatedComponent.vue'
+import ConditionsClientComponent from '@/vuejs/modules/products/components/accord-cadre/ConditionsClientComponent.vue'
 import EnSavoirPlusComponent from '@/vuejs/modules/products/components/accord-cadre/EnSavoirPlusComponent.vue'
 import { useProductStore } from '@/vuejs/stores/product'
 
