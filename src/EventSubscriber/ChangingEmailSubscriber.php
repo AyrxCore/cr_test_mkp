@@ -20,7 +20,6 @@ class ChangingEmailSubscriber implements EventSubscriberInterface
     public function __construct(
         private RouterInterface $router,
         private MailerProvider $mailerProvider,
-        private ParameterBagInterface $parameterBag,
         private Environment $twig,
         private TranslatorInterface $translator,
         private EntityManagerInterface $em,
@@ -48,7 +47,7 @@ class ChangingEmailSubscriber implements EventSubscriberInterface
             UrlGeneratorInterface::ABSOLUTE_URL
         );
         $this->mailerProvider->send(
-            $this->parameterBag->get('mail_from'),
+            $event->getChannel()->getChannelParameter()->getEmail(),
             $log->getValue(),
             $this->translator->trans('emails.request.changing_email_validation.subject', [], 'prehome'),
             $this->twig->render('mails/request.changing_email_validation.html.twig', [
@@ -60,7 +59,7 @@ class ChangingEmailSubscriber implements EventSubscriberInterface
             ])
         );
         $this->mailerProvider->send(
-            $this->parameterBag->get('mail_from'),
+            $event->getChannel()->getChannelParameter()->getEmail(),
             $log->getOldValue(),
             $this->translator->trans('emails.request.changing_email_information.subject', [], 'prehome'),
             $this->twig->render('mails/request.changing_email_information.html.twig', [

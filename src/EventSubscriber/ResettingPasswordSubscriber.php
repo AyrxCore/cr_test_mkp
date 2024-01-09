@@ -18,7 +18,6 @@ class ResettingPasswordSubscriber implements EventSubscriberInterface
     public function __construct(
         private RouterInterface $router,
         private MailerProvider $mailerProvider,
-        private ParameterBagInterface $parameterBag,
         private Environment $twig,
         private TranslatorInterface $translator,
     ) {
@@ -40,7 +39,7 @@ class ResettingPasswordSubscriber implements EventSubscriberInterface
             UrlGeneratorInterface::ABSOLUTE_URL
         );
         $this->mailerProvider->send(
-            $this->parameterBag->get('mail_from'),
+            $event->getChannel()->getChannelParameter()->getEmail(),
             $user->getEmail(),
             $this->translator->trans('emails.request.resetting.subject', [], 'prehome'),
             $this->twig->render('mails/request.resetting.password.html.twig', [
