@@ -112,17 +112,6 @@ class ChannelParameter
     #[Groups(['channel:get'])]
     private ?bool $whiteLabel = true;
 
-    #[ORM\Column(nullable: true)]
-    #[Groups(['channel:get'])]
-    #[Assert\Url(
-        message: 'A channel banner must be an URL',
-    )]
-    private ?string $banner = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['channel:get'])]
-    private ?string $bannerTitle = null;
-
     public function getId(): ?Uuid
     {
         return $this->id;
@@ -268,30 +257,6 @@ class ChannelParameter
     public function setWhiteLabel(bool $whiteLabel): self
     {
         $this->whiteLabel = $whiteLabel;
-
-        return $this;
-    }
-
-    public function getBanner(): ?string
-    {
-        return $this->banner;
-    }
-
-    public function setBanner(?string $banner): self
-    {
-        $this->banner = $banner;
-
-        return $this;
-    }
-
-    public function getBannerTitle(): ?string
-    {
-        return $this->bannerTitle;
-    }
-
-    public function setBannerTitle(?string $bannerTitle): self
-    {
-        $this->bannerTitle = $bannerTitle;
 
         return $this;
     }
