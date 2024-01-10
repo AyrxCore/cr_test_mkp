@@ -17,11 +17,7 @@ export const useSellerStore = defineStore({
   actions: {
     async init(params = {}) {
       try {
-        if (this.sellers.length === 0) {
-          this.sellers = await SellerHttpClient.get().fetchSellersByParams(
-            params,
-          )
-        }
+        this.sellers = await SellerHttpClient.get().fetchSellersByParams(params)
       } catch (error) {
         notifyError(
           `Une erreur est survenue lors du chargement du vendeur, merci de contacter un administrateur.`,
