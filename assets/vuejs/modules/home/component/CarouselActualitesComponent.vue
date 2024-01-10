@@ -54,7 +54,7 @@
       </div>
     </div>
     <div
-      v-else-if="channel.design.banner"
+      v-else-if="channel.options['BANNER_HOMEPAGE']"
       class="h-[160px] bg-cover bg-center md:h-[200px]"
       :style="{ backgroundImage: `url(${channel.options['BANNER_HOMEPAGE']})` }"
     >
