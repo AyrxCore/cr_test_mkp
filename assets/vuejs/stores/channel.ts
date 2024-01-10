@@ -36,8 +36,6 @@ export const useChannelStore = defineStore({
             textColor: channel.design.textColor,
             logo: channel.design.logo,
             favicon: channel.design.favicon,
-            banner: channel.design.banner,
-            bannerTitle: channel.design.bannerTitle,
           },
           documents: {
             privacyPolicy: channel.documents.privacyPolicy,
