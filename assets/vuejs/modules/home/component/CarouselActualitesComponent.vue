@@ -56,12 +56,12 @@
     <div
       v-else-if="channel.design.banner"
       class="h-[160px] bg-cover bg-center md:h-[200px]"
-      :style="{ backgroundImage: `url(${channel.design.banner})` }"
+      :style="{ backgroundImage: `url(${channel.options['BANNER_HOMEPAGE']})` }"
     >
       <h3
         class="flex h-full w-full items-center justify-center bg-white/50 text-center text-xl font-bold sm:text-4xl"
       >
-        {{ channel.design.bannerTitle }}
+        {{ channel.options['BANNER_TITLE_HOMEPAGE'] }}
       </h3>
     </div>
   </div>

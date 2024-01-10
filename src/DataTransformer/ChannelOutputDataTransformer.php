@@ -35,8 +35,6 @@ class ChannelOutputDataTransformer implements DataTransformerInterface
         $channelDesignOutput->textColor = $channelParameter->getTextColor();
         $channelDesignOutput->logo = $channelParameter->getLogo();
         $channelDesignOutput->favicon = $channelParameter->getFavicon();
-        $channelDesignOutput->banner = $channelParameter->getBanner();
-        $channelDesignOutput->bannerTitle = $channelParameter->getBannerTitle();
 
         $output->design = $channelDesignOutput;
 
