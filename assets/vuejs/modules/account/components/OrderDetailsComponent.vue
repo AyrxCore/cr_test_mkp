@@ -27,7 +27,7 @@
         >
       </div>
     </div>
-    <div class="md:w-4/12 lg:w-3/12">
+    <div class="mt-4 md:mt-0 md:w-4/12 lg:w-3/12">
       <div class="flex md:justify-between">
         <div
           class="flex w-full flex-row flex-wrap items-center justify-between md:w-auto"
@@ -35,6 +35,7 @@
           <span
             class="flex items-start text-sm font-bold text-primary md:text-base lg:text-lg"
           >
+            <span class="mr-3 md:hidden">Prix unitaire :</span>
             {{ productPrice }}€ HT
           </span>
         </div>
@@ -44,6 +45,7 @@
           <span
             class="flex items-start text-sm font-bold md:text-base lg:text-lg"
           >
+            <span class="mr-3 md:hidden">Sous total :</span>
             {{ productTotalPrice }}€ HT
           </span>
         </div>

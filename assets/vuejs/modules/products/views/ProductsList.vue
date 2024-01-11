@@ -31,7 +31,7 @@
               Votre recherche : {{ route.query.q }}
             </h3>
             <div
-              class="flex flex-col justify-items-center md:grid md:grid-cols-2 md:gap-5 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+              class="flex h-auto flex-col items-stretch justify-items-center md:grid md:grid-cols-2 md:gap-5 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
             >
               <template v-for="product in internalProducts" :key="product.id">
                 <AccordCadreComponent
@@ -43,7 +43,7 @@
                   :key="`ac-${product.id}`"
                   :accord="product"
                   horizontal-on-mobile
-                  class="mt-5 rounded-lg border-4 border-solid border-secondary bg-white md:mt-0 md:max-w-[350px]"
+                  class="mt-5 !h-full !w-full rounded-lg border-4 border-solid border-secondary bg-white md:mt-0 md:max-w-[350px]"
                 />
                 <ProductComponent
                   v-else-if="
@@ -66,7 +66,7 @@
               </div>
               <ButtonComponent
                 v-if="count > currentCount"
-                class="button button-primary-outline w-1/2"
+                class="button button-primary-outline md:w-1/2"
                 @click="loadMore"
               >
                 <LoaderSharedComponent v-if="loadMoreLoading" />

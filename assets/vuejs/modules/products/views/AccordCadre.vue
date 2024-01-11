@@ -26,7 +26,7 @@
           <ConditionsNotActivatedComponent
             v-if="
               status.not_activated === currentStatus.status &&
-              accord.properties.process_fat_client?.length === 0
+              !accord.properties.process_fat_client?.length
             "
             :label="accord.properties.cta_text_not_activated"
             :text="
@@ -40,7 +40,7 @@
           <ConditionsClientComponent
             v-else-if="
               status.not_activated === currentStatus.status &&
-              accord.properties.process_fat_client?.length > 0
+              !!accord.properties.process_fat_client?.length
             "
             :properties="accord.properties"
             :accord-name="accord.name"

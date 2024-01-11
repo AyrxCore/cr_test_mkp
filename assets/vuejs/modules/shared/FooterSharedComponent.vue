@@ -163,7 +163,6 @@ import YoutubeIconComponent from '@/vuejs/modules/shared/icon/YoutubeIconCompone
 import TwitterIconComponent from '@/vuejs/modules/shared/icon/TwitterIconComponent.vue'
 import LinkedinIconComponent from '@/vuejs/modules/shared/icon/LinkedinIconComponent.vue'
 import QantisLogoComponent from '@/vuejs/modules/shared/icon/QantisLogoComponent.vue'
-import { OPTIONAL_FRONT_BLOCKS } from '../../services/const'
 
 const lemonwayLogoImg = getImage(lemonwayLogo)
 const coqVertLogoImg = getImage(coqVertLogo)

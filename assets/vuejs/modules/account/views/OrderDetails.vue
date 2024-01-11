@@ -92,7 +92,7 @@
           </div>
         </div>
         <div class="mt-5 flex w-full flex-col">
-          <div class="flex p-2 text-gray-500">
+          <div class="hidden p-2 text-gray-500 md:flex">
             <div class="flex md:w-8/12 lg:w-9/12">
               <span>Description d'article</span>
             </div>

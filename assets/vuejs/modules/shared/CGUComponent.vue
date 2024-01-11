@@ -6,8 +6,6 @@
     }"
   >
     CONDITIONS GÉNÉRALES D'UTILISATION
-    <br v-if="!page" />
-    DE LA MARKETPLACE « QANTIS MARKET »
   </div>
   <div class="pt-3 pb-6 text-sm md:text-base lg:text-lg">
     <p class="italic">Entrée en vigueur le 06 mars 2023</p>

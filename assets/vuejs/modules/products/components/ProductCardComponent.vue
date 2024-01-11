@@ -34,7 +34,7 @@
 
     <div
       :class="{ '!flex-row sm:!flex-col': horizontalOnMobile }"
-      class="flex h-full w-full flex-col"
+      class="flex h-full w-full flex-col items-center"
     >
       <!-- Bloc image -->
       <div

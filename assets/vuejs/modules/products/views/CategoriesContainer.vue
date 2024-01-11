@@ -22,18 +22,20 @@
       </div>
       <div
         v-else
-        class="m-auto grid auto-cols-max grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        class="m-auto grid auto-cols-max grid-cols-1 items-stretch gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
       >
-        <div v-for="category in categories" :key="category.id">
-          <div class="min-h-[325px] rounded-xl bg-white p-5">
-            <img
-              v-if="category.image"
-              :src="category.image"
-              :alt="category.name"
-              class="m-auto h-[210px]"
-            />
-            <CategoryComponent :category="category" />
-          </div>
+        <div
+          v-for="category in categories"
+          :key="category.id"
+          class="rounded-xl bg-white p-5"
+        >
+          <img
+            v-if="category.image"
+            :src="category.image"
+            :alt="category.name"
+            class="m-auto h-[210px]"
+          />
+          <CategoryComponent :category="category" />
         </div>
       </div>
     </div>

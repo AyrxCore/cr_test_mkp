@@ -12,7 +12,7 @@
           class="cursor-pointer text-xs text-primary md:text-base"
         >
           <input v-model="acceptCGU" type="checkbox" class="mr-2" />
-          J'accepte les CGU de la marketplace QANTIS
+          J'accepte les CGU
         </label>
 
         <ButtonComponent class="button-primary mt-3 md:mt-0" @click="validCGU">

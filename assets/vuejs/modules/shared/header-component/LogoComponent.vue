@@ -7,7 +7,7 @@
     >
       <img
         :src="primaryLogo"
-        alt="Logo Qantis"
+        alt="Logo"
         class="left-[60px] top-[24.5px] flex h-[60px] max-w-[123px] md:max-w-[145px]"
       />
       <!--

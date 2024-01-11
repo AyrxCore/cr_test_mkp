@@ -40,7 +40,7 @@
         <SwiperSlide
           v-for="accord in productsAccordsCadre?.results"
           :key="accord.id"
-          class="flex h-full items-center justify-center overflow-hidden rounded-lg border-4 border-solid border-secondary bg-white"
+          class="flex !h-auto items-stretch justify-center overflow-hidden rounded-lg border-4 border-solid border-secondary bg-white"
         >
           <AccordCadreComponent :accord="accord" />
         </SwiperSlide>

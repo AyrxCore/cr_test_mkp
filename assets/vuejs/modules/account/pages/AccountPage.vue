@@ -42,7 +42,8 @@
                     class="rounded-lg bg-secondary p-2 xl:p-7"
                     :class="'text-' + betterTextColor('secondary')"
                   >
-                    Code Bonuus {{ user.account.adherent.reducceCode }}
+                    Code Avantages Salariés :
+                    {{ user.account.adherent.reducceCode }}
                   </div>
                   <AccountSidebar />
                   <div class="rounded-lg bg-white xl:p-7">

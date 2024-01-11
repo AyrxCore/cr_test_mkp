@@ -37,7 +37,7 @@
         class="mt1 flex items-center py-2.5"
       >
         <!--      <ChevronRightIcon class="mr-4"/>-->
-        Code Bonuus {{ user.account.adherent.reducceCode }}
+        Code Avantages Salariés : {{ user.account.adherent.reducceCode }}
       </div>
       <a
         href="#"
