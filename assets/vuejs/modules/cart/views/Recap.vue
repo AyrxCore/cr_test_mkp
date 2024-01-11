@@ -5,7 +5,11 @@
       <span class="uppercase">{{ user.externalApiData.buyer.name }}</span>
     </h3>
     <ButtonComponent
-      v-if="cart.orders && cart.orders.length > 0"
+      v-if="
+        cart.orders &&
+        cart.orders.length > 0 &&
+        channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.SAVED_CARTS)
+      "
       class="button-primary-outline"
       type="button"
       @click="openSaveCartForm"
@@ -63,16 +67,21 @@ import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconC
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import CartOrderComponent from '@/vuejs/modules/cart/components/CartOrderComponent.vue'
 import CartRightSideComponent from '@/vuejs/modules/cart/components/CartRightSideComponent.vue'
+import SavedCartModal from '@/vuejs/modules/account/components/savedCart/SavedCartModal.vue'
+
+import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
 import { CartPageList } from '@/vuejs/router/pages-list'
 import { useCartStore } from '@/vuejs/stores/cart'
 import { gtmCartTrackingEvent } from '@/vuejs/modules/cart'
 import { useUserStore } from '@/vuejs/stores/user'
-import SavedCartModal from '@/vuejs/modules/account/components/savedCart/SavedCartModal.vue'
 import { useSavedCartStore } from '@/vuejs/stores/savedCart'
+import { useChannelStore } from '@/vuejs/stores/channel'
 
 const router = useRouter()
 const cartStore = useCartStore()
 const savedCartStore = useSavedCartStore()
+const channelStore = useChannelStore()
+
 const { cart } = storeToRefs(cartStore)
 
 const error = ref<string>(null)
