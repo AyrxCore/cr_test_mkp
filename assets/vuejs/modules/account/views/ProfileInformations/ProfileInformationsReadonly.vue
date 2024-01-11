@@ -1,7 +1,7 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="text-title-primary mb-4 mt-2 md:mt-0">Mes coordonnées</h3>
+      <h3 class="text-title-primary mb-4 mt-2 xl:mt-0">Mes coordonnées</h3>
       <!-- Bloc email -->
       <div class="bloc-contact-information">
         <div>

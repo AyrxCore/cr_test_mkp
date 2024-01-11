@@ -3,7 +3,7 @@
     <template #right-side>
       <div class="flex justify-between">
         <div>
-          <h3 class="text-title-primary mb-6 mt-2 md:mt-0">Adresses</h3>
+          <h3 class="text-title-primary mb-6 mt-2 xl:mt-0">Adresses</h3>
         </div>
       </div>
       <AddressesDefault :address="addressStore.defaultShippingAddressFormatted">

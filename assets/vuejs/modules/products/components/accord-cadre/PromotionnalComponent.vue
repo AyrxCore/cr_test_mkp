@@ -5,17 +5,15 @@
       properties.fat_promo_img &&
       properties.fat_promo_txt
     "
-    class="flex flex-col rounded-md bg-secondary p-6 lg:flex-row"
+    class="flex flex-col items-center rounded-md bg-secondary p-6 lg:flex-row"
     :class="'text-' + betterTextColor('secondary')"
   >
-    <div class="max-w-screen-md">
+    <div class="flex max-w-screen-md items-center justify-center">
       <img :src="properties.fat_promo_img" alt="Image promo" />
     </div>
     <div class="my-8 flex flex-col justify-center lg:pl-6">
       <h3 class="mb-8 text-3xl font-bold">{{ properties.fat_promo_titre }}</h3>
-      <div class="mb-8 text-lg">
-        {{ properties.fat_promo_txt }}
-      </div>
+      <div class="mb-8 text-lg" v-html="properties.fat_promo_txt" />
       <ButtonComponent
         class="button-primary-outline mx-auto"
         @click="openInNewTab(properties.fat_promo_cta_link)"

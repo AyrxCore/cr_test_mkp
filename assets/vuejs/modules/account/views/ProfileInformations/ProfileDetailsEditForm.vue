@@ -1,7 +1,7 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="text-title-primary mb-4 mt-2 md:mt-0">
+      <h3 class="text-title-primary mb-4 mt-2 xl:mt-0">
         Modifier mes coordonnées
       </h3>
       <form @submit.prevent="onDetailsFormSubmit">

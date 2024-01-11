@@ -3,9 +3,7 @@
     class="mb-12 flex h-full flex-col items-center px-5 md:px-8 lg:flex-row-reverse lg:justify-end"
   >
     <div class="lg:ml-16">
-      <h3
-        class="text-title-primary mb-6 text-center leading-9 lg:text-left xl:w-3/4"
-      >
+      <h3 class="text-title-primary mb-6 text-center leading-9 lg:text-left">
         Conditions négociées
       </h3>
       <div>
@@ -56,8 +54,12 @@
           })
         "
       >
-        <SwiperSlide v-for="(image, key) in images" :key="key">
-          <img :src="image" alt="Picture" class="items-center" />
+        <SwiperSlide
+          v-for="(image, key) in images"
+          :key="key"
+          class="flex items-center justify-center"
+        >
+          <img :src="image" alt="Picture" />
         </SwiperSlide>
       </CarouselListSharedComponent>
     </div>

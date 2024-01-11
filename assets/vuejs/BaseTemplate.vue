@@ -9,14 +9,12 @@
           OPTIONAL_FRONT_BLOCKS.BANNER_FLASH_HOMEPAGE,
         )
       "
-      class="flex flex-row items-center justify-center bg-primary py-4 lg:h-[59px]"
+      class="bg-primary p-4 text-center"
       :style="{
         color: betterTextColor('primary'),
       }"
     >
-      <p
-        class="flex w-[305px] flex-col items-center text-sm md:w-auto md:py-2 md:text-base lg:flex-row lg:text-lg"
-      >
+      <p class="text-sm md:w-auto md:text-base lg:text-lg">
         <span class="mr-0 lg:mr-2">
           {{ banner.text }}
         </span>

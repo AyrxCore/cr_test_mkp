@@ -2,7 +2,7 @@
   <h3
     class="mt-6 flex items-center text-left text-primary"
     :class="{
-      'text-sm font-bold md:text-base lg:text-lg': !category.parentId,
+      'text-base font-bold lg:text-lg': !category.parentId,
       'flex justify-between': category.parentId !== null,
     }"
   >
@@ -26,6 +26,7 @@
         'mr-2': category.parentId !== null,
         'mt-4 rotate-90 ease-in-out': showChildren,
       }"
+      class="cursor-pointer"
       @click="toggleChildren"
     />
   </h3>
