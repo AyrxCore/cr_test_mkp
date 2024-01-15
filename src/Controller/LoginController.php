@@ -223,7 +223,7 @@ class LoginController extends AbstractController implements ChannelAwareControll
                 throw new BadRequestException('No account available');
             }
 
-            if ($timestamp < \time() && $timestamp > \time() - (60 * 60)) {
+            if ($timestamp < \time() + 60 && $timestamp > \time() - (60 * 60)) {
                 $hashkey = $account->getAdherent()?->getHashkey() ?: '';
                 $data = $email.$timestamp.$hashkey;
                 if (\base64_encode(\hash('sha256', $data)) !== $hash) {
