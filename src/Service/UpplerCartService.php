@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Context\ChannelContext;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -20,7 +21,7 @@ class UpplerCartService extends AbstractUpplerService
         string $adminClientSecret,
         string $adminTokenFile,
         string $httpCachePath,
-        private string $appDomain,
+        private ChannelContext $channelContext,
     ) {
         parent::__construct(
             upplerClient: $upplerClient,
@@ -240,13 +241,14 @@ class UpplerCartService extends AbstractUpplerService
 
     public function setPaymentMethod(int $cartId, int $paymentMethodId): array|bool
     {
+        $hostname = $this->channelContext->getChannel()->getHostname();
         $res = $this->request(
             'PATCH',
             'v1/buyer/cart/'.$cartId.'/payment-method',
             [
                 'json' => [
                     'payment_method' => $paymentMethodId,
-                    'callback_url' => $this->appDomain.'/api/buyer/cart/'.$cartId.'/confirm',
+                    'callback_url' => 'https://'.$hostname.'/api/buyer/cart/'.$cartId.'/confirm',
                 ],
             ],
         );

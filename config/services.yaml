@@ -4,7 +4,6 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-  app_domain: '%env(APP_DOMAIN)%'
   uppler_env: '%env(UPPLER_ENV)%'
   uppler_api_url: '%env(UPPLER_API_URL)%'
   uppler_admin_client_id: '%env(UPPLER_ADMIN_CLIENT_ID)%'
@@ -34,18 +33,12 @@ parameters:
       - '00477df2-5c2b-11ec-a27b-0af08f946010' #CITROEN
       - 'd43c8e24-d469-11ed-a959-025bcd73cb12' #JEEP
     ADHERENT_MAIL:
-      FROM:
-        '%env(MAIL_FROM)%'
-      TO:
-        '%env(ADH_SERV_MAIL_TO)%'
+      FROM: '%env(MAIL_FROM)%'
+      TO: '%env(ADH_SERV_MAIL_TO)%'
     STELLANTIS_MAIL:
-      FROM:
-        '%env(MAIL_FROM)%'
-      TO:
-        '%env(STELLANTIS_MAIL_TO)%'
-      CC:
-        '%env(STELLANTIS_MAIL_CC)%'
-
+      FROM: '%env(MAIL_FROM)%'
+      TO: '%env(STELLANTIS_MAIL_TO)%'
+      CC: '%env(STELLANTIS_MAIL_CC)%'
 
 imports:
   - { resource: services/ }
@@ -93,7 +86,7 @@ services:
   _instanceof:
     \App\Controller\ChannelRepositoryAwareControllerInterface:
       calls:
-        - setChannelRepository: [ '@App\Repository\ChannelRepository' ]
+        - setChannelRepository: ['@App\Repository\ChannelRepository']
 
     # SERVICES UPPLER
     App\Service\AbstractUpplerService:
@@ -103,14 +96,13 @@ services:
         $adminClientSecret: '%uppler_admin_client_secret%'
         $adminTokenFile: '%uppler_admin_token_file%'
         $httpCachePath: '%http_cache_path%'
-        $appDomain: '%app_domain%'
 
   # Voter
   App\Security\Voter\FavoriteVoter:
-    tags: [ { name: security.voter } ]
+    tags: [{ name: security.voter }]
 
   App\Security\Voter\SavedCartVoter:
-    tags: [ { name: security.voter } ]
+    tags: [{ name: security.voter }]
 
   Sentry\Integration\IgnoreErrorsIntegration:
     arguments:
