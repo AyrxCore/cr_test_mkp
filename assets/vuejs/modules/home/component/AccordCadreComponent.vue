@@ -10,10 +10,7 @@
         Accord-cadre
       </div>
     </div>
-    <div
-      :class="{ '!flex-row': horizontalOnMobile }"
-      class="flex h-full w-full flex-col items-center"
-    >
+    <div class="flex h-full w-full flex-col items-center">
       <div
         class="flex h-[150px] max-w-[200px] items-center justify-center rounded-lg sm:mx-auto sm:w-full md:h-[139px] lg:h-[191px]"
       >
@@ -66,7 +63,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onBeforeMount, PropType, ref } from 'vue'
+import { computed, PropType } from 'vue'
 
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import { Product } from '@/vuejs/types/Product'
@@ -81,23 +78,8 @@ const props = defineProps({
   },
 })
 
-const horizontalOnMobile = ref<boolean>(false)
-
 const properties = computed(() => {
   return props.accord.properties
-})
-
-onBeforeMount(() => {
-  horizontalOnMobile.value =
-    (screen.orientation.type === 'landscape-primary' ||
-      screen.orientation.type === 'landscape-secondary') &&
-    Math.min(window.screen.width, window.screen.height) < 768
-  window.addEventListener('orientationchange', () => {
-    horizontalOnMobile.value =
-      (screen.orientation.type === 'landscape-primary' ||
-        screen.orientation.type === 'landscape-secondary') &&
-      Math.min(window.screen.width, window.screen.height) < 768
-  })
 })
 </script>
 

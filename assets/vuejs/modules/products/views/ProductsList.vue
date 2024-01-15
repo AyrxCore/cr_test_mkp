@@ -42,7 +42,6 @@
                   "
                   :key="`ac-${product.id}`"
                   :accord="product"
-                  horizontal-on-mobile
                   class="mt-5 !h-full !w-full rounded-lg border-4 border-solid border-secondary bg-white md:mt-0 md:max-w-[350px]"
                 />
                 <ProductComponent
@@ -52,7 +51,6 @@
                   "
                   :key="`p-${product.id}`"
                   :product="product"
-                  horizontal-on-mobile
                   class="!h-auto !w-full md:max-w-[350px]"
                 />
               </template>

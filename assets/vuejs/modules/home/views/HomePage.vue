@@ -10,7 +10,7 @@
       <!-- Fin Bloc accords cadre -->
 
       <!-- Bloc sélection de produits -->
-      <div class="m-auto mt-4 max-w-screen-94">
+      <div class="m-auto mt-4 max-w-screen-94 md:px-0">
         <div class="mt-10 sm:w-[45rem]">
           <h3 class="text-title-primary mb-3">Notre sélection de produits</h3>
           <p class="text-lg">

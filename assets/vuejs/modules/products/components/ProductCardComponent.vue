@@ -32,10 +32,7 @@
     </div>
     <!-- Fin bloc header -->
 
-    <div
-      :class="{ '!flex-row sm:!flex-col': horizontalOnMobile }"
-      class="flex h-full w-full flex-col items-center"
-    >
+    <div class="flex h-full w-full flex-col items-center">
       <!-- Bloc image -->
       <div
         class="flex h-[150px] max-w-[200px] items-center justify-center rounded-lg sm:mx-auto sm:w-full md:h-[139px] lg:h-[191px]"
@@ -168,11 +165,6 @@ const props = defineProps({
   product: {
     required: true,
     type: Object as PropType<Product>,
-  },
-  horizontalOnMobile: {
-    required: false,
-    type: Boolean,
-    default: false,
   },
 })
 
