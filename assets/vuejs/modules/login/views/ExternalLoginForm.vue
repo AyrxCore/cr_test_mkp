@@ -10,9 +10,9 @@
           <AlertSharedComponent v-if="showAlert" />
           <div class="lg:w-5/6">
             <div class="relative mb-3 mt-3">
-              <label for="login-email"
-                >Votre adresse email professionnelle</label
-              >
+              <label for="login-email">
+                Votre adresse email professionnelle
+              </label>
               <input
                 id="login-email"
                 v-model="username"
@@ -71,7 +71,7 @@
               <p
                 class="mx-auto mb-2 flex text-center text-xs text-gray-700 md:w-auto md:text-sm xl:mb-3 xl:text-left xl:text-base"
               >
-                Vous êtes adhérent et c’est votre première fois ici ?
+                Vous êtes adhérent et c'est votre première fois ici ?
                 <br />
                 Cliquez ci-dessous 👇
               </p>
@@ -92,8 +92,8 @@
               <HelpIconComponent class="mr-2 w-16 fill-primary md:flex" />
               <p class="flex flex-col text-gray-500">
                 <span class="font-bold text-gray-700">Besoin d'aide ?</span>
-                <span class="text-xs md:text-sm"
-                  >Contactez-nous: au
+                <span class="text-xs md:text-sm">
+                  Contactez-nous : au
                   <a
                     :href="`tel:${channel?.phoneNumber}`"
                     class="text-secondary underline lg:text-right"
@@ -124,8 +124,8 @@
         class="hidden pb-2 text-[0.6rem] text-gray-500 lg:block"
       >
         La marketplace QANTIS est un espace fermé et réservé aux adhérents de
-        notre centrale d’achats. Envie de rejoindre nos plus de 30 000 adhérents
-        ? <a href="https://qantis.co/centrale-dachats/">C’est par ici !</a>
+        notre centrale d'achats. Envie de rejoindre nos plus de 30 000 adhérents
+        ? <a href="https://qantis.co/centrale-dachats/">C'est par ici !</a>
       </p>
       <div
         class="flex justify-between pb-2 text-center text-[0.5rem] md:mt-0 md:hidden"
@@ -137,8 +137,9 @@
           @click="
             eventClick('click_prehome_mentions', channel?.documents.legalTerms)
           "
-          >Mentions légales</a
         >
+          Mentions légales
+        </a>
         <a
           :href="channel?.documents.privacyPolicy"
           target="_blank"
@@ -149,8 +150,9 @@
               channel?.documents.privacyPolicy,
             )
           "
-          >Politique de confidentialité</a
         >
+          Politique de confidentialité
+        </a>
         <a
           :href="channel?.documents.generalTermsOfUse"
           target="_blank"
@@ -161,8 +163,9 @@
               channel?.documents.generalTermsOfUse,
             )
           "
-          >Conditions Générales d'Utilisation</a
         >
+          Conditions Générales d'Utilisation
+        </a>
       </div>
     </div>
   </template>
@@ -266,14 +269,17 @@
   />
 </template>
 <script lang="ts" setup>
-import { onBeforeMount, ref } from 'vue'
+import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
+
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
 import ArrowRightIcon from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import CGUModal from '@/vuejs/modules/login/component/CGUModal.vue'
+import ContactModal from '@/vuejs/modules/contact/component/ContactModal.vue'
 import EyeIcon from '@/vuejs/modules/shared/icon/EyeIconComponent.vue'
 import EyeSlashIcon from '@/vuejs/modules/shared/icon/EyeSlashIconComponent.vue'
+import HelpIconComponent from '@/vuejs/modules/shared/icon/HelpIconComponent.vue'
 import MailIcon from '@/vuejs/modules/shared/icon/MailIconComponent.vue'
 
 import { getUrlParam } from '@/vuejs/services/utils'
@@ -282,8 +288,6 @@ import { useAlertStore } from '@/vuejs/stores/alert'
 import { useUserStore } from '@/vuejs/stores/user'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { Account } from '@/vuejs/types/Account'
-import HelpIconComponent from '@/vuejs/modules/shared/icon/HelpIconComponent.vue'
-import ContactModal from '@/vuejs/modules/contact/component/ContactModal.vue'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { LoginResponse } from '@/vuejs/types/User'
 import { getErrorMessage } from '@/vuejs/services/login'
