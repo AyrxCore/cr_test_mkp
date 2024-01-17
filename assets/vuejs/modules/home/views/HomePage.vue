@@ -124,34 +124,29 @@
           aussi de contribuer à la démarche RSE de votre entreprise.
         </p>
       </div>
-      <div class="absolute right-[5%] bottom-0">
-        <QantisIconComponent />
-      </div>
     </div>
   </BaseTemplate>
 </template>
 <script lang="ts" setup>
 import { computed, onBeforeMount, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
+import { useChannelStore } from '@/vuejs/stores/channel'
+import { useExpertContentStore } from '@/vuejs/stores/expertContent'
+import { useFavoriteStore } from '@/vuejs/stores/favorite'
+import { useProductStore } from '@/vuejs/stores/product'
+import { betterTextColor } from '@/vuejs/services/utils'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
+import { NewsPageList, ProductPageList } from '@/vuejs/router/pages-list'
 
-import AccordsCadreComponent from '@/vuejs/modules/home/component/AccordsCadreComponent.vue'
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
+import AccordsCadreComponent from '@/vuejs/modules/home/component/AccordsCadreComponent.vue'
 import CarouselActualitesComponent from '@/vuejs/modules/home/component/CarouselActualitesComponent.vue'
 import ExpertContentsComponent from '@/vuejs/modules/home/component/ExpertContentsComponent.vue'
 import OurCategoriesComponent from '@/vuejs/modules/home/component/OurCategoriesComponent.vue'
 import PartnersCarousel from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
-import QantisIconComponent from '@/vuejs/modules/shared/icon/QantisIconComponent.vue'
-
-import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
-import { betterTextColor } from '@/vuejs/services/utils'
-import { NewsPageList, ProductPageList } from '@/vuejs/router/pages-list'
-import { useExpertContentStore } from '@/vuejs/stores/expertContent'
-import { useFavoriteStore } from '@/vuejs/stores/favorite'
-import { useChannelStore } from '@/vuejs/stores/channel'
-import { useProductStore } from '@/vuejs/stores/product'
 import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
 import ProductsLoadingCarouselComponent from '@/vuejs/modules/shared/ProductsLoadingCarouselComponent.vue'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const favoriteStore = useFavoriteStore()
 const productStore = useProductStore()
