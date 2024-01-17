@@ -121,7 +121,6 @@ import { useProductStore } from '@/vuejs/stores/product'
 import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { useChannelStore } from '@/vuejs/stores/channel'
-import { storeToRefs } from 'pinia'
 import PromotionnalComponent from '@/vuejs/modules/products/components/accord-cadre/PromotionnalComponent.vue'
 import RseEngagementComponent from '@/vuejs/modules/products/components/accord-cadre/RseEngagementComponent.vue'
 

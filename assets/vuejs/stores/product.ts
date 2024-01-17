@@ -127,17 +127,13 @@ export const useProductStore = defineStore({
           )
       }
     },
-    async findSimilarProducts(categoryId: number, productId: number) {
+    async findSimilarProducts(categoryId: number) {
       const alertStore = useAlertStore()
       try {
-        const similarProducts = await this.fetchProductsByParams({
+        return await this.fetchProductsByParams({
           perPage: 20,
           categories: categoryId,
         })
-
-        return similarProducts.results.filter(
-          (sp) => sp.id !== productId && !sp.isAccordCadre,
-        )
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
           alertStore.setShow(

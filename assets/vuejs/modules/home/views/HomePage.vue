@@ -6,7 +6,21 @@
       </div>
 
       <!-- Bloc accords cadre -->
-      <AccordsCadreComponent />
+      <div class="mt-10 bg-white px-12 py-8">
+        <div class="m-auto max-w-screen-98">
+          <h3 class="text-title-primary mb-3">
+            Les accords-cadres incontournables
+          </h3>
+          <p class="text-sm sm:text-lg">
+            Profitez de toutes les économies incluses dans votre adhésion&nbsp;!
+          </p>
+        </div>
+        <div class="relative m-auto mt-1 max-w-screen-94 md:mt-5">
+          <AccordsCadreComponent
+            :accords-cadres="productsAccordsCadre?.results"
+          />
+        </div>
+      </div>
       <!-- Fin Bloc accords cadre -->
 
       <!-- Bloc sélection de produits -->
@@ -155,6 +169,8 @@ const channelStore = useChannelStore()
 
 const { productsSelection } = storeToRefs(productStore)
 const expertContentsLoaded = ref<boolean>(false)
+
+const { productsAccordsCadre } = storeToRefs(productStore)
 
 onBeforeMount(async () => {
   await Promise.all([

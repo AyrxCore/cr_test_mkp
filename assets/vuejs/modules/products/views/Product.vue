@@ -271,6 +271,18 @@
         />
       </template>
       <!-- Fin bloc produits similaire -->
+
+      <!-- Bloc accords-cadres incontournables -->
+      <template v-if="!isLoadingAccordsCadres">
+        <h3 class="text-title-primary mt-4 mb-2">
+          Les accords-cadres incontournables
+        </h3>
+        <AccordsCadreComponent
+          :accords-cadres="similarAccordsCadres"
+          class="mb-8"
+        />
+      </template>
+      <!-- Fin bloc accords-cadres incontournables -->
     </div>
     <div
       v-else
@@ -311,6 +323,9 @@ import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import { useProductStore } from '@/vuejs/stores/product'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import sampleImg from '@/vuejs/assets/img/sample_product_img.png'
+import AccordsCadreComponent from '@/vuejs/modules/home/component/AccordsCadreComponent.vue'
+import AccordCadreLoadingComponent from '@/vuejs/modules/products/components/AccordCadreLoadingComponent.vue'
+import AccordsCadresLoadingCarouselComponent from '@/vuejs/modules/shared/AccordsCadresLoadingCarouselComponent.vue'
 
 const route = useRoute()
 const productStore = useProductStore()
@@ -321,7 +336,9 @@ const option = ref([])
 const isLoading = ref<boolean>(false)
 const isLoadingPrice = ref<boolean>(false)
 const isLoadingSimilarProducts = ref<boolean>(false)
+const isLoadingAccordsCadres = ref<boolean>(false)
 const similarProducts = ref<Product[]>([])
+const similarAccordsCadres = ref<Product[]>([])
 const product = ref<Product>()
 
 onMounted(async () => {
@@ -389,6 +406,7 @@ watch(
   async (slug: string) => {
     isLoading.value = true
     isLoadingSimilarProducts.value = true
+    isLoadingAccordsCadres.value = true
     try {
       const productId = slug.split('-')
       const formattedProductId = parseInt(productId[productId.length - 1])
@@ -405,12 +423,25 @@ watch(
       if (product.value.categories.length > 0) {
         const categoryId =
           product.value.categories[product.value.categories.length - 1].id
-        similarProducts.value = await productStore.findSimilarProducts(
+
+        const productsAndAccordsCadres = await productStore.findSimilarProducts(
           categoryId,
-          formattedProductId,
+        )
+
+        similarProducts.value = productsAndAccordsCadres.results.filter(
+          (simProd) => simProd.id !== productId && !simProd.isAccordCadre,
+        )
+        similarAccordsCadres.value = productsAndAccordsCadres.results.filter(
+          (simAccCad) => {
+            return (
+              simAccCad.seller.id !== product.value.seller.id &&
+              simAccCad.isAccordCadre
+            )
+          },
         )
       }
       isLoadingSimilarProducts.value = false
+      isLoadingAccordsCadres.value = false
     } catch (error) {
     } finally {
       isLoading.value = false
@@ -420,5 +451,3 @@ watch(
   { immediate: true },
 )
 </script>
-
-<style scoped></style>

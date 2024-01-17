@@ -6,8 +6,8 @@ parameters:
       channelParameter:
         email: marketplace@qantis.co
         phoneNumber: '+33437650621'
-        logo: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/logo-qantis.png
-        favicon: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/favicon-qantis.svg
+        logo: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/prod/QANTIS_ACHATS/logo-qantis.png
+        favicon: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/prod/QANTIS_ACHATS/favicon-qantis.svg
         primaryColor: '#050056'
         secondaryColor: '#404FE6'
         textColor: '#6b7280'
@@ -25,7 +25,7 @@ parameters:
         - { name: 'SUPPLIER_PARTNERS_HOMEPAGE', value: null }
         - { name: 'EXPERT_CONTENT_HOMEPAGE', value: null }
         - { name: 'FAVORITES', value: null }
-        - { name: 'PRE_HOME_IMAGE', value: 'https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/pre-home/qantis-prehome-image.png' }
+        - { name: 'PRE_HOME_IMAGE', value: 'https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/prod/QANTIS_ACHATS/img-prehome-qantis.png' }
         - { name: 'PRE_HOME_TITLE', value: 'Pour tous vos achats, ayez le réflexe QANTIS!' }
         - { name: 'PRE_HOME_SUBTITLE', value: "Depuis 2001, QANTIS optimise et facilite les achats des entreprises et réseaux d'entreprises" }
         - { name: 'PRE_HOME_LIST', value: 'Des conditions avantageuses déjà négociées; Un catalogue de plus de 200 partenaires référencés; Des produits et services du quotidien et pour vos achats métier' }
@@ -100,8 +100,8 @@ parameters:
       channelParameter:
         email: serviceachats@unep-fr.org
         phoneNumber: '+33437651626'
-        logo: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/logo-unep.png
-        favicon: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/favicon-unep.png
+        logo: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/prod/UNEP/logo-unep.png
+        favicon: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/prod/UNEP/favicon-unep.png
         primaryColor: '#97173B'
         secondaryColor: '#004650'
         textColor: '#000000'
@@ -119,7 +119,7 @@ parameters:
         - { name: 'SUPPLIER_PARTNERS_HOMEPAGE', value: null }
         - { name: 'EXPERT_CONTENT_HOMEPAGE', value: null }
         - { name: 'FAVORITES', value: null }
-        - { name: 'PRE_HOME_IMAGE', value: 'https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/pre-home/unep-prehome-image.png' }
+        - { name: 'PRE_HOME_IMAGE', value: 'https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/prod/UNEP/img-prehome-unep.png' }
         - { name: 'PRE_HOME_TITLE', value: 'Optimisez vos achats professionnels grâce au service achats Unep* !' }
         - { name: 'PRE_HOME_SUBTITLE', value: null }
         - { name: 'PRE_HOME_LIST', value: 'Réduisez vos coûts grâce à des offres d’achats exclusives;Accédez à un large choix de partenaires adaptés à vos besoins;Achetez mieux et gagnez du temps' }
@@ -148,8 +148,8 @@ parameters:
       channelParameter:
         email: avantages@verdir.fr
         phoneNumber: '+33437651625'
-        logo: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/logo-verdir.png
-        favicon: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/favicon-verdir.png
+        logo: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/prod/VERDIR/logo-verdir.jpg
+        favicon: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/prod/VERDIR/favicon-verdir.png
         primaryColor: '#ec683e'
         secondaryColor: '#ec683e'
         textColor: '#000000'
@@ -244,8 +244,8 @@ parameters:
       channelParameter:
         email: serviceachats@unge.net
         phoneNumber: '+33437651631'
-        logo: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/logo-unge.jpg
-        favicon: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/favicon-unge.png
+        logo: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/prod/UNGE/logo-unge.jpg
+        favicon: https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/prod/UNGE/favicon-unge.jpg
         primaryColor: '#006788'
         secondaryColor: '#c4d203'
         textColor: '#000000'
