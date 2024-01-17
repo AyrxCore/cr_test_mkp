@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Api\Buyer;
 
+use App\Context\ChannelContext;
 use App\Dto\AccountAccordCadre;
 use App\Entity\AccordStatut;
 use App\Entity\Account;
@@ -22,24 +23,6 @@ use Twig\Environment;
 
 class ProductApiController extends AbstractController
 {
-    public const HOME_TOP_VENTE_PROPERTY
-        = [
-            'property_id' => '217',
-            'value' => '5369',
-        ];
-
-    public const HOME_SELECTION_PROPERTY
-        = [
-            'property_id' => '217',
-            'value' => '5368',
-        ];
-
-    public const HOME_ACCORD_CADRE_PROPERTY
-        = [
-            'property_id' => '217',
-            'value' => '5367',
-        ];
-
     public const DEFAULT_PAGE_NUMBER = 1;
     public const DEFAULT_PER_PAGE = 5;
 
@@ -64,6 +47,7 @@ class ProductApiController extends AbstractController
         Request $request,
         MailerProvider $mailerProvider,
         LoggerInterface $logger,
+        ChannelContext $channelContext
     ): JsonResponse {
         $session = $this->requestStack->getSession();
 
@@ -80,7 +64,7 @@ class ProductApiController extends AbstractController
         try {
             $sugarLink = $this->getParameter('SUBSCRIPTION_MAIL_SUGAR_LINK');
             $from = $this->getParameter('SUBSCRIPTION_MAIL_FROM');
-            $to = $this->getParameter('SUBSCRIPTION_MAIL_TO');
+            $to = $channelContext->getChannel()?->getChannelParameter()?->getEmail();
 
             $mailerProvider->send(
                 $from,
@@ -102,7 +86,7 @@ class ProductApiController extends AbstractController
                 $mailerProvider->send(
                     $parameters['ADHERENT_MAIL']['FROM'],
                     \explode(';', $parameters['ADHERENT_MAIL']['TO']),
-                    'Marketplace - ' . $account->getAdherent()->getSiret() . ' - Demande de rattachement au contrat QANTIS/STELLANTIS',
+                    'Marketplace - '.$account->getAdherent()->getSiret().' - Demande de rattachement au contrat QANTIS/STELLANTIS',
                     $this->twig->render('mails/stellantis/to_adherent_service.html.twig', [
                         'account' => $account,
                         'horodatage' => new \DateTime('now'),
