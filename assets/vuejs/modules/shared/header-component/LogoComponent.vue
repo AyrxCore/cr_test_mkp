@@ -2,14 +2,12 @@
   <div class="flex items-center justify-center lg:min-w-[200px]">
     <RouterLink
       :to="{ name: PageList.HOME_PAGE }"
-      class="flex justify-between text-xl font-bold"
+      class="flex justify-center text-xl font-bold"
       @click="sendGaEvent('click_header_logo')"
     >
-      <img
-        :src="primaryLogo"
-        alt="Logo"
-        class="left-[60px] top-[24.5px] flex h-[60px] max-w-[123px] md:max-w-[145px]"
-      />
+      <div class="max-w-[125px] md:max-w-[175px]">
+        <img :src="primaryLogo" alt="Logo" class="w-full" />
+      </div>
       <!--
       <img
         v-if="adherentLogoImg"

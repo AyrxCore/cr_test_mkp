@@ -5,8 +5,6 @@ import imgDefault from '@/vuejs/assets/img/default-image.png'
 import { format } from 'date-fns'
 import { useChannelStore } from '@/vuejs/stores/channel'
 
-const channelStore = useChannelStore()
-
 export function getImage(urlImage: string): string {
   return new URL(urlImage, import.meta.url).href
 }
@@ -104,6 +102,7 @@ function getColorBrightness(hexColor) {
 }
 
 export const betterTextColor = (bgColor: 'primary' | 'secondary') => {
+  const channelStore = useChannelStore()
   const hexColor =
     bgColor === 'primary'
       ? channelStore.channelPrimaryColor

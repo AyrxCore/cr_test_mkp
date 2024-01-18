@@ -55,7 +55,7 @@ const props = defineProps({
 </script>
 
 <style scoped>
->>> .swiper-wrapper {
+:deep(.swiper-wrapper) {
   justify-content: space-between;
 }
 </style>
