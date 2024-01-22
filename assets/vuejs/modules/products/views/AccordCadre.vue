@@ -59,6 +59,7 @@
         </div>
         <div class="m-auto max-w-screen-94">
           <ProductsCarouselComponent
+            :loading="isLoading"
             :products="partnerProducts"
             @click-left="sendGaEvent('click_fat_slider_left')"
             @click-right="sendGaEvent('click_fat_slider_right')"
@@ -67,6 +68,12 @@
             "
             @click-title="sendGaEvent('click_fat_slider_product_title', $event)"
             @click-img="sendGaEvent('click_fat_slider_product_img', $event)"
+            @click-moins-qty="
+              sendGaEvent('click_fat_slider_product_moins_qty', $event)
+            "
+            @click-plus-qty="
+              sendGaEvent('click_fat_slider_product_plus_qty', $event)
+            "
           />
         </div>
       </div>

@@ -42,7 +42,7 @@
           :src="getUpplerImage(product.images[0])"
           :alt="product.name"
           class="flex max-h-[150px] cursor-pointer items-center md:max-h-[139px] lg:max-h-[191px] lg:w-full lg:max-w-max"
-          @click="goToProductPage('click-img')"
+          @click="goToProductPage"
         />
         <div
           v-else
@@ -62,7 +62,15 @@
                 name: ProductPageList.PRODUCT,
                 params: { slug: productSlug },
               }"
-              @click="emitEvent('click-title')"
+              @click="
+                $emit('click-title', {
+                  partenaire_name: props.product.seller.name,
+                  partenaire_id: props.product.seller.id,
+                  product_name: props.product.name,
+                  product_id: props.product.id,
+                  qty_value: quantity,
+                })
+              "
             >
               {{ product.name }}
             </RouterLink>
@@ -123,7 +131,7 @@
               :quantity="quantity"
               :variant-id="variantId"
               @click="
-                sendGaEvent('click_slider_home_products_cta', {
+                $emit('click-add-cart', {
                   partenaire_name: product.seller.name,
                   partenaire_id: product.seller.id,
                   product_name: product.name,
@@ -155,11 +163,16 @@ import {
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import { Product } from '@/vuejs/types/Product'
 import { Variant } from '@/vuejs/types/Product/Variant'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 import router from '@/vuejs/router'
 
-const emit = defineEmits(['click-add-cart', 'click-title', 'click-img'])
+const emit = defineEmits([
+  'click-add-cart',
+  'click-title',
+  'click-img',
+  'click-moins-qty',
+  'click-plus-qty',
+])
 
 const props = defineProps({
   product: {
@@ -199,21 +212,19 @@ const productDescription = computed(() => {
 })
 
 const updateQuantity = (event) => {
-  const gaEventName =
-    quantity.value > event.quantity
-      ? 'click_product_slider_products_moins_qty'
-      : 'click_product_slider_products_plus_qty'
-  sendGaEvent(gaEventName)
+  const eventName =
+    quantity.value > event.quantity ? 'click-moins-qty' : 'click-plus-qty'
+  emit(eventName)
   quantity.value = event.quantity
 }
 
-const goToProductPage = (eventName: string) => {
+const goToProductPage = () => {
   router.push({
     name: ProductPageList.PRODUCT,
     params: { slug: productSlug.value },
   })
 
-  sendGaEvent(eventName, {
+  emit('click-img', {
     partenaire_name: props.product.seller.name,
     partenaire_id: props.product.seller.id,
     product_name: props.product.name,

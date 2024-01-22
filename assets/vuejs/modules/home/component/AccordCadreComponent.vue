@@ -13,6 +13,12 @@
     <div class="flex h-full w-full flex-col items-center">
       <div
         class="flex h-[150px] max-w-[200px] items-center justify-center rounded-lg sm:mx-auto sm:w-full md:h-[139px] lg:h-[191px]"
+        @click="
+          $emit('click-img', {
+            partenaire_name: accord.seller.name,
+            partenaire_id: accord.seller.id,
+          })
+        "
       >
         <img
           :src="properties.logo_partenaire"
@@ -25,6 +31,12 @@
         <div class="flex w-full flex-col justify-start">
           <h3
             class="truncate-custom truncate-custom-2 my-2 text-center text-3xl font-bold text-primary md:text-xl lg:text-lg"
+            @click="
+              $emit('click-title', {
+                partenaire_name: accord.seller.name,
+                partenaire_id: accord.seller.id,
+              })
+            "
           >
             {{ accord.name }}
           </h3>
@@ -48,7 +60,7 @@
               color: betterTextColor('primary'),
             }"
             @click="
-              sendGaEvent('click_slider_home_fat_cta', {
+              $emit('click-cta', {
                 partenaire_name: accord.seller.name,
                 partenaire_id: accord.seller.id,
               })
@@ -77,6 +89,8 @@ const props = defineProps({
     type: Object as PropType<Product>,
   },
 })
+
+const emit = defineEmits(['click-cta', 'click-title', 'click-img'])
 
 const properties = computed(() => {
   return props.accord.properties

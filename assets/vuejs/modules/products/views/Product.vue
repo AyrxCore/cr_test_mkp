@@ -248,15 +248,17 @@
       </Tabs>
 
       <!-- Bloc produits similaire -->
-      <template v-if="isLoadingSimilarProducts || similarProducts?.length >= 5">
+      <template
+        v-if="
+          isLoadingSimilarProductsAndAccordsCadres ||
+          similarProducts?.length > 0
+        "
+      >
         <h3 class="text-title-primary mt-4 mb-2">
           Sélection de produits similaires
         </h3>
-        <ProductsLoadingCarouselComponent
-          v-if="!similarProducts && isLoadingSimilarProducts"
-        />
         <ProductsCarouselComponent
-          v-else-if="similarProducts.length > 0"
+          :loading="isLoadingSimilarProductsAndAccordsCadres"
           :products="similarProducts"
           class="mt-4 mb-12"
           @click-left="sendGaEvent('click_product_slider_left')"
@@ -268,18 +270,35 @@
             sendGaEvent('click_product_slider_product_title', $event)
           "
           @click-img="sendGaEvent('click_product_slider_product_img', $event)"
+          @click-moins-qty="
+            sendGaEvent('click_product_slider_products_moins_qty', $event)
+          "
+          @click-plus-qty="
+            sendGaEvent('click_product_slider_products_plus_qty', $event)
+          "
         />
       </template>
       <!-- Fin bloc produits similaire -->
 
       <!-- Bloc accords-cadres incontournables -->
-      <template v-if="!isLoadingAccordsCadres">
+      <template
+        v-if="
+          isLoadingSimilarProductsAndAccordsCadres ||
+          similarAccordsCadres?.length > 0
+        "
+      >
         <h3 class="text-title-primary mt-4 mb-2">
           Les accords-cadres incontournables
         </h3>
         <AccordsCadreComponent
+          :loading="isLoadingSimilarProductsAndAccordsCadres"
           :accords-cadres="similarAccordsCadres"
           class="mb-8"
+          @click-left="sendGaEvent('click_product_slider_fat_left')"
+          @click-right="sendGaEvent('click_product_slider_fat_right')"
+          @click-cta="sendGaEvent('click_product_slider_fat_cta', $event)"
+          @click-title="sendGaEvent('click_product_slider_fat_title', $event)"
+          @click-img="sendGaEvent('click_product_slider_fat_img', $event)"
         />
       </template>
       <!-- Fin bloc accords-cadres incontournables -->
@@ -313,7 +332,6 @@ import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 import ProductAddToCartComponent from '@/vuejs/modules/products/components/ProductAddToCartComponent.vue'
 import ProductQuantityComponent from '@/vuejs/modules/shared/ProductQuantityComponent.vue'
 import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
-import ProductsLoadingCarouselComponent from '@/vuejs/modules/shared/ProductsLoadingCarouselComponent.vue'
 import TruckIconComponent from '@/vuejs/modules/shared/icon/TruckIconComponent.vue'
 
 import { getUpplerImage, isUrl } from '@/vuejs/services/utils'
@@ -324,8 +342,6 @@ import { useProductStore } from '@/vuejs/stores/product'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import sampleImg from '@/vuejs/assets/img/sample_product_img.png'
 import AccordsCadreComponent from '@/vuejs/modules/home/component/AccordsCadreComponent.vue'
-import AccordCadreLoadingComponent from '@/vuejs/modules/products/components/AccordCadreLoadingComponent.vue'
-import AccordsCadresLoadingCarouselComponent from '@/vuejs/modules/shared/AccordsCadresLoadingCarouselComponent.vue'
 
 const route = useRoute()
 const productStore = useProductStore()
@@ -335,8 +351,7 @@ const thumbsSwiper = ref(null)
 const option = ref([])
 const isLoading = ref<boolean>(false)
 const isLoadingPrice = ref<boolean>(false)
-const isLoadingSimilarProducts = ref<boolean>(false)
-const isLoadingAccordsCadres = ref<boolean>(false)
+const isLoadingSimilarProductsAndAccordsCadres = ref<boolean>(false)
 const similarProducts = ref<Product[]>([])
 const similarAccordsCadres = ref<Product[]>([])
 const product = ref<Product>()
@@ -405,8 +420,7 @@ watch(
   () => route.params.slug as string,
   async (slug: string) => {
     isLoading.value = true
-    isLoadingSimilarProducts.value = true
-    isLoadingAccordsCadres.value = true
+    isLoadingSimilarProductsAndAccordsCadres.value = true
     try {
       const productId = slug.split('-')
       const formattedProductId = parseInt(productId[productId.length - 1])
@@ -440,8 +454,7 @@ watch(
           },
         )
       }
-      isLoadingSimilarProducts.value = false
-      isLoadingAccordsCadres.value = false
+      isLoadingSimilarProductsAndAccordsCadres.value = false
     } catch (error) {
     } finally {
       isLoading.value = false

@@ -17,7 +17,13 @@
         </div>
         <div class="relative m-auto mt-1 max-w-screen-94 md:mt-5">
           <AccordsCadreComponent
+            :loading="!productsAccordsCadre"
             :accords-cadres="productsAccordsCadre?.results"
+            @click-left="sendGaEvent('click_product_slider_fat_left')"
+            @click-right="sendGaEvent('click_product_slider_fat_right')"
+            @click-cta="sendGaEvent('click_product_slider_fat_cta', $event)"
+            @click-title="sendGaEvent('click_product_slider_fat_title', $event)"
+            @click-img="sendGaEvent('click_product_slider_fat_img', $event)"
           />
         </div>
       </div>
@@ -33,11 +39,8 @@
           </p>
         </div>
         <div class="m-auto max-w-screen-94">
-          <ProductsLoadingCarouselComponent
-            v-if="!productsSelection?.results"
-          />
           <ProductsCarouselComponent
-            v-else
+            :loading="!productsSelection"
             :products="productsSelection?.results"
             @click-left="sendGaEvent('click_slider_home_products_left')"
             @click-right="sendGaEvent('click_slider_home_products_right')"
@@ -48,6 +51,12 @@
               sendGaEvent('click_slider_home_products_title', $event)
             "
             @click-img="sendGaEvent('click_slider_home_products_img', $event)"
+            @click-moins-qty="
+              sendGaEvent('click_slider_home_products_moins_qty', $event)
+            "
+            @click-plus-qty="
+              sendGaEvent('click_slider_home_products_plus_qty', $event)
+            "
           />
         </div>
       </div>
@@ -160,7 +169,6 @@ import ExpertContentsComponent from '@/vuejs/modules/home/component/ExpertConten
 import OurCategoriesComponent from '@/vuejs/modules/home/component/OurCategoriesComponent.vue'
 import PartnersCarousel from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
 import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
-import ProductsLoadingCarouselComponent from '@/vuejs/modules/shared/ProductsLoadingCarouselComponent.vue'
 
 const favoriteStore = useFavoriteStore()
 const productStore = useProductStore()

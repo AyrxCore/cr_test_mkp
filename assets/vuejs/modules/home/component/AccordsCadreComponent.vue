@@ -1,5 +1,5 @@
 <template>
-  <div v-if="accordsCadres?.length" class="relative mt-1 md:mt-5">
+  <div v-if="accordsCadres?.length > 0" class="relative mt-1 md:mt-5">
     <CarouselListSharedComponent
       :slides-per-view="1"
       :space-between="20"
@@ -22,19 +22,24 @@
         },
       }"
       class="swiper-nav-outside"
-      @click-left="sendGaEvent('click_slider_home_fat_left')"
-      @click-right="sendGaEvent('click_slider_home_fat_right')"
+      @click-left="$emit('click-left')"
+      @click-right="$emit('click-right')"
     >
       <SwiperSlide
         v-for="accord in accordsCadres"
         :key="accord.id"
         class="flex !h-auto items-stretch justify-center overflow-hidden rounded-lg border-4 border-solid border-secondary bg-white"
       >
-        <AccordCadreComponent :accord="accord" />
+        <AccordCadreComponent
+          :accord="accord"
+          @click-cta="$emit('click-cta', $event)"
+          @click-title="$emit('click-title', $event)"
+          @click-img="$emit('click-img', $event)"
+        />
       </SwiperSlide>
     </CarouselListSharedComponent>
   </div>
-  <AccordsCadresLoadingCarouselComponent v-else />
+  <AccordsCadresLoadingCarouselComponent v-else-if="loading" />
 </template>
 
 <script lang="ts" setup>
@@ -42,7 +47,6 @@ import { SwiperSlide } from 'swiper/vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
 import AccordCadreComponent from '@/vuejs/modules/home/component/AccordCadreComponent.vue'
 import AccordsCadresLoadingCarouselComponent from '@/vuejs/modules/shared/AccordsCadresLoadingCarouselComponent.vue'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { PropType } from 'vue'
 import { Product } from '@/vuejs/types/Product'
 
@@ -51,11 +55,17 @@ const props = defineProps({
     required: true,
     type: Array || (Object as PropType<Product>),
   },
+  loading: {
+    required: true,
+    type: Boolean,
+  },
 })
-</script>
 
-<style scoped>
-:deep(.swiper-wrapper) {
-  justify-content: space-between;
-}
-</style>
+const emit = defineEmits([
+  'click-left',
+  'click-right',
+  'click-cta',
+  'click-title',
+  'click-img',
+])
+</script>
