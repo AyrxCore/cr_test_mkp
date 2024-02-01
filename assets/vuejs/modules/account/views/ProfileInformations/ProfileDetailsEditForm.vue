@@ -28,7 +28,12 @@
         <div class="grid-rows grid grid-flow-col gap-6">
           <div class="mb-6">
             <LabelField title="Téléphone fixe" />
-            <InputField v-model="userStore.editingInfo.phone" type="text" />
+            <InputField
+              v-model="userStore.editingInfo.phone"
+              type="text"
+              pattern="^((\+)33|0)[1-9](\d{2}){4}$"
+              title="Ex: 0478123456"
+            />
           </div>
         </div>
         <div class="flex justify-between md:justify-end">

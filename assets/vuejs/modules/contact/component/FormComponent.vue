@@ -63,6 +63,7 @@
                 v-model="contact.email"
                 type="email"
                 placeholder="Votre email *"
+                title="Ex: votre_email@test.fr"
                 class="border-1 relative h-[55px] w-full rounded-lg border-gray-200 bg-white px-3 placeholder-gray-400"
                 required
               />
@@ -71,16 +72,11 @@
               <input
                 v-model="contact.phone"
                 type="tel"
+                pattern="^((\+)33|0)[1-9](\d{2}){4}$"
+                title="Ex: 0478123456"
                 placeholder="Votre téléphone (Optionnel)"
                 class="border-1 relative h-[55px] w-full rounded-lg border-gray-200 bg-white px-3 placeholder-gray-400"
-                @blur="checkPhoneNumber"
               />
-              <span
-                v-if="isNotValidPhoneNumber"
-                class="flex w-full bg-red-200 p-1 text-red-700"
-              >
-                Le numéro de téléphone n'est pas correct
-              </span>
             </div>
           </div>
           <div class="mt-3 h-[255px] w-full lg:mt-0 lg:w-1/2">
@@ -123,17 +119,15 @@
   <!-- Fin Bloc formulaire -->
 </template>
 <script lang="ts" setup>
+import { computed, onMounted, ref } from 'vue'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import MessageSquareIconComponent from '@/vuejs/modules/shared/icon/MessageSquareIconComponent.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import { computed, onMounted, ref } from 'vue'
-import { useContactStore } from '@/vuejs/stores/contact'
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
+import { useContactStore } from '@/vuejs/stores/contact'
 import { useAlertStore } from '@/vuejs/stores/alert'
 import { AlertType } from '@/vuejs/types/Alert'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
-import { useUserStore } from '@/vuejs/stores/user'
-import { useChannelStore } from '@/vuejs/stores/channel'
 import { betterTextColor } from '@/vuejs/services/utils'
 
 onMounted(async () => {
@@ -142,12 +136,7 @@ onMounted(async () => {
 
 const alertStore = useAlertStore()
 const contactStore = useContactStore()
-const userStore = useUserStore()
-const channelStore = useChannelStore()
 const isLoading = ref<boolean>(false)
-
-const currentChannel = channelStore.currentChannel
-const isNotValidPhoneNumber = ref<boolean>(false)
 
 const contact = computed(() => {
   return contactStore.contact
@@ -157,20 +146,7 @@ const motifs = computed(() => {
   return contactStore.motifs
 })
 
-const checkPhoneNumber = () => {
-  if (contact.value.phone) {
-    // Expression régulière pour un numéro de téléphone français
-    const telephoneRegex = /^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/
-    isNotValidPhoneNumber.value = !telephoneRegex.test(contact.value.phone)
-  } else {
-    isNotValidPhoneNumber.value = false
-  }
-}
-
 const sendEmail = async () => {
-  if (isNotValidPhoneNumber.value) {
-    return false
-  }
   isLoading.value = true
   setTimeout(async () => {
     const alertStore = useAlertStore()

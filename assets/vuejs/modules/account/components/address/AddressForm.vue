@@ -33,6 +33,7 @@
           v-model="currentAddress.postcode"
           required
           pattern="(?:0[1-9]|[1-8]\d|9[0-8])\d{3}$"
+          title="Ex: 69760"
         />
       </div>
       <div class="mb-6">
@@ -57,6 +58,7 @@
         <InputField
           v-model="currentAddress.phone"
           pattern="^((\+)33|0)[1-9](\d{2}){4}$"
+          title="Ex: 0478123456"
         />
       </div>
     </div>
