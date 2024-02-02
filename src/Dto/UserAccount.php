@@ -82,6 +82,8 @@ final class UserAccount
     #[Assert\Type('string', message: '(adherentName) string required')]
     private string $adherentName = '';
 
+    private string $adherentParentId = '';
+
     #[Assert\NotBlank(message: 'firstname cannot be null')]
     #[Assert\Type('string', message: '(firstname) string required')]
     private string $firstname = '';
@@ -213,6 +215,16 @@ final class UserAccount
     public function setAdherentName(string $adherentName): void
     {
         $this->adherentName = $adherentName;
+    }
+
+    public function getAdherentParentId(): string
+    {
+        return $this->adherentParentId;
+    }
+
+    public function setAdherentParentId(string $adherentParentId): void
+    {
+        $this->adherentParentId = $adherentParentId;
     }
 
     public function getFirstname(): string

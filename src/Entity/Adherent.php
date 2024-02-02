@@ -77,7 +77,7 @@ class Adherent
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $hashkey = null;
 
-    #[Groups(['user:simple', 'adherent:get'])]
+    #[Groups(['user:simple'])]
     #[ORM\Column(nullable: true)]
     #[Assert\Url(
         message: 'A channel logo must be an URL',
@@ -90,6 +90,17 @@ class Adherent
     #[Groups(['update'])]
     private ?string $channelCode = null;
 
+    #[Groups(['user:simple'])]
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $reducceServiceName = null;
+
+    #[Groups(['user:simple'])]
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $reducceUrl = null;
+
+    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?Adherent $parent = null;
+
     public function __construct()
     {
         $this->accordStatuts = new ArrayCollection();
@@ -101,9 +112,10 @@ class Adherent
         return $this->id;
     }
 
-    public function setId(?Uuid $id): void
+    public function setId(?Uuid $id): self
     {
         $this->id = $id;
+        return $this;
     }
 
     public function getName(): ?string
@@ -262,7 +274,9 @@ class Adherent
 
     public function getLogo(): ?string
     {
-        return $this->logo;
+        if ($this->logo !== null) {
+            return $this->logo;
+        } else return $this->parent?->getLogo();
     }
 
     public function setLogo(?string $logo): self
@@ -292,5 +306,43 @@ class Adherent
     public function setChannelCode(?string $channelCode): void
     {
         $this->channelCode = $channelCode;
+    }
+
+    public function getReducceServiceName(): ?string
+    {
+        if ($this->reducceServiceName !== null) {
+            return $this->reducceServiceName;
+        } else return $this->parent?->getReducceServiceName();
+    }
+
+    public function setReducceServiceName(?string $reducceServiceName): self
+    {
+        $this->reducceServiceName = $reducceServiceName;
+        return $this;
+    }
+
+    public function getReducceUrl(): ?string
+    {
+        if ($this->reducceUrl !== null) {
+            return $this->reducceUrl;
+        } else return $this->parent?->getReducceUrl();
+    }
+
+    public function setReducceUrl(?string $reducceUrl): self
+    {
+        $this->reducceUrl = $reducceUrl;
+        return $this;
+    }
+
+    public function getParent(): ?Adherent
+    {
+        return $this->parent;
+    }
+
+    public function setParent(?self $parent): self
+    {
+        $this->parent = $parent;
+
+        return $this;
     }
 }

@@ -1,20 +1,19 @@
 <template>
-  <div class="flex items-center justify-center lg:min-w-[200px]">
+  <div class="mr-4 flex items-center justify-center lg:min-w-[240px]">
     <RouterLink
       :to="{ name: PageList.HOME_PAGE }"
       class="flex justify-center text-xl font-bold"
       @click="sendGaEvent('click_header_logo')"
     >
-      <div class="max-w-[125px] md:max-w-[175px]">
-        <img :src="primaryLogo" alt="Logo" class="w-full" />
+      <div class="flex max-w-[125px] items-center md:max-w-[175px]">
+        <img :src="primaryLogo" alt="Logo" />
       </div>
-      <!--
-      <img
+      <div
         v-if="adherentLogoImg"
-        :src="adherentLogoImg"
-        alt="Logo Adhérent"
-        class="left-[60px] top-[24.5px] ml-1 flex h-[60px] max-w-[123px] md:max-w-[145px]"
-      /> -->
+        class="ml-1 flex max-w-[125px] items-center md:max-w-[175px]"
+      >
+        <img :src="adherentLogoImg" alt="Logo Adhérent" />
+      </div>
     </RouterLink>
   </div>
 </template>

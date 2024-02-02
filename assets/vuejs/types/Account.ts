@@ -34,6 +34,8 @@ export interface SubAccount {
 export interface Adherent {
   reducceCode: string | null
   logo: string | null
+  reducceServiceName: string | null
+  reducceUrl: string | null
 }
 
 export interface Account extends ExternalApiDataEntity {

@@ -12,19 +12,12 @@ use App\Repository\AdherentRepository;
 use App\Repository\ChannelRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Uid\Uuid;
 
 class AdherentPersister implements ContextAwareDataPersisterInterface
 {
-    public function __construct(
-        private AdherentRepository $adherentRepository,
-        private ChannelRepository $channelRepository,
-        private EntityManagerInterface $em,
-        private NormalizerInterface $normalizer,
-        private UserPasswordHasherInterface $userPasswordHasher,
-    ) {
+    public function __construct(private AdherentRepository $adherentRepository, private ChannelRepository $channelRepository, private EntityManagerInterface $em)
+    {
     }
 
     public function supports($data, array $context = []): bool
@@ -35,7 +28,7 @@ class AdherentPersister implements ContextAwareDataPersisterInterface
     /**
      * @param Adherent $data
      */
-    public function persist($data, array $context = [])
+    public function persist($data, array $context = []): ?Adherent
     {
         $adh = $this->adherentRepository->find($data->getId());
         if ($adh === null) {
@@ -48,21 +41,22 @@ class AdherentPersister implements ContextAwareDataPersisterInterface
             throw new BadRequestHttpException('Channel not found');
         }
 
-        $adh->setChannel($channel);
-        $adh->setReducceCode($data->getReducceCode());
-        $adh->setsiret($data->getsiret());
-        $adh->setStreet($data->getStreet());
-        $adh->setCity($data->getCity());
-        $adh->setPostalcode($data->getPostalcode());
-        $adh->setCountry($data->getCountry());
-        $adh->setHashkey($data->getHashkey());
+        $adh->setParent($data->getParent())
+            ->setChannel($channel)
+            ->setReducceCode($data->getReducceCode())
+            ->setsiret($data->getsiret())
+            ->setStreet($data->getStreet())
+            ->setCity($data->getCity())
+            ->setPostalcode($data->getPostalcode())
+            ->setCountry($data->getCountry())
+            ->setHashkey($data->getHashkey());
         foreach ($data->getAttachments() as $attachment) {
             $accordStatut = $this->em->getRepository(AccordStatut::class)->findOneBy([
                 'adherent' => $data->getId(),
                 'accordId' => $attachment['accordId'],
             ]);
             if ($accordStatut) {
-                // ne pas ecraser Pending par NotActivated
+                // Ne pas écraser Pending par NotActivated
                 if (!($accordStatut->getStatus() === AccountAccordCadre::PROCESS_STATUS_PENDING
                     && $attachment['status'] === AccountAccordCadre::PROCESS_STATUS_NOT_ACTIVATED)
                 ) {

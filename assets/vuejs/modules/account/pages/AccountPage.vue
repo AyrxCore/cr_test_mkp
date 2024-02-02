@@ -39,11 +39,92 @@
                 <div class="grid gap-4">
                   <div
                     v-if="user.account.adherent.reducceCode"
-                    class="rounded-lg bg-secondary p-2 xl:p-7"
+                    class="rounded-lg bg-secondary p-2 text-lg xl:p-5"
                     :class="'text-' + betterTextColor('secondary')"
                   >
-                    Code Avantages Salariés :
-                    {{ user.account.adherent.reducceCode }}
+                    <div v-if="user.account.adherent.reducceServiceName">
+                      <div class="mb-2">
+                        Code {{ user.account.adherent.reducceServiceName }}
+                        <span class="ml-1 font-bold">{{
+                          user.account.adherent.reducceCode
+                        }}</span>
+                      </div>
+                      <div v-if="user.account.adherent.reducceUrl">
+                        <a
+                          class="flex underline"
+                          target="_blank"
+                          :href="user.account.adherent.reducceUrl"
+                        >
+                          <RedirectionIconComponent
+                            class="mr-2"
+                            :stroke="betterTextColor('secondary')"
+                          />
+                          <div>
+                            Se rendre sur
+                            {{ user.account.adherent.reducceServiceName }}
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                    <div
+                      v-else-if="
+                        !user.account.adherent.reducceServiceName &&
+                        user.account.adherent.reducceUrl
+                      "
+                    >
+                      <div class="mb-2">
+                        Code BONUUS
+                        <span class="ml-1 font-bold">{{
+                          user.account.adherent.reducceCode
+                        }}</span>
+                      </div>
+                      <div>
+                        <a
+                          class="flex underline"
+                          target="_blank"
+                          :href="user.account.adherent.reducceUrl"
+                        >
+                          <RedirectionIconComponent
+                            class="mr-2"
+                            :stroke="betterTextColor('secondary')"
+                          />
+                          <div>Se rendre sur BONUUS</div>
+                        </a>
+                      </div>
+                    </div>
+                    <div
+                      v-else-if="
+                        !user.account.adherent.reducceServiceName &&
+                        !user.account.adherent.reducceUrl &&
+                        channel.code === 'QANTIS_ACHAT'
+                      "
+                    >
+                      <div class="mb-2">
+                        Code BONUUS
+                        <span class="ml-1 font-bold">{{
+                          user.account.adherent.reducceCode
+                        }}</span>
+                      </div>
+                      <div>
+                        <a
+                          class="flex underline"
+                          target="_blank"
+                          href="https://bonuus.qantis.co"
+                        >
+                          <RedirectionIconComponent
+                            class="mr-2"
+                            :stroke="betterTextColor('secondary')"
+                          />
+                          <div>Se rendre sur BONUUS</div>
+                        </a>
+                      </div>
+                    </div>
+                    <div v-else>
+                      Code Avantages Salariés
+                      <span class="ml-1 font-bold">{{
+                        user.account.adherent.reducceCode
+                      }}</span>
+                    </div>
                   </div>
                   <AccountSidebar />
                   <div class="rounded-lg bg-white xl:p-7">
@@ -89,17 +170,16 @@
 </template>
 
 <script lang="ts" setup>
-import { useUserStore } from '@/vuejs/stores/user'
-import { useChannelStore } from '@/vuejs/stores/channel'
 import { storeToRefs } from 'pinia'
-
 import AccountSidebar from '@/vuejs/modules/account/components/sidebar/AccountSidebar.vue'
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import DisconnectIconComponent from '@/vuejs/modules/shared/icon/DisconnectIconComponent.vue'
+import RedirectionIconComponent from '@/vuejs/modules/shared/icon/RedirectionIconComponent.vue'
 import DropdownListComponent from '@/vuejs/modules/shared/DropdownListComponent.vue'
 import { betterTextColor } from '@/vuejs/services/utils'
-import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
+import { useUserStore } from '@/vuejs/stores/user'
+import { useChannelStore } from '@/vuejs/stores/channel'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const userStore = useUserStore()

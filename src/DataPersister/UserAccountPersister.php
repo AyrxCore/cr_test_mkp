@@ -17,21 +17,12 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Uid\Uuid;
 
 class UserAccountPersister implements ContextAwareDataPersisterInterface
 {
-    public function __construct(
-        private AccountRepository $accountRepository,
-        private AdherentRepository $adherentRepository,
-        private ChannelRepository $channelRepository,
-        private EntityManagerInterface $em,
-        private NormalizerInterface $normalizer,
-        private UserInfoUpdateRequestRepository $userInfoUpdateRequestRepository,
-        private UserPasswordHasherInterface $userPasswordHasher,
-        private UserRepository $userRepository,
-    ) {
+    public function __construct(private AccountRepository $accountRepository, private AdherentRepository $adherentRepository, private ChannelRepository $channelRepository, private EntityManagerInterface $em, private UserInfoUpdateRequestRepository $userInfoUpdateRequestRepository, private UserPasswordHasherInterface $userPasswordHasher, private UserRepository $userRepository)
+    {
     }
 
     public function supports($data, array $context = []): bool
@@ -42,15 +33,17 @@ class UserAccountPersister implements ContextAwareDataPersisterInterface
     /**
      * @param UserAccount $data
      */
-    public function persist($data, array $context = [])
+    public function persist($data, array $context = []): UserAccount
     {
         $adh = $this->adherentRepository->find($data->getAdherentId());
 
         if ($adh === null) {
             $adh = new Adherent();
-            $adh->setId(new Uuid($data->getAdherentId()));
-            $adh->setName($data->getAdherentName());
-            $adh->setChannel($this->channelRepository->findOneByCode($data->getChannelCode()));
+            $parent = $data->getAdherentParentId() ? $this->adherentRepository->find($data->getAdherentParentId()) : null;
+            $adh->setId(new Uuid($data->getAdherentId()))
+                ->setParent($parent)
+                ->setName($data->getAdherentName())
+                ->setChannel($this->channelRepository->findOneByCode($data->getChannelCode()));
             $this->em->persist($adh);
         }
 

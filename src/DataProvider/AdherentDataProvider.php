@@ -14,8 +14,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class AdherentDataProvider implements RestrictedDataProviderInterface, ItemDataProviderInterface
 {
-    public function __construct(private EntityManagerInterface $entityManager, private ChannelContext $channelContext)
-    {
+    public function __construct(private EntityManagerInterface $entityManager, private ChannelContext $channelContext) {
     }
 
     public function getItem(string $resourceClass, $id, string $operationName = null, array $context = [])
@@ -27,7 +26,7 @@ class AdherentDataProvider implements RestrictedDataProviderInterface, ItemDataP
         if (!$adherent) {
             throw new NotFoundHttpException('Adherent not found');
         }
-        
+
         if ($adherent->getChannel() !== $channel) {
             throw new AccessDeniedException('Access to channel is forbidden');
         }
