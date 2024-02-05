@@ -98,7 +98,7 @@ class Adherent
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $reducceUrl = null;
 
-    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(targetEntity: Adherent::class, inversedBy: 'parent')]
     private ?Adherent $parent = null;
 
     public function __construct()
@@ -339,7 +339,7 @@ class Adherent
         return $this->parent;
     }
 
-    public function setParent(?self $parent): self
+    public function setParent(?Adherent $parent): self
     {
         $this->parent = $parent;
 
