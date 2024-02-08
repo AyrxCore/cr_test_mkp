@@ -15,19 +15,27 @@
           </ul>
         </div>
         <div class="flex flex-col items-center justify-center lg:flex-row">
-          <ButtonComponent
-            v-for="(button, key) in buttons"
-            :key="key"
-            class="mb-6 h-auto w-full md:mr-5 md:w-auto lg:h-12 lg:whitespace-nowrap"
-            :class="
-              button.style === 'primary'
-                ? 'button-primary'
-                : 'button-primary-outline'
-            "
-            @click="clickOnCta(button.url, button.style)"
-          >
-            <span class="w-full">{{ button.name }}</span>
-          </ButtonComponent>
+          <template v-for="(button, key) in buttons" :key="key">
+            <ButtonDownloadFileWithLogo
+              :event-name="
+                button.style === 'primary'
+                  ? 'click_fat_conditions_cta1'
+                  : 'click_fat_conditions_cta2'
+              "
+              :event-params="{
+                productName: props.properties.fat_marque,
+              }"
+              :classes="
+                'mb-6 h-auto w-full md:mr-5 md:w-auto lg:h-12 lg:whitespace-nowrap' +
+                  button.style ===
+                'primary'
+                  ? 'button-primary'
+                  : 'button-primary-outline'
+              "
+              :url="button.url"
+              :name="button.name"
+            />
+          </template>
         </div>
       </div>
     </div>
@@ -66,15 +74,11 @@
   </div>
 </template>
 <script lang="ts" setup>
-import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import { computed } from 'vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
 import { SwiperSlide } from 'swiper/vue'
-import { checkIsAbsoluteUrl, openInNewTab } from '@/vuejs/services/utils'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
-import { useProductStore } from '@/vuejs/stores/product'
-
-const productStore = useProductStore()
+import ButtonDownloadFileWithLogo from '@/vuejs/modules/products/components/accord-cadre/ButtonDownloadFileWithLogo.vue'
 
 const props = defineProps({
   mentionsLegales: {
@@ -125,22 +129,6 @@ const buttons = computed(() => {
     return el.url != null
   })
 })
-
-const clickOnCta = (buttonUrl: string, buttonStyle: string) => {
-  if (checkIsAbsoluteUrl(buttonUrl)) {
-    openInNewTab(buttonUrl)
-  } else {
-    productStore.downloadPdfFile(buttonUrl)
-  }
-
-  const eventName =
-    buttonStyle === 'primary'
-      ? 'click_fat_conditions_cta1'
-      : 'click_fat_conditions_cta2'
-  sendGaEvent(eventName, {
-    productName: props.properties.fat_marque,
-  })
-}
 </script>
 
 <style scoped></style>

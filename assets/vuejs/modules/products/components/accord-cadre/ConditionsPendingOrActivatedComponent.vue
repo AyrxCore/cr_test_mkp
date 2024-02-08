@@ -35,15 +35,17 @@
     </div>
 
     <div class="mt-6 flex flex-col items-center">
-      <ButtonComponent
+      <ButtonDownloadFileWithLogo
         v-if="cta1.name && cta1.url"
-        class="button-primary mx-auto mb-6 border-2 border-solid !border-white"
-        @click="clickOnCta(cta1.url, 1)"
-      >
-        <span>
-          {{ cta1.name }}
-        </span>
-      </ButtonComponent>
+        event-name="click_fat_cta_1"
+        :event-params="{
+          product_name: props.accordName,
+          state_rattachement: props.currentStatus.status,
+        }"
+        classes="button-primary mx-auto mb-6 border-2 border-solid !border-white"
+        :url="cta1.url"
+        :name="cta1.name"
+      />
       <a
         v-else-if="cta1.name && cta1.mailto"
         class="button button-primary mx-auto mb-6 border-2 border-solid !border-white"
@@ -84,6 +86,7 @@ import { AccountAccordCadre } from '@/vuejs/types/AccountAccordCadre'
 import PendingIconComponent from '@/vuejs/modules/shared/icon/PendingIconComponent.vue'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { useChannelStore } from '@/vuejs/stores/channel'
+import ButtonDownloadFileWithLogo from '@/vuejs/modules/products/components/accord-cadre/ButtonDownloadFileWithLogo.vue'
 
 const props = defineProps({
   currentStatus: {
