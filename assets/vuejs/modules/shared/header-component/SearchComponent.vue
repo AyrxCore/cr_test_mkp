@@ -29,14 +29,17 @@ import SearchIconComponent from '@/vuejs/modules/shared/icon/SearchIconComponent
 
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import { useProductStore } from '@/vuejs/stores/product'
 
 const route = useRoute()
 const emit = defineEmits(['searchProduct'])
 const wrapper = ref<HTMLElement>()
 
 const searchTerm = ref('')
+const productStore = useProductStore()
 
 const searchProduct = () => {
+  productStore.setSearchTerms(searchTerm.value)
   emit('searchProduct', { term: searchTerm.value })
   sendGaEvent('action_header_search', { search_value: searchTerm.value })
 }

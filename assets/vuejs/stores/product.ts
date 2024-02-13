@@ -33,6 +33,7 @@ export const useProductStore = defineStore({
     selectedCategoryId: null,
     selectedProperties: null,
     selectedCompanyId: null,
+    searchTerms: null,
     productVariants: [],
     productVariantsOptions: [],
     currentVariantOptions: null,
@@ -177,6 +178,7 @@ export const useProductStore = defineStore({
       this.selectedCategoryId = null
       this.selectedProperties = null
       this.selectedCompanyId = null
+      this.searchTerms = null
     },
     async downloadPdfFile(url: string) {
       try {
@@ -201,6 +203,9 @@ export const useProductStore = defineStore({
     setSelectedCompany(companyId) {
       this.selectedCompanyId = companyId
     },
+    setSearchTerms(searchterms) {
+      this.searchTerms = searchterms
+    },
     updateProductVariant(product: Product, variant) {
       product.defaultVariantId = variant.id
       product.price = variant.price?.display_price / 100
@@ -218,7 +223,8 @@ export const useProductStore = defineStore({
       return (
         !!this.selectedCategoryId ||
         !!this.selectedProperties ||
-        !!this.selectedCompanyId
+        !!this.selectedCompanyId ||
+        !!this.searchTerms
       )
     },
   },

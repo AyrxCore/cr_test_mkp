@@ -106,10 +106,10 @@ const {
   selectedCategoryId,
   selectedProperties,
   selectedCompanyId,
+  searchTerms,
   filters,
 } = storeToRefs(productStore)
 const isLoading = ref<boolean>()
-const term = ref<string>('')
 const currentPartenaire = ref<number>(null)
 const perPage = ref<number>(30)
 const currentCount = ref<number>(null)
@@ -171,7 +171,7 @@ const count = computed(() => {
 })
 
 const removeFilterAll = async () => {
-  term.value = null
+  searchTerms.value = null
   selectedCategoryId.value = null
   selectedCompanyId.value = null
   selectedProperties.value = null
@@ -179,9 +179,8 @@ const removeFilterAll = async () => {
 
 const loadPage = async () => {
   const queryValue = {}
-
-  if (term.value) {
-    queryValue.q = term.value
+  if (searchTerms.value) {
+    queryValue.q = searchTerms.value
   }
 
   if (selectedCategoryId.value) {
@@ -205,6 +204,7 @@ const loadPage = async () => {
 
 watch(
   () => [
+    searchTerms.value,
     selectedCategoryId.value,
     selectedCompanyId.value,
     selectedProperties.value,
@@ -218,10 +218,9 @@ watch(
   () => route.query,
   async (routeObject) => {
     await pageLoad()
-
     if (routeObject.q) {
-      term.value = routeObject.q.toString()
-      paramsProducts.value.name = term.value
+      productStore.setSearchTerms(routeObject.q)
+      paramsProducts.value.name = routeObject.q
     }
 
     if (routeObject.category) {

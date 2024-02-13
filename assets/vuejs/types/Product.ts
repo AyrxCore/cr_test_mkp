@@ -56,6 +56,7 @@ export interface ProductStoreState {
   selectedCategoryId?: string
   selectedProperties?: object
   selectedCompanyId?: string
+  searchTerms?: string
   productVariants: []
   productVariantsOptions: []
   currentVariantOptions?: number
