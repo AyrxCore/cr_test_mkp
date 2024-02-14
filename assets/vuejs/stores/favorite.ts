@@ -32,7 +32,6 @@ export const useFavoriteStore = defineStore({
         return newFavorite
       } catch (error) {
         if (error.response.status === 409) {
-          notifyError(`Le libellé ${favorite.name} est déjà utilisé`)
           throw error
         } else {
           notifyError(`La liste ${favorite.name} n'a pas pu être mise à jour`)
@@ -54,7 +53,6 @@ export const useFavoriteStore = defineStore({
         return updatedFavorite
       } catch (error) {
         if (error.response.status === 422) {
-          notifyError(`Le libellé ${favorite.name} est déjà utilisé`)
           throw error
         } else {
           notifyError(`La liste ${favorite.name} n'a pas pu être mise à jour`)

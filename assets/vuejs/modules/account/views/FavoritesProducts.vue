@@ -8,8 +8,10 @@
         v-if="showFormFavorite"
         class="modal"
         :is-loading="isLoading"
+        :error-submit="errorSubmit"
         @cancel="showFormFavorite = false"
         @submit-favorite="onSubmitFavorite"
+        @change-value="errorSubmit = null"
       />
       <div v-if="showAlert" class="lg:w-5/6">
         <AlertSharedComponent />
@@ -37,9 +39,10 @@
             :key="key"
             :favorite="favorite"
             :can-delete="favorite.accountId === user.account.id"
+            :error-submit="errorSubmit"
             @submit-favorite="onSubmitFavorite"
             @delete-favorite="onDeleteFavorite"
-            @cancel="showFormFavorite = false"
+            @change-value="errorSubmit = null"
           />
         </div>
         <div class="mt-4 flex w-full justify-end">
@@ -55,18 +58,19 @@
   </AccountPage>
 </template>
 <script lang="ts" setup>
-import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import { computed, onMounted, ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
+import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 import FavoritesProductsComponent from '@/vuejs/modules/account/components/FavoriteProductComponent.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import FavoriteFormModal from '@/vuejs/modules/account/components/favorite/FavoriteAddEditModal.vue'
-import { useFavoriteStore } from '@/vuejs/stores/favorite'
-import { storeToRefs } from 'pinia'
-import { useAlertStore } from '@/vuejs/stores/alert'
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
+import { useFavoriteStore } from '@/vuejs/stores/favorite'
+import { useAlertStore } from '@/vuejs/stores/alert'
 import { useUserStore } from '@/vuejs/stores/user'
-import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import { notifyError } from '@/vuejs/services/utils'
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
@@ -76,6 +80,7 @@ const deleteFavorite = ref<boolean>(false)
 const favoriteStore = useFavoriteStore()
 const isLoading = ref<boolean>(false)
 const { show: showAlert } = storeToRefs(alertStore)
+const errorSubmit = ref<string>(null)
 
 onMounted(async () => {
   isLoading.value = true
@@ -89,6 +94,9 @@ const openFavoriteForm = () => {
 
 const onSubmitFavorite = async (event) => {
   isLoading.value = true
+  errorSubmit.value = null
+  const oldFavoriteName = event.favorite.name
+  event.favorite.name = event.newFavoriteName
   try {
     if (event.isEditing) {
       await favoriteStore.update(event.favorite)
@@ -97,9 +105,20 @@ const onSubmitFavorite = async (event) => {
     }
     await favoriteStore.fetchFavorites()
     showFormFavorite.value = false
-  } catch (error) {}
-
-  isLoading.value = false
+  } catch (error) {
+    if (error.response.status === 409) {
+      errorSubmit.value = `Le libellé ${event.newFavoriteName} est déjà utilisé`
+    } else if (error.response.status === 422) {
+      notifyError(`Le libellé ${event.newFavoriteName} est déjà utilisé`)
+    } else {
+      notifyError(
+        `La liste ${event.newFavoriteName} n'a pas pu être mise à jour`,
+      )
+    }
+    event.favorite.name = oldFavoriteName
+  } finally {
+    isLoading.value = false
+  }
 }
 
 const onDeleteFavorite = async (event) => {
@@ -125,5 +144,3 @@ const favorites = computed(() => {
   return favoriteStore.favorites
 })
 </script>
-
-<style scoped></style>

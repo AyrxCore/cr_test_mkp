@@ -6,7 +6,11 @@
     <template #content>
       <form v-if="favorite" class="w-full" @submit.prevent="onSubmitFavorite">
         <div class="px-3 md:px-8">
-          <FavoriteForm :favorite="favorite" />
+          <FavoriteForm
+            :favorite="favorite"
+            :error-submit="errorMessage"
+            @change-value="changeValue($event)"
+          />
           <div class="flex justify-between md:justify-end">
             <ButtonComponent
               class="button-primary-outline mr-2"
@@ -26,12 +30,12 @@
 </template>
 
 <script lang="ts" setup>
+import { onMounted, onUpdated, ref } from 'vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import { onMounted, ref } from 'vue'
-import { Favorite } from '@/vuejs/types/Favorite'
-import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import FavoriteForm from '@/vuejs/modules/account/components/favorite/FavoriteForm.vue'
 import FavoriteModal from '@/vuejs/modules/account/pages/DefaultModalPage.vue'
+import { Favorite } from '@/vuejs/types/Favorite'
+import { useFavoriteStore } from '@/vuejs/stores/favorite'
 
 const props = defineProps({
   favoriteId: {
@@ -49,10 +53,17 @@ const props = defineProps({
     required: false,
     default: false,
   },
+  errorSubmit: {
+    type: String,
+    required: false,
+    default: null,
+  },
 })
 const favorite = ref<Favorite>()
+const favoriteName = ref<string>(null)
+const errorMessage = ref<string>(null)
 const favoriteStore = useFavoriteStore()
-const emit = defineEmits(['cancel', 'submitFavorite'])
+const emit = defineEmits(['cancel', 'submitFavorite', 'changeValue'])
 
 onMounted(async () => {
   if (props.favoriteId) {
@@ -68,15 +79,26 @@ onMounted(async () => {
 })
 
 const onCancelClick = () => {
+  errorMessage.value = null
   emit('cancel')
 }
 
 const onSubmitFavorite = async () => {
-  await emit('submitFavorite', {
+  emit('submitFavorite', {
+    newFavoriteName: favoriteName.value,
     favorite: favorite.value,
     isEditing: props.isEditing,
   })
 }
+
+const changeValue = async (event) => {
+  favoriteName.value = event
+  emit('changeValue', event)
+}
+
+onUpdated(() => {
+  errorMessage.value = props.errorSubmit
+})
 </script>
 
 <style scoped></style>

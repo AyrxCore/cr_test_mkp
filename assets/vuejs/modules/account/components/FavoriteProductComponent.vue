@@ -42,12 +42,14 @@
       </button>
     </div>
     <FavoriteFormModal
-      v-if="canDelete && showFormFavorite"
+      v-if="showFormEditFavorite"
       class="modal"
       :favorite-id="favorite.id"
       :is-editing="true"
-      @cancel="showFormFavorite = false"
+      :error-submit="errorSubmit"
+      @cancel="showFormEditFavorite = false"
       @submit-favorite="onSubmitFavorite"
+      @change-value="$emit('changeValue')"
     />
     <FavoriteDeleteModal
       v-if="canDelete && deleteFavorite"
@@ -59,27 +61,27 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { computed, PropType, ref } from 'vue'
+import { format } from 'date-fns'
+import { storeToRefs } from 'pinia'
+import { PageList } from '@/vuejs/router'
 import EditIconComponent from '@/vuejs/modules/shared/icon/EditIconComponent.vue'
 import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
-import { computed, PropType, ref } from 'vue'
-import { Favorite } from '@/vuejs/types/Favorite'
-import { format } from 'date-fns'
-import { PageList } from '@/vuejs/router'
 import FavoriteFormModal from '@/vuejs/modules/account/components/favorite/FavoriteAddEditModal.vue'
 import FavoriteDeleteModal from '@/vuejs/modules/account/components/favorite/FavoriteDeleteModal.vue'
-import { useAlertStore } from '@/vuejs/stores/alert'
-import { AlertType } from '@/vuejs/types/Alert'
 import MultipleUserComponent from '@/vuejs/modules/shared/icon/MultipleUserComponent.vue'
-import { storeToRefs } from 'pinia'
+import { AlertType } from '@/vuejs/types/Alert'
+import { Favorite } from '@/vuejs/types/Favorite'
+import { useAlertStore } from '@/vuejs/stores/alert'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const alertStore = useAlertStore()
-const emit = defineEmits(['submitFavorite', 'deleteFavorite'])
+const emit = defineEmits(['submitFavorite', 'deleteFavorite', 'changeValue'])
 
 const { channelPrimaryColor } = storeToRefs(useChannelStore())
 
-const showFormFavorite = ref<boolean>(false)
+const showFormEditFavorite = ref<boolean>(false)
 const deleteFavorite = ref<boolean>(false)
 
 const props = defineProps({
@@ -90,6 +92,11 @@ const props = defineProps({
   canDelete: {
     type: Boolean,
     default: true,
+  },
+  errorSubmit: {
+    type: String,
+    required: false,
+    default: null,
   },
 })
 
@@ -102,7 +109,7 @@ const updatedAt = computed(() => {
 })
 
 const openFavoriteForm = () => {
-  showFormFavorite.value = true
+  showFormEditFavorite.value = true
   sendGaEvent('click_favorites_edit')
 }
 
@@ -111,16 +118,16 @@ const openDeleteFavoriteForm = () => {
   sendGaEvent('click_favorites_delete')
 }
 const onSubmitFavorite = async (event) => {
-  await emit('submitFavorite', {
+  emit('submitFavorite', {
+    newFavoriteName: event.newFavoriteName,
     favorite: event.favorite,
     isEditing: event.isEditing,
   })
-  showFormFavorite.value = false
 }
 
 const onDeleteFavorite = async (event) => {
   if (props.canDelete) {
-    await emit('deleteFavorite', {
+    emit('deleteFavorite', {
       favoriteId: event.favoriteId,
       selectedFavoriteId: event.selectedFavoriteId,
     })
