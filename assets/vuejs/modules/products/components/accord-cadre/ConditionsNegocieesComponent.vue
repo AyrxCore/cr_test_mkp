@@ -32,7 +32,7 @@
                   ? 'button-primary'
                   : 'button-primary-outline'
               "
-              :url="button.url"
+              :url="formatUrlWithChannelCode(button.url)"
               :name="button.name"
             />
           </template>
@@ -75,10 +75,11 @@
 </template>
 <script lang="ts" setup>
 import { computed } from 'vue'
-import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
 import { SwiperSlide } from 'swiper/vue'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
 import ButtonDownloadFileWithLogo from '@/vuejs/modules/products/components/accord-cadre/ButtonDownloadFileWithLogo.vue'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import { formatUrlWithChannelCode } from '@/vuejs/services/formatter'
 
 const props = defineProps({
   mentionsLegales: {

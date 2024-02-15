@@ -8,7 +8,7 @@
       <ButtonComponent
         v-if="cta1.name && cta1.url"
         class="button-primary mx-auto mb-6 border-2 border-solid !border-white"
-        @click="openInNewTab(cta1.url)"
+        @click="openingNewTab(cta1.url)"
       >
         <span>
           {{ cta1.name }}
@@ -26,7 +26,7 @@
       <ButtonComponent
         v-if="cta2.name && cta2.url"
         class="button-primary mx-auto mb-6 border-2 border-solid !border-white"
-        @click="openInNewTab(cta2.url)"
+        @click="openingNewTab(cta2.url)"
       >
         {{ cta2.name }}
       </ButtonComponent>
@@ -43,9 +43,10 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { computed } from 'vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import { openInNewTab } from '@/vuejs/services/utils'
-import { computed } from 'vue'
+import { formatUrlWithChannelCode } from '@/vuejs/services/formatter'
 
 const props = defineProps({
   properties: {
@@ -73,6 +74,8 @@ const cta2 = computed(() => {
     mailto: props.properties.cta2_mailto_fat_client,
   }
 })
-</script>
 
-<style scoped></style>
+const openingNewTab = (url: string) => {
+  openInNewTab(formatUrlWithChannelCode(url))
+}
+</script>

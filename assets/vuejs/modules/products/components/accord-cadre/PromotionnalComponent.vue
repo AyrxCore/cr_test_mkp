@@ -16,7 +16,7 @@
       <div class="mb-8 text-lg" v-html="properties.fat_promo_txt" />
       <ButtonComponent
         class="button-primary-outline mx-auto"
-        @click="openInNewTab(properties.fat_promo_cta_link)"
+        @click="openingNewTab(properties.fat_promo_cta_link)"
       >
         <span class="w-full">{{ properties.fat_promo_cta_txt }}</span>
       </ButtonComponent>
@@ -25,10 +25,11 @@
 </template>
 
 <script setup lang="ts">
-import { betterTextColor, openInNewTab } from '@/vuejs/services/utils'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
+import { betterTextColor, openInNewTab } from '@/vuejs/services/utils'
 import { useChannelStore } from '@/vuejs/stores/channel'
+import { formatUrlWithChannelCode } from '@/vuejs/services/formatter'
 
 const props = defineProps({
   properties: {
@@ -38,6 +39,8 @@ const props = defineProps({
 })
 
 const channelStore = useChannelStore()
-</script>
 
-<style scoped></style>
+const openingNewTab = (url: string) => {
+  openInNewTab(formatUrlWithChannelCode(url))
+}
+</script>

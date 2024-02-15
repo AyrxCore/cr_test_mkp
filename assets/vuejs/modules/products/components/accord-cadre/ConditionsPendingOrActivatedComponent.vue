@@ -43,7 +43,7 @@
           state_rattachement: props.currentStatus.status,
         }"
         classes="button-primary mx-auto mb-6 border-2 border-solid !border-white"
-        :url="cta1.url"
+        :url="formatUrlWithChannelCode(cta1.url)"
         :name="cta1.name"
       />
       <a
@@ -77,16 +77,17 @@
   </div>
 </template>
 <script lang="ts" setup>
-import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import { betterTextColor, openInNewTab } from '@/vuejs/services/utils'
-import { status } from '@/vuejs/modules/products'
-import CheckIconComponent from '@/vuejs/modules/shared/icon/CheckIconComponent.vue'
 import { computed, PropType } from 'vue'
-import { AccountAccordCadre } from '@/vuejs/types/AccountAccordCadre'
+import CheckIconComponent from '@/vuejs/modules/shared/icon/CheckIconComponent.vue'
+import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import PendingIconComponent from '@/vuejs/modules/shared/icon/PendingIconComponent.vue'
+import ButtonDownloadFileWithLogo from '@/vuejs/modules/products/components/accord-cadre/ButtonDownloadFileWithLogo.vue'
+import { status } from '@/vuejs/modules/products'
+import { AccountAccordCadre } from '@/vuejs/types/AccountAccordCadre'
+import { betterTextColor, openInNewTab } from '@/vuejs/services/utils'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { useChannelStore } from '@/vuejs/stores/channel'
-import ButtonDownloadFileWithLogo from '@/vuejs/modules/products/components/accord-cadre/ButtonDownloadFileWithLogo.vue'
+import { formatUrlWithChannelCode } from '@/vuejs/services/formatter'
 
 const props = defineProps({
   currentStatus: {
@@ -152,7 +153,7 @@ const cta2 = computed(() => {
 })
 
 const clickOnCta = (buttonUrl: string, ctaNumber: number) => {
-  openInNewTab(buttonUrl)
+  openInNewTab(formatUrlWithChannelCode(buttonUrl))
   gtmEvent(ctaNumber)
 }
 
