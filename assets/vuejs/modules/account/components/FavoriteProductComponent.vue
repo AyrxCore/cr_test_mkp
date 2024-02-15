@@ -78,7 +78,6 @@ import FavoriteDeleteModal from '@/vuejs/modules/account/components/favorite/Fav
 import MultipleUserComponent from '@/vuejs/modules/shared/icon/MultipleUserComponent.vue'
 import { AlertType } from '@/vuejs/types/Alert'
 import { useAlertStore } from '@/vuejs/stores/alert'
-import { storeToRefs } from 'pinia'
 import { Favorite } from '@/vuejs/types/Favorite'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
