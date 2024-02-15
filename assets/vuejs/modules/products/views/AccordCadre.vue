@@ -84,7 +84,7 @@
         :properties="accord.properties"
         :accord-name="accord.name"
       />
-      <div id="sectionRse" />
+      <div id="sectionRse" class="scroll-mt-40" />
       <RseEngagementComponent :properties="accord.properties" />
       <div class="mb-12 mt-8 px-6 lg:px-12">
         <h3 class="text-title-primary">
