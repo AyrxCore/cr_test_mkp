@@ -24,22 +24,28 @@
       {{ favorite.nbFavoriteProducts }}
     </div>
     <div class="flex justify-end md:w-1/12">
-      <button
-        :class="{
-          'disabled cursor-not-allowed': !canDelete,
-        }"
-        @click="openFavoriteForm"
-      >
-        <EditIconComponent class="mr-2" :stroke="channelPrimaryColor" />
-      </button>
-      <button
-        :class="{
-          'disabled cursor-not-allowed': !canDelete,
-        }"
-        @click="openDeleteFavoriteForm"
-      >
-        <TrashIconComponent :stroke="channelPrimaryColor" />
-      </button>
+      <VTooltip class="flex" :triggers="['hover', 'focus']">
+        <button
+          :class="{
+            'disabled cursor-not-allowed': !canDelete,
+          }"
+          @click="openFavoriteForm"
+        >
+          <EditIconComponent class="mr-2" :stroke="channelPrimaryColor" />
+        </button>
+        <template #popper> Editer une liste de produits favoris </template>
+      </VTooltip>
+      <VTooltip class="flex" :triggers="['hover', 'focus']">
+        <button
+          :class="{
+            'disabled cursor-not-allowed': !canDelete,
+          }"
+          @click="openDeleteFavoriteForm"
+        >
+          <TrashIconComponent :stroke="channelPrimaryColor" />
+        </button>
+        <template #popper> Supprimer une liste de produits favoris </template>
+      </VTooltip>
     </div>
     <FavoriteFormModal
       v-if="showFormEditFavorite"
@@ -71,8 +77,9 @@ import FavoriteFormModal from '@/vuejs/modules/account/components/favorite/Favor
 import FavoriteDeleteModal from '@/vuejs/modules/account/components/favorite/FavoriteDeleteModal.vue'
 import MultipleUserComponent from '@/vuejs/modules/shared/icon/MultipleUserComponent.vue'
 import { AlertType } from '@/vuejs/types/Alert'
-import { Favorite } from '@/vuejs/types/Favorite'
 import { useAlertStore } from '@/vuejs/stores/alert'
+import { storeToRefs } from 'pinia'
+import { Favorite } from '@/vuejs/types/Favorite'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
