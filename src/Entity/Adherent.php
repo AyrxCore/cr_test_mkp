@@ -79,9 +79,6 @@ class Adherent
 
     #[Groups(['user:simple'])]
     #[ORM\Column(nullable: true)]
-    #[Assert\Url(
-        message: 'A channel logo must be an URL',
-    )]
     private ?string $logo = null;
 
     #[ORM\ManyToOne(inversedBy: 'adherents')]
