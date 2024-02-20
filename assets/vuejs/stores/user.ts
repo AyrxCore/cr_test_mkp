@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import {
   AuthenticateUserData,
+  LoginResponse,
   PasswordChangeRequest,
   UserStoreState,
 } from '@/vuejs/types/User'
@@ -26,7 +27,18 @@ export const useUserStore = defineStore({
       const alertStore = useAlertStore()
       try {
         await UserHttpClient.get().getUserToken(userData)
-        return await UserHttpClient.get().getUserAccounts()
+        const accounts = await UserHttpClient.get().getUserAccounts()
+
+        if (!accounts.length) {
+          alertStore.setShow(
+            getErrorMessage(LoginResponse.UserEmptyAccount),
+            AlertType.danger,
+          )
+
+          return []
+        } else {
+          return accounts
+        }
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
           alertStore.setShow(

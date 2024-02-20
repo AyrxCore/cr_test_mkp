@@ -289,8 +289,6 @@ import { useUserStore } from '@/vuejs/stores/user'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { Account } from '@/vuejs/types/Account'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
-import { LoginResponse } from '@/vuejs/types/User'
-import { getErrorMessage } from '@/vuejs/services/login'
 
 const username = ref<string>('')
 const password = ref<string>('')
@@ -321,11 +319,6 @@ const loginSubmit = async () => {
 
   if (!accounts.length) {
     isLoading.value = false
-    alertStore.setShow(
-      getErrorMessage(LoginResponse.UserEmptyAccount),
-      AlertType.danger,
-    )
-
     return false
   }
 
