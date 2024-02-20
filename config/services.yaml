@@ -126,3 +126,9 @@ services:
   App\Service\Channel\ChannelOptionsBuilder:
     arguments:
       $validKeys: '%channel_option_valid_keys%'
+
+  App\Service\AccordCadreSubscriptionService:
+    arguments:
+      $sugarLink: '%env(SUGAR_LINK)%'
+      $emailFrom: '%env(MAIL_FROM)%'
+      $stellantisMailing: '%STELLANTIS_MAILING%'
