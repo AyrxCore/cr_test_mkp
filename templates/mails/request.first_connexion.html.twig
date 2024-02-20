@@ -594,11 +594,13 @@ inline;">Des conditions d’achats avantageuses sur les produits et services ess
                                                 <center class="default-button"><span>Je crée mon mot de passe</span></center>
                                               </div>
                                             </v:textbox>
-                                          </v:roundrect> <![endif]--> <!--[if !mso]> --> <a href="{{ confirmation_url }}" class="r25-r default-button" target="_blank" data-btn="1" style="font-style: normal; font-weight: bold; line-height: 1.15;
+                                          </v:roundrect> <![endif]-->
+                                          <!--[if !mso]> --> <a href="{{ confirmation_url }}" class="r25-r default-button" target="_blank" data-btn="1" style="font-style: normal; font-weight: bold; line-height: 1.15;
                                             text-decoration: none; word-break: break-word; border-style: solid; word-wrap: break-word; display: block; -webkit-text-size-adjust: none; background-color: {{ channel_secondary_color(channel) }}; border-color: {{ channel_secondary_color(channel) }}; border-radius: 16px; border-width:
                                             0px; color: #ffffff; font-family: arial,helvetica,sans-serif; font-size: 16px; height: 18px; mso-hide: all; padding-bottom: 12px; padding-top: 12px; width: 285px;"> <span>Je crée mon mot de passe</span></a>
                                           <!--<![endif]-->
                                         </td>
+
                                       </tr>
                                       <tr class="nl2go-responsive-hide">
                                         <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
@@ -613,6 +615,14 @@ inline;">Des conditions d’achats avantageuses sur les produits et services ess
                       </th>
                     </tr>
                   </table>
+                </td>
+              </tr>
+            </table>
+            <table>
+              <tr>
+                <td style="text-align: center;background-color: white;padding: 0px 25px;font-size: 14px;">
+                  <span>Si le bouton ne s’affiche pas, cliquez sur ce lien ci-dessous pour créer votre mot de passe :</span>
+                  <a href="{{ confirmation_url }}" style="color: darkblue;">{{ confirmation_url }}</a>
                 </td>
               </tr>
             </table>
