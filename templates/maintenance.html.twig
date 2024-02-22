@@ -1,30 +1,31 @@
 {% extends "base.html.twig" %}
-{% block title %}{{ channel.name }} - Maintenance en cours{% endblock %}
+{% block title %}
+	{{ channel.name }}
+	- Maintenance en cours
+{% endblock %}
 {% block header %}{% endblock %}
 
 {% block body %}
-	<div class="h-screen text-center">
-    <div class="bg-primary p-10">
-      {% if channel is defined and channel.logo is defined %}
-        <img class="h-16 md:h-28 m-auto" src="{{ channel.logo }}" alt="Logo {{ channel.name }}">
-      {% else %}
-        <img class="h-16 md:h-28 m-auto" src="/pre_home/qantis_marketplace_logo_blanc.png" alt="Logo Qantis">
-      {% endif %}
-    </div>
-    <h1 class="text-xl md:text-2xl uppercase font-bold mt-10">Maintenance en cours</h1>
-    <p class="mt-10 text-sm md:text-base">
-      Afin d'améliorer votre expérience, votre marketplace {{ channel.name }} est temporairement indisponible.<br>
-      Nous nous excusons pour la gêne occasionnée.
-    </p>
+	<div class="h-screen text-center w-screen">
+		<div class="bg-primary p-10">
+			<img class="h-16 md:h-28 m-auto" src="{{ channel.channelParameter.logo }}" alt="Logo {{ channel.name }}">
+		</div>
+		<h1 class="text-xl md:text-2xl uppercase font-bold mt-10">Maintenance en cours</h1>
+		<p class="mt-10 text-sm md:text-base">
+			Afin d'améliorer votre expérience, votre marketplace
+			{{ channel.name }}
+			est temporairement indisponible.<br>
+			Nous nous excusons pour la gêne occasionnée.
+		</p>
 
-    <p class="mt-6">
-      Pour toute question, vous pouvez contacter notre équipe :<br>
-      <a class="underline" href="mailto:info@qantis.co">info@qantis.co</a>
-      /
-      <a class="underline" href="tel:{{ channel_phone_number(channel) }}">
-        {{ channel_formatted_phone_number(channel) }}
-      </a>
-    </p>
+		<p class="mt-6">
+			Pour toute question, vous pouvez contacter notre équipe :<br>
+			<a class="underline" href="mailto:{{ channel_email(channel) }}">{{ channel_email(channel) }}</a>
+			/
+			<a class="underline" href="tel:{{ channel_phone_number(channel) }}">
+				{{ channel_formatted_phone_number(channel) }}
+			</a>
+		</p>
 	</div>
 {% endblock %}
 {% block footer %}{% endblock %}
