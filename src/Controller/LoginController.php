@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Events\FirstConnexionEvent;
 use App\Events\ResettingPasswordEvent;
+use App\Exception\AutoLoginException;
 use App\Form\ResettingType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -212,7 +213,7 @@ class LoginController extends AbstractController implements ChannelAwareControll
             $user = $this->userRepository->findOneBy(['email' => $email]);
 
             if (!$user) {
-                throw new BadRequestException('email not found');
+                throw new AutoLoginException('email not found');
             }
 
             if (!$channel = $this->getChannel($request)) {

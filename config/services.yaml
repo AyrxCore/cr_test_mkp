@@ -110,6 +110,7 @@ services:
         ignore_exceptions:
           - Symfony\Component\HttpKernel\Exception\NotFoundHttpException
           - Symfony\Component\Security\Core\Exception\AuthenticationException
+          - App\Exception\AutoLoginException
 
   App\DataFixtures\Story\ChannelStory:
     arguments:
