@@ -23,7 +23,7 @@
                   : 'click_fat_conditions_cta2'
               "
               :event-params="{
-                productName: props.properties.fat_marque,
+                product_name: props.properties.fat_marque,
               }"
               :classes="
                 'mb-6 h-auto w-full md:mr-5 md:w-auto lg:h-12 lg:whitespace-nowrap' +
@@ -53,12 +53,12 @@
         }"
         @click-left="
           sendGaEvent('click_fat_tableau_conditions_left', {
-            productName: props.accordName,
+            product_name: props.accordName,
           })
         "
         @click-right="
           sendGaEvent('click_fat_tableau_conditions_right', {
-            productName: props.accordName,
+            product_name: props.accordName,
           })
         "
       >

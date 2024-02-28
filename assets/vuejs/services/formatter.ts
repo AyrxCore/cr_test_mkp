@@ -6,3 +6,8 @@ export function formatUrlWithChannelCode(url: string): string {
     ? url.replace('{{CHANNEL_CODE}}', channelStore.currentChannel.code)
     : url
 }
+
+export function getIdFromIri(iri: string) {
+  const parts = iri.split('/')
+  return parts[parts.length - 1]
+}
