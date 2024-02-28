@@ -216,9 +216,6 @@ export const useProductStore = defineStore({
     },
   },
   getters: {
-    filters(): ProductFilters {
-      return this.products.filters
-    },
     hasFilters(): boolean {
       return (
         !!this.selectedCategoryId ||

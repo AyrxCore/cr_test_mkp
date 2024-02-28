@@ -108,7 +108,7 @@ const emit = defineEmits(['filter-product', 'close-filters'])
 
 const productStore = useProductStore()
 
-const { filters, hasFilters } = storeToRefs(productStore)
+const { hasFilters } = storeToRefs(productStore)
 
 const visibleCategoryFilters = ref<number>(5)
 const visibleCompanyFilter = ref<number>(5)
@@ -155,6 +155,10 @@ const changeFilterProperties = (event) => {
     filter_value: (event.target as HTMLInputElement).value,
   })
 }
+
+const filters = computed(() => {
+  return productStore.products?.filters
+})
 
 const categories = computed(() => {
   return filters.value?.categories

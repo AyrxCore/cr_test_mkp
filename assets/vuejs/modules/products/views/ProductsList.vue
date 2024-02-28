@@ -24,7 +24,10 @@
         <MobileFiltersProductsComponent />
         <div class="my-2 flex flex-col justify-between lg:flex-row">
           <div class="hidden w-full max-w-[300px] lg:mr-6 lg:block xl:mr-8">
-            <FiltersProductComponent v-if="filters" class="w-full" />
+            <FiltersProductComponent
+              v-if="productStore.products.filters"
+              class="w-full"
+            />
           </div>
           <div class="flex w-full grow-0 flex-col">
             <h3 class="mb-4 hidden text-xl text-primary md:block md:text-3xl">
@@ -107,7 +110,6 @@ const {
   selectedProperties,
   selectedCompanyId,
   searchTerms,
-  filters,
 } = storeToRefs(productStore)
 const isLoading = ref<boolean>()
 const currentPartenaire = ref<number>(null)
@@ -125,21 +127,6 @@ const paramsProducts = ref(null)
 onBeforeMount(async () => {
   await favoriteStore.fetchFavorites()
 })
-
-const pageLoad = async () => {
-  isLoading.value = true
-  currentPartenaire.value = null
-  internalProducts.value = []
-
-  paramsProducts.value = {
-    page: 1,
-    perPage: perPage.value,
-    withFilters: true,
-  }
-
-  currentCount.value = perPage.value
-  await removeFilterAll()
-}
 
 const loadMore = async () => {
   loadMoreLoading.value = true
@@ -170,38 +157,6 @@ const count = computed(() => {
   return products.value?.resultsCount
 })
 
-const removeFilterAll = async () => {
-  searchTerms.value = null
-  selectedCategoryId.value = null
-  selectedCompanyId.value = null
-  selectedProperties.value = null
-}
-
-const loadPage = async () => {
-  const queryValue = {}
-  if (searchTerms.value) {
-    queryValue.q = searchTerms.value
-  }
-
-  if (selectedCategoryId.value) {
-    queryValue.category = selectedCategoryId.value
-  }
-
-  if (selectedCompanyId.value) {
-    queryValue.company = selectedCompanyId.value
-  }
-
-  if (selectedProperties.value) {
-    queryValue.property_id = selectedProperties.value.property_id
-    queryValue.value = selectedProperties.value.value
-  }
-
-  await router.replace({
-    name: ProductPageList.PRODUCTS,
-    query: queryValue,
-  })
-}
-
 watch(
   () => [
     searchTerms.value,
@@ -209,15 +164,45 @@ watch(
     selectedCompanyId.value,
     selectedProperties.value,
   ],
-  async () => {
-    await loadPage()
+  () => {
+    const queryValue = { ...route.query }
+    searchTerms.value ? (queryValue.q = searchTerms.value) : delete queryValue.q
+    selectedCategoryId.value
+      ? (queryValue.category = selectedCategoryId.value)
+      : delete queryValue.category
+    selectedCompanyId.value
+      ? (queryValue.company = selectedCompanyId.value)
+      : delete queryValue.company
+
+    if (selectedProperties.value) {
+      queryValue.property_id = selectedProperties.value.property_id
+      queryValue.value = selectedProperties.value.value
+    } else {
+      delete queryValue.property_id
+      delete queryValue.value
+    }
+
+    router.replace({
+      name: ProductPageList.PRODUCTS,
+      query: queryValue,
+    })
   },
 )
 
 watch(
   () => route.query,
   async (routeObject) => {
-    await pageLoad()
+    isLoading.value = true
+    currentPartenaire.value = null
+    internalProducts.value = []
+
+    paramsProducts.value = {
+      page: 1,
+      perPage: perPage.value,
+      withFilters: true,
+    }
+
+    currentCount.value = perPage.value
     if (routeObject.q) {
       productStore.setSearchTerms(routeObject.q)
       paramsProducts.value.name = routeObject.q
