@@ -1,7 +1,7 @@
 import { useUserStore } from '@/vuejs/stores/user'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { event } from 'vue-gtag'
-import { formatUserIri } from '@/vuejs/services/formatter'
+import { getIdFromIri } from '@/vuejs/services/formatter'
 
 /**
  * envoie un événement personnalisé à la couche de données (dataLayer) avec les données fournies
@@ -15,7 +15,7 @@ export const buildStandardGaData = (
   return {
     device: Screen.orientation > 1 ? 'phone' : 'desktop',
     navigateur: userBrowser(),
-    user_id: formatUserIri(userId),
+    user_id: getIdFromIri(userId),
     marketplace: channelName,
   }
 }
