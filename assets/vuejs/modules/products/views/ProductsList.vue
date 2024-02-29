@@ -201,7 +201,7 @@ watch(
       perPage: perPage.value,
       withFilters: true,
     }
-
+    productStore.clearFilters()
     currentCount.value = perPage.value
     if (routeObject.q) {
       productStore.setSearchTerms(routeObject.q)
