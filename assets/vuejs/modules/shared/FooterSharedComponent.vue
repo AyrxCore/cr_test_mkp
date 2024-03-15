@@ -122,13 +122,6 @@
               <TwitterIconComponent class="fill-primary stroke-white" />
             </a>
             <a
-              href="https://www.facebook.com/QANTIS.co"
-              class="flex h-10 w-10 items-center justify-center rounded-full bg-white"
-              target="_blank"
-            >
-              <FacebookIconComponent class="fill-primary stroke-primary" />
-            </a>
-            <a
               href="https://www.linkedin.com/company/qantis-co/mycompany/"
               class="flex h-10 w-10 items-center justify-center rounded-full bg-white"
               target="_blank"
@@ -158,7 +151,6 @@ import { PageList } from '@/vuejs/router'
 
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
-import FacebookIconComponent from '@/vuejs/modules/shared/icon/FacebookIconComponent.vue'
 import YoutubeIconComponent from '@/vuejs/modules/shared/icon/YoutubeIconComponent.vue'
 import TwitterIconComponent from '@/vuejs/modules/shared/icon/TwitterIconComponent.vue'
 import LinkedinIconComponent from '@/vuejs/modules/shared/icon/LinkedinIconComponent.vue'
