@@ -117,7 +117,7 @@ export const useUserStore = defineStore({
     async updateUserAccountEmail(): Promise<void> {
       try {
         await UserHttpClient.get(true).updateUserAccountEmail({
-          email: this.editingInfo.username,
+          email: this.editingInfo.username.toLowerCase(),
           id: this.user.externalApiData.subaccount.id,
           accountId: this.user.account.id,
         })

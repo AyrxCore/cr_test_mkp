@@ -15,7 +15,7 @@
               </label>
               <input
                 id="login-email"
-                v-model="username"
+                v-model.trim="username"
                 type="email"
                 class="input !border-solid !border-black !py-1 !pr-16 !ring-black md:!py-2 xl:!py-4"
                 placeholder="Saisir votre adresse email professionnelle"
@@ -313,7 +313,7 @@ const loginSubmit = async () => {
   alertStore.setClose()
   isLoading.value = true
   const accounts = await userStore.authenticate({
-    username: username.value,
+    username: username.value.toLowerCase(),
     password: password.value,
   })
 

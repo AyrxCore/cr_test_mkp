@@ -9,7 +9,7 @@
           <div class="mb-6">
             <LabelField title="Email" />
             <InputField
-              v-model="userStore.editingInfo.username"
+              v-model.trim="userStore.editingInfo.username"
               type="email"
               required
               title="Ex: votre_email@test.fr"
