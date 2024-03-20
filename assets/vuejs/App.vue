@@ -104,8 +104,4 @@ body {
 h3 {
   font-family: 'CoText';
 }
-
-#gravite_widget_button_container {
-  top: 80% !important;
-}
 </style>
