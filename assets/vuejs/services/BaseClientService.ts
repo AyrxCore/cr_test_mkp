@@ -49,14 +49,11 @@ class BaseClientService {
         return response
       },
       async (error: AxiosError) => {
-        const originalConfig = error.config
-        if (error.response?.status === 401 && !originalConfig._retry) {
+        if (error.response?.status === 401) {
           if (error.config.url !== 'authentication/token') {
             document.cookie = 'BEARER=; Max-Age=0'
             document.cookie = 'PHPSESSID=; Max-Age=0'
             location.reload()
-          } else {
-            console.log(error.config.url)
           }
         }
         if (error.response?.status === 503) {

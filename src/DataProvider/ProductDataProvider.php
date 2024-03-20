@@ -60,8 +60,6 @@ class ProductDataProvider implements
                     'details' => $badRequestException->getMessage(),
                 ],
             ];
-        } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
         }
     }
 

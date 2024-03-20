@@ -18,8 +18,7 @@ class SellerDataProvider implements
     ContextAwareCollectionDataProviderInterface,
     ItemDataProviderInterface
 {
-    public function __construct(public UpplerSellerService $upplerSellerService, private SellerFactory $sellerFactory, private
-    UpplerProductService $upplerProductService)
+    public function __construct(public UpplerSellerService $upplerSellerService, private SellerFactory $sellerFactory, private UpplerProductService $upplerProductService)
     {
     }
 
@@ -35,7 +34,7 @@ class SellerDataProvider implements
             $allAdherentSellers = $this->upplerProductService->findAllSellers(params: $params);
 
             $sellers = \array_filter($allUpplerSellers['results'], function ($seller) use ($allAdherentSellers) {
-                return array_key_exists($seller['id'], $allAdherentSellers);
+                return \array_key_exists($seller['id'], $allAdherentSellers);
             });
 
             return $this->sellerFactory->createAndAddToCollection($sellers);
@@ -46,8 +45,6 @@ class SellerDataProvider implements
                     'details' => $badRequestException->getMessage(),
                 ],
             ];
-        } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
         }
     }
 

@@ -31,11 +31,11 @@ class UpplerOrderService extends AbstractUpplerService
             );
         } catch (\Exception $exception) {
             $this->apiLogger->error('Erreur :'.$exception->getMessage());
-            throw new \Exception('Une erreur est survenue lors de la recherche des commande, veuillez contacter les administrateurs du site');
+            throw new \Exception('Une erreur est survenue lors du chargement des commandes, veuillez contacter les administrateurs du site');
         }
 
         if ($res->getStatusCode() !== Response::HTTP_OK) {
-            throw new NotFoundHttpException("Aucune commande n'a pas été trouvée");
+            throw new NotFoundHttpException("Aucune commande n'a été trouvée");
         }
 
         return \json_decode($res->getContent(), true);

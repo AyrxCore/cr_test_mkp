@@ -8,12 +8,12 @@ use App\Context\ChannelContext;
 use App\Service\AccordCadreSubscriptionService;
 use App\Service\UpplerProductService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class ProductApiController extends AbstractController
 {
@@ -49,7 +49,7 @@ class ProductApiController extends AbstractController
             !$session->has('account') || empty($session->get('account'))
             || !$session->has('access_token') || empty($session->get('access_token'))
         ) {
-            throw new AccessDeniedException('Access denied to make subscription. Please login.');
+            throw new AuthenticationException('Access denied to make subscription. Please login.');
         }
         $accountId = (string) $session->get('account')->getId();
 

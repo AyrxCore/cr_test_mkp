@@ -9,7 +9,7 @@ use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Entity\Favorite;
 use App\Repository\FavoriteRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class FavoriteProvider implements RestrictedDataProviderInterface, CollectionDataProviderInterface
 {
@@ -21,7 +21,7 @@ class FavoriteProvider implements RestrictedDataProviderInterface, CollectionDat
     {
         $account = $this->requestStack->getSession()->get('account');
         if (!$account) {
-            throw new AccessDeniedException('You must be logged in to access this resource.');
+            throw new AuthenticationException('You must be logged in to access this resource.');
         }
 
         return $this->favoriteRepository->findFavorites($account);

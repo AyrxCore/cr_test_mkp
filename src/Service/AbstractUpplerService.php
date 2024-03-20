@@ -192,7 +192,7 @@ abstract class AbstractUpplerService
                 !$session->has('account') || empty($session->get('account'))
                 || !$session->has('access_token') || empty($session->get('access_token'))
             ) {
-                throw new AuthenticationException();
+                throw new AuthenticationException('Session is not valid');
             }
 
             $accessToken = $session->get('access_token')->access_token;
