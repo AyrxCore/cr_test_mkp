@@ -5,7 +5,8 @@
 </template>
 <script setup lang="ts">
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import { checkIsAbsoluteUrl, openInNewTab } from '@/vuejs/services/utils'
+import { openInNewTab} from '@/vuejs/services/utils'
+import { isAbsoluteUrl, isFilePath } from '@/vuejs/services/urlChecker'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { useProductStore } from '@/vuejs/stores/product'
 
@@ -35,7 +36,7 @@ const props = defineProps({
 })
 
 const clickOnCta = (url: string) => {
-  if (checkIsAbsoluteUrl(url)) {
+  if (isAbsoluteUrl(url) || (!isAbsoluteUrl(url) && !isFilePath(url))) {
     openInNewTab(url)
   } else {
     productStore.downloadPdfFile(url)

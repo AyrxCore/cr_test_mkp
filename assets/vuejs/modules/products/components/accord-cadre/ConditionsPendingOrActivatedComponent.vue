@@ -56,13 +56,17 @@
           {{ cta1.name }}
         </span>
       </a>
-      <ButtonComponent
+      <ButtonDownloadFileWithLogo
         v-if="cta2.name && cta2.url"
-        class="button-primary mx-auto mb-6 border-2 border-solid !border-white"
-        @click="clickOnCta(cta2.url, 2)"
-      >
-        {{ cta2.name }}
-      </ButtonComponent>
+        event-name="click_fat_cta_2"
+        :event-params="{
+          product_name: props.accordName,
+          state_rattachement: props.currentStatus.status,
+        }"
+        classes="button-primary mx-auto mb-6 border-2 border-solid !border-white"
+        :url="formatUrlWithChannelCode(cta2.url)"
+        :name="cta2.name"
+      />
       <a
         v-else-if="cta2.name && cta2.mailto"
         class="button button-primary mx-auto mb-6 border-2 border-solid !border-white"
