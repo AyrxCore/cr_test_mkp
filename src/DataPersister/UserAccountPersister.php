@@ -135,6 +135,7 @@ class UserAccountPersister implements ContextAwareDataPersisterInterface
         $account->setUser($user);
         $account->setEnabled($data->isEnabled());
         $account->setAdherent($adh);
+        $account->setContactId(Uuid::fromString($data->getContactId()));
 
         if (!$logPhone || ($logPhone->getValue() === $data->getPhone())) {
             $account->setPhone($data->getPhone());

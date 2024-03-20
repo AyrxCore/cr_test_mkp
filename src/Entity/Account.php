@@ -120,6 +120,9 @@ class Account
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $serviceFonction = null;
 
+    #[ORM\Column(type: 'uuid', nullable: true)]
+    private ?Uuid $contactId = null;
+
     public function __construct()
     {
         $this->cartSavings = new ArrayCollection();
@@ -428,6 +431,18 @@ class Account
     public function setServiceFonction(?string $serviceFonction): self
     {
         $this->serviceFonction = $serviceFonction;
+
+        return $this;
+    }
+
+    public function getContactId(): ?Uuid
+    {
+        return $this->contactId;
+    }
+
+    public function setContactId(?Uuid $contactId): self
+    {
+        $this->contactId = $contactId;
 
         return $this;
     }

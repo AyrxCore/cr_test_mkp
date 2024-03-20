@@ -74,6 +74,10 @@ final class UserAccount
     #[Assert\Type('string', message: '(upplerSubAccountClientSecret) string required')]
     private string $upplerSubAccountClientSecret = '';
 
+    #[Assert\NotBlank(message: 'contactId cannot be null')]
+    #[Assert\Type('string', message: '(contactId) string required')]
+    private string $contactId = '';
+
     #[Assert\NotBlank(message: 'adherentId cannot be null')]
     #[Assert\Type('string', message: '(adherentId) string required')]
     private string $adherentId = '';
@@ -195,6 +199,16 @@ final class UserAccount
         $this->upplerSubAccountClientSecret = $upplerSubAccountClientSecret;
 
         return $this;
+    }
+
+    public function getContactId(): string
+    {
+        return $this->contactId;
+    }
+
+    public function setContactId(string $contactId): void
+    {
+        $this->contactId = $contactId;
     }
 
     public function getAdherentId(): string
