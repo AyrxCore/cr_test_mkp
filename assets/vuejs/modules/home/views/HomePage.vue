@@ -181,11 +181,17 @@ const expertContentsLoaded = ref<boolean>(false)
 const { productsAccordsCadre } = storeToRefs(productStore)
 
 onBeforeMount(async () => {
-  await Promise.all([
-    productStore.initHomeProducts(),
-    expertContentStore.init(),
-    favoriteStore.fetchFavorites(),
-  ])
+  const promises = []
+  promises.push(productStore.initHomeProducts())
+  if (
+    channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.EXPERT_CONTENT_HOMEPAGE)
+  ) {
+    promises.push(expertContentStore.init())
+  }
+  if (channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.FAVORITES)) {
+    promises.push(favoriteStore.fetchFavorites())
+  }
+  await Promise.all(promises)
 })
 
 onMounted(async () => {

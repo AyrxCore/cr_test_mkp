@@ -4,16 +4,11 @@ import { AlertType } from '@/vuejs/types/Alert'
 import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
 import { getErrorMessage } from '@/vuejs/services/login'
 import ProductHttpClient from '@/vuejs/services/httpclient/ProductHttpClient'
-import {
-  Product,
-  ProductFilters,
-  ProductStoreState,
-} from '@/vuejs/types/Product'
+import { Product, ProductStoreState } from '@/vuejs/types/Product'
 import { arrayEqual, hexToBinary, notifyError } from '@/vuejs/services/utils'
 import {
   HOME_ACCORD_CADRE_PROPERTY,
   HOME_SELECTION_PROPERTY,
-  HOME_TOP_VENTE_PROPERTY,
 } from '@/vuejs/services/const'
 
 export const useProductStore = defineStore({
@@ -26,7 +21,6 @@ export const useProductStore = defineStore({
       page: 1,
       resultsCount: 0,
     },
-    productsTopVente: null,
     productsAccordsCadre: null,
     productsSelection: null,
     cart: [],
@@ -50,10 +44,6 @@ export const useProductStore = defineStore({
     },
     async initHomeProducts() {
       try {
-        this.productsTopVente =
-          await ProductHttpClient.get().fetchProductsByParams(
-            HOME_TOP_VENTE_PROPERTY,
-          )
         this.productsAccordsCadre =
           await ProductHttpClient.get().fetchProductsByParams(
             HOME_ACCORD_CADRE_PROPERTY,

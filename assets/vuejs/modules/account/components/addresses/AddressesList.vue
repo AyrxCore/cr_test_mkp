@@ -2,12 +2,7 @@
   <table class="list-address w-full table-auto">
     <AddressesListHeader />
     <tbody v-if="!isLoading" class="bg-white">
-      <tr
-        v-for="(address, key) in addresses.filter(
-          (address) => address.type === props.type,
-        )"
-        :key="key"
-      >
+      <tr v-for="(address, key) in listAdresses" :key="key">
         <AddressesListItem :address="address" :type="props.type" />
       </tr>
     </tbody>
@@ -30,7 +25,15 @@ import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.
 import { useAddressStore } from '@/vuejs/stores/address'
 import AddressesListItem from '@/vuejs/modules/account/components/addresses/AddressesListItem.vue'
 import AddressesListHeader from '@/vuejs/modules/account/components/addresses/AddressesListHeader.vue'
+import { computed, onBeforeMount } from 'vue'
+import { Address } from '@/vuejs/types/Address'
 
+const addressStore = useAddressStore()
+onBeforeMount(() => {
+  addressStore.getAddresses()
+})
+
+const { addresses, isLoading } = storeToRefs(addressStore)
 const props = defineProps({
   type: {
     required: true,
@@ -38,8 +41,11 @@ const props = defineProps({
   },
 })
 
-const buyerCompanyStore = useAddressStore()
-const { addresses, isLoading } = storeToRefs(buyerCompanyStore)
+const listAdresses = computed(() => {
+  return addresses.value.filter(
+    (address: Address) => address.type === props.type,
+  )
+})
 </script>
 
 <style scoped lang="postcss">

@@ -1,7 +1,6 @@
 import { Price } from '@/vuejs/types/Product/Price'
 import { Seller } from '@/vuejs/types/Seller'
 import { AccountAccordCadre } from '@/vuejs/types/AccountAccordCadre'
-import { Filter } from '@/vuejs/types/Filter'
 
 export interface Product {
   id: number
@@ -49,7 +48,6 @@ export interface ProductCollection {
 
 export interface ProductStoreState {
   products: ProductCollection
-  productsTopVente: ProductCollection
   productsAccordsCadre: ProductCollection
   productsSelection: ProductCollection
   cart: []
@@ -60,18 +58,4 @@ export interface ProductStoreState {
   productVariants: []
   productVariantsOptions: []
   currentVariantOptions?: number
-}
-
-export interface SearchProductsResponse {
-  filters: Array<any>
-  results_count: number
-  page: number
-  results: Array<Product>
-  parameters: any
-}
-
-export interface HomeProductsResponse {
-  topVente: Product[]
-  accordsCadre: Product[]
-  selection: Product[]
 }

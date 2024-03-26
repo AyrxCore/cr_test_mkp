@@ -61,8 +61,8 @@ import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
 
 const channelStore = useChannelStore()
 const { channel } = storeToRefs(channelStore)
-const expertContentStore = useBannerStore()
-const { banner } = storeToRefs(expertContentStore)
+const bannerStore = useBannerStore()
+const { banner } = storeToRefs(bannerStore)
 
 const props = defineProps({
   title: {

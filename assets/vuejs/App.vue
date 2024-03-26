@@ -40,7 +40,6 @@ import NotifComponent from '@/vuejs/modules/shared/NotifComponent.vue'
 import CmsPageComponent from '@/vuejs/modules/shared/CmsPageComponent.vue'
 
 import { useCategoryStore } from '@/vuejs/stores/category'
-import { useAddressStore } from '@/vuejs/stores/address'
 import { useCartStore } from '@/vuejs/stores/cart'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import router from './router'
@@ -48,6 +47,7 @@ import { CartPageList } from './router/pages-list'
 import {
   CGU_PAGE_ID,
   MENTIONS_LEGALES_PAGE_ID,
+  OPTIONAL_FRONT_BLOCKS,
   POLITIQUE_DE_CONFIDENTIALITE_PAGE_ID,
 } from '@/vuejs/services/const'
 import { useBannerStore } from '@/vuejs/stores/banner'
@@ -56,7 +56,6 @@ import FooterPrehome from '@/vuejs/modules/login/component/FooterPrehome.vue'
 
 const cartStore = useCartStore()
 const channelStore = useChannelStore()
-const companyStore = useAddressStore()
 const categoryStore = useCategoryStore()
 const bannerStore = useBannerStore()
 
@@ -71,13 +70,15 @@ const props = defineProps({
 onBeforeMount(async () => {
   // The channel must be the first thing to fetch because we need to send every other requests with the "X-Channel" header
   await channelStore.getChannel(window.location.hostname)
-
   if (props.component === '') {
-    await Promise.all([
-      companyStore.getAddresses(),
-      categoryStore.init(),
-      bannerStore.init(),
-    ])
+    const promises = []
+    promises.push(categoryStore.init())
+    if (
+      channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.BANNER_FLASH_HOMEPAGE)
+    ) {
+      promises.push(bannerStore.init())
+    }
+    await Promise.all(promises)
   }
 })
 
