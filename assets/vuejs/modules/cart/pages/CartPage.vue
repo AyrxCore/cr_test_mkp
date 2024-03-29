@@ -55,9 +55,11 @@ import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedCo
 import { CartPageList } from '@/vuejs/router/pages-list'
 import { useCartStore } from '@/vuejs/stores/cart'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
+import { useAddressStore } from '@/vuejs/stores/address'
 
 const router = useRouter()
 const cartStore = useCartStore()
+const addressStore = useAddressStore()
 
 const loadingCart = ref<boolean>(true)
 
@@ -66,6 +68,7 @@ const currentRouteName = computed(
 )
 
 onMounted(async () => {
+  await addressStore.getAddresses()
   await cartStore.getCart()
   loadingCart.value = false
 })
