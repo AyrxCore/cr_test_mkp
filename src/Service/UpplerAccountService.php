@@ -15,6 +15,7 @@ class UpplerAccountService extends AbstractUpplerService
         $session = $this->requestStack->getSession();
         /** @var Account $account */
         $account = $session->get('account');
+
         $res = $this->request(
             'GET',
             'v1/administrator/sub-account/'.$account->getUpplerSubAccountId(),
@@ -82,14 +83,14 @@ class UpplerAccountService extends AbstractUpplerService
         $account->firstname = $subAccount->accounter->firstname;
 
         $account->shipping_address = (
-            $subAccount->shipping_address !== null &&
-            \property_exists($subAccount->shipping_address, 'id')
+            $subAccount->shipping_address !== null
+            && \property_exists($subAccount->shipping_address, 'id')
         )
             ? $subAccount->shipping_address->id
             : $subAccount->shipping_address;
         $account->billing_address = (
-            $subAccount->billing_address !== null &&
-            \property_exists($subAccount->billing_address, 'id')
+            $subAccount->billing_address !== null
+            && \property_exists($subAccount->billing_address, 'id')
         )
             ? $subAccount->billing_address->id
             : $subAccount->billing_address;

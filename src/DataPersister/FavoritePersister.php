@@ -10,17 +10,21 @@ use App\Entity\Favorite;
 use App\Service\FavoriteService;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Contracts\Service\Attribute\Required;
 
 class FavoritePersister implements ContextAwareDataPersisterInterface
 {
-    public function __construct(public EntityManagerInterface $em, public NormalizerInterface $normalizer, public Security $security, public RequestStack $requestStack, public
-    FavoriteService $favoriteService ) {}
+    public function __construct(
+        private EntityManagerInterface $em,
+        private NormalizerInterface $normalizer,
+        private Security $security,
+        private RequestStack $requestStack,
+        private FavoriteService $favoriteService
+    ) {
+    }
 
     public function supports($data, array $context = []): bool
     {
@@ -29,7 +33,8 @@ class FavoritePersister implements ContextAwareDataPersisterInterface
 
     /**
      * @param Favorite $data
-     * @throws Exception
+     *
+     * @throws \Exception
      */
     public function persist($data, array $context = []): Favorite
     {
@@ -46,13 +51,13 @@ class FavoritePersister implements ContextAwareDataPersisterInterface
             return $data;
         } catch (UniqueConstraintViolationException $uniqueConstraintViolationException) {
             throw new ConflictHttpException($uniqueConstraintViolationException->getMessage());
-        } catch (Exception $exception) {
-            throw  new Exception($exception->getMessage());
+        } catch (\Exception $exception) {
+            throw new \Exception($exception->getMessage());
         }
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function remove($data, array $context = []): bool
     {

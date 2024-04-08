@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Twig;
 
-use Exception;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Twig\Extension\AbstractExtension;
@@ -10,8 +11,8 @@ use Twig\TwigFunction;
 
 class ViteAssetExtension extends AbstractExtension
 {
-    private ?array $manifestData = null;
     public const CACHE_KEY = 'vite_manifest';
+    private ?array $manifestData = null;
 
     public function __construct(
         private string $env,
@@ -30,7 +31,7 @@ class ViteAssetExtension extends AbstractExtension
 
     public function asset(string $entry, array $deps)
     {
-        if ('dev' === $this->env && $this->isDevServerRunning()) {
+        if ($this->env === 'dev' && $this->isDevServerRunning()) {
             return $this->assetDev($entry, $deps);
         }
 
@@ -39,7 +40,7 @@ class ViteAssetExtension extends AbstractExtension
 
     public function assetDev(string $entry, array $deps): string
     {
-        if (in_array('static', $deps)) {
+        if (\in_array('static', $deps, true)) {
             return "http://localhost:3003/assets/{$entry}";
         }
 
@@ -56,12 +57,12 @@ class ViteAssetExtension extends AbstractExtension
 
     public function assetProd(string $entry): string
     {
-        if (null === $this->manifestData) {
+        if ($this->manifestData === null) {
             $item = $this->cache->getItem(self::CACHE_KEY);
             if ($item->isHit()) {
                 $this->manifestData = $item->get();
             } else {
-                $this->manifestData = json_decode(file_get_contents($this->manifest), true);
+                $this->manifestData = \json_decode(\file_get_contents($this->manifest), true);
                 $item->set($this->manifestData);
                 $this->cache->save($item);
             }
@@ -97,8 +98,9 @@ class ViteAssetExtension extends AbstractExtension
         // Check to see if the dev server is actually running by pinging the vite endpoint
         try {
             $response = $this->client->request('GET', 'http://js:3003/assets/@vite/client');
+
             return $response->getStatusCode() === 200;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Api;
 
 use App\Service\MailerProvider;
@@ -24,7 +26,7 @@ class ContactController extends AbstractController
         'Question sur Mon Compte',
         'Question sur un partenaire ou un accord-cadre',
         'Votre avis sur la marketplace',
-        'Autre'
+        'Autre',
     ];
 
     #[Required]
@@ -50,8 +52,6 @@ class ContactController extends AbstractController
     #[Route('/send-email', name: 'send_contact_email', methods: ['POST'])]
     public function sendContact(Request $request): JsonResponse
     {
-        $session = $this->requestStack->getSession();
-
         $options = $request->request->all();
 
         $token = new CsrfToken('contact_form', $options['_token']);
@@ -87,11 +87,11 @@ class ContactController extends AbstractController
                 } catch (\Exception $exception) {
                     $error = true;
                     $message = 'Un incident est survenu lors de l\'envoie du mail, veuillez essayer ultérieurement';
-                    $this->logger->critical("Erreur d'envoie de mail " . $contact->email . " : " . $exception->getMessage());
+                    $this->logger->critical("Erreur d'envoie de mail ".$contact->email.' : '.$exception->getMessage());
                 }
             } else {
                 $error = true;
-                $message = implode('<br>', $contact->errors);
+                $message = \implode('<br>', $contact->errors);
             }
         }
 
@@ -108,31 +108,31 @@ class ContactController extends AbstractController
     public function getToken(): JsonResponse
     {
         $token = $this->csrfTokenManager->getToken('contact_form');
+
         return new JsonResponse($token->getValue());
     }
 
     private function validateFormContact(\stdClass $contact)
     {
-        if (null === $contact->lastName) {
+        if ($contact->lastName === null) {
             $contact->errors[] = 'Le nom est obligatoire';
         }
 
-        if (null === $contact->firstName) {
+        if ($contact->firstName === null) {
             $contact->errors[] = 'Le prénom est obligatoire';
         }
 
-        if (null === $contact->email) {
+        if ($contact->email === null) {
             $contact->errors[] = 'L\'email est obligatoire';
-        } elseif (!filter_var($contact->email, FILTER_VALIDATE_EMAIL)) {
-            $contact->errors[] = 'L\'email ' . $contact->email . ' vous avez saisi n\'est pas correcte';
+        } elseif (!\filter_var($contact->email, \FILTER_VALIDATE_EMAIL)) {
+            $contact->errors[] = 'L\'email '.$contact->email.' que vous avez saisi n\'est pas correcte';
         }
 
-        if (null === $contact->description) {
+        if ($contact->description === null) {
             $contact->errors[] = 'La description est obligatoire';
         }
 
-
-        if (null === $contact->motif) {
+        if ($contact->motif === null) {
             $contact->errors[] = 'La sélection du motif est obligatoire';
         }
 

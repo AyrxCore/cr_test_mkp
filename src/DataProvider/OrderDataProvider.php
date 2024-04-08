@@ -13,7 +13,6 @@ use App\Factory\OrderFactory;
 use App\Helper\UpplerHelper;
 use App\Service\UpplerOrderService;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -42,10 +41,6 @@ class OrderDataProvider implements RestrictedDataProviderInterface, ItemDataProv
         $session = $this->requestStack->getSession();
         /** @var Account $account */
         $account = $session->get('account');
-
-        if (!$account) {
-            throw new AuthenticationException();
-        }
 
         $remoteOrder = $this->upplerOrderService->getOrderByIdAndUserId($id, $account->getUpplerUserId());
 

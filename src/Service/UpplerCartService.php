@@ -82,15 +82,15 @@ class UpplerCartService extends AbstractUpplerService
         }
     }
 
-    public function getCartById(int $cartId): array|null
+    public function getCartById(int $cartId): array|bool
     {
         $res = $this->request(
             'GET',
             'v1/buyer/cart/'.$cartId.'?expand[]=orders&expand[]=orderItems',
         );
 
-        if ($res->getStatusCode() !== Response::HTTP_OK) {
-            throw new NotFoundHttpException();
+        if (!$res || $res->getStatusCode() !== Response::HTTP_OK) {
+            return false;
         }
 
         return \json_decode($res->getContent(), true);

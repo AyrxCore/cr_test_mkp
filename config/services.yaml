@@ -83,6 +83,10 @@ services:
     tags:
       - { name: doctrine.event_listener, event: postLoad }
 
+  App\EventListener\AuthenticationListener:
+    tags:
+      - { name: kernel.event_listener, event: kernel.request }
+
   _instanceof:
     \App\Controller\ChannelRepositoryAwareControllerInterface:
       calls:
@@ -133,3 +137,5 @@ services:
       $sugarLink: '%env(SUGAR_LINK)%'
       $emailFrom: '%env(MAIL_FROM)%'
       $stellantisMailing: '%STELLANTIS_MAILING%'
+
+  Symfony\Component\Security\Http\AccessMapInterface: '@security.access_map'

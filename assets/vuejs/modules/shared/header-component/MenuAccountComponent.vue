@@ -36,12 +36,11 @@
         v-if="user.account?.adherent && user.account?.adherent.reducceCode"
         class="mt1 flex items-center py-2.5"
       >
-        <!--      <ChevronRightIcon class="mr-4"/>-->
         Code Avantages Salariés : {{ user.account.adherent.reducceCode }}
       </div>
       <a
         href="#"
-        class="inline-flex pt-5 font-bold hover:text-secondary"
+        class="inline-flex items-center pt-5 font-bold hover:text-secondary"
         @click="onLogout($event)"
       >
         <DisconnectIcon :stroke="channelPrimaryColor" class="mr-2" />

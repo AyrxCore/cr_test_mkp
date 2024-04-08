@@ -1,15 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Custom\Favorite;
 
-use App\Entity\Favorite;
 use App\Service\FavoriteService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -27,20 +27,14 @@ class AddProduct extends AbstractController
     )]
     public function __invoke(Request $request): JsonResponse
     {
-        $session = $this->requestStack->getSession();
-        $account = $session->get('account');
-
-        if (!$session->has('account') || empty($account)) {
-            return new JsonResponse('session account is not hydrated', Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
         $options = $request->request->all();
-        $productId = (int)$options['productId'] ?? null;
-        $variantId = (int)$options['variantId'] ?? null;
+        $productId = (int) $options['productId'] ?? null;
+        $variantId = (int) $options['variantId'] ?? null;
         $productName = $options['productName'] ?? null;
         $selectedFavorites = !empty($options['selectedFavorites']) ? $options['selectedFavorites'] : [];
         if (isset($productId, $productName, $variantId, $selectedFavorites)) {
             $this->favoriteService->addProductToFavorites($selectedFavorites, $productId, $variantId, $productName);
+
             return new JsonResponse(['statut' => 'OK']);
         } else {
             throw new BadRequestException('Impossible d\'ajouter le produit à un ou plusieurs favoris');
