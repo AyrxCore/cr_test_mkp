@@ -10,19 +10,41 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue'
+import { PageList } from '@/vuejs/router'
+
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import CmsPageComponent from '@/vuejs/modules/shared/CmsPageComponent.vue'
+
+import { useChannelStore } from '@/vuejs/stores/channel'
+
+const channelStore = useChannelStore()
 
 defineProps({
   title: {
     type: String,
     required: true,
   },
-  pageId: {
-    type: Number,
+  page: {
+    type: String,
     required: true,
   },
+})
+
+const channelDocuments = channelStore.currentChannel.documents
+
+const pageId = computed(() => {
+  switch (props.page) {
+    case PageList.MENTIONS_LEGALES_PAGE:
+      return channelDocuments.legalTerms
+    case PageList.CGU_PAGE:
+      return channelDocuments.generalTermsOfUse
+    case PageList.POLITIQUE_DE_CONFIDENTIALITE:
+      return channelDocuments.privacyPolicy
+    default:
+      break
+  }
 })
 </script>
 

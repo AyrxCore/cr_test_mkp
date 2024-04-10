@@ -131,38 +131,26 @@
         class="flex justify-between pb-2 text-center text-[0.5rem] md:mt-0 md:hidden"
       >
         <a
-          :href="channel?.documents.legalTerms"
+          :href="channelLegalTermsLink"
           target="_blank"
           class="text-gray-500"
-          @click="
-            eventClick('click_prehome_mentions', channel?.documents.legalTerms)
-          "
+          @click="eventClick('click_prehome_mentions', channelLegalTermsLink)"
         >
           Mentions légales
         </a>
         <a
-          :href="channel?.documents.privacyPolicy"
+          :href="channelPrivacyPolicyLink"
           target="_blank"
           class="text-gray-500"
-          @click="
-            eventClick(
-              'click_prehome_polconf',
-              channel?.documents.privacyPolicy,
-            )
-          "
+          @click="eventClick('click_prehome_polconf', channelPrivacyPolicyLink)"
         >
           Politique de confidentialité
         </a>
         <a
-          :href="channel?.documents.generalTermsOfUse"
+          :href="channelGeneralTermsOfUseLink"
           target="_blank"
           class="text-gray-500"
-          @click="
-            eventClick(
-              'click_prehome_cgu',
-              channel?.documents.generalTermsOfUse,
-            )
-          "
+          @click="eventClick('click_prehome_cgu', channelGeneralTermsOfUseLink)"
         >
           Conditions Générales d'Utilisation
         </a>
@@ -304,9 +292,13 @@ const showContactForm = ref<boolean>(false)
 
 const { show: showAlert } = storeToRefs(alertStore)
 
-const { channel, formattedPhoneNumber: channelPhoneNumber } = storeToRefs(
-  useChannelStore(),
-)
+const {
+  channel,
+  formattedPhoneNumber: channelPhoneNumber,
+  channelGeneralTermsOfUseLink,
+  channelLegalTermsLink,
+  channelPrivacyPolicyLink,
+} = storeToRefs(useChannelStore())
 
 const loginSubmit = async () => {
   if (isLoading.value) return

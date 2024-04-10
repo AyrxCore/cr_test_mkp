@@ -1,6 +1,4 @@
-export const MENTIONS_LEGALES_PAGE_ID = 107
 export const CGU_PAGE_ID = 108
-export const POLITIQUE_DE_CONFIDENTIALITE_PAGE_ID = 109
 
 export const ADDRESS_BILLING = 'billing'
 export const ADDRESS_SHIPPING = 'shipping'

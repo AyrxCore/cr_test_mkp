@@ -22,12 +22,6 @@ import {
   ProductPageList,
 } from '@/vuejs/router/pages-list'
 
-import {
-  CGU_PAGE_ID,
-  MENTIONS_LEGALES_PAGE_ID,
-  POLITIQUE_DE_CONFIDENTIALITE_PAGE_ID,
-} from '@/vuejs/services/const'
-
 export const PageList = {
   ...MainPageList,
   ...ProductPageList,
@@ -57,7 +51,7 @@ const routes: RouteRecordRaw[] = [
     component: LegalDocument,
     props: {
       title: 'Mentions légales',
-      pageId: MENTIONS_LEGALES_PAGE_ID,
+      page: PageList.MENTIONS_LEGALES_PAGE
     },
   },
   {
@@ -66,7 +60,7 @@ const routes: RouteRecordRaw[] = [
     component: LegalDocument,
     props: {
       title: 'Politique de confidentialité',
-      pageId: POLITIQUE_DE_CONFIDENTIALITE_PAGE_ID,
+      page: PageList.POLITIQUE_DE_CONFIDENTIALITE
     },
   },
   {
@@ -74,9 +68,8 @@ const routes: RouteRecordRaw[] = [
     name: PageList.CGU_PAGE,
     component: LegalDocument,
     props: {
-      /* eslint-disable-next-line quotes */
       title: "Conditions générales d'utilisation",
-      pageId: CGU_PAGE_ID,
+      page: PageList.CGU_PAGE,
     },
   },
   {

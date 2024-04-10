@@ -1,5 +1,9 @@
 import { defineStore } from 'pinia'
-import { Channel, ChannelStoreState } from '@/vuejs/types/Channel'
+import {
+  Channel,
+  ChannelStoreState,
+  ChannelDocuments,
+} from '@/vuejs/types/Channel'
 import { notifyError } from '@/vuejs/services/utils'
 import ChannelHttpClient from '@/vuejs/services/httpclient/ChannelHttpClient'
 import { useCommonStore } from '@/vuejs/stores/common'
@@ -82,6 +86,24 @@ export const useChannelStore = defineStore({
         this.currentChannel?.phoneNumber &&
         parsePhoneNumber(this.currentChannel.phoneNumber).formatNational()
       )
+    },
+    channelDocuments(): ChannelDocuments | null {
+      return this.currentChannel?.documents
+    },
+    channelLegalTermsLink(): string | null {
+      return this.channelDocuments?.legalTerms.startsWith('https')
+        ? this.channelDocuments?.legalTerms
+        : '/mentions-legales'
+    },
+    channelGeneralTermsOfUseLink(): string | null {
+      return this.channelDocuments?.generalTermsOfUse.startsWith('https')
+        ? this.channelDocuments?.generalTermsOfUse
+        : '/conditions-generales-d-utilisation'
+    },
+    channelPrivacyPolicyLink(): string | null {
+      return this.channelDocuments?.privacyPolicy.startsWith('https')
+        ? this.channelDocuments?.privacyPolicy
+        : '/politique-de-confidentialite'
     },
   },
 })

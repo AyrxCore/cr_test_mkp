@@ -8,7 +8,7 @@ interface ChannelDesign {
   bannerTitle: string | null
 }
 
-interface ChannelDocuments {
+export interface ChannelDocuments {
   privacyPolicy: string | null
   legalTerms: string | null
   generalTermsOfUse: string | null

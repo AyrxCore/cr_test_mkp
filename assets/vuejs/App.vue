@@ -6,7 +6,6 @@
   <LoginForm v-else-if="props.component === 'login'" />
   <PrehomeRightPart v-else-if="props.component === 'prehome-right-part'" />
   <FooterPrehome v-else-if="props.component === 'footer-prehome'" />
-  <PartnersCarousel v-else-if="props.component === 'partners-carousel'" />
   <ArrowRightIconComponent v-else-if="props.component === 'arrow-right-icon'" />
   <ArrowLeftIconComponent v-else-if="props.component === 'arrow-left-icon'" />
   <FormComponent v-else-if="props.component === 'contact-form'" />
@@ -14,16 +13,20 @@
     v-else-if="props.component === 'sticky-contact-buttons'"
   />
   <CmsPageComponent
-    v-else-if="props.component === 'mentions-legales'"
-    :page-id="MENTIONS_LEGALES_PAGE_ID"
+    v-else-if="props.component === 'mentions-legales' && currentChannel"
+    :page-id="channelDocuments?.legalTerms"
   />
   <CmsPageComponent
-    v-else-if="props.component === 'politique-de-confidentialite'"
-    :page-id="POLITIQUE_DE_CONFIDENTIALITE_PAGE_ID"
+    v-else-if="
+      props.component === 'politique-de-confidentialite' && currentChannel
+    "
+    :page-id="channelDocuments?.privacyPolicy"
   />
   <CmsPageComponent
-    v-else-if="props.component === 'conditions-generales-d-utilisation'"
-    :page-id="CGU_PAGE_ID"
+    v-else-if="
+      props.component === 'conditions-generales-d-utilisation' && currentChannel
+    "
+    :page-id="channelDocuments?.generalTermsOfUse"
   />
 </template>
 
@@ -31,7 +34,6 @@
 import { onBeforeMount, onMounted } from 'vue'
 
 import LoginForm from './modules/login/views/ExternalLoginForm.vue'
-import PartnersCarousel from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
 import StickyContactButtons from '@/vuejs/modules/shared/StickyContactButtonsComponent.vue'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import ArrowLeftIconComponent from '@/vuejs/modules/shared/icon/ArrowLeftIconComponent.vue'
@@ -44,18 +46,15 @@ import { useCartStore } from '@/vuejs/stores/cart'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import router from './router'
 import { CartPageList } from './router/pages-list'
-import {
-  CGU_PAGE_ID,
-  MENTIONS_LEGALES_PAGE_ID,
-  OPTIONAL_FRONT_BLOCKS,
-  POLITIQUE_DE_CONFIDENTIALITE_PAGE_ID,
-} from '@/vuejs/services/const'
+import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
 import { useBannerStore } from '@/vuejs/stores/banner'
 import PrehomeRightPart from '@/vuejs/modules/login/component/PrehomeRightPart.vue'
 import FooterPrehome from '@/vuejs/modules/login/component/FooterPrehome.vue'
+import { storeToRefs } from 'pinia'
 
-const cartStore = useCartStore()
 const channelStore = useChannelStore()
+const { currentChannel, channelDocuments } = storeToRefs(channelStore)
+const cartStore = useCartStore()
 const categoryStore = useCategoryStore()
 const bannerStore = useBannerStore()
 

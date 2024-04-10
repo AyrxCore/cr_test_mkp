@@ -10,10 +10,10 @@
     >
       <div class="mb-2 md:mb-4">
         <h3 class="mb-2 md:mb-6 lg:mb-7">
-          {{ currentChannel.name }}
+          {{ channel.name }}
         </h3>
         <p>
-          {{ currentChannel.options['TEXT_FOOTER'] }}
+          {{ channel.options['TEXT_FOOTER'] }}
         </p>
       </div>
       <div class="mb-2 md:mb-4">
@@ -30,7 +30,7 @@
           <li>
             <a
               target="_blank"
-              :href="currentChannel.documents.generalTermsOfUse"
+              :href="channelGeneralTermsOfUseLink"
               @click="sendGaEvent('click_footer_cgu')"
             >
               Conditions générales d'utilisation
@@ -39,7 +39,7 @@
           <li>
             <a
               target="_blank"
-              :href="currentChannel.documents.legalTerms"
+              :href="channelLegalTermsLink"
               @click="sendGaEvent('click_footer_mentions_legales')"
             >
               Mentions légales
@@ -48,7 +48,7 @@
           <li>
             <a
               target="_blank"
-              :href="currentChannel.documents.privacyPolicy"
+              :href="channelPrivacyPolicyLink"
               @click="sendGaEvent('click_footer_politique_confidentialite')"
             >
               Politique de confidentialité
@@ -90,7 +90,7 @@
         </div>
       </div>
     </div>
-    <div v-if="!currentChannel?.whiteLabel">
+    <div v-if="!channel?.whiteLabel">
       <div
         class="mt-4 flex flex-col-reverse px-8 pb-5 md:grid md:grid-cols-2 md:gap-8 md:px-16 md:pb-20 xl:mt-0 xl:grid-cols-4 xl:gap-16"
       >
@@ -144,7 +144,6 @@
 import lemonwayLogo from '@/vuejs/assets/img/lemonway_footer_logo.png'
 import coqVertLogo from '@/vuejs/assets/img/coq_vert_footer_logo.png'
 import { betterTextColor, getImage } from '@/vuejs/services/utils'
-import { useUserStore } from '@/vuejs/stores/user'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { AccountPageList } from '@/vuejs/router/pages-list'
 import { PageList } from '@/vuejs/router'
@@ -155,14 +154,17 @@ import YoutubeIconComponent from '@/vuejs/modules/shared/icon/YoutubeIconCompone
 import TwitterIconComponent from '@/vuejs/modules/shared/icon/TwitterIconComponent.vue'
 import LinkedinIconComponent from '@/vuejs/modules/shared/icon/LinkedinIconComponent.vue'
 import QantisLogoComponent from '@/vuejs/modules/shared/icon/QantisLogoComponent.vue'
+import { storeToRefs } from 'pinia'
 
 const lemonwayLogoImg = getImage(lemonwayLogo)
 const coqVertLogoImg = getImage(coqVertLogo)
 
-const userStore = useUserStore()
-const channelStore = useChannelStore()
-
-const currentChannel = channelStore.currentChannel
+const {
+  channel,
+  channelGeneralTermsOfUseLink,
+  channelLegalTermsLink,
+  channelPrivacyPolicyLink,
+} = storeToRefs(useChannelStore())
 </script>
 
 <style lang="scss">

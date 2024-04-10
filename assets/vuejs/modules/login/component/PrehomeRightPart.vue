@@ -26,19 +26,19 @@
 
     <div class="flex justify-between pb-2 text-center text-xs">
       <a
-        :href="channel?.documents.legalTerms"
+        :href="channelLegalTermsLink"
         target="_blank"
         class="mr-4 text-gray-400"
         >Mentions légales</a
       >
       <a
-        :href="channel?.documents.privacyPolicy"
+        :href="channelPrivacyPolicyLink"
         target="_blank"
         class="mr-4 text-gray-400"
         >Politique de confidentialité</a
       >
       <a
-        :href="channel?.documents.generalTermsOfUse"
+        :href="channelGeneralTermsOfUseLink"
         target="_blank"
         class="text-gray-400"
         >Conditions Générales d'Utilisation</a
@@ -48,10 +48,17 @@
 </template>
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { useChannelStore } from '@/vuejs/stores/channel'
 import { computed } from 'vue'
 
-const { channel } = storeToRefs(useChannelStore())
+import { useChannelStore } from '@/vuejs/stores/channel'
+
+const {
+  channel,
+  channelGeneralTermsOfUseLink,
+  channelLegalTermsLink,
+  channelPrivacyPolicyLink,
+} = storeToRefs(useChannelStore())
+
 const listDetails = computed(() => {
   return channel.value?.options?.PRE_HOME_LIST
     ? channel.value?.options?.PRE_HOME_LIST.split(';')
