@@ -66,7 +66,7 @@
               })
             "
           >
-            Profiter de l'accord&#8209;cadre
+            Consulter l'accord&#8209;cadre
           </RouterLink>
         </div>
       </div>
