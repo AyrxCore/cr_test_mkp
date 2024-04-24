@@ -15,7 +15,7 @@
   </AccountPage>
 </template>
 <script lang="ts" setup>
-import { useHead } from '@vueuse/head'
+import { useHead } from '@unhead/vue'
 
 import AddressForm from '@/vuejs/modules/account/components/address/AddressForm.vue'
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'

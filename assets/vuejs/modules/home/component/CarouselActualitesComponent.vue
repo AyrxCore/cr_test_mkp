@@ -29,7 +29,7 @@
           <SwiperSlide
             v-for="content in expertContents"
             :key="content.id"
-            class="flex h-[303px] items-center justify-center overflow-hidden rounded-lg bg-white xl:h-full"
+            class="!flex h-[303px] items-center justify-center overflow-hidden rounded-lg bg-white xl:h-full"
           >
             <RouterLink
               :to="{

@@ -5,7 +5,7 @@ export default class FavoriteHttpClient extends BaseClientService {
   public fetchList<T extends []>(): Promise<T> {
     return this.apiClient
       .get<T>('favorites')
-      .then((response) => response.data['hydra:member'])
+      .then((response) => response.data)
   }
 
   public create<T extends []>(favorite: Favorite): Promise<T | Favorite> {

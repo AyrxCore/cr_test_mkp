@@ -5,7 +5,7 @@ export default class OrderHttpClient extends BaseClientService {
   public getOrders<T extends []>(): Promise<T> {
     return this.apiClient
       .get<T>('orders')
-      .then((response) => response.data['hydra:member'])
+      .then((response) => response.data)
   }
 
   public getOrderById<T extends []>(orderId: number): Promise<T> {

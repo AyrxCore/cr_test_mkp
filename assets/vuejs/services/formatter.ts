@@ -7,7 +7,7 @@ export function formatUrlWithChannelCode(url: string): string {
     : url
 }
 
-export function getIdFromIri(iri: string) {
-  const parts = iri.split('/')
-  return parts[parts.length - 1]
+export function getIdFromIri(iri: string | undefined) {
+  const parts = iri?.split('/')
+  return parts && parts.length > 1 ? parts[parts.length - 1] : null
 }

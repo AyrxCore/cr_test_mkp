@@ -5,12 +5,12 @@ export default class ExpertContentHttpClient extends BaseClientService {
   public findExpertsContentsCategories<T extends []>(): Promise<T> {
     return this.apiClient
       .get<T>('expert-content-categories')
-      .then((response) => response.data['hydra:member'])
+      .then((response) => response.data)
   }
 
   public findExpertsContents<T extends []>(): Promise<T> {
     return this.apiClient.get<T>('expert-contents').then((response) => {
-      return response.data['hydra:member']
+      return response.data
     })
   }
 

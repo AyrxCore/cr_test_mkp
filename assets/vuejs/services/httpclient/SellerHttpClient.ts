@@ -20,7 +20,9 @@ export default class SellerHttpClient extends BaseClientService {
       .join('&')
     return this.apiClient
       .get<T>(`sellers?${queryString}`)
-      .then((response) => response.data['hydra:member'])
+      .then((response) => {
+        return response.data
+      })
   }
 
   public getSeller<T extends []>(id: number): Promise<Seller> {

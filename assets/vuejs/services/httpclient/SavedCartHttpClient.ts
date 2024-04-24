@@ -5,7 +5,7 @@ export default class SavedCartHttpClient extends BaseClientService {
   public fetchList<T extends []>(): Promise<T> {
     return this.apiClient
       .get<T>('saved-carts')
-      .then((response) => response.data['hydra:member'])
+      .then((response) => response.data)
   }
 
   public create<T extends []>(savedCart: SavedCart): Promise<T | SavedCart> {

@@ -63,7 +63,7 @@
               <SwiperSlide
                 v-for="(img, key) in product.images"
                 :key="key"
-                class="flex w-[100%] justify-center p-4 md:h-auto"
+                class="!flex w-[100%] justify-center p-4 md:h-auto"
               >
                 <img
                   :src="getUpplerImage(img)"

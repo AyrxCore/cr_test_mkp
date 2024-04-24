@@ -20,7 +20,7 @@ export default class ProductHttpClient extends BaseClientService {
       .join('&')
     return this.apiClient
       .get<T>(`products?${queryString}`)
-      .then((response) => response.data['hydra:member'][0])
+      .then((response) => response.data[0])
   }
 
   public findProductById<T extends []>(id: number): Promise<Product> {

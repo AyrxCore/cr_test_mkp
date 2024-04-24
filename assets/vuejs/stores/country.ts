@@ -17,8 +17,7 @@ export const useCountryStore = defineStore({
     async getCountries(): Promise<void> {
       const alertStore = useAlertStore()
       try {
-        const countries = await CountryHttpClient.get().getCountriesAsBuyer()
-        this.countries = countries['hydra:member']
+        this.countries = await CountryHttpClient.get().getCountriesAsBuyer()
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
           alertStore.setShow(

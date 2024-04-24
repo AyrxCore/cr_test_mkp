@@ -1,4 +1,3 @@
-import { CollectionResponse } from '@/vuejs/types/HttpClient'
 import { ExternalApiDataEntity } from '@/vuejs/types/ExternalApiDataEntity'
 import { User } from '@/vuejs/types/User'
 
@@ -69,10 +68,6 @@ interface AccountToUpdate {
   lastName: string
   firstName: string
   phone: string
-}
-
-export interface AccountCollectionResponse extends CollectionResponse {
-  'hydra:member': Account[]
 }
 
 export type AccountEmail = Omit<

@@ -2,7 +2,7 @@ import '@/style/main.scss'
 import 'vue-universal-modal/dist/index.css'
 import 'floating-vue/dist/style.css'
 
-import { createHead } from '@vueuse/head'
+import { createHead } from '@unhead/vue'
 import { createApp } from 'vue'
 import App from './vuejs/App.vue'
 import router from '@/vuejs/router'

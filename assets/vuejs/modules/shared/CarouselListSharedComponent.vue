@@ -34,7 +34,7 @@ import {
   A11y,
   Thumbs,
   Autoplay,
-} from 'swiper'
+} from 'swiper/modules'
 import 'swiper/scss'
 import 'swiper/scss/a11y'
 import 'swiper/scss/navigation'

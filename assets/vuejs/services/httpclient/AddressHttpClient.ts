@@ -9,7 +9,7 @@ export default class AddressHttpClient extends BaseClientService {
   public getAddressesAsBuyer<T extends []>(): Promise<T> {
     return this.apiClient
       .get<T>('addresses')
-      .then((response) => response.data['hydra:member'])
+      .then((response) => response.data)
   }
 
   public getAdressAsAdmin<T extends []>(id: number): Promise<Address> {

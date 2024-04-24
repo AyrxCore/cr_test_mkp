@@ -65,7 +65,7 @@
         <SwiperSlide
           v-for="(image, key) in images"
           :key="key"
-          class="flex items-center justify-center"
+          class="!flex items-center justify-center"
         >
           <img :src="image" alt="Picture" />
         </SwiperSlide>

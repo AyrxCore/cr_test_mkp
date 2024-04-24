@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useHead } from '@vueuse/head'
+import { useHead } from '@unhead/vue'
 import { onMounted, reactive } from 'vue'
 import { storeToRefs } from 'pinia'
 
