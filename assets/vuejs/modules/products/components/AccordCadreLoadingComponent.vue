@@ -14,7 +14,7 @@
         color: betterTextColor('primary'),
       }"
     >
-      Profiter de l'accord-cadre
+      Consulter l'accord-cadre
     </a>
   </div>
 </template>
