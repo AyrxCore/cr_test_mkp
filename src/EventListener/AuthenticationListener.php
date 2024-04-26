@@ -7,6 +7,7 @@ namespace App\EventListener;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\AccessMapInterface;
 
 class AuthenticationListener
@@ -19,6 +20,7 @@ class AuthenticationListener
     public function __construct(
         private AccessMapInterface $accessMap,
         private RequestStack $requestStack,
+        private Security $security,
     ) {
     }
 
@@ -32,8 +34,12 @@ class AuthenticationListener
             return;
         }
 
-        $session = $this->requestStack->getSession();
+        $currentUser = $this->security->getUser();
+        if ($currentUser && \in_array('ROLE_API', $currentUser->getRoles(), true)) {
+            return;
+        }
 
+        $session = $this->requestStack->getSession();
         if (!$session->has('account') || empty($session->get('account'))) {
             throw new AuthenticationException('session account is not hydrated');
         }
