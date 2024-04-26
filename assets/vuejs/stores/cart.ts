@@ -56,7 +56,7 @@ export const useCartStore = defineStore({
         this.productVariantsInCart.indexOf(variantId) === -1 &&
           this.newlyAddedProducts.push(variantId)
 
-        notifySuccess('La référence du produit été ajoutée au panier')
+        notifySuccess('La référence du produit a été ajoutée au panier')
       } catch (error) {
         notifyError(
           `L'ajout au panier est impossible, merci de contacter un administrateur.`,
@@ -100,7 +100,7 @@ export const useCartStore = defineStore({
     async deleteProduct(id: number): Promise<void> {
       try {
         await CartHttpClient.get().deleteProductFromCartAsBuyer(id)
-        notifySuccess('La référence du produit été retirée au panier')
+        notifySuccess('La référence du produit a été retirée du panier')
       } catch (error) {
         notifyError(
           `Une erreur est survenue lors de la modification du panier, merci de contacter un administrateur.`,
