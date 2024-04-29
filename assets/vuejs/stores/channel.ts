@@ -91,17 +91,17 @@ export const useChannelStore = defineStore({
       return this.currentChannel?.documents
     },
     channelLegalTermsLink(): string | null {
-      return this.channelDocuments?.legalTerms.startsWith('https')
+      return this.channelDocuments?.legalTerms?.startsWith('https')
         ? this.channelDocuments?.legalTerms
         : '/mentions-legales'
     },
     channelGeneralTermsOfUseLink(): string | null {
-      return this.channelDocuments?.generalTermsOfUse.startsWith('https')
+      return this.channelDocuments?.generalTermsOfUse?.startsWith('https')
         ? this.channelDocuments?.generalTermsOfUse
         : '/conditions-generales-d-utilisation'
     },
     channelPrivacyPolicyLink(): string | null {
-      return this.channelDocuments?.privacyPolicy.startsWith('https')
+      return this.channelDocuments?.privacyPolicy?.startsWith('https')
         ? this.channelDocuments?.privacyPolicy
         : '/politique-de-confidentialite'
     },

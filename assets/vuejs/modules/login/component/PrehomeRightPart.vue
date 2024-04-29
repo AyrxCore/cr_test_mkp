@@ -24,25 +24,34 @@
       </p>
     </div>
 
-    <div class="flex justify-between pb-2 text-center text-xs">
+    <div class="flex justify-around pb-2 text-center text-xs">
       <a
+        v-if="channelDocuments?.legalTerms"
         :href="channelLegalTermsLink"
         target="_blank"
         class="mr-4 text-gray-400"
-        >Mentions légales</a
+        @click="sendGaEvent('click_prehome_mentions')"
       >
+        Mentions légales
+      </a>
       <a
+        v-if="channelDocuments?.privacyPolicy"
         :href="channelPrivacyPolicyLink"
         target="_blank"
         class="mr-4 text-gray-400"
-        >Politique de confidentialité</a
+        @click="sendGaEvent('click_prehome_polconf')"
       >
+        Politique de confidentialité
+      </a>
       <a
+        v-if="channelDocuments?.generalTermsOfUse"
         :href="channelGeneralTermsOfUseLink"
         target="_blank"
         class="text-gray-400"
-        >Conditions Générales d'Utilisation</a
+        @click="sendGaEvent('click_prehome_cgu')"
       >
+        Conditions Générales d'Utilisation
+      </a>
     </div>
   </div>
 </template>
@@ -51,9 +60,11 @@ import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 
 import { useChannelStore } from '@/vuejs/stores/channel'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const {
   channel,
+  channelDocuments,
   channelGeneralTermsOfUseLink,
   channelLegalTermsLink,
   channelPrivacyPolicyLink,

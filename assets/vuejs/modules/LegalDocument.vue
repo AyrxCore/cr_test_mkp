@@ -1,7 +1,7 @@
 <template>
   <BaseTemplate :title="title">
     <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 px-5 sm:px-8">
-      <breadcrumb-shared-component :current-page="title" />
+      <BreadcrumbSharedComponent :current-page="title" />
       <div class="m-auto my-2 w-[100%] max-w-screen-2xl text-primary">
         <CmsPageComponent :page-id="pageId" class="text-primary" />
       </div>

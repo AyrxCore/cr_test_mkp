@@ -29,6 +29,7 @@
           </li>
           <li>
             <a
+              v-if="channelDocuments?.generalTermsOfUse"
               target="_blank"
               :href="channelGeneralTermsOfUseLink"
               @click="sendGaEvent('click_footer_cgu')"
@@ -38,6 +39,7 @@
           </li>
           <li>
             <a
+              v-if="channelDocuments?.legalTerms"
               target="_blank"
               :href="channelLegalTermsLink"
               @click="sendGaEvent('click_footer_mentions_legales')"
@@ -47,6 +49,7 @@
           </li>
           <li>
             <a
+              v-if="channelDocuments?.privacyPolicy"
               target="_blank"
               :href="channelPrivacyPolicyLink"
               @click="sendGaEvent('click_footer_politique_confidentialite')"
@@ -141,26 +144,27 @@
 </template>
 
 <script lang="ts" setup>
-import lemonwayLogo from '@/vuejs/assets/img/lemonway_footer_logo.png'
-import coqVertLogo from '@/vuejs/assets/img/coq_vert_footer_logo.png'
+import { storeToRefs } from 'pinia'
+
 import { betterTextColor, getImage } from '@/vuejs/services/utils'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { AccountPageList } from '@/vuejs/router/pages-list'
 import { PageList } from '@/vuejs/router'
-
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 import YoutubeIconComponent from '@/vuejs/modules/shared/icon/YoutubeIconComponent.vue'
 import TwitterIconComponent from '@/vuejs/modules/shared/icon/TwitterIconComponent.vue'
 import LinkedinIconComponent from '@/vuejs/modules/shared/icon/LinkedinIconComponent.vue'
 import QantisLogoComponent from '@/vuejs/modules/shared/icon/QantisLogoComponent.vue'
-import { storeToRefs } from 'pinia'
+import lemonwayLogo from '@/vuejs/assets/img/lemonway_footer_logo.png'
+import coqVertLogo from '@/vuejs/assets/img/coq_vert_footer_logo.png'
 
 const lemonwayLogoImg = getImage(lemonwayLogo)
 const coqVertLogoImg = getImage(coqVertLogo)
 
 const {
   channel,
+  channelDocuments,
   channelGeneralTermsOfUseLink,
   channelLegalTermsLink,
   channelPrivacyPolicyLink,

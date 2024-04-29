@@ -131,6 +131,7 @@
         class="flex justify-between pb-2 text-center text-[0.5rem] md:mt-0 md:hidden"
       >
         <a
+          v-if="channelDocuments?.legalTerms"
           :href="channelLegalTermsLink"
           target="_blank"
           class="text-gray-500"
@@ -139,6 +140,7 @@
           Mentions légales
         </a>
         <a
+          v-if="channelDocuments?.privacyPolicy"
           :href="channelPrivacyPolicyLink"
           target="_blank"
           class="text-gray-500"
@@ -147,6 +149,7 @@
           Politique de confidentialité
         </a>
         <a
+          v-if="channelDocuments?.generalTermsOfUse"
           :href="channelGeneralTermsOfUseLink"
           target="_blank"
           class="text-gray-500"
@@ -294,6 +297,7 @@ const { show: showAlert } = storeToRefs(alertStore)
 
 const {
   channel,
+  channelDocuments,
   formattedPhoneNumber: channelPhoneNumber,
   channelGeneralTermsOfUseLink,
   channelLegalTermsLink,
