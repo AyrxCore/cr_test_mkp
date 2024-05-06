@@ -11,7 +11,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
-use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     itemOperations: [
@@ -97,6 +96,9 @@ class Adherent
 
     #[ORM\ManyToOne(targetEntity: Adherent::class, inversedBy: 'parent')]
     private ?Adherent $parent = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $libelleApe = null;
 
     public function __construct()
     {
@@ -339,6 +341,18 @@ class Adherent
     public function setParent(?Adherent $parent): self
     {
         $this->parent = $parent;
+
+        return $this;
+    }
+
+    public function getLibelleApe(): ?string
+    {
+        return $this->libelleApe;
+    }
+
+    public function setLibelleApe(?string $libelleApe): self
+    {
+        $this->libelleApe = $libelleApe;
 
         return $this;
     }

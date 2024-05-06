@@ -12,6 +12,7 @@ use App\Repository\AdherentRepository;
 use App\Repository\ChannelRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Uid\Uuid;
 
 class AdherentPersister implements ContextAwareDataPersisterInterface
@@ -30,26 +31,17 @@ class AdherentPersister implements ContextAwareDataPersisterInterface
      */
     public function persist($data, array $context = []): ?Adherent
     {
-        $adh = $this->adherentRepository->find($data->getId());
-        if ($adh === null) {
-            return null;
+        $adherent = $this->adherentRepository->find($data->getId());
+
+        if (!$adherent) {
+            throw new NotFoundHttpException('Adherent not found');
         }
 
         $channel = $this->channelRepository->findOneByCode($data->getChannelCode());
-
         if (!$channel) {
             throw new BadRequestHttpException('Channel not found');
         }
 
-        $adh->setParent($data->getParent())
-            ->setChannel($channel)
-            ->setReducceCode($data->getReducceCode())
-            ->setsiret($data->getsiret())
-            ->setStreet($data->getStreet())
-            ->setCity($data->getCity())
-            ->setPostalcode($data->getPostalcode())
-            ->setCountry($data->getCountry())
-            ->setHashkey($data->getHashkey());
         foreach ($data->getAttachments() as $attachment) {
             $accordStatut = $this->em->getRepository(AccordStatut::class)->findOneBy([
                 'adherent' => $data->getId(),
@@ -57,7 +49,8 @@ class AdherentPersister implements ContextAwareDataPersisterInterface
             ]);
             if ($accordStatut) {
                 // Ne pas écraser Pending par NotActivated
-                if (!($accordStatut->getStatus() === AccountAccordCadre::PROCESS_STATUS_PENDING
+                if (
+                    !($accordStatut->getStatus() === AccountAccordCadre::PROCESS_STATUS_PENDING
                     && $attachment['status'] === AccountAccordCadre::PROCESS_STATUS_NOT_ACTIVATED)
                 ) {
                     $accordStatut->setStatus($attachment['status']);
@@ -65,7 +58,7 @@ class AdherentPersister implements ContextAwareDataPersisterInterface
                 }
             } else {
                 $accordStatut = new AccordStatut();
-                $accordStatut->setAdherent($adh);
+                $accordStatut->setAdherent($adherent);
                 $accordStatut->setAccordId(new Uuid($attachment['accordId']));
                 $accordStatut->setStatus($attachment['status']);
                 $this->em->persist($accordStatut);
