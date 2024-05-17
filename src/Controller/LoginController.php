@@ -9,6 +9,7 @@ use App\Events\FirstConnexionEvent;
 use App\Events\ResettingPasswordEvent;
 use App\Exception\AutoLoginException;
 use App\Form\ResettingType;
+use App\Repository\AccountRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,6 +35,7 @@ class LoginController extends AbstractController implements ChannelAwareControll
         private RequestStack $requestStack,
         private UserPasswordHasherInterface $passwordHasher,
         private UserRepository $userRepository,
+        private AccountRepository $accountRepository,
     ) {
     }
 
@@ -239,6 +241,32 @@ class LoginController extends AbstractController implements ChannelAwareControll
             } else {
                 throw new BadRequestException();
             }
+        }
+
+        throw new NotFoundHttpException();
+    }
+
+//    Generate an auto-login link to allow Qantis user to connect to an adherent's MKP
+//    Only for ROLE_API
+    #[Route('/login/neo-auto-login', name: 'generate_neo_auto_login_link')]
+    public function generateNeoAutoLoginLink(
+        Request $request,
+        LoginLinkHandlerInterface $loginLinkHandler
+    ): JsonResponse {
+        if ($request->isMethod('GET')) {
+            $contactId = $request->query->get('contactId');
+            $account = $this->accountRepository->findOneBy(['contactId' => $contactId, 'enabled' => true]);
+
+            if (!$account) {
+                throw new BadRequestException('No account available or account deactivated');
+            }
+
+            $user = $account->getUser();
+            $loginLinkDetails = $loginLinkHandler->createLoginLink($user);
+
+            return new JsonResponse([
+                'url' => $loginLinkDetails->getUrl()."&neoAutoLogin=true",
+            ]);
         }
 
         throw new NotFoundHttpException();

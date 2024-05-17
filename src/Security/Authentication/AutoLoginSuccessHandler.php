@@ -6,6 +6,7 @@ namespace App\Security\Authentication;
 
 use App\Controller\ChannelAwareControllerInterface;
 use App\Controller\ChannelAwareControllerTrait;
+use App\Entity\User;
 use App\Events\UserAcceptCGUEvent;
 use App\Service\UpplerAuthenticationService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -40,6 +41,7 @@ class AutoLoginSuccessHandler implements AuthenticationSuccessHandlerInterface, 
         /** @var User $user */
         $user = $token->getUser();
         $token = $this->JWTManager->create($user);
+        $isNeoAutoLogin = filter_var($request->query->get('neoAutoLogin'), FILTER_VALIDATE_BOOLEAN);
 
         try {
             $response = new RedirectResponse($this->router->generate('prehome'));
@@ -51,12 +53,14 @@ class AutoLoginSuccessHandler implements AuthenticationSuccessHandlerInterface, 
             if (!$account = $user->getFirstEnabledAccount($channel)) {
                 throw new \Exception('No account available');
             }
+
             $authSuccess = $this->upplerAuthenticationService->authenticateUser(
-                $account
+                $account,
+                $isNeoAutoLogin
             );
 
             if ($authSuccess && $session->has('access_token') && !empty($session->get('access_token'))) {
-                if (empty($account->isAcceptCGU())) {
+                if (empty($account->isAcceptCGU()) && !$isNeoAutoLogin) {
                     $event = new UserAcceptCGUEvent($account);
                     $this->eventDispatcher->dispatch($event);
                 }
@@ -65,6 +69,9 @@ class AutoLoginSuccessHandler implements AuthenticationSuccessHandlerInterface, 
                 $this->entityManager->flush();
 
                 $response->headers->setCookie(new Cookie('BEARER', $token));
+                if($isNeoAutoLogin) {
+                    $response->headers->setCookie(new Cookie('neoAutoLogin', "true"));
+                }
             }
 
             return $response;
