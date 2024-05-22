@@ -144,7 +144,7 @@ abstract class AbstractUpplerService
         return false;
     }
 
-    // Obtient un accesssToken depuis l'API Uppler pour le user propriétaire des clientId/clientSecret
+    // Obtient un accessToken depuis l'API Uppler pour le user propriétaire des clientId/clientSecret
     public function getToken(string $clientId, string $clientSecret): object|null
     {
         $res = $this->request(
@@ -160,7 +160,7 @@ abstract class AbstractUpplerService
             withoutToken: true
         );
 
-        if ($res->getStatusCode() === Response::HTTP_OK) {
+        if ($res && $res->getStatusCode() === Response::HTTP_OK) {
             $datas = \json_decode($res->getContent());
 
             return $datas;
