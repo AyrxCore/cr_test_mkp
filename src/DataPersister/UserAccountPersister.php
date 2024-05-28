@@ -91,9 +91,18 @@ class UserAccountPersister implements ContextAwareDataPersisterInterface
 
         if (!$logEmail || ($logEmail->getValue() === $data->getEmail())) {
             $sameMailUser = $this->userRepository->findOneBy(['email' => $data->getEmail()]);
-
-            if ($sameMailUser) {
-                $user = $sameMailUser;
+            if (\count($user->getAccounts()) > 1 && $data->getEmail() !== $user->getEmail() && !$sameMailUser) {
+                $newUser = new User();
+                $newUser->setEnabled($user->isEnabled());
+                $newUser->setPassword($user->getPassword());
+                $user = $newUser;
+                if ($logEmail) {
+                    $logEmail->setUser($user);
+                }
+            } else {
+                if ($sameMailUser) {
+                    $user = $sameMailUser;
+                }
             }
 
             $user->setUsername($data->getEmail());
