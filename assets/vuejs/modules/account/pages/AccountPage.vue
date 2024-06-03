@@ -133,7 +133,7 @@
                     </h3>
                     <div class="items-center text-sm md:text-base xl:text-lg">
                       <span>
-                        Le service adhérents sera ravi de répondre à vos
+                        {{ customerService }} sera ravi de répondre à vos
                         questions du lundi au vendredi de 8h30 à 18h
                       </span>
                       <div class="mt-4 text-primary underline">
@@ -170,6 +170,7 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import AccountSidebar from '@/vuejs/modules/account/components/sidebar/AccountSidebar.vue'
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
@@ -196,6 +197,12 @@ const onLogout = async (e: Event): Promise<void> => {
   ;(await userStore.logout()) && location.reload()
   sendGaEvent('click_account_logout')
 }
+
+const customerService = computed((): string => {
+  return (
+    channel?.value?.options?.ACCOUNT_TEXT_LEFT_COLUMN ?? 'Le service adhérents'
+  )
+})
 </script>
 
 <style lang="postcss">

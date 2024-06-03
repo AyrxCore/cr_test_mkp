@@ -60,7 +60,7 @@
         </ul>
       </div>
       <div class="mb-2 md:mb-4">
-        <h3 class="mb-2 md:mb-6 lg:mb-7">Votre espace adhérents</h3>
+        <h3 class="mb-2 md:mb-6 lg:mb-7">{{ memberArea }}</h3>
         <ul>
           <li>
             <RouterLink
@@ -144,6 +144,7 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import { betterTextColor, getImage } from '@/vuejs/services/utils'
@@ -169,6 +170,12 @@ const {
   channelLegalTermsLink,
   channelPrivacyPolicyLink,
 } = storeToRefs(useChannelStore())
+
+const memberArea = computed((): string => {
+  return (
+    channel?.value?.options?.FOOTER_TITLE_ACCOUNT ?? 'Votre espace adhérents'
+  )
+})
 </script>
 
 <style lang="scss">

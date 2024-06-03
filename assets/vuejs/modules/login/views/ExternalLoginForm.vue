@@ -71,7 +71,7 @@
               <p
                 class="mx-auto mb-2 flex text-center text-xs text-gray-700 md:w-auto md:text-sm xl:mb-3 xl:text-left xl:text-base"
               >
-                Vous êtes adhérent et c'est votre première fois ici ?
+                {{ isFirst }}
                 <br />
                 Cliquez ci-dessous 👇
               </p>
@@ -93,7 +93,7 @@
               <p class="flex flex-col text-gray-500">
                 <span class="font-bold text-gray-700">Besoin d'aide ?</span>
                 <span class="text-xs md:text-sm">
-                  Contactez-nous : au
+                  Contactez-nous au :
                   <a
                     :href="`tel:${channel?.phoneNumber}`"
                     class="text-secondary underline lg:text-right"
@@ -224,8 +224,8 @@
             <div
               class="flex flex-col justify-center px-2 text-center text-gray-500"
             >
-              <p>
-                Notre service adhérents est à votre écoute <br />
+              <p class="px-12 text-sm">
+                {{ contactTo }} est à votre écoute<br />
                 du lundi au vendredi de 8h30 à 18h au
                 <a
                   :href="`tel:${channel?.phoneNumber}`"
@@ -242,8 +242,7 @@
                 <MailIcon
                   class="h-[15px] w-[15px] fill-primary stroke-white text-secondary hover:!fill-secondary"
                 />
-
-                <span>Joindre le service adhérents</span>
+                <span> {{ contactAdherentsService }}</span>
               </ButtonComponent>
             </div>
           </div>
@@ -260,7 +259,7 @@
   />
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
@@ -392,4 +391,27 @@ const contactModal = (eventName: string) => {
   sendGaEvent(eventName)
   showContactForm.value = true
 }
+
+const isFirst = computed((): string => {
+  return (
+    channel?.value?.options?.PRE_HOME_TEXT_LEFT_COLUMN ??
+    "Vous êtes adhérent et c'est votre première fois ici ?"
+  )
+})
+
+const contactTo = computed((): string => {
+  return (
+    channel?.value?.options
+      ?.PRE_HOME_TEXT_FIRST_CONNECTION_CHANGE_OF_PASSWORD ??
+    'Notre service adhérents'
+  )
+})
+
+const contactAdherentsService = computed((): string => {
+  return (
+    channel?.value?.options
+      ?.PRE_HOME_BUTTON_FIRST_CONNECTION_CHANGE_OF_PASSWORD ??
+    'Joindre le service adhérents'
+  )
+})
 </script>

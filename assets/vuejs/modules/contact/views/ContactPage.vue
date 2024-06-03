@@ -9,7 +9,7 @@
       />
       <h3 class="text-title-34 my-4 font-bold text-primary">Contactez-nous</h3>
       <span class="mb-5 text-lg">
-        Notre Service adhérent est disponible du lundi au vendredi de 8h30 à 18h
+        {{ customerService }} est disponible du lundi au vendredi de 8h30 à 18h
       </span>
       <div class="m-auto my-2 mt-5 flex w-full flex-col lg:mt-14 lg:flex-row">
         <!-- Bloc moyen de contact -->
@@ -76,6 +76,8 @@
   </BaseTemplate>
 </template>
 <script lang="ts" setup>
+import { computed } from 'vue'
+
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import FormContact from '@/vuejs/modules/contact/component/FormComponent.vue'
@@ -87,6 +89,13 @@ import { useChannelStore } from '@/vuejs/stores/channel'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const { channel, formattedPhoneNumber } = storeToRefs(useChannelStore())
+
+const customerService = computed((): string => {
+  return (
+    channel?.value?.options?.CONTACT_TEXT_UNDER_TITLE ??
+    'Notre service adhérents'
+  )
+})
 </script>
 
 <style scoped>

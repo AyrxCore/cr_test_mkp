@@ -4,7 +4,7 @@
       class="mx-4 flex flex-col justify-center text-center text-white sm:text-gray-500"
     >
       <p class="px-12 text-sm">
-        Notre service adhérents est à votre écoute <br />
+        {{ customerService }} est à votre écoute <br />
         du lundi au vendredi de 8h30 à 18h au
         <a
           :href="`tel:${channel?.phoneNumber}`"
@@ -22,7 +22,7 @@
         <MailIcon
           class="h-[15px] w-[15px] fill-primary stroke-white text-secondary hover:!fill-secondary"
         />
-        <span>Joindre le service adhérents par email</span>
+        <span>{{ contactAdherentsService }}</span>
       </ButtonComponent>
     </div>
     <ContactModal
@@ -34,17 +34,16 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useChannelStore } from '@/vuejs/stores/channel'
-import { ref } from 'vue'
 import MailIcon from '@/vuejs/modules/shared/icon/MailIconComponent.vue'
 import ContactModal from '@/vuejs/modules/contact/component/ContactModal.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
-const { channel, formattedPhoneNumber: channelPhoneNumber } = storeToRefs(
-  useChannelStore(),
-)
+const { channel, formattedPhoneNumber: channelPhoneNumber } =
+  storeToRefs(useChannelStore())
 
 const showContactForm = ref<boolean>(false)
 const isLoading = ref<boolean>(false)
@@ -52,4 +51,20 @@ const EmailContactGtmEvent = () => {
   showContactForm.value = true
   sendGaEvent('click_prehome_email')
 }
+
+const customerService = computed((): string => {
+  return (
+    channel?.value?.options
+      ?.PRE_HOME_TEXT_FIRST_CONNECTION_CHANGE_OF_PASSWORD ??
+    'Notre service adhérents'
+  )
+})
+
+const contactAdherentsService = computed((): string => {
+  return (
+    channel?.value?.options
+      ?.PRE_HOME_BUTTON_FIRST_CONNECTION_CHANGE_OF_PASSWORD ??
+    'Joindre le service adhérents par email'
+  )
+})
 </script>
