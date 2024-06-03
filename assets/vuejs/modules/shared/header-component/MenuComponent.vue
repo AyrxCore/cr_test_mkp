@@ -8,7 +8,6 @@
           @click.stop="toggleMenu"
         >
           <MenuIconComponent class="mr-0.5 text-xl lg:w-auto" />
-          <span class="ml-4 hidden lg:block"> Toutes les catégories </span>
         </button>
 
         <MenuCategoryComponent
