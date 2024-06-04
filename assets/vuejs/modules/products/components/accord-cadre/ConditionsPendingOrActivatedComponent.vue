@@ -2,30 +2,30 @@
   <div class="text-center text-lg leading-5 text-white">
     <div
       v-if="currentStatus.status === status.pending"
-      class="mx-auto flex justify-center border p-2 lg:w-2/3"
       :class="
         'border-' +
         betterTextColor('primary') +
         ' text-' +
         betterTextColor('primary')
       "
+      class="mx-auto flex justify-center border p-2 lg:w-2/3"
     >
       Votre rattachement est en cours
       <PendingIconComponent
-        class="ml-1 w-5"
         :fill="betterTextColor('primary')"
         :stroke="betterTextColor('primary')"
+        class="ml-1 w-5"
       />
     </div>
     <div
       v-else
-      class="mx-auto flex justify-center border p-2 lg:w-2/3"
       :class="
         'border-' +
         betterTextColor('primary') +
         ' text-' +
         betterTextColor('primary')
       "
+      class="mx-auto flex justify-center border p-2 lg:w-2/3"
     >
       <CheckIconComponent :stroke="betterTextColor('primary')" class="mr-4" />
       Vous bénéficiez des conditions
@@ -37,19 +37,23 @@
     <div class="mt-6 flex flex-col items-center">
       <ButtonDownloadFileWithLogo
         v-if="cta1.name && cta1.url"
-        event-name="click_fat_cta_1"
+        :disabled="isNeoAutoLogin"
         :event-params="{
           product_name: props.accordName,
           state_rattachement: props.currentStatus.status,
         }"
-        classes="button-primary mx-auto mb-6 border-2 border-solid !border-white"
-        :url="formatUrlWithChannelCode(cta1.url)"
         :name="cta1.name"
+        :url="formatUrlWithChannelCode(cta1.url)"
+        classes="button-primary mx-auto mb-6 border-2 border-solid !border-white"
+        event-name="click_fat_cta_1"
       />
       <a
         v-else-if="cta1.name && cta1.mailto"
-        class="button button-primary mx-auto mb-6 border-2 border-solid !border-white"
+        :class="{
+          disabled: isNeoAutoLogin,
+        }"
         :href="cta1.mailto"
+        class="button button-primary mx-auto mb-6 border-2 border-solid !border-white"
         @click="gtmEvent(1)"
       >
         <span>
@@ -58,19 +62,23 @@
       </a>
       <ButtonDownloadFileWithLogo
         v-if="cta2.name && cta2.url"
-        event-name="click_fat_cta_2"
+        :disabled="isNeoAutoLogin"
         :event-params="{
           product_name: props.accordName,
           state_rattachement: props.currentStatus.status,
         }"
-        classes="button-primary mx-auto mb-6 border-2 border-solid !border-white"
-        :url="formatUrlWithChannelCode(cta2.url)"
         :name="cta2.name"
+        :url="formatUrlWithChannelCode(cta2.url)"
+        classes="button-primary mx-auto mb-6 border-2 border-solid !border-white"
+        event-name="click_fat_cta_2"
       />
       <a
         v-else-if="cta2.name && cta2.mailto"
-        class="button button-primary mx-auto mb-6 border-2 border-solid !border-white"
+        :class="{
+          disabled: isNeoAutoLogin,
+        }"
         :href="cta2.mailto"
+        class="button button-primary mx-auto mb-6 border-2 border-solid !border-white"
         @click="gtmEvent(2)"
       >
         <span>
@@ -82,16 +90,17 @@
 </template>
 <script lang="ts" setup>
 import { computed, PropType } from 'vue'
+import { storeToRefs } from 'pinia'
 import CheckIconComponent from '@/vuejs/modules/shared/icon/CheckIconComponent.vue'
-import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import PendingIconComponent from '@/vuejs/modules/shared/icon/PendingIconComponent.vue'
 import ButtonDownloadFileWithLogo from '@/vuejs/modules/products/components/accord-cadre/ButtonDownloadFileWithLogo.vue'
 import { status } from '@/vuejs/modules/products'
 import { AccountAccordCadre } from '@/vuejs/types/AccountAccordCadre'
 import { betterTextColor, openInNewTab } from '@/vuejs/services/utils'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
-import { useChannelStore } from '@/vuejs/stores/channel'
 import { formatUrlWithChannelCode } from '@/vuejs/services/formatter'
+import { useChannelStore } from '@/vuejs/stores/channel'
+import { useUserStore } from '@/vuejs/stores/user'
 
 const props = defineProps({
   currentStatus: {
@@ -110,6 +119,7 @@ const props = defineProps({
 
 const channelStore = useChannelStore()
 
+const { isNeoAutoLogin } = storeToRefs(useUserStore())
 const currentChannel = channelStore.currentChannel
 
 const text = computed(() => {
@@ -156,12 +166,7 @@ const cta2 = computed(() => {
   }
 })
 
-const clickOnCta = (buttonUrl: string, ctaNumber: number) => {
-  openInNewTab(formatUrlWithChannelCode(buttonUrl))
-  gtmEvent(ctaNumber)
-}
-
-const gtmEvent = (ctaNumber) => {
+const gtmEvent = (ctaNumber: number) => {
   const eventName = ctaNumber === 1 ? 'click_fat_cta_1' : 'click_fat_cta_2'
   sendGaEvent(eventName, {
     product_name: props.accordName,

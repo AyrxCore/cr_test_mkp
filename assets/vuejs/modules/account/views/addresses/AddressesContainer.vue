@@ -18,6 +18,7 @@
         </div>
         <div>
           <ButtonComponent
+            :disabled="isNeoAutoLogin"
             class="button-primary !hidden md:!inline-flex"
             @click="onCreateAddressClick(ADDRESS_SHIPPING)"
           >
@@ -25,13 +26,16 @@
             <span class="hidden md:flex">Ajouter une adresse de livraison</span>
           </ButtonComponent>
           <div
+            :class="{
+              disabled: isNeoAutoLogin,
+            }"
             class="rounded-full border border-primary px-2 py-1 md:hidden"
             @click="onCreateAddressClick(ADDRESS_SHIPPING)"
           >
             <AddIconComponent
-              class="!mr-0 flex w-[20px]"
               :fill="channelPrimaryColor"
               :stroke="channelPrimaryColor"
+              class="!mr-0 flex w-[20px]"
             />
           </div>
         </div>
@@ -45,6 +49,7 @@
         </div>
         <div>
           <ButtonComponent
+            :disabled="isNeoAutoLogin"
             class="button-primary !hidden md:!inline-flex"
             @click="onCreateAddressClick(ADDRESS_BILLING)"
           >
@@ -54,13 +59,16 @@
             >
           </ButtonComponent>
           <div
+            :class="{
+              disabled: isNeoAutoLogin,
+            }"
             class="rounded-full border border-primary px-2 py-1 md:hidden"
             @click="onCreateAddressClick(ADDRESS_BILLING)"
           >
             <AddIconComponent
-              class="!mr-0 flex w-[20px]"
               :fill="channelPrimaryColor"
               :stroke="channelPrimaryColor"
+              class="!mr-0 flex w-[20px]"
             />
           </div>
         </div>
@@ -72,22 +80,24 @@
   </AccountPage>
 </template>
 <script lang="ts" setup>
-import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import { onMounted } from 'vue'
-import { useAddressStore } from '@/vuejs/stores/address'
+import { storeToRefs } from 'pinia'
+import router from '@/vuejs/router'
+import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import AddressesList from '@/vuejs/modules/account/components/addresses/AddressesList.vue'
 import AddressesDefault from '@/vuejs/modules/account/components/addresses/AddressesDefault.vue'
-import router from '@/vuejs/router'
-import { AccountPageList } from '@/vuejs/router/pages-list'
 import AddIconComponent from '@/vuejs/modules/shared/icon/AddIconComponent.vue'
 import { ADDRESS_BILLING, ADDRESS_SHIPPING } from '@/vuejs/services/const'
-import { storeToRefs } from 'pinia'
-import { useChannelStore } from '@/vuejs/stores/channel'
+import { AccountPageList } from '@/vuejs/router/pages-list'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import { useChannelStore } from '@/vuejs/stores/channel'
+import { useUserStore } from '@/vuejs/stores/user'
+import { useAddressStore } from '@/vuejs/stores/address'
 
 const addressStore = useAddressStore()
 const { channelPrimaryColor } = storeToRefs(useChannelStore())
+const { isNeoAutoLogin } = storeToRefs(useUserStore())
 
 onMounted(async () => {
   addressStore.isLoading = !addressStore.addresses.length

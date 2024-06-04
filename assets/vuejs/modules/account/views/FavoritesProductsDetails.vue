@@ -12,6 +12,7 @@
               {{ favoriteName }}
             </h3>
             <ButtonComponent
+              :disabled="isNeoAutoLogin"
               class="button-primary-outline"
               @click="openFavoriteForm"
             >
@@ -20,10 +21,10 @@
           </div>
           <FavoriteFormModal
             v-if="showFormFavorite"
-            class="modal"
             :favorite-id="favorite.id"
             :is-editing="true"
             :is-loading="isEditLoading"
+            class="modal"
             @cancel="showFormFavorite = false"
             @submit-favorite="onSubmitFavorite"
           />
@@ -37,8 +38,8 @@
           <FavoritesProductsDetailsComponent
             v-for="(favoriteProduct, key) in favorite.favoriteProducts"
             :key="key"
-            :favorite-product="favoriteProduct"
             :favorite-id="favorite.id"
+            :favorite-product="favoriteProduct"
             @remove-product="onRemoveProduct"
             @move-product="onMoveProduct"
             @selected-product="addProductSelectedToList"
@@ -46,15 +47,16 @@
           />
           <div class="mt-6 flex flex-col md:flex-row md:justify-end">
             <ButtonComponent
+              :disabled="isNeoAutoLogin"
               class="button-primary-outline"
               @click="refreshFavoriteItems(favorite.id)"
             >
               Mettre à jour la liste
             </ButtonComponent>
             <ButtonComponent
-              class="button-primary mt-5 ml-8 md:mt-0"
-              :disabled="listItemToAddCart.length === 0"
+              :disabled="listItemToAddCart.length === 0 || isNeoAutoLogin"
               :is-loading="isAddToCartLoading"
+              class="button-primary mt-5 ml-8 md:mt-0"
               @click="addToCart"
             >
               Ajouter au panier
@@ -71,12 +73,12 @@
         >
           <div>Aucune liste avec cet identifiant n'a été trouvée</div>
           <RouterLink
-            class="button button-primary mt-10 w-auto md:w-auto"
             :to="{ name: PageList.FAVORITES_LIST }"
+            class="button button-primary mt-10 w-auto md:w-auto"
           >
             <ArrowLeftIconComponent
-              stroke="#FFFFFF"
               class="mr-2 w-4 !stroke-white"
+              stroke="#FFFFFF"
             />
             Retour à la liste des favoris
           </RouterLink>
@@ -86,37 +88,40 @@
   </AccountPage>
 </template>
 <script lang="ts" setup>
-import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import { computed, onMounted, ref, watch } from 'vue'
-import FavoritesProductsDetailsComponent from '@/vuejs/modules/account/components/FavoriteProductDetailsComponent.vue'
+import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
-import { useFavoriteStore } from '@/vuejs/stores/favorite'
-import { Favorite } from '@/vuejs/types/Favorite'
+import { PageList } from '@/vuejs/router'
+import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
+import FavoritesProductsDetailsComponent from '@/vuejs/modules/account/components/FavoriteProductDetailsComponent.vue'
 import FavoriteFormModal from '@/vuejs/modules/account/components/favorite/FavoriteAddEditModal.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import { useAlertStore } from '@/vuejs/stores/alert'
-import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
-import { storeToRefs } from 'pinia'
-import { addProductToCartGoogleAnalytics } from '@/vuejs/modules/products'
-import { useCartStore } from '@/vuejs/stores/cart'
-import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
-import { PageList } from '@/vuejs/router'
 import ArrowLeftIconComponent from '@/vuejs/modules/shared/icon/ArrowLeftIconComponent.vue'
+import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
+import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
+import { addProductToCartGoogleAnalytics } from '@/vuejs/modules/products'
+import { Favorite } from '@/vuejs/types/Favorite'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import { useUserStore } from '@/vuejs/stores/user'
+import { useCartStore } from '@/vuejs/stores/cart'
+import { useAlertStore } from '@/vuejs/stores/alert'
+import { useFavoriteStore } from '@/vuejs/stores/favorite'
+
+const route = useRoute()
 
 const cartStore = useCartStore()
-const route = useRoute()
 const favoriteStore = useFavoriteStore()
+const alertStore = useAlertStore()
+const { isNeoAutoLogin } = storeToRefs(useUserStore())
+const { show: showAlert } = storeToRefs(alertStore)
+
 const isLoading = ref<boolean>(false)
 const isAddToCartLoading = ref<boolean>(false)
 const isEditLoading = ref<boolean>(false)
 const favorite = ref<Favorite>()
 const showFormFavorite = ref<boolean>(false)
 const listItemToAddCart = ref([])
-const alertStore = useAlertStore()
 const cartProducts = ref([])
-
-const { show: showAlert } = storeToRefs(alertStore)
 
 const favoriteName = computed(() => {
   return favorite.value.name

@@ -17,7 +17,12 @@
         </div>
         <div>
           <div class="float-right w-fit px-2 py-1 text-white">
-            <RouterLink :to="{ name: PageList.CONTACT_INFORMATION_EMAIL_EDIT }">
+            <RouterLink
+              :class="{
+                disabled: isNeoAutoLogin,
+              }"
+              :to="{ name: PageList.CONTACT_INFORMATION_EMAIL_EDIT }"
+            >
               <EditIconComponent :stroke="channelPrimaryColor" />
             </RouterLink>
           </div>
@@ -34,6 +39,9 @@
         <div>
           <div class="float-right w-fit px-2 py-1 text-white">
             <RouterLink
+              :class="{
+                disabled: isNeoAutoLogin,
+              }"
               :to="{ name: PageList.CONTACT_INFORMATION_PASSWORD_CHANGE }"
             >
               <EditIconComponent
@@ -59,6 +67,9 @@
         <div>
           <div class="float-right w-fit px-2 py-1 text-white">
             <RouterLink
+              :class="{
+                disabled: isNeoAutoLogin,
+              }"
               :to="{ name: PageList.CONTACT_INFORMATION_DETAILS_EDIT }"
             >
               <EditIconComponent
@@ -74,17 +85,18 @@
   </AccountPage>
 </template>
 <script lang="ts" setup>
+import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
+import { PageList } from '@/vuejs/router'
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import EditIconComponent from '@/vuejs/modules/shared/icon/EditIconComponent.vue'
 import { useUserStore } from '@/vuejs/stores/user'
-import { storeToRefs } from 'pinia'
-import { PageList } from '@/vuejs/router'
-import { computed } from 'vue'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
-const userStore = useUserStore()
-const { user } = storeToRefs(userStore)
+const { user, isNeoAutoLogin } = storeToRefs(useUserStore())
+const { channelPrimaryColor } = storeToRefs(useChannelStore())
+
 const emailInformation = computed(() => {
   const information = user.value.userInfoUpdateRequests.filter(function (el) {
     return el.attribute === 'email'
@@ -92,8 +104,6 @@ const emailInformation = computed(() => {
 
   return information[0] ?? null
 })
-
-const { channelPrimaryColor } = storeToRefs(useChannelStore())
 </script>
 
 <style scoped>

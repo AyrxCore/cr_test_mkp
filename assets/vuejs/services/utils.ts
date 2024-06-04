@@ -1,4 +1,5 @@
 import { notify } from 'notiwind'
+import Cookies from 'js-cookie'
 
 import { Address } from '../types/Address'
 import imgDefault from '@/vuejs/assets/img/default-image.png'
@@ -113,4 +114,12 @@ export const betterTextColor = (bgColor: 'primary' | 'secondary') => {
   } else {
     return 'black'
   }
+}
+
+export function getCookie(name: string | undefined): string | undefined {
+  if (!name) {
+    return null
+  }
+
+  return Cookies.get(name)
 }

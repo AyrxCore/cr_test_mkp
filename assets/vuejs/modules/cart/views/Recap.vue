@@ -10,6 +10,7 @@
         cart.orders.length > 0 &&
         channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.SAVED_CARTS)
       "
+      :disabled="isNeoAutoLogin"
       class="button-primary-outline"
       type="button"
       @click="openSaveCartForm"
@@ -18,8 +19,8 @@
     </ButtonComponent>
     <SavedCartModal
       v-if="showSaveCartForm"
-      class="modal"
       :is-loading="isLoading"
+      class="modal"
       @cancel="showSaveCartForm = false"
       @submit-saved-cart="onSubmitSavedCart"
     />
@@ -33,10 +34,10 @@
       <CartOrderComponent
         v-for="(order, key) in cart.orders"
         :key="order.id"
-        :order="order"
         :class="{
           'mb-5': cart.orders.length > 1 && key !== cart.orders.length,
         }"
+        :order="order"
       />
     </div>
     <template v-else>Votre panier est vide !</template>
@@ -89,7 +90,7 @@ const showSaveCartForm = ref<boolean>(false)
 cartStore.termsOfSales = []
 
 const userStore = useUserStore()
-const { user } = storeToRefs(userStore)
+const { user, isNeoAutoLogin } = storeToRefs(userStore)
 const isLoading = ref<boolean>(false)
 
 const goToAdress = async (): Promise<void> => {

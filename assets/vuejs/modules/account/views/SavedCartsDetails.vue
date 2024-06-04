@@ -10,6 +10,7 @@
           <div class="my-4 flex justify-between xl:mt-0">
             <h3 class="text-title-primary mb-2">{{ name }}</h3>
             <ButtonComponent
+              :disabled="isNeoAutoLogin"
               class="button-primary-outline"
               @click="openSavedCartForm"
             >
@@ -19,9 +20,9 @@
           </div>
           <SavedCartModal
             v-if="showForm"
-            class="modal"
             :is-loading="isLoadingModal"
             :saved-cart-id="savedCart.id"
+            class="modal"
             @cancel="showForm = false"
             @submit-saved-cart="onSubmitSavedCart"
           />
@@ -46,8 +47,9 @@
           </p>
           <div class="mt-6 flex flex-col justify-end md:flex-row">
             <ButtonComponent
-              class="button-primary mt-5 md:mt-0"
+              :disabled="isNeoAutoLogin"
               :is-loading="isAddToCartLoading"
+              class="button-primary mt-5 md:mt-0"
               @click="addToCart"
             >
               <ShoppingCartIconComponent :stroke="'#FFFFFF'" class="mr-2 w-4" />
@@ -60,24 +62,26 @@
   </AccountPage>
 </template>
 <script lang="ts" setup>
-import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import { computed, onMounted, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
-import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import { useAlertStore } from '@/vuejs/stores/alert'
-import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
 import { storeToRefs } from 'pinia'
-import { addProductToCartGoogleAnalytics } from '@/vuejs/modules/products'
-import { useCartStore } from '@/vuejs/stores/cart'
-import SavedCartModal from '@/vuejs/modules/account/components/savedCart/SavedCartModal.vue'
-import { SavedCart } from '@/vuejs/types/SavedCart'
-import { useSavedCartStore } from '@/vuejs/stores/savedCart'
+import { useRoute } from 'vue-router'
+import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
+import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
+import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
 import SavedCartDetailsComponent from '@/vuejs/modules/account/components/SavedCartDetailsComponent.vue'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
 import EditIconComponent from '@/vuejs/modules/shared/icon/EditIconComponent.vue'
+import SavedCartModal from '@/vuejs/modules/account/components/savedCart/SavedCartModal.vue'
+import { addProductToCartGoogleAnalytics } from '@/vuejs/modules/products'
+import { SavedCart } from '@/vuejs/types/SavedCart'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import { useUserStore } from '@/vuejs/stores/user'
+import { useAlertStore } from '@/vuejs/stores/alert'
+import { useCartStore } from '@/vuejs/stores/cart'
+import { useSavedCartStore } from '@/vuejs/stores/savedCart'
 
+const { isNeoAutoLogin } = storeToRefs(useUserStore())
 const cartStore = useCartStore()
 const route = useRoute()
 const savedCart = ref<SavedCart>()

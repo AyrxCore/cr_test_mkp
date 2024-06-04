@@ -5,14 +5,14 @@ import axios, {
   AxiosResponse,
 } from 'axios'
 import store from '@/vuejs/store'
+import Cookies from 'js-cookie'
 import { useCommonStore } from '@/vuejs/stores/common'
 
 const commonStore = useCommonStore(store)
 
 class BaseClientService {
-  public apiClient: AxiosInstance
   public static self: InstanceType<any>
-
+  public apiClient: AxiosInstance
   public isPatch: boolean
 
   public constructor(isPatch: boolean) {
@@ -51,8 +51,9 @@ class BaseClientService {
       async (error: AxiosError) => {
         if (error.response?.status === 401) {
           if (error.config.url !== 'authentication/token') {
-            document.cookie = 'BEARER=; Max-Age=0'
-            document.cookie = 'PHPSESSID=; Max-Age=0'
+            Cookies.remove('BEARER')
+            Cookies.remove('PHPSESSID')
+            Cookies.remove('isNeoAutoLogin')
             location.reload()
           }
         }

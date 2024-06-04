@@ -4,8 +4,11 @@
       <p v-html="text" />
     </div>
     <ButtonComponent
-      class="button-primary mb-7 whitespace-normal border-2 border-solid !border-white"
+      :class="{
+        disabled: isNeoAutoLogin,
+      }"
       :is-loading="isLoading"
+      class="button-primary mb-7 whitespace-normal border-2 border-solid !border-white"
       @click="sendSubmission"
     >
       <ArrowRightIconComponent class="h-4 w-4" />
@@ -24,16 +27,19 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { PropType, ref } from 'vue'
+import { storeToRefs } from 'pinia'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import ModalValidationBeneficePartnerModal from '@/vuejs/modules/products/components/accord-cadre/ValidationBeneficeModal.vue'
 import ModalValidationBeneficeErrorModal from '@/vuejs/modules/products/components/accord-cadre/ValidationBeneficeErrorModal.vue'
-
-import { PropType, ref } from 'vue'
 import { AccountAccordCadre } from '@/vuejs/types/AccountAccordCadre'
 import { status } from '@/vuejs/modules/products'
 import ProductHttpClient from '@/vuejs/services/httpclient/ProductHttpClient'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import { useUserStore } from '@/vuejs/stores/user'
+
+const { isNeoAutoLogin } = storeToRefs(useUserStore())
 
 const showSuccesModal = ref<boolean>(false)
 const showErrorModal = ref<boolean>(false)

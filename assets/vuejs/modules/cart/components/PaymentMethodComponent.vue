@@ -4,6 +4,7 @@
   >
     <slot name="method-icon" />
     <ButtonComponent
+      :disabled="isNeoAutoLogin"
       :is-loading="isLoading"
       class="button-primary mt-4 !whitespace-normal"
       @click="emit('selectMethod')"
@@ -14,10 +15,10 @@
 </template>
 <script lang="ts" setup>
 import { PropType } from 'vue'
-
+import { storeToRefs } from 'pinia'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-
 import { PaymentMethod } from '@/vuejs/types/Cart'
+import { useUserStore } from '@/vuejs/stores/user'
 
 const props = defineProps({
   method: {
@@ -29,6 +30,8 @@ const props = defineProps({
     default: false,
   },
 })
+
+const { isNeoAutoLogin } = storeToRefs(useUserStore())
 
 const emit = defineEmits<{
   (e: 'selectMethod'): void

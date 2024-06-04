@@ -17,6 +17,7 @@ export interface User extends ExternalApiDataEntity {
 export interface UserStoreState {
   user: User
   editingInfo: string[]
+  isNeoAutoLogin: boolean
 }
 
 // Décrit le bloc de données nécessaire à l'obtention du token

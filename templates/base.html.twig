@@ -6,7 +6,7 @@
     {% block title %}{% endblock %}
   </title>
   <meta name="viewport" content="width=device-width, initial-scale=1"> {% block metas %}{% endblock %}
-  <link rel="icon" href="{{ channel.channelParameter.favicon }}" sizes="32x32" />
+  <link rel="icon" href="{{ channel.channelParameter.favicon }}" sizes="32x32"/>
   <style>:root {
       --primary-color: {{channel_primary_color(channel)}};
       --secondary-color: {{channel_secondary_color(channel)}};
@@ -51,7 +51,7 @@
       }
     </script>
   {% endblock %}
-  {% if settings.useExternalScriptsTags %}
+  {% if settings.useExternalScriptsTags and isNeoAutoLogin == false %}
     {% include '_partials/_gtm-header.html.twig' %}
     {% include '_partials/_clarity-header.html.twig' %}
     {% include '_partials/_ga-header.html.twig' %}
@@ -59,7 +59,7 @@
 
 </head>
 <body>
-{% if settings.useExternalScriptsTags %}
+{% if settings.useExternalScriptsTags and isNeoAutoLogin == false %}
   {% include '_partials/_gtm-body.html.twig' %}
 {% endif %}
 <div id="baseHtml" class="min-h-screen flex" data-external-scripts="{{ settings.useExternalScriptsTags }}">

@@ -1,25 +1,26 @@
 import { defineStore } from 'pinia'
+import router, { PageList } from '@/vuejs/router'
+import { useAlertStore } from '@/vuejs/stores/alert'
 import {
   AuthenticateUserData,
   LoginResponse,
   PasswordChangeRequest,
   UserStoreState,
 } from '@/vuejs/types/User'
-
-import UserHttpClient from '@/vuejs/services/httpclient/UserHttpClient'
-import { useAlertStore } from '@/vuejs/stores/alert'
 import { AlertType } from '@/vuejs/types/Alert'
 import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
-import { getErrorMessage } from '@/vuejs/services/login'
-import router, { PageList } from '@/vuejs/router'
 import { Account } from '@/vuejs/types/Account'
 import { notifyError, notifySuccess } from '@/vuejs/services/utils'
+import { getCookie } from '@/vuejs/services/utils'
+import UserHttpClient from '@/vuejs/services/httpclient/UserHttpClient'
+import { getErrorMessage } from '@/vuejs/services/login'
 
 export const useUserStore = defineStore({
   id: 'user',
   state: (): UserStoreState => ({
     user: null,
     editingInfo: [],
+    isNeoAutoLogin: getCookie('neoAutoLogin') === 'true',
   }),
 
   actions: {

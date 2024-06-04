@@ -1,8 +1,9 @@
 <template>
   <button
     :class="{ 'pointer-events-none': isLoading }"
-    class="button"
+    :disabled="disabled"
     :type="props.type"
+    class="button"
     @click="onClick"
   >
     <LoaderSharedComponent v-if="isLoading" />
@@ -28,6 +29,11 @@ const props = defineProps({
     required: false,
     type: String,
     default: 'submit',
+  },
+  disabled: {
+    required: false,
+    type: Boolean,
+    default: false,
   },
 })
 

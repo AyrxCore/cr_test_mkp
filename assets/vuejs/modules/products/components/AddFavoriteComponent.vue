@@ -6,17 +6,17 @@
   >
     <button class="flex text-gray-500" @click="onOpenFavorite">
       <HeartIconComponent
-        class="lg:h-auto lg:w-auto"
-        :stroke="
-          currentSelectedFavorites.length > 0
-            ? channelSecondaryColor
-            : '#000000'
-        "
         :fill="
           currentSelectedFavorites.length > 0
             ? channelSecondaryColor
             : '#FFFFFF'
         "
+        :stroke="
+          currentSelectedFavorites.length > 0
+            ? channelSecondaryColor
+            : '#000000'
+        "
+        class="lg:h-auto lg:w-auto"
       />
     </button>
 
@@ -48,10 +48,10 @@
                   <label class="my-1 flex items-center text-base text-gray-600">
                     <input
                       v-model="newSelectedFavorites"
-                      type="checkbox"
-                      class="checkbox-secondary"
-                      :value="favoriteItem.id"
                       :checked="isChecked(favoriteItem)"
+                      :value="favoriteItem.id"
+                      class="checkbox-secondary"
+                      type="checkbox"
                       @change="handleChange"
                     />
                     <span class="ml-2">{{ favoriteItem.name }}</span>
@@ -62,25 +62,25 @@
                 <input
                   v-model.trim="newFavorite"
                   class="ml-1 w-full rounded py-0"
-                  type="text"
                   placeholder="Ajouter une nouvelle liste"
+                  type="text"
                 />
               </div>
 
               <div class="!mt-5 flex justify-end">
                 <ButtonComponent
-                  class="button-primary !h-10"
                   :disabled="
                     disableAddButton &&
                     (newFavorite === null || newFavorite === '')
                   "
                   :is-loading="addProductToFavoriteLoading"
+                  class="button-primary !h-10"
                 >
                   {{ addButtonName }}
                 </ButtonComponent>
                 <ButtonComponent
-                  type="button"
                   class="button-primary-outline ml-2 flex !h-10 justify-end !py-2"
+                  type="button"
                   @click="onOutsideBlock"
                   >Annuler
                 </ButtonComponent>

@@ -21,7 +21,7 @@
 		}
 	</style>
 
-	{% if settings.useExternalScriptsTags %}
+	{% if settings.useExternalScriptsTags and isNeoAutoLogin == false %}
 		{% include '_partials/_gtm-header.html.twig' %}
 		{% include '_partials/_clarity-header.html.twig' %}
     {% include '_partials/_ga-header.html.twig' %}
@@ -32,7 +32,7 @@
 	{% endblock %}
 </head>
 <body>
-	{% if settings.useExternalScriptsTags %}
+	{% if settings.useExternalScriptsTags and isNeoAutoLogin == false %}
 		{% include '_partials/_gtm-body.html.twig' %}
 	{% endif %}
 

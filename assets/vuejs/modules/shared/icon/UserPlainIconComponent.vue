@@ -1,10 +1,10 @@
 <template>
   <svg
-    width="16"
-    height="20"
-    viewBox="0 0 13 15"
     fill="none"
+    height="20"
     stroke="#000000"
+    viewBox="0 0 13 15"
+    width="16"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path

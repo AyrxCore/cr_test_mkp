@@ -56,7 +56,7 @@ class AutoLoginSuccessHandler implements AuthenticationSuccessHandlerInterface, 
 
             $authSuccess = $this->upplerAuthenticationService->authenticateUser(
                 $account,
-                $isNeoAutoLogin
+                !$isNeoAutoLogin
             );
 
             if ($authSuccess && $session->has('access_token') && !empty($session->get('access_token'))) {
@@ -70,7 +70,7 @@ class AutoLoginSuccessHandler implements AuthenticationSuccessHandlerInterface, 
 
                 $response->headers->setCookie(new Cookie('BEARER', $token));
                 if($isNeoAutoLogin) {
-                    $response->headers->setCookie(new Cookie('neoAutoLogin', "true"));
+                    $response->headers->setCookie(new Cookie('neoAutoLogin', "true", httpOnly: false));
                 }
             }
 

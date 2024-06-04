@@ -72,6 +72,11 @@
   animation: gradient 1s ease infinite;
 }
 
+.disabled {
+  pointer-events: none;
+  cursor: default;
+}
+
 @keyframes gradient {
   0% {
     background-position: 0% 50%;

@@ -6,9 +6,9 @@
       </h3>
       <FavoriteFormModal
         v-if="showFormFavorite"
-        class="modal"
-        :is-loading="isLoading"
         :error-submit="errorSubmit"
+        :is-loading="isLoading"
+        class="modal"
         @cancel="showFormFavorite = false"
         @submit-favorite="onSubmitFavorite"
         @change-value="errorSubmit = null"
@@ -37,9 +37,9 @@
           <FavoritesProductsComponent
             v-for="(favorite, key) in favorites"
             :key="key"
-            :favorite="favorite"
             :can-delete="favorite.accountId === user.account.id"
             :error-submit="errorSubmit"
+            :favorite="favorite"
             @submit-favorite="onSubmitFavorite"
             @delete-favorite="onDeleteFavorite"
             @change-value="errorSubmit = null"
@@ -47,6 +47,7 @@
         </div>
         <div class="mt-4 flex w-full justify-end">
           <ButtonComponent
+            :disabled="isNeoAutoLogin"
             class="button-primary mb-2 md:mb-0"
             @click="openFavoriteForm"
           >
@@ -72,14 +73,14 @@ import { useUserStore } from '@/vuejs/stores/user'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { notifyError } from '@/vuejs/services/utils'
 
-const userStore = useUserStore()
-const { user } = storeToRefs(userStore)
 const alertStore = useAlertStore()
+const favoriteStore = useFavoriteStore()
+const { show: showAlert } = storeToRefs(alertStore)
+const { user, isNeoAutoLogin } = storeToRefs(useUserStore())
+
 const showFormFavorite = ref<boolean>(false)
 const deleteFavorite = ref<boolean>(false)
-const favoriteStore = useFavoriteStore()
 const isLoading = ref<boolean>(false)
-const { show: showAlert } = storeToRefs(alertStore)
 const errorSubmit = ref<string>(null)
 
 onMounted(async () => {

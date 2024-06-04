@@ -7,8 +7,9 @@
         <input
           v-if="product"
           v-model="selectedProduct"
-          type="checkbox"
+          :disabled="isNeoAutoLogin"
           class="checkbox-secondary"
+          type="checkbox"
           @change="onSelectProduct"
         />
       </div>
@@ -51,26 +52,26 @@
             {{ productPrice }}€ HT
           </span>
           <div class="bottom-0 flex items-start justify-between space-x-3">
-            <button @click="openMoveProductForm">
+            <button :disabled="isNeoAutoLogin" @click="openMoveProductForm">
               <ChangeIconComponent :fill="channelPrimaryColor" />
             </button>
-            <button @click="openRemoveForm">
+            <button :disabled="isNeoAutoLogin" @click="openRemoveForm">
               <TrashIconComponent :stroke="channelPrimaryColor" />
             </button>
           </div>
           <ProductDeleteModal
             v-if="removeProduct"
-            class="modal"
-            :favorite-product="favoriteProduct"
             :favorite-id="favoriteId"
+            :favorite-product="favoriteProduct"
+            class="modal"
             @cancel="removeProduct = false"
             @remove-product="onRemoveProduct"
           />
           <ProductMoveModal
             v-if="moveProduct"
-            class="modal"
-            :favorite-product="favoriteProduct"
             :favorite-id="favoriteId"
+            :favorite-product="favoriteProduct"
+            class="modal"
             @cancel="moveProduct = false"
             @move-product="onMoveProduct"
           />
@@ -80,18 +81,19 @@
   </div>
 </template>
 <script lang="ts" setup>
-import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
 import { computed, onMounted, PropType, ref } from 'vue'
-import { Product } from '@/vuejs/types/Product'
-import { useProductStore } from '@/vuejs/stores/product'
+import { storeToRefs } from 'pinia'
 import { PageList } from '@/vuejs/router'
+import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
 import ChangeIconComponent from '@/vuejs/modules/shared/icon/ChangeIconComponent.vue'
 import ProductDeleteModal from '@/vuejs/modules/account/components/favorite/ProductRemoveModal.vue'
 import ProductMoveModal from '@/vuejs/modules/account/components/favorite/ProductMoveModal.vue'
+import { Product } from '@/vuejs/types/Product'
 import { FavoriteProduct } from '@/vuejs/types/Favorite'
-import { storeToRefs } from 'pinia'
-import { useChannelStore } from '@/vuejs/stores/channel'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import { useChannelStore } from '@/vuejs/stores/channel'
+import { useProductStore } from '@/vuejs/stores/product'
+import { useUserStore } from '@/vuejs/stores/user'
 
 const emit = defineEmits([
   'removeProduct',
@@ -101,6 +103,9 @@ const emit = defineEmits([
 ])
 
 const productStore = useProductStore()
+const { isNeoAutoLogin } = storeToRefs(useUserStore())
+const { channelPrimaryColor } = storeToRefs(useChannelStore())
+
 const product = ref<Product>()
 const productNotFound = ref(false)
 const selectedProduct = ref(null)
@@ -109,8 +114,6 @@ const price = ref()
 const percent = ref()
 const removeProduct = ref<boolean>(false)
 const moveProduct = ref<boolean>(false)
-
-const { channelPrimaryColor } = storeToRefs(useChannelStore())
 
 const props = defineProps({
   favoriteProduct: {
@@ -134,28 +137,28 @@ const openMoveProductForm = () => {
   sendGaEvent('click_favorite_details_update_product')
 }
 
-const onSelectProduct = async () => {
+const onSelectProduct = () => {
   if (selectedProduct.value) {
-    await emit('selectedProduct', {
+    emit('selectedProduct', {
       selectedProduct: props.favoriteProduct,
       product: product.value,
     })
   } else {
-    await emit('removeSelectedProduct', {
+    emit('removeSelectedProduct', {
       selectedProduct: props.favoriteProduct,
     })
   }
 }
 
-const onRemoveProduct = async (event) => {
-  await emit('removeProduct', {
+const onRemoveProduct = (event) => {
+  emit('removeProduct', {
     favoriteProductId: event.favoriteProductId,
   })
   removeProduct.value = false
 }
 
-const onMoveProduct = async (event) => {
-  await emit('moveProduct', {
+const onMoveProduct = (event) => {
+  emit('moveProduct', {
     favoriteId: event.favoriteId,
     favoriteProductId: event.favoriteProductId,
   })

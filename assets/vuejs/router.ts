@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import Cookies from 'js-cookie'
 
 import Home from '@/vuejs/modules/home/views/HomePage.vue'
 import Contact from '@/vuejs/modules/contact/views/ContactPage.vue'
@@ -51,7 +52,7 @@ const routes: RouteRecordRaw[] = [
     component: LegalDocument,
     props: {
       title: 'Mentions légales',
-      page: PageList.MENTIONS_LEGALES_PAGE
+      page: PageList.MENTIONS_LEGALES_PAGE,
     },
   },
   {
@@ -60,7 +61,7 @@ const routes: RouteRecordRaw[] = [
     component: LegalDocument,
     props: {
       title: 'Politique de confidentialité',
-      page: PageList.POLITIQUE_DE_CONFIDENTIALITE
+      page: PageList.POLITIQUE_DE_CONFIDENTIALITE,
     },
   },
   {
@@ -107,8 +108,9 @@ router.beforeEach(async (to, from, next) => {
   if (!userStore.isLogged) {
     await userStore.getCurrentUserData()
     if (!userStore.isLogged) {
-      document.cookie = 'BEARER=; Max-Age=0'
-      document.cookie = 'PHPSESSID=; Max-Age=0'
+      Cookies.remove('BEARER')
+      Cookies.remove('PHPSESSID')
+      Cookies.remove('isNeoAutoLogin')
       location.reload()
     }
 

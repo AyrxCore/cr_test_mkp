@@ -2,9 +2,9 @@
   <div v-if="favorite" class="bloc-item-favoris">
     <div class="md:w-5/12">
       <RouterLink
+        :title="favorite.public ? 'Liste partagée' : ''"
         :to="{ name: PageList.FAVORITES_DETAILS, params: { id: favorite.id } }"
         class="flex items-center font-bold text-primary underline"
-        :title="favorite.public ? 'Liste partagée' : ''"
         @click="sendGaEvent('click_favorites_details')"
       >
         {{ favorite.name }}
@@ -24,43 +24,43 @@
       {{ favorite.nbFavoriteProducts }}
     </div>
     <div class="flex justify-end md:w-1/12">
-      <VTooltip class="flex" :triggers="['hover', 'focus']">
+      <VTooltip :triggers="['hover', 'focus']" class="flex">
         <button
           :class="{
-            'disabled cursor-not-allowed': !canDelete,
+            disabled: !canDelete || isNeoAutoLogin,
           }"
           @click="openFavoriteForm"
         >
-          <EditIconComponent class="mr-2" :stroke="channelPrimaryColor" />
+          <EditIconComponent :stroke="channelPrimaryColor" class="mr-2" />
         </button>
-        <template #popper> Editer une liste de produits favoris </template>
+        <template #popper> Editer une liste de produits favoris</template>
       </VTooltip>
-      <VTooltip class="flex" :triggers="['hover', 'focus']">
+      <VTooltip :triggers="['hover', 'focus']" class="flex">
         <button
           :class="{
-            'disabled cursor-not-allowed': !canDelete,
+            disabled: !canDelete || isNeoAutoLogin,
           }"
           @click="openDeleteFavoriteForm"
         >
           <TrashIconComponent :stroke="channelPrimaryColor" />
         </button>
-        <template #popper> Supprimer une liste de produits favoris </template>
+        <template #popper> Supprimer une liste de produits favoris</template>
       </VTooltip>
     </div>
     <FavoriteFormModal
       v-if="showFormEditFavorite"
-      class="modal"
+      :error-submit="errorSubmit"
       :favorite-id="favorite.id"
       :is-editing="true"
-      :error-submit="errorSubmit"
+      class="modal"
       @cancel="showFormEditFavorite = false"
       @submit-favorite="onSubmitFavorite"
       @change-value="$emit('changeValue')"
     />
     <FavoriteDeleteModal
       v-if="canDelete && deleteFavorite"
-      class="modal"
       :favorite-id="favorite.id"
+      class="modal"
       @cancel="deleteFavorite = false"
       @delete-favorite="onDeleteFavorite"
     />
@@ -77,14 +77,16 @@ import FavoriteFormModal from '@/vuejs/modules/account/components/favorite/Favor
 import FavoriteDeleteModal from '@/vuejs/modules/account/components/favorite/FavoriteDeleteModal.vue'
 import MultipleUserComponent from '@/vuejs/modules/shared/icon/MultipleUserComponent.vue'
 import { AlertType } from '@/vuejs/types/Alert'
-import { useAlertStore } from '@/vuejs/stores/alert'
 import { Favorite } from '@/vuejs/types/Favorite'
+import { useAlertStore } from '@/vuejs/stores/alert'
+import { useUserStore } from '@/vuejs/stores/user'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
-const alertStore = useAlertStore()
 const emit = defineEmits(['submitFavorite', 'deleteFavorite', 'changeValue'])
 
+const alertStore = useAlertStore()
+const { isNeoAutoLogin } = storeToRefs(useUserStore())
 const { channelPrimaryColor } = storeToRefs(useChannelStore())
 
 const showFormEditFavorite = ref<boolean>(false)

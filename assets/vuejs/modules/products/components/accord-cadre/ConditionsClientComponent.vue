@@ -7,6 +7,7 @@
     <div class="mt-6 flex flex-col items-center">
       <ButtonComponent
         v-if="cta1.name && cta1.url"
+        :disabled="isNeoAutoLogin"
         class="button-primary mx-auto mb-6 border-2 border-solid !border-white"
         @click="openingNewTab(cta1.url)"
       >
@@ -16,8 +17,11 @@
       </ButtonComponent>
       <a
         v-else-if="cta1.name && cta1.mailto"
-        class="button button-primary mx-auto mb-6 border-2 border-solid !border-white"
+        :class="{
+          disabled: isNeoAutoLogin,
+        }"
         :href="cta1.mailto"
+        class="button button-primary mx-auto mb-6 border-2 border-solid !border-white"
       >
         <span>
           {{ cta1.name }}
@@ -25,6 +29,7 @@
       </a>
       <ButtonComponent
         v-if="cta2.name && cta2.url"
+        :disabled="isNeoAutoLogin"
         class="button-primary mx-auto mb-6 border-2 border-solid !border-white"
         @click="openingNewTab(cta2.url)"
       >
@@ -32,8 +37,11 @@
       </ButtonComponent>
       <a
         v-else-if="cta2.name && cta2.mailto"
-        class="button button-primary mx-auto mb-6 border-2 border-solid !border-white"
+        :class="{
+          disabled: isNeoAutoLogin,
+        }"
         :href="cta2.mailto"
+        class="button button-primary mx-auto mb-6 border-2 border-solid !border-white"
       >
         <span>
           {{ cta2.name }}
@@ -44,9 +52,13 @@
 </template>
 <script lang="ts" setup>
 import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import { openInNewTab } from '@/vuejs/services/utils'
 import { formatUrlWithChannelCode } from '@/vuejs/services/formatter'
+import { useUserStore } from '@/vuejs/stores/user'
+
+const { isNeoAutoLogin } = storeToRefs(useUserStore())
 
 const props = defineProps({
   properties: {

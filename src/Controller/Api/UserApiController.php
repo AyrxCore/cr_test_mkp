@@ -67,7 +67,8 @@ class UserApiController extends AbstractController
     {
         $request->getSession()->invalidate();
         $response = new Response();
-        $response->headers->clearCookie('BEARER', '/');
+        $response->headers->clearCookie('BEARER');
+        $response->headers->clearCookie('isNeoAutologin');
 
         return $response;
     }

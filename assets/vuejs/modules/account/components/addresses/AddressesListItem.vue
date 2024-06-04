@@ -1,8 +1,8 @@
 <template>
   <td class="hidden p-3 pl-6 md:table-cell">{{ props.address.name }}</td>
   <td
-    class="hidden p-3 md:table-cell"
     :class="{ 'italic text-gray-300': !props.address.company }"
+    class="hidden p-3 md:table-cell"
   >
     {{ props.address.company ? props.address.company : 'Non renseignée' }}
   </td>
@@ -19,6 +19,9 @@
       </div>
       <a
         v-if="props.address.id !== selectedAddress"
+        :class="{
+          disabled: isNeoAutoLogin,
+        }"
         class="mr-2 px-2 text-sm text-secondary md:text-base"
         href="#"
         title="Définir cette adresse par défaut"
@@ -29,24 +32,24 @@
       <label v-else class="mr-2 rounded px-2" title="Adresse par défaut">
         <StarIconComponent class="fill-primary stroke-primary" />
       </label>
-      <button @click="onEditAddressClick">
-        <EditIconComponent class="mr-6" :stroke="channelPrimaryColor" />
+      <button :disabled="isNeoAutoLogin" @click="onEditAddressClick">
+        <EditIconComponent :stroke="channelPrimaryColor" class="mr-6" />
       </button>
     </div>
   </td>
 </template>
 
 <script lang="ts" setup>
-import EditIconComponent from '@/vuejs/modules/shared/icon/EditIconComponent.vue'
-import router from '@/vuejs/router'
-import { AccountPageList } from '@/vuejs/router/pages-list'
-import StarIconComponent from '@/vuejs/modules/shared/icon/StarIconComponent.vue'
-import { useUserStore } from '@/vuejs/stores/user'
 import { computed, PropType, ref } from 'vue'
-import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
-import { useAddressStore } from '@/vuejs/stores/address'
-import { Address } from '@/vuejs/types/Address'
+import router from '@/vuejs/router'
 import { storeToRefs } from 'pinia'
+import EditIconComponent from '@/vuejs/modules/shared/icon/EditIconComponent.vue'
+import StarIconComponent from '@/vuejs/modules/shared/icon/StarIconComponent.vue'
+import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
+import { Address } from '@/vuejs/types/Address'
+import { AccountPageList } from '@/vuejs/router/pages-list'
+import { useUserStore } from '@/vuejs/stores/user'
+import { useAddressStore } from '@/vuejs/stores/address'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { ADDRESS_BILLING, ADDRESS_SHIPPING } from '@/vuejs/services/const'
@@ -66,6 +69,7 @@ const props = defineProps({
   },
 })
 
+const { isNeoAutoLogin } = storeToRefs(userStore)
 const { channelPrimaryColor } = storeToRefs(useChannelStore())
 
 const selectedAddress = computed((): number => {

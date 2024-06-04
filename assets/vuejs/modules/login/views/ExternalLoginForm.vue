@@ -16,11 +16,11 @@
               <input
                 id="login-email"
                 v-model.trim="username"
-                type="email"
+                :disabled="isLoading"
                 class="input !border-solid !border-black !py-1 !pr-16 !ring-black md:!py-2 xl:!py-4"
                 placeholder="Saisir votre adresse email professionnelle"
-                :disabled="isLoading"
                 required
+                type="email"
               />
               <span
                 class="absolute inset-y-0 right-0 flex items-center pr-8 text-gray-700"
@@ -32,10 +32,10 @@
               <label for="login-password">Votre mot de passe</label>
               <input
                 v-model="password"
-                :type="showPassword ? 'text' : 'password'"
-                placeholder="**********"
-                class="input !border-solid !border-black !py-1 !pr-16 !ring-black md:!py-2 xl:!py-4"
                 :disabled="isLoading"
+                :type="showPassword ? 'text' : 'password'"
+                class="input !border-solid !border-black !py-1 !pr-16 !ring-black md:!py-2 xl:!py-4"
+                placeholder="**********"
                 required
               />
               <span
@@ -47,8 +47,8 @@
               </span>
             </div>
             <a
-              href="javascript:void(0)"
               class="text-sm font-medium text-gray-500 underline"
+              href="javascript:void(0)"
               @click="
                 eventClick('click_prehome_forgot_pass', '/login/reset-password')
               "
@@ -58,8 +58,8 @@
             <div class="mt-5 flex w-full justify-center lg:mt-10">
               <ButtonComponent
                 :is-loading="isLoading"
-                type="submit"
                 class="button-primary w-full font-bold md:w-1/2"
+                type="submit"
                 @click="sendGaEvent('click_prehome_login')"
               >
                 Se connecter
@@ -76,8 +76,8 @@
                 Cliquez ci-dessous 👇
               </p>
               <a
-                href="/login/first-signin"
                 class="button button-primary-outline"
+                href="/login/first-signin"
                 @click="
                   eventClick('click_prehome_activate', '/login/first-signin')
                 "
@@ -107,8 +107,8 @@
                   >
                   du lundi au vendredi de 8h30 à 18h ou via
                   <button
-                    type="button"
                     class="text-secondary underline"
+                    type="button"
                     @click="contactModal('click_prehome_email')"
                   >
                     {{ channel?.email }}
@@ -133,8 +133,8 @@
         <a
           v-if="channelDocuments?.legalTerms"
           :href="channelLegalTermsLink"
-          target="_blank"
           class="text-gray-500"
+          target="_blank"
           @click="eventClick('click_prehome_mentions', channelLegalTermsLink)"
         >
           Mentions légales
@@ -142,8 +142,8 @@
         <a
           v-if="channelDocuments?.privacyPolicy"
           :href="channelPrivacyPolicyLink"
-          target="_blank"
           class="text-gray-500"
+          target="_blank"
           @click="eventClick('click_prehome_polconf', channelPrivacyPolicyLink)"
         >
           Politique de confidentialité
@@ -151,8 +151,8 @@
         <a
           v-if="channelDocuments?.generalTermsOfUse"
           :href="channelGeneralTermsOfUseLink"
-          target="_blank"
           class="text-gray-500"
+          target="_blank"
           @click="eventClick('click_prehome_cgu', channelGeneralTermsOfUseLink)"
         >
           Conditions Générales d'Utilisation
@@ -193,8 +193,8 @@
                 :id="`account-radio-${id}`"
                 v-model="accountSelectedId"
                 :value="account.id"
-                type="radio"
                 class="mr-4 border-primary"
+                type="radio"
                 @change="onChangeBuyer(account.acceptCGU)"
               />
               <div>
@@ -213,8 +213,8 @@
           <div class="mt-10 flex justify-center md:justify-end">
             <ButtonComponent
               :is-loading="isLoading"
-              type="button"
               class="button-primary w-auto"
+              type="button"
               @click="onAccountClick"
             >
               Valider
@@ -235,8 +235,8 @@
                 ou par mail
               </p>
               <ButtonComponent
-                type="button"
                 class="button-primary-outline mx-auto mt-5 w-full md:w-auto lg:mt-10"
+                type="button"
                 @click="showContactForm = true"
               >
                 <MailIcon
@@ -253,8 +253,8 @@
   <CGUModal v-if="showCGUModal" class="modal" @valid-cgu="valideCGU" />
   <ContactModal
     v-if="showContactForm"
-    class="modal"
     :is-loading="isLoading"
+    class="modal"
     @cancel="showContactForm = false"
   />
 </template>

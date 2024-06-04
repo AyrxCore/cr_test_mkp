@@ -1,11 +1,15 @@
 <template>
-  <ButtonComponent :class="classes" @click="clickOnCta(url)">
+  <ButtonComponent
+    :class="classes"
+    :disabled="disabled"
+    @click="clickOnCta(url)"
+  >
     <span class="w-full">{{ name }}</span>
   </ButtonComponent>
 </template>
-<script setup lang="ts">
+<script lang="ts" setup>
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import { openInNewTab} from '@/vuejs/services/utils'
+import { openInNewTab } from '@/vuejs/services/utils'
 import { isAbsoluteUrl, isFilePath } from '@/vuejs/services/urlChecker'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { useProductStore } from '@/vuejs/stores/product'
@@ -32,6 +36,11 @@ const props = defineProps({
   eventParams: {
     type: Object,
     required: true,
+  },
+  disabled: {
+    type: Boolean,
+    required: false,
+    default: false,
   },
 })
 

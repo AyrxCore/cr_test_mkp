@@ -6,8 +6,8 @@
           name: PageList.SAVED_CARTS_DETAILS,
           params: { id: savedCart.id },
         }"
-        @click="sendGaEvent('click_saved_carts_details')"
         class="font-bold text-primary underline"
+        @click="sendGaEvent('click_saved_carts_details')"
       >
         {{ savedCart.name }}
       </RouterLink>
@@ -29,19 +29,21 @@
           title="Visualisez le contenu du panier sauvegardé"
           @click="sendGaEvent('click_saved_carts_details')"
         >
-          <EyeIconComponent class="mr-2" :stroke="channelPrimaryColor" />
+          <EyeIconComponent :stroke="channelPrimaryColor" class="mr-2" />
         </RouterLink>
         <button
+          :disabled="isNeoAutoLogin"
           class="flex"
           title="Ajoutez ce panier sauvegardé à votre panier actuel"
           @click="openAddToCartConfirm"
         >
           <ShoppingCartIconComponent
-            class="mr-2"
             :stroke="channelPrimaryColor"
+            class="mr-2"
           />
         </button>
         <button
+          :disabled="isNeoAutoLogin"
           class="flex"
           title="Supprimez ce panier sauvegardé"
           @click="openDeleteForm"
@@ -51,24 +53,24 @@
       </div>
       <SavedCartModal
         v-if="showForm"
-        class="modal"
         :is-loading="isLoading"
+        class="modal"
         @cancel="showForm = false"
         @submit-saved-cart="onSubmitSavedCart"
       />
       <SavedCartDeleteModal
         v-if="showDeleteForm"
-        class="modal"
         :is-loading="isLoading"
         :saved-cart-id="savedCart.id"
+        class="modal"
         @cancel="showDeleteForm = false"
         @delete-saved-cart="onDelete"
       />
       <SavedCartAddToCartModal
         v-if="showAddToCartConfirm"
-        class="modal"
         :is-loading="isLoading"
         :saved-cart-id="savedCart.id"
+        class="modal"
         @cancel="showAddToCartConfirm = false"
         @add-to-cart="onAddToCart"
       />
@@ -76,17 +78,18 @@
   </div>
 </template>
 <script lang="ts" setup>
-import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
 import { computed, ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { PageList } from '@/vuejs/router'
 import { format } from 'date-fns'
+import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
 import SavedCartModal from '@/vuejs/modules/account/components/savedCart/SavedCartModal.vue'
 import EyeIconComponent from '@/vuejs/modules/shared/icon/EyeIconComponent.vue'
 import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
-import { PageList } from '@/vuejs/router'
 import SavedCartDeleteModal from '@/vuejs/modules/account/components/savedCart/SavedCartDeleteModal.vue'
 import SavedCartAddToCartModal from '@/vuejs/modules/account/components/savedCart/SavedCartAddToCartModal.vue'
-import { storeToRefs } from 'pinia'
 import { useChannelStore } from '@/vuejs/stores/channel'
+import { useUserStore } from '@/vuejs/stores/user'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const props = defineProps({
@@ -96,9 +99,10 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['submit', 'delete', 'addToCart'])
-
+const { isNeoAutoLogin } = storeToRefs(useUserStore())
 const { channelPrimaryColor } = storeToRefs(useChannelStore())
+
+const emit = defineEmits(['submit', 'delete', 'addToCart'])
 
 const showForm = ref<boolean>(false)
 const showDeleteForm = ref<boolean>(false)
@@ -122,23 +126,23 @@ const openAddToCartConfirm = () => {
   showAddToCartConfirm.value = true
   sendGaEvent('click_saved_carts_edit')
 }
-const onSubmitSavedCart = async (event) => {
-  await emit('submit', {
+const onSubmitSavedCart = (event) => {
+  emit('submit', {
     savedCart: event.savedCart,
   })
   showForm.value = false
 }
 
-const onDelete = async (event) => {
-  await emit('delete', {
+const onDelete = (event) => {
+  emit('delete', {
     savedCartId: event.savedCartId,
   })
 
   showDeleteForm.value = false
 }
 
-const onAddToCart = async (event) => {
-  await emit('addToCart', {
+const onAddToCart = (event) => {
+  emit('addToCart', {
     savedCartId: event.savedCartId,
   })
 

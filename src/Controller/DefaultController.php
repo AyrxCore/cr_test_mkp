@@ -30,6 +30,7 @@ class DefaultController extends AbstractController implements ChannelAwareContro
     public function index(Request $request): Response
     {
         $channel = $this->getChannel($request);
+        $isNeoAutoLogin = $request->cookies->get('neoAutoLogin') === 'true';
 
         if ($channel === null) {
             return new Response('no channel specified');
@@ -49,12 +50,13 @@ class DefaultController extends AbstractController implements ChannelAwareContro
 
             // Clear local cookie as user is not connected anymore
             $response = new Response();
-            $response->headers->clearCookie('BEARER', '/');
+            $response->headers->clearCookie('BEARER');
+            $response->headers->clearCookie('isNeoAutoLogin');
 
             return $this->render(
                 'index.html.twig',
                 [
-                    'channel' => $channel,
+                    'channel' => $channel
                 ],
                 $response
             );
@@ -62,6 +64,7 @@ class DefaultController extends AbstractController implements ChannelAwareContro
 
         return $this->render('index_app.html.twig', [
             'channel' => $channel,
+            'isNeoAutoLogin' => $isNeoAutoLogin
         ]);
     }
 

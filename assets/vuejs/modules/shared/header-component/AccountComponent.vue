@@ -2,10 +2,29 @@
   <div class="flex items-center justify-center md:min-w-[400px]">
     <div class="flex items-center justify-between">
       <div class="md:flex md:flex-col md:justify-around">
-        <div class="flex cursor-pointer items-center" @click.stop="toggleMenu">
-          <UserPlainIconComponent />
+        <div
+          :class="{
+            'py-2 md:py-0 border-solid border-primary border-4 px-2 rounded-2xl':
+              isNeoAutoLogin,
+          }"
+          class="flex cursor-pointer items-center"
+          @click.stop="toggleMenu"
+        >
+          <UserPlainIconComponent v-if="!isNeoAutoLogin" />
+          <UserAutoLoginIconComponent
+            v-else
+            class="stroke-primary fill-primary"
+          />
           <div class="hidden text-lg md:ml-3 md:block md:max-w-[250px]">
-            Bienvenue {{ user.firstName }} {{ user.lastName }}
+            <span v-if="!isNeoAutoLogin"
+              >Bienvenue {{ user.firstName }} {{ user.lastName }}</span
+            >
+            <span v-else class="text-primary font-bold"
+              >Connecté en tant que
+              <div class="text-black">
+                {{ user.firstName }} {{ user.lastName }}
+              </div></span
+            >
           </div>
           <ArrowDownIconComponent class="ml-2" />
         </div>
@@ -40,6 +59,7 @@ import ShoppingCartIcon from '@/vuejs/modules/shared/icon/ShoppingCartIconCompon
 import MenuAccountComponent from '@/vuejs/modules/shared/header-component/MenuAccountComponent.vue'
 import UserPlainIconComponent from '@/vuejs/modules/shared/icon/UserPlainIconComponent.vue'
 import ArrowDownIconComponent from '@/vuejs/modules/shared/icon/ArrowDownIconComponent.vue'
+import UserAutoLoginIconComponent from '@/vuejs/modules/shared/icon/UserAutoLoginIconComponent.vue'
 
 import { CartPageList } from '@/vuejs/router/pages-list'
 import { useUserStore } from '@/vuejs/stores/user'
@@ -50,6 +70,7 @@ import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 const userStore = useUserStore()
 const cartStore = useCartStore()
 
+const { isNeoAutoLogin } = storeToRefs(useUserStore())
 const { user } = storeToRefs(userStore)
 
 const isMenuOpen = ref<boolean>(false)
