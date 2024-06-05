@@ -15,8 +15,7 @@ export interface ChannelDocuments {
 }
 
 export interface ChannelOptions {
-  name: string | null
-  value: string | null
+  [key: string]: string | null
 }
 
 export interface Channel {

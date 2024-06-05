@@ -15,7 +15,7 @@ export const useSellerStore = defineStore({
   }),
 
   actions: {
-    async init(params = {}) {
+    async getSellers(params = {}) {
       try {
         this.sellers = await SellerHttpClient.get().fetchSellersByParams(params)
       } catch (error) {
