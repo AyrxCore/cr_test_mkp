@@ -81,7 +81,7 @@ const selectedCategory = ref<Category>(null)
 const categoryStore = useCategoryStore()
 
 const categories = computed((): Category[] => {
-  return categoryStore.categories
+  return categoryStore.categoriesSortedAlphabetically
 })
 const closeMenu = (): void => {
   emit('update:modelValue', false)

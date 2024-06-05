@@ -71,7 +71,7 @@ onBeforeMount(async () => {
   await channelStore.getChannel(window.location.hostname)
   if (props.component === '') {
     const promises = []
-    promises.push(categoryStore.init())
+    promises.push(categoryStore.getAllCategories())
     if (
       channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.BANNER_FLASH_HOMEPAGE)
     ) {

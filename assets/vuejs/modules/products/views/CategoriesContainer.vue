@@ -48,11 +48,12 @@ import { computed } from 'vue'
 import { useCategoryStore } from '@/vuejs/stores/category'
 import CategoryComponent from '@/vuejs/modules/products/components/CategoryComponent.vue'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
+import { Category } from '@/vuejs/types/Product/Category'
 
 const categoryStore = useCategoryStore()
 
-const categories = computed(() => {
-  return categoryStore.categories
+const categories = computed((): Category[] => {
+  return categoryStore.categoriesSortedAlphabetically
 })
 </script>
 

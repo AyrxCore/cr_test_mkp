@@ -52,15 +52,16 @@ import DropdownListComponent from '@/vuejs/modules/shared/DropdownListComponent.
 import { useCategoryStore } from '@/vuejs/stores/category'
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import { Category } from '@/vuejs/types/Product/Category'
 
 const categoryStore = useCategoryStore()
 
 const windowWidth = ref<number>(null)
 
-const categories = computed(() => {
+const categories = computed((): Category[] => {
   return windowWidth.value <= 1280
-    ? categoryStore.categories
-    : categoryStore.categories.slice(0, 7)
+    ? categoryStore.categoriesSortedAlphabetically
+    : categoryStore.categoriesSortedAlphabetically.slice(0, 7)
 })
 
 const onResize = () => {

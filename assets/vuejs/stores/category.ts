@@ -4,25 +4,19 @@ import { Category } from '@/vuejs/types/Product/Category'
 
 export interface CategoryStoreState {
   categories: []
-  listMenu: []
 }
 
 export const useCategoryStore = defineStore({
   id: 'category',
   state: (): CategoryStoreState => ({
     categories: [],
-    listMenu: [],
   }),
 
   actions: {
-    async init() {
+    async getAllCategories() {
       try {
         if (this.categories.length === 0) {
-          const result = await CategoryHttpClient.get().getCategories()
-          this.listMenu = result.slice(0, 6)
-          this.categories = result.sort((a: Category, b: Category) => {
-            return a.name.localeCompare(b.name)
-          })
+          this.categories = await CategoryHttpClient.get().getCategories()
         }
       } catch (error) {
         return []
@@ -30,8 +24,10 @@ export const useCategoryStore = defineStore({
     },
   },
   getters: {
-    getAllCategories() {
-      return this.categories
+    categoriesSortedAlphabetically() {
+      return this.categories.slice(0).sort((a: Category, b: Category) => {
+        return a.name.localeCompare(b.name)
+      })
     },
   },
 })

@@ -44,23 +44,44 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 
+import { storeToRefs } from 'pinia'
+
 import MenuCategoryComponent from '@/vuejs/modules/shared/header-component/MenuCategoryComponent.vue'
 import MenuIconComponent from '@/vuejs/modules/shared/icon/MenuIconComponent.vue'
 
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { useCategoryStore } from '@/vuejs/stores/category'
+import { useChannelStore } from '@/vuejs/stores/channel'
+
+import { Category } from '@/vuejs/types/Product/Category'
 
 const isMenuOpen = ref<boolean>(false)
+
+const { channel } = storeToRefs(useChannelStore())
+const { categories } = storeToRefs(useCategoryStore())
 
 const toggleMenu = (): void => {
   isMenuOpen.value = !isMenuOpen.value
   sendGaEvent('click_header_all_categories')
 }
 
-const categoryStore = useCategoryStore()
+const listMenu = computed((): Category[] => {
+  const customCategories = channel?.value?.options?.CUSTOM_HEADER_CATEGORIES
+  const categoryIds = customCategories
+    ? customCategories.split(',').map(Number)
+    : []
 
-const listMenu = computed(() => {
-  return categoryStore.listMenu
+  if (categoryIds.length) {
+    const filteredCategories = categories.value.filter((category: Category) =>
+      categoryIds.includes(category.id),
+    )
+    return filteredCategories.sort(
+      (a: Category, b: Category) =>
+        categoryIds.indexOf(a.id) - categoryIds.indexOf(b.id),
+    )
+  }
+
+  return categories.value.slice(0, 6)
 })
 </script>
