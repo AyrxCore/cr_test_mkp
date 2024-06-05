@@ -69,18 +69,7 @@ export const SHIPPING_STATUS = {
   },
 }
 
-/**
- * Those parameters are usefull to get differents products to display on the home page as there label
- */
-export const HOME_TOP_VENTE_PROPERTY = {
-  perPage: 5,
-  properties: {
-    property_id: 217,
-    value: 5369,
-  },
-}
-
-export const HOME_SELECTION_PROPERTY = {
+export const HOME_PRODUCTS_SELECTION_PROPERTY = {
   perPage: 5,
   properties: {
     property_id: 217,

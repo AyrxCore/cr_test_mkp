@@ -12,13 +12,13 @@
             Les accords-cadres incontournables
           </h3>
           <p class="text-sm sm:text-lg">
-            Profitez de toutes les économies incluses dans votre adhésion&nbsp;!
+            Découvrez les partenaires et leurs conditions&nbsp;!
           </p>
         </div>
         <div class="relative m-auto mt-1 max-w-screen-94 md:mt-5">
           <AccordsCadreComponent
-            :loading="!productsAccordsCadre"
             :accords-cadres="productsAccordsCadre?.results"
+            :loading="!productsAccordsCadre"
             @click-left="sendGaEvent('click_product_slider_fat_left')"
             @click-right="sendGaEvent('click_product_slider_fat_right')"
             @click-cta="sendGaEvent('click_product_slider_fat_cta', $event)"
@@ -106,11 +106,11 @@
           <div class="flex justify-center">
             <p class="md:mt-10">
               <RouterLink
-                :to="{ name: NewsPageList.NEWS }"
-                class="button button-primary"
                 :style="{
                   color: betterTextColor('primary'),
                 }"
+                :to="{ name: NewsPageList.NEWS }"
+                class="button button-primary"
               >
                 Tous nos contenus experts
               </RouterLink>
@@ -127,19 +127,19 @@
     >
       <div class="px-5 text-center">
         <h3
-          class="text-[23px] font-bold leading-[27px] sm:text-3xl sm:leading-[38.11px]"
           :style="{
             color: betterTextColor('secondary'),
           }"
+          class="text-[23px] font-bold leading-[27px] sm:text-3xl sm:leading-[38.11px]"
         >
           Vous faites des économies tout <br />
           en contribuant à votre démarche RSE
         </h3>
         <p
-          class="mt-8 text-lg sm:mx-auto sm:text-base xl:w-[40%]"
           :style="{
             color: betterTextColor('secondary'),
           }"
+          class="mt-8 text-lg sm:mx-auto sm:text-base xl:w-[40%]"
         >
           Nos adhérents réalisent en moyenne 27 % d'économies, grâce à la
           mutualisation des achats. Nous notons et référençons nos partenaires
@@ -182,7 +182,8 @@ const { productsAccordsCadre } = storeToRefs(productStore)
 
 onBeforeMount(async () => {
   const promises = []
-  promises.push(productStore.initHomeProducts())
+  promises.push(productStore.initSliderProductsSelection())
+  promises.push(productStore.initSliderAccordsCadres())
   if (
     channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.EXPERT_CONTENT_HOMEPAGE)
   ) {

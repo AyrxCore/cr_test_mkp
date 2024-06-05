@@ -8,6 +8,10 @@ import { notifyError } from '@/vuejs/services/utils'
 import ChannelHttpClient from '@/vuejs/services/httpclient/ChannelHttpClient'
 import { useCommonStore } from '@/vuejs/stores/common'
 import { parsePhoneNumber } from 'libphonenumber-js'
+import {
+  HOME_ACCORD_CADRE_PROPERTY,
+  HOME_PRODUCTS_SELECTION_PROPERTY,
+} from '@/vuejs/services/const'
 
 const commonStore = useCommonStore()
 
@@ -20,9 +24,8 @@ export const useChannelStore = defineStore({
   actions: {
     async getChannel(hostname: string): Promise<void> {
       try {
-        const channel: Channel = await ChannelHttpClient.get().getChannelByHost(
-          hostname,
-        )
+        const channel: Channel =
+          await ChannelHttpClient.get().getChannelByHost(hostname)
 
         commonStore.setChannelCode(channel.code)
 
@@ -104,6 +107,44 @@ export const useChannelStore = defineStore({
       return this.channelDocuments?.privacyPolicy?.startsWith('https')
         ? this.channelDocuments?.privacyPolicy
         : '/politique-de-confidentialite'
+    },
+    channelSliderAccordsCadresProperty() {
+      let accordCadreProperty = HOME_ACCORD_CADRE_PROPERTY
+      if (
+        this.channel.options['HOMEPAGE_ACCORD_CADRE_CHANNEL_PROPERTY_VALUE_ID']
+      ) {
+        let copyAccordCadreProperty = Object.assign(
+          {},
+          HOME_ACCORD_CADRE_PROPERTY,
+        )
+        copyAccordCadreProperty.properties.value = parseInt(
+          this.channel.options[
+            'HOMEPAGE_ACCORD_CADRE_CHANNEL_PROPERTY_VALUE_ID'
+          ],
+        )
+        accordCadreProperty = copyAccordCadreProperty
+      }
+      return accordCadreProperty
+    },
+    channelSliderProductsSelectionProperty() {
+      let productSelectionProperty = HOME_PRODUCTS_SELECTION_PROPERTY
+      if (
+        this.channel.options[
+          'HOMEPAGE_PRODUCTS_SELECTION_CHANNEL_PROPERTY_VALUE_ID'
+        ]
+      ) {
+        let copySelectionProperty = Object.assign(
+          {},
+          HOME_PRODUCTS_SELECTION_PROPERTY,
+        )
+        copySelectionProperty.properties.value = parseInt(
+          this.channel.options[
+            'HOMEPAGE_PRODUCTS_SELECTION_CHANNEL_PROPERTY_VALUE_ID'
+          ],
+        )
+        productSelectionProperty = copySelectionProperty
+      }
+      return productSelectionProperty
     },
   },
 })

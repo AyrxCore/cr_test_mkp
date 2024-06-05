@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 import { useAlertStore } from '@/vuejs/stores/alert'
 import { AlertType } from '@/vuejs/types/Alert'
 import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
@@ -8,8 +8,9 @@ import { Product, ProductStoreState } from '@/vuejs/types/Product'
 import { arrayEqual, hexToBinary, notifyError } from '@/vuejs/services/utils'
 import {
   HOME_ACCORD_CADRE_PROPERTY,
-  HOME_SELECTION_PROPERTY,
+  HOME_PRODUCTS_SELECTION_PROPERTY,
 } from '@/vuejs/services/const'
+import { useChannelStore } from '@/vuejs/stores/channel'
 
 export const useProductStore = defineStore({
   id: 'product',
@@ -36,21 +37,29 @@ export const useProductStore = defineStore({
   actions: {
     async fetchProductsByParams(params): Promise<void> {
       try {
-        this.products = await ProductHttpClient.get().fetchProductsByParams(
-          params,
-        )
+        this.products =
+          await ProductHttpClient.get().fetchProductsByParams(params)
         return this.products
       } catch (error) {}
     },
-    async initHomeProducts() {
+    async initSliderAccordsCadres() {
       try {
+        const { channelSliderAccordsCadresProperty } =
+          storeToRefs(useChannelStore())
+
         this.productsAccordsCadre =
           await ProductHttpClient.get().fetchProductsByParams(
-            HOME_ACCORD_CADRE_PROPERTY,
+            channelSliderAccordsCadresProperty,
           )
+      } catch (error) {}
+    },
+    async initSliderProductsSelection() {
+      try {
+        const { channelSliderProductsSelectionProperty } =
+          storeToRefs(useChannelStore())
         this.productsSelection =
           await ProductHttpClient.get().fetchProductsByParams(
-            HOME_SELECTION_PROPERTY,
+            channelSliderProductsSelectionProperty,
           )
       } catch (error) {}
     },
