@@ -108,7 +108,7 @@ export const useChannelStore = defineStore({
         ? this.channelDocuments?.privacyPolicy
         : '/politique-de-confidentialite'
     },
-    channelSliderAccordsCadresProperty() {
+    channelSliderAccordsCadresProperty(): Object {
       let accordCadreProperty = HOME_ACCORD_CADRE_PROPERTY
       if (
         this.channel.options['HOMEPAGE_ACCORD_CADRE_CHANNEL_PROPERTY_VALUE_ID']
@@ -126,7 +126,7 @@ export const useChannelStore = defineStore({
       }
       return accordCadreProperty
     },
-    channelSliderProductsSelectionProperty() {
+    channelSliderProductsSelectionProperty(): Object {
       let productSelectionProperty = HOME_PRODUCTS_SELECTION_PROPERTY
       if (
         this.channel.options[

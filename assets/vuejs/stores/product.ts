@@ -46,10 +46,9 @@ export const useProductStore = defineStore({
       try {
         const { channelSliderAccordsCadresProperty } =
           storeToRefs(useChannelStore())
-
         this.productsAccordsCadre =
           await ProductHttpClient.get().fetchProductsByParams(
-            channelSliderAccordsCadresProperty,
+            channelSliderAccordsCadresProperty.value,
           )
       } catch (error) {}
     },
@@ -59,7 +58,7 @@ export const useProductStore = defineStore({
           storeToRefs(useChannelStore())
         this.productsSelection =
           await ProductHttpClient.get().fetchProductsByParams(
-            channelSliderProductsSelectionProperty,
+            channelSliderProductsSelectionProperty.value,
           )
       } catch (error) {}
     },
