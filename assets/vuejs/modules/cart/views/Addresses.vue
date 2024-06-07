@@ -3,7 +3,7 @@
   <div class="flex flex-col-reverse lg:grid lg:grid-cols-4 lg:gap-4 lg:px-0">
     <div class="col-span-3 flex flex-col lg:grid lg:grid-cols-2 lg:gap-2">
       <div>
-        <h3 class="mb-5 text-[19px] text-primary md:text-[25px]">
+        <h3 class="mt-5 text-[19px] text-primary md:text-[25px] lg:mt-0">
           Adresse de facturation
         </h3>
         <div class="mt-5 items-center rounded-lg bg-white p-5">

@@ -16,6 +16,7 @@
 ###< phpunit/phpunit ###
 
 node_modules
+yarn-error.log
 .idea
 /public/assets/
 /docker/logs/nginx/access.log

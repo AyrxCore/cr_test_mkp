@@ -1,14 +1,22 @@
 import { defineStore } from 'pinia'
 
 import CartHttpClient from '@/vuejs/services/httpclient/CartHttpClient'
+import CompanyHttpClient from '@/vuejs/services/httpclient/CompanyHttpClient'
+
+// IDs des méthodes de paiements Uppler
+export const CART_PAYMENT_CB_ID: number = 8
+export const CART_PAYMENT_SEPA_IDs: number[] = [9, 10]
+
 import {
   Cart,
   CartAddressesUpdate,
   CartPaymentMethodUpdated,
+  CartPaymentSepaUpdated,
   CartStoreState,
   OrderItemQuantityUpdate,
   OrderShippingUpdate,
   PaymentMethod,
+  SepaData,
 } from '@/vuejs/types/Cart'
 
 import { notifyError, notifySuccess } from '@/vuejs/services/utils'
@@ -22,6 +30,8 @@ export const useCartStore = defineStore({
     modifyingCart: false,
     shippingMethods: [],
     selectedShippingMethods: {},
+    companyMandates: [],
+    selectedSepa: null,
   }),
 
   actions: {
@@ -100,7 +110,6 @@ export const useCartStore = defineStore({
     async deleteProduct(id: number): Promise<void> {
       try {
         await CartHttpClient.get().deleteProductFromCartAsBuyer(id)
-        notifySuccess('La référence du produit a été retirée du panier')
       } catch (error) {
         notifyError(
           `Une erreur est survenue lors de la modification du panier, merci de contacter un administrateur.`,
@@ -142,6 +151,29 @@ export const useCartStore = defineStore({
         )
       }
     },
+    async updateCartPaymentSepaInfos({
+      iban,
+      bic,
+      ownerName,
+      phone,
+      mandateId,
+    }: SepaData): Promise<CartPaymentSepaUpdated> {
+      try {
+        return await CartHttpClient.get(true).updateCartPaymentSepaInfos({
+          cartId: this.cart.id,
+          iban: iban,
+          bic: bic,
+          ownerName: ownerName,
+          phone: phone,
+          mandateId: mandateId,
+        })
+      } catch (error) {
+        notifyError(
+          `Une erreur est survenue lors de la sauvegarde de vos informations, merci de contacter un administrateur.`,
+        )
+        throw error?.response?.data?.errors
+      }
+    },
     async findCartById(id: number): Promise<Cart> {
       try {
         return await CartHttpClient.get().findCartById(id)
@@ -158,6 +190,16 @@ export const useCartStore = defineStore({
       } catch (error) {
         notifyError(
           `Une erreur est survenue lors du chargement des méthodes de livraison, merci de contacter un administrateur.`,
+        )
+      }
+    },
+    async getCompanyMandates(): Promise<void> {
+      try {
+        this.companyMandates =
+          await CompanyHttpClient.get().getExistingMandates()
+      } catch (error) {
+        notifyError(
+          `Une erreur est survenue lors du chargement des mandats, merci de contacter un administrateur.`,
         )
       }
     },
@@ -189,14 +231,15 @@ export const useCartStore = defineStore({
       return true
     },
     CBPaymentMethod(): PaymentMethod {
-      return this.cart?.paymentMethods?.find(
-        (e) => e.name.default === 'Carte de crédit',
+      return this.cart?.paymentMethods?.find((e) => e.id === CART_PAYMENT_CB_ID)
+    },
+    SEPAPaymentMethods(): PaymentMethod[] {
+      return this.cart?.paymentMethods?.filter((e) =>
+        CART_PAYMENT_SEPA_IDs.includes(e.id),
       )
     },
-    SEPAPaymentMethod(): PaymentMethod {
-      return this.cart?.paymentMethods?.find(
-        (e) => e.name.default === 'Virement bancaire',
-      )
+    hasCompanyMandates(): boolean {
+      return this.companyMandates?.length > 0
     },
   },
 })

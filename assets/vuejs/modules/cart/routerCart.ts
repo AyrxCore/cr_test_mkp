@@ -4,6 +4,7 @@ import RecapPage from '@/vuejs/modules/cart/views/Recap.vue'
 import AddressPage from '@/vuejs/modules/cart/views/Addresses.vue'
 import ShipmentsPage from '@/vuejs/modules/cart/views/Shipments.vue'
 import PaymentPage from '@/vuejs/modules/cart/views/Payment.vue'
+import SepaPaymentPage from '@/vuejs/modules/cart/views/PaymentSepa.vue'
 import ConfirmationPage from '@/vuejs/modules/cart/views/Confirmation.vue'
 import PaymentErrorPage from '@/vuejs/modules/cart/views/PaymentError.vue'
 
@@ -33,6 +34,11 @@ export const routes: RouteRecordRaw[] = [
         path: 'payment',
         component: PaymentPage,
         name: CartPageList.CART_PAYMENT,
+      },
+      {
+        path: 'payment/sepa',
+        component: SepaPaymentPage,
+        name: CartPageList.CART_PAYMENT_SEPA,
       },
       {
         path: 'confirmed/:id',

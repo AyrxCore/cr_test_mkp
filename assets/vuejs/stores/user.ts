@@ -41,11 +41,10 @@ export const useUserStore = defineStore({
           return accounts
         }
       } catch (error) {
-        error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow(
-            getErrorMessage(error.response.data.message),
-            AlertType.danger,
-          )
+        alertStore.setShow(
+          getErrorMessage(error.response.data.message),
+          AlertType.danger,
+        )
         return []
       }
     },

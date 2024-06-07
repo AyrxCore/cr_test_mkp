@@ -20,9 +20,9 @@
         </h3>
         <p class="text-gray-500">
           Ci-dessous, vous trouverez des détails sur les articles que vous avez
-          commandés. Si vous avez commandé plus d’un article, veuillez noter que
-          certains articles peuvent afficher une méthode d’expédition différente
-          et/ou un état différent parce qu’ils sont expédiés dans un emballage
+          commandés. Si vous avez commandé plus d'un article, veuillez noter que
+          certains articles peuvent afficher une méthode d'expédition différente
+          et/ou un état différent parce qu'ils sont expédiés dans un emballage
           distinct.
         </p>
         <div

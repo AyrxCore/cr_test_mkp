@@ -22,7 +22,12 @@
           >
             Livraison
           </CartBreadcrumbItemComponent>
-          <CartBreadcrumbItemComponent :route-name="CartPageList.CART_PAYMENT">
+          <CartBreadcrumbItemComponent
+            :route-name="[
+              CartPageList.CART_PAYMENT,
+              CartPageList.CART_PAYMENT_SEPA,
+            ]"
+          >
             Paiement
           </CartBreadcrumbItemComponent>
           <CartBreadcrumbItemComponent

@@ -35,6 +35,21 @@ class UpplerBuyerCompanyService extends AbstractUpplerService
         throw new \Exception('Error while getting buyer company');
     }
 
+    public function getExistingMandates(): array
+    {
+        $res = $this->request(
+            'GET',
+            'v1/buyer/mandate/',
+        );
+
+        $mandates = [];
+        if ($res && $res->getStatusCode() === Response::HTTP_OK) {
+            $mandates = \json_decode($res->getContent(), true);
+        }
+
+        return $mandates;
+    }
+
     public function getUserBuyerData(): object|null
     {
         $session = $this->requestStack->getSession();

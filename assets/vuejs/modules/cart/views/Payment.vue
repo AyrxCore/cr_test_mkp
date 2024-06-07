@@ -1,5 +1,5 @@
 <template>
-  <h3 class="text-title-primary mt-8 mb-2">Choisir un type de paiement</h3>
+  <h3 class="text-title-primary mb-2 mt-8">Choisir un type de paiement</h3>
   <div class="flex flex-col-reverse lg:grid lg:grid-cols-4 lg:gap-4 lg:px-0">
     <div class="col-span-3 flex flex-col lg:grid lg:grid-cols-2 lg:gap-2">
       <PaymentMethodComponent
@@ -13,7 +13,16 @@
           <img class="m-auto h-20" :src="cbLogosImg" alt="CB Icons" />
         </template>
       </PaymentMethodComponent>
-      <template v-if="!CBPaymentMethod">
+      <PaymentMethodComponent
+        v-for="method in SEPAPaymentMethods"
+        :method="method"
+        @select-method="selectSEPA(method)"
+      >
+        <template #method-icon>
+          <SepaIconComponent class="m-auto" />
+        </template>
+      </PaymentMethodComponent>
+      <template v-if="!CBPaymentMethod && SEPAPaymentMethods.length === 0">
         Aucune méthode de paiement disponible
       </template>
     </div>
@@ -25,17 +34,22 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
 
 import CartRightSideComponent from '@/vuejs/modules/cart/components/CartRightSideComponent.vue'
 import PaymentMethodComponent from '@/vuejs/modules/cart/components/PaymentMethodComponent.vue'
+import SepaIconComponent from '@/vuejs/modules/shared/icon/SepaIconComponent.vue'
 import cbLogos from '@/vuejs/assets/img/cb-icons.png'
 
 import { getImage, notifyError } from '@/vuejs/services/utils'
 import { useCartStore } from '@/vuejs/stores/cart'
+import { PageList } from '@/vuejs/router'
+import { PaymentMethod } from '@/vuejs/types/Cart'
 
 const cartStore = useCartStore()
+const router = useRouter()
 
-const { CBPaymentMethod } = storeToRefs(cartStore)
+const { CBPaymentMethod, SEPAPaymentMethods } = storeToRefs(cartStore)
 const isCBLoading = ref<boolean>(false)
 
 const cbLogosImg = getImage(cbLogos)
@@ -53,6 +67,13 @@ const selectCB = async () => {
     )
     isCBLoading.value = false
   }
+}
+
+const selectSEPA = async (method: PaymentMethod) => {
+  cartStore.selectedSepa = method
+  router.push({
+    name: PageList.CART_PAYMENT_SEPA,
+  })
 }
 </script>
 

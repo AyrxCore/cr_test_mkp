@@ -8,14 +8,16 @@ export const useAlertStore = defineStore({
     show: false,
     message: '',
     type: undefined,
+    timeout: null,
   }),
 
   actions: {
     setShow(message: string, type: AlertType): void {
+      clearTimeout(this.timeout)
       this.message = message
       this.type = type
       this.show = true
-      setTimeout(
+      this.timeout = setTimeout(
         () => {
           this.setClose()
         },

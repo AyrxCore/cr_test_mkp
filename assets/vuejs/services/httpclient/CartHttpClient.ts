@@ -5,6 +5,8 @@ import {
   CartAddressesUpdate,
   CartPaymentMethodUpdate,
   CartPaymentMethodUpdated,
+  CartPaymentSepaUpdate,
+  CartPaymentSepaUpdated,
   OrderItemQuantityUpdate,
   OrderShippingUpdate,
   ShippingMethod,
@@ -72,15 +74,34 @@ export default class CartHttpClient extends BaseClientService {
       .then((response) => response.data)
   }
 
-  public findCartById<T extends []>(id: number): Promise<Cart> {
+  public updateCartPaymentSepaInfos<T extends CartPaymentSepaUpdated>({
+    cartId,
+    iban,
+    bic,
+    ownerName,
+    phone,
+    mandateId,
+  }: CartPaymentSepaUpdate): Promise<T> {
+    return this.apiClient
+      .patch(`cart_payment_sepas/${cartId}`, {
+        iban: iban,
+        bic: bic,
+        ownerName: ownerName,
+        phone: phone,
+        mandateId: mandateId,
+      })
+      .then((response) => response.data)
+  }
+
+  public findCartById<T extends Cart>(id: number): Promise<T> {
     return this.apiClient
       .get(`buyer/cart/${id}`)
       .then((response) => response.data)
   }
 
-  public getCartShippingMethods<T extends []>(
+  public getCartShippingMethods<T extends ShippingMethod[]>(
     cartId: number,
-  ): Promise<ShippingMethod[]> {
+  ): Promise<T> {
     return this.apiClient
       .get(`buyer/cart/${cartId}/shipments`)
       .then((response) => response.data)

@@ -1,0 +1,66 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Dto;
+
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Validator\Constraints as Assert;
+
+#[ApiResource(
+    collectionOperations: ['get_all' => [
+        'openapi_context' => [
+            'summary' => 'Liste des mandats existants pour la company de l\'utilisateur',
+        ],
+        'path' => '/company/mandates',
+        'method' => 'GET',
+    ]],
+)]
+final class CompanyMandate
+{
+    #[ApiProperty(identifier: true)]
+    private ?int $id = null;
+
+    #[Assert\Type('string', message: '(string) Iban')]
+    private ?string $iban = null;
+
+    #[Assert\Type('string', message: '(string) Created at')]
+    private ?string $createdAt = null;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    public function getIban(): ?string
+    {
+        return $this->iban;
+    }
+
+    public function setIban(string $iban): ?self
+    {
+        $this->iban = $iban;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?string
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(string $createdAt): ?self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+}

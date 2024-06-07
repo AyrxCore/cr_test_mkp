@@ -119,6 +119,7 @@ router.beforeEach(async (to, from, next) => {
         CartPageList.CART_ADDRESSES,
         CartPageList.CART_SHIPMENTS,
         CartPageList.CART_PAYMENT,
+        CartPageList.CART_PAYMENT_SEPA,
       ].includes(to.name) &&
       !cartStore.hasAllTermsChecked
     ) {

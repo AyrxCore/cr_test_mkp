@@ -54,7 +54,7 @@ export function notifySuccess(text: string, time: number = 10000): void {
     {
       group: 'notif',
       type: 'success',
-      title: 'Succès!',
+      title: 'Succès !',
       text,
     },
     time,

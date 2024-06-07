@@ -29,7 +29,7 @@
   <div class="flex flex-col-reverse lg:grid lg:grid-cols-4 lg:gap-4 lg:px-0">
     <div
       v-if="cart.orders && cart.orders.length > 0"
-      class="col-span-3 mt-10 rounded-lg lg:mt-0"
+      class="col-span-3 mt-5 rounded-lg lg:mt-0"
     >
       <CartOrderComponent
         v-for="(order, key) in cart.orders"

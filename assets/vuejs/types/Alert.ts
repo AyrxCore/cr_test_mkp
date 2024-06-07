@@ -11,4 +11,5 @@ export interface AlertStoreState {
   show: boolean
   message: string
   type: AlertType
+  timeout: number
 }

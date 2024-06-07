@@ -23,6 +23,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 final class CartPayment
 {
+    // IDs des méthodes de paiements Uppler
+    public const CART_PAYMENT_CB = 8;
+    public const CART_PAYMENT_SEPA = [9, 10];
+
     #[ApiProperty(identifier: true)]
     private ?int $id = null;
 

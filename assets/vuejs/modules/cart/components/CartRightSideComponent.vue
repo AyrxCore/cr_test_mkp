@@ -1,10 +1,10 @@
 <template>
   <div>
     <div
-      class="flex flex-col items-center justify-between rounded-lg bg-white p-5 md:flex-row lg:flex-col lg:p-3 xl:p-5"
+      class="flex flex-col items-center justify-between rounded-lg bg-white p-4 md:flex-row lg:flex-col lg:px-6 lg:py-4"
     >
-      <div class="w-auto md:w-7/12 lg:w-auto">
-        <h3 class="mb-5 text-[19px] text-primary xl:text-[25px]">
+      <div class="w-full">
+        <h3 class="mb-2 text-[19px] text-primary lg:mb-4 xl:text-[25px]">
           <slot name="title" />
         </h3>
         <div
@@ -50,7 +50,7 @@
           <div class="float-right">{{ totalDisplayed }}€</div>
         </div>
       </div>
-      <div class="w-full md:w-4/12 lg:w-auto xl:w-full">
+      <div class="w-full md:pl-8 lg:px-0">
         <slot name="button-next" />
       </div>
     </div>
@@ -62,8 +62,8 @@
         <img class="h-14" :src="cbLogosImg" alt="CB Icons" />
       </div>
       <div
-        v-if="!!SEPAPaymentMethod"
-        class="h-14 items-center rounded-lg bg-white p-5"
+        v-if="SEPAPaymentMethods.length > 0"
+        class="ml-2 h-14 items-center rounded-lg bg-white p-5"
       >
         <SepaIconComponent />
       </div>
@@ -83,7 +83,7 @@ import { useCartStore } from '@/vuejs/stores/cart'
 
 const cartStore = useCartStore()
 
-const { cart, CBPaymentMethod, SEPAPaymentMethod } = storeToRefs(cartStore)
+const { cart, CBPaymentMethod, SEPAPaymentMethods } = storeToRefs(cartStore)
 
 const cbLogosImg = getImage(cbLogos)
 

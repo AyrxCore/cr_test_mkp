@@ -7,7 +7,7 @@
       :disabled="isNeoAutoLogin"
       :is-loading="isLoading"
       class="button-primary mt-4 !whitespace-normal"
-      @click="emit('selectMethod')"
+      @click="emit('select-method')"
     >
       Choisir le paiement par {{ method.name.default }}
     </ButtonComponent>
@@ -34,7 +34,7 @@ const props = defineProps({
 const { isNeoAutoLogin } = storeToRefs(useUserStore())
 
 const emit = defineEmits<{
-  (e: 'selectMethod'): void
+  (e: 'select-method'): void
 }>()
 </script>
 

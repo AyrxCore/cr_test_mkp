@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Context\ChannelContext;
+use App\Dto\CartPaymentSepa;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -241,7 +242,7 @@ class UpplerCartService extends AbstractUpplerService
 
     public function setPaymentMethod(int $cartId, int $paymentMethodId): array|bool
     {
-        $hostname = $this->channelContext->getChannel()->getHostname();
+        $hostname = $this->getHostname();
         $res = $this->request(
             'PATCH',
             'v1/buyer/cart/'.$cartId.'/payment-method',
@@ -254,6 +255,55 @@ class UpplerCartService extends AbstractUpplerService
         );
         if ($res && $res->getStatusCode() === Response::HTTP_OK) {
             return \json_decode($res->getContent(), true);
+        }
+
+        return false;
+    }
+
+    public function setSepaInformations(CartPaymentSepa $cartPaymentSepa): array|bool
+    {
+        if ($cartPaymentSepa->getMandateId() !== null) {
+            $data = ['mandate_id' => $cartPaymentSepa->getMandateId()];
+        } else {
+            $data = [
+                'iban' => $cartPaymentSepa->getIban(),
+                'bic' => $cartPaymentSepa->getBic(),
+                'owner_name' => $cartPaymentSepa->getOwnerName(),
+                'phone' => $cartPaymentSepa->getPhone(),
+                'saved' => true,
+            ];
+        }
+
+        $hostname = $this->getHostname();
+        $res = $this->request(
+            'PATCH',
+            'v1/buyer/cart/'.$cartPaymentSepa->getId().'/bank-account',
+            [
+                'json' => \array_merge($data, [
+                    'success_callback_url' => 'https://'.$hostname.'/api/buyer/cart/'.$cartPaymentSepa->getId().'/confirm',
+                    'error_callback_url' => 'https://'.$hostname.'/api/buyer/cart/'.$cartPaymentSepa->getId().'/confirm',
+                ]),
+            ],
+        );
+        if ($res) {
+            if ($res->getStatusCode() === Response::HTTP_OK) {
+                return \json_decode($res->getContent(), true);
+            } else {
+                $res = \json_decode($res->getContent(false), true);
+                $listErrors = ['errors' => []];
+                if (isset($res['errors'])) {
+                    foreach ($res['errors']['children'] as $errorType) {
+                        if (!isset($errorType['errors'])) {
+                            continue;
+                        }
+                        foreach ($errorType['errors'] as $error) {
+                            $listErrors['errors'][] = $error;
+                        }
+                    }
+                }
+
+                return $listErrors;
+            }
         }
 
         return false;
@@ -284,5 +334,10 @@ class UpplerCartService extends AbstractUpplerService
         }
 
         return true;
+    }
+
+    private function getHostname(): string
+    {
+        return $this->channelContext->getChannel()->getHostname();
     }
 }

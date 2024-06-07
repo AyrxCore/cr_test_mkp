@@ -10,6 +10,12 @@ interface Currency {
   code: string
 }
 
+export interface CompanyMandate {
+  id: number
+  iban: string
+  createdAt: string
+}
+
 export interface CartStoreState {
   cart?: Cart
   termsOfSales: number[]
@@ -19,6 +25,16 @@ export interface CartStoreState {
   selectedShippingMethods: {
     [key: number]: number
   }
+  companyMandates: Array<CompanyMandate>
+  selectedSepa: PaymentMethod
+}
+
+export interface SepaData {
+  iban?: string
+  bic?: string
+  ownerName?: string
+  phone?: string
+  mandateId?: number
 }
 
 interface LanguageVariation {
@@ -79,6 +95,19 @@ export interface CartPaymentMethodUpdate {
 export interface CartPaymentMethodUpdated {
   payment_id: number
   payment_url: string
+}
+
+export interface CartPaymentSepaUpdate {
+  cartId: number
+  iban: string
+  bic: string
+  ownerName: string
+  phone: string
+  mandateId: number
+}
+
+export interface CartPaymentSepaUpdated {
+  signing_url: string
 }
 
 export interface ShippingMethod {

@@ -1,11 +1,12 @@
 <template>
-  <h3 class="text-title-primary mt-8 mb-2">Livraison</h3>
+  <h3 class="text-title-primary mb-2 mt-8">Livraison</h3>
   <div class="flex flex-col-reverse lg:grid lg:grid-cols-4 lg:gap-4 lg:px-0">
     <div class="col-span-3">
       <template v-if="!isLoadingMethods">
         <CartShipmentComponent
           v-for="(order, key) in cart.orders"
           :order="order"
+          @loaded="shipmentsLoaded[key] = $event"
         >
           <template #order-index>
             ({{ key + 1 }} sur {{ cart.orders.length }})
@@ -19,6 +20,7 @@
       <template #button-next>
         <ButtonComponent
           class="button-primary mt-3 w-full"
+          :disabled="!allShipmentsLoaded"
           @click="goToPayment"
         >
           <ArrowRightIconComponent class="h-4 w-4" />
@@ -29,7 +31,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 
@@ -49,6 +51,13 @@ const cartStore = useCartStore()
 const { cart } = storeToRefs(cartStore)
 
 const isLoadingMethods = ref<boolean>(true)
+const shipmentsLoaded = ref<boolean[]>([])
+
+const allShipmentsLoaded = computed((): boolean => {
+  return (
+    shipmentsLoaded.value.length > 0 && shipmentsLoaded.value.every((e) => !!e)
+  )
+})
 
 onMounted(async (): Promise<void> => {
   isLoadingMethods.value = true

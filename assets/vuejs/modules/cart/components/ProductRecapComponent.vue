@@ -123,7 +123,7 @@
 <script lang="ts" setup>
 import { computed, onMounted, PropType, ref } from 'vue'
 
-import { formatPrice } from '@/vuejs/services/utils'
+import { formatPrice, notifySuccess } from '@/vuejs/services/utils'
 
 import { OrderItem, OrderProduct } from '@/vuejs/types/Cart'
 import { useCartStore } from '@/vuejs/stores/cart'
@@ -221,6 +221,7 @@ const deleteProduct = async (): Promise<void> => {
     cartStore.modifyingCart = true
     await cartStore.deleteProduct(props.item.id)
     await cartStore.getCart()
+    notifySuccess('La référence du produit a été retirée au panier')
   } catch (e) {
   } finally {
     cartStore.modifyingCart = false

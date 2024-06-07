@@ -1,5 +1,5 @@
 <template>
-  <h2 class="mb-5 text-base text-primary md:text-xl">
+  <h2 class="my-4 text-base text-primary md:text-xl lg:mt-0">
     Livraison {{ seller.name }}
     <slot name="order-index" />
   </h2>
@@ -95,6 +95,8 @@ import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.
 const cartStore = useCartStore()
 const sellerStore = useSellerStore()
 
+const emit = defineEmits(['loaded'])
+
 const props = defineProps({
   order: {
     required: true,
@@ -124,11 +126,13 @@ const selectedShippingMethod = ref<number>(
 )
 
 onMounted(async (): Promise<void> => {
+  emit('loaded', false)
   isLoading.value = true
   const sellerId = props.order.seller.id
   await sellerStore.getSeller(sellerId)
   await selectShippingMethod()
   isLoading.value = false
+  emit('loaded', true)
 })
 
 const seller = computed((): Seller => {

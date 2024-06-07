@@ -9,26 +9,26 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { RouteRecordName, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
 const props = defineProps({
   routeName: {
     required: true,
-    type: String,
+    type: [String, Array<String>],
   },
 })
 
 const classes = computed((): string[] => {
-  if (props.routeName === currentRouteName.value) {
+  if (props.routeName.includes(currentRouteName.value)) {
     return ['border-secondary', 'text-secondary']
   }
   return ['border-black', 'text-black']
 })
 
 const currentRouteName = computed(
-  (): RouteRecordName => router.currentRoute.value.name,
+  (): string => router.currentRoute.value.name as string,
 )
 </script>
 
