@@ -71,11 +71,10 @@ const sellersLoading = ref<boolean>(false)
 
 const customSellers = computed((): Seller[] => {
   const suppliersList = channel?.value?.options?.SUPPLIER_PARTNERS_HOMEPAGE_LIST
-  if (!props.params && suppliersList) {
-    const suppliersListDecoded = suppliersList
-      .split(',')
-      .map((e) => parseInt(e))
-    return sellers.value.filter((e) => suppliersListDecoded.includes(e.id))
+  if (sellers.value.length > 0 && suppliersList && !props.params) {
+    return suppliersList.split(',').map((e) => {
+      return sellers.value.find((s) => s.id === parseInt(e))
+    })
   }
   return sellers.value
 })
