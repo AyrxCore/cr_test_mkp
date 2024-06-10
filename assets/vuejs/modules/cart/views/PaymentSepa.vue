@@ -25,13 +25,6 @@
             Utiliser et payer
           </ButtonComponent>
         </div>
-        <ButtonComponent
-          class="button-primary-outline w-fit"
-          v-if="!isSEPALoading"
-          @click="newMandate = true"
-        >
-          Saisir un nouveau mandat
-        </ButtonComponent>
       </template>
       <template v-else-if="newMandate">
         <form class="lg:w-1/2" @submit.prevent="confirmForm">
@@ -80,6 +73,13 @@
           </ButtonComponent>
         </form>
       </template>
+      <ButtonComponent
+        class="button-primary-outline w-fit"
+        v-if="!newMandate && !isMandatesLoading"
+        @click="newMandate = true"
+      >
+        Saisir un nouveau mandat
+      </ButtonComponent>
     </div>
     <CartRightSideComponent :has-payment-methods="false">
       <template #title>Récapitulatif</template>
