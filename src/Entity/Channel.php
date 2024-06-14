@@ -55,6 +55,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 class Channel
 {
+    public const QANTIS_ACHAT = 'QANTIS_ACHAT';
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]

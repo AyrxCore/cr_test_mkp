@@ -4,23 +4,23 @@
   création de son compte</p>
 <ul>
   <li>Raison Sociale: {{ account.adherent.name }}</li>
-  <li>SIRET: {{ account.adherent.siret }}</li>
-  <li>Activité: {{ account.adherent.libelleApe ?? account.adherent.activiteApe }}</li>
-  <li>Adresse: {{ account.adherent.street }} {{ account.adherent.postalcode }} {{ account.adherent.city }}</li>
-  <li>Nom Prénom: {{ account.user.lastName }} {{ account.user.firstName }}</li>
-  <li>Fonction: {{ account.serviceFonction }}</li>
-  <li>Email: {{ account.user.email }}</li>
-  <li>Tél: {{ account.phone }}</li>
+  <li>SIRET : {{ account.adherent.siret }}</li>
+  <li>Activité : {{ account.adherent.libelleApe ?? account.adherent.activiteApe }}</li>
+  <li>Adresse : {{ account.adherent.street }} {{ account.adherent.postalcode }} {{ account.adherent.city }}</li>
+  <li>Nom Prénom : {{ account.user.lastName }} {{ account.user.firstName }}</li>
+  <li>Fonction : {{ account.serviceFonction }}</li>
+  <li>Email : {{ account.user.email }}</li>
+  <li>Tél : {{ account.phone }}</li>
 </ul>
 <p></p>
 
-<p>Pour bénéficier de l’accord Stellantis sur les marques Peugeot, Alfa Romeo, DS, Fiat, Citroën, Jeep et Opel et
-  demander à être rattaché au contrat QANTIS, l’entreprise s’engage :</p>
+<p>Pour bénéficier de l'accord Stellantis sur les marques Peugeot, Alfa Romeo, DS, Fiat, Citroën, Jeep et Opel et
+  demander à être rattaché au contrat QANTIS, l'entreprise s'engage :</p>
 <ul>
-  <li>A immatriculer les véhicules en France et les utiliser à titre principal en France.</li>
-  <li>A ce que chacun des véhicules soit utilisé par les salariés principalement pour leurs besoins professionnels</li>
-  <li>A ce que chaque véhicule soit conservé pour une période minimum de douze mois et ne soit pas revendu avant
-    l’expiration de ce délai de conservation
+  <li>À immatriculer les véhicules en France et les utiliser à titre principal en France.</li>
+  <li>À ce que chacun des véhicules soit utilisé par les salariés principalement pour leurs besoins professionnels</li>
+  <li>À ce que chaque véhicule soit conservé pour une période minimum de douze mois et ne soit pas revendu avant
+    l'expiration de ce délai de conservation
   </li>
 </ul>
 <p>Horodatage : le {{ horodatage | date('d/m/Y à H:i:s', "Europe/Paris") }}</p>

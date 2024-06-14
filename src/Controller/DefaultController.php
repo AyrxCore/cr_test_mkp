@@ -25,7 +25,7 @@ class DefaultController extends AbstractController implements ChannelAwareContro
     #[Route(
         '/{route}',
         name: 'app',
-        requirements: ['route' => '^(?!.*_wdt|_profiler|login|conditions-generales-d-utilisation|mentions-legales|politique-de-confidentialite|maintenance|api).+']
+        requirements: ['route' => '^(?!.*_wdt|_profiler|login|conditions-generales-d-utilisation|mentions-legales|politique-de-confidentialite|rattachement-stellantis|maintenance|api).+']
     )]
     public function index(Request $request): Response
     {
@@ -56,7 +56,7 @@ class DefaultController extends AbstractController implements ChannelAwareContro
             return $this->render(
                 'index.html.twig',
                 [
-                    'channel' => $channel
+                    'channel' => $channel,
                 ],
                 $response
             );
@@ -64,7 +64,7 @@ class DefaultController extends AbstractController implements ChannelAwareContro
 
         return $this->render('index_app.html.twig', [
             'channel' => $channel,
-            'isNeoAutoLogin' => $isNeoAutoLogin
+            'isNeoAutoLogin' => $isNeoAutoLogin,
         ]);
     }
 

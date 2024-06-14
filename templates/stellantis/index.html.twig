@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>
+    Rattachement Accord Cadre QANTIS - Stellantis
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"> {% block metas %}{% endblock %}
+  <link rel="icon" href="{{ channel.channelParameter.favicon }}" sizes="32x32" />
+  <style>:root {
+      --primary-color: {{channel_primary_color(channel)}};
+      --secondary-color: {{channel_secondary_color(channel)}};
+      --body-background: #f2f0f6;
+    }
+  </style>
+  {% block javascripts %}
+    {{ vite_asset('main.ts', []) }}
+  {% endblock %}
+
+</head>
+<body>
+<div id="baseHtml" class="min-h-screen w-full" data-external-scripts="{{ settings.useExternalScriptsTags }}">
+  <div class="container mt-5 lg:px-0 min-w-full flex flex-col">
+    <div class=" flex flex-col w-full">
+      <div class="mx-5 md:mx-14">
+        <div class="flex flex-col-reverse">
+          <a href="/" class="left-0 mt-4 lg:mt-0 order-4 lg:order-1 flex items-center text-primary"
+             id="btn-go-back">
+            <div class="vue-app mr-3 text-primary w-[14px] h-[14px]" data-component="arrow-left-icon"></div>
+            Accès marketplace
+          </a>
+          <div class="flex justify-center">
+            <img class="max-h-[6rem] lg:max-h-32 object-contain" src="{{ channel.channelParameter.logo }}" alt="Logo" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col lg:space-x-2 justify-center bg-primary bottom-0">
+      <div
+        class="mx-auto w-10/12 md:w-[34rem] lg:w-[35rem] xl:w-[39rem] flex px-4 md:px-10 bg-white rounded-lg my-16 sm:my-10">
+        <div class="w-full flex flex-col">
+          <div class="mx-auto mt-5">
+            <img src="{{ asset('stellantis/checked.png') }}" alt="Checked" class="w-[50px] md:w-[100px]" />
+          </div>
+          <div class="mx-auto text-center">
+            <h1 class="font-bold text-xl mx-16 px-8 md:mx-0">Votre demande a bien été prise en compte</h1>
+          </div>
+
+          <div class="mx-auto w-1/2">
+            <img src="{{ asset('stellantis/stellantis.png') }}" alt="Stellantis" />
+          </div>
+          <div class="mx-5">
+            <p class="text-justify mt-4 text-sm">
+              Votre demande pour être rattaché au contrat et bénéficier de l'accord avec Stellantis sur les marques
+              <strong>Peugeot, Citroën, Fiat, DS, Jeep, Opel et Alfa Romeo</strong> a bien été envoyée au fournisseur.
+            </p>
+            <p class="text-justify text-sm">
+              Rendez-vous dans la concession la plus proche, muni de votre numéro SIRET et en vous présentant comme
+              adhérent et en demandant à bénéficier de l'accord-cadre QANTIS dans le cadre de votre Service Achats.
+            </p>
+            <h2 class="text-justify mt-4 text-sm">Vous vous engagez :</h2>
+            <ol class="text-justify text-sm">
+              <li> 1) À immatriculer les véhicules en France et les utiliser à titre principal en France.</li>
+              <li> 2) À ce que chacun des véhicules soit utilisé par les salariés principalement pour leurs besoins
+                professionnels
+              </li>
+              <li> 3) À ce que chaque véhicule soit conservé pour une période minimum de douze mois et ne soit pas
+                revendu avant l'expiration de ce délai de conservation.
+              </li>
+            </ol>
+            <div class="md:flex justify-between my-9 hidden">
+              <div>
+                <img src="{{ asset('stellantis/peugeot.png') }}" alt="Peugeot" />
+              </div>
+              <div>
+                <img src="{{ asset('stellantis/citroen.png') }}" alt="Citroën" />
+              </div>
+              <div>
+                <img src="{{ asset('stellantis/fiat.png') }}" alt="FIAT" />
+              </div>
+              <div>
+                <img src="{{ asset('stellantis/ds.png') }}" alt="DS" />
+              </div>
+              <div>
+                <img src="{{ asset('stellantis/jeep.png') }}" alt="Jeep" />
+              </div>
+              <div>
+                <img src="{{ asset('stellantis/opel.png') }}" alt="Opel" />
+              </div>
+              <div>
+                <img src="{{ asset('stellantis/alpha-romeo.png') }}" alt="Alpha Romeo" />
+              </div>
+            </div>
+          </div>
+
+          <div class="mx-auto mt-9 md:mt-0 mb-6">
+            <a class="button button-primary-outline flex items-center justify-between" href="/">
+              <div>J'accède à la marketplace</div>
+              <div class="vue-app ml-3 text-primary w-[21px] h-[14px]" data-component="arrow-right-icon"></div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -40,4 +40,18 @@ class AccountRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    public function findAccountsByUserEmailAndChannelCode(string $email, string $channelCode): array
+    {
+        return $this->createQueryBuilder('a')
+            ->join('a.adherent', 'adherent')
+            ->join('adherent.channel', 'channel')
+            ->join('a.user', 'user')
+            ->where('user.email = :email')
+            ->andWhere('channel.code = :channelCode')
+            ->setParameter('email', $email)
+            ->setParameter('channelCode', $channelCode)
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -23,15 +23,15 @@ parameters:
   SUBSCRIPTION_MAIL_SUGAR_LINK: '%env(SUGAR_LINK)%'
   SUBSCRIPTION_MAIL_FROM: '%env(MAIL_FROM)%'
   SUBSCRIPTION_MAIL_TO: '%env(MAIL_TO)%'
-  STELLANTIS_MAILING:
+  STELLANTIS_PARAMS:
     ACCORDS_IDS:
-      - '010148ae-5c2b-11ec-bfa4-0af08f946010' #PEUGEOT
-      - 'e7b514bc-d469-11ed-b265-025bcd73cb12' #ALFA ROMEO
-      - '0058a438-5c2b-11ec-b127-0af08f946010' #DS
-      - '00ddfc1e-5c2b-11ec-b75a-0af08f946010' #OPEL
-      - 'b828903e-d469-11ed-8695-067e628b0734' #FIAT
-      - '00477df2-5c2b-11ec-a27b-0af08f946010' #CITROEN
-      - 'd43c8e24-d469-11ed-a959-025bcd73cb12' #JEEP
+      PEUGEOT: '010148ae-5c2b-11ec-bfa4-0af08f946010'
+      ALFA_ROMEO: 'e7b514bc-d469-11ed-b265-025bcd73cb12'
+      DS: '0058a438-5c2b-11ec-b127-0af08f946010'
+      OPEL: '00ddfc1e-5c2b-11ec-b75a-0af08f946010'
+      FIAT: 'b828903e-d469-11ed-8695-067e628b0734'
+      CITROEN: '00477df2-5c2b-11ec-a27b-0af08f946010'
+      JEEP: 'd43c8e24-d469-11ed-a959-025bcd73cb12'
     ADHERENT_MAIL:
       FROM: '%env(MAIL_FROM)%'
       TO: '%env(ADH_SERV_MAIL_TO)%'
@@ -130,8 +130,12 @@ services:
 
   App\Service\AccordCadreSubscriptionService:
     arguments:
+      $stellantisParams: '%STELLANTIS_PARAMS%'
+
+  App\Service\AccordCadreSubscription\SubscriptionMailerService:
+    arguments:
       $sugarLink: '%env(SUGAR_LINK)%'
       $emailFrom: '%env(MAIL_FROM)%'
-      $stellantisMailing: '%STELLANTIS_MAILING%'
+      $stellantisParams: '%STELLANTIS_PARAMS%'
 
   Symfony\Component\Security\Http\AccessMapInterface: '@security.access_map'
