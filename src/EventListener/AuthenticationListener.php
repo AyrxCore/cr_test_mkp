@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace App\EventListener;
 
+use ApiPlatform\Core\EventListener\EventPriorities;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\AccessMapInterface;
 
+# Priority set to execute listener before api platform
+# See https://api-platform.com/docs/v2.3/core/events
+#[AsEventListener(event: 'kernel.request', priority: EventPriorities::PRE_RESPOND)]
 class AuthenticationListener
 {
     private const NOT_HYDRATED_ROUTES = [
