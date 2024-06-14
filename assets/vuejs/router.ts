@@ -110,7 +110,7 @@ router.beforeEach(async (to, from, next) => {
     if (!userStore.isLogged) {
       Cookies.remove('BEARER')
       Cookies.remove('PHPSESSID')
-      Cookies.remove('isNeoAutoLogin')
+      Cookies.remove('neoAutoLogin')
       location.reload()
     }
 

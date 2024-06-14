@@ -51,7 +51,7 @@ class DefaultController extends AbstractController implements ChannelAwareContro
             // Clear local cookie as user is not connected anymore
             $response = new Response();
             $response->headers->clearCookie('BEARER');
-            $response->headers->clearCookie('isNeoAutoLogin');
+            $response->headers->clearCookie('neoAutoLogin');
 
             return $this->render(
                 'index.html.twig',

@@ -88,7 +88,7 @@
                 />
               </a>
             </div>
-            <div class="mt-6 mb-8 flex md:mt-10 xl:mt-14">
+            <div class="mb-8 mt-6 flex md:mt-10 xl:mt-14">
               <HelpIconComponent class="mr-2 w-16 fill-primary md:flex" />
               <p class="flex flex-col text-gray-500">
                 <span class="font-bold text-gray-700">Besoin d'aide ?</span>
@@ -261,6 +261,7 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
+import Cookies from 'js-cookie'
 
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
 import ArrowRightIcon from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
@@ -307,6 +308,7 @@ const loginSubmit = async () => {
   if (isLoading.value) return
   alertStore.setClose()
   isLoading.value = true
+
   const accounts = await userStore.authenticate({
     username: username.value.toLowerCase(),
     password: password.value,
