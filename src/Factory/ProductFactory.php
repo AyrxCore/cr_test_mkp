@@ -78,10 +78,8 @@ class ProductFactory extends AbstractFactory
             $properties = $this->mapProperties($data['properties']);
             $product->setProperties($properties);
 
-            $categories = [];
-            foreach ($data['categories'] as $category) {
-                $categories[] = ['id' => $category['id'], 'name' => $category['name']['default']];
-            }
+            $categories = $this->categoryFactory->createAndAddToCollection($data['categories']);
+
             $product->setCategories($categories);
 
             if (!$product->getIsAccordCadre()) {
@@ -131,11 +129,11 @@ class ProductFactory extends AbstractFactory
         }
 
         if (!empty($remoteFilters['company'])) {
-            $filters['companies'] = $this->categoryFactory->createAndAddToCollection($remoteFilters['company']);
+            $filters['companies'] = $this->sellerFactory->createAndAddToCollection($remoteFilters['company']);
         }
 
         if (!empty($remoteFilters['category'])) {
-            $filters['categories'] = $this->sellerFactory->createAndAddToCollection($remoteFilters['category']);
+            $filters['categories'] = $this->categoryFactory->createAndAddToCollection($remoteFilters['category']);
         }
 
         return $filters;

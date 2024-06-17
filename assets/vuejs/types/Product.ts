@@ -1,6 +1,7 @@
 import { Price } from '@/vuejs/types/Product/Price'
 import { Seller } from '@/vuejs/types/Seller'
 import { AccountAccordCadre } from '@/vuejs/types/AccountAccordCadre'
+import { Category } from '@/vuejs/types/Product/Category'
 
 export interface Product {
   id: number
@@ -8,7 +9,7 @@ export interface Product {
   slug?: string
   name: string
   description?: string
-  categories: Array<any>
+  categories: Array<Category>
   images: Array<any>
   options: Array<any>
   properties: Array<any>

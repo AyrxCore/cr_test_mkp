@@ -26,5 +26,7 @@ parameters:
     - 'CONTACT_TEXT_UNDER_TITLE'
     - 'HOMEPAGE_ACCORD_CADRE_CHANNEL_PROPERTY_VALUE_ID'
     - 'HOMEPAGE_PRODUCTS_SELECTION_CHANNEL_PROPERTY_VALUE_ID'
+    - 'CUSTOM_CATEGORIES_NAME'
+
     
 # Mettre un lien confluence pour expliquer les différentes clés

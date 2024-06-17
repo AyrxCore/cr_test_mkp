@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Dto;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
     collectionOperations: [
@@ -15,10 +16,12 @@ use ApiPlatform\Core\Annotation\ApiResource;
 )]
 final class Category
 {
+    #[Groups(['products:get', 'product:get'])]
     private ?int $id = null;
 
     private ?int $parentId;
 
+    #[Groups(['products:get', 'product:get'])]
     private ?string $name;
 
     private ?string $image;

@@ -225,4 +225,16 @@ class Channel
 
         return $this;
     }
+
+    public function getChannelOptionValueByKey(string $key): ?string
+    {
+        foreach ($this->channelOptions as $channelOption) {
+            if ($channelOption->getName() === $key) {
+                return $channelOption->getValue();
+            }
+        }
+    
+        return null;
+    }
+    
 }

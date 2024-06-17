@@ -8,12 +8,26 @@ use App\Dto\Category;
 use App\Entity\Account;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use App\Context\ChannelContext;
+use Symfony\Component\Security\Core\Security;
 
 class CategoryFactory extends AbstractFactory
 {
-    public function __construct(private RequestStack $requestStack, protected AdapterInterface $cache)
+    private const CUSTOM_CATEGORY_NAME_KEY = "CUSTOM_CATEGORIES_NAME";
+    private array $customCategoriesValues = [];
+
+    public function __construct(private RequestStack $requestStack, protected AdapterInterface $cache, private ChannelContext $channelContext, private Security $security)
     {
         parent::__construct($this->cache);
+    }
+
+    public function createAndAddToCollection(array $data): array
+    {
+        $value = $this->channelContext->getChannel()->getChannelOptionValueByKey(self::CUSTOM_CATEGORY_NAME_KEY);
+
+        $this->customCategoriesValues = $value ? json_decode($value, true) : [];
+        
+        return parent::createAndAddToCollection($data);
     }
 
     public function create(array $data): Category
@@ -38,11 +52,14 @@ class CategoryFactory extends AbstractFactory
     {
         $category = new Category();
         $category->setId($data['id']);
-        $category->setName($data['name']);
+        $category->setName(
+            $this->customCategoriesValues[$data['id']] ?? 
+            (is_array($data['name']) ? $data['name']['default'] : $data['name'])
+        );        
         $category->setImage($data['image'] ?? '');
-        $category->setParentId($data['parent']);
-        $category->setProductCount($data['count']);
-        $category->setChecked($data['checked']);
+        $category->setParentId($data['parent'] ?? null);
+        $category->setProductCount($data['count'] ?? null);
+        $category->setChecked($data['checked'] ?? null);
         $children = [];
 
         if (!empty($data['child'])) {
@@ -52,7 +69,8 @@ class CategoryFactory extends AbstractFactory
         }
 
         $category->setChildren($children);
-
+        
         return $category;
     }
+
 }
