@@ -2,10 +2,10 @@
   <div class="flex flex-col items-center rounded-md bg-white p-4">
     <div class="flex h-[50px] w-full items-center justify-end">
       <div
-        class="rounded-sm bg-secondary p-1 text-sm"
         :style="{
           color: betterTextColor('secondary'),
         }"
+        class="rounded-sm bg-secondary p-1 text-sm"
       >
         Accord-cadre
       </div>
@@ -20,11 +20,19 @@
           })
         "
       >
-        <img
-          :src="properties.logo_partenaire"
-          alt="Image produit"
-          class="max-h-[150px] cursor-pointer items-center sm:flex md:max-h-[139px] lg:max-h-[191px] lg:w-full lg:max-w-max"
-        />
+        <RouterLink
+          :to="{
+            name: ProductPageList.ACCORD_CADRE,
+            params: { slug: accord.slug },
+          }"
+          class="block"
+        >
+          <img
+            :src="properties.logo_partenaire"
+            :alt="`Image ${accord.name}`"
+            class="max-h-[150px] cursor-pointer items-center sm:flex md:max-h-[139px] lg:max-h-[191px] lg:w-full lg:max-w-max"
+          />
+        </RouterLink>
       </div>
 
       <div class="flex h-full flex-col justify-between">
@@ -38,14 +46,22 @@
               })
             "
           >
-            {{ accord.name }}
+            <RouterLink
+              :to="{
+                name: ProductPageList.ACCORD_CADRE,
+                params: { slug: accord.slug },
+              }"
+              class="block"
+            >
+              {{ accord.name }}
+            </RouterLink>
           </h3>
         </div>
 
         <div class="flex w-full items-center justify-start xl:mt-1">
           <p
-            class="description truncate-custom truncate-custom-3 mb-4 px-2"
             v-html="accord.description"
+            class="description truncate-custom truncate-custom-3 mb-4 px-2"
           />
         </div>
 
@@ -55,10 +71,10 @@
               name: ProductPageList.ACCORD_CADRE,
               params: { slug: accord.slug },
             }"
-            class="button button-primary text-wrap mt-auto flex justify-center"
             :style="{
               color: betterTextColor('primary'),
             }"
+            class="button button-primary"
             @click="
               $emit('click-cta', {
                 partenaire_name: accord.seller.name,
@@ -81,7 +97,6 @@ import { ProductPageList } from '@/vuejs/router/pages-list'
 import { Product } from '@/vuejs/types/Product'
 
 import { betterTextColor } from '@/vuejs/services/utils'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const props = defineProps({
   accord: {
@@ -96,10 +111,3 @@ const properties = computed(() => {
   return props.accord.properties
 })
 </script>
-
-<style>
-.text-wrap {
-  text-wrap: wrap;
-  text-align: center;
-}
-</style>
