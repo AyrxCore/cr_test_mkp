@@ -148,19 +148,17 @@ const motifs = computed(() => {
 
 const sendEmail = async () => {
   isLoading.value = true
-  setTimeout(async () => {
-    const alertStore = useAlertStore()
-    const response = await contactStore.sendEmail(contact.value)
-    if (response.error === false) {
-      await contactStore.init()
-    }
-    alertStore.setShow(
-      response.message,
-      response.error === true ? AlertType.danger : AlertType.success,
-    )
+  const alertStore = useAlertStore()
+  const response = await contactStore.sendEmail(contact.value)
+  if (response.error === false) {
+    await contactStore.init()
+  }
+  alertStore.setShow(
+    response.message,
+    response.error === true ? AlertType.danger : AlertType.success,
+  )
 
-    isLoading.value = false
-  }, 500)
+  isLoading.value = false
 }
 </script>
 

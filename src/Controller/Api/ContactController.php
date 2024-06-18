@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller\Api;
 
+use App\Controller\ChannelAwareControllerInterface;
+use App\Controller\ChannelAwareControllerTrait;
 use App\Service\MailerProvider;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,8 +20,10 @@ use Symfony\Contracts\Service\Attribute\Required;
 use Twig\Environment;
 
 #[Route('/api/contact')]
-class ContactController extends AbstractController
+class ContactController extends AbstractController implements ChannelAwareControllerInterface
 {
+    use ChannelAwareControllerTrait;
+
     public const LIST_MOTIFS = [
         'Question sur une commande ou un produit',
         'Question sur une livraison',
@@ -76,17 +80,17 @@ class ContactController extends AbstractController
             if ($isValid) {
                 try {
                     $this->mailerProvider->send(
-                        $contact->email,
-                        $this->parameterBag->get('mail_contact'),
+                        $this->parameterBag->get('CONTACT_MAIL_FROM'),
+                        $this->getChannel($request)->getChannelParameter()->getEmail(),
                         $contact->motif,
                         $this->twig->render('mails/request.send.contact.html.twig', [
                             'contact' => $contact,
                         ])
                     );
-                    $message = 'Votre demande a bien été envoyée, <br />notre équipe fait le nécessaire pour vous répondre le plus rapidement';
+                    $message = 'Votre demande a bien été envoyée, notre équipe fait le nécessaire pour vous répondre le plus rapidement possible.';
                 } catch (\Exception $exception) {
                     $error = true;
-                    $message = 'Un incident est survenu lors de l\'envoie du mail, veuillez essayer ultérieurement';
+                    $message = 'Un incident est survenu lors de l\'envoi du mail, veuillez essayer ultérieurement';
                     $this->logger->critical("Erreur d'envoie de mail ".$contact->email.' : '.$exception->getMessage());
                 }
             } else {
