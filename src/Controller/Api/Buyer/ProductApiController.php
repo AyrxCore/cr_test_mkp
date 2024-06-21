@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Controller\Api\Buyer;
 
 use App\Context\ChannelContext;
+use App\Dto\AccountAccordCadre;
 use App\Service\AccordCadreSubscriptionService;
 use App\Service\UpplerProductService;
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,7 +36,7 @@ class ProductApiController extends AbstractController
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     #[Route('/api/accord-cadre-subscription', name: 'accord_cadre_subscription', methods: ['POST'])]
     public function subscription(
@@ -52,6 +52,12 @@ class ProductApiController extends AbstractController
             throw new BadRequestHttpException('Missing required parameters.');
         }
 
-        return new JsonResponse($this->accordCadreSubscriptionService->subscription($params, $accountId, $channelContext->getChannel()));
+        $created = $this->accordCadreSubscriptionService->subscription($params, $accountId, $channelContext->getChannel());
+
+        if (!$created) {
+            throw new BadRequestHttpException();
+        }
+
+        return new JsonResponse(AccountAccordCadre::PROCESS_STATUS_PENDING);
     }
 }

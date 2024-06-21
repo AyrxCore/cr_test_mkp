@@ -9,7 +9,6 @@ use App\Entity\AccordStatut;
 use App\Entity\Account;
 use App\Entity\LogAccordStatutRequest;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
 
@@ -22,30 +21,31 @@ class SubscriptionService
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function subscription(
         string $accordId,
         Account $account
-    ): string {
+    ): bool {
         try {
             return $this->processAccordStatus($account, $accordId);
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             $this->logger->critical(
                 "Erreur d'envoi de demande de subscription "
                 .$account->getUser()->getemail().' '.$account->getAdherent()->getName().' : '.
                 $exception->getMessage()
             );
 
-            return AccountAccordCadre::PROCESS_STATUS_NOT_ACTIVATED;
+            return false;
         }
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
-    private function processAccordStatus(Account $account, string $accordId): string
+    private function processAccordStatus(Account $account, string $accordId): bool
     {
+        $created = false;
         try {
             $accordStatut = $this->em->getRepository(AccordStatut::class)->findOneBy([
                 'adherent' => $account->getAdherent()->getId(),
@@ -64,17 +64,19 @@ class SubscriptionService
                 $log->setAccount($account);
                 $log->setCreatedAt(new \DateTimeImmutable('now'));
                 $this->em->persist($log);
+                $created = true;
             } else {
                 if ($accordStatut->getStatus() === AccountAccordCadre::PROCESS_STATUS_NOT_ACTIVATED) {
                     $accordStatut->setStatus(AccountAccordCadre::PROCESS_STATUS_PENDING);
+                    $created = true;
                 }
             }
 
             $this->em->persist($accordStatut);
             $this->em->flush();
 
-            return $accordStatut->getStatus();
-        } catch (Exception $e) {
+            return $created;
+        } catch (\Exception $e) {
             throw $e;
         }
     }

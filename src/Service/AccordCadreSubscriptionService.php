@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Dto\AccountAccordCadre;
 use App\Entity\Account;
 use App\Entity\Channel;
 use App\Repository\AccountRepository;
 use App\Service\AccordCadreSubscription\SubscriptionMailerService;
 use App\Service\AccordCadreSubscription\SubscriptionService;
 use Doctrine\ORM\EntityNotFoundException;
-use Exception;
 
 class AccordCadreSubscriptionService
 {
@@ -24,43 +22,44 @@ class AccordCadreSubscriptionService
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function subscription(
         array $params,
         string $accountId,
         Channel $channel,
-    ): string {
+    ): bool {
         $account = $this->accountRepository->find($accountId);
 
         if (!$account) {
             throw new EntityNotFoundException('Account not found');
         }
 
-        $isStellantis = in_array($params['accordId'], $this->stellantisParams['ACCORDS_IDS']);
+        $isStellantis = \in_array($params['accordId'], $this->stellantisParams['ACCORDS_IDS'], true);
 
-        $status = $isStellantis ? $this->stellantisSubscription($account) : $this->subscriptionService->subscription($params['accordId'], $account);
+        $created = $isStellantis ? $this->stellantisSubscription($account) : $this->subscriptionService->subscription($params['accordId'], $account);
 
-        if ($status === AccountAccordCadre::PROCESS_STATUS_PENDING) {
+        if ($created) {
             $email = $channel->getChannelParameter()?->getEmail();
             $this->subscriptionMailerService->sendMail($account, $email, $params['accordName'], $isStellantis);
         }
 
-        return $status;
+        return $created;
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
-    private function stellantisSubscription(Account $account): string
+    private function stellantisSubscription(Account $account): bool
     {
-        $atLeastOneStatusPending = null;
+        $atLeastOneCreated = false;
         foreach ($this->stellantisParams['ACCORDS_IDS'] as $id) {
-            $status = $this->subscriptionService->subscription($id, $account);
-            if (!$atLeastOneStatusPending && $status === AccountAccordCadre::PROCESS_STATUS_PENDING) {
-                $atLeastOneStatusPending = $status;
+            $created = $this->subscriptionService->subscription($id, $account);
+            if (!$atLeastOneCreated && $created) {
+                $atLeastOneCreated = true;
             }
         }
-        return $atLeastOneStatusPending;
+
+        return $atLeastOneCreated;
     }
 }
