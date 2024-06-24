@@ -4,38 +4,32 @@ declare(strict_types=1);
 
 namespace App\Dto;
 
-use ApiPlatform\Core\Annotation\ApiProperty;
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use App\State\Processor\AddressPersistProcessor;
+use App\State\Provider\AddressProvider;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    collectionOperations: [
-        'create' => [
-            'openapi_context' => [
-                'summary' => 'Créer une nouvelle adresse',
-                'description' => 'Permet de créer une nouvelle adresse pour une company',
-            ],
-            'method' => 'POST',
-            'validate' => true,
-            'normalization_context' => ['groups' => ['address:create']],
-        ],
-        'get',
+    operations: [
+        new Get(),
+        new Put(
+            openapiContext: ['summary' => 'Editer une adresse', 'description' => 'Permet d\'éditer adresse pour une company'],
+            normalizationContext: ['groups' => ['address:update']],
+            validate: true),
+        new Post(
+            openapiContext: ['summary' => 'Créer une nouvelle adresse', 'description' => 'Permet de créer une nouvelle adresse pour une company'],
+            normalizationContext: ['groups' => ['address:create']],
+            validate: true),
+        new GetCollection()
     ],
-    itemOperations: [
-        'get' => [
-            'method' => 'GET',
-        ],
-        'update' => [
-            'openapi_context' => [
-                'summary' => 'Editer une adresse',
-                'description' => "Permet d'éditer adresse pour une company",
-            ],
-            'method' => 'PUT',
-            'validate' => true,
-            'normalization_context' => ['groups' => ['address:update']],
-        ],
-    ],
+    provider: AddressProvider::class,
+    processor: AddressPersistProcessor::class
 )]
 final class Address
 {

@@ -21,6 +21,7 @@
                 placeholder="Saisir votre adresse email professionnelle"
                 required
                 type="email"
+                autocomplete="username"
               />
               <span
                 class="absolute inset-y-0 right-0 flex items-center pr-8 text-gray-700"
@@ -37,6 +38,7 @@
                 class="input !border-solid !border-black !py-1 !pr-16 !ring-black md:!py-2 xl:!py-4"
                 placeholder="**********"
                 required
+                autocomplete="current-password"
               />
               <span
                 class="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-6 pt-6 text-gray-500"
@@ -261,7 +263,6 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import Cookies from 'js-cookie'
 
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
 import ArrowRightIcon from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'

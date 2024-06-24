@@ -7,8 +7,8 @@ namespace App\Service;
 use App\Entity\Favorite;
 use App\Entity\FavoriteProduct;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Service\Attribute\Required;
 
 class FavoriteService

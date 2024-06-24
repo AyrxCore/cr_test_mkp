@@ -27,7 +27,7 @@ class AddProduct extends AbstractController
     )]
     public function __invoke(Request $request): JsonResponse
     {
-        $options = $request->request->all();
+        $options = $request->getPayload()->all();
         $productId = (int) $options['productId'] ?? null;
         $variantId = (int) $options['variantId'] ?? null;
         $productName = $options['productName'] ?? null;

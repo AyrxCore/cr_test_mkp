@@ -14,7 +14,7 @@ abstract class AbstractNormalizer implements NormalizerInterface
 {
     protected SfNormalizerInterface $normalizer;
 
-    public function normalize($object, $format = null, array $context = [])
+    public function normalize($object, $format = null, array $context = []): float|array|\ArrayObject|bool|int|string|null
     {
         $data = $this->normalizer->normalize($object, $format, $context);
 
@@ -29,10 +29,10 @@ abstract class AbstractNormalizer implements NormalizerInterface
 
     public function denormalize($data, string $type, string $format = null, array $context = [])
     {
-        return $this->normalizer->denormalize($data, $type, $format, $context);
+        return $this->denormalize($data, $type, $format, $context);
     }
 
-    public function setSerializer(SerializerInterface $serializer)
+    public function setSerializer(SerializerInterface $serializer): void
     {
         if ($this->normalizer instanceof SerializerAwareInterface) {
             $this->normalizer->setSerializer($serializer);

@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace App\Dto;
 
-use ApiPlatform\Core\Annotation\ApiProperty;
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use App\State\Provider\CompanyMandateProvider;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    collectionOperations: ['get_all' => [
-        'openapi_context' => [
-            'summary' => 'Liste des mandats existants pour la company de l\'utilisateur',
-        ],
-        'path' => '/company/mandates',
-        'method' => 'GET',
-    ]],
+    operations: [
+        new GetCollection(
+            uriTemplate: '/company/mandates',
+            openapiContext: ['Liste des mandats existants pour la company de l\'utilisateur']
+        ),
+    ],
+    provider: CompanyMandateProvider::class
 )]
 final class CompanyMandate
 {

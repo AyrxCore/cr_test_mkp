@@ -37,7 +37,7 @@ export default class FavoriteHttpClient extends BaseClientService {
 
   public addProduct<T extends []>(data): Promise<T | Favorite> {
     return this.apiClient
-      .postForm<T>('favorite-products', data)
+      .post<T>('favorite-products', data)
       .then((response) => response.data)
   }
 
@@ -52,7 +52,7 @@ export default class FavoriteHttpClient extends BaseClientService {
     data,
   ): Promise<T | Favorite> {
     return this.apiClient
-      .postForm<T>(`favorite-products/${favoriteProductId}/favorites`, data)
+      .post<T>(`favorite-products/${favoriteProductId}/favorites`, data)
       .then((response) => response.data)
   }
 
@@ -61,7 +61,7 @@ export default class FavoriteHttpClient extends BaseClientService {
     favoriteIdToReceive,
   ): Promise<T | Favorite> {
     return this.apiClient
-      .postForm<T>('favorite-products/favorites', {
+      .post<T>('favorite-products/favorites', {
         favoriteId: id,
         favoriteIdToReceive,
       })

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\EventListener;
 
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\AccessMapInterface;
 
 class AuthenticationListener

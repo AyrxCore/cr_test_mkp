@@ -4,8 +4,14 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use App\Repository\AdherentRepository;
+use App\State\Processor\AdherentPersistProcessor;
+use App\State\Provider\AdherentProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,20 +19,20 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
 #[ApiResource(
-    itemOperations: [
-        'get' => [
-            'normalization_context' => ['groups' => ['user:simple', 'adherent:get']],
-        ],
-        'update' => [
-            'openapi_context' => [
-                'summary' => 'Modifier un adherent',
-                'description' => 'Permet de mettre à jour le channel, le code bonuus et les rattachements',
-            ],
-            'method' => 'PATCH',
-            'validate' => true,
-            'denormalizationContext' => ['groups' => 'update'],
-        ],
+    operations: [
+        new Get(
+            normalizationContext: ['groups' => ['user:simple', 'adherent:get']]
+        ),
+        new Patch(
+            openapiContext: ['summary' => 'Modifier un adherent', 'description' => 'Permet de mettre à jour le channel, le code bonuus et les rattachements'],
+            denormalizationContext: ['groups' => 'update'],
+            validate: true
+        ),
+        new Post(),
+        new GetCollection()
     ],
+    provider: AdherentProvider::class,
+    processor: AdherentPersistProcessor::class
 )]
 #[ORM\Entity(repositoryClass: AdherentRepository::class)]
 class Adherent
@@ -94,8 +100,11 @@ class Adherent
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $reducceUrl = null;
 
-    #[ORM\ManyToOne(targetEntity: Adherent::class, inversedBy: 'parent')]
-    private ?Adherent $parent = null;
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
+    private ?self $parent = null;
+
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
+    private Collection $children;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $libelleApe = null;
@@ -104,6 +113,7 @@ class Adherent
     {
         $this->accordStatuts = new ArrayCollection();
         $this->accounts = new ArrayCollection();
+        $this->children = new ArrayCollection();
     }
 
     public function getId(): ?Uuid
@@ -355,5 +365,13 @@ class Adherent
         $this->libelleApe = $libelleApe;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getChildren(): Collection
+    {
+        return $this->children;
     }
 }

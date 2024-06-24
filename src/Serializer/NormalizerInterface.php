@@ -10,5 +10,5 @@ use Symfony\Component\Serializer\SerializerAwareInterface;
 
 interface NormalizerInterface extends SymfonyNormalizerInterface, DenormalizerInterface, SerializerAwareInterface
 {
-    public const EXTERNAL_API_CONTEXT_KEY = 'external_api_data';
+    public const string EXTERNAL_API_CONTEXT_KEY = 'external_api_data';
 }

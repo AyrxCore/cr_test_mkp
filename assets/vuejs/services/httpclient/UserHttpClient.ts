@@ -1,3 +1,5 @@
+import { AxiosResponse } from 'axios'
+
 import BaseClientService from '@/vuejs/services/BaseClientService'
 import {
   AuthenticateResponse,
@@ -50,7 +52,7 @@ export default class UserHttpClient extends BaseClientService {
 
   public updateUserAccountEmail<T extends User>(
     accountEmail: AccountEmail,
-  ): Promise<T> {
+  ): Promise<AxiosResponse<any> | { err: any }> {
     return this.apiClient
       .patch(`sub_accounts/${accountEmail.id}`, accountEmail)
       .then((response) => {

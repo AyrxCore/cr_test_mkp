@@ -117,14 +117,6 @@ services:
     arguments:
       $channels: '%channels%'
 
-  App\DataProvider\AccountCollectionDataProvider:
-    arguments:
-      $collectionExtensions: !tagged api_platform.doctrine.orm.query_extension.collection
-
-  App\DataProvider\UserMeItemDataProvider:
-    arguments:
-      $itemExtensions: !tagged api_platform.doctrine.orm.query_extension.item
-
   App\Service\Channel\ChannelOptionsBuilder:
     arguments:
       $validKeys: '%channel_option_valid_keys%'
@@ -138,5 +130,7 @@ services:
       $sugarLink: '%env(SUGAR_LINK)%'
       $emailFrom: '%env(MAIL_FROM)%'
       $stellantisParams: '%STELLANTIS_PARAMS%'
+
+  Symfony\Component\DependencyInjection\ContainerInterface: '@service_container'
 
   Symfony\Component\Security\Http\AccessMapInterface: '@security.access_map'

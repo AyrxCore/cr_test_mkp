@@ -24,7 +24,7 @@ class ContactController extends AbstractController implements ChannelAwareContro
 {
     use ChannelAwareControllerTrait;
 
-    public const LIST_MOTIFS = [
+    public const array LIST_MOTIFS = [
         'Question sur une commande ou un produit',
         'Question sur une livraison',
         'Question sur Mon Compte',
@@ -46,7 +46,7 @@ class ContactController extends AbstractController implements ChannelAwareContro
     public ParameterBagInterface $parameterBag;
     public LoggerInterface $logger;
 
-    public function __construct(private CsrfTokenManagerInterface $csrfTokenManager)
+    public function __construct(private readonly CsrfTokenManagerInterface $csrfTokenManager)
     {
     }
 
@@ -56,7 +56,7 @@ class ContactController extends AbstractController implements ChannelAwareContro
     #[Route('/send-email', name: 'send_contact_email', methods: ['POST'])]
     public function sendContact(Request $request): JsonResponse
     {
-        $options = $request->request->all();
+        $options = \json_decode($request->getContent(), true);
 
         $token = new CsrfToken('contact_form', $options['_token']);
         $error = false;
@@ -116,7 +116,7 @@ class ContactController extends AbstractController implements ChannelAwareContro
         return new JsonResponse($token->getValue());
     }
 
-    private function validateFormContact(\stdClass $contact)
+    private function validateFormContact(\stdClass $contact): bool
     {
         if ($contact->lastName === null) {
             $contact->errors[] = 'Le nom est obligatoire';

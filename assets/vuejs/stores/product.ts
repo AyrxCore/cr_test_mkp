@@ -6,10 +6,6 @@ import { getErrorMessage } from '@/vuejs/services/login'
 import ProductHttpClient from '@/vuejs/services/httpclient/ProductHttpClient'
 import { Product, ProductStoreState } from '@/vuejs/types/Product'
 import { arrayEqual, hexToBinary, notifyError } from '@/vuejs/services/utils'
-import {
-  HOME_ACCORD_CADRE_PROPERTY,
-  HOME_PRODUCTS_SELECTION_PROPERTY,
-} from '@/vuejs/services/const'
 import { useChannelStore } from '@/vuejs/stores/channel'
 
 export const useProductStore = defineStore({

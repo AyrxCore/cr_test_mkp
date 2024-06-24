@@ -97,7 +97,7 @@ const onSubmitFavorite = async (event) => {
   isLoading.value = true
   errorSubmit.value = null
   const oldFavoriteName = event.favorite.name
-  event.favorite.name = event.newFavoriteName
+  event.favorite.name = event.newFavoriteName ?? event.favorite.name
   try {
     if (event.isEditing) {
       await favoriteStore.update(event.favorite)

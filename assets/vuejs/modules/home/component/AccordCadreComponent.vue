@@ -67,12 +67,12 @@
 
         <div class="mt-1 flex w-full justify-center">
           <RouterLink
+            :style="{
+              color: betterTextColor('primary'),
+            }"
             :to="{
               name: ProductPageList.ACCORD_CADRE,
               params: { slug: accord.slug },
-            }"
-            :style="{
-              color: betterTextColor('primary'),
             }"
             class="button button-primary"
             @click="

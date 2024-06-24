@@ -75,7 +75,7 @@
       </template>
       <ButtonComponent
         class="button-primary-outline w-fit"
-        v-if="!newMandate && !isMandatesLoading"
+        v-if="!newMandate && !isMandatesLoading && !isSEPALoading"
         @click="newMandate = true"
       >
         Saisir un nouveau mandat
@@ -121,6 +121,7 @@ onMounted(async (): Promise<void> => {
 })
 
 const confirmForm = async () => {
+  errors.value = []
   if (!isValidIBAN(iban.value)) {
     errors.value = ["Le format de l'IBAN est invalide"]
     return

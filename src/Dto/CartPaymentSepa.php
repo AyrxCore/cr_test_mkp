@@ -4,20 +4,22 @@ declare(strict_types=1);
 
 namespace App\Dto;
 
-use ApiPlatform\Core\Annotation\ApiProperty;
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Patch;
+use App\State\Processor\CartPaymentSepaPersistProcessor;
+use App\State\Provider\CartPaymentSepaProvider;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    itemOperations: [
-        'update' => [
-            'openapi_context' => [
-                'summary' => 'Update cart sepa informations',
-            ],
-            'method' => 'PATCH',
-            'validate' => true,
-        ],
-    ]
+    operations: [
+        new Patch(
+            openapiContext: ['summary' => 'Update cart sepa informations'],
+            validate: true
+        ),
+    ],
+    provider: CartPaymentSepaProvider::class,
+    processor: CartPaymentSepaPersistProcessor::class
 )]
 final class CartPaymentSepa
 {

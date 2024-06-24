@@ -60,8 +60,8 @@ const props = defineProps({
   },
 })
 const favorite = ref<Favorite>()
-const favoriteName = ref<string>(null)
-const errorMessage = ref<string>(null)
+const favoriteName = ref<string|null>(null)
+const errorMessage = ref<string|null>(null)
 const favoriteStore = useFavoriteStore()
 const emit = defineEmits(['cancel', 'submitFavorite', 'changeValue'])
 

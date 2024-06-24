@@ -1,9 +1,9 @@
 <template>
-  <h3 class="mb-2 ml-4 text-2xl font-bold">
+  <h3 class="mb-2 ml-4 text-2xl font-bold text-primary">
     <slot name="title" />
   </h3>
   <div
-    class="mb-8 flex items-center justify-between rounded-lg bg-white py-3 px-3 text-base md:text-lg"
+    class="mb-8 flex items-center justify-between rounded-lg bg-white p-3 text-base md:text-lg"
   >
     <div class="truncate">
       <span v-if="props.address" :title="props.address">

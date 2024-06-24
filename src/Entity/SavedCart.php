@@ -4,9 +4,15 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use App\Repository\SavedCartRepository;
+use App\State\Processor\SavedCartPersistProcessor;
+use App\State\Processor\SavedCartRemoveProcessor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,55 +22,39 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
 #[ApiResource(
-    collectionOperations: [
-        'get' => [
-            'method' => 'GET',
-            'path' => '/saved-carts',
-        ],
-        'create' => [
-            'openapi_context' => [
-                'summary' => 'Créer une nouvelle liste de panier sauvegardé',
-                'description' => 'Permet de créer une nouvelle liste de panier sauvegardé',
-            ],
-            'method' => 'POST',
-            'validate' => true,
-            'path' => '/saved-carts',
-        ],
+    operations: [
+        new Get(
+            uriTemplate: '/saved-carts/{id}',
+            normalizationContext: ['groups' => ['savedCart:get']]
+        ),
+        new Patch(
+            uriTemplate: '/saved-carts/{id}',
+            openapiContext: ['summary' => 'Modifier une liste de panier', 'description' => 'Permet de mettre a jour le nom et la visibilité d\'une liste de panier sauvegardé'],
+            normalizationContext: ['groups' => ['update']],
+            security: 'is_granted(\'MANAGE_SAVED_CART\', object)',
+            validate: true
+        ),
+        new Delete(
+            uriTemplate: '/saved-carts/{id}',
+            openapiContext: ['summary' => 'Supprimer une liste de panier sauvegardé'],
+            security: 'is_granted(\'MANAGE_SAVED_CART\', object)',
+            validate: true,
+            processor: SavedCartRemoveProcessor::class
+        ),
+        new Get(
+            uriTemplate: '/saved-carts/{id}/products',
+            openapiContext: ['summary' => 'Afficher la liste des produits liés à un panier sauvegardé']
+        ),
+        new GetCollection(
+            uriTemplate: '/saved-carts'
+        ),
+        new Post(
+            uriTemplate: '/saved-carts',
+            openapiContext: ['summary' => 'Créer une nouvelle liste de panier sauvegardé', 'description' => 'Permet de créer une nouvelle liste de panier sauvegardé'],
+            validate: true
+        ),
     ],
-    itemOperations: [
-        'get' => [
-            'normalization_context' => ['groups' => ['savedCart:get']],
-            'method' => 'GET',
-            'path' => '/saved-carts/{id}',
-        ],
-        'patch' => [
-            'openapi_context' => [
-                'summary' => 'Modifier une liste de panier',
-                'description' => "Permet de mettre a jour le nom et la visibilité d'une liste de panier sauvegardé",
-            ],
-            'security' => "is_granted('MANAGE_SAVED_CART', object)",
-            'method' => 'PATCH',
-            'path' => '/saved-carts/{id}',
-            'validate' => true,
-            'normalization_context' => ['groups' => ['update']],
-        ],
-        'delete' => [
-            'openapi_context' => [
-                'summary' => 'Supprimer une liste de panier sauvegardé',
-            ],
-            'security' => "is_granted('MANAGE_SAVED_CART', object)",
-            'method' => 'DELETE',
-            'path' => '/saved-carts/{id}',
-            'validate' => true,
-        ],
-        'get_uppler_products' => [
-            'method' => 'GET',
-            'path' => '/saved-carts/{id}/products',
-            'openapi_context' => [
-                'summary' => 'Afficher la liste des produits liés à un panier sauvegardé',
-            ],
-        ],
-    ],
+    processor: SavedCartPersistProcessor::class
 )]
 #[ORM\Entity(repositoryClass: SavedCartRepository::class)]
 #[ORM\UniqueConstraint(
@@ -104,7 +94,6 @@ class SavedCart
 
     #[ORM\OneToMany(mappedBy: 'savedCart', targetEntity: SavedCartProduct::class, cascade: ['persist'], orphanRemoval: true)]
     #[Groups(['savedCart:get'])]
-    #[ApiSubresource]
     private Collection $savedCartProducts;
 
     public function __construct()

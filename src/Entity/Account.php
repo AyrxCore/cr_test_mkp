@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\AccountRepository;
+use App\State\Provider\AccountProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -14,34 +17,24 @@ use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
+#[ApiResource(
+    operations: [
+        new Get(
+            normalizationContext: ['groups' => ['account:get']],
+            security: 'is_granted("ROLE_API") or object.getUser() == user'
+        ),
+        new Get(
+            openapiContext: ['summary' => 'Select an Account', 'description' => 'Select an Account to use when communicating with Uppler'],
+            name: 'account_select',
+        ),
+        new GetCollection(
+            normalizationContext: ['groups' => ['user:simple', 'account:get', 'account:external_api_data:buyer']],
+            name: 'api_accounts_get_collection',
+            provider: AccountProvider::class
+        )]
+)]
 #[ORM\Entity(repositoryClass: AccountRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-#[ApiResource(
-    collectionOperations: [
-        'get' => [
-            'normalization_context' => [
-                'groups' => [
-                    'user:simple',
-                    'account:get',
-                    'account:external_api_data:buyer',
-                ],
-            ],
-        ],
-    ],
-    itemOperations: [
-        'get' => [
-            'security' => 'is_granted("ROLE_API") or object.getUser() == user',
-            'normalization_context' => ['groups' => ['account:get']],
-        ],
-        'select' => [
-            'route_name' => 'account_select',
-            'openapi_context' => [
-                'summary' => 'Select an Account',
-                'description' => 'Select an Account to use when communicating with Uppler',
-            ],
-        ],
-    ],
-)]
 class Account
 {
     #[ORM\Id]
@@ -51,11 +44,11 @@ class Account
     #[Groups(['user:simple', 'account:list', 'account:get'])]
     private ?Uuid $id = null;
 
-    #[ORM\Column()]
+    #[ORM\Column]
     #[Groups(['user:simple', 'account:list', 'account:get'])]
     private ?int $upplerUserId = null;
 
-    #[ORM\Column()]
+    #[ORM\Column]
     #[Groups(['account:list', 'account:get'])]
     private ?int $upplerSubAccountId = null;
 
@@ -86,7 +79,7 @@ class Account
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $updatedAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'accounts', cascade: ['persist'])]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'accounts')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['account:get'])]
     private ?User $user = null;
@@ -95,7 +88,7 @@ class Account
     #[Groups(['account:get', 'user:simple'])]
     private ?bool $enabled = null;
 
-    #[ORM\ManyToOne(inversedBy: 'accounts', fetch: 'EAGER')]
+    #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'accounts')]
     #[ORM\JoinColumn(nullable: true)]
     #[Groups(['user:simple'])]
     private ?Adherent $adherent = null;
@@ -136,14 +129,14 @@ class Account
     }
 
     #[ORM\PrePersist]
-    public function onPrePersist()
+    public function onPrePersist(): void
     {
         $this->updatedAt = new \DateTime('now');
         $this->createdAt = new \DateTime('now');
     }
 
     #[ORM\PreUpdate]
-    public function onPreUpdate()
+    public function onPreUpdate(): void
     {
         $this->updatedAt = new \DateTime('now');
     }

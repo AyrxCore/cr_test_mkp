@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 )]
 class GenerateHostsCommand extends Command
 {
-    private const HOST_PATTERN = '/^(?:https?:\/\/)?([a-z\-.]+)\.[a-z]+$/';
+    private const string HOST_PATTERN = '/^(?:https?:\/\/)?([a-z\-.]+)\.[a-z]+$/';
 
     public function __construct(private ContainerInterface $container)
     {

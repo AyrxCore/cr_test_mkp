@@ -32,7 +32,7 @@ class DeleteFavoriteMoveProduct extends AbstractController
     public function __invoke(Request $request): JsonResponse
     {
         try {
-            $options = $request->request->all();
+            $options = $request->getPayload()->all();
 
             $favoriteId = $options['favoriteId'] ?? null;
             $favoriteIdToReceive = $options['favoriteIdToReceive'] ?? null;

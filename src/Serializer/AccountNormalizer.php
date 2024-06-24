@@ -11,8 +11,8 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface as SfNormalizerI
 class AccountNormalizer extends AbstractNormalizer
 {
     public function __construct(
-        SfNormalizerInterface $normalizer,
-        private UpplerBuyerCompanyService $upplerBuyerCompanyService,
+        SfNormalizerInterface                      $normalizer,
+        private readonly UpplerBuyerCompanyService $upplerBuyerCompanyService,
     ) {
         $this->normalizer = $normalizer;
     }
@@ -22,13 +22,14 @@ class AccountNormalizer extends AbstractNormalizer
         return $data instanceof Account && $this->normalizer->supportsNormalization($data, $format);
     }
 
-    public function supportsDenormalization($data, $type, $format = null)
+    public function supportsDenormalization($data, $type, $format = null): bool
     {
-        return $data instanceof Account && $this->normalizer->supportsDenormalization($data, $type, $format);
+        return $data instanceof Account && $this->supportsDenormalization($data, $type, $format);
     }
 
     /**
      * @param Account $object
+     * @throws \Exception
      */
     protected function getExternalApiData(mixed $object, array $context): ?\stdClass
     {

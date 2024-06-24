@@ -1,5 +1,5 @@
 <template>
-  <h3 class="text-title-primary mt-8 mb-2">Adresses</h3>
+  <h3 class="text-title-primary mb-2 mt-8">Adresses</h3>
   <div class="flex flex-col-reverse lg:grid lg:grid-cols-4 lg:gap-4 lg:px-0">
     <div class="col-span-3 flex flex-col lg:grid lg:grid-cols-2 lg:gap-2">
       <div>

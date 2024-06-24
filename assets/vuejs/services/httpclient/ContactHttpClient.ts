@@ -17,7 +17,7 @@ export default class ContactHttpClient extends DefaultClientService {
 
   public sendEmail<T extends []>(contact: Contact): Promise<T> {
     return this.client
-      .postForm<T>('contact/send-email', contact)
+      .post<T>('contact/send-email', contact)
       .then((response) => response.data)
   }
 }

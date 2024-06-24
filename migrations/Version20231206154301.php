@@ -32,8 +32,6 @@ final class Version20231206154301 extends AbstractMigration
                     (\'7baab085-a4d1-4932-baa4-70cd20b449a6\',\'1ee935b1-507b-6a54-b3b1-9dfe7a0ccd80\',\'SUPPLIER_PARTNERS_HOMEPAGE_QANTIS\',\'true\'),
                     (\'e6b4881b-9db4-470f-83db-32dfaaedd8fd\',\'1ee935b1-507b-6a54-b3b1-9dfe7a0ccd80\',\'EXPERT_CONTENT_HOMEPAGE_QANTIS\',\'true\'),
                     (\'f471e184-203d-43c6-8ee6-e2476edb0e9f\',\'1ee935b1-507b-6a54-b3b1-9dfe7a0ccd80\',\'FAVORITES\',\'true\')');
-
-
     }
 
     public function down(Schema $schema): void

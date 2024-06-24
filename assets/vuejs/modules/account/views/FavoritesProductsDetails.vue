@@ -144,12 +144,13 @@ onMounted(async () => {
 
 const onSubmitFavorite = async (event) => {
   isEditLoading.value = true
-  const previousFavoriteName = favorite.value.name
+  const oldFavoriteName = event.favorite.name
+  event.favorite.name = event.newFavoriteName ?? event.favorite.name
   try {
     await favoriteStore.update(event.favorite)
     favorite.value.name = event.favorite.name
   } catch (error) {
-    favorite.value.name = previousFavoriteName
+    favorite.value.name = oldFavoriteName
   } finally {
     isEditLoading.value = false
     showFormFavorite.value = false

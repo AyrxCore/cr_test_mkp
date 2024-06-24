@@ -4,22 +4,26 @@ declare(strict_types=1);
 
 namespace App\Dto;
 
-use ApiPlatform\Core\Annotation\ApiProperty;
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use App\State\Processor\CartPaymentPersistProcessor;
+use App\State\Provider\CartPaymentProvider;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    collectionOperations: ['POST'],
-    itemOperations: [
-        'get',
-        'update' => [
-            'openapi_context' => [
-                'summary' => 'Update cart payment method',
-            ],
-            'method' => 'PATCH',
-            'validate' => true,
-        ],
-    ]
+    operations: [
+        new Get(),
+        new Patch(
+            openapiContext: ['summary' => 'Update cart payment method'],
+            validate: true
+        ),
+        new Post()
+    ],
+    provider: CartPaymentProvider::class,
+    processor: CartPaymentPersistProcessor::class
 )]
 final class CartPayment
 {

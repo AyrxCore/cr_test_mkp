@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use ApiPlatform\Action\NotFoundAction;
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use App\Repository\UserRepository;
+use App\State\Provider\UserMeItemProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -19,33 +21,19 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Uid\Uuid;
 
 #[ApiResource(
-    collectionOperations: [],
-    itemOperations: [
-        'get' => [
-            'controller' => NotFoundAction::class,
-            'read' => false,
-            'output' => false,
-        ],
-        'get_me' => [
-            'method' => 'GET',
-            'path' => '/me',
-            'defaults' => [
-                'id' => '7de7d979-b89a-4ea7-bb98-2772cf91fa84',
-            ],
-            'normalization_context' => [
-                'groups' => [
-                    'user:simple',
-                    'user:me',
-                    'user:external_api_data:subaccount',
-                    'user:external_api_data:buyer',
-                ],
-            ],
-            'openapi_context' => [
-                'summary' => 'Get current user info',
-                'description' => 'Get current user info',
-            ],
-        ],
-    ],
+    operations: [
+        new Get(
+            controller: NotFoundAction::class,
+            output: false,
+            read: false
+        ),
+        new Get(
+            uriTemplate: '/me',
+            defaults: ['id' => '7de7d979-b89a-4ea7-bb98-2772cf91fa84'],
+            openapiContext: ['summary' => 'Get current user info', 'description' => 'Get current user info'],
+            normalizationContext: ['groups' => ['user:simple', 'user:me', 'user:external_api_data:subaccount', 'user:external_api_data:buyer']],
+            provider: UserMeItemProvider::class
+        )]
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -67,9 +55,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups('user:simple')]
     private array $roles = [];
 
-    /**
-     * @var string The hashed password
-     */
     #[ORM\Column]
     private ?string $password = null;
 
@@ -130,14 +115,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     #[ORM\PrePersist]
-    public function onPrePersist()
+    public function onPrePersist(): void
     {
         $this->updatedAt = new \DateTime('now');
         $this->createdAt = new \DateTime('now');
     }
 
     #[ORM\PreUpdate]
-    public function onPreUpdate()
+    public function onPreUpdate(): void
     {
         $this->updatedAt = new \DateTime('now');
     }
@@ -196,7 +181,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function addRole($role)
+    public function addRole($role): static
     {
         $role = \strtoupper($role);
 
@@ -207,7 +192,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeRole($role)
+    public function removeRole($role): static
     {
         $role = \strtoupper($role);
 
@@ -219,7 +204,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function hasRole($role)
+    public function hasRole($role): bool
     {
         return \in_array(\strtoupper($role), $this->getRoles(), true);
     }

@@ -22,7 +22,7 @@ class UpplerAddressService extends AbstractUpplerService
         return \json_decode($res->getContent(), true);
     }
 
-    public function getAddress(?int $addressId = null, string $url = null): array
+    public function getAddress(?int $addressId = null, ?string $url = null): array
     {
         $res = $this->request(
             'GET',
@@ -55,7 +55,7 @@ class UpplerAddressService extends AbstractUpplerService
         return $this->getAddress(null, $headers['location'][0]);
     }
 
-    public function updateAddress(Address $address): bool
+    public function updateAddress(Address $address): void
     {
         $res = $this->request(
             method: 'PATCH',
@@ -67,8 +67,6 @@ class UpplerAddressService extends AbstractUpplerService
         if ($res->getStatusCode() !== Response::HTTP_NO_CONTENT) {
             throw new BadRequestHttpException();
         }
-
-        return true;
     }
 
     private function buildJsonData(Address $address, bool $operationCreate = false): array

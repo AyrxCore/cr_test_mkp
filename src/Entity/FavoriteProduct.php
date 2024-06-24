@@ -2,7 +2,11 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\FavoriteProductRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
@@ -10,42 +14,26 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
 #[ApiResource(
-    collectionOperations: [
-        'add_product_to_favorites_collection' => [
-            'route_name' => 'add_product_to_favorites_collection',
-            'method' => "POST",
-            'openapi_context' => [
-                'summary' => "Ajouter un produit à une liste de favori",
-                'description' => "Cette opération permet d'ajouter un produit à une ou plusieurs liste de favori."
-            ],
-        ],
-        'move_products_to_other_favorites_collection' => [
-            'route_name' => 'move_products_to_other_favorites_collection',
-            'method' => "PATCH",
-            'openapi_context' => [
-                'summary' => 'Déplacer tous les produits vers une autre liste de favori'
-            ],
-        ],
-        'move_product_to_favorites_collection' => [
-            'route_name' => 'move_product_to_favorites_collection',
-            'method' => "POST",
-            'openapi_context' => [
-                'summary' => 'Déplacer un produit vers une autre liste de favori'
-            ],
-        ],
-    ],
-    itemOperations: [
-        'get' => [
-            'path' => '/favorite-products/{id}',
-        ],
-        'delete' => [
-            'method' => "DELETE",
-            'path' => '/favorite-products/{id}',
-            'openapi_context' => [
-                'summary' => 'Supprimer un produit lié à un favori'
-            ],
-        ]
-    ]
+    operations: [
+        new Get(
+            uriTemplate: '/favorite-products/{id}'
+        ),
+        new Delete(
+            uriTemplate: '/favorite-products/{id}',
+            openapiContext: ['summary' => 'Supprimer un produit lié à un favori']
+        ),
+        new Post(
+            routeName: 'add_product_to_favorites_collection',
+            openapiContext: ['summary' => 'Ajouter un produit à une liste de favori', 'description' => 'Cette opération permet d\'ajouter un produit à une ou plusieurs liste de favori.'],
+        ),
+        new Patch(
+            routeName: 'move_products_to_other_favorites_collection',
+            openapiContext: ['summary' => 'Déplacer tous les produits vers une autre liste de favori'],
+        ),
+        new Post(
+            routeName: 'move_product_to_favorites_collection',
+            openapiContext: ['summary' => 'Déplacer un produit vers une autre liste de favori'],
+        )]
 )]
 #[ORM\Entity(repositoryClass: FavoriteProductRepository::class)]
 class FavoriteProduct

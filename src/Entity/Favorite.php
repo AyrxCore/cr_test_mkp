@@ -4,8 +4,16 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use App\Repository\FavoriteRepository;
+use App\State\Processor\FavoritePersistProcessor;
+use App\State\Processor\FavoriteRemoveProcessor;
+use App\State\Provider\FavoriteProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,41 +23,31 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
 #[ApiResource(
-    collectionOperations: [
-        'get',
-        'create' => [
-            'openapi_context' => [
-                'summary' => 'Créer une nouvelle liste de favori',
-                'description' => 'Permet de créer une nouvelle liste de favori',
-            ],
-            'method' => 'POST',
-            'validate' => true,
-        ],
+    operations: [
+        new Get(
+            normalizationContext: ['groups' => ['favorite:get']],
+            security: "is_granted('VIEW_FAVORITE', object)"
+        ),
+        new Patch(
+            openapiContext: ['summary' => 'Modifier une liste de favori', 'description' => 'Permet de mettre a jour le nom et la visibilité d\'une liste de favoris'],
+            normalizationContext: ['groups' => ['update']],
+            security: "is_granted('EDIT_FAVORITE', object)",
+            validate: true
+        ),
+        new Delete(
+            openapiContext: ['summary' => 'Supprimer une liste de favori'],
+            security: "is_granted('DELETE_FAVORITE', object)",
+            validate: true,
+            processor: FavoriteRemoveProcessor::class
+        ),
+        new GetCollection(),
+        new Post(
+            openapiContext: ['summary' => 'Créer une nouvelle liste de favori', 'description' => 'Permet de créer une nouvelle liste de favori'],
+            validate: true
+        ),
     ],
-    itemOperations: [
-        'get' => [
-            'normalization_context' => ['groups' => ['favorite:get']],
-            'security' => "is_granted('VIEW_FAVORITE', object)",
-        ],
-        'update' => [
-            'openapi_context' => [
-                'summary' => 'Modifier une liste de favori',
-                'description' => "Permet de mettre a jour le nom et la visibilité d'une liste de favoris",
-            ],
-            'method' => 'PATCH',
-            'validate' => true,
-            'normalization_context' => ['groups' => ['update']],
-            'security' => "is_granted('EDIT_FAVORITE', object)",
-        ],
-        'delete' => [
-            'openapi_context' => [
-                'summary' => 'Supprimer une liste de favori',
-            ],
-            'method' => 'DELETE',
-            'validate' => true,
-            'security' => "is_granted('DELETE_FAVORITE', object)",
-        ],
-    ]
+    provider: FavoriteProvider::class,
+    processor: FavoritePersistProcessor::class
 )]
 #[ORM\Entity(repositoryClass: FavoriteRepository::class)]
 #[ORM\UniqueConstraint(
@@ -191,6 +189,9 @@ class Favorite
         return $this->favoriteProducts;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function addFavoriteProduct(FavoriteProduct $favoriteProduct): self
     {
         foreach ($this->favoriteProducts as $product) {

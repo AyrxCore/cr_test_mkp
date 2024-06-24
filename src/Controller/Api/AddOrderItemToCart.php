@@ -9,24 +9,23 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 #[AsController]
 class AddOrderItemToCart extends AbstractController
 {
-    public function __construct(private UpplerCartService $upplerCartService)
+    public function __construct(private readonly UpplerCartService $upplerCartService)
     {
     }
 
-    /**
-     * @Route("/api/order_items", name="add_order_item_to_cart", methods={"POST"})
-     */
-    public function __invoke(Request $request, NormalizerInterface $normalizer): JsonResponse
+    #[Route(path: '/api/order_items', name: 'add_order_item_to_cart', methods: ['POST'])]
+    public function __invoke(Request $request): JsonResponse
     {
         try {
-            $cartId = (int) $request->request->get('cartId');
-            $products = $request->request->get('products');
+            $data = $request->getPayload()->all();
+            $cartId = (int) $data['cartId'];
+            $products = $data['products'];
             foreach ($products as $product) {
                 $this->upplerCartService->addItemToCart(
                     $cartId,
@@ -37,7 +36,7 @@ class AddOrderItemToCart extends AbstractController
 
             return new JsonResponse(true);
         } catch (\Exception $exception) {
-            return new JsonResponse($exception->getMessage());
+            throw new BadRequestHttpException($exception->getMessage());
         }
     }
 }

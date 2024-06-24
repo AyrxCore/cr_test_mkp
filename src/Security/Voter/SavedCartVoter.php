@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class SavedCartVoter extends Voter
 {
-    private const MANAGE_SAVED_CART = 'MANAGE_SAVED_CART';
+    private const string MANAGE_SAVED_CART = 'MANAGE_SAVED_CART';
 
     public function __construct(private RequestStack $requestStack)
     {
@@ -26,7 +26,7 @@ class SavedCartVoter extends Voter
     /**
      * @param SavedCart $subject
      */
-    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool|int
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         /** @var Account $account */
         $account = $this->requestStack->getSession()->get('account');

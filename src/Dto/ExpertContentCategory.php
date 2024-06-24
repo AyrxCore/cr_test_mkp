@@ -4,23 +4,21 @@ declare(strict_types=1);
 
 namespace App\Dto;
 
-use ApiPlatform\Core\Annotation\ApiProperty;
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use App\State\Provider\ExpertContentCategoryProvider;
 
 #[ApiResource(
-    collectionOperations: [
-        'get' => [
-            'openapi_context' => [
-                'summary' => 'Liste des categories de contenus experts',
-                'description' => 'Permet de récupérer les categories des contenus experts',
-            ],
-            'path' => '/expert-content-categories',
-            'method' => 'GET',
-        ],
+    operations: [
+        new Get(),
+        new GetCollection(
+            uriTemplate: '/expert-content-categories',
+            openapiContext: ['summary' => 'Liste des categories de contenus experts', 'description' => 'Permet de récupérer les categories des contenus experts']
+        )
     ],
-    itemOperations: [
-        'get',
-    ],
+    provider: ExpertContentCategoryProvider::class
 )]
 class ExpertContentCategory
 {

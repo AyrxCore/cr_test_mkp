@@ -26,54 +26,40 @@ final class Property implements \JsonSerializable
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * @param string|null $name
-     */
     public function setName(?string $name): void
     {
         $this->name = $name;
     }
 
-    /**
-     * @return string|null
-     */
     public function getValue(): ?string
     {
         return $this->value;
     }
 
     /**
-     * @param mixed|null $value
+     * @param null|mixed $value
      */
     public function setValue(mixed $value): void
     {
         $this->value = $value;
     }
 
-    public function jsonSerialize()
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize(): array
     {
-        return  get_object_vars($this);
+        return \get_object_vars($this);
     }
 
-    /**
-     * @return bool|null
-     */
     public function getChecked(): ?bool
     {
         return $this->checked;
     }
 
-    /**
-     * @param bool|null $checked
-     */
     public function setChecked(?bool $checked): void
     {
         $this->checked = $checked;

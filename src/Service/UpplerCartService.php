@@ -22,7 +22,7 @@ class UpplerCartService extends AbstractUpplerService
         string $adminClientSecret,
         string $adminTokenFile,
         string $httpCachePath,
-        private ChannelContext $channelContext,
+        private readonly ChannelContext $channelContext,
     ) {
         parent::__construct(
             upplerClient: $upplerClient,
@@ -66,7 +66,6 @@ class UpplerCartService extends AbstractUpplerService
 
         if (\count($carts) > 0) {
             $cart = $carts[0];
-
             if ($cart['state'] === 'payment') {
                 $this->isPaymentConfirmed($cart['id']);
             }
@@ -121,7 +120,7 @@ class UpplerCartService extends AbstractUpplerService
         return true;
     }
 
-    public function updateCartAddress(int|string $cartReference, int $shippingId, int $billingId): bool
+    public function updateCartAddress(int|string $cartReference, int $shippingId, int $billingId): void
     {
         $res = $this->request(
             'PATCH',
@@ -137,11 +136,9 @@ class UpplerCartService extends AbstractUpplerService
         if ($res->getStatusCode() !== Response::HTTP_NO_CONTENT) {
             throw new BadRequestHttpException();
         }
-
-        return true;
     }
 
-    public function updateOrderItemQuantity(int $id, int $quantity): bool
+    public function updateOrderItemQuantity(int $id, int $quantity): void
     {
         $res = $this->request(
             'PATCH',
@@ -154,11 +151,9 @@ class UpplerCartService extends AbstractUpplerService
         if ($res->getStatusCode() !== Response::HTTP_NO_CONTENT) {
             throw new BadRequestHttpException('Update quantity error');
         }
-
-        return true;
     }
 
-    public function deleteOrderItem(int $id): bool
+    public function deleteOrderItem(int $id): void
     {
         $res = $this->request(
             'DELETE',
@@ -168,8 +163,6 @@ class UpplerCartService extends AbstractUpplerService
         if ($res->getStatusCode() !== Response::HTTP_NO_CONTENT) {
             throw new BadRequestHttpException();
         }
-
-        return true;
     }
 
     public function getShippingMethods(int $cartId): array|bool
@@ -178,6 +171,7 @@ class UpplerCartService extends AbstractUpplerService
             'GET',
             'v1/buyer/cart/'.$cartId.'/shipping-method',
         );
+
         if ($res && $res->getStatusCode() === Response::HTTP_OK) {
             $res = \json_decode($res->getContent(), true);
 
@@ -187,19 +181,7 @@ class UpplerCartService extends AbstractUpplerService
         return false;
     }
 
-    public function getShippingMethodsForOrder(array $shippingMethods, int $orderId): array
-    {
-        $methods = [];
-        foreach ($shippingMethods as $method) {
-            if ($method->order->id === $orderId) {
-                $methods[] = $method;
-            }
-        }
-
-        return $methods;
-    }
-
-    public function setShippingMethod(int $cartId, int $orderId, int $shippingMethodId): bool
+    public function setShippingMethod(int $cartId, int $orderId, int $shippingMethodId): void
     {
         $res = $this->request(
             'PATCH',
@@ -221,8 +203,6 @@ class UpplerCartService extends AbstractUpplerService
         if ($res->getStatusCode() !== Response::HTTP_NO_CONTENT) {
             throw new BadRequestHttpException();
         }
-
-        return true;
     }
 
     public function getPaymentMethods(int $cartId): array
@@ -315,6 +295,7 @@ class UpplerCartService extends AbstractUpplerService
             'GET',
             'v1/buyer/cart/'.$cartId.'/transaction/confirm',
         );
+
         if ($res && $res->getStatusCode() === Response::HTTP_OK) {
             return \json_decode($res->getContent(), true);
         }

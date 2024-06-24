@@ -46,11 +46,3 @@ services:
       $normalizer: '@api_platform.serializer.normalizer.item'
     tags:
       - { name: serializer.normalizer, priority: 100 }
-
-  App\DataProvider\AccountCollectionDataProvider:
-    arguments:
-      $collectionExtensions: !tagged api_platform.doctrine.orm.query_extension.collection
-
-  App\DataProvider\UserMeItemDataProvider:
-    arguments:
-      $itemExtensions: !tagged api_platform.doctrine.orm.query_extension.item

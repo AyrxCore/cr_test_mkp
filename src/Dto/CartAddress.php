@@ -4,22 +4,26 @@ declare(strict_types=1);
 
 namespace App\Dto;
 
-use ApiPlatform\Core\Annotation\ApiProperty;
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use App\State\Processor\CartAddressPersistProcessor;
+use App\State\Provider\CartAddressProvider;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    collectionOperations: ['POST'],
-    itemOperations: [
-        'get',
-        'update' => [
-            'openapi_context' => [
-                'summary' => 'Update cart adresses',
-            ],
-            'method' => 'PATCH',
-            'validate' => true,
-        ],
-    ]
+    operations: [
+        new Get(),
+        new Patch(
+            openapiContext: ['summary' => 'Update cart adresses'],
+            validate: true
+        ),
+        new Post()
+    ],
+    provider: CartAddressProvider::class,
+    processor: CartAddressPersistProcessor::class
 )]
 final class CartAddress
 {
@@ -54,6 +58,7 @@ final class CartAddress
 
         return $this;
     }
+
     public function getBillingAddressId(): ?int
     {
         return $this->billingAddressId;

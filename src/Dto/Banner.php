@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 namespace App\Dto;
 
-use ApiPlatform\Core\Annotation\ApiProperty;
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use App\State\Provider\BannerProvider;
 
 #[ApiResource(
-    collectionOperations: [],
-    itemOperations: [
-        'get' => [
-            'path' => '/banners/{id}',
-            'requirements' => ['id' => '\d+'],
-        ],
+    operations: [
+        new Get(
+            uriTemplate: '/banners/{id}',
+            requirements: ['id' => '\\d+']
+        )
     ],
+    provider: BannerProvider::class
 )]
 class Banner
 {
-    public const DYNAMIC_CONFIG_ID = 2;
+    public const int DYNAMIC_CONFIG_ID = 2;
     #[ApiProperty(identifier: true)]
     private ?int $id = null;
 

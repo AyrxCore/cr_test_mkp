@@ -4,20 +4,19 @@ declare(strict_types=1);
 
 namespace App\Dto;
 
-use ApiPlatform\Core\Annotation\ApiProperty;
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use App\State\Provider\InvoiceProvider;
 
 #[ApiResource(
-    collectionOperations: [],
-    itemOperations: [
-        'get' => [
-            'openapi_context' => [
-                'summary' => "Télécharger la facture de la commande",
-                'description' => "Cette opération permet de télécharger le fichier pdf  d'une commande en spécifiant l'identifiant de la facture."
-            ],
-            'path' => '/invoices/{id}/download',
-        ],
-    ]
+    operations: [
+        new Get(
+            uriTemplate: '/invoices/{id}/download',
+            openapiContext: ['summary' => 'Télécharger la facture de la commande', 'description' => 'Cette opération permet de télécharger le fichier pdf  d\'une commande en spécifiant l\'identifiant de la facture.']
+        )
+    ],
+    provider: InvoiceProvider::class
 )]
 final class Invoice
 {

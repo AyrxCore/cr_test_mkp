@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Factory;
 
+use App\Context\ChannelContext;
 use App\Dto\Category;
 use App\Entity\Account;
-use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Psr\Cache\CacheItemPoolInterface as AdapterInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
-use App\Context\ChannelContext;
-use Symfony\Component\Security\Core\Security;
 
 class CategoryFactory extends AbstractFactory
 {
-    private const CUSTOM_CATEGORY_NAME_KEY = "CUSTOM_CATEGORIES_NAME";
+    private const CUSTOM_CATEGORY_NAME_KEY = 'CUSTOM_CATEGORIES_NAME';
     private array $customCategoriesValues = [];
 
     public function __construct(private RequestStack $requestStack, protected AdapterInterface $cache, private ChannelContext $channelContext, private Security $security)
@@ -25,8 +25,8 @@ class CategoryFactory extends AbstractFactory
     {
         $value = $this->channelContext->getChannel()->getChannelOptionValueByKey(self::CUSTOM_CATEGORY_NAME_KEY);
 
-        $this->customCategoriesValues = $value ? json_decode($value, true) : [];
-        
+        $this->customCategoriesValues = $value ? \json_decode($value, true) : [];
+
         return parent::createAndAddToCollection($data);
     }
 
@@ -53,9 +53,9 @@ class CategoryFactory extends AbstractFactory
         $category = new Category();
         $category->setId($data['id']);
         $category->setName(
-            $this->customCategoriesValues[$data['id']] ?? 
-            (is_array($data['name']) ? $data['name']['default'] : $data['name'])
-        );        
+            $this->customCategoriesValues[$data['id']] ??
+            (\is_array($data['name']) ? $data['name']['default'] : $data['name'])
+        );
         $category->setImage($data['image'] ?? '');
         $category->setParentId($data['parent'] ?? null);
         $category->setProductCount($data['count'] ?? null);
@@ -69,8 +69,7 @@ class CategoryFactory extends AbstractFactory
         }
 
         $category->setChildren($children);
-        
+
         return $category;
     }
-
 }

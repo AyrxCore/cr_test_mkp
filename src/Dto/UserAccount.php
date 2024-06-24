@@ -4,49 +4,43 @@ declare(strict_types=1);
 
 namespace App\Dto;
 
-use ApiPlatform\Core\Annotation\ApiProperty;
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use App\State\Processor\UserAccountPersistProcessor;
+use App\State\Provider\UserAccountProvider;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    collectionOperations: [
-        'create' => [
-            'openapi_context' => [
-                'summary' => 'Déclarer un account Uppler',
-                'description' => 'Permet de créer un account Uppler sur la marketplace
-            en passant toutes les infos de ce compte. Un compte utilisateur est automatiquement créé si nécessaire',
-            ],
-            'method' => 'POST',
-            'validate' => true,
-        ],
+    operations: [
+        new Get(
+            openapiContext: ['summary' => 'Editer un account', 'description' => 'Permet d\'enregistrer des modifications dans un account uppler']
+        ),
+        new Patch(
+            openapiContext: ['summary' => 'Modifier un account', 'description' => 'Permet d\'enregistrer des modifications dans un account uppler'],
+            validate: true,
+        ),
+        new Post(
+            openapiContext: ['summary' => 'Déclarer un account Uppler', 'description' => 'Permet de créer un account Uppler sur la marketplace
+            en passant toutes les infos de ce compte. Un compte utilisateur est automatiquement créé si nécessaire'],
+            validate: true,
+        )
     ],
-    itemOperations: [
-        'get' => [
-            'openapi_context' => [
-                'summary' => 'Editer un account',
-                'description' => "Permet d'enregistrer des modifications dans un account uppler",
-            ],
-        ],
-        'update' => [
-            'openapi_context' => [
-                'summary' => 'Modifier un account',
-                'description' => "Permet d'enregistrer des modifications dans un account uppler",
-            ],
-            'method' => 'PATCH',
-            'validate' => true,
-        ],
-    ]
+    provider: UserAccountProvider::class,
+    processor: UserAccountPersistProcessor::class
 )]
 final class UserAccount
 {
+    #[ApiProperty(identifier: true)]
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    #[ApiProperty(identifier: true)]
     private ?Uuid $accountId = null;
 
     private ?Uuid $userId = null;

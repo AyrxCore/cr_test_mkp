@@ -4,32 +4,29 @@ declare(strict_types=1);
 
 namespace App\Dto;
 
-use ApiPlatform\Core\Annotation\ApiProperty;
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use App\State\Provider\ExpertContentProvider;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 #[ApiResource(
-    collectionOperations: [
-        'get' => [
-            'openapi_context' => [
-                'summary' => 'Liste des contenus experts',
-                'description' => 'Permet de récupérer les derniers contenus experts',
-            ],
-            'path' => '/expert-contents',
-            'method' => 'GET',
-            'normalization' => false,
-        ],
+    operations: [
+        new Get(
+            uriTemplate: '/expert-contents/{slug}',
+            requirements: ['slug' => '.+']
+        ),
+        new GetCollection(
+            uriTemplate: '/expert-contents',
+            openapiContext: ['summary' => 'Liste des contenus experts', 'description' => 'Permet de récupérer les derniers contenus experts']
+        )
     ],
-    itemOperations: [
-        'get' => [
-            'path' => '/expert-contents/{slug}',
-            'requirements' => ['slug' => '.+'],
-        ],
-    ],
+    provider: ExpertContentProvider::class
 )]
 class ExpertContent
 {
-    public const DYNAMIC_CONFIG_ID = 1;
+    public const int DYNAMIC_CONFIG_ID = 1;
 
     #[ApiProperty(identifier: false)]
     private ?int $id = null;
@@ -249,7 +246,7 @@ class ExpertContent
         return $this->id;
     }
 
-    public function hydrate($dynamicEntity)
+    public function hydrate($dynamicEntity): void
     {
         $id = $dynamicEntity['id'];
         $slug = $dynamicEntity['slug'];

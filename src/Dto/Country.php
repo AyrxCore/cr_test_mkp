@@ -4,23 +4,21 @@ declare(strict_types=1);
 
 namespace App\Dto;
 
-use ApiPlatform\Core\Annotation\ApiProperty;
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use App\State\Provider\CountryProvider;
 
 #[ApiResource(
-    collectionOperations: [
-        'get' => [
-            'openapi_context' => [
-                'summary' => 'Liste des pays',
-                'description' => 'Permet de récupérer la liste des pays paginée et filtrable',
-            ],
-            'method' => 'GET',
-            'validate' => true,
-        ],
+    operations: [
+        new Get(),
+        new GetCollection(
+            openapiContext: ['summary' => 'Liste des pays', 'description' => 'Permet de récupérer la liste des pays paginée et filtrable'],
+            validate: true
+        )
     ],
-    itemOperations: [
-        'get',
-    ]
+    provider: CountryProvider::class
 )]
 final class Country
 {

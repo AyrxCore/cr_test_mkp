@@ -15,11 +15,11 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface as SfNormalizerI
 class UserNormalizer extends AbstractNormalizer
 {
     public function __construct(
-        SfNormalizerInterface $normalizer,
-        private UpplerAccountService $upplerAccountService,
-        private UpplerBuyerCompanyService $upplerBuyerCompanyService,
-        private RequestStack $requestStack,
-        private AccountRepository $accountRepository,
+        SfNormalizerInterface                      $normalizer,
+        private readonly UpplerAccountService      $upplerAccountService,
+        private readonly UpplerBuyerCompanyService $upplerBuyerCompanyService,
+        private readonly RequestStack              $requestStack,
+        private readonly AccountRepository         $accountRepository,
     ) {
         $this->normalizer = $normalizer;
     }
@@ -51,7 +51,7 @@ class UserNormalizer extends AbstractNormalizer
 
     public function supportsDenormalization($data, $type, $format = null): bool
     {
-        return $data instanceof User && $this->normalizer->supportsDenormalization($data, $type, $format);
+        return $data instanceof User && $this->supportsDenormalization($data, $type, $format);
     }
 
     /**

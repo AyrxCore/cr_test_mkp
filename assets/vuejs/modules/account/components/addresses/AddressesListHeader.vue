@@ -1,9 +1,9 @@
 <template>
   <thead>
     <tr class="text-left">
-      <th class="hidden p-3 md:table-cell">Nom</th>
-      <th class="hidden p-3 md:table-cell">Raison sociale</th>
-      <th class="p-3">Adresse postale</th>
+      <th class="hidden p-3 text-primary md:table-cell">Nom</th>
+      <th class="hidden p-3 text-primary md:table-cell">Raison sociale</th>
+      <th class="p-3 text-primary">Adresse postale</th>
       <th />
     </tr>
   </thead>

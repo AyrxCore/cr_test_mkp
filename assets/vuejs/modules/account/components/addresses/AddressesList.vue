@@ -8,7 +8,7 @@
     </tbody>
     <tbody v-else>
       <tr>
-        <td class="mx-auto pt-2 pb-4" colspan="6">
+        <td class="mx-auto pb-4 pt-2" colspan="6">
           <LoaderSharedComponent
             class="mx-auto text-secondary"
             classes="loader-xl loader"
@@ -19,19 +19,17 @@
   </table>
 </template>
 <script lang="ts" setup>
+import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 import { useAddressStore } from '@/vuejs/stores/address'
-import AddressesListItem from '@/vuejs/modules/account/components/addresses/AddressesListItem.vue'
-import AddressesListHeader from '@/vuejs/modules/account/components/addresses/AddressesListHeader.vue'
-import { computed, onBeforeMount } from 'vue'
 import { Address } from '@/vuejs/types/Address'
 
+import AddressesListItem from '@/vuejs/modules/account/components/addresses/AddressesListItem.vue'
+import AddressesListHeader from '@/vuejs/modules/account/components/addresses/AddressesListHeader.vue'
+
 const addressStore = useAddressStore()
-onBeforeMount(() => {
-  addressStore.getAddresses()
-})
 
 const { addresses, isLoading } = storeToRefs(addressStore)
 const props = defineProps({

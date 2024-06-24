@@ -4,24 +4,25 @@ declare(strict_types=1);
 
 namespace App\Dto;
 
-use ApiPlatform\Core\Annotation\ApiProperty;
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Patch;
+use App\State\Processor\SubAccountPersistProcessor;
+use App\State\Provider\SubAccountProvider;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    collectionOperations: [],
-    itemOperations: [
-        'get',
-        'update' => [
-            'openapi_context' => [
-                'summary' => 'Editer un account',
-                'description' => "Permet d'enregistrer des modifications dans un account uppler",
-            ],
-            'method' => 'PATCH',
-            'validate' => true,
-        ],
-    ]
+    operations: [
+        new Get(),
+        new Patch(
+            openapiContext: ['summary' => 'Editer un account', 'description' => 'Permet d\'enregistrer des modifications dans un account uppler'],
+            validate: true
+        )
+    ],
+    provider: SubAccountProvider::class,
+    processor: SubAccountPersistProcessor::class
 )]
 final class SubAccount
 {

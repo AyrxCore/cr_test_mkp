@@ -4,43 +4,41 @@ declare(strict_types=1);
 
 namespace App\Dto;
 
-use ApiPlatform\Core\Annotation\ApiProperty;
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use App\State\Provider\ProductProvider;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
-    collectionOperations: [
-        'get' => [
-            'openapi_context' => [
-                'summary' => 'Get remote products list',
-                'description' => 'It gets a list of products from remote data provider',
-            ],
-            'method' => 'GET',
-            'normalization_context' => ['groups' => ['products:get']],
-        ],
+    operations: [
+        new Get(
+            uriTemplate: '/products/{id}',
+            requirements: ['id' => '\\d+'],
+            normalizationContext: ['groups' => ['product:get']]
+        ),
+        new GetCollection(
+            openapiContext: ['summary' => 'Get remote products list', 'description' => 'It gets a list of products from remote data provider'],
+            normalizationContext: ['groups' => ['products:get']]
+        )
     ],
-    itemOperations: [
-        'get' => [
-            'path' => '/products/{id}',
-            'requirements' => ['id' => '\d+'],
-            'normalization_context' => ['groups' => ['product:get']],
-        ],
-    ],
+    provider: ProductProvider::class
 )]
 final class Product
 {
-    public const PROCESS_STATUS_NOT_ACTIVATED = 'NOT_ACTIVATED';
-    public const PROCESS_STATUS_PENDING = 'PENDING';
-    public const PROCESS_STATUS_ACTIVATED = 'ACTIVATED';
-    public const PROCESS_STATUS
+    public const string PROCESS_STATUS_NOT_ACTIVATED = 'NOT_ACTIVATED';
+    public const string PROCESS_STATUS_PENDING = 'PENDING';
+    public const string PROCESS_STATUS_ACTIVATED = 'ACTIVATED';
+    public const array PROCESS_STATUS
         = [
             self::PROCESS_STATUS_NOT_ACTIVATED,
             self::PROCESS_STATUS_PENDING,
             self::PROCESS_STATUS_ACTIVATED,
         ];
 
-    public const HOME_TOP_VENTE = 'home-top-vente';
-    public const HOME_SELECTION = 'home-selection';
+    public const string HOME_TOP_VENTE = 'home-top-vente';
+    public const string HOME_SELECTION = 'home-selection';
 
     #[ApiProperty(identifier: true)]
     #[Groups(['products:get', 'product:get'])]

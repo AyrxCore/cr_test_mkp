@@ -12,7 +12,7 @@ use App\Entity\Account;
 use App\Entity\Favorite;
 use App\Helper\UpplerHelper;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Psr\Cache\CacheItemPoolInterface as AdapterInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Uid\Uuid;
 

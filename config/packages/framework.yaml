@@ -22,6 +22,8 @@ framework:
       uppler.client:
         base_uri: '%env(UPPLER_API_URL)%'
 
+  handle_all_throwables: false
+
 when@test:
   framework:
     test: true

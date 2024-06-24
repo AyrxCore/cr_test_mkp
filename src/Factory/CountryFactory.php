@@ -6,7 +6,7 @@ namespace App\Factory;
 
 use App\Dto\Country;
 use App\Entity\Account;
-use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Psr\Cache\CacheItemPoolInterface as AdapterInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class CountryFactory extends AbstractFactory

@@ -57,7 +57,7 @@ class LoginController extends AbstractController implements ChannelAwareControll
         ];
 
         if ($request->getMethod() == 'POST') {
-            $username = $request->request->get('_username');
+            $username = $request->getPayload()->all()['_username'];
             $user = $em->getRepository(User::class)->findUserByUsernameOrEmail($username);
             if (!empty($user) && $user instanceof User && (bool) $user->getFirstEnabledAccount($channel)) {
                 /**

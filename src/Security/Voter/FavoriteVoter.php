@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security\Voter;
 
+use App\Entity\Account;
 use App\Entity\Favorite;
 use App\Entity\User;
-use App\Entity\Account;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -12,19 +14,15 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 class FavoriteVoter extends Voter
 {
+    public const string VIEW_FAVORITE = 'VIEW_FAVORITE';
+    public const string EDIT_FAVORITE = 'EDIT_FAVORITE';
+    public const string DELETE_FAVORITE = 'DELETE_FAVORITE';
     #[Required]
     public RequestStack $requestStack;
 
-    public const VIEW_FAVORITE = 'VIEW_FAVORITE';
-    public const EDIT_FAVORITE = 'EDIT_FAVORITE';
-    public const DELETE_FAVORITE = 'DELETE_FAVORITE';
-
-    /**
-     * @inheritDoc
-     */
-    protected function supports(string $attribute, $subject)
+    protected function supports(string $attribute, $subject): bool
     {
-        if (!in_array($attribute, [self::VIEW_FAVORITE, self::EDIT_FAVORITE, self::DELETE_FAVORITE])) {
+        if (!\in_array($attribute, [self::VIEW_FAVORITE, self::EDIT_FAVORITE, self::DELETE_FAVORITE], true)) {
             return false;
         }
 
@@ -33,10 +31,7 @@ class FavoriteVoter extends Voter
         return $favorite instanceof Favorite;
     }
 
-    /**
-     * @inheritDoc
-     */
-    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool|int
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         /** @var User $user */
         $user = $token->getUser();
@@ -57,8 +52,8 @@ class FavoriteVoter extends Voter
 
     private function canView(Favorite $favorite, User $user, Account $account): bool
     {
-        return $favorite->getAccount()->getId()->equals($account->getId()) ||
-            ($favorite->isPublic() && $favorite->getAccount()->getAdherent()->getId()->equals($account->getAdherent()->getId()));
+        return $favorite->getAccount()->getId()->equals($account->getId())
+            || ($favorite->isPublic() && $favorite->getAccount()->getAdherent()->getId()->equals($account->getAdherent()->getId()));
     }
 
     private function canEdit(Favorite $favorite, Account $account): bool

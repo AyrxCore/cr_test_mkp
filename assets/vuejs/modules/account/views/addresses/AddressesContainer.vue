@@ -14,7 +14,9 @@
       </AddressesDefault>
       <div class="mb-4 flex items-center justify-between">
         <div>
-          <h3 class="ml-4 text-2xl font-bold">Adresses de livraison</h3>
+          <h3 class="ml-4 text-2xl font-bold text-primary">
+            Adresses de livraison
+          </h3>
         </div>
         <div>
           <ButtonComponent
@@ -45,7 +47,9 @@
       </div>
       <div class="mb-4 mt-4 flex justify-between md:mt-8">
         <div>
-          <h3 class="ml-4 text-2xl font-bold">Adresses de facturation</h3>
+          <h3 class="ml-4 text-2xl font-bold text-primary">
+            Adresses de facturation
+          </h3>
         </div>
         <div>
           <ButtonComponent
@@ -82,18 +86,20 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
+
 import router from '@/vuejs/router'
+import { AccountPageList } from '@/vuejs/router/pages-list'
+import { ADDRESS_BILLING, ADDRESS_SHIPPING } from '@/vuejs/services/const'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import { useAddressStore } from '@/vuejs/stores/address'
+import { useChannelStore } from '@/vuejs/stores/channel'
+import { useUserStore } from '@/vuejs/stores/user'
+
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import AddressesList from '@/vuejs/modules/account/components/addresses/AddressesList.vue'
 import AddressesDefault from '@/vuejs/modules/account/components/addresses/AddressesDefault.vue'
 import AddIconComponent from '@/vuejs/modules/shared/icon/AddIconComponent.vue'
-import { ADDRESS_BILLING, ADDRESS_SHIPPING } from '@/vuejs/services/const'
-import { AccountPageList } from '@/vuejs/router/pages-list'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
-import { useChannelStore } from '@/vuejs/stores/channel'
-import { useUserStore } from '@/vuejs/stores/user'
-import { useAddressStore } from '@/vuejs/stores/address'
 
 const addressStore = useAddressStore()
 const { channelPrimaryColor } = storeToRefs(useChannelStore())

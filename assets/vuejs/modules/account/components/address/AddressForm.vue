@@ -115,6 +115,7 @@ const props = defineProps({
 const emit = defineEmits(['submitAddress', 'cancelCreateAddress'])
 
 onMounted(async () => {
+  if (countryStore.countries.length > 0) return
   await countryStore.getCountries()
 })
 

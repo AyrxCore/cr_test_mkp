@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Action\NotFoundAction;
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Action\NotFoundAction;
 use ApiPlatform\Metadata\ApiProperty;
-use App\Dto\Output\ChannelOutput;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use App\Repository\ChannelRepository;
+use App\State\Provider\ChannelProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,41 +18,28 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[ApiResource(
+    operations: [
+        new Get(
+            controller: NotFoundAction::class,
+            output: false,
+            read: false
+        ),
+        new Get(
+            uriTemplate: '/channels/by-host/{hostname}',
+            outputFormats: 'json',
+            uriVariables: 'hostname',
+            openapiContext: ['summary' => 'Retrieves a Channel by its hostname', 'parameters' => [['name' => 'hostname', 'in' => 'path', 'required' => true, 'type' => 'string', 'description' => 'The hostname of the Channel']]],
+            normalizationContext: ['groups' => ['channel:get']],
+            provider: ChannelProvider::class
+        ),
+    ]
+)]
 #[ORM\Entity(repositoryClass: ChannelRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\UniqueConstraint(
     name: 'code_hostname_unique_idx',
     columns: ['code', 'hostname'],
-)]
-#[ApiResource(
-    collectionOperations: [],
-    itemOperations: [
-        'get' => [
-            'controller' => NotFoundAction::class,
-            'read' => false,
-            'output' => false,
-        ],
-        'get_by_host' => [
-            'identifiers' => 'hostname',
-            'method' => 'GET',
-            'path' => '/channels/by-host/{hostname}',
-            'normalization_context' => ['groups' => ['channel:get']],
-            'openapi_context' => [
-                'summary' => 'Retrieves a Channel by its hostname',
-                'parameters' => [
-                    [
-                        'name' => 'hostname',
-                        'in' => 'path',
-                        'required' => true,
-                        'type' => 'string',
-                        'description' => 'The hostname of the Channel',
-                    ],
-                ],
-            ],
-            'stateless' => true,
-        ],
-    ],
-    output: ChannelOutput::class
 )]
 class Channel
 {
@@ -63,7 +51,7 @@ class Channel
     #[Groups(['channel:get'])]
     private ?Uuid $id = null;
 
-    #[ORM\Column()]
+    #[ORM\Column]
     #[Groups(['channel:get'])]
     private ?string $name = null;
 

@@ -96,7 +96,7 @@ import PendingIconComponent from '@/vuejs/modules/shared/icon/PendingIconCompone
 import ButtonDownloadFileWithLogo from '@/vuejs/modules/products/components/accord-cadre/ButtonDownloadFileWithLogo.vue'
 import { status } from '@/vuejs/modules/products'
 import { AccountAccordCadre } from '@/vuejs/types/AccountAccordCadre'
-import { betterTextColor, openInNewTab } from '@/vuejs/services/utils'
+import { betterTextColor } from '@/vuejs/services/utils'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { formatUrlWithChannelCode } from '@/vuejs/services/formatter'
 import { useChannelStore } from '@/vuejs/stores/channel'

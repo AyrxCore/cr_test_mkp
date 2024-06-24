@@ -32,7 +32,7 @@ class MoveProduct extends AbstractController
     )]
     public function __invoke(string $id, Request $request): JsonResponse
     {
-        $options = $request->request->all();
+        $options = $request->getPayload()->all();
         $favoriteId = $options['favoriteId'] ?? '';
         try {
             /** @var Favorite $favorite */

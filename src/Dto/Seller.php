@@ -4,37 +4,31 @@ declare(strict_types=1);
 
 namespace App\Dto;
 
-use ApiPlatform\Core\Annotation\ApiProperty;
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Controller\Api\SellerPromotions;
+use App\State\Provider\SellerProvider;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
-    collectionOperations: [
-        'get' => [
-            'openapi_context' => [
-                'summary' => 'Get remote sellers list',
-                'description' => 'It gets a list of sellers from remote data provider',
-            ],
-            'method' => 'GET',
-            'normalization' => false,
-        ],
+    operations: [
+        new Get(
+            uriTemplate: '/sellers/{id}',
+            requirements: ['id' => '\\d+']
+        ),
+        new Get(
+            uriTemplate: '/sellers/{id}/promotions',
+            requirements: ['id' => '\\d+'],
+            controller: SellerPromotions::class,
+            openapiContext: ['summary' => 'Add multiple item to cart']
+        ),
+        new GetCollection(
+            openapiContext: ['summary' => 'Get remote sellers list', 'description' => 'It gets a list of sellers from remote data provider']
+        )
     ],
-    itemOperations: [
-        'get' => [
-            'path' => '/sellers/{id}',
-            'requirements' => ['id' => '\d+'],
-        ],
-        'get_promotions' => [
-            'openapi_context' => [
-                'summary' => 'Add multiple item to cart',
-            ],
-            'method' => 'GET',
-            'path' => '/sellers/{id}/promotions',
-            'requirements' => ['id' => '\d+'],
-            'controller' => SellerPromotions::class,
-        ],
-    ],
+    provider: SellerProvider::class
 )]
 final class Seller
 {

@@ -4,39 +4,34 @@ declare(strict_types=1);
 
 namespace App\Dto;
 
-use ApiPlatform\Core\Annotation\ApiProperty;
-use ApiPlatform\Core\Annotation\ApiResource;
-use DateTimeInterface;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use App\State\Provider\OrderProvider;
 
 #[ApiResource(
-    collectionOperations: [
-        'get' => [
-            "openapi_context" => [
-                'summary' => "Liste des commandes",
-                'description' => "Cette opération permet de récupérer la liste des commandes associées à un acheteur."
-            ],
-            "validate" => true,
-        ],
+    operations: [
+        new Get(
+            requirements: ['id' => '\\d+'],
+            openapiContext: ['summary' => 'Récupérer un historique par son identifiant', 'description' => 'Cette opération permet de récupérer les informations d\'une commande en spécifiant son identifiant unique.']
+        ),
+        new GetCollection(
+            openapiContext: ['summary' => 'Liste des commandes', 'description' => 'Cette opération permet de récupérer la liste des commandes associées à un acheteur.'],
+            validate: true
+        ),
     ],
-    itemOperations: [
-        'get' => [
-            "openapi_context" => [
-                'summary' => "Récupérer un historique par son identifiant",
-                'description' => "Cette opération permet de récupérer les informations d'une commande en spécifiant son identifiant unique."
-            ],
-            'requirements' => ['id' => '\d+'],
-        ],
-    ]
+    provider: OrderProvider::class
 )]
 final class Order
 {
-    public const ORDER_NEW = 'NEW';
-    public const ORDER_PENDING = 'PENDING';
-    public const ORDER_CONFIRMED = 'CONFIRMED';
-    public const ORDER_EDITED = 'EDITED';
-    public const ORDER_REFUSED = 'REFUSED';
-    public const ORDER_EXPIRED = 'EXPIRED';
-    public const ORDER_CANCELED = 'CANCELED';
+    public const string ORDER_NEW = 'NEW';
+    public const string ORDER_PENDING = 'PENDING';
+    public const string ORDER_CONFIRMED = 'CONFIRMED';
+    public const string ORDER_EDITED = 'EDITED';
+    public const string ORDER_REFUSED = 'REFUSED';
+    public const string ORDER_EXPIRED = 'EXPIRED';
+    public const string ORDER_CANCELED = 'CANCELED';
 
     #[ApiProperty(identifier: true)]
     private ?int $id = null;
@@ -50,13 +45,13 @@ final class Order
     private ?string $shippingAddress = null;
     private ?string $shippingState = null;
     private ?int $paymentId = null;
-    private ?DateTimeInterface $createdAt = null;
-    private ?DateTimeInterface $updatedAt = null;
-    private ?DateTimeInterface $confirmedAt = null;
-    private ?DateTimeInterface $shippedAt = null;
-    private ?DateTimeInterface $deliveredAt = null;
-    private ?DateTimeInterface $canceledAt = null;
-    private ?DateTimeInterface $refusedAt = null;
+    private ?\DateTimeInterface $createdAt = null;
+    private ?\DateTimeInterface $updatedAt = null;
+    private ?\DateTimeInterface $confirmedAt = null;
+    private ?\DateTimeInterface $shippedAt = null;
+    private ?\DateTimeInterface $deliveredAt = null;
+    private ?\DateTimeInterface $canceledAt = null;
+    private ?\DateTimeInterface $refusedAt = null;
 
     public function getId(): ?int
     {
@@ -130,72 +125,72 @@ final class Order
         $this->shippingState = $shippingState;
     }
 
-    public function getCreatedAt(): ?DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(?DateTimeInterface $createdAt): void
+    public function setCreatedAt(?\DateTimeInterface $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
 
-    public function getUpdatedAt(): ?DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?DateTimeInterface $updatedAt): void
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
 
-    public function getConfirmedAt(): ?DateTimeInterface
+    public function getConfirmedAt(): ?\DateTimeInterface
     {
         return $this->confirmedAt;
     }
 
-    public function setConfirmedAt(?DateTimeInterface $confirmedAt): void
+    public function setConfirmedAt(?\DateTimeInterface $confirmedAt): void
     {
         $this->confirmedAt = $confirmedAt;
     }
 
-    public function getShippedAt(): ?DateTimeInterface
+    public function getShippedAt(): ?\DateTimeInterface
     {
         return $this->shippedAt;
     }
 
-    public function setShippedAt(?DateTimeInterface $shippedAt): void
+    public function setShippedAt(?\DateTimeInterface $shippedAt): void
     {
         $this->shippedAt = $shippedAt;
     }
 
-    public function getDeliveredAt(): ?DateTimeInterface
+    public function getDeliveredAt(): ?\DateTimeInterface
     {
         return $this->deliveredAt;
     }
 
-    public function setDeliveredAt(?DateTimeInterface $deliveredAt): void
+    public function setDeliveredAt(?\DateTimeInterface $deliveredAt): void
     {
         $this->deliveredAt = $deliveredAt;
     }
 
-    public function getCanceledAt(): ?DateTimeInterface
+    public function getCanceledAt(): ?\DateTimeInterface
     {
         return $this->canceledAt;
     }
 
-    public function setCanceledAt(?DateTimeInterface $canceledAt): void
+    public function setCanceledAt(?\DateTimeInterface $canceledAt): void
     {
         $this->canceledAt = $canceledAt;
     }
 
-    public function getRefusedAt(): ?DateTimeInterface
+    public function getRefusedAt(): ?\DateTimeInterface
     {
         return $this->refusedAt;
     }
 
-    public function setRefusedAt(?DateTimeInterface $refusedAt): void
+    public function setRefusedAt(?\DateTimeInterface $refusedAt): void
     {
         $this->refusedAt = $refusedAt;
     }
