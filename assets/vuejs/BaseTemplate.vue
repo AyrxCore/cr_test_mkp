@@ -1,7 +1,8 @@
 <template>
-  <div class="min-h-screen">
+  <div class="flex min-h-screen flex-col">
     <StickyContactButtons />
     <HeaderSharedComponent />
+
     <div
       v-if="
         banner &&
@@ -23,14 +24,15 @@
         </a>
       </p>
     </div>
-    <main>
+
+    <main class="flex-grow">
       <slot />
     </main>
 
     <div
       v-show="scY.value > 500"
       id="pagetop"
-      class="fixed right-1 bottom-10 z-10 cursor-pointer rounded bg-secondary p-1"
+      class="fixed bottom-10 right-1 z-10 cursor-pointer rounded bg-secondary p-1"
       @click="toTop"
     >
       <ChevronDownIconComponent
@@ -40,6 +42,7 @@
         }"
       />
     </div>
+
     <FooterSharedComponent />
   </div>
 </template>
