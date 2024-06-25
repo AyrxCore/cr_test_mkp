@@ -5,11 +5,11 @@
       <!-- Bloc email -->
       <div class="bloc-contact-information">
         <div>
-          <h3 class="mb-2 text-2xl font-bold">E-mail</h3>
+          <h3 class="mb-2 text-2xl font-bold text-primary">E-mail</h3>
           <p class="mb-2.5 text-lg">E-mail&nbsp;: {{ user.username }}</p>
           <div
             v-if="emailInformation && !emailInformation.isIso"
-            class="rounded bg-orange-400 py-2 px-5 text-sm text-white"
+            class="rounded bg-orange-400 px-5 py-2 text-sm text-white"
           >
             Demande de changement d'email {{ emailInformation.value }}, en
             attente de validation
@@ -33,7 +33,7 @@
       <!-- Bloc password -->
       <div class="bloc-contact-information">
         <div>
-          <h3 class="mb-2 text-2xl font-bold">Mot de passe</h3>
+          <h3 class="mb-2 text-2xl font-bold text-primary">Mot de passe</h3>
           <p class="mb-2.5 text-lg">Mot de passe&nbsp;: ********</p>
         </div>
         <div>
@@ -57,7 +57,7 @@
       <!-- Bloc coordonnées -->
       <div class="bloc-contact-information">
         <div>
-          <h3 class="mb-2 text-2xl font-bold">Coordonnées</h3>
+          <h3 class="mb-2 text-2xl font-bold text-primary">Coordonnées</h3>
           <p class="mb-2.5 text-lg">Nom&nbsp;: {{ user.lastName }}</p>
           <p class="mb-2.5 text-lg">Prénom&nbsp;: {{ user.firstName }}</p>
           <p class="mb-2.5 text-lg">

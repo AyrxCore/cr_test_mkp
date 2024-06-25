@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\State\Processor;
 
 use ApiPlatform\Metadata\Operation;
@@ -16,8 +18,12 @@ use Symfony\Component\Uid\Uuid;
 
 readonly class AdherentPersistProcessor implements ProcessorInterface
 {
-    public function __construct(private AdherentRepository $adherentRepository, private ChannelRepository $channelRepository, private EntityManagerInterface $em, private AccordStatutRepository $accordStatutRepository)
-    {
+    public function __construct(
+        private AccordStatutRepository $accordStatutRepository,
+        private AdherentRepository $adherentRepository,
+        private ChannelRepository $channelRepository,
+        private EntityManagerInterface $em,
+    ) {
     }
 
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): mixed

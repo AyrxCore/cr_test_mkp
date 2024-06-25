@@ -1,6 +1,6 @@
 <template>
   <BaseTemplate>
-    <div class="xs:w-full m-auto mt-4 mb-16 flex-1 px-4 sm:px-8">
+    <div class="xs:w-full m-auto mb-16 mt-4 flex-1 px-4 sm:px-8">
       <BreadcrumbSharedComponent
         current-page="Mon compte"
         gtm-event-name="click_account_details_breadcrumb"
@@ -14,7 +14,7 @@
               <div class="flex flex-col-reverse gap-4 p-4 xl:grid xl:p-0">
                 <div class="rounded-lg bg-white pt-2 xl:p-7">
                   <div class="hidden xl:flex xl:flex-col">
-                    <h3 class="text-md mb-2 font-bold xl:text-2xl">
+                    <h3 class="text-md mb-2 font-bold text-primary xl:text-2xl">
                       {{ user.firstName }}
                       <span class="uppercase">{{ user.lastName }}</span>
                     </h3>
@@ -172,16 +172,18 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
-import AccountSidebar from '@/vuejs/modules/account/components/sidebar/AccountSidebar.vue'
+
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import { betterTextColor } from '@/vuejs/services/utils'
+import { useChannelStore } from '@/vuejs/stores/channel'
+import { useUserStore } from '@/vuejs/stores/user'
+
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
+import AccountSidebar from '@/vuejs/modules/account/components/sidebar/AccountSidebar.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
+import DropdownListComponent from '@/vuejs/modules/shared/DropdownListComponent.vue'
 import DisconnectIconComponent from '@/vuejs/modules/shared/icon/DisconnectIconComponent.vue'
 import RedirectionIconComponent from '@/vuejs/modules/shared/icon/RedirectionIconComponent.vue'
-import DropdownListComponent from '@/vuejs/modules/shared/DropdownListComponent.vue'
-import { betterTextColor } from '@/vuejs/services/utils'
-import { useUserStore } from '@/vuejs/stores/user'
-import { useChannelStore } from '@/vuejs/stores/channel'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)

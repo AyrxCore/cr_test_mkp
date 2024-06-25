@@ -25,11 +25,10 @@ use Symfony\Component\Uid\Uuid;
         ),
         new Patch(
             openapiContext: ['summary' => 'Modifier un adherent', 'description' => 'Permet de mettre à jour le channel, le code bonuus et les rattachements'],
-            denormalizationContext: ['groups' => 'update'],
             validate: true
         ),
         new Post(),
-        new GetCollection()
+        new GetCollection(),
     ],
     provider: AdherentProvider::class,
     processor: AdherentPersistProcessor::class
@@ -54,14 +53,13 @@ class Adherent
     private Collection $accounts;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['user:simple', 'update', 'adherent:get'])]
+    #[Groups(['user:simple', 'adherent:get'])]
     private ?string $reducceCode = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['adherent:get'])]
     private ?string $siret = null;
 
-    #[Groups(['update'])]
     private array $attachments = [];
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -89,7 +87,6 @@ class Adherent
     #[ORM\ManyToOne(inversedBy: 'adherents')]
     private ?Channel $channel = null;
 
-    #[Groups(['update'])]
     private ?string $channelCode = null;
 
     #[Groups(['user:simple'])]
@@ -124,6 +121,7 @@ class Adherent
     public function setId(?Uuid $id): self
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -285,7 +283,9 @@ class Adherent
     {
         if ($this->logo !== null) {
             return $this->logo;
-        } else return $this->parent?->getLogo();
+        }
+
+        return $this->parent?->getLogo();
     }
 
     public function setLogo(?string $logo): self
@@ -321,12 +321,15 @@ class Adherent
     {
         if ($this->reducceServiceName !== null) {
             return $this->reducceServiceName;
-        } else return $this->parent?->getReducceServiceName();
+        }
+
+        return $this->parent?->getReducceServiceName();
     }
 
     public function setReducceServiceName(?string $reducceServiceName): self
     {
         $this->reducceServiceName = $reducceServiceName;
+
         return $this;
     }
 
@@ -334,21 +337,24 @@ class Adherent
     {
         if ($this->reducceUrl !== null) {
             return $this->reducceUrl;
-        } else return $this->parent?->getReducceUrl();
+        }
+
+        return $this->parent?->getReducceUrl();
     }
 
     public function setReducceUrl(?string $reducceUrl): self
     {
         $this->reducceUrl = $reducceUrl;
+
         return $this;
     }
 
-    public function getParent(): ?Adherent
+    public function getParent(): ?self
     {
         return $this->parent;
     }
 
-    public function setParent(?Adherent $parent): self
+    public function setParent(?self $parent): self
     {
         $this->parent = $parent;
 

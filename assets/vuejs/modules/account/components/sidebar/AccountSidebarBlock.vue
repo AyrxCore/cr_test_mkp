@@ -1,6 +1,6 @@
 <template>
   <div class="rounded-lg bg-white xl:py-7 xl:pl-7 xl:pr-4">
-    <h3 class="mb-2 text-lg font-bold xl:text-2xl">
+    <h3 class="mb-2 text-lg font-bold text-primary xl:text-2xl">
       {{ props.title }}
     </h3>
     <p
@@ -16,8 +16,9 @@
   </div>
 </template>
 <script lang="ts" setup>
-import AccountSidebarBlockItem from '@/vuejs/modules/account/components/sidebar/AccountSidebarBlockItem.vue'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+
+import AccountSidebarBlockItem from '@/vuejs/modules/account/components/sidebar/AccountSidebarBlockItem.vue'
 
 const props = defineProps({
   title: {
