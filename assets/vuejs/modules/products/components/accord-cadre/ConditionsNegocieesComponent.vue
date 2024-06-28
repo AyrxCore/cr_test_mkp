@@ -14,7 +14,7 @@
             </li>
           </ul>
         </div>
-        <div class="flex flex-col items-center justify-center lg:flex-row">
+        <div class="flex flex-col items-center justify-around lg:flex-row">
           <template v-for="(button, key) in buttons" :key="key">
             <ButtonDownloadFileWithLogo
               :event-name="

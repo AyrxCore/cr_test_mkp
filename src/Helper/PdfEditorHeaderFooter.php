@@ -51,7 +51,7 @@ class PdfEditorHeaderFooter
             $pdf->SetFontSize(6);
             $pageWidth = $pdf->GetPageWidth();
             $pdf->SetXY(0, 280);
-            $pdf->Cell($pageWidth, 10, \utf8_decode($this->footerText), align: 'C');
+            $pdf->Cell($pageWidth, 10, \mb_convert_encoding($this->footerText, 'ISO-8859-1', 'UTF-8'), align: 'C');
         }
 
         return \bin2hex($pdf->Output(name: 'S'));
