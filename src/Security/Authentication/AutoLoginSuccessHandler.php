@@ -41,7 +41,7 @@ class AutoLoginSuccessHandler implements AuthenticationSuccessHandlerInterface, 
         /** @var User $user */
         $user = $token->getUser();
         $token = $this->JWTManager->create($user);
-        $isNeoAutoLogin = filter_var($request->query->get('neoAutoLogin'), FILTER_VALIDATE_BOOLEAN);
+        $isNeoAutoLogin = \filter_var($request->query->get('neoAutoLogin'), \FILTER_VALIDATE_BOOLEAN);
 
         try {
             $response = new RedirectResponse($this->router->generate('prehome'));
@@ -69,8 +69,8 @@ class AutoLoginSuccessHandler implements AuthenticationSuccessHandlerInterface, 
                 $this->entityManager->flush();
 
                 $response->headers->setCookie(new Cookie('BEARER', $token));
-                if($isNeoAutoLogin) {
-                    $response->headers->setCookie(new Cookie('neoAutoLogin', "true", httpOnly: false));
+                if ($isNeoAutoLogin) {
+                    $response->headers->setCookie(new Cookie('neoAutoLogin', 'true', httpOnly: false));
                 }
             }
 

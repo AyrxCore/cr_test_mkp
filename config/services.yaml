@@ -134,3 +134,16 @@ services:
   Symfony\Component\DependencyInjection\ContainerInterface: '@service_container'
 
   Symfony\Component\Security\Http\AccessMapInterface: '@security.access_map'
+
+  App\EventListener\JWTExceptionListener:
+    tags:
+      - {
+          name: 'kernel.event_listener',
+          event: 'lexik_jwt_authentication.on_jwt_expired',
+          method: 'onJWTException',
+        }
+      - {
+          name: 'kernel.event_listener',
+          event: 'lexik_jwt_authentication.on_jwt_invalid',
+          method: 'onJWTException',
+        }
