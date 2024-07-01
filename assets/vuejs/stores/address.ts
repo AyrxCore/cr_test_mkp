@@ -106,7 +106,7 @@ export const useAddressStore = defineStore({
 
   getters: {
     defaultAddress(): Address {
-      return this.addresses.find((a: Address) => typeof a.type !== 'undefined')
+      return this.addresses.find((a: Address) => !a.type)
     },
     shippingAddresses(): Address[] {
       return this.addresses.filter((a: Address) => a.type === ADDRESS_SHIPPING)
