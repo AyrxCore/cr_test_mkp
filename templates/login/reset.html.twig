@@ -1,41 +1,43 @@
 {% extends "default-prehome-page.html.twig" %}
-{% block title %}Nouveau du mot de passe{% endblock %}
+{% block title %}
+	Nouveau du mot de passe
+{% endblock %}
 
 {% block content %}
-  {% if passwordChanged %}
-    <div class="w-full">
-      {% include '_partials/_alert.html.twig' %}
+	{% if passwordChanged %}
+		<div class="w-full">
+			{% include '_partials/_alert.html.twig' %}
 
-      <h1 class="text-lg font-bold xl:text-2xl w-full text-center mb-5">
-        Votre mot de passe a bien été défini
-      </h1>
-      <p>
-        Vous pouvez désormais vous connecter en utilisant votre adresse email et votre nouveau mot de passe.
-      </p>
-      <div class="flex justify-center w-full mt-6">
-        <a href="/" class="flex button button-primary mt-2 xl:mt-0 justify-center w-auto">
-          Se connecter
-        </a>
-      </div>
-    </div>
+			<h1 class="text-lg font-bold xl:text-2xl w-full text-center mb-5 text-primary">
+				Votre mot de passe a bien été défini
+			</h1>
+			<p>
+				Vous pouvez désormais vous connecter en utilisant votre adresse email et votre nouveau mot de passe.
+			</p>
+			<div class="flex justify-center w-full mt-6">
+				<a href="/" class="flex button button-primary mt-2 xl:mt-0 justify-center w-auto">
+					Se connecter
+				</a>
+			</div>
+		</div>
 
-  {% else %}
-    {{ form_start(form, {'attr': {'class': 'w-full'}}) }}
-    <h1 class="text-lg font-bold xl:text-2xl w-full text-center mb-5">
-      Saisir votre nouveau mot de passe
-    </h1>
-    {% set formErrors = form.vars.errors.form.getErrors(true) %}
-    {% if formErrors|length %}
-      {% for error in formErrors %}
-        {% include '_partials/message-alert/_danger.html.twig' with { 'message': error.message} %}
-      {% endfor %}
-    {% endif %}
-    {{ form_row(form.password) }}
-    <div class="flex justify-center w-fullmt-2">
-      <button type="submit" class="flex button button-primary mt-2 xl:mt-0 justify-center w-auto">
-        Valider
-      </button>
-    </div>
-    {{ form_end(form) }}
-  {% endif %}
+	{% else %}
+		{{ form_start(form, {'attr': {'class': 'w-full'}}) }}
+		<h1 class="text-lg font-bold xl:text-2xl w-full text-center mb-5 text-primary">
+			Saisir votre nouveau mot de passe
+		</h1>
+		{% set formErrors = form.vars.errors.form.getErrors(true) %}
+		{% if formErrors|length %}
+			{% for error in formErrors %}
+				{% include '_partials/message-alert/_danger.html.twig' with { 'message': error.message } %}
+			{% endfor %}
+		{% endif %}
+		{{ form_row(form.password) }}
+		<div class="flex justify-center w-fullmt-2">
+			<button type="submit" class="flex button button-primary mt-2 xl:mt-0 justify-center w-auto">
+				Valider
+			</button>
+		</div>
+		{{ form_end(form) }}
+	{% endif %}
 {% endblock %}

@@ -29,6 +29,9 @@ class ResettingType extends AbstractType
                             'class' => 'block mt-2 w-full rounded-lg border !border-black !ring-black p-2.5 text-sm text-gray-900 mb-5',
                             'placeholder' => '********',
                         ],
+                        'label_attr' => [
+                            'class' => 'text-primary',
+                        ],
                     ],
                     'first_options' => [
                         'label' => 'Nouveau mot de passe',

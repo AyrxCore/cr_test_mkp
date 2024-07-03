@@ -20,7 +20,6 @@ export const useContactStore = defineStore({
       motif: null,
       companyName: null,
       accordCadreName: null,
-      _token: null,
     },
     motifs: [],
   }),
@@ -31,7 +30,6 @@ export const useContactStore = defineStore({
         if (this.motifs.length === 0) {
           this.motifs = await ContactHttpClient.get().getMotifs()
         }
-        this.contact._token = await ContactHttpClient.get().getToken()
         const userStore = useUserStore()
         if (userStore.user) {
           this.contact.lastName = userStore.user.lastName

@@ -15,7 +15,6 @@
     <div class="app-advanced">
       <form class="mx-auto w-full" @submit.prevent="sendEmail">
         <div class="mb-3 pt-0">
-          <input type="hidden" name="_token" :value="contact._token" />
           <select
             v-model="contact.motif"
             class="border-1 relative h-[55px] w-full rounded-md border-gray-200"

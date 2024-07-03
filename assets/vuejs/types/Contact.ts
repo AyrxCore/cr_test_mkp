@@ -7,5 +7,4 @@ export interface Contact {
   motif?: string
   companyName?: string
   accordCadreName?: string
-  _token?: string
 }

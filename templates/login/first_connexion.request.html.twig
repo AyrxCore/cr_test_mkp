@@ -1,45 +1,44 @@
 {% extends "default-prehome-page.html.twig" %}
-{% block title %}Première connexion - Marketplace
+{% block title %}
+	Première connexion - Marketplace
 {% endblock %}
 
 {% block content %}
-  <form action="{{ path('first_signin') }}" method="post"  data-event-name="click_activate_valider">
-    <h1 class="text-lg font-bold xl:text-2xl w-full text-center">
-      Activation de votre compte
-    </h1>
-    <div class="mt-5">
-      <p>
-        Pour votre première connexion sur la marketplace
-      </p>
-      <ol class="list-decimal ml-6">
-        <li>Entrez ci-dessous votre <span class="font-bold">email professionnel</span></li>
-        <li>Définissez votre <span class="font-bold">mot de passe</span> grâce au lien reçu par email</li>
-        <li>Retournez à la page de connexion, saisissez votre adresse email et votre mot de passe, et connectez-vous!
-        </li>
-      </ol>
+	<form action="{{ path('first_signin') }}" method="post" data-event-name="click_activate_valider">
+		<h1 class="text-lg font-bold xl:text-2xl w-full text-center text-primary">
+			Activation de votre compte
+		</h1>
+		<div class="mt-5">
+			<p>
+				Pour votre première connexion sur la marketplace
+			</p>
+			<ol class="list-decimal ml-6">
+				<li>
+					Entrez ci-dessous votre
+					<span class="font-bold">email professionnel</span>
+				</li>
+				<li>
+					Définissez votre
+					<span class="font-bold">mot de passe</span>
+					grâce au lien reçu par email
+				</li>
+				<li>
+					Retournez à la page de connexion, saisissez votre adresse email et votre mot de passe, et connectez-vous !
+				</li>
+			</ol>
 
-      {% include '_partials/_alert.html.twig' %}
+			{% include '_partials/_alert.html.twig' %}
 
-      <div class="flex flex-col md:flex-row justify-between space-x-2 mt-5 w-full">
-        <input
-          type="email"
-          id="username"
-          class="block w-full rounded-lg !border-solid !border-black !ring-black p-2.5 text-sm"
-          name="_username"
-          value=""
-          placeholder="Saisir votre adresse email professionnelle"
-          autocomplete="username"
-          required
-        />
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-        <div class="flex justify-center">
-          <button id="formFirstConnection" type="submit" class="flex button button-primary mt-2 md:mt-0 justify-center w-auto">
-            Valider
-          </button>
-        </div>
-      </div>
-    </div>
+			<div class="flex flex-col md:flex-row justify-between space-x-2 mt-5 w-full">
+				<input type="email" id="username" class="block w-full rounded-lg !border-solid !border-black !ring-black p-2.5 text-sm" name="_username" value="" placeholder="Saisir votre adresse email professionnelle" autocomplete="username" required/>
+				<div class="flex justify-center">
+					<button id="formFirstConnection" type="submit" class="flex button button-primary mt-2 md:mt-0 justify-center w-auto">
+						Valider
+					</button>
+				</div>
+			</div>
+		</div>
 
-  </form>
+	</form>
 
 {% endblock %}

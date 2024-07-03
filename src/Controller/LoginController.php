@@ -246,8 +246,8 @@ class LoginController extends AbstractController implements ChannelAwareControll
         throw new NotFoundHttpException();
     }
 
-//    Generate an auto-login link to allow Qantis user to connect to an adherent's MKP
-//    Only for ROLE_API
+    // Generate an auto-login link to allow Qantis user to connect to an adherent's MKP
+    // Only for ROLE_API
     #[Route('/login/neo-auto-login', name: 'generate_neo_auto_login_link')]
     public function generateNeoAutoLoginLink(
         Request $request,
@@ -265,7 +265,7 @@ class LoginController extends AbstractController implements ChannelAwareControll
             $loginLinkDetails = $loginLinkHandler->createLoginLink($user);
 
             return new JsonResponse([
-                'url' => $loginLinkDetails->getUrl()."&neoAutoLogin=true",
+                'url' => $loginLinkDetails->getUrl().'&neoAutoLogin=true',
             ]);
         }
 

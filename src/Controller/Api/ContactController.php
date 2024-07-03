@@ -14,9 +14,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
-use Symfony\Contracts\Service\Attribute\Required;
 use Twig\Environment;
 
 #[Route('/api/contact')]
@@ -33,21 +30,13 @@ class ContactController extends AbstractController implements ChannelAwareContro
         'Autre',
     ];
 
-    #[Required]
-    public RequestStack $requestStack;
-
-    #[Required]
-    public MailerProvider $mailerProvider;
-
-    #[Required]
-    public Environment $twig;
-
-    #[Required]
-    public ParameterBagInterface $parameterBag;
-    public LoggerInterface $logger;
-
-    public function __construct(private readonly CsrfTokenManagerInterface $csrfTokenManager)
-    {
+    public function __construct(
+        private readonly Environment $twig,
+        private readonly LoggerInterface $logger,
+        private readonly MailerProvider $mailerProvider,
+        private readonly ParameterBagInterface $parameterBag,
+        private readonly RequestStack $request,
+    ) {
     }
 
     /**
@@ -58,45 +47,39 @@ class ContactController extends AbstractController implements ChannelAwareContro
     {
         $options = \json_decode($request->getContent(), true);
 
-        $token = new CsrfToken('contact_form', $options['_token']);
         $error = false;
 
-        if (!$this->csrfTokenManager->isTokenValid($token)) {
-            $error = true;
-            $message = 'Le jeton CSRF est invalide.';
-        } else {
-            $contact = new \stdClass();
+        $contact = new \stdClass();
 
-            $contact->lastName = $options['lastName'] ?? null;
-            $contact->phone = $options['phone'] ?? null;
-            $contact->motif = self::LIST_MOTIFS[$options['motif']] ?? null;
-            $contact->description = $options['description'] ?? null;
-            $contact->email = $options['email'] ?? null;
-            $contact->firstName = $options['firstName'] ?? null;
-            $contact->companyName = $options['companyName'] ?? null;
-            $contact->accordCadreName = $options['accordCadreName'] ?? null;
-            $contact->errors = [];
-            $isValid = $this->validateFormContact($contact);
-            if ($isValid) {
-                try {
-                    $this->mailerProvider->send(
-                        $this->parameterBag->get('CONTACT_MAIL_FROM'),
-                        $this->getChannel($request)->getChannelParameter()->getEmail(),
-                        $contact->motif,
-                        $this->twig->render('mails/request.send.contact.html.twig', [
-                            'contact' => $contact,
-                        ])
-                    );
-                    $message = 'Votre demande a bien été envoyée, notre équipe fait le nécessaire pour vous répondre le plus rapidement possible.';
-                } catch (\Exception $exception) {
-                    $error = true;
-                    $message = 'Un incident est survenu lors de l\'envoi du mail, veuillez essayer ultérieurement';
-                    $this->logger->critical("Erreur d'envoie de mail ".$contact->email.' : '.$exception->getMessage());
-                }
-            } else {
+        $contact->lastName = $options['lastName'] ?? null;
+        $contact->phone = $options['phone'] ?? null;
+        $contact->motif = self::LIST_MOTIFS[$options['motif']] ?? null;
+        $contact->description = $options['description'] ?? null;
+        $contact->email = $options['email'] ?? null;
+        $contact->firstName = $options['firstName'] ?? null;
+        $contact->companyName = $options['companyName'] ?? null;
+        $contact->accordCadreName = $options['accordCadreName'] ?? null;
+        $contact->errors = [];
+        $isValid = $this->validateFormContact($contact);
+        if ($isValid) {
+            try {
+                $this->mailerProvider->send(
+                    $this->parameterBag->get('CONTACT_MAIL_FROM'),
+                    $this->getChannel($request)->getChannelParameter()->getEmail(),
+                    $contact->motif,
+                    $this->twig->render('mails/request.send.contact.html.twig', [
+                        'contact' => $contact,
+                    ])
+                );
+                $message = 'Votre demande a bien été envoyée, notre équipe fait le nécessaire pour vous répondre le plus rapidement possible.';
+            } catch (\Exception $exception) {
                 $error = true;
-                $message = \implode('<br>', $contact->errors);
+                $message = 'Un incident est survenu lors de l\'envoi du mail, veuillez essayer ultérieurement';
+                $this->logger->critical("Erreur d'envoie de mail ".$contact->email.' : '.$exception->getMessage());
             }
+        } else {
+            $error = true;
+            $message = \implode('<br>', $contact->errors);
         }
 
         return new JsonResponse(['error' => $error, 'message' => $message]);
@@ -106,14 +89,6 @@ class ContactController extends AbstractController implements ChannelAwareContro
     public function getListMotifs(): JsonResponse
     {
         return new JsonResponse(self::LIST_MOTIFS);
-    }
-
-    #[Route('/token', name: 'contact_token', methods: ['GET'])]
-    public function getToken(): JsonResponse
-    {
-        $token = $this->csrfTokenManager->getToken('contact_form');
-
-        return new JsonResponse($token->getValue());
     }
 
     private function validateFormContact(\stdClass $contact): bool
