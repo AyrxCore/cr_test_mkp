@@ -37,29 +37,21 @@ import { PageList } from '@/vuejs/router'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { computed, onUpdated, ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import {
-  buildStandardGaData,
-  gtmMixinPushEvent,
-  sendGaEvent,
-} from '@/vuejs/services/googleAnalytics'
-import { useUserStore } from '@/vuejs/stores/user'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { betterTextColor } from '@/vuejs/services/utils'
 
-const userStore = useUserStore()
 const channelStore = useChannelStore()
 const { channel, formattedPhoneNumber: channelPhoneNumber } =
   storeToRefs(channelStore)
 const emailButton = ref(null)
 const emailButtonWidth = ref(null)
 
-const currentChannel = channelStore.currentChannel
-
 const contactPage = computed(() => ({
   name: PageList.CONTACT_PAGE,
 }))
 
 function getEmailButtonWidth() {
-  if (!emailButton.value.$el) {
+  if (!emailButton.value?.$el) {
     return
   }
 
@@ -83,12 +75,14 @@ const channelEmailButtonStyle = computed(() => {
   @apply relative right-[56px] h-[45px] rounded-l-[20px] px-5 text-white transition-all;
 
   &.button-email {
-    text-wrap: nowrap;
-
     &:hover {
       /*noinspection CssUnresolvedCustomProperty*/
       right: var(--email-right);
     }
+    white-space: nowrap;
+    word-break: keep-all;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 </style>
