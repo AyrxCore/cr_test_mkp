@@ -43,7 +43,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 class Channel
 {
+    public const DLR = 'DLR';
     public const QANTIS_ACHAT = 'QANTIS_ACHAT';
+
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
@@ -221,8 +223,7 @@ class Channel
                 return $channelOption->getValue();
             }
         }
-    
+
         return null;
     }
-    
 }

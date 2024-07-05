@@ -7,7 +7,6 @@ namespace App\Controller;
 use App\Entity\Channel;
 use App\Repository\AccountRepository;
 use App\Service\AccordCadreSubscriptionService;
-use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -19,6 +18,11 @@ class StellantisRattachementController extends AbstractController implements Cha
 {
     use ChannelAwareControllerTrait;
 
+    public const array ALLOWED_CHANNELS = [
+        Channel::DLR,
+        Channel::QANTIS_ACHAT,
+    ];
+
     public function __construct(
         private LoggerInterface $logger,
         private AccountRepository $accountRepository,
@@ -28,19 +32,19 @@ class StellantisRattachementController extends AbstractController implements Cha
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     #[Route('/rattachement-stellantis', name: 'rattachement_stellantis', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $channel = $this->getChannel($request);
-        if ($channel?->getCode() !== Channel::QANTIS_ACHAT) {
+        if (!\in_array($channel?->getCode(), self::ALLOWED_CHANNELS, true)) {
             return $this->redirectToRoute('prehome');
         }
 
         $email = $request->get('email') ?? null;
-        if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-            return $this->renderError('L\'adresse email '. $email .' est invalide', $channel);
+        if (\filter_var($email, \FILTER_VALIDATE_EMAIL) === false) {
+            return $this->renderError('L\'adresse email '.$email.' est invalide', $channel);
         }
 
         $accounts = $this->accountRepository->findAccountsByUserEmailAndChannelCode($email, $channel->getCode());
@@ -51,7 +55,7 @@ class StellantisRattachementController extends AbstractController implements Cha
         $accords = $this->parameterBag->get('STELLANTIS_PARAMS')['ACCORDS_IDS'];
 
         foreach ($accounts as $account) {
-            shuffle($accords);
+            \shuffle($accords);
             $params = [
                 'accordId' => $accords[0],
                 'accordName' => 'Stellantis',
