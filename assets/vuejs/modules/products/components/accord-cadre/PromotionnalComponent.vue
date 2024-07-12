@@ -5,8 +5,8 @@
       properties.fat_promo_img &&
       properties.fat_promo_txt
     "
-    class="flex flex-col items-center rounded-md bg-secondary p-6 lg:flex-row"
     :class="'text-' + betterTextColor('secondary')"
+    class="flex flex-col items-center rounded-md bg-secondary p-6 lg:flex-row"
   >
     <div class="flex max-w-screen-md items-center justify-center lg:w-5/12">
       <img :src="properties.fat_promo_img" alt="Image promo" />
@@ -24,12 +24,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
+import { useChannelStore } from '@/vuejs/stores/channel'
 import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
 import { betterTextColor, openInNewTab } from '@/vuejs/services/utils'
-import { useChannelStore } from '@/vuejs/stores/channel'
 import { formatUrlWithChannelCode } from '@/vuejs/services/formatter'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const props = defineProps({
   properties: {
@@ -41,6 +42,7 @@ const props = defineProps({
 const channelStore = useChannelStore()
 
 const openingNewTab = (url: string) => {
+  sendGaEvent('click_cta_promotionnal')
   openInNewTab(formatUrlWithChannelCode(url))
 }
 </script>
