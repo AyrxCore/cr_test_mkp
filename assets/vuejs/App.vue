@@ -110,6 +110,7 @@ onBeforeUnmount(() => {
 })
 
 const handleBeforeUnload = (event) => {
+  // localStorage used to help closing other opened tabs when closing the current one
   localStorage.setItem('logout', Date.now().toString())
 }
 
