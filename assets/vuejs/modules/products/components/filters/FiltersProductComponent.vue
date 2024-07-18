@@ -40,8 +40,8 @@
       <FilterCategoryComponent
         v-for="(category, index) in categories"
         v-show="index < visibleCategoryFilters"
-        :category="category"
         :key="category.id"
+        :category="category"
         @change-category="changeFilterCategory"
       />
       <button

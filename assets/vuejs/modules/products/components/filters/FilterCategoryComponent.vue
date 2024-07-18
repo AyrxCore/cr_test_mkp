@@ -1,5 +1,5 @@
 <template>
-  <div class="my-2 text-left text-sm">
+  <div class="my-3 text-left text-sm">
     <div class="flex items-center">
       <input
         v-model="catRadio"
@@ -17,8 +17,8 @@
       <Chevron2RightIconComponent
         v-if="category.children?.length > 0"
         :class="{
-          'ml-2 h-3 w-6 font-bold': !category.parentId,
-          'mr-2': category.parentId !== null,
+          'ml-4 h-3 w-6 font-bold': !category.parentId,
+          'mr-1': category.parentId !== null,
           'rotate-90 ease-in-out': showChildren,
         }"
         @click="toggleChildren"
