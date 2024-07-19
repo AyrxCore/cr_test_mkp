@@ -21,8 +21,8 @@
       <FilterCompanyComponent
         v-for="(company, index) in companies"
         v-show="index < visibleCompanyFilter"
-        :company="company.value"
         :key="company.id"
+        :company="company.value"
         @change-company="changeFilterCompany"
       />
       <button
@@ -65,8 +65,8 @@
         </label>
         <select
           v-if="property.type === 'choice'"
-          v-model="property.id"
           :id="property.id"
+          v-model="property.id"
           class="flex w-full cursor-pointer"
           @change="changeFilterProperties"
         >
@@ -136,11 +136,11 @@ const changeFilterCompany = (event) => {
   })
 }
 
-const changeFilterCategory = (event) => {
-  productStore.setSelectedCategory(event.category_id)
+const changeFilterCategory = (categoryId: number) => {
+  productStore.setSelectedCategory(categoryId)
   sendGaEvent('click_resultats_filtre', {
     filter_name: 'category',
-    filter_value: event.category_id,
+    filter_value: categoryId,
   })
 }
 

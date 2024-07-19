@@ -2,14 +2,12 @@
   <div class="my-3 text-left text-sm">
     <div class="flex items-center">
       <input
-        v-model="catRadio"
+        :id="`categoryRadio-${category.id}`"
         :checked="category.checked"
         :value="category.id"
-        :id="`categoryRadio-${category.id}`"
-        name="catRadio"
         type="radio"
         class="mr-3 cursor-pointer"
-        @change="handleCategorySelection(category)"
+        @change="handleCategorySelection(category.id)"
       />
       <label :for="`categoryRadio-${category.id}`" class="cursor-pointer">
         {{ category.name }} ({{ category.productCount }})
@@ -29,7 +27,7 @@
         v-for="cat in category.children"
         :key="cat.id"
         :category="cat"
-        @change-category="handleCategorySelection(cat)"
+        @change-category="handleCategorySelection"
       />
     </div>
   </div>
@@ -51,18 +49,15 @@ defineProps({
   },
 })
 
-const showChildren = ref<boolean>(false)
-const catRadio = ref()
-
 const emit = defineEmits(['change-category'])
+
+const showChildren = ref<boolean>(false)
 
 const toggleChildren = () => {
   showChildren.value = !showChildren.value
 }
 
-const handleCategorySelection = async (category: Category) => {
-  await emit('change-category', { category_id: category.id })
+const handleCategorySelection = async (categoryId: number) => {
+  await emit('change-category', categoryId)
 }
 </script>
-
-<style scoped></style>
