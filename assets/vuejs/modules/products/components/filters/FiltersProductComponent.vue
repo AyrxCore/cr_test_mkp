@@ -11,7 +11,7 @@
       </ButtonComponent>
       <CloseIcon
         class="cursor-pointer hover:text-secondary md:hidden"
-        @click.native="emit('close-filters')"
+        @click="emit('close-filters')"
       />
     </div>
     <template v-if="companies.length > 0">
