@@ -34,11 +34,11 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType, ref } from 'vue'
+import { PropType, ref, watch } from 'vue'
 import Chevron2RightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
 import { Category } from '@/vuejs/types/Product/Category'
 
-defineProps({
+const props = defineProps({
   category: {
     required: true,
     type: Object as PropType<Category>,
@@ -60,4 +60,27 @@ const toggleChildren = () => {
 const handleCategorySelection = async (categoryId: number) => {
   await emit('change-category', categoryId)
 }
+
+const isAnyChildChecked = (category) => {
+  if (category.checked) {
+    return true
+  }
+  if (category.children) {
+    return category.children.some(isAnyChildChecked)
+  }
+  return false
+}
+
+watch(
+  () => props.category,
+  (newVal, oldVal) => {
+    if (newVal.checked !== oldVal?.checked && newVal.checked) {
+      showChildren.value = true
+    }
+    if (isAnyChildChecked(newVal)) {
+      showChildren.value = true
+    }
+  },
+  { deep: true, immediate: true }
+)
 </script>
