@@ -73,13 +73,11 @@ const isAnyChildChecked = (category) => {
 
 watch(
   () => props.category,
-  (newVal, oldVal) => {
-    if (newVal.checked !== oldVal?.checked && newVal.checked) {
+  (newVal) => {
+    if (isAnyChildChecked(newVal) && !newVal.checked) {
       showChildren.value = true
     }
-    if (isAnyChildChecked(newVal)) {
-      showChildren.value = true
-    }
+    return false
   },
   { deep: true, immediate: true }
 )
