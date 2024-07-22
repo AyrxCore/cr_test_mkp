@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount, onBeforeUnmount, onMounted } from 'vue'
+import { onBeforeMount, onMounted } from 'vue'
 
 import LoginForm from './modules/login/views/ExternalLoginForm.vue'
 import StickyContactButtons from '@/vuejs/modules/shared/StickyContactButtonsComponent.vue'
@@ -51,14 +51,12 @@ import { useBannerStore } from '@/vuejs/stores/banner'
 import PrehomeRightPart from '@/vuejs/modules/login/component/PrehomeRightPart.vue'
 import FooterPrehome from '@/vuejs/modules/login/component/FooterPrehome.vue'
 import { storeToRefs } from 'pinia'
-import { useUserStore } from '@/vuejs/stores/user'
 
 const channelStore = useChannelStore()
 const { currentChannel, channelDocuments } = storeToRefs(channelStore)
 const cartStore = useCartStore()
 const categoryStore = useCategoryStore()
 const bannerStore = useBannerStore()
-const userStore = useUserStore()
 
 const props = defineProps({
   component: {
@@ -95,31 +93,7 @@ onMounted(async () => {
   ) {
     await cartStore.getCart()
   }
-
-  if (userStore.isNeoAutoLogin) {
-    window.addEventListener('beforeunload', handleBeforeUnload)
-    window.addEventListener('storage', handleStorageEvent)
-  }
 })
-
-onBeforeUnmount(() => {
-  if (userStore.isNeoAutoLogin) {
-    window.removeEventListener('beforeunload', handleBeforeUnload)
-    window.removeEventListener('storage', handleStorageEvent)
-  }
-})
-
-const handleBeforeUnload = (event) => {
-  // localStorage used to help closing other opened tabs when closing the current one
-  localStorage.setItem('logout', Date.now().toString())
-}
-
-const handleStorageEvent = async (event) => {
-  if (event.key === 'logout') {
-    await userStore.logout()
-    localStorage.removeItem('logout')
-  }
-}
 </script>
 
 <style lang="postcss">
