@@ -19,22 +19,24 @@
           'mr-1': category.parentId !== null,
           'rotate-90 ease-in-out': showChildren,
         }"
+        class="cursor-pointer"
         @click="toggleChildren"
       />
     </div>
-    <div v-if="showChildren" class="ml-4 mt-2">
+    <div v-show="showChildren" class="ml-4 mt-2">
       <FilterCategoryComponent
         v-for="cat in category.children"
         :key="cat.id"
         :category="cat"
         @change-category="handleCategorySelection"
+        @open-hierarchy="openHierarchy"
       />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { PropType, ref, watch } from 'vue'
+import { PropType, onMounted, ref } from 'vue'
 import Chevron2RightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
 import { Category } from '@/vuejs/types/Product/Category'
 
@@ -43,42 +45,28 @@ const props = defineProps({
     required: true,
     type: Object as PropType<Category>,
   },
-  space: {
-    type: Number,
-    default: 0,
-  },
 })
 
-const emit = defineEmits(['change-category'])
+const emit = defineEmits(['change-category', 'open-hierarchy'])
 
 const showChildren = ref<boolean>(false)
 
-const toggleChildren = () => {
+const toggleChildren = (): void => {
   showChildren.value = !showChildren.value
 }
 
-const handleCategorySelection = async (categoryId: number) => {
-  await emit('change-category', categoryId)
+const handleCategorySelection = (categoryId: number): void => {
+  emit('change-category', categoryId)
 }
 
-const isAnyChildChecked = (category) => {
-  if (category.checked) {
-    return true
-  }
-  if (category.children) {
-    return category.children.some(isAnyChildChecked)
-  }
-  return false
+const openHierarchy = (): void => {
+  toggleChildren()
+  emit('open-hierarchy')
 }
 
-watch(
-  () => props.category,
-  (newVal) => {
-    if (isAnyChildChecked(newVal) && !newVal.checked) {
-      showChildren.value = true
-    }
-    return false
-  },
-  { deep: true, immediate: true }
-)
+onMounted((): void => {
+  if (props.category.checked) {
+    emit('open-hierarchy')
+  }
+})
 </script>
