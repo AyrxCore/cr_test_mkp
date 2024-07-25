@@ -111,9 +111,11 @@ const handleScroll = () => {
   }, 100)
 }
 
-const handleBeforeUnload = (event) => {
+const handleBeforeUnload = async (event) => {
   broadcastChannel.postMessage('logout')
-  handleLogout()
+  event.preventDefault()
+  event.returnValue = ''
+  await handleLogout()
 }
 
 const handleLogoutMessage = () => {
