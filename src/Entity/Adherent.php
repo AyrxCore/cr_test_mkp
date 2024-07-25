@@ -106,6 +106,9 @@ class Adherent
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $libelleApe = null;
 
+    #[ORM\Column]
+    private ?bool $active = true;
+
     public function __construct()
     {
         $this->accordStatuts = new ArrayCollection();
@@ -379,5 +382,17 @@ class Adherent
     public function getChildren(): Collection
     {
         return $this->children;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(?bool $active): static
+    {
+        $this->active = $active;
+
+        return $this;
     }
 }

@@ -10,8 +10,6 @@
     >
       <div class="relative mt-2">
         <CarouselListSharedComponent
-          :slides-per-view="1"
-          :space-between="20"
           :autoplay="{
             delay: 3000,
             disableOnInteraction: false,
@@ -23,8 +21,10 @@
               spaceBetween: 20,
             },
           }"
-          loop
+          :slides-per-view="1"
+          :space-between="20"
           class="swiper-nav-outside"
+          loop
         >
           <SwiperSlide
             v-for="content in expertContents"
@@ -37,6 +37,7 @@
                 params: { slug: content.slug },
               }"
               class="truncate-custom truncate-custom-2 text-primary"
+              @click="sendGaEvent('click_homepage_banner_news')"
             >
               <img
                 :src="content.slider_img_mobile"
@@ -55,8 +56,8 @@
     </div>
     <div
       v-else-if="channel.options['BANNER_HOMEPAGE']"
-      class="h-[160px] bg-cover bg-center md:h-[200px]"
       :style="{ backgroundImage: `url(${channel.options['BANNER_HOMEPAGE']})` }"
+      class="h-[160px] bg-cover bg-center md:h-[200px]"
     >
       <h3
         class="flex h-full w-full items-center justify-center bg-white/50 text-center text-xl font-bold sm:text-4xl"
@@ -74,6 +75,7 @@ import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListShar
 
 import { NewsPageList } from '@/vuejs/router/pages-list'
 import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { useExpertContentStore } from '@/vuejs/stores/expertContent'
 import { useChannelStore } from '@/vuejs/stores/channel'
 
