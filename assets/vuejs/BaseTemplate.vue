@@ -113,8 +113,6 @@ const handleScroll = () => {
 
 const handleBeforeUnload = (event) => {
   broadcastChannel.postMessage('logout')
-  event.preventDefault()
-  event.returnValue = ''
   handleLogout()
 }
 
