@@ -49,7 +49,7 @@
 
 <script lang="ts" setup>
 import { useHead } from '@unhead/vue'
-import { onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+import { onBeforeUnmount, onMounted, reactive } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import HeaderSharedComponent from '@/vuejs/modules/shared/HeaderSharedComponent.vue'
@@ -68,8 +68,7 @@ const { channel } = storeToRefs(channelStore)
 const bannerStore = useBannerStore()
 const { banner } = storeToRefs(bannerStore)
 const userStore = useUserStore()
-const tabCount = ref(0)
-const isLoggingOut = ref(false)
+let broadcastChannel = null
 
 const props = defineProps({
   title: {
@@ -82,18 +81,16 @@ const props = defineProps({
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
   if (userStore.isNeoAutoLogin) {
-    initTabTracking()
-    window.onbeforeunload = handleBeforeUnload
-    window.addEventListener('storage', handleStorageEvent)
+    broadcastChannel = new BroadcastChannel('logout_channel')
+    broadcastChannel.onmessage = handleLogoutMessage
+    window.addEventListener('beforeunload', handleBeforeUnload)
   }
 })
 
 onBeforeUnmount(() => {
-  if (userStore.isNeoAutoLogin) {
-    window.removeEventListener('beforeunload', handleBeforeUnload, {
-      capture: true,
-    })
-    window.removeEventListener('storage', handleStorageEvent)
+  if (broadcastChannel) {
+    broadcastChannel.close()
+    window.removeEventListener('beforeunload', handleBeforeUnload)
   }
 })
 
@@ -114,40 +111,22 @@ const handleScroll = () => {
   }, 100)
 }
 
-const handleBeforeUnload = async (event) => {
-  localStorage.setItem('logout', Date.now().toString())
-  decrementTabCount()
-  if ((tabCount.value === 0 || tabCount.value === 1) && !isLoggingOut.value) {
-    isLoggingOut.value = true
-    await handleLogout()
-    localStorage.removeItem('tabCount')
-  }
+const handleBeforeUnload = (event) => {
+  broadcastChannel.postMessage('logout')
+  event.preventDefault()
+  event.returnValue = ''
+  handleLogout()
 }
 
-const handleStorageEvent = async (event) => {
-  if (event.key === 'logout' && !isLoggingOut.value) {
-    await handleLogout()
-    localStorage.removeItem('logout')
-    localStorage.removeItem('tabCount')
-    // Recharge les autres onglets qui sont ouverts pour les déconnecter et afficher la page de login
-    window.location.reload()
-  }
-}
-
-const initTabTracking = () => {
-  const count = parseInt(localStorage.getItem('tabCount') || '0')
-  localStorage.setItem('tabCount', (count + 1).toString())
-  tabCount.value = count + 1
-}
-
-const decrementTabCount = () => {
-  tabCount.value = Math.max(0, tabCount.value - 1)
-  localStorage.setItem('tabCount', tabCount.value.toString())
+const handleLogoutMessage = () => {
+  handleLogout()
+  broadcastChannel.close()
 }
 
 const handleLogout = async () => {
   if (userStore.isLogged) {
     await userStore.logout()
+    window.location.reload()
   }
 }
 const toTop = () => {
