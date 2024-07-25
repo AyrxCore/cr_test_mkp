@@ -49,7 +49,7 @@
 
 <script lang="ts" setup>
 import { useHead } from '@unhead/vue'
-import { onBeforeUnmount, onMounted, reactive } from 'vue'
+import { onBeforeMount, onBeforeUnmount, onMounted, reactive } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import HeaderSharedComponent from '@/vuejs/modules/shared/HeaderSharedComponent.vue'
@@ -77,14 +77,16 @@ const props = defineProps({
     default: '',
   },
 })
-
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
+onBeforeMount(() => {
   if (userStore.isNeoAutoLogin) {
     broadcastChannel = new BroadcastChannel('logout_channel')
     broadcastChannel.onmessage = handleLogoutMessage
     window.addEventListener('beforeunload', handleBeforeUnload)
   }
+})
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
 })
 
 onBeforeUnmount(() => {
@@ -113,8 +115,6 @@ const handleScroll = () => {
 
 const handleBeforeUnload = async (event) => {
   broadcastChannel.postMessage('logout')
-  event.preventDefault()
-  event.returnValue = ''
   await handleLogout()
 }
 
