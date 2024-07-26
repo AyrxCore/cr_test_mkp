@@ -49,7 +49,7 @@
 
 <script lang="ts" setup>
 import { useHead } from '@unhead/vue'
-import { onMounted, reactive } from 'vue'
+import { onBeforeMount, onMounted, reactive } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import HeaderSharedComponent from '@/vuejs/modules/shared/HeaderSharedComponent.vue'
@@ -61,11 +61,14 @@ import { useBannerStore } from '@/vuejs/stores/banner'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { betterTextColor } from '@/vuejs/services/utils'
 import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
+import { useUserStore } from '@/vuejs/stores/user'
 
 const channelStore = useChannelStore()
 const { channel } = storeToRefs(channelStore)
 const bannerStore = useBannerStore()
 const { banner } = storeToRefs(bannerStore)
+const userStore = useUserStore()
+let broadcastChannel = null
 
 const props = defineProps({
   title: {
@@ -73,6 +76,14 @@ const props = defineProps({
     type: String,
     default: '',
   },
+})
+
+onBeforeMount(() => {
+  if (userStore.isNeoAutoLogin) {
+    broadcastChannel = new BroadcastChannel('logout_channel')
+    broadcastChannel.onmessage = handleLogoutMessage
+    window.addEventListener('beforeunload', handleBeforeUnload)
+  }
 })
 
 onMounted(() => {
@@ -101,6 +112,24 @@ const toTop = () => {
     top: 0,
     behavior: 'smooth',
   })
+}
+
+const handleBeforeUnload = (event) => {
+  const logoutUrl = '/api/user/logout'
+  navigator.sendBeacon(logoutUrl)
+  broadcastChannel.postMessage('logout')
+}
+
+const handleLogoutMessage = async () => {
+  await handleLogout()
+}
+
+const handleLogout = async () => {
+  if (userStore.isLogged) {
+    await userStore.logout()
+    broadcastChannel.close()
+    window.location.reload()
+  }
 }
 useHead({
   title: pageTitle.value,

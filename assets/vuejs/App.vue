@@ -51,16 +51,12 @@ import { useBannerStore } from '@/vuejs/stores/banner'
 import PrehomeRightPart from '@/vuejs/modules/login/component/PrehomeRightPart.vue'
 import FooterPrehome from '@/vuejs/modules/login/component/FooterPrehome.vue'
 import { storeToRefs } from 'pinia'
-import { useUserStore } from '@/vuejs/stores/user'
 
 const channelStore = useChannelStore()
 const { currentChannel, channelDocuments } = storeToRefs(channelStore)
 const cartStore = useCartStore()
 const categoryStore = useCategoryStore()
 const bannerStore = useBannerStore()
-
-const userStore = useUserStore()
-let broadcastChannel = null
 
 const props = defineProps({
   component: {
@@ -71,7 +67,6 @@ const props = defineProps({
 })
 
 onBeforeMount(async () => {
-  console.log('onBeforeMount started')
   // The channel must be the first thing to fetch because we need to send every other requests with the "X-Channel" header
   await channelStore.getChannel(window.location.hostname)
   if (props.component === '') {
@@ -83,14 +78,6 @@ onBeforeMount(async () => {
       promises.push(bannerStore.init())
     }
     await Promise.all(promises)
-
-    if (userStore.isNeoAutoLogin) {
-      console.log('isNeoAutoLogin:', userStore.isNeoAutoLogin)
-      broadcastChannel = new BroadcastChannel('logout_channel')
-      broadcastChannel.onmessage = handleLogoutMessage
-      window.addEventListener('beforeunload', handleBeforeUnload)
-      console.log('BroadcastChannel and event listener set up')
-    }
   }
 })
 
@@ -107,24 +94,6 @@ onMounted(async () => {
     await cartStore.getCart()
   }
 })
-
-const handleBeforeUnload = (event) => {
-  const logoutUrl = '/api/user/logout'
-  navigator.sendBeacon(logoutUrl)
-  broadcastChannel.postMessage('logout')
-}
-
-const handleLogoutMessage = async () => {
-  await handleLogout()
-}
-
-const handleLogout = async () => {
-  if (userStore.isLogged) {
-    await userStore.logout()
-    broadcastChannel.close()
-    window.location.reload()
-  }
-}
 </script>
 
 <style lang="postcss">
