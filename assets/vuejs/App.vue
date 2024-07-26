@@ -112,12 +112,12 @@ const handleBeforeUnload = async (event) => {
 
 const handleLogoutMessage = async () => {
   await handleLogout()
-  broadcastChannel.close()
 }
 
 const handleLogout = async () => {
   if (userStore.isLogged) {
     await userStore.logout()
+    broadcastChannel.close()
     window.location.reload()
   }
 }
