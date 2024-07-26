@@ -49,7 +49,7 @@
 
 <script lang="ts" setup>
 import { useHead } from '@unhead/vue'
-import { onBeforeMount, onBeforeUnmount, onMounted, reactive } from 'vue'
+import { onMounted, reactive } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import HeaderSharedComponent from '@/vuejs/modules/shared/HeaderSharedComponent.vue'
@@ -61,14 +61,11 @@ import { useBannerStore } from '@/vuejs/stores/banner'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { betterTextColor } from '@/vuejs/services/utils'
 import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
-import { useUserStore } from '@/vuejs/stores/user'
 
 const channelStore = useChannelStore()
 const { channel } = storeToRefs(channelStore)
 const bannerStore = useBannerStore()
 const { banner } = storeToRefs(bannerStore)
-const userStore = useUserStore()
-let broadcastChannel = null
 
 const props = defineProps({
   title: {
@@ -77,23 +74,9 @@ const props = defineProps({
     default: '',
   },
 })
-onBeforeMount(() => {
-  if (userStore.isNeoAutoLogin) {
-    broadcastChannel = new BroadcastChannel('logout_channel')
-    broadcastChannel.onmessage = handleLogoutMessage
-    window.addEventListener('beforeunload', handleBeforeUnload)
-  }
-})
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
-})
-
-onBeforeUnmount(() => {
-  if (broadcastChannel) {
-    broadcastChannel.close()
-    window.removeEventListener('beforeunload', handleBeforeUnload)
-  }
 })
 
 const scTimer = reactive({ value: null })
@@ -113,22 +96,6 @@ const handleScroll = () => {
   }, 100)
 }
 
-const handleBeforeUnload = async (event) => {
-  broadcastChannel.postMessage('logout')
-  await handleLogout()
-}
-
-const handleLogoutMessage = () => {
-  handleLogout()
-  broadcastChannel.close()
-}
-
-const handleLogout = async () => {
-  if (userStore.isLogged) {
-    await userStore.logout()
-    window.location.reload()
-  }
-}
 const toTop = () => {
   window.scrollTo({
     top: 0,

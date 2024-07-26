@@ -51,12 +51,16 @@ import { useBannerStore } from '@/vuejs/stores/banner'
 import PrehomeRightPart from '@/vuejs/modules/login/component/PrehomeRightPart.vue'
 import FooterPrehome from '@/vuejs/modules/login/component/FooterPrehome.vue'
 import { storeToRefs } from 'pinia'
+import { useUserStore } from '@/vuejs/stores/user'
 
 const channelStore = useChannelStore()
 const { currentChannel, channelDocuments } = storeToRefs(channelStore)
 const cartStore = useCartStore()
 const categoryStore = useCategoryStore()
 const bannerStore = useBannerStore()
+
+const userStore = useUserStore()
+let broadcastChannel = null
 
 const props = defineProps({
   component: {
@@ -78,6 +82,12 @@ onBeforeMount(async () => {
       promises.push(bannerStore.init())
     }
     await Promise.all(promises)
+
+    if (userStore.isNeoAutoLogin) {
+      broadcastChannel = new BroadcastChannel('logout_channel')
+      broadcastChannel.onmessage = handleLogoutMessage
+      window.addEventListener('beforeunload', handleBeforeUnload)
+    }
   }
 })
 
@@ -94,6 +104,23 @@ onMounted(async () => {
     await cartStore.getCart()
   }
 })
+
+const handleBeforeUnload = async (event) => {
+  broadcastChannel.postMessage('logout')
+  await handleLogout()
+}
+
+const handleLogoutMessage = async () => {
+  await handleLogout()
+  broadcastChannel.close()
+}
+
+const handleLogout = async () => {
+  if (userStore.isLogged) {
+    await userStore.logout()
+    window.location.reload()
+  }
+}
 </script>
 
 <style lang="postcss">
