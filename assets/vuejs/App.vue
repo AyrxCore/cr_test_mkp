@@ -52,6 +52,7 @@ import PrehomeRightPart from '@/vuejs/modules/login/component/PrehomeRightPart.v
 import FooterPrehome from '@/vuejs/modules/login/component/FooterPrehome.vue'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '@/vuejs/stores/user'
+import Cookies from 'js-cookie'
 
 const channelStore = useChannelStore()
 const { currentChannel, channelDocuments } = storeToRefs(channelStore)
@@ -71,6 +72,7 @@ const props = defineProps({
 })
 
 onBeforeMount(async () => {
+  console.log('onBeforeMount started')
   // The channel must be the first thing to fetch because we need to send every other requests with the "X-Channel" header
   await channelStore.getChannel(window.location.hostname)
   if (props.component === '') {
@@ -84,9 +86,11 @@ onBeforeMount(async () => {
     await Promise.all(promises)
 
     if (userStore.isNeoAutoLogin) {
+      console.log('isNeoAutoLogin:', userStore.isNeoAutoLogin)
       broadcastChannel = new BroadcastChannel('logout_channel')
       broadcastChannel.onmessage = handleLogoutMessage
       window.addEventListener('beforeunload', handleBeforeUnload)
+      console.log('BroadcastChannel and event listener set up')
     }
   }
 })
@@ -106,17 +110,20 @@ onMounted(async () => {
 })
 
 const handleBeforeUnload = async (event) => {
+  console.log('handleBeforeUnload triggered')
   broadcastChannel.postMessage('logout')
   await handleLogout()
 }
 
 const handleLogoutMessage = async () => {
+  console.log('handleLogoutMessage triggered')
   await handleLogout()
 }
 
 const handleLogout = async () => {
   if (userStore.isLogged) {
     await userStore.logout()
+    Cookies.remove('neoAutoLogin')
     broadcastChannel.close()
     window.location.reload()
   }
