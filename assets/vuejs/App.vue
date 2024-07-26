@@ -52,7 +52,6 @@ import PrehomeRightPart from '@/vuejs/modules/login/component/PrehomeRightPart.v
 import FooterPrehome from '@/vuejs/modules/login/component/FooterPrehome.vue'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '@/vuejs/stores/user'
-import Cookies from 'js-cookie'
 
 const channelStore = useChannelStore()
 const { currentChannel, channelDocuments } = storeToRefs(channelStore)
@@ -110,20 +109,17 @@ onMounted(async () => {
 })
 
 const handleBeforeUnload = async (event) => {
-  console.log('handleBeforeUnload triggered')
   broadcastChannel.postMessage('logout')
   await handleLogout()
 }
 
 const handleLogoutMessage = async () => {
-  console.log('handleLogoutMessage triggered')
   await handleLogout()
 }
 
 const handleLogout = async () => {
   if (userStore.isLogged) {
     await userStore.logout()
-    Cookies.remove('neoAutoLogin')
     broadcastChannel.close()
     window.location.reload()
   }
