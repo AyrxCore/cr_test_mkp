@@ -1,10 +1,6 @@
 <template>
   <div class="relative mt-5 p-8">
     <CarouselListSharedComponent
-      class="nav-mobile-only swiper-nav-outside"
-      :slides-per-view="1"
-      :space-between="20"
-      :show-nav="true"
       :breakpoints="{
         1280: {
           slidesPerView: 3,
@@ -15,10 +11,14 @@
           spaceBetween: 20,
         },
       }"
+      :show-nav="true"
+      :slides-per-view="1"
+      :space-between="20"
+      class="nav-mobile-only swiper-nav-outside"
     >
       <SwiperSlide
         v-for="contenu in props.contents"
-        :key="contenu.id"
+        :key="contenu?.id"
         class="!flex h-full items-center justify-center overflow-hidden rounded-lg"
       >
         <div
@@ -27,7 +27,7 @@
           <!-- Bloc image -->
           <div class="mx-auto flex h-[191px] justify-center rounded-lg px-1">
             <img
-              :src="contenu.mise_en_avant_homepage_img_desktop"
+              :src="contenu?.mise_en_avant_homepage_img_desktop"
               alt="Picture"
               class="w-full items-center sm:mx-auto"
             />
@@ -39,11 +39,11 @@
             <h3
               class="truncate-custom truncate-custom-2 mb-5 text-[23px] font-bold text-primary"
             >
-              {{ contenu.articleTitle }}
+              {{ contenu?.articleTitle }}
             </h3>
             <div class="h-[100px]">
               <p class="truncate-custom truncate-custom-3 text-lg">
-                {{ contenu.articleTeaser }}
+                {{ contenu?.articleTeaser }}
               </p>
             </div>
           </div>
@@ -51,7 +51,7 @@
             <RouterLink
               :to="{
                 name: PageList.NEWS_ITEM,
-                params: { slug: contenu.slug },
+                params: { slug: contenu?.slug },
               }"
               class="button border-2 border-primary text-sm font-medium !text-primary shadow-none hover:scale-105 hover:!border-primary hover:!bg-white hover:!shadow-inner-darker focus:!bg-white"
             >

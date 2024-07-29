@@ -3,8 +3,6 @@
     <LoaderSharedComponent v-if="sellersLoading" class="m-auto" />
     <CarouselListSharedComponent
       v-else
-      :slides-per-view="1"
-      :space-between="10"
       :breakpoints="{
         640: {
           slidesPerView: 6,
@@ -15,6 +13,8 @@
           spaceBetween: 20,
         },
       }"
+      :slides-per-view="1"
+      :space-between="10"
       class="swiper-nav-outside"
     >
       <SwiperSlide
@@ -25,15 +25,15 @@
         <RouterLink
           :to="{
             name: ProductPageList.PRODUCTS,
-            query: { company: seller.id },
+            query: { company: seller?.id },
           }"
           replace
         >
           <img
-            :src="getUpplerImage(seller.avatar)"
-            :alt="seller.name"
+            :alt="seller?.name"
+            :src="getUpplerImage(seller?.avatar)"
             class="pointer h-[107px] w-full cursor-pointer object-contain"
-            @click="emit('click-partner-slider', seller.name)"
+            @click="emit('click-partner-slider', seller?.name)"
           />
         </RouterLink>
       </SwiperSlide>

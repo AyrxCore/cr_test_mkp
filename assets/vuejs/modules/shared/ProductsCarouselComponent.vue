@@ -1,7 +1,6 @@
 <template>
   <div v-if="products?.length > 0" class="relative mt-1 md:mt-5">
     <CarouselListSharedComponent
-      :space-between="10"
       :breakpoints="{
         1600: {
           slidesPerView: 5,
@@ -20,6 +19,7 @@
           spaceBetween: 20,
         },
       }"
+      :space-between="10"
       class="swiper-nav-outside"
       @click-left="$emit('click-left')"
       @click-right="$emit('click-right')"
@@ -63,6 +63,7 @@ const props = defineProps({
   products: {
     required: true,
     type: Array,
+    default: [],
   },
   loading: {
     required: true,

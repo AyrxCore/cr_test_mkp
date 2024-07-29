@@ -1,8 +1,6 @@
 <template>
   <div v-if="accordsCadres?.length > 0" class="relative mt-1 md:mt-5">
     <CarouselListSharedComponent
-      :slides-per-view="1"
-      :space-between="20"
       :breakpoints="{
         1600: {
           slidesPerView: 5,
@@ -21,6 +19,8 @@
           spaceBetween: 20,
         },
       }"
+      :slides-per-view="1"
+      :space-between="20"
       class="swiper-nav-outside"
       @click-left="$emit('click-left')"
       @click-right="$emit('click-right')"
@@ -54,6 +54,7 @@ const props = defineProps({
   accordsCadres: {
     required: true,
     type: Array || (Object as PropType<Product>),
+    default: [],
   },
   loading: {
     required: true,
