@@ -115,8 +115,7 @@ const toTop = () => {
 }
 
 const handleBeforeUnload = (event) => {
-  const logoutUrl = '/api/user/logout'
-  navigator.sendBeacon(logoutUrl)
+  navigator.sendBeacon('/api/user/logout')
   broadcastChannel.postMessage('logout')
 }
 
