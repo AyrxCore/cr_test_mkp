@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Account;
+use App\Entity\Channel;
 use App\Entity\User;
 use App\Events\FirstConnexionEvent;
 use App\Events\ResettingPasswordEvent;
@@ -11,6 +13,7 @@ use App\Exception\AutoLoginException;
 use App\Form\ResettingType;
 use App\Repository\AccountRepository;
 use App\Repository\UserRepository;
+use App\Service\LogAutoLoginErrorService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -36,6 +39,7 @@ class LoginController extends AbstractController implements ChannelAwareControll
         private UserPasswordHasherInterface $passwordHasher,
         private UserRepository $userRepository,
         private AccountRepository $accountRepository,
+        private readonly LogAutoLoginErrorService $logAutoLoginErrorService
     ) {
     }
 
@@ -212,35 +216,43 @@ class LoginController extends AbstractController implements ChannelAwareControll
             $hash = $request->query->get('hash');
             $timestamp = (int) $request->query->get('timestamp');
             $email = $request->query->get('email');
+
+            if (!$email || !$hash || !$timestamp) {
+                throw new BadRequestException('Missing parameters (Email or timestamp or hash');
+            }
+
             $user = $this->userRepository->findOneBy(['email' => $email]);
 
             if (!$user) {
+                $this->logAutoLoginError($this->getChannel($request), $email, 'Adresse email non trouvé dans la base de données');
                 throw new AutoLoginException('email not found');
             }
 
             if (!$channel = $this->getChannel($request)) {
+                $this->logAutoLoginError($this->getChannel($request), $email, 'Aucun channel trouvé pour cette requête');
                 throw new BadRequestException();
             }
 
             if (!$account = $user->getFirstEnabledAccount($channel)) {
+                $this->logAutoLoginError($this->getChannel($request), $email, 'Aucun compte valide trouvé');
                 throw new BadRequestException('No account available');
             }
 
-            if ($timestamp < \time() + 60 && $timestamp > \time() - (60 * 60)) {
-                $hashkey = $account->getAdherent()?->getHashkey() ?: '';
-                $data = $email.$timestamp.$hashkey;
-                if (\base64_encode(\hash('sha256', $data)) !== $hash) {
-                    throw new BadRequestException();
-                }
-
-                $loginLinkDetails = $loginLinkHandler->createLoginLink($user);
-
-                return new JsonResponse([
-                    'url' => $loginLinkDetails->getUrl(),
-                ]);
-            } else {
-                throw new BadRequestException();
+            if (!$this->isTimestampValid($timestamp)) {
+                $this->logAutoLoginError($this->getChannel($request), $email, 'Le temps de validité du lien de connexion a expiré');
+                throw new BadRequestException('Link expired');
             }
+
+            if (!$this->isHashValid($account, $hash, $email, $timestamp)) {
+                $this->logAutoLoginError($this->getChannel($request), $email, 'Hash invalide');
+                throw new BadRequestException('Invalid hash');
+            }
+
+            $loginLinkDetails = $loginLinkHandler->createLoginLink($user);
+
+            return new JsonResponse([
+                'url' => $loginLinkDetails->getUrl(),
+            ]);
         }
 
         throw new NotFoundHttpException();
@@ -270,5 +282,26 @@ class LoginController extends AbstractController implements ChannelAwareControll
         }
 
         throw new NotFoundHttpException();
+    }
+
+    private function isTimestampValid(?int $timestamp): bool
+    {
+        $currentTime = \time();
+        $timeWindow = 60 * 60; // 1 heure en secondes
+
+        return $timestamp < $currentTime + 60 && $timestamp > $currentTime - $timeWindow;
+    }
+
+    private function isHashValid(Account $account, string $hash, string $email, int $timestamp): bool
+    {
+        $hashkey = $account->getAdherent()?->getHashkey() ?: '';
+        $data = $email.$timestamp.$hashkey;
+
+        return \base64_encode(\hash('sha256', $data)) === $hash;
+    }
+
+    private function logAutoLoginError(?Channel $channel, string $email, string $reason): void
+    {
+        $this->logAutoLoginErrorService->log($channel?->getName(), $email, $reason);
     }
 }
