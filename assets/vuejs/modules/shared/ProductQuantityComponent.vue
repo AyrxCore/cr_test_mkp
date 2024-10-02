@@ -2,29 +2,29 @@
   <div class="skin-7">
     <div class="num-in">
       <span
-        class="minus rounded-l-md"
-        :disabled="qte == 1"
         :class="{
           '!cursor-not-allowed': qte == 1,
         }"
+        :disabled="qte == 1"
         :style="{
           color: betterTextColor('secondary'),
         }"
+        class="minus rounded-l-md"
         @click="decrement"
         >-</span
       >
       <input
         v-model.number="qte"
-        type="text"
         class="in-num"
-        @input="onInput"
+        type="text"
         @blur="onBlur"
+        @input="onInput"
       />
       <span
-        class="plus rounded-r-md"
         :style="{
           color: betterTextColor('secondary'),
         }"
+        class="plus rounded-r-md"
         @click="increment"
         >+</span
       >
@@ -51,8 +51,8 @@ const onInput = (event: InputEvent): void => {
   const onlyNumbers = inputValue.replace(/[^0-9]/g, '') // Filtrer uniquement les chiffres
   if (onlyNumbers === 0 && onlyNumbers !== '') {
     qte.value = 1
-  } else if (onlyNumbers > 99) {
-    qte.value = 99
+  } else if (onlyNumbers > 999) {
+    qte.value = 999
   } else if (onlyNumbers.length === 0) {
     qte.value = ''
   } else {
@@ -64,7 +64,7 @@ const onInput = (event: InputEvent): void => {
 }
 
 const onBlur = (): void => {
-  if (qte.value !== props.quantity && qte.value >= 1 && qte.value <= 99) {
+  if (qte.value !== props.quantity && qte.value >= 1 && qte.value <= 999) {
     emit('updateQuantity', {
       quantity: qte.value,
     })
@@ -83,7 +83,7 @@ const decrement = (): void => {
 }
 
 const increment = (): void => {
-  if (qte.value < 99) {
+  if (qte.value < 999) {
     qte.value++
     emit('updateQuantity', {
       quantity: qte.value,
@@ -111,7 +111,7 @@ const increment = (): void => {
 
 .skin-7 .num-in input {
   float: left;
-  width: 35px;
+  width: 40px;
   line-height: 34px;
   text-align: center;
 }
