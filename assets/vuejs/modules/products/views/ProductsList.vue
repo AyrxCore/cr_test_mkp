@@ -1,12 +1,12 @@
 <template>
-  <BaseTemplate title="Résultat de recherche de produits" class="ff-roboto">
+  <BaseTemplate class="ff-roboto" title="Résultat de recherche de produits">
     <div
       v-if="isLoading"
       class="my-20 flex h-20 w-full flex-col items-center justify-center text-primary"
     >
       <LoadingComponent />
     </div>
-    <div v-else class="my-4 mx-auto w-full px-4 md:px-8 lg:px-10 xl:px-12">
+    <div v-else class="mx-auto my-4 w-full px-4 md:px-8 lg:px-10 xl:px-12">
       <BreadcrumbSharedComponent
         :list-url="breadcrumbUrl"
         current-page="Page de résultat"
@@ -113,7 +113,7 @@ const {
 } = storeToRefs(productStore)
 const isLoading = ref<boolean>()
 const currentPartenaire = ref<number>(null)
-const perPage = ref<number>(30)
+const perPage = ref<number>(36)
 const currentCount = ref<number>(null)
 const resultNotFound = ref<boolean>(false)
 const favoriteStore = useFavoriteStore()
