@@ -1,31 +1,33 @@
 <template>
-  <div class="mb-2 flex flex-col items-center rounded-md bg-white p-4 md:mb-0">
+  <div
+    class="mb-2 flex min-h-[490px] flex-col items-center rounded-md bg-white p-4 md:mb-0"
+  >
     <!-- Bloc header -->
-    <div class="relative flex h-[50px] w-full items-center justify-between">
+    <div class="flex h-[50px] w-full items-center justify-between">
       <div
         class="flex h-[50px] w-[78px] items-center justify-start rounded-md bg-white"
       >
         <img
-          :src="getUpplerImage(product.seller.avatar)"
           :alt="product.seller.name"
+          :src="getUpplerImage(product.seller.avatar)"
           class="h-full w-full object-contain"
         />
       </div>
       <div class="flex items-center">
         <div
-          class="rounded-sm bg-primary p-1 text-sm"
           :style="{
             color: betterTextColor('primary'),
           }"
+          class="rounded-sm bg-primary p-1 text-sm"
         >
           Produit
         </div>
         <AddFavoriteComponent
           v-if="product.variants?.length === 2"
+          :favorites-product="product.favorites"
           :product-id="product.id"
           :product-name="product.name"
           :variant-id="variantId"
-          :favorites-product="product.favorites"
           class="ml-4"
         />
       </div>
@@ -34,28 +36,31 @@
 
     <div class="flex h-full w-full flex-col items-center">
       <!-- Bloc image -->
-      <div
-        class="flex h-[150px] max-w-[200px] items-center justify-center rounded-lg sm:mx-auto sm:w-full md:h-[139px] lg:h-[191px]"
-      >
-        <img
-          v-if="product.images[0]"
-          :src="getUpplerImage(product.images[0])"
-          :alt="product.name"
-          class="flex max-h-[150px] cursor-pointer items-center md:max-h-[139px] lg:max-h-[191px] lg:w-full lg:max-w-max"
-          @click="goToProductPage"
-        />
+      <div class="my-1 flex w-full items-center">
         <div
-          v-else
-          class="loading flex h-[116px] w-full items-center justify-center rounded-lg px-6 py-2"
-        />
+          class="flex h-[200px] max-w-[200px] items-center justify-center rounded-lg sm:mx-auto"
+        >
+          <img
+            v-if="product.images[0]"
+            :alt="product.name"
+            :src="getUpplerImage(product.images[0])"
+            class="flex cursor-pointer items-center lg:w-full lg:max-w-max"
+            @click="goToProductPage"
+          />
+          <div
+            v-else
+            class="loading flex h-[116px] w-full items-center justify-center rounded-lg px-6 py-2"
+          />
+        </div>
       </div>
       <!-- Fin bloc image -->
 
-      <div class="mt-auto">
-        <!-- Bloc nom et description -->
-        <div class="flex w-full flex-col justify-start">
+      <!-- Bloc texte -->
+      <div class="flex h-3/5 w-full flex-col justify-between">
+        <!-- Bloc titre -->
+        <div class="h-[30%]">
           <h3
-            class="truncate-custom truncate-custom-2 my-2 max-h-[55px] text-left text-sm font-bold text-primary md:text-base lg:text-lg"
+            class="truncate-custom truncate-custom-2 my-2 text-left text-sm font-bold text-primary md:text-base lg:text-lg"
           >
             <RouterLink
               :to="{
@@ -75,17 +80,20 @@
               {{ product.name }}
             </RouterLink>
           </h3>
-          <div class="max-h-[100px]">
-            <p
-              class="truncate-custom truncate-custom-3 mt-1 w-full justify-start text-left text-sm md:text-base lg:text-lg"
-              v-html="productDescription"
-            />
-          </div>
         </div>
-        <!-- Fin bloc nom et description -->
+        <!-- Fin bloc titre -->
+
+        <!-- Bloc description -->
+        <div class="h-[40%]">
+          <p
+            class="truncate-custom truncate-custom-3 mt-1 w-full justify-start text-left text-sm md:text-base lg:text-lg"
+            v-html="productDescription"
+          />
+        </div>
+        <!-- Fin bloc description -->
 
         <!-- Bloc prix -->
-        <div class="flex w-full items-center justify-start xl:mt-1">
+        <div class="my-1 flex h-[10%] w-full items-center justify-start">
           <span
             v-if="product.price"
             class="mr-2 text-lg font-bold text-primary md:text-base lg:text-lg"
@@ -105,46 +113,52 @@
         <!-- Fin bloc prix -->
 
         <!-- Bloc quantité -->
-        <div class="mt-1 flex w-full justify-between">
-          <div v-if="product.variants?.length > 2" class="mx-auto items-center">
-            <RouterLink
-              :to="{
-                name: ProductPageList.PRODUCT,
-                params: { slug: productSlug },
-              }"
-              class="button border-2 border-primary !text-primary shadow-none hover:scale-105 hover:!border-primary hover:!bg-white hover:!shadow-inner-darker focus:!bg-white"
+        <div class="mb-1 flex h-[20%] justify-end">
+          <div class="mt-1 flex w-full justify-between">
+            <div
+              v-if="product.variants?.length > 2"
+              class="mx-auto items-center"
             >
-              Voir les options
-              <ArrowRightIconComponent class="ml-2 w-4 stroke-primary" />
-            </RouterLink>
-          </div>
+              <RouterLink
+                :to="{
+                  name: ProductPageList.PRODUCT,
+                  params: { slug: productSlug },
+                }"
+                class="button border-2 border-primary !text-primary shadow-none hover:scale-105 hover:!border-primary hover:!bg-white hover:!shadow-inner-darker focus:!bg-white"
+              >
+                Voir les options
+                <ArrowRightIconComponent class="ml-2 w-4 stroke-primary" />
+              </RouterLink>
+            </div>
 
-          <div v-else class="flex w-full justify-between">
-            <div class="flex items-center justify-start">
-              <ProductQuantityComponent
+            <div v-else class="flex w-full justify-between">
+              <div class="flex items-center justify-start">
+                <ProductQuantityComponent
+                  :quantity="quantity"
+                  @update-quantity="updateQuantity"
+                />
+              </div>
+              <ButtonAddToCartComponent
+                :product="product"
                 :quantity="quantity"
-                @update-quantity="updateQuantity"
+                :variant-id="variantId"
+                @click="
+                  $emit('click-add-cart', {
+                    partenaire_name: product.seller.name,
+                    partenaire_id: product.seller.id,
+                    product_name: product.name,
+                    product_id: product.id,
+                    qty_value: product.quantity,
+                  })
+                "
               />
             </div>
-            <ButtonAddToCartComponent
-              :product="product"
-              :quantity="quantity"
-              :variant-id="variantId"
-              @click="
-                $emit('click-add-cart', {
-                  partenaire_name: product.seller.name,
-                  partenaire_id: product.seller.id,
-                  product_name: product.name,
-                  product_id: product.id,
-                  qty_value: product.quantity,
-                })
-              "
-            />
           </div>
         </div>
+        <!-- Fin bloc quantité -->
+        <!-- Fin bloc texte -->
       </div>
     </div>
-    <!-- Bloc quantité -->
   </div>
 </template>
 <script lang="ts" setup>

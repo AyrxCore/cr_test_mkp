@@ -10,33 +10,33 @@
         Accord-cadre
       </div>
     </div>
-    <div class="flex h-full w-full flex-col items-center">
-      <div
-        class="flex h-[150px] max-w-[200px] items-center justify-center rounded-lg sm:mx-auto sm:w-full md:h-[139px] lg:h-[191px]"
-        @click="
-          $emit('click-img', {
-            partenaire_name: accord.seller.name,
-            partenaire_id: accord.seller.id,
-          })
-        "
-      >
-        <RouterLink
-          :to="{
-            name: ProductPageList.ACCORD_CADRE,
-            params: { slug: accord.slug },
-          }"
-          class="block"
-        >
-          <img
-            :src="properties.logo_partenaire"
-            :alt="`Image ${accord.name}`"
-            class="max-h-[150px] cursor-pointer items-center sm:flex md:max-h-[139px] lg:max-h-[191px] lg:w-full lg:max-w-max"
-          />
-        </RouterLink>
-      </div>
 
-      <div class="flex h-full flex-col justify-between">
-        <div class="flex w-full flex-col justify-start">
+    <div class="flex h-full w-full flex-col items-center">
+      <!-- Bloc image -->
+      <div class="my-1 flex w-full items-center">
+        <div
+          class="flex h-[200px] max-w-[200px] items-center justify-center rounded-lg sm:mx-auto"
+        >
+          <RouterLink
+            :to="{
+              name: ProductPageList.ACCORD_CADRE,
+              params: { slug: accord.slug },
+            }"
+            class="block"
+          >
+            <img
+              :alt="`Image ${accord.name}`"
+              :src="properties.logo_partenaire"
+              class="max-h-[150px] cursor-pointer items-center sm:flex md:max-h-[139px] lg:max-h-[191px] lg:w-full lg:max-w-max"
+            />
+          </RouterLink>
+        </div>
+      </div>
+      <!-- Fin bloc image -->
+
+      <div class="flex h-3/5 w-full flex-col justify-between">
+        <!-- Bloc titre -->
+        <div class="h-[30%]">
           <h3
             class="truncate-custom truncate-custom-2 my-2 text-center text-3xl font-bold text-primary md:text-xl lg:text-lg"
             @click="
@@ -57,13 +57,16 @@
             </RouterLink>
           </h3>
         </div>
+        <!-- Fin bloc titre -->
 
-        <div class="flex w-full items-center justify-start xl:mt-1">
+        <!-- Bloc description -->
+        <div>
           <p
+            class="description truncate-custom truncate-custom-3 mb-4 px-2 text-center"
             v-html="accord.description"
-            class="description truncate-custom truncate-custom-3 mb-4 px-2"
           />
         </div>
+        <!-- Fin bloc description -->
 
         <div class="mt-1 flex w-full justify-center">
           <RouterLink
@@ -96,7 +99,14 @@ import { computed, PropType } from 'vue'
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import { Product } from '@/vuejs/types/Product'
 
-import { betterTextColor } from '@/vuejs/services/utils'
+import {
+  betterTextColor,
+  formatPrice,
+  getUpplerImage,
+} from '@/vuejs/services/utils'
+import ProductQuantityComponent from '@/vuejs/modules/shared/ProductQuantityComponent.vue'
+import ButtonAddToCartComponent from '@/vuejs/modules/shared/ButtonAddToCartComponent.vue'
+import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 
 const props = defineProps({
   accord: {
