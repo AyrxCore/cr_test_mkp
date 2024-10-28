@@ -15,9 +15,12 @@
   font-family: 'Roboto';
   src: url('/fonts/Roboto-Regular.ttf') format('truetype');
 }
+.text-title-default-size {
+  @apply text-[1.6rem];
+}
 
 .text-title-primary {
-  @apply text-3xl font-bold text-primary font-cotext
+  @apply text-title-default-size font-bold text-primary font-cotext
 }
 
 .badge {

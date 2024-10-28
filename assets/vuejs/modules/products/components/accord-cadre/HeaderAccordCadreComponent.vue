@@ -33,7 +33,7 @@
     >
       <h3
         v-if="bannerText"
-        class="flex h-full w-full items-center justify-center bg-black/50 px-6 text-center text-2xl font-bold text-white sm:text-4xl"
+        class="sm:text-title-default-size flex h-full w-full items-center justify-center bg-black/50 px-6 text-center text-2xl font-bold text-white"
       >
         {{ bannerText }}
       </h3>

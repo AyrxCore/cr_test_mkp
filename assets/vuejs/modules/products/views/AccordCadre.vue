@@ -18,7 +18,9 @@
         />
 
         <div class="mt-5 flex flex-col items-center bg-primary p-6 lg:mt-0">
-          <h3 class="mb-6 mt-5 text-center text-3xl font-bold text-white">
+          <h3
+            class="text-title-default-size mb-6 mt-5 text-center font-bold text-white"
+          >
             Comment bénéficier des conditions négociées&nbsp;?
           </h3>
           <ConditionsNotActivatedComponent

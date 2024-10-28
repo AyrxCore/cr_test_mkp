@@ -38,7 +38,7 @@
         <!-- Bloc titre -->
         <div class="h-[30%]">
           <h3
-            class="truncate-custom truncate-custom-2 my-2 text-center text-3xl font-bold text-primary md:text-xl lg:text-lg"
+            class="truncate-custom truncate-custom-2 text-title-default-size my-2 text-center font-bold text-primary md:text-xl lg:text-lg"
             @click="
               $emit('click-title', {
                 partenaire_name: accord.seller.name,

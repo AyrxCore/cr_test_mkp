@@ -12,7 +12,9 @@
       <img :src="properties.fat_promo_img" alt="Image promo" />
     </div>
     <div class="my-8 flex flex-col justify-center lg:w-7/12 lg:pl-6">
-      <h3 class="mb-8 text-3xl font-bold">{{ properties.fat_promo_titre }}</h3>
+      <h3 class="text-title-default-size mb-8 font-bold">
+        {{ properties.fat_promo_titre }}
+      </h3>
       <div class="mb-8 text-lg" v-html="properties.fat_promo_txt" />
       <ButtonComponent
         class="button-primary-outline mx-auto"

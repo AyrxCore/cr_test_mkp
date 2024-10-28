@@ -130,7 +130,7 @@
           :style="{
             color: betterTextColor('secondary'),
           }"
-          class="text-[23px] font-bold leading-[27px] sm:text-3xl sm:leading-[38.11px]"
+          class="sm:text-title-default-size text-[23px] font-bold leading-[27px] sm:leading-[38.11px]"
         >
           Vous faites des économies tout <br />
           en contribuant à votre démarche RSE

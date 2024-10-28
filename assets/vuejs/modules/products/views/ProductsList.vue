@@ -18,7 +18,9 @@
         Aucun résultat n'a été trouvé pour la recherche ”{{ route.query.q }}“
       </div>
       <div v-else class="flex w-full flex-col">
-        <h3 class="mt-4 text-xl text-primary md:hidden md:text-3xl">
+        <h3
+          class="md:text-title-default-size mt-4 text-xl text-primary md:hidden"
+        >
           {{ route.query.q }}
         </h3>
         <MobileFiltersProductsComponent />
@@ -30,7 +32,9 @@
             />
           </div>
           <div class="flex w-full grow-0 flex-col">
-            <h3 class="mb-4 hidden text-xl text-primary md:block md:text-3xl">
+            <h3
+              class="md:text-title-default-size mb-4 hidden text-xl text-primary md:block"
+            >
               Votre recherche : {{ route.query.q }}
             </h3>
             <div
@@ -132,7 +136,7 @@ const loadMore = async () => {
   loadMoreLoading.value = true
   paramsProducts.value.page++
   await loadProducts(paramsProducts.value)
-  currentCount.value += currentCount.value
+  currentCount.value += perPage.value
   loadMoreLoading.value = false
   sendGaEvent('click_resultats_more')
 }
