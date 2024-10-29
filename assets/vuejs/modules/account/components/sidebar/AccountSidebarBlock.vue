@@ -6,7 +6,7 @@
     <p
       v-for="(item, keyItem) in props.items"
       :key="keyItem"
-      class="flex items-center md:text-base xl:mb-3"
+      class="flex items-center md:text-base"
     >
       <AccountSidebarBlockItem
         :item="item"

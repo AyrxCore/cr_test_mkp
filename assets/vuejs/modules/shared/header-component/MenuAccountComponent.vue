@@ -3,7 +3,7 @@
     <div
       v-if="modelValue"
       v-click-outside="closeMenu"
-      class="!lg:h-auto !sm:w-4/5 absolute top-0 right-0 z-10 flex flex-col overflow-auto rounded bg-white bg-secondary p-3 px-5 py-2.5 text-sm text-black shadow sm:top-24 sm:right-32 sm:h-fit sm:rounded md:p-5 lg:mx-0"
+      class="!lg:h-auto !sm:w-4/5 absolute right-0 top-0 z-10 flex flex-col overflow-auto rounded bg-secondary bg-white p-3 px-5 py-2.5 text-sm text-black shadow sm:right-32 sm:top-24 sm:h-fit sm:rounded md:p-5 lg:mx-0"
     >
       <div class="flex items-center">
         <RouterLink
@@ -32,15 +32,9 @@
         />
         {{ value.label }}
       </RouterLink>
-      <div
-        v-if="user.account?.adherent && user.account?.adherent.reducceCode"
-        class="mt1 flex items-center py-2.5"
-      >
-        Code Avantages Salariés : {{ user.account.adherent.reducceCode }}
-      </div>
       <a
-        href="#"
         class="inline-flex items-center pt-5 font-bold hover:text-secondary"
+        href="#"
         @click="onLogout($event)"
       >
         <DisconnectIcon :stroke="channelPrimaryColor" class="mr-2" />
