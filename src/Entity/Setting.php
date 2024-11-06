@@ -13,6 +13,7 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\Entity(repositoryClass: SettingRepository::class)]
 class Setting
 {
+    public const CHATBOT = 'chatbot';
     public const EXTERNAL_SCRIPTS_TAGS = 'external_scripts_tags';
     public const MAINTENANCE_MODE = 'maintenance_mode';
 

@@ -27,4 +27,9 @@ class SettingsService
     {
         return !$this->getSetting(Setting::MAINTENANCE_MODE) ? false : $this->getSetting(Setting::MAINTENANCE_MODE)->getValue();
     }
+
+    public function getChatbot(): bool|string|null
+    {
+        return !$this->getSetting(Setting::CHATBOT) ? false : $this->getSetting(Setting::CHATBOT)->getValue();
+    }
 }

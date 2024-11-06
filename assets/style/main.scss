@@ -15,6 +15,11 @@
   font-family: 'Roboto';
   src: url('/fonts/Roboto-Regular.ttf') format('truetype');
 }
+
+.lkb-courier-svg-icon {
+  display: initial;
+}
+
 .text-title-default-size {
   @apply text-[1.6rem];
 }
