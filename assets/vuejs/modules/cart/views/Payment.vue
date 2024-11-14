@@ -22,7 +22,18 @@
           <SepaIconComponent class="m-auto" />
         </template>
       </PaymentMethodComponent>
-      <template v-if="!CBPaymentMethod && SEPAPaymentMethods.length === 0">
+      <PaymentMethodComponent
+        v-if="showMandatAdminPayment"
+        :method="mandatAdminPaymentMethod"
+        :is-loading="isMandatAdminLoading"
+        class="lg:mr-4"
+        @select-method="selectMandatAdmin"
+      >
+        <template #method-icon>
+          <TownHallIcon class="m-auto" />
+        </template>
+      </PaymentMethodComponent>
+      <template v-if="noMethodAvailable">
         Aucune méthode de paiement disponible
       </template>
     </div>
@@ -32,13 +43,14 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 
 import CartRightSideComponent from '@/vuejs/modules/cart/components/CartRightSideComponent.vue'
 import PaymentMethodComponent from '@/vuejs/modules/cart/components/PaymentMethodComponent.vue'
 import SepaIconComponent from '@/vuejs/modules/shared/icon/SepaIconComponent.vue'
+import TownHallIcon from '@/vuejs/modules/shared/icon/TownHallIconComponent.vue'
 import cbLogos from '@/vuejs/assets/img/cb-icons.png'
 
 import { getImage, notifyError } from '@/vuejs/services/utils'
@@ -49,10 +61,24 @@ import { PaymentMethod } from '@/vuejs/types/Cart'
 const cartStore = useCartStore()
 const router = useRouter()
 
-const { CBPaymentMethod, SEPAPaymentMethods } = storeToRefs(cartStore)
+const {
+  CBPaymentMethod,
+  SEPAPaymentMethods,
+  mandatAdminPaymentMethod,
+  showMandatAdminPayment,
+} = storeToRefs(cartStore)
 const isCBLoading = ref<boolean>(false)
+const isMandatAdminLoading = ref<boolean>(false)
 
 const cbLogosImg = getImage(cbLogos)
+
+const noMethodAvailable = computed((): boolean => {
+  return (
+    !CBPaymentMethod.value &&
+    SEPAPaymentMethods.value.length === 0 &&
+    !showMandatAdminPayment.value
+  )
+})
 
 const selectCB = async () => {
   isCBLoading.value = true
@@ -74,6 +100,20 @@ const selectSEPA = async (method: PaymentMethod) => {
   router.push({
     name: PageList.CART_PAYMENT_SEPA,
   })
+}
+
+const selectMandatAdmin = async () => {
+  isMandatAdminLoading.value = true
+  const result = await cartStore.updateCartPaymentMethod(
+    mandatAdminPaymentMethod.value.id,
+  )
+  if (result) {
+    window.location.replace(
+      `${window.location.origin}/api/buyer/cart/${cartStore.cart.id}/confirm`,
+    )
+  } else {
+    isMandatAdminLoading.value = false
+  }
 }
 </script>
 

@@ -67,6 +67,12 @@
       >
         <SepaIconComponent />
       </div>
+      <div
+        v-if="showMandatAdminPayment"
+        class="ml-2 flex h-14 items-center rounded-lg bg-white p-5 text-gray-700"
+      >
+        <TownHallIcon />
+      </div>
     </div>
   </div>
 </template>
@@ -77,13 +83,15 @@ import { computed } from 'vue'
 import cbLogos from '@/vuejs/assets/img/cb-icons.png'
 import SepaIconComponent from '@/vuejs/modules/shared/icon/SepaIconComponent.vue'
 import InformationIconComponent from '@/vuejs/modules/shared/icon/InformationIconComponent.vue'
+import TownHallIcon from '@/vuejs/modules/shared/icon/TownHallIconComponent.vue'
 
 import { formatPrice, getImage } from '@/vuejs/services/utils'
 import { useCartStore } from '@/vuejs/stores/cart'
 
 const cartStore = useCartStore()
 
-const { cart, CBPaymentMethod, SEPAPaymentMethods } = storeToRefs(cartStore)
+const { cart, CBPaymentMethod, SEPAPaymentMethods, showMandatAdminPayment } =
+  storeToRefs(cartStore)
 
 const cbLogosImg = getImage(cbLogos)
 

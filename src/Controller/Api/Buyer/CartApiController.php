@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Api\Buyer;
 
+use App\Dto\CartPayment;
 use App\Service\CartService;
 use App\Service\UpplerCartService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -46,6 +47,11 @@ class CartApiController extends AbstractController
             $confirmed = $this->upplerCartService->isPaymentConfirmed($cartId);
 
             $acceptedStatus = ['completed'];
+
+            $paymentMethod = $cart['payment_method'];
+            if (isset($paymentMethod) && $paymentMethod['id'] === CartPayment::CART_PAYMENT_MANDAT_ADMIN) {
+                $acceptedStatus[] = 'new';
+            }
 
             if ($confirmed && \in_array($confirmed['status'], $acceptedStatus, true)) {
                 $this->upplerCartService->confirmCart($cartId);

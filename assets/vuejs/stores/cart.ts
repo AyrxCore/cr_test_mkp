@@ -2,10 +2,13 @@ import { defineStore } from 'pinia'
 
 import CartHttpClient from '@/vuejs/services/httpclient/CartHttpClient'
 import CompanyHttpClient from '@/vuejs/services/httpclient/CompanyHttpClient'
+import { notifyError, notifySuccess } from '@/vuejs/services/utils'
+import { useChannelStore } from '@/vuejs/stores/channel'
 
 // IDs des méthodes de paiements Uppler
 export const CART_PAYMENT_CB_ID: number = 8
 export const CART_PAYMENT_SEPA_IDs: number[] = [9, 10]
+export const CART_PAYMENT_MANDAT_ADMIN: number = 11
 
 import {
   Cart,
@@ -19,7 +22,7 @@ import {
   SepaData,
 } from '@/vuejs/types/Cart'
 
-import { notifyError, notifySuccess } from '@/vuejs/services/utils'
+const channelStore = useChannelStore()
 
 export const useCartStore = defineStore({
   id: 'cart',
@@ -236,6 +239,17 @@ export const useCartStore = defineStore({
     SEPAPaymentMethods(): PaymentMethod[] {
       return this.cart?.paymentMethods?.filter((e) =>
         CART_PAYMENT_SEPA_IDs.includes(e.id),
+      )
+    },
+    mandatAdminPaymentMethod(): PaymentMethod {
+      return this.cart?.paymentMethods?.find(
+        (e) => e.id === CART_PAYMENT_MANDAT_ADMIN,
+      )
+    },
+    showMandatAdminPayment(): boolean {
+      return (
+        !!this.mandatAdminPaymentMethod &&
+        channelStore.isAllowedToShow('HAS_MANDAT_ADMIN_PAYMENT')
       )
     },
     hasCompanyMandates(): boolean {

@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             openapiContext: ['summary' => 'Update cart payment method'],
             validate: true
         ),
-        new Post()
+        new Post(),
     ],
     provider: CartPaymentProvider::class,
     processor: CartPaymentPersistProcessor::class
@@ -30,6 +30,7 @@ final class CartPayment
     // IDs des méthodes de paiements Uppler
     public const CART_PAYMENT_CB = 8;
     public const CART_PAYMENT_SEPA = [9, 10];
+    public const CART_PAYMENT_MANDAT_ADMIN = 11;
 
     #[ApiProperty(identifier: true)]
     private ?int $id = null;
