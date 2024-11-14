@@ -70,7 +70,7 @@ export const SHIPPING_STATUS = {
 }
 
 export const HOME_PRODUCTS_SELECTION_PROPERTY = {
-  perPage: 5,
+  perPage: 50,
   properties: {
     property_id: 217,
     value: 5368,
@@ -78,7 +78,7 @@ export const HOME_PRODUCTS_SELECTION_PROPERTY = {
 }
 
 export const HOME_ACCORD_CADRE_PROPERTY = {
-  perPage: 5,
+  perPage: 50,
   properties: {
     property_id: 217,
     value: 5367,
