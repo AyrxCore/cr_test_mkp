@@ -47,7 +47,7 @@
           <!-- Fin slider all pictures -->
           <!-- Slider picture -->
           <div
-            class="relative flex w-[100%] items-center bg-white md:!mr-6 md:!ml-0 md:h-[450px] md:max-w-[50%] xl:max-w-[40%]"
+            class="relative flex w-[100%] items-center bg-white md:!ml-0 md:!mr-6 md:h-[450px] md:max-w-[50%] xl:max-w-[40%]"
           >
             <CarouselListSharedComponent
               :slides-per-view="1"
@@ -204,7 +204,7 @@
         </div>
       </div>
 
-      <Tabs class="mt-4" :options="{ disableScrollBehavior: true }">
+      <Tabs class="mt-4">
         <Tab
           name="Description"
           @click.native="
@@ -219,7 +219,7 @@
           />
         </Tab>
         <Tab
-          v-if="product.properties.length !== 0"
+          v-if="Object.values(productProperties).length > 0"
           name="Caractéristiques techniques"
           @click.native="
             sendGaEvent('click_product_view_caracteristics', {
@@ -230,7 +230,7 @@
           <table class="w-full table-auto">
             <tbody>
               <tr
-                v-for="(property, key, index) in product.properties"
+                v-for="(property, key, index) in productProperties"
                 :key="index"
                 class="border text-sm text-primary md:text-base lg:text-lg"
               >
@@ -254,13 +254,13 @@
           similarProducts?.length > 0
         "
       >
-        <h3 class="text-title-primary mt-4 mb-2">
+        <h3 class="text-title-primary mb-2 mt-4">
           Sélection de produits similaires
         </h3>
         <ProductsCarouselComponent
           :loading="isLoadingSimilarProductsAndAccordsCadres"
           :products="similarProducts"
-          class="mt-4 mb-12"
+          class="mb-12 mt-4"
           @click-left="sendGaEvent('click_product_slider_left')"
           @click-right="sendGaEvent('click_product_slider_right')"
           @click-add-cart="
@@ -287,7 +287,7 @@
           similarAccordsCadres?.length > 0
         "
       >
-        <h3 class="text-title-primary mt-4 mb-2">
+        <h3 class="text-title-primary mb-2 mt-4">
           Les accords-cadres incontournables
         </h3>
         <AccordsCadreComponent
@@ -336,7 +336,7 @@ import TruckIconComponent from '@/vuejs/modules/shared/icon/TruckIconComponent.v
 
 import { getUpplerImage, isUrl } from '@/vuejs/services/utils'
 import { PageList } from '@/vuejs/router'
-import { Product } from '@/vuejs/types/Product'
+import { Product, ProductProperties } from '@/vuejs/types/Product'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import { useProductStore } from '@/vuejs/stores/product'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
@@ -355,6 +355,8 @@ const isLoadingSimilarProductsAndAccordsCadres = ref<boolean>(false)
 const similarProducts = ref<Product[]>([])
 const similarAccordsCadres = ref<Product[]>([])
 const product = ref<Product>()
+
+const FILTERED_PRODUCT_PROPERTIES = ['accord-id']
 
 onMounted(async () => {
   await favoriteStore.fetchFavorites()
@@ -378,12 +380,20 @@ const breadcrumbUrl = computed(() => {
   return breadcrumb
 })
 
-const productTitle = computed(() => {
+const productTitle = computed((): string => {
   return product.value ? product.value.name + ' | ' : ''
 })
 
 const hasOptions = computed((): boolean => {
   return Object.keys(product?.value.options)[0].length > 0
+})
+
+const productProperties = computed((): ProductProperties => {
+  const productProperties = { ...product.value.properties }
+  FILTERED_PRODUCT_PROPERTIES.forEach((key) => {
+    delete productProperties[key]
+  })
+  return productProperties
 })
 
 const updateQuantity = (event) => {
@@ -438,9 +448,8 @@ watch(
         const categoryId =
           product.value.categories[product.value.categories.length - 1].id
 
-        const productsAndAccordsCadres = await productStore.findSimilarProducts(
-          categoryId,
-        )
+        const productsAndAccordsCadres =
+          await productStore.findSimilarProducts(categoryId)
 
         similarProducts.value = productsAndAccordsCadres.results.filter(
           (simProd) => simProd.id !== productId && !simProd.isAccordCadre,

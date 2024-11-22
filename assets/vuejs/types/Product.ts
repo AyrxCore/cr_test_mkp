@@ -12,7 +12,7 @@ export interface Product {
   categories: Array<Category>
   images: Array<any>
   options: Array<any>
-  properties: Array<any>
+  properties: ProductProperties
   variants: []
   defaultVariantId?: number
   defaultVariantOptions: Array<any>
@@ -28,6 +28,10 @@ export interface Product {
   similarProducts: Array<any>
   selectedVariants: Array<any>
   quantity: number
+}
+
+export interface ProductProperties {
+  [key: string]: string
 }
 
 export interface ProductFilters {
