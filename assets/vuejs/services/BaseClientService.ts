@@ -17,7 +17,6 @@ class BaseClientService {
 
   public constructor(isPatch: boolean) {
     this.isPatch = isPatch
-
     const headers = {
       accept: 'application/json',
       'Content-Type': isPatch

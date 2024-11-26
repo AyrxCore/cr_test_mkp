@@ -41,10 +41,8 @@ class ProductFactory extends AbstractFactory
 
                 $product = $this->initProduct($remoteProduct, $account);
 
-                if ($product->getIsAccordCadre()) {
-                    $properties = $this->mapProperties($remoteProduct['properties']);
-                    $product->setProperties($properties);
-                }
+                $properties = $this->mapProperties($remoteProduct['properties']);
+                $product->setProperties($properties);
 
                 if (!$product->getIsAccordCadre()) {
                     $product->setVariants($this->buildVariants($remoteProduct['variants']));

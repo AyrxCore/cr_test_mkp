@@ -24,6 +24,13 @@
             @click-cta="sendGaEvent('click_product_slider_fat_cta', $event)"
             @click-title="sendGaEvent('click_product_slider_fat_title', $event)"
             @click-img="sendGaEvent('click_product_slider_fat_img', $event)"
+            @show-showcase-modal="handleShowcaseModal"
+          />
+          <ShowcaseModal
+            v-if="showShowcaseModal"
+            :accord="accordSelected"
+            class="modal"
+            @cancel="showShowcaseModal = false"
           />
         </div>
       </div>
@@ -41,7 +48,7 @@
         <div class="m-auto max-w-screen-94">
           <ProductsCarouselComponent
             :loading="!productsSelection"
-            :products="productsSelection?.results"
+            :products="filteredProductsSelection"
             @click-left="sendGaEvent('click_slider_home_products_left')"
             @click-right="sendGaEvent('click_slider_home_products_right')"
             @click-add-cart="
@@ -150,11 +157,13 @@
     </div>
   </BaseTemplate>
 </template>
+
 <script lang="ts" setup>
 import { computed, onBeforeMount, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { useExpertContentStore } from '@/vuejs/stores/expertContent'
+import { useUserStore } from '@/vuejs/stores/user'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import { useProductStore } from '@/vuejs/stores/product'
 import { betterTextColor } from '@/vuejs/services/utils'
@@ -169,16 +178,24 @@ import ExpertContentsComponent from '@/vuejs/modules/home/component/ExpertConten
 import OurCategoriesComponent from '@/vuejs/modules/home/component/OurCategoriesComponent.vue'
 import PartnersCarousel from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
 import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
+import ShowcaseModal from '@/vuejs/modules/home/component/ShowcaseModal.vue'
+import { Product } from '@/vuejs/types/Product'
 
 const favoriteStore = useFavoriteStore()
 const productStore = useProductStore()
 const expertContentStore = useExpertContentStore()
 const channelStore = useChannelStore()
 
+const { adherentTarifShowcases } = storeToRefs(useUserStore())
+
 const { productsSelection } = storeToRefs(productStore)
 const expertContentsLoaded = ref<boolean>(false)
+const showShowcaseModal = ref<boolean>(false)
+const accordSelected = ref<Product>(null)
 
 const { productsAccordsCadre } = storeToRefs(productStore)
+
+const emit = defineEmits(['show-showcase-modal', 'close-showcase-modal'])
 
 onBeforeMount(async () => {
   const promises = []
@@ -202,6 +219,20 @@ onMounted(async () => {
 const expertContents = computed(() => {
   return expertContentStore.expertContents
 })
+
+const filteredProductsSelection = computed(() => {
+  return productsSelection.value?.results.filter(
+    (product) =>
+      !adherentTarifShowcases.value.some(
+        (showcase) => showcase.accordId === product.properties['accord-id'],
+      ),
+  )
+})
+
+const handleShowcaseModal = (accord) => {
+  accordSelected.value = accord
+  showShowcaseModal.value = true
+}
 </script>
 
 <style lang="scss">

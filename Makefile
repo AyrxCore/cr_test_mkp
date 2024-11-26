@@ -149,7 +149,7 @@ test-feature: ## Run feature tests
 	$(dc_exec) php vendor/bin/pest --testsuite feature
 
 coverage-html:
-	$(dc_exec) php php -d xdebug.mode=coverage vendor/bin/pest --coverage-html var/coverage/
+	$(dc_exec) php vendor/bin/pest --coverage-html=var/coverage/ && xdg-open var/coverage/index.html
 
 ##
 ## Coding standards

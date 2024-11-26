@@ -109,11 +109,18 @@ class Adherent
     #[ORM\Column]
     private ?bool $active = true;
 
+    #[ORM\OneToMany(mappedBy: 'adherent', targetEntity: AdherentTarifShowcase::class, orphanRemoval: true)]
+    #[Groups(['user:simple'])]
+    private Collection $adherentTarifShowcases;
+
+    private array $tarifShowcases = [];
+
     public function __construct()
     {
         $this->accordStatuts = new ArrayCollection();
         $this->accounts = new ArrayCollection();
         $this->children = new ArrayCollection();
+        $this->adherentTarifShowcases = new ArrayCollection();
     }
 
     public function getId(): ?Uuid
@@ -394,5 +401,45 @@ class Adherent
         $this->active = $active;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, AdherentTarifShowcase>
+     */
+    public function getAdherentTarifShowcases(): Collection
+    {
+        return $this->adherentTarifShowcases;
+    }
+
+    public function addAdherentTarifShowcase(AdherentTarifShowcase $adherentTarifShowcase): static
+    {
+        if (!$this->adherentTarifShowcases->contains($adherentTarifShowcase)) {
+            $this->adherentTarifShowcases->add($adherentTarifShowcase);
+            $adherentTarifShowcase->setAdherent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAdherentTarifShowcase(AdherentTarifShowcase $adherentTarifShowcase): static
+    {
+        if ($this->adherentTarifShowcases->removeElement($adherentTarifShowcase)) {
+            // set the owning side to null (unless already changed)
+            if ($adherentTarifShowcase->getAdherent() === $this) {
+                $adherentTarifShowcase->setAdherent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getTarifShowcases(): array
+    {
+        return $this->tarifShowcases;
+    }
+
+    public function setTarifShowcases(array $tarifShowcases): void
+    {
+        $this->tarifShowcases = $tarifShowcases;
     }
 }

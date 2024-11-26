@@ -28,13 +28,14 @@
       <SwiperSlide
         v-for="accord in accordsCadres"
         :key="accord.id"
-        class="!flex !h-auto items-stretch justify-center overflow-hidden rounded-lg border-4 border-solid border-secondary bg-white"
+        class="!flex !h-auto items-stretch justify-center overflow-hidden bg-white"
       >
         <AccordCadreComponent
           :accord="accord"
           @click-cta="$emit('click-cta', $event)"
           @click-title="$emit('click-title', $event)"
           @click-img="$emit('click-img', $event)"
+          @show-showcase-modal="$emit('show-showcase-modal', $event)"
         />
       </SwiperSlide>
     </CarouselListSharedComponent>
@@ -44,10 +45,11 @@
 
 <script lang="ts" setup>
 import { SwiperSlide } from 'swiper/vue'
+import { PropType } from 'vue'
+
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
 import AccordCadreComponent from '@/vuejs/modules/home/component/AccordCadreComponent.vue'
 import AccordsCadresLoadingCarouselComponent from '@/vuejs/modules/shared/AccordsCadresLoadingCarouselComponent.vue'
-import { PropType } from 'vue'
 import { Product } from '@/vuejs/types/Product'
 
 const props = defineProps({
@@ -68,5 +70,6 @@ const emit = defineEmits([
   'click-cta',
   'click-title',
   'click-img',
+  'show-showcase-modal',
 ])
 </script>

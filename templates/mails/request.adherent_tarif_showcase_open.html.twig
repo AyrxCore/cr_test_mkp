@@ -1,0 +1,18 @@
+{% block body %}
+    <p>Bonjour,</p>
+
+    <p>Une demande de recontact a été effectuée pour la FAT mise en vitrine suivante :</p>
+
+    <h3>Détails de la FAT</h3>
+    <ul>
+        <li><strong>Nom de l'accord :</strong> {{ accord_name }}</li>
+        <li><strong>ID de l'accord :</strong> {{ accord_id }}</li>
+        <li>
+          <strong>Nom de l'adhérent :</strong> {{ adherent_name }} (<a href="{{ sugarLink }}" target="_blank">Voir dans SugarCRM</a>)
+        </li>
+        <li><strong>ID tarif :</strong> {{ tarif_id }}</li>
+    </ul>
+
+    <p>Merci de prendre en charge cette demande et de recontacter l'adhérent dans les meilleurs délais.</p>
+
+{% endblock %}

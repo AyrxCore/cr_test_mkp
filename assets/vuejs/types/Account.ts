@@ -1,5 +1,6 @@
 import { ExternalApiDataEntity } from '@/vuejs/types/ExternalApiDataEntity'
 import { User } from '@/vuejs/types/User'
+import { AdherentTarifShowcase } from './AdherentTarifShowcase'
 
 interface BuyerDefaultAddress {
   id: number
@@ -35,6 +36,7 @@ export interface Adherent {
   logo: string | null
   reducceServiceName: string | null
   reducceUrl: string | null
+  adherentTarifShowcases: AdherentTarifShowcase[] | []
 }
 
 export interface Account extends ExternalApiDataEntity {

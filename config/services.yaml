@@ -20,10 +20,11 @@ parameters:
   uppler_url_source_product_img: '%env(UPPLER_URL_SOURCE_PRODUCT_IMG)%'
   uppler_url_source_list_product_img: '%env(UPPLER_URL_SOURCE_LIST_PRODUCT_IMG)%'
   uppler_url_source_seller_img: '%env(UPPLER_URL_SOURCE_SELLER_IMG)%'
-  SUBSCRIPTION_MAIL_SUGAR_LINK: '%env(SUGAR_LINK)%'
+  ACCOUNTS_SUGAR_LINK: '%env(SUGAR_LINK)%'
   SUBSCRIPTION_MAIL_FROM: '%env(MAIL_FROM)%'
   SUBSCRIPTION_MAIL_TO: '%env(MAIL_TO)%'
   CONTACT_MAIL_FROM: '%env(MAIL_FROM)%'
+  MAIL_CONTACT_SHOWCASE_TO: '%env(MAIL_TO)%'
   STELLANTIS_PARAMS:
     ACCORDS_IDS:
       PEUGEOT: '010148ae-5c2b-11ec-bfa4-0af08f946010'

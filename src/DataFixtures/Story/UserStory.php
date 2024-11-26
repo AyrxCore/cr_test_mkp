@@ -26,6 +26,7 @@ final class UserStory extends Story
 
         $this->addState('adherentQantis', AdherentFactory::new()
             ->create([
+                'id' => 'ce7ed022-5789-11ec-b3a5-0af08f946010',
                 'name' => 'GROUPE QANTIS',
                 'reducceCode' => 'KKT26DIB',
                 'siret' => '53849238000026',

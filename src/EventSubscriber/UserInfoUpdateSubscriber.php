@@ -1,26 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\EventSubscriber;
 
 use App\Entity\UserInfoUpdateRequest;
-use App\Events\FirstConnexionEvent;
 use App\Events\UserInfoUpdateEvent;
 use App\Service\MailerProvider;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
-
 class UserInfoUpdateSubscriber implements EventSubscriberInterface
 {
-
     #[Required]
     public RouterInterface $router;
 
@@ -41,14 +38,12 @@ class UserInfoUpdateSubscriber implements EventSubscriberInterface
 
     public LoggerInterface $logger;
 
-
     public static function getSubscribedEvents(): array
     {
         return [
             UserInfoUpdateEvent::class => 'onUserInfoUpdate',
         ];
     }
-
 
     public function onUserInfoUpdate(UserInfoUpdateEvent $event): void
     {
@@ -84,7 +79,7 @@ class UserInfoUpdateSubscriber implements EventSubscriberInterface
 
         $from = $this->parameterBag->get('SUBSCRIPTION_MAIL_FROM');
         $to = $this->parameterBag->get('SUBSCRIPTION_MAIL_TO');
-        $sugarLink = $this->parameterBag->get('SUBSCRIPTION_MAIL_SUGAR_LINK');
+        $sugarLink = $this->parameterBag->get('ACCOUNTS_SUGAR_LINK');
 
         $this->mailerProvider->send(
             $from,
@@ -98,9 +93,8 @@ class UserInfoUpdateSubscriber implements EventSubscriberInterface
                 'lastname' => $user->getLastName(),
                 'phone' => $logPhone?->getValue(),
                 'adherentName' => $adherent->getName(),
-                'sugarLink' => $sugarLink . (string)$adherent->getId(),
+                'sugarLink' => $sugarLink.(string) $adherent->getId(),
             ])
         );
     }
-
 }

@@ -10,6 +10,7 @@ import {
 import { AlertType } from '@/vuejs/types/Alert'
 import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
 import { Account } from '@/vuejs/types/Account'
+import { AdherentTarifShowcase } from '@/vuejs/types/AdherentTarifShowcase'
 import { notifyError, notifySuccess } from '@/vuejs/services/utils'
 import { getCookie } from '@/vuejs/services/utils'
 import UserHttpClient from '@/vuejs/services/httpclient/UserHttpClient'
@@ -180,11 +181,24 @@ export const useUserStore = defineStore({
         )
       }
     },
+    updateContactRequested(accordId: string): void {
+      const showcase =
+        this.user?.account?.adherent?.adherentTarifShowcases.find(
+          (showcase) => showcase.accordId === accordId,
+        )
+      if (showcase) {
+        showcase.contactRequested = true
+        this.user = { ...this.user }
+      }
+    },
   },
 
   getters: {
     isLogged(): boolean {
       return this.user !== null
+    },
+    adherentTarifShowcases(): AdherentTarifShowcase[] {
+      return this.user?.account?.adherent?.adherentTarifShowcases || []
     },
   },
 })

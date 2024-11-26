@@ -1,8 +1,8 @@
 <template>
   <div class="modal-overlay">
     <div
-      class="z-9999 fixed mx-3 w-full rounded p-3 md:w-[60%] md:p-5 lg:top-20 lg:mx-0"
       :class="background"
+      class="z-9999 fixed mx-3 w-full rounded p-3 md:w-[60%] md:p-5 lg:top-20 lg:mx-0"
     >
       <div class="w-full">
         <div class="flex justify-end">
@@ -11,7 +11,7 @@
             type="button"
             @click="onCancelClick"
           >
-            X
+            <CloseIconComponent />
           </ButtonComponent>
         </div>
         <h3 class="text-title-primary mb-3 flex flex-col px-5 !text-white">
@@ -25,6 +25,7 @@
 
 <script lang="ts" setup>
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
+import CloseIconComponent from '@/vuejs/modules/shared/icon/CloseIconComponent.vue'
 
 defineProps({
   background: {

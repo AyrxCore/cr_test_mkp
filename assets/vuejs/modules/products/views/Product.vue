@@ -319,7 +319,7 @@
 </template>
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { SwiperSlide } from 'swiper/vue'
 import { Tab, Tabs } from 'vue3-tabs-component'
 
@@ -339,13 +339,18 @@ import { PageList } from '@/vuejs/router'
 import { Product, ProductProperties } from '@/vuejs/types/Product'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import { useProductStore } from '@/vuejs/stores/product'
+import { useUserStore } from '@/vuejs/stores/user'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import sampleImg from '@/vuejs/assets/img/sample_product_img.png'
 import AccordsCadreComponent from '@/vuejs/modules/home/component/AccordsCadreComponent.vue'
+import { storeToRefs } from 'pinia'
 
 const route = useRoute()
+const router = useRouter()
+
 const productStore = useProductStore()
 const favoriteStore = useFavoriteStore()
+const { adherentTarifShowcases } = storeToRefs(useUserStore())
 
 const thumbsSwiper = ref(null)
 const option = ref([])
@@ -426,6 +431,12 @@ const updateProductVariant = async () => {
   isLoadingPrice.value = false
 }
 
+const isInShowcase = computed<boolean>(() =>
+  adherentTarifShowcases.value.some(
+    (showcase) => showcase.accordId === product.value.properties['accord-id'],
+  ),
+)
+
 watch(
   () => route.params.slug as string,
   async (slug: string) => {
@@ -436,6 +447,11 @@ watch(
       const formattedProductId = parseInt(productId[productId.length - 1])
 
       product.value = await productStore.initProduct(formattedProductId)
+
+      if (isInShowcase.value) {
+        router.push({ name: PageList.HOME_PAGE })
+      }
+
       if (product.value.variants.length > 2) {
         await productStore.findDefaultVariantProduct(product.value)
       }

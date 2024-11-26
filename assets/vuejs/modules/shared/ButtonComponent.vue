@@ -77,6 +77,18 @@ const onClick = ($event: PointerEvent): void => {
     }
   }
 
+  &-secondary {
+    @apply border-2 border-secondary bg-secondary text-white;
+
+    &:hover:not(:disabled):not(:focus) {
+      @apply shadow-inner-darker;
+    }
+  }
+
+  &-primary-outline-white {
+    @apply border-2 border-white bg-primary text-white;
+  }
+
   svg {
     &:last-of-type:not(.loader) {
       @apply mr-1.5;

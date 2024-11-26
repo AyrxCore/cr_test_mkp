@@ -1,7 +1,7 @@
 <template>
   <BaseTemplate :title="accordTitle">
     <LoadingComponent v-if="isLoading" />
-    <div v-else-if="accord && !isLoading" class="m-auto my-4">
+    <div v-else-if="accord && !isLoading && !isInShowcase" class="m-auto my-4">
       <HeaderPartnerComponent
         :name="accord.name"
         :note="accord.properties.note_rse ?? null"
@@ -117,7 +117,7 @@ import HeaderPartnerComponent from '@/vuejs/modules/products/components/accord-c
 import { computed, ref, watch } from 'vue'
 import PartnersCarouselComponent from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
 import { Product } from '@/vuejs/types/Product'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 import ConditionsNegocieesComponent from '@/vuejs/modules/products/components/accord-cadre/ConditionsNegocieesComponent.vue'
 import { status } from '@/vuejs/modules/products'
@@ -130,16 +130,22 @@ import { useProductStore } from '@/vuejs/stores/product'
 import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { useChannelStore } from '@/vuejs/stores/channel'
+import { useUserStore } from '@/vuejs/stores/user'
+
 import PromotionnalComponent from '@/vuejs/modules/products/components/accord-cadre/PromotionnalComponent.vue'
 import RseEngagementComponent from '@/vuejs/modules/products/components/accord-cadre/RseEngagementComponent.vue'
+import { MainPageList } from '@/vuejs/router/pages-list'
+import { storeToRefs } from 'pinia'
 
 const route = useRoute()
+const router = useRouter()
 const accordStore = useProductStore()
 const channelStore = useChannelStore()
 const productStore = useProductStore()
 const accord = ref<Product>()
 const isLoading = ref<boolean>(false)
 const partnerProducts = ref<Product[]>()
+const { adherentTarifShowcases } = storeToRefs(useUserStore())
 
 const currentChannel = channelStore.currentChannel
 
@@ -164,6 +170,25 @@ const accordTitle = computed(() => {
   return accord.value ? accord.value.name + ' | ' : ''
 })
 
+const isInShowcase = computed<boolean>(() =>
+  accord.value && accord.value.properties
+    ? adherentTarifShowcases.value.some(
+        (showcase) =>
+          showcase.accordId === accord.value!.properties['accord-id'],
+      )
+    : false,
+)
+
+watch(
+  () => isInShowcase.value,
+  (newValue) => {
+    if (newValue) {
+      router.push({ name: MainPageList.HOME_PAGE })
+    }
+  },
+  { immediate: true },
+)
+
 watch(
   () => route.params.slug as string,
   async (slug: string) => {
@@ -174,11 +199,14 @@ watch(
         accord.value = await accordStore.findAccordCadreById(
           accordId[accordId.length - 1],
         )
-        partnerProducts.value = await productStore.findPartnerProducts(
-          accord.value.seller.id,
-        )
+        if (!isInShowcase.value) {
+          partnerProducts.value = await productStore.findPartnerProducts(
+            accord.value.seller.id,
+          )
+        }
       }
     } catch (error) {
+      console.error(error)
     } finally {
       isLoading.value = false
     }

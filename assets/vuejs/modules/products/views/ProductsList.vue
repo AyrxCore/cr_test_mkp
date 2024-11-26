@@ -49,7 +49,8 @@
                   "
                   :key="`ac-${product.id}`"
                   :accord="product"
-                  class="mt-5 !h-full !w-full rounded-lg border-4 border-solid border-secondary bg-white md:mt-0 md:max-w-[350px]"
+                  class="mt-5 !h-full !w-full bg-white md:mt-0 md:max-w-[350px]"
+                  @show-showcase-modal="handleShowcaseModal"
                 />
                 <ProductComponent
                   v-else-if="
@@ -82,6 +83,12 @@
         </div>
       </div>
     </div>
+    <ShowcaseModal
+      v-if="showShowcaseModal"
+      :accord="accordSelected"
+      class="modal"
+      @cancel="showShowcaseModal = false"
+    />
   </BaseTemplate>
 </template>
 <script lang="ts" setup>
@@ -104,10 +111,14 @@ import { ProductPageList } from '@/vuejs/router/pages-list'
 import { Product } from '@/vuejs/types/Product'
 import { useProductStore } from '@/vuejs/stores/product'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
+import { useUserStore } from '@/vuejs/stores/user'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import ShowcaseModal from '@/vuejs/modules/home/component/ShowcaseModal.vue'
 
 const route = useRoute()
 const productStore = useProductStore()
+const { adherentTarifShowcases } = storeToRefs(useUserStore())
+
 const {
   products,
   selectedCategoryId,
@@ -127,10 +138,17 @@ const breadcrumbUrl = computed(() => {
 const internalProducts = ref<Array<Product>>([])
 const loadMoreLoading = ref<boolean>(false)
 const paramsProducts = ref(null)
+const showShowcaseModal = ref<boolean>(false)
+const accordSelected = ref<Product>(null)
 
 onBeforeMount(async () => {
   await favoriteStore.fetchFavorites()
 })
+
+const handleShowcaseModal = (accord) => {
+  accordSelected.value = accord
+  showShowcaseModal.value = true
+}
 
 const loadMore = async () => {
   loadMoreLoading.value = true
@@ -144,7 +162,16 @@ const loadMore = async () => {
 const loadProducts = async (paramsProducts: object) => {
   await productStore.fetchProductsByParams(paramsProducts)
 
-  internalProducts.value.push(...products.value.results)
+  internalProducts.value.push(
+    ...products.value.results.filter(
+      (product) =>
+        product.isAccordCadre ||
+        !adherentTarifShowcases.value.some(
+          (showcase) => showcase.accordId === product.properties['accord-id'],
+        ),
+    ),
+  )
+
   if (route.query.q) {
     const eventLabel =
       products.value?.resultsCount > 0
