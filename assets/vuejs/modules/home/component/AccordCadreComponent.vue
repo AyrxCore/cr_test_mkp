@@ -38,7 +38,7 @@
         >
           <component
             :is="isInShowcase ? 'div' : 'RouterLink'"
-            :to="!isInShowcase ? productLink : null"
+            :to="isInShowcase ? null : productLink"
             class="block"
           >
             <img
@@ -46,7 +46,7 @@
               :class="{ 'pointer-events-none': contactRequested }"
               :src="properties.logo_partenaire"
               class="max-h-[150px] cursor-pointer items-center sm:flex md:max-h-[139px] lg:max-h-[191px] lg:w-full lg:max-w-max"
-              @click="$emit('show-showcase-modal', accord)"
+              @click="handleShowcaseModal"
             />
           </component>
         </div>
@@ -198,4 +198,10 @@ const productLink = computed<RouteLocationRaw>(() => ({
 const contactButtonClass = computed<string>(() =>
   contactRequested.value ? 'button-primary-outline' : 'button-primary',
 )
+
+const handleShowcaseModal = () => {
+  if (isInShowcase.value) {
+    emit('show-showcase-modal', props.accord)
+  }
+}
 </script>
