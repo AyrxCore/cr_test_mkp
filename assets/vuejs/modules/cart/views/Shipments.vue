@@ -43,7 +43,7 @@ import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 
 import { useCartStore } from '@/vuejs/stores/cart'
 import { PageList } from '@/vuejs/router'
-import { notifyError } from '@/vuejs/services/utils'
+import { notifyError, setHeadTitle } from '@/vuejs/services/utils'
 
 const router = useRouter()
 const cartStore = useCartStore()
@@ -75,6 +75,8 @@ const goToPayment = async (): Promise<void> => {
   }
   router.push({ name: PageList.CART_PAYMENT })
 }
+
+setHeadTitle('Livraison | QANTIS Marketplace')
 </script>
 
 <style scoped></style>

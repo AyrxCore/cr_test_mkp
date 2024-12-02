@@ -1,5 +1,5 @@
 <template>
-  <BaseTemplate>
+  <BaseTemplate title="Mon compte">
     <div class="xs:w-full m-auto mb-16 mt-4 flex-1 px-4 sm:px-8">
       <BreadcrumbSharedComponent
         current-page="Mon compte"

@@ -4,7 +4,11 @@ import { AlertType } from '@/vuejs/types/Alert'
 import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
 import { getErrorMessage } from '@/vuejs/services/login'
 import ProductHttpClient from '@/vuejs/services/httpclient/ProductHttpClient'
-import { Product, ProductStoreState } from '@/vuejs/types/Product'
+import {
+  Product,
+  ProductStoreState,
+  ProductCategory,
+} from '@/vuejs/types/Product'
 import { arrayEqual, hexToBinary, notifyError } from '@/vuejs/services/utils'
 import { useChannelStore } from '@/vuejs/stores/channel'
 
@@ -217,6 +221,9 @@ export const useProductStore = defineStore({
         !!this.selectedCompanyId ||
         !!this.searchTerms
       )
+    },
+    selectedSearchCategory(): ProductCategory {
+      return this.products?.filters?.categories?.find((e) => !!e.checked)
     },
   },
 })

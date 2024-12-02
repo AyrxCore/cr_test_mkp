@@ -1,7 +1,7 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="text-title-primary mt-2 mb-6 xl:mt-0">
+      <h3 class="text-title-primary mb-6 mt-2 xl:mt-0">
         Créer une adresse de
         <span v-if="props.type === ADDRESS_BILLING"> facturation </span>
         <span v-else-if="props.type === ADDRESS_SHIPPING"> livraison </span>
@@ -15,29 +15,16 @@
   </AccountPage>
 </template>
 <script lang="ts" setup>
-import { useHead } from '@unhead/vue'
-
 import AddressForm from '@/vuejs/modules/account/components/address/AddressForm.vue'
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import { ADDRESS_BILLING, ADDRESS_SHIPPING } from '@/vuejs/services/const'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
-const title = 'Créer une adresse'
 const props = defineProps({
   type: {
     required: true,
     type: String,
   },
-})
-
-useHead({
-  title,
-  meta: [
-    {
-      property: 'og:title',
-      content: title,
-    },
-  ],
 })
 
 const eventGaSubmitAddress = () => {

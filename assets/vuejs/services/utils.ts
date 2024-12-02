@@ -1,5 +1,6 @@
 import { notify } from 'notiwind'
 import Cookies from 'js-cookie'
+import { useHead } from '@unhead/vue'
 
 import { Address } from '../types/Address'
 import imgDefault from '@/vuejs/assets/img/default-image.png'
@@ -122,4 +123,17 @@ export function getCookie(name: string | undefined): string | undefined {
   }
 
   return Cookies.get(name)
+}
+
+export function setHeadTitle(title: string): void {
+  useHead({
+    title: title,
+
+    meta: [
+      {
+        property: 'og:title',
+        content: title,
+      },
+    ],
+  })
 }

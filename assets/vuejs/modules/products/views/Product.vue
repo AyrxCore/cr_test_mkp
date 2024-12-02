@@ -386,7 +386,7 @@ const breadcrumbUrl = computed(() => {
 })
 
 const productTitle = computed((): string => {
-  return product.value ? product.value.name + ' | ' : ''
+  return product.value ? product.value.name : ''
 })
 
 const hasOptions = computed((): boolean => {

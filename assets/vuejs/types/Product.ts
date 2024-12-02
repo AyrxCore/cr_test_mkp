@@ -34,8 +34,18 @@ export interface ProductProperties {
   [key: string]: string
 }
 
+export interface ProductCategory {
+  id: number
+  checked: boolean
+  name: string
+  parentId: number
+  children: ProductCategory[]
+  image: string
+  productCount: number
+}
+
 export interface ProductFilters {
-  categories?: Array<any>
+  categories?: ProductCategory[]
   companies?: Array<any>
   properties?: Array<any>
 }

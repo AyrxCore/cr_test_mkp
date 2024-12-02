@@ -166,8 +166,8 @@ const scrollTo = (selector) => {
   }
 }
 
-const accordTitle = computed(() => {
-  return accord.value ? accord.value.name + ' | ' : ''
+const accordTitle = computed((): string => {
+  return accord.value ? accord.value.name : ''
 })
 
 const isInShowcase = computed<boolean>(() =>

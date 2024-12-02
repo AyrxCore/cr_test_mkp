@@ -53,7 +53,7 @@ import SepaIconComponent from '@/vuejs/modules/shared/icon/SepaIconComponent.vue
 import TownHallIcon from '@/vuejs/modules/shared/icon/TownHallIconComponent.vue'
 import cbLogos from '@/vuejs/assets/img/cb-icons.png'
 
-import { getImage, notifyError } from '@/vuejs/services/utils'
+import { getImage, notifyError, setHeadTitle } from '@/vuejs/services/utils'
 import { useCartStore } from '@/vuejs/stores/cart'
 import { PageList } from '@/vuejs/router'
 import { PaymentMethod } from '@/vuejs/types/Cart'
@@ -115,6 +115,8 @@ const selectMandatAdmin = async () => {
     isMandatAdminLoading.value = false
   }
 }
+
+setHeadTitle('Paiement | QANTIS Marketplace')
 </script>
 
 <style scoped></style>

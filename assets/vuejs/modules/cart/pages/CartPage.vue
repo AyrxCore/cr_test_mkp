@@ -1,5 +1,5 @@
 <template>
-  <BaseTemplate>
+  <BaseTemplate title="Panier">
     <div
       class="xs:w-full m-auto my-4 mb-24 h-full max-w-screen-2xl flex-1 px-5 sm:px-8"
     >

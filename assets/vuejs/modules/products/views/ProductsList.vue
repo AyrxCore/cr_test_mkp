@@ -1,5 +1,5 @@
 <template>
-  <BaseTemplate class="ff-roboto" title="Résultat de recherche de produits">
+  <BaseTemplate :title="headTitle" class="ff-roboto">
     <div
       v-if="isLoading"
       class="my-20 flex h-20 w-full flex-col items-center justify-center text-primary"
@@ -122,6 +122,7 @@ const { adherentTarifShowcases } = storeToRefs(useUserStore())
 const {
   products,
   selectedCategoryId,
+  selectedSearchCategory,
   selectedProperties,
   selectedCompanyId,
   searchTerms,
@@ -184,8 +185,19 @@ const loadProducts = async (paramsProducts: object) => {
   }
 }
 
-const count = computed(() => {
+const count = computed((): number => {
   return products.value?.resultsCount
+})
+
+const headTitle = computed((): string => {
+  if (searchTerms.value) {
+    return searchTerms.value
+  }
+  if (selectedSearchCategory.value) {
+    return selectedSearchCategory.value.name
+  }
+
+  return 'Recherche'
 })
 
 watch(

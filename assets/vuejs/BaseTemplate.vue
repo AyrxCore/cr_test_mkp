@@ -48,8 +48,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useHead } from '@unhead/vue'
-import { onBeforeMount, onMounted, reactive } from 'vue'
+import { computed, onBeforeMount, onMounted, reactive, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import HeaderSharedComponent from '@/vuejs/modules/shared/HeaderSharedComponent.vue'
@@ -59,7 +58,7 @@ import ChevronDownIconComponent from '@/vuejs/modules/shared/icon/ChevronDownIco
 
 import { useBannerStore } from '@/vuejs/stores/banner'
 import { useChannelStore } from '@/vuejs/stores/channel'
-import { betterTextColor } from '@/vuejs/services/utils'
+import { betterTextColor, setHeadTitle } from '@/vuejs/services/utils'
 import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
 import { useUserStore } from '@/vuejs/stores/user'
 
@@ -92,10 +91,11 @@ onMounted(() => {
 
 const scTimer = reactive({ value: null })
 const scY = reactive({ value: 0 })
-const pageTitle = reactive({
-  value:
+const pageTitle = computed((): string => {
+  return (
     (props.title.length && `${props.title} | ${channel.value.name}`) ||
-    channel.value.name,
+    channel.value.name
+  )
 })
 
 const handleScroll = () => {
@@ -130,14 +130,12 @@ const handleLogout = async () => {
     window.location.reload()
   }
 }
-useHead({
-  title: pageTitle.value,
 
-  meta: [
-    {
-      property: 'og:title',
-      content: props.title,
-    },
-  ],
-})
+watch(
+  () => pageTitle.value,
+  () => {
+    setHeadTitle(pageTitle.value)
+  },
+  { immediate: true },
+)
 </script>

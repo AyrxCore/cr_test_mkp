@@ -96,7 +96,11 @@ import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import CartRightSideComponent from '@/vuejs/modules/cart/components/CartRightSideComponent.vue'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 
-import { formatAddress, notifyError } from '@/vuejs/services/utils'
+import {
+  formatAddress,
+  notifyError,
+  setHeadTitle,
+} from '@/vuejs/services/utils'
 import { useAddressStore } from '@/vuejs/stores/address'
 import { useCartStore } from '@/vuejs/stores/cart'
 import { Address } from '@/vuejs/types/Address'
@@ -197,6 +201,8 @@ const selectAddress = async (type: string): Promise<void> => {
   selectedBillingAddressId.value = 0
   isLoading.value = false
 }
+
+setHeadTitle('Adresses | QANTIS Marketplace')
 </script>
 
 <style scoped></style>
