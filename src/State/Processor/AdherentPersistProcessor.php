@@ -10,14 +10,12 @@ use App\Entity\Adherent;
 use App\Repository\AdherentRepository;
 use App\Service\AccordStatutService;
 use App\Service\TarifShowcaseService;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Uid\Uuid;
 
 readonly class AdherentPersistProcessor implements ProcessorInterface
 {
     public function __construct(
-        private EntityManagerInterface $em,
         private AdherentRepository $adherentRepository,
         private AccordStatutService $accordStatutService,
         private TarifShowcaseService $tarifShowcaseService,
@@ -31,7 +29,6 @@ readonly class AdherentPersistProcessor implements ProcessorInterface
         $this->accordStatutService->processAccordStatutAttachments($data->getAttachments(), $adherent);
         $this->tarifShowcaseService->processTarifShowcases($data->getTarifShowcases(), $adherent);
 
-        $this->em->flush();
     }
 
     private function getAdherent(Uuid $adherentId): Adherent

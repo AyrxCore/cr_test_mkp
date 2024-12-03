@@ -49,7 +49,6 @@ class AdherentTarifShowcaseContactRequestProcessor implements ProcessorInterface
         $subject = 'Demande de recontact - FAT mise en vitrine'.($accordName ? ' - '.$accordName : '');
         $emailData = [
             'accord_name' => $accordName,
-            'accord_id' => $data->getAccordId(),
             'adherent_name' => $adherent->getName(),
             'accord_id' => $data->getAccordId(),
             'tarif_id' => $data->getTarifId(),

@@ -37,6 +37,8 @@ class AccordStatutService
                 $this->createAccordStatut($adherent, $attachment);
             }
         }
+
+        $this->em->flush();
     }
 
     private function createAccordStatut(Adherent $adherent, array $attachment): void
