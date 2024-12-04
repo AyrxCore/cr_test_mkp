@@ -1,20 +1,22 @@
 <template>
-  <h3 class="mt-1 flex items-center text-left">
-    <RouterLink
+  <h3
+    class="mt-1 flex cursor-pointer items-center text-left"
+    @click.capture.stop="selectCategory"
+  >
+    <component
+      :is="category.children.length > 0 ? 'span' : 'RouterLink'"
       :to="{ name: ProductPageList.PRODUCTS, query: { category: category.id } }"
       replace
-      @click="emit('closeMenu')"
     >
       {{ category.name }}
-    </RouterLink>
+    </component>
     <Chevron2RightIconComponent
       v-if="category.children.length > 0"
-      class="ml-2 cursor-pointer fill-black stroke-black hover:text-secondary"
       :class="{
         'ml-2 font-bold': !category.parentId,
         'mt-2 rotate-90 ease-in-out': showChildren,
       }"
-      @click.capture.stop="selectCategory"
+      class="ml-2 fill-black stroke-black hover:text-secondary"
     />
   </h3>
   <div v-if="showChildren" class="ml-5">
@@ -43,7 +45,11 @@ const emit = defineEmits(['selectCategory', 'closeMenu'])
 const showChildren = ref<boolean>(false)
 
 const selectCategory = () => {
-  emit('selectCategory', props.category)
+  if (props.category.children.length > 0) {
+    emit('selectCategory', props.category)
+  } else {
+    emit('closeMenu')
+  }
 }
 </script>
 
