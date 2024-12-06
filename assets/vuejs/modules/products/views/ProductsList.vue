@@ -64,9 +64,12 @@
               </template>
             </div>
             <div
-              class="mt-5 flex w-full flex-col items-center justify-center space-y-3"
+              class="mt-5 flex w-full flex-col items-center justify-center space-y-4"
             >
-              <div class="flex justify-center">
+              <div
+                v-if="adherentTarifShowcases.length === 0"
+                class="flex justify-center"
+              >
                 Résultats {{ count > currentCount ? currentCount : count }} sur
                 {{ count }}
               </div>
