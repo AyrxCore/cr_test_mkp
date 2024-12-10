@@ -24,12 +24,12 @@
                   </div>
                   <div class="sticky bottom-0 flex">
                     <DisconnectIconComponent
-                      class="mr-2"
                       :stroke="channelPrimaryColor"
+                      class="mr-2"
                     />
                     <a
-                      href="#"
                       class="w-fit border-b-2 border-primary hover:border-secondary"
+                      href="#"
                       @click="onLogout"
                     >
                       Déconnexion
@@ -37,95 +37,6 @@
                   </div>
                 </div>
                 <div class="grid gap-4">
-                  <div
-                    v-if="user.account.adherent.reducceCode"
-                    class="rounded-lg bg-secondary p-2 text-lg xl:p-5"
-                    :class="'text-' + betterTextColor('secondary')"
-                  >
-                    <div v-if="user.account.adherent.reducceServiceName">
-                      <div class="mb-2">
-                        Code {{ user.account.adherent.reducceServiceName }}
-                        <span class="ml-1 font-bold">{{
-                          user.account.adherent.reducceCode
-                        }}</span>
-                      </div>
-                      <div v-if="user.account.adherent.reducceUrl">
-                        <a
-                          class="flex underline"
-                          target="_blank"
-                          :href="user.account.adherent.reducceUrl"
-                        >
-                          <RedirectionIconComponent
-                            class="mr-2"
-                            :stroke="betterTextColor('secondary')"
-                          />
-                          <div>
-                            Se rendre sur
-                            {{ user.account.adherent.reducceServiceName }}
-                          </div>
-                        </a>
-                      </div>
-                    </div>
-                    <div
-                      v-else-if="
-                        !user.account.adherent.reducceServiceName &&
-                        user.account.adherent.reducceUrl
-                      "
-                    >
-                      <div class="mb-2">
-                        Code BONUUS
-                        <span class="ml-1 font-bold">{{
-                          user.account.adherent.reducceCode
-                        }}</span>
-                      </div>
-                      <div>
-                        <a
-                          class="flex underline"
-                          target="_blank"
-                          :href="user.account.adherent.reducceUrl"
-                        >
-                          <RedirectionIconComponent
-                            class="mr-2"
-                            :stroke="betterTextColor('secondary')"
-                          />
-                          <div>Se rendre sur BONUUS</div>
-                        </a>
-                      </div>
-                    </div>
-                    <div
-                      v-else-if="
-                        !user.account.adherent.reducceServiceName &&
-                        !user.account.adherent.reducceUrl &&
-                        channel.code === 'QANTIS_ACHAT'
-                      "
-                    >
-                      <div class="mb-2">
-                        Code BONUUS
-                        <span class="ml-1 font-bold">{{
-                          user.account.adherent.reducceCode
-                        }}</span>
-                      </div>
-                      <div>
-                        <a
-                          class="flex underline"
-                          target="_blank"
-                          href="https://bonuus.qantis.co"
-                        >
-                          <RedirectionIconComponent
-                            class="mr-2"
-                            :stroke="betterTextColor('secondary')"
-                          />
-                          <div>Se rendre sur BONUUS</div>
-                        </a>
-                      </div>
-                    </div>
-                    <div v-else>
-                      Code Avantages Salariés
-                      <span class="ml-1 font-bold">{{
-                        user.account.adherent.reducceCode
-                      }}</span>
-                    </div>
-                  </div>
                   <AccountSidebar />
                   <div class="rounded-lg bg-white xl:p-7">
                     <h3 class="mb-2 text-lg font-bold xl:text-2xl">
