@@ -1,35 +1,32 @@
 <template>
   <div class="text-center text-lg leading-5 text-white">
     <div
-      v-if="currentStatus.status === status.pending"
       :class="
         'border-' +
         betterTextColor('primary') +
         ' text-' +
         betterTextColor('primary')
       "
-      class="mx-auto flex justify-center border p-2 lg:w-2/3"
+      class="mx-auto flex w-fit justify-center border px-6 py-2"
     >
-      Votre rattachement est en cours
-      <PendingIconComponent
-        :fill="betterTextColor('primary')"
-        :stroke="betterTextColor('primary')"
-        class="ml-1 w-5"
-      />
+      <template v-if="currentStatus.status === status.pending">
+        <PendingIconComponent
+          :fill="betterTextColor('primary')"
+          :stroke="betterTextColor('primary')"
+          class="mr-4"
+        />
+        {{
+          properties.label_process_pending || 'Votre rattachement est en cours'
+        }}
+      </template>
+      <template v-else>
+        <CheckIconComponent :stroke="betterTextColor('primary')" class="mr-4" />
+        {{
+          properties.label_process_activated || 'Vous bénéficiez des conditions'
+        }}
+      </template>
     </div>
-    <div
-      v-else
-      :class="
-        'border-' +
-        betterTextColor('primary') +
-        ' text-' +
-        betterTextColor('primary')
-      "
-      class="mx-auto flex justify-center border p-2 lg:w-2/3"
-    >
-      <CheckIconComponent :stroke="betterTextColor('primary')" class="mr-4" />
-      Vous bénéficiez des conditions
-    </div>
+
     <div class="condition-beneficiaire mt-4">
       <p v-html="text" />
     </div>
