@@ -44,8 +44,8 @@
         <p class="mt-7 flex items-center text-sm md:items-center lg:text-lg">
           <input
             v-model="orderTermsOfSales"
-            type="checkbox"
             class="mr-2 cursor-pointer lg:mt-0"
+            type="checkbox"
             @change="onTermsChange"
           />
           <span>

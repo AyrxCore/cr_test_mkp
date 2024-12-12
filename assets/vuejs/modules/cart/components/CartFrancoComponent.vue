@@ -1,6 +1,6 @@
 <template>
   <div class="text-sm italic lg:text-base">
-    <p v-if="notDisplayedPromotion || !promotions.length">
+    <p v-if="notDisplayedPromotion || !getPromotions.length">
       {{ seller?.description }}
     </p>
     <p v-else-if="leftBeforePromotion">
@@ -15,9 +15,10 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, PropType } from 'vue'
+import { storeToRefs } from 'pinia'
 
 import { Order } from '@/vuejs/types/Cart'
-import { Seller, SellerPromotion } from '@/vuejs/types/Seller'
+import { Seller } from '@/vuejs/types/Seller'
 
 import { formatPrice } from '@/vuejs/services/utils'
 
@@ -32,17 +33,20 @@ const props = defineProps({
   },
 })
 
+const { getPromotions, getNextPromotion, getHasReachedFranco } =
+  storeToRefs(sellerStore)
+
 onMounted(async (): Promise<void> => {
   const sellerId = props.order.seller.id
   await sellerStore.getSellerPromotions(sellerId)
 })
 
-const promotions = computed((): SellerPromotion[] => {
-  return sellerStore.promotions[props.order.seller.id] || []
-})
-
 const seller = computed((): Seller => {
   return sellerStore.sellers.find((e) => e.id === props.order.seller.id)
+})
+
+const hasReachedFranco = computed((): boolean => {
+  return getHasReachedFranco.value(props.order)
 })
 
 const notDisplayedPromotion = computed((): boolean => {
@@ -50,38 +54,16 @@ const notDisplayedPromotion = computed((): boolean => {
   return SELLERS_NO_DISPLAY_PROMOTION.includes(seller.value?.id)
 })
 
+const nextPromotion = computed(() => {
+  return getNextPromotion.value(props.order)
+})
+
 const leftBeforePromotion = computed((): string => {
   if (!nextPromotion.value) return null
   return formatPrice(
-    (nextPromotion.value.order_eligibility.amount -
+    (nextPromotion.value?.order_eligibility.amount -
       props.order.items_total_excluding_taxes) /
       100,
-  )
-})
-
-const nextPromotion = computed((): SellerPromotion => {
-  const total = props.order.items_total_excluding_taxes
-  let currentPromotion: SellerPromotion = null
-  if (!promotions.value.length) return
-  promotions.value.forEach((p, id) => {
-    if (!currentPromotion && total < p.order_eligibility.amount) {
-      currentPromotion = p
-    } else if (
-      total < p.order_eligibility.amount &&
-      currentPromotion.order_eligibility.amount > p.order_eligibility.amount
-    ) {
-      currentPromotion = p
-    }
-  })
-
-  return currentPromotion
-})
-
-const hasReachedFranco = computed((): boolean => {
-  return (
-    promotions.value &&
-    promotions.value.length > 0 &&
-    nextPromotion.value === null
   )
 })
 

@@ -17,17 +17,18 @@
         <input
           :id="`shipmentMethod-${method.shipping_method.id}`"
           v-model="selectedShippingMethod"
-          type="radio"
           :name="`shipmentMethod-${order.id}`"
           :value="method.shipping_method.id"
           class="checked:bg-secondary checked:hover:bg-secondary focus:bg-secondary focus:outline-none focus:ring-1 focus:ring-secondary checked:focus:bg-secondary checked:active:bg-secondary"
+          type="radio"
           @change="selectShippingMethod"
         />
         <label
           :for="`shipmentMethod-${method.shipping_method.id}`"
           class="pl-2"
         >
-          {{ method.shipping_method.name.fr }} - {{ method.amount / 100 }}€
+          {{ method.shipping_method.name.fr }} -
+          {{ hasReachedFranco ? 0 : method.amount / 100 }}€
         </label>
       </div>
       <template v-if="filteredShipmentMethods.length === 0">
@@ -43,10 +44,10 @@
       {{ order.items.length }} référence(s)
       <span class="ml-2 flex items-center font-bold text-secondary underline">
         <Chevron2RightIconComponent
-          class="mr-1 fill-secondary stroke-secondary text-sm lg:text-lg"
           :class="{
             'rotate-90 ease-in-out': isDetailsOpen,
           }"
+          class="mr-1 fill-secondary stroke-secondary text-sm lg:text-lg"
         />
         Détails
       </span>
@@ -82,18 +83,20 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, PropType, ref } from 'vue'
+import { storeToRefs } from 'pinia'
 
 import CartFrancoComponent from '@/vuejs/modules/cart/components/CartFrancoComponent.vue'
 import Chevron2RightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
+import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 
 import { useCartStore } from '@/vuejs/stores/cart'
 import { SELLER_IDS, useSellerStore } from '@/vuejs/stores/seller'
 import { Order, ShippingMethod } from '@/vuejs/types/Cart'
 import { Seller } from '@/vuejs/types/Seller'
-import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 
 const cartStore = useCartStore()
 const sellerStore = useSellerStore()
+const { getHasReachedFranco } = storeToRefs(sellerStore)
 
 const emit = defineEmits(['loaded'])
 
@@ -108,6 +111,10 @@ const isLoading = ref<boolean>(false)
 const isDetailsOpen = ref<boolean>(false)
 const shipmentMethods = cartStore.shippingMethods.filter((e) => {
   return e.order.id === props.order.id
+})
+
+const hasReachedFranco = computed((): boolean => {
+  return getHasReachedFranco.value(props.order)
 })
 
 const filteredShipmentMethods = ref<ShippingMethod[]>(

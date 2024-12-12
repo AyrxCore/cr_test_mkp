@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { Seller, SellerStoreState } from '@/vuejs/types/Seller'
+import { Seller, SellerPromotion, SellerStoreState } from '@/vuejs/types/Seller'
 import SellerHttpClient from '@/vuejs/services/httpclient/SellerHttpClient'
 import { notifyError } from '@/vuejs/services/utils'
 
@@ -34,5 +34,35 @@ export const useSellerStore = defineStore({
         await SellerHttpClient.get().getSellerPromotions(sellerId)
     },
   },
-  getters: {},
+  getters: {
+    getPromotions: (state) => {
+      return (order) => state.promotions[order.seller.id] || []
+    },
+    getNextPromotion: (state) => {
+      return (order) => {
+        const total = order.items_total_excluding_taxes
+        let currentPromotion: SellerPromotion = null
+        if (!state.getPromotions(order).length) return
+        state.getPromotions(order).forEach((p, id) => {
+          if (!currentPromotion && total < p.order_eligibility.amount) {
+            currentPromotion = p
+          } else if (
+            total < p.order_eligibility.amount &&
+            currentPromotion.order_eligibility.amount >
+              p.order_eligibility.amount
+          ) {
+            currentPromotion = p
+          }
+        })
+
+        return currentPromotion
+      }
+    },
+    getHasReachedFranco: (state) => {
+      return (order) =>
+        state.getPromotions(order) &&
+        state.getPromotions(order).length > 0 &&
+        state.getNextPromotion(order) === null
+    },
+  },
 })
