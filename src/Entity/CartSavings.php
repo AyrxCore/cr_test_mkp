@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\CartSavingsRepository;
@@ -36,6 +38,15 @@ class CartSavings
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\Column]
+    private ?int $orderTotal = null;
+
+    #[ORM\Column]
+    private ?int $itemsTotalBeforeSavings = null;
+
+    #[ORM\Column]
+    private ?int $itemsTotal = null;
+
     #[ORM\PrePersist]
     public function onPrePersist()
     {
@@ -58,7 +69,6 @@ class CartSavings
 
         return $this;
     }
-
 
     public function getCartId(): ?int
     {
@@ -118,5 +128,41 @@ class CartSavings
         $this->createdAt = $createdAt;
 
         return $this;
+    }
+
+    public function getOrderTotal(): ?int
+    {
+        return $this->orderTotal;
+    }
+
+    public function setOrderTotal(int $orderTotal): static
+    {
+        $this->orderTotal = $orderTotal;
+
+        return $this;
+    }
+
+    public function getItemsTotalBeforeSavings(): ?int
+    {
+        return $this->itemsTotalBeforeSavings;
+    }
+
+    public function setItemsTotalBeforeSavings(int $itemsTotalBeforeSavings): static
+    {
+        $this->itemsTotalBeforeSavings = $itemsTotalBeforeSavings;
+
+        return $this;
+    }
+
+    public function setItemsTotal(int $itemsTotal): static
+    {
+        $this->itemsTotal = $itemsTotal;
+
+        return $this;
+    }
+
+    public function getItemsTotal(): ?int
+    {
+        return $this->itemsTotal;
     }
 }

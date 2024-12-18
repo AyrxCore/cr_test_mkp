@@ -49,6 +49,10 @@ class CartService
                 $priceReferenceByOrder += $pricePaid;
             }
             $cartSaving->setAmount($priceReferenceByOrder - $order['items_total_excluding_taxes']);
+            $cartSaving->setOrderTotal($order['total_excluding_taxes']);
+            $cartSaving->setItemsTotalBeforeSavings($priceReferenceByOrder);
+            $cartSaving->setItemsTotal($order['items_total_excluding_taxes']);
+
             $this->em->persist($cartSaving);
         }
 
