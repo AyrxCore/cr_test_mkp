@@ -1,5 +1,5 @@
 <template>
-  <BaseTemplate :title="headTitle" class="ff-roboto">
+  <BaseTemplate :title="termsOrCategoryFilterName" class="ff-roboto">
     <div
       v-if="isLoading"
       class="my-20 flex h-20 w-full flex-col items-center justify-center text-primary"
@@ -21,7 +21,7 @@
         <h3
           class="md:text-title-default-size mt-4 text-xl text-primary md:hidden"
         >
-          {{ route.query.q }}
+          {{ termsOrCategoryFilterName }}
         </h3>
         <MobileFiltersProductsComponent />
         <div class="my-2 flex flex-col justify-between lg:flex-row">
@@ -35,7 +35,7 @@
             <h3
               class="md:text-title-default-size mb-4 hidden text-xl text-primary md:block"
             >
-              Votre recherche : {{ route.query.q }}
+              Votre recherche : {{ termsOrCategoryFilterName }}
             </h3>
             <div
               class="flex h-auto flex-col items-stretch justify-items-center md:grid md:grid-cols-2 md:gap-5 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
@@ -192,7 +192,7 @@ const count = computed((): number => {
   return products.value?.resultsCount
 })
 
-const headTitle = computed((): string => {
+const termsOrCategoryFilterName = computed((): string => {
   if (searchTerms.value) {
     return searchTerms.value
   }

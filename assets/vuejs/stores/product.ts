@@ -222,8 +222,24 @@ export const useProductStore = defineStore({
         !!this.searchTerms
       )
     },
-    selectedSearchCategory(): ProductCategory {
-      return this.products?.filters?.categories?.find((e) => !!e.checked)
+    selectedSearchCategory(state): ProductCategory {
+      const categories = state.products?.filters?.categories ?? []
+      return findCheckedItem(categories)
     },
   },
 })
+
+function findCheckedItem(categories: any[]): any | null {
+  for (const item of categories) {
+    if (item.checked === true) {
+      return item
+    }
+    if (item.children && item.children.length > 0) {
+      const childResult = findCheckedItem(item.children)
+      if (childResult) {
+        return childResult
+      }
+    }
+  }
+  return null
+}
