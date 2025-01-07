@@ -506,6 +506,30 @@
                                     </table>
                                   </td>
                                 </tr>
+                                <tr>
+                                  <td class="r26-c" align="left">
+                                    <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%"
+                                           class="r16-o" style="table-layout: fixed; width: 100%;">
+                                      <tr>
+                                        <td align="center" valign="top" class="r27-i nl2go-default-textstyle"
+                                            style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; word-break: break-word; padding-bottom: 10px; text-align: center;">
+                                          <div>
+                                            <p style="margin: 0;"><span style="display: inline;"><span
+                                                  style="font-size: 13px;">Si le bouton ne s’affiche pas, cliquez sur le lien ci-dessous pour valider le changement de mail
+                                                  :</span></span>
+                                              <br/>
+                                              <a href="{{ confirmation_url }}" style="color: darkblue;">
+                                                <span style="display: inline;">
+                                                  <span style="font-size: 13px;">{{ confirmation_url }}</span>
+                                                </span>
+                                              </a>
+                                            </p>
+                                          </div>
+                                        </td>
+                                      </tr>
+                                    </table>
+                                  </td>
+                                </tr>
                               </table>
                             </td>
                           </tr>
@@ -552,21 +576,23 @@
                                 <tr>
                                   <td class="r26-c nl2go-default-textstyle" align="left"
                                       style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; word-break: break-word; padding-bottom: 15px; padding-top: 5px; text-align: left; valign: top;">
-                                    <div><p style="margin: 0;"><span style="color: {{ channel_secondary_color(channel) }}; font-size: 17px;"><strong>📞</strong></span><span style="color: {{ channel_secondary_color(channel) }};"><strong> Par téléphone au</strong></span>
+                                    <div><p style="margin: 0;"><span style="color: {{ channel_secondary_color(channel) }}; font-size: 17px;"><strong>📞</strong></span><span
+                                          style="color: {{ channel_secondary_color(channel) }};"><strong> Par téléphone au</strong></span>
                                       </p>
                                       <p style="margin: 0;"><a href="tel:{{ channel_phone_number(channel) }}" target="_blank" style="color: #1f2d3d; text-decoration: underline;
 "><span
-                                            style="color: {{ channel_secondary_color(channel) }};"><strong>{{ channel_formatted_phone_number(channel)
-                                              }}</strong></span></a></p></div>
+                                            style="color: {{ channel_secondary_color(channel) }};"><strong>{{ channel_formatted_phone_number(channel) }}</strong></span></a></p>
+                                    </div>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td class="r26-c nl2go-default-textstyle" align="left"
                                       style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; word-break: break-word; padding-bottom: 15px; padding-top: 5px; text-align: left; valign: top;">
-                                    <div><p style="margin: 0;"><span style="color: {{ channel_secondary_color(channel) }}; font-size: 17px;"><strong>📩</strong></span><span style="color: {{ channel_secondary_color(channel) }};"><strong> Par email à</strong></span>
+                                    <div><p style="margin: 0;"><span style="color: {{ channel_secondary_color(channel) }}; font-size: 17px;"><strong>📩</strong></span><span
+                                          style="color: {{ channel_secondary_color(channel) }};"><strong> Par email à</strong></span>
                                       </p>
-                                      <p style="margin: 0;"><a href="mailto:{{channel_email(channel)}}" target="_blank" style="color: #1f2d3d; text-decoration: underline;"><span
-                                            style="color: {{ channel_secondary_color(channel) }};"><strong>{{channel_email(channel)}}</strong></span></a></p></div>
+                                      <p style="margin: 0;"><a href="mailto:{{ channel_email(channel) }}" target="_blank" style="color: #1f2d3d; text-decoration: underline;"><span
+                                            style="color: {{ channel_secondary_color(channel) }};"><strong>{{ channel_email(channel) }}</strong></span></a></p></div>
                                   </td>
                                 </tr>
                               </table>
