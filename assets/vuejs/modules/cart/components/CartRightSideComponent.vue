@@ -54,24 +54,19 @@
         <slot name="button-next" />
       </div>
     </div>
-    <div v-if="hasPaymentMethods" class="mt-5 flex justify-start">
-      <div
-        v-if="!!CBPaymentMethod"
-        class="items-center rounded-lg bg-white p-5"
-      >
-        <img class="h-14" :src="cbLogosImg" alt="CB Icons" />
+    <div v-if="hasPaymentMethods" class="mt-5 flex flex-wrap gap-2">
+      <div v-if="!!CBPaymentMethod" class="rounded-lg bg-white p-2">
+        <img :src="cbPaymentImage" alt="CB Icons" class="max-h-8" />
       </div>
-      <div
-        v-if="SEPAPaymentMethods.length > 0"
-        class="ml-2 h-14 items-center rounded-lg bg-white p-5"
-      >
-        <SepaIconComponent />
+      <div v-if="SEPAPaymentMethods.length > 0" class="rounded-lg bg-white p-2">
+        <img :src="sepaPaymentImage" alt="SEPA Icon" class="max-h-8" />
       </div>
-      <div
-        v-if="showMandatAdminPayment"
-        class="ml-2 flex h-14 items-center rounded-lg bg-white p-5 text-gray-700"
-      >
-        <TownHallIcon />
+      <div v-if="showMandatAdminPayment" class="rounded-lg bg-white p-2">
+        <img
+          :src="mandatePaymentImage"
+          alt="Mandat administratif Icon"
+          class="max-h-8"
+        />
       </div>
     </div>
   </div>
@@ -80,10 +75,10 @@
 import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 
-import cbLogos from '@/vuejs/assets/img/cb-icons.png'
-import SepaIconComponent from '@/vuejs/modules/shared/icon/SepaIconComponent.vue'
+import cbPaymentAsset from '@/vuejs/assets/img/payments/payment_cb.png'
+import sepaPaymentAsset from '@/vuejs/assets/img/payments/payment_sepa.png'
+import mandatePaymentAsset from '@/vuejs/assets/img/payments/payment_mandate.png'
 import InformationIconComponent from '@/vuejs/modules/shared/icon/InformationIconComponent.vue'
-import TownHallIcon from '@/vuejs/modules/shared/icon/TownHallIconComponent.vue'
 
 import { formatPrice, getImage } from '@/vuejs/services/utils'
 import { useCartStore } from '@/vuejs/stores/cart'
@@ -93,7 +88,9 @@ const cartStore = useCartStore()
 const { cart, CBPaymentMethod, SEPAPaymentMethods, showMandatAdminPayment } =
   storeToRefs(cartStore)
 
-const cbLogosImg = getImage(cbLogos)
+const cbPaymentImage = getImage(cbPaymentAsset)
+const sepaPaymentImage = getImage(sepaPaymentAsset)
+const mandatePaymentImage = getImage(mandatePaymentAsset)
 
 const props = defineProps({
   showNextButton: {
