@@ -29,6 +29,10 @@
     <testsuite name="feature">
       <directory>tests/Feature</directory>
     </testsuite>
+
+    <testsuite name="integration">
+      <directory>tests/Integration</directory>
+    </testsuite>
   </testsuites>
 
   <coverage processUncoveredFiles="true">

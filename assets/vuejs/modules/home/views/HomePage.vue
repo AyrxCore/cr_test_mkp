@@ -36,6 +36,10 @@
       </div>
       <!-- Fin Bloc accords cadre -->
 
+      <!-- Bloc boutons sémantiques -->
+      <SemanticButtonsComponent />
+      <!-- Fin Bloc boutons sémantiques -->
+
       <!-- Bloc sélection de produits -->
       <div class="m-auto mt-4 max-w-screen-94 md:px-0">
         <div class="mt-10 sm:w-[45rem]">
@@ -161,6 +165,7 @@
 <script lang="ts" setup>
 import { computed, onBeforeMount, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
+
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { useExpertContentStore } from '@/vuejs/stores/expertContent'
 import { useUserStore } from '@/vuejs/stores/user'
@@ -179,6 +184,7 @@ import OurCategoriesComponent from '@/vuejs/modules/home/component/OurCategories
 import PartnersCarousel from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
 import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
 import ShowcaseModal from '@/vuejs/modules/home/component/ShowcaseModal.vue'
+import SemanticButtonsComponent from '@/vuejs/modules/home/component/SemanticButtonsComponent.vue'
 import { Product } from '@/vuejs/types/Product'
 
 const favoriteStore = useFavoriteStore()
@@ -187,13 +193,12 @@ const expertContentStore = useExpertContentStore()
 const channelStore = useChannelStore()
 
 const { adherentTarifShowcases } = storeToRefs(useUserStore())
-
 const { productsSelection } = storeToRefs(productStore)
+const { productsAccordsCadre } = storeToRefs(productStore)
+
 const expertContentsLoaded = ref<boolean>(false)
 const showShowcaseModal = ref<boolean>(false)
 const accordSelected = ref<Product>(null)
-
-const { productsAccordsCadre } = storeToRefs(productStore)
 
 const emit = defineEmits(['show-showcase-modal', 'close-showcase-modal'])
 

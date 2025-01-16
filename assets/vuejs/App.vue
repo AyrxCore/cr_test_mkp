@@ -32,6 +32,7 @@
 
 <script lang="ts" setup>
 import { onBeforeMount, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
 
 import LoginForm from './modules/login/views/ExternalLoginForm.vue'
 import StickyContactButtons from '@/vuejs/modules/shared/StickyContactButtonsComponent.vue'
@@ -40,23 +41,23 @@ import ArrowLeftIconComponent from '@/vuejs/modules/shared/icon/ArrowLeftIconCom
 import FormComponent from '@/vuejs/modules/contact/component/FormComponent.vue'
 import NotifComponent from '@/vuejs/modules/shared/NotifComponent.vue'
 import CmsPageComponent from '@/vuejs/modules/shared/CmsPageComponent.vue'
+import PrehomeRightPart from '@/vuejs/modules/login/component/PrehomeRightPart.vue'
+import FooterPrehome from '@/vuejs/modules/login/component/FooterPrehome.vue'
 
 import { useCategoryStore } from '@/vuejs/stores/category'
 import { useCartStore } from '@/vuejs/stores/cart'
 import { useChannelStore } from '@/vuejs/stores/channel'
+import { useBannerStore } from '@/vuejs/stores/banner'
+
 import router from './router'
 import { CartPageList } from './router/pages-list'
 import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
-import { useBannerStore } from '@/vuejs/stores/banner'
-import PrehomeRightPart from '@/vuejs/modules/login/component/PrehomeRightPart.vue'
-import FooterPrehome from '@/vuejs/modules/login/component/FooterPrehome.vue'
-import { storeToRefs } from 'pinia'
 
 const channelStore = useChannelStore()
-const { currentChannel, channelDocuments } = storeToRefs(channelStore)
 const cartStore = useCartStore()
 const categoryStore = useCategoryStore()
 const bannerStore = useBannerStore()
+const { currentChannel, channelDocuments } = storeToRefs(channelStore)
 
 const props = defineProps({
   component: {

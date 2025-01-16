@@ -39,7 +39,7 @@ use Symfony\Component\Uid\Uuid;
     $this->accordStatutService->processAccordStatutAttachments([$this->attachment], $this->adherent);
 
     \expect($accordStatut->getStatus())->toBe(AccountAccordCadre::PROCESS_STATUS_ACTIVATED);
-})->group('accord-statut-service')->only();
+})->group('accord-statut-service');
 
 \it('creates a new AccordStatut when none exists', function () {
     // Simuler l'absence d'un AccordStatut existant
@@ -64,4 +64,4 @@ use Symfony\Component\Uid\Uuid;
         ->and($createdAccordStatut->getAdherent())->toBe($this->adherent)
         ->and($createdAccordStatut->getAccordId()->toRfc4122())->toBe($this->attachment['accordId'])
         ->and($createdAccordStatut->getStatus())->toBe(AccountAccordCadre::PROCESS_STATUS_ACTIVATED);
-})->group('accord-statut-service')->only();
+})->group('accord-statut-service');
