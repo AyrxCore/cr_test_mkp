@@ -39,7 +39,7 @@ class FirstConnexionSubscriber implements EventSubscriberInterface
             UrlGeneratorInterface::ABSOLUTE_URL
         );
         $this->mailerProvider->send(
-            $event->getChannel()->getChannelParameter()->getEmail(),
+            $event->getChannel()->getChannelParameter()->getEmailFrom(),
             $user->getEmail(),
             $this->translator->trans('emails.request.first_connexion.subject', [], 'prehome'),
             $this->twig->render('mails/request.first_connexion.html.twig', [

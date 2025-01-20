@@ -46,8 +46,9 @@ class ChangingEmailSubscriber implements EventSubscriberInterface
             ['token' => $log->getEmailChangingToken()],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
+        $channelEmailTo = $event->getChannel()->getChannelParameter()->getEmailFrom();
         $this->mailerProvider->send(
-            $event->getChannel()->getChannelParameter()->getEmail(),
+            $channelEmailTo,
             $log->getValue(),
             $this->translator->trans('emails.request.changing_email_validation.subject', [], 'prehome'),
             $this->twig->render('mails/request.changing_email_validation.html.twig', [
@@ -59,7 +60,7 @@ class ChangingEmailSubscriber implements EventSubscriberInterface
             ])
         );
         $this->mailerProvider->send(
-            $event->getChannel()->getChannelParameter()->getEmail(),
+            $channelEmailTo,
             $log->getOldValue(),
             $this->translator->trans('emails.request.changing_email_information.subject', [], 'prehome'),
             $this->twig->render('mails/request.changing_email_information.html.twig', [

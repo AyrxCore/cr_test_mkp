@@ -112,6 +112,10 @@ class ChannelParameter
     #[Groups(['channel:get'])]
     private ?bool $whiteLabel = true;
 
+    #[ORM\Column(nullable: true)]
+    #[Assert\Email]
+    private ?string $noReplyEmail = null;
+
     public function getId(): ?Uuid
     {
         return $this->id;
@@ -259,5 +263,17 @@ class ChannelParameter
         $this->whiteLabel = $whiteLabel;
 
         return $this;
+    }
+
+    public function getNoReplyEmail(): ?string {
+        return $this->noReplyEmail;
+    }
+
+    public function setNoReplyEmail(?string $noReplyEmail): void {
+        $this->noReplyEmail = $noReplyEmail;
+    }
+
+    public function getEmailFrom(): ?string {
+        return $this->noReplyEmail ?? $this->email;
     }
 }
