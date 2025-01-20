@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Dto\AccountAccordCadre;
 use App\Entity\AccordStatut;
 use App\Entity\Adherent;
 use App\Repository\AccordStatutRepository;
@@ -21,21 +20,31 @@ class AccordStatutService
 
     public function processAccordStatutAttachments(array $attachments, Adherent $adherent): void
     {
-        foreach ($attachments as $attachment) {
-            $accordStatut = $this->accordStatutRepository->findOneBy([
-                'adherent' => $adherent->getId(),
-                'accordId' => $attachment['accordId'],
-            ]);
+        $currenAccordsStatuts = $this->accordStatutRepository->findBy([
+            'adherent' => $adherent->getId(),
+        ]);
 
-            if ($accordStatut) {
-                if (!($accordStatut->getStatus() === AccountAccordCadre::PROCESS_STATUS_PENDING
-                    && $attachment['status'] === AccountAccordCadre::PROCESS_STATUS_NOT_ACTIVATED)) {
-                    $accordStatut->setStatus($attachment['status']);
-                    $this->em->persist($accordStatut);
-                }
+        // On supprime les rattachements en base qui ne sont pas dans le nouvel envoi
+        // et on met à jour les status de ceux présents
+        foreach ($currenAccordsStatuts as $accordStatut) {
+            // On cherche si l'accord est présent dans le nouvel envoi
+            $filteredAttachments = \array_filter($attachments, fn ($attachment) => $attachment['accordId'] === (string) $accordStatut->getAccordId());
+            $incomingAttachment = \array_shift($filteredAttachments);
+            // On le supprime s'il n'est pas présent
+            if (!$incomingAttachment) {
+                $this->em->remove($accordStatut);
             } else {
-                $this->createAccordStatut($adherent, $attachment);
+                // Sinon on le met à jour
+                $accordStatut->setStatus($incomingAttachment['status']);
+                $this->em->persist($accordStatut);
+                // On supprime les rattachements traités de l'envoi initial
+                $attachments = \array_filter($attachments, fn ($attachment) => $attachment['accordId'] !== (string) $accordStatut->getAccordId());
             }
+        }
+
+        // On créé les nouveaux rattachements restant dans l'envoi initial
+        foreach ($attachments as $attachment) {
+            $this->createAccordStatut($adherent, $attachment);
         }
 
         $this->em->flush();
