@@ -6,8 +6,8 @@
       class="xs:w-[100%] m-auto mt-4 max-w-screen-2xl flex-1 px-5 sm:px-8"
     >
       <BreadcrumbSharedComponent
-        :list-url="breadcrumbUrl"
         :current-page="product.name"
+        :list-url="breadcrumbUrl"
         gtm-event-name="click_product_breadcrumb"
       />
       <div class="m-auto mt-4 flex flex-col">
@@ -15,10 +15,6 @@
           <!-- Slider all pictures, hidden on mobile -->
           <CarouselListSharedComponent
             v-if="product.images?.length > 1"
-            direction="vertical"
-            :space-between="10"
-            :pagination="false"
-            :show-nav="false"
             :breakpoints="{
               640: {
                 slidesPerView: 4,
@@ -27,9 +23,13 @@
                 spaceBetween: 20,
               },
             }"
+            :pagination="false"
+            :show-nav="false"
+            :space-between="10"
+            class="!ml-0 !mr-4 hidden xl:flex xl:h-[450px]"
+            direction="vertical"
             loop
             watch-slides-progress
-            class="!ml-0 !mr-4 hidden xl:flex xl:h-[450px]"
             @swiper="setThumbsSwiper"
           >
             <SwiperSlide
@@ -38,8 +38,8 @@
               class="cursor-pointer"
             >
               <img
-                :src="getUpplerImage(img)"
                 :alt="`${product.name} image ${key}`"
+                :src="getUpplerImage(img)"
                 class="bg-white p-1"
               />
             </SwiperSlide>
@@ -50,15 +50,15 @@
             class="relative flex w-[100%] items-center bg-white md:!ml-0 md:!mr-6 md:h-[450px] md:max-w-[50%] xl:max-w-[40%]"
           >
             <CarouselListSharedComponent
+              :show-nav="product.images?.length > 1"
               :slides-per-view="1"
               :space-between="20"
-              :show-nav="product.images?.length > 1"
               :thumbs="{
                 swiper:
                   thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null,
               }"
-              loop
               class="h-[303px]"
+              loop
             >
               <SwiperSlide
                 v-for="(img, key) in product.images"
@@ -66,8 +66,8 @@
                 class="!flex w-[100%] justify-center p-4 md:h-auto"
               >
                 <img
-                  :src="getUpplerImage(img)"
                   :alt="`${product.name} main image ${key}`"
+                  :src="getUpplerImage(img)"
                   class="h-auto sm:mx-auto"
                   @click.stop="
                     sendGaEvent('click_product_img', {
@@ -91,20 +91,26 @@
           <div class="flex flex-col">
             <!-- Product details -->
             <div class="mt-4 md:mt-0">
-              <img
-                :src="getUpplerImage(product.seller.avatar)"
-                :alt="`${product.seller.name} logo`"
-                class="mb-1 h-10"
-              />
+              <div class="mb-2">
+                <RouterLink
+                  :to="{
+                    name: ProductPageList.PRODUCTS,
+                    query: { q: product.seller.name },
+                  }"
+                  class="font-bold text-secondary underline"
+                >
+                  {{ product.seller.name }}
+                </RouterLink>
+              </div>
               <h3
                 class="flex items-center text-xl font-bold text-primary md:mb-3 md:text-3xl"
               >
                 {{ product.name }}
                 <AddFavoriteComponent
+                  :favorites-product="product.favorites"
                   :product-id="product.id"
                   :product-name="product.name"
                   :variant-id="product.defaultVariantId"
-                  :favorites-product="product.favorites"
                   class="ml-2 inline-flex"
                 />
               </h3>
@@ -197,8 +203,8 @@
             <!-- Fin Livraison -->
             <ProductAddToCartComponent
               v-if="product"
-              class="mt-4 hidden lg:flex"
               :product="product"
+              class="mt-4 hidden lg:flex"
             />
           </div>
         </div>
@@ -291,8 +297,8 @@
           Les accords-cadres incontournables
         </h3>
         <AccordsCadreComponent
-          :loading="isLoadingSimilarProductsAndAccordsCadres"
           :accords-cadres="similarAccordsCadres"
+          :loading="isLoadingSimilarProductsAndAccordsCadres"
           class="mb-8"
           @click-left="sendGaEvent('click_product_slider_fat_left')"
           @click-right="sendGaEvent('click_product_slider_fat_right')"
@@ -312,9 +318,9 @@
   </BaseTemplate>
   <ProductAddToCartComponent
     v-if="product"
-    class="z-10 flex lg:hidden"
     :product="product"
     :show-price="true"
+    class="z-10 flex lg:hidden"
   />
 </template>
 <script lang="ts" setup>
@@ -322,6 +328,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { SwiperSlide } from 'swiper/vue'
 import { Tab, Tabs } from 'vue3-tabs-component'
+import { storeToRefs } from 'pinia'
 
 import AddFavoriteComponent from '@/vuejs/modules/products/components/AddFavoriteComponent.vue'
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
@@ -343,7 +350,7 @@ import { useUserStore } from '@/vuejs/stores/user'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import sampleImg from '@/vuejs/assets/img/sample_product_img.png'
 import AccordsCadreComponent from '@/vuejs/modules/home/component/AccordsCadreComponent.vue'
-import { storeToRefs } from 'pinia'
+import { ProductPageList } from '@/vuejs/router/pages-list'
 
 const route = useRoute()
 const router = useRouter()
