@@ -19,8 +19,15 @@ class StellantisRattachementController extends AbstractController implements Cha
     use ChannelAwareControllerTrait;
 
     public const array ALLOWED_CHANNELS = [
+        Channel::ARTEMA,
         Channel::DLR,
+        Channel::FNPHP,
+        Channel::FSPF,
         Channel::QANTIS_ACHAT,
+        Channel::SYNETAM,
+        Channel::UITS,
+        Channel::UNEP,
+        Channel::UNGE,
     ];
 
     public function __construct(

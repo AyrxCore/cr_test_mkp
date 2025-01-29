@@ -43,8 +43,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 class Channel
 {
+    public const ARTEMA = 'ARTEMA';
     public const DLR = 'DLR';
+    public const FNPHP = 'FNPHP';
+    public const FSPF = 'FSPF';
     public const QANTIS_ACHAT = 'QANTIS_ACHAT';
+    public const SYNETAM = 'SYNETAM';
+    public const UITS = 'UITS';
+    public const UNEP = 'UNEP';
+    public const UNGE = 'UNGE';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
