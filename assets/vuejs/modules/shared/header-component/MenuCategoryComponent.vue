@@ -53,7 +53,7 @@
             replace
             @click="closeMenu"
           >
-            VOIR TOUT
+            Voir tout
           </RouterLink>
         </h3>
         <div class="w-[100%] py-1 !text-base !leading-9">
