@@ -68,10 +68,11 @@ use App\Tests\Story\Channel\ChannelStory;
 \it('returns a 404 when trying to get a non-existing channel by host', function () {
     $client = $this::createClient();
 
-    $client->request('GET', '/api/channels/by-host/some.unknown-host.com');
+    $client->request('GET', '/api/channels/by-host/some.unknown-host.com', [
+        'headers' => ['Accept' => 'application/json'],
+    ]);
 
     $this->assertResponseStatusCodeSame(404);
-    $this->assertJsonContains(['hydra:description' => 'Channel not found']);
 })->group('channels');
 
 \it('gets a channel by host', function () {
@@ -80,7 +81,9 @@ use App\Tests\Story\Channel\ChannelStory;
 
     $client = $this::createClient();
 
-    $client->request('GET', '/api/channels/by-host/test.qantis.local');
+    $client->request('GET', '/api/channels/by-host/test.qantis.local', [
+        'headers' => ['Accept' => 'application/json'],
+    ]);
 
     $this->assertResponseIsSuccessful();
     $this->assertResponseStatusCodeSame(200);

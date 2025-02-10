@@ -6,31 +6,12 @@ namespace App\DataFixtures\Factory;
 
 use App\DataFixtures\Factory\Trait\BeforeInstantiateTrait;
 use App\Entity\Channel;
-use App\Repository\ChannelRepository;
-use Zenstruck\Foundry\ModelFactory;
-use Zenstruck\Foundry\Proxy;
-use Zenstruck\Foundry\RepositoryProxy;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends ModelFactory<Channel>
- *
- * @method        Channel|Proxy                     create(array|callable $attributes = [])
- * @method static Channel|Proxy                     createOne(array $attributes = [])
- * @method static Channel|Proxy                     find(object|array|mixed $criteria)
- * @method static Channel|Proxy                     findOrCreate(array $attributes)
- * @method static Channel|Proxy                     first(string $sortedField = 'id')
- * @method static Channel|Proxy                     last(string $sortedField = 'id')
- * @method static Channel|Proxy                     random(array $attributes = [])
- * @method static Channel|Proxy                     randomOrCreate(array $attributes = [])
- * @method static ChannelRepository|RepositoryProxy repository()
- * @method static Channel[]|Proxy[]                 all()
- * @method static Channel[]|Proxy[]                 createMany(int $number, array|callable $attributes = [])
- * @method static Channel[]|Proxy[]                 createSequence(iterable|callable $sequence)
- * @method static Channel[]|Proxy[]                 findBy(array $attributes)
- * @method static Channel[]|Proxy[]                 randomRange(int $min, int $max, array $attributes = [])
- * @method static Channel[]|Proxy[]                 randomSet(int $number, array $attributes = [])
+ * @extends PersistentObjectFactory<Channel>
  */
-final class ChannelFactory extends ModelFactory
+final class ChannelFactory extends PersistentObjectFactory
 {
     use BeforeInstantiateTrait;
 
@@ -43,7 +24,12 @@ final class ChannelFactory extends ModelFactory
         parent::__construct();
     }
 
-    protected function getDefaults(): array
+    public static function class(): string
+    {
+        return Channel::class;
+    }
+
+    protected function defaults(): array
     {
         return [
             'code' => self::faker()->regexify('[A-Z_]{3,20}'),
@@ -52,7 +38,7 @@ final class ChannelFactory extends ModelFactory
         ];
     }
 
-    protected function initialize(): self
+    protected function initialize(): static
     {
         return $this
             ->beforeInstantiate($this->convertIdAttributes())
@@ -68,10 +54,5 @@ final class ChannelFactory extends ModelFactory
 
                 return $attributes;
             });
-    }
-
-    protected static function getClass(): string
-    {
-        return Channel::class;
     }
 }

@@ -36,7 +36,7 @@ use App\Tests\Story\Account\UserStory;
 \it('returns a 405 Method Not Allowed when trying to DELETE an account', function () {
     $client = $this::createClientWithCredentials();
 
-    $user = UserFactory::find(['username' => $this::DEFAULT_USER_LOGIN]);
+    $user = UserFactory::find(['username' => UserStory::DEFAULT_USER]);
     $accounts = $user->getAccounts();
     $accountId = $accounts->first()->getId();
 
@@ -46,29 +46,29 @@ use App\Tests\Story\Account\UserStory;
     $this->assertJsonResponseMatches('account/delete-not-allowed-response.json');
 })->group('accounts');
 
-\it('returns a 404 Forbidden when trying to GET an account which belongs to another user', function () {
-    UserFactory::new([
+\it('returns a 401 Forbidden when trying to GET an account which belongs to another user', function () {
+    $user = UserFactory::new([
         'username' => 'some_user',
         'password' => 'password',
         'enabled' => true,
         'roles' => ['ROLE_USER'],
-        'accounts' => [
-            AccountFactory::new([
-                'adherent' => UserStory::adherentQantisTest(),
-                'enabled' => true,
-            ]),
-        ],
     ])->create();
+
+    AccountFactory::new([
+        'adherent' => UserStory::adherentQantisTest(),
+        'enabled' => true,
+        'user' => $user,
+    ]);
 
     $client = $this::createClientWithCredentials('some_user', 'password');
 
-    $user = UserFactory::find(['username' => $this::DEFAULT_USER_LOGIN]);
-    $accountId = $this::getUserFirstAccount($user->object())->getId();
+    $user = UserFactory::find(['username' => UserStory::DEFAULT_USER]);
+    $accountId = $this::getUserFirstAccount($user)->getId();
 
     $client->request('GET', \sprintf('/api/accounts/%s', $accountId));
 
-    $this->assertResponseStatusCodeSame(404);
-    $this->assertJsonContains(['hydra:description' => 'Not Found']);
+    $this->assertResponseStatusCodeSame(401);
+    $this->assertJsonContains(['message' => 'JWT Token not found']);
 })->group('accounts');
 
 \it('GETs a collection of accounts logged in user has role ROLE_API and can access another user\'s accounts', function () {
@@ -80,7 +80,7 @@ use App\Tests\Story\Account\UserStory;
 })->group('accounts');
 
 \it('GETs a collection of accounts Account belongs to logged in user', function () {
-    $client = $this::createClientWithCredentials(username: 'gsm@qantis.co');
+    $client = $this::createClientWithCredentials();
 
     $client->request('GET', '/api/accounts');
 
@@ -93,7 +93,7 @@ use App\Tests\Story\Account\UserStory;
     $client = $this::createClientWithCredentials(username: $loggedInUsername);
 
     $user = UserFactory::find(['username' => $otherUsername]);
-    $accountId = $this::getUserFirstAccount($user->object())->getId();
+    $accountId = $this::getUserFirstAccount($user)->getId();
 
     $client->request('GET', \sprintf('/api/accounts/%s', $accountId));
 
@@ -107,12 +107,12 @@ use App\Tests\Story\Account\UserStory;
 })
     ->with([
         'Account belongs to logged in user' => [
-            'loggedInUsername' => 'gsm@qantis.co',
-            'otherUsername' => 'gsm@qantis.co',
+            'loggedInUsername' => UserStory::DEFAULT_USER,
+            'otherUsername' => UserStory::DEFAULT_USER,
         ],
         "logged in user has role ROLE_API and can access another user's account" => [
             'loggedInUsername' => 'api_user',
-            'otherUsername' => 'gsm@qantis.co',
+            'otherUsername' => UserStory::DEFAULT_USER,
         ],
     ])
     ->group('accounts');

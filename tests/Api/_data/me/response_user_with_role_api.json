@@ -1,45 +1,42 @@
 {
-  "@context": "/api/contexts/User",
-  "@id": "/api/users/@uuid@",
-  "@type": "User",
-  "email": "gsm@qantis.co",
-  "roles": ["ROLE_USER"],
-  "username": "gsm@qantis.co",
-  "firstName": "Gaëtan",
-  "lastName": "DE SAINTE MARIE",
-  "enabled": true,
+  "email": "api_user@qantis.co",
+  "roles": [
+    "ROLE_API",
+    "ROLE_USER"
+  ],
+  "username": "api_user",
+  "firstName": "Api",
+  "lastName": "User",
   "account": {
-    "@id": "/api/accounts/@uuid@",
-    "@type": "Account",
     "id": "@uuid@",
-    "upplerUserId": 113,
     "lastConnexion": "@datetime@",
+    "user": {
+      "email": "test@qantis.co",
+      "roles": [
+        "ROLE_USER"
+      ],
+      "username": "test@qantis.co",
+      "firstName": "@string@",
+      "lastName": "@string@"
+    },
     "adherent": {
-      "@id": "/api/adherents/@uuid@",
-      "@type": "Adherent",
-      "reducceCode": "KKT26DIB",
-      "logo": null
+      "reducceCode": "KKT26DIB"
     },
     "acceptCGU": true,
-    "phone": "04 05 06 07 08",
-    "enabled": true
-  },
-  "userInfoUpdateRequests": [],
-  "externalApiData": {
     "subaccount": {
       "id": 23,
-      "email": "gsm@qantis.co",
-      "lastname": "DE SAINTE MARIE",
-      "firstname": "Ga\u00ebtan",
+      "email": "test@qantis.co",
+      "lastname": "@string@",
+      "firstname": "@string@",
       "shipping_address": 622,
       "billing_address": 622
     },
     "buyer": {
       "id": 72,
       "name": "GROUPE QANTIS",
-      "description": [],
+      "description": {},
       "avatar": null,
-      "avatar_url": "https://uppler-platform-quantis.s3.eu-west-3.amazonaws.com/image/",
+      "avatar_url": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/",
       "vat": null,
       "phone": null,
       "default_address": {
@@ -92,4 +89,5 @@
       "company_subordinations": []
     }
   }
+
 }

@@ -6,31 +6,12 @@ namespace App\DataFixtures\Factory;
 
 use App\DataFixtures\Factory\Trait\BeforeInstantiateTrait;
 use App\Entity\LogAutoLoginError;
-use App\Repository\LogAutoLoginErrorRepository;
-use Zenstruck\Foundry\ModelFactory;
-use Zenstruck\Foundry\Proxy;
-use Zenstruck\Foundry\RepositoryProxy;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends ModelFactory<LogAutoLoginError>
- *
- * @method        LogAutoLoginError|Proxy                     create(array|callable $attributes = [])
- * @method static LogAutoLoginError|Proxy                     createOne(array $attributes = [])
- * @method static LogAutoLoginError|Proxy                     find(object|array|mixed $criteria)
- * @method static LogAutoLoginError|Proxy                     findOrCreate(array $attributes)
- * @method static LogAutoLoginError|Proxy                     first(string $sortedField = 'id')
- * @method static LogAutoLoginError|Proxy                     last(string $sortedField = 'id')
- * @method static LogAutoLoginError|Proxy                     random(array $attributes = [])
- * @method static LogAutoLoginError|Proxy                     randomOrCreate(array $attributes = [])
- * @method static LogAutoLoginErrorRepository|RepositoryProxy repository()
- * @method static LogAutoLoginError[]|Proxy[]                 all()
- * @method static LogAutoLoginError[]|Proxy[]                 createMany(int $number, array|callable $attributes = [])
- * @method static LogAutoLoginError[]|Proxy[]                 createSequence(iterable|callable $sequence)
- * @method static LogAutoLoginError[]|Proxy[]                 findBy(array $attributes)
- * @method static LogAutoLoginError[]|Proxy[]                 randomRange(int $min, int $max, array $attributes = [])
- * @method static LogAutoLoginError[]|Proxy[]                 randomSet(int $number, array $attributes = [])
+ * @extends PersistentObjectFactory<LogAutoLoginError>
  */
-final class LogAutoLoginErrorFactory extends ModelFactory
+final class LogAutoLoginErrorFactory extends PersistentObjectFactory
 {
     use BeforeInstantiateTrait;
 
@@ -43,7 +24,12 @@ final class LogAutoLoginErrorFactory extends ModelFactory
         parent::__construct();
     }
 
-    protected function getDefaults(): array
+    public static function class(): string
+    {
+        return LogAutoLoginError::class;
+    }
+
+    protected function defaults(): array
     {
         return [
             'createdAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
@@ -53,13 +39,8 @@ final class LogAutoLoginErrorFactory extends ModelFactory
         ];
     }
 
-    protected function initialize(): self
+    protected function initialize(): static
     {
         return $this;
-    }
-
-    protected static function getClass(): string
-    {
-        return LogAutoLoginError::class;
     }
 }

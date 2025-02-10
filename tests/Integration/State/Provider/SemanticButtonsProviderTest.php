@@ -22,7 +22,7 @@ use Zenstruck\Foundry\Test\ResetDatabase;
     ]);
 
     $channelContext = Mockery::mock(ChannelContext::class);
-    $channelContext->shouldReceive('getChannel')->once()->andReturn($channel->object());
+    $channelContext->shouldReceive('getChannel')->once()->andReturn($channel);
 
     $semanticButtonProvider = new SemanticButtonsProvider(
         $semanticButtonFactory,

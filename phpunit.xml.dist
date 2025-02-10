@@ -6,7 +6,7 @@
          backupGlobals="false"
          colors="true"
          bootstrap="tests/bootstrap.php"
-         convertDeprecationsToExceptions="false"
+         resolveDependencies="false"
 >
   <php>
     <ini name="display_errors" value="1"/>
@@ -26,8 +26,8 @@
       <directory>tests/Unit</directory>
     </testsuite>
 
-    <testsuite name="feature">
-      <directory>tests/Feature</directory>
+    <testsuite name="api">
+      <directory>tests/Api</directory>
     </testsuite>
 
     <testsuite name="integration">
@@ -35,15 +35,18 @@
     </testsuite>
   </testsuites>
 
-  <coverage processUncoveredFiles="true">
+  <source>
     <include>
-      <directory suffix=".php">./src/</directory>
+      <directory>./src/Service</directory>
+      <directory>./src/Command</directory>
+      <directory>./src/Controller</directory>
+      <directory>./src/State</directory>
+      <directory>./src/Filter</directory>
+      <directory>./src/Helper</directory>
+      <directory>./src/Security</directory>
+      <directory>./src/Utils</directory>
     </include>
-  </coverage>
-
-  <listeners>
-    <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
-  </listeners>
+  </source>
 
   <extensions>
   </extensions>

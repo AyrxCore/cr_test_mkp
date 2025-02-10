@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Feature\Helper;
+namespace App\Tests\Api\Helper;
 
 class JsonHelper
 {

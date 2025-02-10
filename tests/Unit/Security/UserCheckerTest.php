@@ -16,8 +16,8 @@ use Symfony\Component\Security\Core\Exception\CustomUserMessageAccountStatusExce
         ->create();
 
     $userChecker = new UserChecker();
-    $userChecker->checkPreAuth($user->object());
-    $userChecker->checkPostAuth($user->object());
+    $userChecker->checkPreAuth($user);
+    $userChecker->checkPostAuth($user);
 })
     ->throws(CustomUserMessageAccountStatusException::class, 'user_disabled');
 
@@ -32,8 +32,8 @@ use Symfony\Component\Security\Core\Exception\CustomUserMessageAccountStatusExce
         ->create();
 
     $userChecker = new UserChecker();
-    $userChecker->checkPreAuth($user->object());
-    $userChecker->checkPostAuth($user->object());
+    $userChecker->checkPreAuth($user);
+    $userChecker->checkPostAuth($user);
 });
 
 \it('throws an exception if user has no account', function () {
@@ -44,8 +44,8 @@ use Symfony\Component\Security\Core\Exception\CustomUserMessageAccountStatusExce
         ->create();
 
     $userChecker = new UserChecker();
-    $userChecker->checkPreAuth($user->object());
-    $userChecker->checkPostAuth($user->object());
+    $userChecker->checkPreAuth($user);
+    $userChecker->checkPostAuth($user);
 })
     ->throws(CustomUserMessageAccountStatusException::class, 'user_empty_account');
 
@@ -59,11 +59,11 @@ use Symfony\Component\Security\Core\Exception\CustomUserMessageAccountStatusExce
     ])
         ->withoutPersisting()
         ->create();
-    $user->addAccount($account->object());
+    $user->addAccount($account);
 
     $userChecker = new UserChecker();
-    $userChecker->checkPreAuth($user->object());
-    $userChecker->checkPostAuth($user->object());
+    $userChecker->checkPreAuth($user);
+    $userChecker->checkPostAuth($user);
 })
     ->throws(CustomUserMessageAccountStatusException::class, 'user_empty_account');
 
@@ -77,11 +77,11 @@ use Symfony\Component\Security\Core\Exception\CustomUserMessageAccountStatusExce
     ])
         ->withoutPersisting()
         ->create();
-    $user->addAccount($account->object());
+    $user->addAccount($account);
 
     $userChecker = new UserChecker();
-    $userChecker->checkPreAuth($user->object());
-    $userChecker->checkPostAuth($user->object());
+    $userChecker->checkPreAuth($user);
+    $userChecker->checkPostAuth($user);
 })
     ->throws(CustomUserMessageAccountStatusException::class, 'user_disabled');
 
@@ -102,10 +102,10 @@ use Symfony\Component\Security\Core\Exception\CustomUserMessageAccountStatusExce
     ])
         ->withoutPersisting()
         ->create();
-    $user->addAccount($account->object());
-    $user->addAccount($account2->object());
+    $user->addAccount($account);
+    $user->addAccount($account2);
 
     $userChecker = new UserChecker();
-    $userChecker->checkPreAuth($user->object());
-    $userChecker->checkPostAuth($user->object());
+    $userChecker->checkPreAuth($user);
+    $userChecker->checkPostAuth($user);
 });

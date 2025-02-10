@@ -7,9 +7,9 @@ use App\Service\LogAutoLoginErrorService;
 use Faker\Factory;
 
 \it('creates and saves LogAutoLoginErrorCorrectly', function () {
-    $channelName = Factory::create()->word;
-    $email = Factory::create()->email;
-    $reason = Factory::create()->sentence;
+    $channelName = Factory::create()->word();
+    $email = Factory::create()->email();
+    $reason = Factory::create()->sentence();
 
     $logAutoLoginErrorRepository = Mockery::mock(LogAutoLoginErrorRepository::class);
     $logAutoLoginErrorRepository->shouldReceive('save')

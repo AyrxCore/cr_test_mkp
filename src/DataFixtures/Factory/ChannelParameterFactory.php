@@ -6,35 +6,21 @@ namespace App\DataFixtures\Factory;
 
 use App\DataFixtures\Factory\Trait\BeforeInstantiateTrait;
 use App\Entity\ChannelParameter;
-use App\Repository\ChannelParameterRepository;
-use Zenstruck\Foundry\ModelFactory;
-use Zenstruck\Foundry\Proxy;
-use Zenstruck\Foundry\RepositoryProxy;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends ModelFactory<ChannelParameter>
- *
- * @method        ChannelParameter|Proxy                     create(array|callable $attributes = [])
- * @method static ChannelParameter|Proxy                     createOne(array $attributes = [])
- * @method static ChannelParameter|Proxy                     find(object|array|mixed $criteria)
- * @method static ChannelParameter|Proxy                     findOrCreate(array $attributes)
- * @method static ChannelParameter|Proxy                     first(string $sortedField = 'id')
- * @method static ChannelParameter|Proxy                     last(string $sortedField = 'id')
- * @method static ChannelParameter|Proxy                     random(array $attributes = [])
- * @method static ChannelParameter|Proxy                     randomOrCreate(array $attributes = [])
- * @method static ChannelParameterRepository|RepositoryProxy repository()
- * @method static ChannelParameter[]|Proxy[]                 all()
- * @method static ChannelParameter[]|Proxy[]                 createMany(int $number, array|callable $attributes = [])
- * @method static ChannelParameter[]|Proxy[]                 createSequence(iterable|callable $sequence)
- * @method static ChannelParameter[]|Proxy[]                 findBy(array $attributes)
- * @method static ChannelParameter[]|Proxy[]                 randomRange(int $min, int $max, array $attributes = [])
- * @method static ChannelParameter[]|Proxy[]                 randomSet(int $number, array $attributes = [])
+ * @extends PersistentObjectFactory<ChannelParameter>
  */
-final class ChannelParameterFactory extends ModelFactory
+final class ChannelParameterFactory extends PersistentObjectFactory
 {
     use BeforeInstantiateTrait;
 
-    protected function getDefaults(): array
+    public static function class(): string
+    {
+        return ChannelParameter::class;
+    }
+
+    protected function defaults(): array
     {
         return [
             'logo' => self::faker()->imageUrl(width: 160, height: 60),
@@ -51,13 +37,8 @@ final class ChannelParameterFactory extends ModelFactory
         ];
     }
 
-    protected function initialize(): self
+    protected function initialize(): static
     {
         return $this->beforeInstantiate($this->convertIdAttributes());
-    }
-
-    protected static function getClass(): string
-    {
-        return ChannelParameter::class;
     }
 }

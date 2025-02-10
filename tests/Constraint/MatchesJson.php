@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Constraint;
 
-use App\Tests\Feature\Helper\JsonHelper;
+use App\Tests\Api\Helper\JsonHelper;
 use Coduo\PHPMatcher\PHPMatcher;
 use PHPUnit\Framework\Constraint\Constraint;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,9 +27,8 @@ final class MatchesJson extends Constraint
 
     /**
      * @param Response $response
-     * @noinspection PhpParameterNameChangedDuringInheritanceInspection
      *
-     * {@inheritdoc}
+     * @noinspection PhpParameterNameChangedDuringInheritanceInspection
      */
     protected function matches($response): bool
     {
@@ -38,9 +37,8 @@ final class MatchesJson extends Constraint
 
     /**
      * @param Response $response
-     * @noinspection PhpParameterNameChangedDuringInheritanceInspection
      *
-     * {@inheritdoc}
+     * @noinspection PhpParameterNameChangedDuringInheritanceInspection
      */
     protected function failureDescription($response): string
     {
@@ -49,9 +47,8 @@ final class MatchesJson extends Constraint
 
     /**
      * @param Response $response
-     * @noinspection PhpParameterNameChangedDuringInheritanceInspection
      *
-     * {@inheritdoc}
+     * @noinspection PhpParameterNameChangedDuringInheritanceInspection
      */
     protected function additionalFailureDescription($response): string
     {

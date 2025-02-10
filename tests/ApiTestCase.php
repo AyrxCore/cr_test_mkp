@@ -13,11 +13,16 @@ use App\Tests\Constraint\MatchesJson;
 use App\Tests\Story\Account\UserStory;
 use App\Tests\Story\Channel\ChannelParameterStory;
 use App\Tests\Story\Channel\ChannelStory;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class ApiTestCase extends ApiPlatformTestCase
 {
-    public const DEFAULT_USER_LOGIN = 'gsm@qantis.co';
-    private const DEFAULT_USER_PASSWORD = '23AP4DF8';
+    use Factories;
+    use ResetDatabase;
+
+    public const string DEFAULT_USER_LOGIN = 'gsm@qantis.co';
+    protected const string DEFAULT_USER_PASSWORD = '23AP4DF8';
 
     public function assertJsonResponseMatches($jsonFilePath, string $message = ''): void
     {
@@ -25,8 +30,8 @@ class ApiTestCase extends ApiPlatformTestCase
     }
 
     protected static function createClientWithCredentials(
-        string $username = self::DEFAULT_USER_LOGIN,
-        string $password = self::DEFAULT_USER_PASSWORD,
+        string $username = UserStory::DEFAULT_USER,
+        string $password = UserStory::DEFAULT_PASSWORD,
         string $channel = 'QANTIS_TEST',
     ): Client {
         // load dev fixtures
@@ -52,9 +57,9 @@ class ApiTestCase extends ApiPlatformTestCase
             return $client;
         }
 
-        // get the user's account matching current channel
-        $account = self::getUserFirstAccount($user->object(), $channel);
+        $accounts = $user->getAccounts();
 
+        $account = $accounts->first();
         if (!$account) {
             return $client;
         }
@@ -65,6 +70,7 @@ class ApiTestCase extends ApiPlatformTestCase
         return $client;
     }
 
+    // get the user's account matching current channel
     protected static function getUserFirstAccount(User $user, string $channel = 'QANTIS_TEST'): ?Account
     {
         // get the account matching the channel

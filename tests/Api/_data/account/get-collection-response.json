@@ -16,9 +16,9 @@
         "@id": "/api/users/@uuid@",
         "@type": "User",
         "id": "@uuid@",
-        "email": "gsm@qantis.co",
+        "email": "test@qantis.co",
         "roles": ["ROLE_USER"],
-        "username": "gsm@qantis.co",
+        "username": "test@qantis.co",
         "firstName": "Gaëtan",
         "lastName": "DE SAINTE MARIE",
         "enabled": true,
@@ -28,7 +28,8 @@
         "@id": "/api/adherents/@uuid@",
         "@type": "Adherent",
         "reducceCode": "KKT26DIB",
-        "logo": null
+        "adherentTarifShowcases": [],
+        "logo": "@string@"
       },
       "enabled": true,
       "acceptCGU": "@boolean@",

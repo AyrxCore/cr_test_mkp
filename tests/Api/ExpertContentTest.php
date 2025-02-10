@@ -19,7 +19,7 @@ declare(strict_types=1);
 
     $this->assertResponseStatusCodeSame(404);
 
-    $this->assertJsonContains(['hydra:description' => 'Not Found']);
+    $this->assertJsonContains(['hydra:description' => 'News with slug: wrong-slug does not exist']);
 })->group('expertContents');
 
 \it('gets expert content with slug', function () {
