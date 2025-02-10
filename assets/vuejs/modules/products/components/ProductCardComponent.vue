@@ -38,13 +38,13 @@
       <!-- Bloc image -->
       <div class="my-1 flex w-full items-center">
         <div
-          class="flex h-[200px] max-w-[200px] items-center justify-center rounded-lg sm:mx-auto"
+          class="mx-auto flex h-[200px] max-w-[200px] items-center justify-center rounded-lg"
         >
           <img
             v-if="product.images[0]"
             :alt="product.name"
             :src="getUpplerImage(product.images[0])"
-            class="flex cursor-pointer items-center lg:w-full lg:max-w-max"
+            class="flex h-full w-full cursor-pointer items-center object-contain lg:max-w-max"
             @click="goToProductPage"
           />
           <div

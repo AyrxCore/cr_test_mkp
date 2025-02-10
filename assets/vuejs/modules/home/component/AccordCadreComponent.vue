@@ -28,7 +28,7 @@
     <div class="flex h-full w-full flex-col items-center">
       <div class="my-1 flex w-full items-center">
         <div
-          class="flex h-[200px] max-w-[200px] items-center justify-center rounded-lg sm:mx-auto"
+          class="mx-auto flex h-[200px] max-w-[200px] items-center justify-center rounded-lg"
           @click="
             $emit('click-img', {
               partenaire_name: accord.seller.name,
