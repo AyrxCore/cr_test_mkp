@@ -6,7 +6,6 @@ namespace App\Service;
 
 use App\Entity\Account;
 use App\Entity\LogAccountConnection;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
@@ -18,7 +17,7 @@ class UpplerAuthenticationService extends AbstractUpplerService
     // Permet d'authentifier un user auprès d'Uppler
     public function authenticateUser(Account $account, bool $isConnectionLogged = true): bool
     {
-        $session = $this->requestStack->getSession();
+        $session = $this->getSession();
 
         $session->clear();
 
@@ -26,13 +25,13 @@ class UpplerAuthenticationService extends AbstractUpplerService
             return false;
         }
         // grâce aux paramètres de connexion déjà connus, on sollicite un accessToken pour ce user
-        $this->getUserToken($account);
+        $this->setUserToken($account);
 
         // si l'accessToken a été récupéré, il doit être en session,
         // si c'est le cas, on stocke aussi les infos du tokenUser
         if ($session->has('access_token') && !empty($session->get('access_token'))) {
-            if($isConnectionLogged) {
-                $account->setLastConnexion(new DateTime('now'));
+            if ($isConnectionLogged) {
+                $account->setLastConnexion(new \DateTime('now'));
                 $this->em->persist($account);
 
                 $log = new LogAccountConnection();
@@ -42,6 +41,7 @@ class UpplerAuthenticationService extends AbstractUpplerService
 
                 $this->em->flush();
             }
+
             return true;
         }
 

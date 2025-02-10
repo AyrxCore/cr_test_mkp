@@ -1,5 +1,5 @@
 monolog:
-    channels: ['api']
+    channels: ['api', 'UpplerApi']
     handlers:
         main:
             type: fingers_crossed
@@ -18,6 +18,11 @@ monolog:
             path: "%kernel.logs_dir%/api.log"
             level: error
             channels: [ "api" ]
+        upplerApi:
+          type: stream
+          path: php://stdout
+          level: debug
+          channels: [ "UpplerApi" ]
         console:
             type: console
             process_psr_3_messages: false

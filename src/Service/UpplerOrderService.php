@@ -22,23 +22,23 @@ class UpplerOrderService extends AbstractUpplerService
      * @throws ClientExceptionInterface
      * @throws \Exception
      */
-    public function getOrdersByUserId(int $userId): array|null
+    public function getOrdersByUserId(int $userId): array
     {
         try {
             $res = $this->request(
                 'GET',
                 'v1/buyer/order/?criteria[user]='.$userId.'&expand[]=buyer_user&criteria[type]=order',
             );
+
+            if ($res && $res->getStatusCode() === Response::HTTP_OK) {
+                return \json_decode($res->getContent(), true);
+            }
+
+            throw new NotFoundHttpException("Aucune commande n'a été trouvée");
         } catch (\Exception $exception) {
-            $this->apiLogger->error('Erreur :'.$exception->getMessage());
+            $this->upplerApiLogger->error('Erreur :'.$exception->getMessage());
             throw new \Exception('Une erreur est survenue lors du chargement des commandes, veuillez contacter les administrateurs du site');
         }
-
-        if ($res->getStatusCode() !== Response::HTTP_OK) {
-            throw new NotFoundHttpException("Aucune commande n'a été trouvée");
-        }
-
-        return \json_decode($res->getContent(), true);
     }
 
     /**
@@ -56,7 +56,7 @@ class UpplerOrderService extends AbstractUpplerService
         );
 
         if ($res && $res->getStatusCode() !== Response::HTTP_OK) {
-            $this->apiLogger->error($res->getStatusCode()." La commande avec l'ID: ".$orderId.' du User '.$userId." n'a pas été trouvée");
+            $this->upplerApiLogger->error($res->getStatusCode()." La commande avec l'ID: ".$orderId.' du User '.$userId." n'a pas été trouvée");
 
             throw new NotFoundHttpException("La commande avec l'ID ".$orderId." n'a pas été trouvée");
         }
@@ -78,7 +78,7 @@ class UpplerOrderService extends AbstractUpplerService
         );
 
         if ($res->getStatusCode() !== Response::HTTP_OK) {
-            $this->apiLogger->error($res->getStatusCode()." La facture avec l'ID:  $orderInvoiceId  n'a pas été trouvée");
+            $this->upplerApiLogger->error($res->getStatusCode()." La facture avec l'ID:  $orderInvoiceId  n'a pas été trouvée");
 
             throw new FileNotFoundException(" La facture avec l'ID:  $orderInvoiceId  n'a pas été trouvée");
         }

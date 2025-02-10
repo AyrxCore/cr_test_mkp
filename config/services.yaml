@@ -91,7 +91,7 @@ services:
         - setChannelRepository: ['@App\Repository\ChannelRepository']
 
     # SERVICES UPPLER
-    App\Service\AbstractUpplerService:
+    App\Service\UpplerHttpClientService:
       bind:
         $upplerEnv: '%uppler_env%'
         $adminClientId: '%uppler_admin_client_id%'

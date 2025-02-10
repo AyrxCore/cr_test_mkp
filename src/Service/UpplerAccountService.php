@@ -5,16 +5,13 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Dto\SubAccount;
-use App\Entity\Account;
 use Symfony\Component\HttpFoundation\Response;
 
 class UpplerAccountService extends AbstractUpplerService
 {
-    public function getUserSubAccountData(): object|null
+    public function getUserSubAccountData(): ?object
     {
-        $session = $this->requestStack->getSession();
-        /** @var Account $account */
-        $account = $session->get('account');
+        $account = $this->getAccount();
 
         $res = $this->request(
             'GET',

@@ -6,32 +6,21 @@ namespace App\Service;
 
 use App\Context\ChannelContext;
 use App\Dto\CartPaymentSepa;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class UpplerCartService extends AbstractUpplerService
 {
     public function __construct(
-        HttpClientInterface $upplerClient,
-        RequestStack $requestStack,
-        string $upplerEnv,
-        string $adminClientId,
-        string $adminClientSecret,
-        string $adminTokenFile,
-        string $httpCachePath,
+        protected UpplerHttpClientService $upplerClient,
+        protected LoggerInterface $upplerApiLogger,
         private readonly ChannelContext $channelContext,
     ) {
         parent::__construct(
             upplerClient: $upplerClient,
-            requestStack: $requestStack,
-            upplerEnv: $upplerEnv,
-            adminClientId: $adminClientId,
-            adminClientSecret: $adminClientSecret,
-            adminTokenFile: $adminTokenFile,
-            httpCachePath: $httpCachePath,
+            upplerApiLogger: $upplerApiLogger
         );
     }
 
@@ -111,6 +100,7 @@ class UpplerCartService extends AbstractUpplerService
                     ],
                 ],
             ],
+            addLog: true
         );
 
         if ($res->getStatusCode() !== Response::HTTP_NO_CONTENT) {
@@ -131,6 +121,7 @@ class UpplerCartService extends AbstractUpplerService
                     'billing_address' => $billingId,
                 ],
             ],
+            addLog: true
         );
 
         if ($res->getStatusCode() !== Response::HTTP_NO_CONTENT) {
@@ -146,6 +137,7 @@ class UpplerCartService extends AbstractUpplerService
             [
                 'json' => ['quantity' => $quantity],
             ],
+            addLog: true
         );
 
         if ($res->getStatusCode() !== Response::HTTP_NO_CONTENT) {
@@ -158,6 +150,7 @@ class UpplerCartService extends AbstractUpplerService
         $res = $this->request(
             'DELETE',
             'v1/buyer/order-item/'.$id,
+            addLog: true
         );
 
         if ($res->getStatusCode() !== Response::HTTP_NO_CONTENT) {
@@ -198,6 +191,7 @@ class UpplerCartService extends AbstractUpplerService
                     ],
                 ],
             ],
+            addLog: true
         );
 
         if ($res->getStatusCode() !== Response::HTTP_NO_CONTENT) {
@@ -232,6 +226,7 @@ class UpplerCartService extends AbstractUpplerService
                     'callback_url' => 'https://'.$hostname.'/api/buyer/cart/'.$cartId.'/confirm',
                 ],
             ],
+            addLog: true
         );
         if ($res && $res->getStatusCode() === Response::HTTP_OK) {
             return \json_decode($res->getContent(), true);
@@ -264,6 +259,7 @@ class UpplerCartService extends AbstractUpplerService
                     'error_callback_url' => 'https://'.$hostname.'/api/buyer/cart/'.$cartPaymentSepa->getId().'/confirm',
                 ]),
             ],
+            addLog: true
         );
         if ($res) {
             if ($res->getStatusCode() === Response::HTTP_OK) {
@@ -308,6 +304,7 @@ class UpplerCartService extends AbstractUpplerService
         $res = $this->request(
             'PATCH',
             'v1/buyer/cart/'.$cartId.'/confirm',
+            addLog: true
         );
 
         if ($res->getStatusCode() !== Response::HTTP_NO_CONTENT) {
