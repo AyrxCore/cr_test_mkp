@@ -17,11 +17,11 @@
                 id="login-email"
                 v-model.trim="username"
                 :disabled="isLoading"
+                autocomplete="username"
                 class="input !border-solid !border-black !py-1 !pr-16 !ring-black md:!py-2 xl:!py-4"
                 placeholder="Saisir votre adresse email professionnelle"
                 required
                 type="email"
-                autocomplete="username"
               />
               <span
                 class="absolute inset-y-0 right-0 flex items-center pr-8 text-gray-700"
@@ -35,10 +35,10 @@
                 v-model="password"
                 :disabled="isLoading"
                 :type="showPassword ? 'text' : 'password'"
+                autocomplete="current-password"
                 class="input !border-solid !border-black !py-1 !pr-16 !ring-black md:!py-2 xl:!py-4"
                 placeholder="**********"
                 required
-                autocomplete="current-password"
               />
               <span
                 class="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-6 pt-6 text-gray-500"
@@ -57,7 +57,7 @@
             >
               Mot de passe oublié ?
             </a>
-            <div class="mt-5 flex w-full justify-center lg:mt-10">
+            <div class="mt-5 flex w-full justify-center">
               <ButtonComponent
                 :is-loading="isLoading"
                 class="button-primary w-full font-bold md:w-1/2"
@@ -68,7 +68,7 @@
               </ButtonComponent>
             </div>
             <div
-              class="mb-2 mt-5 flex w-full flex-col items-center justify-center md:justify-start xl:!mt-10 xl:mb-3"
+              class="mb-2 mt-5 flex w-full flex-col items-center justify-center md:justify-start xl:mb-3"
             >
               <p
                 class="mx-auto mb-2 flex text-center text-xs text-gray-700 md:w-auto md:text-sm xl:mb-3 xl:text-left xl:text-base"

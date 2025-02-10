@@ -6,7 +6,7 @@
       {{ back_label is defined ? back_label : '' }}
     </a>
   {% endif %}
-  <div class="flex justify-center  mt-5 lg:mt-10">
+  <div class="flex justify-center mt-4">
     {% if channel is defined and channel.channelParameter.logo is defined %}
       <img class="max-h-[6rem] lg:max-h-32 object-contain" src="{{ channel.channelParameter.logo }}" alt="Logo">
     {% else %}
