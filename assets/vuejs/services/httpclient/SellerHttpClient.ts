@@ -1,10 +1,9 @@
 import BaseClientService from '@/vuejs/services/BaseClientService'
 import { Seller, SellerPromotion } from '@/vuejs/types/Seller'
 import { ProductCollection } from '@/vuejs/types/Product'
+
 export default class SellerHttpClient extends BaseClientService {
-  public fetchSellersByParams<T extends []>(
-    params,
-  ): Promise<ProductCollection> {
+  public fetchSellersByParams<T extends []>(params): Promise<Seller[]> {
     const queryString = Object.keys(params)
       .map((key) => {
         if (typeof params[key] === 'object') {
@@ -18,11 +17,9 @@ export default class SellerHttpClient extends BaseClientService {
         }
       })
       .join('&')
-    return this.apiClient
-      .get<T>(`sellers?${queryString}`)
-      .then((response) => {
-        return response.data
-      })
+    return this.apiClient.get<T>(`sellers?${queryString}`).then((response) => {
+      return response.data
+    })
   }
 
   public getSeller<T extends []>(id: number): Promise<Seller> {

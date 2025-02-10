@@ -39,7 +39,8 @@ export interface SellerPromotion {
 }
 
 export interface SellerStoreState {
-  sellers: Seller[]
+  allSellers: Seller[]
+  sellersByParams: Seller[]
   promotions: {
     [key: number]: SellerPromotion[]
   }
