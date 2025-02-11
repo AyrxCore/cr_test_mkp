@@ -143,7 +143,7 @@ onMounted(async (): Promise<void> => {
 })
 
 const seller = computed((): Seller => {
-  return sellerStore.sellers.find((e) => e.id === props.order.seller.id)
+  return sellerStore.allSellers.find((e) => e.id === props.order.seller.id)
 })
 
 const selectShippingMethod = async (): Promise<void> => {

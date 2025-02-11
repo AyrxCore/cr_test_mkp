@@ -93,7 +93,7 @@ const orderTermsOfSales = ref<boolean>(false)
 const showTos = ref<boolean>(false)
 
 const seller = computed((): Seller => {
-  return sellerStore.sellers.find((e) => e.id === props.order.seller.id)
+  return sellerStore.allSellers.find((e) => e.id === props.order.seller.id)
 })
 
 onMounted(async (): Promise<void> => {

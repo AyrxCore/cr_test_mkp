@@ -59,8 +59,8 @@ export const useSellerStore = defineStore({
       }
     },
     async getSeller(id: number): Promise<void> {
-      if (this.sellers.find((e: Seller) => e.id === id)) return
-      this.sellers.push(await SellerHttpClient.get().getSeller(id))
+      if (this.allSellers.find((e: Seller) => e.id === id)) return
+      this.allSellers.push(await SellerHttpClient.get().getSeller(id))
     },
     async getSellerPromotions(sellerId: number): Promise<void> {
       if (this.promotions[sellerId]) return
