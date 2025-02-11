@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\Account;
 use Symfony\Component\HttpFoundation\Response;
 
 class UpplerBuyerCompanyService extends AbstractUpplerService
@@ -11,7 +12,7 @@ class UpplerBuyerCompanyService extends AbstractUpplerService
     // filters : filtres disponibles pour étendre la quantité d'informations retournées
     // Valeurs possibles ("accounts","files","subscriptions","dynamicFields")
     // https://app.preprod-yousg3q-qbpekzlwwankw.fr-3.platformsh.site/api-documentation/operator#section-Company
-    public function getBuyerByCompanyId(int $id, array $filters = []): ?object
+    public function getBuyerByCompanyId(int $id, array $filters = []): object|null
     {
         $urlFilters = null;
 
@@ -49,9 +50,11 @@ class UpplerBuyerCompanyService extends AbstractUpplerService
         return $mandates;
     }
 
-    public function getUserBuyerData(): ?object
+    public function getUserBuyerData(): object|null
     {
-        $account = $this->getAccount();
+        $session = $this->requestStack->getSession();
+        /** @var Account $account */
+        $account = $session->get('account');
         $res = $this->request(
             'GET',
             'v1/buyer/profile/'.$account->getUpplerCompanyId().'?expand[]=address'
