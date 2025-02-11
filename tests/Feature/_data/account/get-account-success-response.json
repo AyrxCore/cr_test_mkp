@@ -11,8 +11,8 @@
     "@id": "\/api\/users\/@uuid@",
     "@type": "User",
     "id": "@uuid@",
-    "email": "test@qantis.co",
-    "username": "test@qantis.co",
+    "email": "gsm@qantis.co",
+    "username": "gsm@qantis.co",
     "firstName": "Gaëtan",
     "lastName": "DE SAINTE MARIE",
     "enabled": true

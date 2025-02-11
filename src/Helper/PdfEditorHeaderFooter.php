@@ -11,7 +11,6 @@ use setasign\Fpdi\PdfParser\PdfParserException;
 use setasign\Fpdi\PdfParser\StreamReader;
 use setasign\Fpdi\PdfParser\Type\PdfTypeException;
 use setasign\Fpdi\PdfReader\PdfReaderException;
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
 class PdfEditorHeaderFooter
 {
@@ -63,9 +62,6 @@ class PdfEditorHeaderFooter
      */
     private function getPdfContent(string $path): StreamReader|string
     {
-        if (!\file_exists($path)) {
-            throw new FileNotFoundException();
-        }
         if (\filter_var($path, \FILTER_VALIDATE_URL)) {
             if (!$pdfContent = @\file_get_contents($path)) {
                 throw new \Exception('Le fichier PDF est introuvable. Veuillez contacter votre administrateur.');

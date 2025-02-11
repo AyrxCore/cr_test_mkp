@@ -18,7 +18,7 @@ final class AuthenticationStory extends Story
     {
         UserStory::load();
 
-        $users = UserFactory::new()
+        UserFactory::new()
             ->sequence([
                 [
                     'email' => 'test_role_api_user_disabled@qantis.co',
@@ -46,12 +46,10 @@ final class AuthenticationStory extends Story
                     'lastName' => 'TEST',
                     'enabled' => true,
                     'accounts' => [
+                        AccountFactory::new(),
                     ],
                 ],
             ])
             ->create();
-        AccountFactory::createOne([
-            'user' => $users[2],
-        ]);
     }
 }

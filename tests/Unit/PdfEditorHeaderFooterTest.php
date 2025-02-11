@@ -3,11 +3,10 @@
 declare(strict_types=1);
 
 use App\Helper\PdfEditorHeaderFooter;
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
 \beforeEach(function () {
-    $this->pdfFilePath = 'tests/Resources/peugeot-conditions-negociees.pdf';
-    $this->headerLogoPath = 'tests/Resources/logo-qantis-test.png';
+    $this->pdfFilePath = 'tests/Files/peugeot-conditions-negociees.pdf';
+    $this->headerLogoPath = 'tests/Files/logo-qantis-test.png';
     $this->footerText = 'Footer Text';
 });
 
@@ -18,9 +17,9 @@ use Symfony\Component\Filesystem\Exception\FileNotFoundException;
     $this->expect($pdfContent)->toBeString();
 })->group('PdfEditorHeaderFooter');
 
-\it('should handle not exist invalid PDF file path', function () {
+\it('should handle invalid PDF file path', function () {
     $pdfEditor = new PdfEditorHeaderFooter('invalid.pdf', $this->headerLogoPath, $this->footerText);
 
-    $this->expectException(FileNotFoundException::class);
+    $this->expectException(\Exception::class);
     $pdfEditor->savePDF();
 })->group('PdfEditorHeaderFooter');

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 use App\DataFixtures\Factory\UserFactory;
 use App\Entity\LogAutoLoginError;
-use App\Tests\Story\Account\UserStory;
+use App\Tests\ApiTestCase;
 use App\Tests\Story\LogAutoLoginError\LogAutoLoginErrorStory;
 
 \beforeEach(function () {
     $this->client = $this->createClientWithCredentials();
     $this->user = UserFactory::find([
-        'username' => UserStory::DEFAULT_USER,
+        'username' => ApiTestCase::DEFAULT_USER_LOGIN,
     ]);
 });
 \it('access forbidden if didn\'t have ROLE_API', function () {

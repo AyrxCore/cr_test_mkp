@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\DataFixtures\Factory\UserFactory;
-use App\Tests\Story\Account\UserStory;
+use App\DataFixtures\Story\UserStory;
 use App\Tests\Story\Authentication\AuthenticationStory;
 use Symfony\Component\HttpFoundation\Cookie;
 
@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Cookie;
     $expectedStatusCode,
     $expectedRoles,
     $expectedResponse = null,
-    $channel = 'QANTIS_TEST',
+    $channel = 'QANTIS_ACHAT',
 ) {
     // load dev fixtures
     UserStory::load();
@@ -47,7 +47,7 @@ use Symfony\Component\HttpFoundation\Cookie;
         ]);
 
     if (!\in_array('ROLE_API', $expectedRoles, true)) {
-        $user = UserFactory::find(['username' => $username]);
+        $user = UserFactory::find(['username' => $username])->object();
         $account = $this::getUserFirstAccount($user, $channel);
         $this->assertNotNull($account);
         // Select an account to initialize the session
@@ -64,7 +64,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 })
     ->with([
         'user with ROLE_USER' => [
-            'username' => 'test@qantis.co',
+            'username' => 'gsm@qantis.co',
             'password' => '23AP4DF8',
             'expectedStatusCode' => 204,
             'roles' => ['ROLE_USER'],
@@ -103,7 +103,7 @@ use Symfony\Component\HttpFoundation\Cookie;
             'error_message' => 'Identifiants invalides.',
         ],
         'wrong password' => [
-            'username' => 'test@qantis.co',
+            'username' => 'gsm@qantis.co',
             'password' => 'wrong_password',
             'error_message' => 'Identifiants invalides.',
         ],

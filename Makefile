@@ -63,11 +63,6 @@ exec: ## Execute command in container: make exec SERVICE COMMAND [ARGS...]
 logs: ## Displays container logs: make logs SERVICE
 	APP_ENV=$(APP_ENV) APP_DEBUG=$(APP_DEBUG) $(dc) logs -f --tail 100 $(args)
 
-php-bash:
-	docker exec -it marketplace-php-1 bash
-
-node-bash:
-	docker exec -it marketplace-js-1 sh
 ##
 ## App
 
@@ -136,9 +131,7 @@ build-front: ## Build front environment
 ##
 ## Tests
 
-.PHONY: test
-all-tests:
-	$(dc_exec) php vendor/bin/pest
+test: test-unit test-feature ## Run feature and unit tests
 
 test-file: ## Run tests on a single file (ex: make test-file tests/Feature/AuthenticationTest.php)
 	$(dc_exec) php vendor/bin/pest $(args) || true
@@ -146,29 +139,17 @@ test-file: ## Run tests on a single file (ex: make test-file tests/Feature/Authe
 test-filter: ## Run tests by filtering on the case name (ex: make test-filter "authenticates a user")
 	$(dc_exec) php vendor/bin/pest --filter "$(args)" || true
 
-group-tests: ## Run tests on groups (ex: make test-group "authentication,accounts")
+test-group: ## Run tests on groups (ex: make test-group "authentication,accounts")
 	$(dc_exec) php vendor/bin/pest --group=$(args) || true
 
-unit-tests: ## Run unit tests
+test-unit: ## Run unit tests
 	$(dc_exec) php vendor/bin/pest --testsuite unit
 
-integration-tests: ## Run unit tests
-	$(dc_exec) php vendor/bin/pest --testsuite integration
+test-feature: ## Run feature tests
+	$(dc_exec) php vendor/bin/pest --testsuite feature
 
-api-tests: ## Run unit tests
-	$(dc_exec) php vendor/bin/pest --testsuite api
-
-coverage-report:
+coverage-html:
 	$(dc_exec) php vendor/bin/pest --coverage-html=var/coverage/ && xdg-open var/coverage/index.html
-
-#Run cache clear
-cache-clear:
-	$(dc_exec) php bin/console cache:clear
-
-#Run cache clear test
-cache-clear-test:
-	$(dc_exec) php bin/console cache:clear -e test
-
 
 ##
 ## Coding standards

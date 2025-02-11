@@ -6,7 +6,7 @@ namespace App\Tests;
 
 use App\Dto\Banner;
 use App\Dto\ExpertContent;
-use App\Tests\Api\Helper\JsonHelper;
+use App\Tests\Feature\Helper\JsonHelper;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -54,7 +54,7 @@ class MockClientCallback
             ));
         }
 
-        return new MockResponse();
+        return new MockResponse(null);
     }
 
     private function getProductsResponse(array $options): MockResponse
@@ -82,6 +82,6 @@ class MockClientCallback
             return new MockResponse(JsonHelper::parseJsonDataFile(\sprintf('%sbanner.json', $basePath)));
         }
 
-        return new MockResponse();
+        return new MockResponse(null);
     }
 }

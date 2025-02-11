@@ -5,19 +5,33 @@ declare(strict_types=1);
 namespace App\DataFixtures\Factory;
 
 use App\Entity\Account;
-use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
+use App\Repository\AccountRepository;
+use Zenstruck\Foundry\ModelFactory;
+use Zenstruck\Foundry\Proxy;
+use Zenstruck\Foundry\RepositoryProxy;
 
 /**
- * @extends PersistentObjectFactory<Account>
+ * @extends ModelFactory<Account>
+ *
+ * @method        Account|Proxy                     create(array|callable $attributes = [])
+ * @method static Account|Proxy                     createOne(array $attributes = [])
+ * @method static Account|Proxy                     find(object|array|mixed $criteria)
+ * @method static Account|Proxy                     findOrCreate(array $attributes)
+ * @method static Account|Proxy                     first(string $sortedField = 'id')
+ * @method static Account|Proxy                     last(string $sortedField = 'id')
+ * @method static Account|Proxy                     random(array $attributes = [])
+ * @method static Account|Proxy                     randomOrCreate(array $attributes = [])
+ * @method static AccountRepository|RepositoryProxy repository()
+ * @method static Account[]|Proxy[]                 all()
+ * @method static Account[]|Proxy[]                 createMany(int $number, array|callable $attributes = [])
+ * @method static Account[]|Proxy[]                 createSequence(iterable|callable $sequence)
+ * @method static Account[]|Proxy[]                 findBy(array $attributes)
+ * @method static Account[]|Proxy[]                 randomRange(int $min, int $max, array $attributes = [])
+ * @method static Account[]|Proxy[]                 randomSet(int $number, array $attributes = [])
  */
-final class AccountFactory extends PersistentObjectFactory
+final class AccountFactory extends ModelFactory
 {
-    public static function class(): string
-    {
-        return Account::class;
-    }
-
-    protected function defaults(): array
+    protected function getDefaults(): array
     {
         return [
             'acceptCGU' => self::faker()->boolean(),
@@ -35,8 +49,13 @@ final class AccountFactory extends PersistentObjectFactory
         ];
     }
 
-    protected function initialize(): static
+    protected function initialize(): self
     {
         return $this;
+    }
+
+    protected static function getClass(): string
+    {
+        return Account::class;
     }
 }

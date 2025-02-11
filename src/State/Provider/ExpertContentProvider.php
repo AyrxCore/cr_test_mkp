@@ -28,12 +28,12 @@ readonly class ExpertContentProvider implements ProviderInterface
             return $this->expertContentFactory->createAndAddToCollection($dynamicsEntities);
         }
 
-        try {
-            $dynamicsEntities = $this->upplerDynamicEntityService->getDynamicsEntities(['dynamic_fields'], ['slug' => $uriVariables['slug'], 'enabled' => '1']);
+        $dynamicsEntities = $this->upplerDynamicEntityService->getDynamicsEntities(['dynamic_fields'], ['slug' => $uriVariables['slug'], 'enabled' => '1']);
 
-            return $this->expertContentFactory->create($dynamicsEntities[0]);
-        } catch (\Throwable $exception) {
+        if (empty($dynamicsEntities)) {
             throw new NotFoundHttpException(\sprintf('News with slug: %s does not exist', $uriVariables['slug']));
         }
+
+        return $this->expertContentFactory->create($dynamicsEntities[0]);
     }
 }

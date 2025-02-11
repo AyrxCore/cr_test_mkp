@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\DataFixtures\Factory\UserFactory;
-use App\Tests\Story\Account\UserStory;
 
 \it('returns 404 error when trying to get a non-existing adherent', function () {
     $client = $this::createClientWithCredentials();
@@ -14,10 +13,24 @@ use App\Tests\Story\Account\UserStory;
     $this->assertJsonContains(['hydra:description' => 'Adherent not found']);
 })->group('adherents');
 
+\it('returns 400 error when trying to get an adherent on a non-existing channel', function () {
+    $badChannel = 'BAD-CHANNEL';
+    $client = $this::createClientWithCredentials(channel: $badChannel);
+
+    $user = UserFactory::find(['username' => $this::DEFAULT_USER_LOGIN]);
+    $accounts = $user->getAccounts();
+    $adherentId = $accounts->first()->getAdherent()->getId();
+
+    $client->request('GET', \sprintf('/api/adherents/%s', $adherentId));
+
+    $this->assertResponseStatusCodeSame(400);
+    $this->assertJsonContains(['hydra:description' => \sprintf('No such channel "%s".', $badChannel)]);
+})->group('adherents');
+
 \it('returns 403 error when trying to get an adherent on a channel where he has no access', function () {
     $client = $this::createClientWithCredentials();
 
-    $user = UserFactory::find(['username' => 'gsm@qantis.co']);
+    $user = UserFactory::find(['username' => $this::DEFAULT_USER_LOGIN]);
     $accounts = $user->getAccounts();
     $adherentId = $accounts->first()->getAdherent()->getId();
 
@@ -28,9 +41,9 @@ use App\Tests\Story\Account\UserStory;
 })->group('adherents');
 
 \it('gets an adherent on a existing channel', function () {
-    $client = $this::createClientWithCredentials();
+    $client = $this::createClientWithCredentials(channel: 'QANTIS_ACHAT');
 
-    $user = UserFactory::find(['username' => UserStory::DEFAULT_USER]);
+    $user = UserFactory::find(['username' => $this::DEFAULT_USER_LOGIN]);
     $accounts = $user->getAccounts();
     $adherentId = $accounts->first()->getAdherent()->getId();
 
