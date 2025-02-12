@@ -21,9 +21,12 @@ readonly class BannerProvider implements ProviderInterface
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
+        $dynamicEntityConfigurationId = Banner::DYNAMIC_CONFIG_ID;
+
         $entitiesBanner = $this->upplerDynamicEntityService->getDynamicsEntities(
             ['dynamic_fields'],
-            ['dynamic_entity_configuration_id' => Banner::DYNAMIC_CONFIG_ID, 'enabled' => 1]
+            [],
+            (string) $dynamicEntityConfigurationId
         );
 
         if (!empty($entitiesBanner[0])) {

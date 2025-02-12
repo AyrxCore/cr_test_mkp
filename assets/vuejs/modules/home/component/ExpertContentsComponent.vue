@@ -67,13 +67,14 @@
 
 <script lang="ts" setup>
 import { SwiperSlide } from 'swiper/vue'
-import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
 import { PageList } from '@/vuejs/router'
-
+import { PropType } from 'vue'
+import { ExpertContent } from '@/vuejs/types/ExpertContent'
+import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
 const props = defineProps({
   contents: {
     required: true,
-    type: Array,
+    type: Array as PropType<ExpertContent[]>,
   },
 })
 </script>

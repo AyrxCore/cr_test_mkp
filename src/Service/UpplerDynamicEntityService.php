@@ -11,71 +11,105 @@ class UpplerDynamicEntityService extends AbstractUpplerService
 {
     public function getDynamicsEntitiesCategories(array $expands = []): array
     {
-        $path = 'v1/administrator/dynamic-field-configuration';
-
-        if (!empty($expands)) {
-            foreach ($expands as $expand) {
-                $path .= \sprintf('&expand[]=%s', $expand);
-            }
-        }
-
-        $res = $this->request(
+        $path = $this->buildCategoriesPath($expands);
+        $response = $this->request(
             method: 'GET',
             path: $path,
             isAdmin: true
         );
 
-        if ($res->getStatusCode() !== Response::HTTP_OK && $res->getStatusCode() !== Response::HTTP_PARTIAL_CONTENT) {
-            throw new NotFoundHttpException('Not found');
+        $this->validateResponse($response);
+        $dynamicsFields = \json_decode($response->getContent(), true);
+
+        return $this->processCategoriesData($dynamicsFields);
+    }
+
+    public function getDynamicsEntities(
+        array $expands = [],
+        array $criteria = [],
+        ?string $dynamicEntityConfigurationId = null
+    ): array {
+        $path = $this->buildEntitiesPath($dynamicEntityConfigurationId, $expands, $criteria);
+
+        $response = $this->request(
+            method: 'GET',
+            path: $path
+        );
+
+        $this->validateResponse($response);
+
+        return \json_decode($response->getContent(), true);
+    }
+
+    private function buildCategoriesPath(array $expands): string
+    {
+        $path = 'v1/administrator/dynamic-field-configuration';
+
+        foreach ($expands as $expand) {
+            $path .= \sprintf('&expand[]=%s', \urlencode($expand));
         }
 
-        $dynamicsFields = \json_decode($res->getContent(), true);
+        return $path;
+    }
 
+    private function buildEntitiesPath(
+        ?string $dynamicEntityConfigurationId,
+        array $expands,
+        array $criteria
+    ): string {
+        $path = 'v1/buyer/dynamic-entity-configuration';
+
+        if ($dynamicEntityConfigurationId) {
+            $path .= "/{$dynamicEntityConfigurationId}/entities";
+        }
+
+        $path .= '?sorting[created_at]=DESC';
+
+        foreach ($expands as $expand) {
+            $path .= \sprintf('&expand[]=%s', \urlencode($expand));
+        }
+
+        foreach ($criteria as $key => $value) {
+            $path .= \sprintf('&criteria[%s]=%s', \urlencode($key), \urlencode($value));
+        }
+
+        return $path;
+    }
+
+    private function validateResponse($response): void
+    {
+        if (!$response || !\in_array($response->getStatusCode(), [Response::HTTP_OK, Response::HTTP_PARTIAL_CONTENT], true)) {
+            throw new NotFoundHttpException('Not Found');
+        }
+    }
+
+    private function processCategoriesData(array $dynamicsFields): array
+    {
         $data = [];
-        // Cet appel API nous retourne une liste de données
-        // mais nous n'avons besoin des propriétés category_name et category_color pour construire la liste des catégories
+
         foreach ($dynamicsFields as $dynamicField) {
             if ($dynamicField['name']['fr'] === 'category_name') {
-                foreach ($dynamicField['dynamic_field_choice'] as $key => $choice) {
-                    $data[$key]['id'][] = $key;
-                    $data[$key]['name'][] = $choice['value'];
-                }
+                $this->processCategoryNames($data, $dynamicField);
             } elseif ($dynamicField['name']['fr'] === 'category_color') {
-                foreach ($dynamicField['dynamic_field_choice'] as $key => $choice) {
-                    $data[$key]['color'][] = $choice['value'];
-                }
+                $this->processCategoryColors($data, $dynamicField);
             }
         }
 
         return $data;
     }
 
-    public function getDynamicsEntities(array $expands = [], array $criteria = []): array
+    private function processCategoryNames(array &$data, array $dynamicField): void
     {
-        $path = 'v1/administrator/dynamic-entity?sorting[created_at]=DESC';
-
-        if (!empty($expands)) {
-            foreach ($expands as $expand) {
-                $path .= \sprintf('&expand[]=%s', $expand);
-            }
+        foreach ($dynamicField['dynamic_field_choice'] as $key => $choice) {
+            $data[$key]['id'][] = $key;
+            $data[$key]['name'][] = $choice['value'];
         }
+    }
 
-        if (!empty($criteria)) {
-            foreach ($criteria as $key => $value) {
-                $path .= \sprintf('&criteria[%s]=%s', $key, $value);
-            }
+    private function processCategoryColors(array &$data, array $dynamicField): void
+    {
+        foreach ($dynamicField['dynamic_field_choice'] as $key => $choice) {
+            $data[$key]['color'][] = $choice['value'];
         }
-
-        $res = $this->request(
-            method: 'GET',
-            path: $path,
-            isAdmin: true
-        );
-
-        if (!$res || $res->getStatusCode() !== Response::HTTP_OK && $res->getStatusCode() !== Response::HTTP_PARTIAL_CONTENT) {
-            throw new NotFoundHttpException('Not Found');
-        }
-
-        return \json_decode($res->getContent(), true);
     }
 }

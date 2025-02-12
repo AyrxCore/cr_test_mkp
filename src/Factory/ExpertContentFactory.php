@@ -13,7 +13,6 @@ class ExpertContentFactory extends AbstractFactory
     {
         $expertContentCached = $this->cache->getItem(\sprintf('expert_content_%d', $data['id']));
         if (!$expertContentCached->isHit()) {
-            $urlImg = 'https://uppler-platform-quantis.s3.eu-west-3.amazonaws.com/image/';
             $id = $data['id'];
             $slug = $data['slug'];
 
@@ -30,7 +29,7 @@ class ExpertContentFactory extends AbstractFactory
                             throw new NotFoundHttpException('mise_en_avant_homepage_img_desktop img is empty');
                         }
 
-                        $expertContent->setMiseEnAvantHomepageImgDesktop($urlImg.$dynamicField['images'][0]['path']);
+                        $expertContent->setMiseEnAvantHomepageImgDesktop($dynamicField['images'][0]['url']);
                         break;
 
                     case 'mise_en_avant_homepage_img_mobile':
@@ -38,34 +37,34 @@ class ExpertContentFactory extends AbstractFactory
                             throw new NotFoundHttpException('mise_en_avant_homepage_img_mobile img is empty');
                         }
 
-                        $expertContent->setMiseEnAvantHomepageImgMobile($urlImg.$dynamicField['images'][0]['path']);
+                        $expertContent->setMiseEnAvantHomepageImgMobile($dynamicField['images'][0]['url']);
                         break;
 
                     case 'page_actus_img_desktop':
                         if (\count($dynamicField['images']) !== 1) {
                             throw new NotFoundHttpException('page_actus_img_desktop img is empty');
                         }
-                        $expertContent->setPageActusImgDesktop($urlImg.$dynamicField['images'][0]['path']);
+                        $expertContent->setPageActusImgDesktop($dynamicField['images'][0]['url']);
                         break;
 
                     case 'page_actus_img_mobile':
                         if (\count($dynamicField['images']) !== 1) {
                             throw new NotFoundHttpException('page_actus_img_mobile img is empty');
                         }
-                        $expertContent->setPageActusImgMobile($urlImg.$dynamicField['images'][0]['path']);
+                        $expertContent->setPageActusImgMobile($dynamicField['images'][0]['url']);
 
                         break;
 
                     case 'slider_img_desktop':
                         if (\count($dynamicField['images']) === 1) {
-                            $expertContent->setSliderImgDesktop($urlImg.$dynamicField['images'][0]['path']);
+                            $expertContent->setSliderImgDesktop($dynamicField['images'][0]['url']);
                         }
 
                         break;
 
                     case 'slider_img_mobile':
                         if (\count($dynamicField['images']) === 1) {
-                            $expertContent->setSliderImgMobile($urlImg.$dynamicField['images'][0]['path']);
+                            $expertContent->setSliderImgMobile($dynamicField['images'][0]['url']);
                         }
 
                         break;
@@ -75,7 +74,7 @@ class ExpertContentFactory extends AbstractFactory
                             throw new NotFoundHttpException('article_img_desktop img is empty');
                         }
 
-                        $expertContent->setArticleImgDesktop($urlImg.$dynamicField['images'][0]['path']);
+                        $expertContent->setArticleImgDesktop($dynamicField['images'][0]['url']);
                         break;
 
                     case 'article_img_mobile':
@@ -83,7 +82,7 @@ class ExpertContentFactory extends AbstractFactory
                             throw new NotFoundHttpException('article_img_mobile img is empty');
                         }
 
-                        $expertContent->setArticleImgMobile($urlImg.$dynamicField['images'][0]['path']);
+                        $expertContent->setArticleImgMobile($dynamicField['images'][0]['url']);
                         break;
 
                     case 'article_title':

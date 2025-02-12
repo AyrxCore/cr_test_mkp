@@ -14,26 +14,42 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 readonly class ExpertContentProvider implements ProviderInterface
 {
-    public function __construct(private UpplerDynamicEntityService $upplerDynamicEntityService, private ExpertContentFactory $expertContentFactory)
-    {
+    public function __construct(
+        private UpplerDynamicEntityService $upplerDynamicEntityService,
+        private ExpertContentFactory $expertContentFactory,
+    ) {
     }
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
-        if ($operation instanceof CollectionOperationInterface) {
-            $criteria = ['enabled' => '1', 'dynamic_entity_configuration_id' => ExpertContent::DYNAMIC_CONFIG_ID];
+        return $operation instanceof CollectionOperationInterface
+            ? $this->handleCollection()
+            : $this->handleSingle($uriVariables);
+    }
 
-            $dynamicsEntities = $this->upplerDynamicEntityService->getDynamicsEntities(['dynamic_fields'], $criteria);
+    private function handleCollection(): array
+    {
+        $entities = $this->upplerDynamicEntityService->getDynamicsEntities(
+            expands: ['dynamic_fields'],
+            dynamicEntityConfigurationId: (string) ExpertContent::DYNAMIC_CONFIG_ID
+        );
 
-            return $this->expertContentFactory->createAndAddToCollection($dynamicsEntities);
+        return $this->expertContentFactory->createAndAddToCollection($entities);
+    }
+
+    private function handleSingle(array $uriVariables): object
+    {
+        $entities = $this->upplerDynamicEntityService->getDynamicsEntities(
+            expands: ['dynamic_fields'],
+            criteria: ['slug' => $uriVariables['slug']]
+        );
+
+        if (empty($entities)) {
+            throw new NotFoundHttpException(
+                \sprintf('News with slug: %s does not exist', $uriVariables['slug'])
+            );
         }
 
-        $dynamicsEntities = $this->upplerDynamicEntityService->getDynamicsEntities(['dynamic_fields'], ['slug' => $uriVariables['slug'], 'enabled' => '1']);
-
-        if (empty($dynamicsEntities)) {
-            throw new NotFoundHttpException(\sprintf('News with slug: %s does not exist', $uriVariables['slug']));
-        }
-
-        return $this->expertContentFactory->create($dynamicsEntities[0]);
+        return $this->expertContentFactory->create($entities[0]);
     }
 }

@@ -63,6 +63,7 @@ abstract class AbstractUpplerService
 
         $origUrl = \getenv('UPPLER_API_URL').$path;
         $origOptions = $options;
+
         $this->computeHeaders($path, $options, $isAdmin, $withoutToken);
 
         try {
@@ -145,7 +146,7 @@ abstract class AbstractUpplerService
     }
 
     // Obtient un accessToken depuis l'API Uppler pour le user propriétaire des clientId/clientSecret
-    public function getToken(string $clientId, string $clientSecret): object|null
+    public function getToken(string $clientId, string $clientSecret): ?object
     {
         $res = $this->request(
             'POST',

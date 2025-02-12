@@ -81,6 +81,7 @@ import { useChannelStore } from '@/vuejs/stores/channel'
 
 const expertContent = useExpertContentStore()
 const channelStore = useChannelStore()
+
 const { expertContents } = storeToRefs(expertContent)
 const { channel } = storeToRefs(channelStore)
 </script>
