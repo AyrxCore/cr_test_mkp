@@ -2,29 +2,44 @@
   <nav class="sticky top-0 z-30 w-full bg-white py-1 shadow-md lg:pb-3">
     <div class="mx-auto items-center px-4 lg:flex">
       <div class="flex justify-between">
-        <MenuComponent class="lg:hidden" />
+        <MenuComponent class="w-1/4 lg:hidden" />
         <LogoComponent class="w-1/2" />
-        <AccountComponent class="lg:hidden" />
+        <div
+          class="mr-4 flex w-1/4 items-center justify-end md:w-full lg:hidden"
+        >
+          <AccountComponent />
+          <CartButtonComponent class="ml-4" />
+        </div>
       </div>
-      <div class="mt-4 mb-2 lg:my-4 lg:flex lg:w-[100%]">
+      <div class="mb-2 mt-4 lg:my-4 lg:w-[100%]">
         <SearchComponent @search-product="search" />
       </div>
-      <AccountComponent class="hidden lg:flex" />
+      <div
+        class="hidden items-center lg:ml-4 lg:flex lg:min-w-[350px] lg:justify-evenly xl:ml-0 xl:min-w-[650px]"
+      >
+        <div class="hidden xl:flex">
+          <ContactUsButtonComponent />
+        </div>
+        <AccountComponent />
+        <CartButtonComponent class="lg:ml-4 xl:ml-0" />
+      </div>
     </div>
     <MenuComponent :icon-color="channelSecondaryColor" class="hidden lg:flex" />
   </nav>
 </template>
 
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import MenuComponent from '@/vuejs/modules/shared/header-component/MenuComponent.vue'
 import AccountComponent from '@/vuejs/modules/shared/header-component/AccountComponent.vue'
 import LogoComponent from '@/vuejs/modules/shared/header-component/LogoComponent.vue'
 import SearchComponent from '@/vuejs/modules/shared/header-component/SearchComponent.vue'
+import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
+import CartButtonComponent from '@/vuejs/modules/shared/CartButtonComponent.vue'
 import router from '@/vuejs/router'
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import { useProductStore } from '@/vuejs/stores/product'
 import { useChannelStore } from '@/vuejs/stores/channel'
-import { storeToRefs } from 'pinia'
 
 const productStore = useProductStore()
 

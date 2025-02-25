@@ -1,5 +1,5 @@
 <template>
-  <div class="mr-4 flex items-center justify-center lg:min-w-[240px]">
+  <div class="flex items-center justify-center lg:mr-4 lg:min-w-[240px]">
     <RouterLink
       :to="{ name: PageList.HOME_PAGE }"
       class="flex justify-center text-xl font-bold"

@@ -9,9 +9,6 @@
   <ArrowRightIconComponent v-else-if="props.component === 'arrow-right-icon'" />
   <ArrowLeftIconComponent v-else-if="props.component === 'arrow-left-icon'" />
   <FormComponent v-else-if="props.component === 'contact-form'" />
-  <StickyContactButtons
-    v-else-if="props.component === 'sticky-contact-buttons'"
-  />
   <CmsPageComponent
     v-else-if="props.component === 'mentions-legales' && currentChannel"
     :page-id="channelDocuments?.legalTerms"
@@ -35,7 +32,6 @@ import { onBeforeMount, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import LoginForm from './modules/login/views/ExternalLoginForm.vue'
-import StickyContactButtons from '@/vuejs/modules/shared/StickyContactButtonsComponent.vue'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import ArrowLeftIconComponent from '@/vuejs/modules/shared/icon/ArrowLeftIconComponent.vue'
 import FormComponent from '@/vuejs/modules/contact/component/FormComponent.vue'

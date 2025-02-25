@@ -1,6 +1,5 @@
 <template>
   <div class="flex min-h-screen flex-col">
-    <StickyContactButtons />
     <HeaderSharedComponent />
 
     <div
@@ -10,10 +9,10 @@
           OPTIONAL_FRONT_BLOCKS.BANNER_FLASH_HOMEPAGE,
         )
       "
-      class="bg-primary p-4 text-center"
       :style="{
         color: betterTextColor('primary'),
       }"
+      class="bg-primary p-4 text-center"
     >
       <p class="text-sm md:w-auto md:text-base lg:text-lg">
         <span class="mr-0 lg:mr-2">
@@ -36,10 +35,10 @@
       @click="toTop"
     >
       <ChevronDownIconComponent
-        class="rotate-180"
         :style="{
           color: betterTextColor('secondary'),
         }"
+        class="rotate-180"
       />
     </div>
 
@@ -53,7 +52,6 @@ import { storeToRefs } from 'pinia'
 
 import HeaderSharedComponent from '@/vuejs/modules/shared/HeaderSharedComponent.vue'
 import FooterSharedComponent from '@/vuejs/modules/shared/FooterSharedComponent.vue'
-import StickyContactButtons from '@/vuejs/modules/shared/StickyContactButtonsComponent.vue'
 import ChevronDownIconComponent from '@/vuejs/modules/shared/icon/ChevronDownIconComponent.vue'
 
 import { useBannerStore } from '@/vuejs/stores/banner'
