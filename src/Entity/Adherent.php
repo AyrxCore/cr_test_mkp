@@ -295,7 +295,7 @@ class Adherent
             return $this->logo;
         }
 
-        return $this->parent?->getLogo();
+        return $this->getParent()?->getLogo();
     }
 
     public function setLogo(?string $logo): self
@@ -333,7 +333,7 @@ class Adherent
             return $this->reducceServiceName;
         }
 
-        return $this->parent?->getReducceServiceName();
+        return $this->getParent()?->getReducceServiceName();
     }
 
     public function setReducceServiceName(?string $reducceServiceName): self
@@ -349,7 +349,7 @@ class Adherent
             return $this->reducceUrl;
         }
 
-        return $this->parent?->getReducceUrl();
+        return $this->getParent()?->getReducceUrl();
     }
 
     public function setReducceUrl(?string $reducceUrl): self
@@ -361,6 +361,10 @@ class Adherent
 
     public function getParent(): ?self
     {
+        if ($this->parent === $this) {
+            return null;
+        }
+
         return $this->parent;
     }
 
