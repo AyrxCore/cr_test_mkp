@@ -6,53 +6,30 @@ namespace App\DataFixtures\Factory;
 
 use App\DataFixtures\Factory\Trait\BeforeInstantiateTrait;
 use App\Entity\Adherent;
-use App\Repository\AdherentRepository;
-use Zenstruck\Foundry\ModelFactory;
-use Zenstruck\Foundry\Proxy;
-use Zenstruck\Foundry\RepositoryProxy;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
-/**
- * @extends ModelFactory<Adherent>
- *
- * @method        Adherent|Proxy                     create(array|callable $attributes = [])
- * @method static Adherent|Proxy                     createOne(array $attributes = [])
- * @method static Adherent|Proxy                     find(object|array|mixed $criteria)
- * @method static Adherent|Proxy                     findOrCreate(array $attributes)
- * @method static Adherent|Proxy                     first(string $sortedField = 'id')
- * @method static Adherent|Proxy                     last(string $sortedField = 'id')
- * @method static Adherent|Proxy                     random(array $attributes = [])
- * @method static Adherent|Proxy                     randomOrCreate(array $attributes = [])
- * @method static AdherentRepository|RepositoryProxy repository()
- * @method static Adherent[]|Proxy[]                 all()
- * @method static Adherent[]|Proxy[]                 createMany(int $number, array|callable $attributes = [])
- * @method static Adherent[]|Proxy[]                 createSequence(iterable|callable $sequence)
- * @method static Adherent[]|Proxy[]                 findBy(array $attributes)
- * @method static Adherent[]|Proxy[]                 randomRange(int $min, int $max, array $attributes = [])
- * @method static Adherent[]|Proxy[]                 randomSet(int $number, array $attributes = [])
- *
- * TODO: rename Adherent to Member
- */
-final class AdherentFactory extends ModelFactory
+final class AdherentFactory extends PersistentObjectFactory
 {
     use BeforeInstantiateTrait;
 
-    protected function getDefaults(): array
+    public static function class(): string
+    {
+        return Adherent::class;
+    }
+
+    protected function defaults(): array
     {
         return [
             'id' => self::faker()->uuid(),
             'name' => self::faker()->name(),
             'reducceCode' => self::faker()->regexify('[0-9a-zA-Z]{10}'),
             'siret' => self::faker()->regexify('[0-9]{14}'),
+            'logo' => self::faker()->imageUrl(),
         ];
     }
 
-    protected function initialize(): self
+    protected function initialize(): static
     {
         return $this->beforeInstantiate($this->convertIdAttributes());
-    }
-
-    protected static function getClass(): string
-    {
-        return Adherent::class;
     }
 }

@@ -6,7 +6,7 @@ namespace App\Tests;
 
 use App\Dto\Banner;
 use App\Dto\ExpertContent;
-use App\Tests\Feature\Helper\JsonHelper;
+use App\Tests\Api\Helper\JsonHelper;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -15,7 +15,7 @@ class MockClientCallback
 {
     public function __invoke(string $method, string $url, array $options = []): ResponseInterface
     {
-        ['path' => $path] = \parse_url($url);
+        ['path' => $path, 'query' => $query] = \parse_url($url);
 
         if ($path === '/oauth/v2/token') {
             return new MockResponse(JsonHelper::parseJsonDataFile('_mocks/uppler-response/v2/token/gsm-response.json'));
@@ -47,6 +47,30 @@ class MockClientCallback
             ));
         }
 
+        // match request for any v1 endpoint with query parameters
+        if ($method === 'GET' && !empty($query) && \preg_match('/^\/v1\/(?<filePath>[\w_\/-]+)(?:\?([^#]*))?/', $path, $matches)) {
+            \parse_str($query, $queryParams);
+
+            if (!empty($queryParams['criteria'])) {
+                $criteriaString = \implode('_', \array_map(
+                    fn ($key, $value) => \sprintf('%s_%s', $key, $value),
+                    \array_keys($queryParams['criteria']),
+                    $queryParams['criteria']
+                ));
+
+                return new MockResponse(JsonHelper::parseJsonDataFile(
+                    \sprintf('_mocks/uppler-response/v1/%s/%s.json',
+                        $matches['filePath'],
+                        $criteriaString
+                    )
+                ));
+            }
+
+            return new MockResponse(JsonHelper::parseJsonDataFile(
+                \sprintf('_mocks/uppler-response/v1/%s.json', $matches['filePath'])
+            ));
+        }
+
         // match request for a collection resource (ex: /v1/buyer/cart)
         if ($method === 'GET' && \preg_match('/^\/v1\/(?<fileBasePath>[\w_\/-]+)/', $path, $matches)) {
             return new MockResponse(JsonHelper::parseJsonDataFile(
@@ -54,7 +78,7 @@ class MockClientCallback
             ));
         }
 
-        return new MockResponse(null);
+        return new MockResponse();
     }
 
     private function getProductsResponse(array $options): MockResponse
@@ -75,13 +99,13 @@ class MockClientCallback
         $dynamicConfigId = (int) $queryParams['criteria']['dynamic_entity_configuration_id'] ?? null;
 
         if ($dynamicConfigId === ExpertContent::DYNAMIC_CONFIG_ID) {
-            return new MockResponse(JsonHelper::parseJsonDataFile($basePath.'collection.json'));
+            return new MockResponse(JsonHelper::parseJsonDataFile($basePath.'entities.json'));
         }
 
         if ($dynamicConfigId === Banner::DYNAMIC_CONFIG_ID) {
             return new MockResponse(JsonHelper::parseJsonDataFile(\sprintf('%sbanner.json', $basePath)));
         }
 
-        return new MockResponse(null);
+        return new MockResponse();
     }
 }

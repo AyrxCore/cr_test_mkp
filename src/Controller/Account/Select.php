@@ -40,32 +40,37 @@ class Select extends AbstractController
     )]
     public function __invoke(Account $account)
     {
-        /** @var User $currentUser */
-        $currentUser = $this->security->getUser();
+        try {
+            /** @var User $currentUser */
+            $currentUser = $this->security->getUser();
 
-        if (!$currentUser->getAccounts()->contains($account)) {
-            throw new AccessDeniedHttpException('This account does not belong to the current user');
+            if (!$currentUser->getAccounts()->contains($account)) {
+                throw new AccessDeniedHttpException('This account does not belong to the current user');
+            }
+
+            if (!$account->isEnabled()) {
+                throw new AccessDeniedHttpException('Account is disabled');
+            }
+
+            $channel = $this->channelContext->getChannel();
+
+            if ($account->getAdherent()?->getChannel()?->getCode() !== $channel->getCode()) {
+                throw new AccessDeniedHttpException('Account is not linked to current channel');
+            }
+
+            $isAuthenticated = $this->upplerAuthenticationService->authenticateUser($account);
+
+            if ($isAuthenticated && !$this->requestStack->getSession()->get('access_token')) {
+                throw new AccessDeniedHttpException("Vous n'avez pas accès à ce compte");
+            }
+
+            if (empty($account->isAcceptCGU())) {
+                $this->eventDispatcher->dispatch(new UserAcceptCGUEvent($account));
+            }
+
+            return new JsonResponse(['status' => 'ok']);
+        } catch (\Throwable $exception) {
+            throw $exception;
         }
-
-        if (!$account->isEnabled()) {
-            throw new AccessDeniedHttpException('Account is disabled');
-        }
-
-        $channel = $this->channelContext->getChannel();
-        if ($account->getAdherent()?->getChannel()?->getCode() !== $channel->getCode()) {
-            throw new AccessDeniedHttpException('Account is not linked to current channel');
-        }
-
-        $isAuthenticated = $this->upplerAuthenticationService->authenticateUser($account);
-
-        if ($isAuthenticated && !$this->requestStack->getSession()->get('access_token')) {
-            throw new AccessDeniedHttpException("Vous n'avez pas accès à ce compte");
-        }
-
-        if (empty($account->isAcceptCGU())) {
-            $this->eventDispatcher->dispatch(new UserAcceptCGUEvent($account));
-        }
-
-        return new JsonResponse(['status' => 'ok']);
     }
 }

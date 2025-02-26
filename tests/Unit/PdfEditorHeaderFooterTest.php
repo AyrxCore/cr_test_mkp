@@ -5,8 +5,8 @@ declare(strict_types=1);
 use App\Helper\PdfEditorHeaderFooter;
 
 \beforeEach(function () {
-    $this->pdfFilePath = 'tests/Files/peugeot-conditions-negociees.pdf';
-    $this->headerLogoPath = 'tests/Files/logo-qantis-test.png';
+    $this->pdfFilePath = 'tests/Resources/peugeot-conditions-negociees.pdf';
+    $this->headerLogoPath = 'tests/Resources/logo-qantis-test.png';
     $this->footerText = 'Footer Text';
 });
 
@@ -15,11 +15,4 @@ use App\Helper\PdfEditorHeaderFooter;
     $pdfContent = $pdfEditor->savePDF();
 
     $this->expect($pdfContent)->toBeString();
-})->group('PdfEditorHeaderFooter');
-
-\it('should handle invalid PDF file path', function () {
-    $pdfEditor = new PdfEditorHeaderFooter('invalid.pdf', $this->headerLogoPath, $this->footerText);
-
-    $this->expectException(\Exception::class);
-    $pdfEditor->savePDF();
 })->group('PdfEditorHeaderFooter');

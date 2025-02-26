@@ -1,9 +1,0 @@
-{
-  "@context": "/api/contexts/Adherent",
-  "@type": "Adherent",
-  "@id": "/api/adherents/@uuid@",
-  "id": "@uuid@",
-  "name": "GROUPE QANTIS",
-  "siret": "53849238000026",
-  "reducceCode": "KKT26DIB"
-}
