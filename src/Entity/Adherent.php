@@ -106,6 +106,14 @@ class Adherent
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $libelleApe = null;
 
+    #[ORM\Column(options: ['default' => false])]
+    #[Groups(['user:simple'])]
+    private bool $showModalStellantis = false;
+
+    #[ORM\Column(options: ['default' => false])]
+    #[Groups(['user:simple'])]
+    private bool $stellantisModalValidated = false;
+
     #[ORM\Column]
     private ?bool $active = true;
 
@@ -393,6 +401,30 @@ class Adherent
     public function getChildren(): Collection
     {
         return $this->children;
+    }
+
+    public function isShowModalStellantis(): bool
+    {
+        return $this->showModalStellantis;
+    }
+
+    public function setShowModalStellantis(bool $showModalStellantis): static
+    {
+        $this->showModalStellantis = $showModalStellantis;
+
+        return $this;
+    }
+
+    public function isStellantisModalValidated(): bool
+    {
+        return $this->stellantisModalValidated;
+    }
+
+    public function setStellantisModalValidated(bool $stellantisModalValidated): self
+    {
+        $this->stellantisModalValidated = $stellantisModalValidated;
+
+        return $this;
     }
 
     public function isActive(): ?bool
