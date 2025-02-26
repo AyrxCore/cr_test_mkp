@@ -37,6 +37,7 @@ abstract class AbstractUpplerService
     public function __construct(
         private HttpClientInterface $upplerClient,
         protected RequestStack $requestStack,
+        protected UpplerLogRequestService $upplerLogRequestService,
         private string $upplerEnv,
         private string $adminClientId,
         private string $adminClientSecret,
@@ -54,7 +55,8 @@ abstract class AbstractUpplerService
         array $options = [],
         bool $isAdmin = false,
         bool $withoutToken = false,
-        bool $withCache = false
+        bool $withCache = false,
+        bool $addCustomLog = false
     ): bool|ResponseInterface {
         if ($withCache) {
             $store = new Store($this->httpCachePath);
@@ -65,33 +67,33 @@ abstract class AbstractUpplerService
         $origOptions = $options;
 
         $this->computeHeaders($path, $options, $isAdmin, $withoutToken);
-
+        $inputData = ['method' => $method, 'path' => $path, 'options' => $options];
+        $response = null;
+        $errors = [];
         try {
             $this->apiLogger->info('Token utilisé  '.$this->adminToken.' endpoint '.$path);
-            $res = $this->upplerClient->request($method, $path, $options);
+            $response = $this->upplerClient->request($method, $path, $options);
 
-            if ($res->getStatusCode() === Response::HTTP_UNAUTHORIZED) {
+            if ($response->getStatusCode() === Response::HTTP_UNAUTHORIZED) {
                 $this->apiLogger->critical('token '.$this->adminToken.' retour 401 ');
-                $this->checkResponse($res, $method, $origUrl, $origOptions, $isAdmin);
+                $this->checkResponse($response, $method, $origUrl, $origOptions, $isAdmin);
                 $this->computeHeaders($origUrl, $origOptions, $isAdmin, $withoutToken);
-                $res = $this->upplerClient->request($method, $origUrl, $origOptions);
-            } elseif (!\in_array($res->getStatusCode(), self::HTTP_SUCCESS_RESPONSES, true)) {
-                $errorData = $res->getContent(false);
+                $response = $this->upplerClient->request($method, $origUrl, $origOptions);
+            } elseif (!\in_array($response->getStatusCode(), self::HTTP_SUCCESS_RESPONSES, true)) {
+                $errorData = $response->getContent(false);
                 $this->apiLogger->critical('error '.$errorData);
             }
 
-            $this->apiLogger->info($res->getStatusCode().' requete OK url ==>  '.$path);
+            $this->apiLogger->info($response->getStatusCode().' requete OK url ==>  '.$path);
+        } catch (\Throwable $e) {
+            $errors = $this->logError($e, $path);
+        } finally {
+            if ($addCustomLog) {
+                $this->upplerLogRequestService->logRequest($inputData, $response, $errors);
+            }
 
-            return $res;
-        } catch (ClientException $e) {
-            $this->apiLogger->critical('Client Error '.$path.' : '.$e->getResponse()->getContent());
-        } catch (ServerException $e) {
-            $this->apiLogger->critical('Server Error '.$path.' : '.$e->getResponse()->getContent());
-        } catch (\Exception $e) {
-            $this->apiLogger->critical('Error '.$path.' : '.$e->getMessage());
+            return $response ?? false;
         }
-
-        return false;
     }
 
     // obtient un token pour l'administrateur et le stocke dans
@@ -246,5 +248,22 @@ abstract class AbstractUpplerService
         } else {
             $this->apiLogger->critical('Error '.$res->getContent(false));
         }
+    }
+
+    private function logError(\Throwable $exception, string $path): array
+    {
+        $errorMessage = match (true) {
+            $exception instanceof ClientException => 'Client Error '.$path.' : '.$exception->getResponse()->getContent(),
+            $exception instanceof ServerException => 'Server Error '.$path.' : '.$exception->getResponse()->getContent(),
+            $exception instanceof \Exception => 'Error '.$path.' : '.$exception->getMessage(),
+            default => 'General Error '.$path.' : '.$exception->getMessage(),
+        };
+
+        $this->apiLogger->critical($errorMessage);
+
+        return [
+            'code' => $exception->getCode(),
+            'message' => $errorMessage,
+        ];
     }
 }

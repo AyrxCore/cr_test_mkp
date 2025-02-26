@@ -1,5 +1,5 @@
 monolog:
-    channels: [ 'api']
+    channels: [ 'api', 'upplerApi']
     handlers:
         main:
             type: stream
@@ -24,3 +24,8 @@ monolog:
             path: "%kernel.logs_dir%/api.log"
             level: debug
             channels: [ "api"]
+        upplerApi:
+            type: stream
+            path: php://stdout
+            level: debug
+            channels: [ "upplerApi"]
