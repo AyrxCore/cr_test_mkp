@@ -6,7 +6,12 @@
       prevEl: '.swiper-button-direction-prev',
       nextEl: '.swiper-button-direction-next',
     }"
-    :pagination="pagination"
+    :pagination="{
+      enabled: pagination,
+      clickable: true,
+      bulletClass: 'swiper-pagination-bullet',
+      bulletActiveClass: 'swiper-pagination-bullet-active',
+    }"
     @swiper="emit('on-swipe')"
     @slide-change="emit('on-slide-change')"
   >
@@ -24,6 +29,7 @@
     </template>
   </Swiper>
 </template>
+
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { Swiper } from 'swiper/vue'
@@ -89,7 +95,7 @@ const defaultModules = computed(
 }
 
 .swiper-pagination-bullet {
-  @apply h-[0.625rem] w-[0.625rem] border border-secondary bg-white opacity-100;
+  @apply h-[0.625rem] w-[0.625rem] cursor-pointer border border-secondary bg-white opacity-100;
 
   &-active {
     @apply bg-secondary;
@@ -110,7 +116,7 @@ const defaultModules = computed(
   &-button-direction {
     &-prev,
     &-next {
-      @apply absolute top-0 bottom-0 z-10 flex cursor-pointer items-center text-primary;
+      @apply absolute bottom-0 top-0 z-10 flex cursor-pointer items-center text-primary;
 
       svg {
         @apply h-8 w-8 rounded-full border-2 border-primary bg-white md:h-12 md:w-12 md:border-none md:bg-transparent;
