@@ -41,7 +41,7 @@ readonly class ExpertContentProvider implements ProviderInterface
     {
         $entities = $this->upplerDynamicEntityService->getDynamicsEntities(
             expands: ['dynamic_fields'],
-            criteria: ['slug' => $uriVariables['slug']]
+            criteria: ['slug' => (string) $uriVariables['slug']]
         );
 
         if (empty($entities)) {

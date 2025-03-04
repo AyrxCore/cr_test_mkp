@@ -52,30 +52,6 @@ class UpplerDynamicEntityService extends AbstractUpplerService
         return $path;
     }
 
-    private function buildEntitiesPath(
-        ?string $dynamicEntityConfigurationId,
-        array $expands,
-        array $criteria
-    ): string {
-        $path = 'v1/buyer/dynamic-entity-configuration';
-
-        if ($dynamicEntityConfigurationId) {
-            $path .= "/{$dynamicEntityConfigurationId}/entities";
-        }
-
-        $path .= '?sorting[created_at]=DESC';
-
-        foreach ($expands as $expand) {
-            $path .= \sprintf('&expand[]=%s', \urlencode($expand));
-        }
-
-        foreach ($criteria as $key => $value) {
-            $path .= \sprintf('&criteria[%s]=%s', \urlencode($key), \urlencode($value));
-        }
-
-        return $path;
-    }
-
     private function validateResponse($response): void
     {
         if (!$response || !\in_array($response->getStatusCode(), [Response::HTTP_OK, Response::HTTP_PARTIAL_CONTENT], true)) {
@@ -111,5 +87,29 @@ class UpplerDynamicEntityService extends AbstractUpplerService
         foreach ($dynamicField['dynamic_field_choice'] as $key => $choice) {
             $data[$key]['color'][] = $choice['value'];
         }
+    }
+
+    private function buildEntitiesPath(
+        ?string $dynamicEntityConfigurationId,
+        array $expands,
+        array $criteria
+    ): string {
+        $path = 'v1/buyer/dynamic-entity-configuration';
+
+        if ($dynamicEntityConfigurationId) {
+            $path .= "/{$dynamicEntityConfigurationId}/entities";
+        }
+
+        $path .= '?sorting[created_at]=DESC';
+
+        foreach ($expands as $expand) {
+            $path .= \sprintf('&expand[]=%s', \urlencode($expand));
+        }
+
+        foreach ($criteria as $key => $value) {
+            $path .= \sprintf('&criteria[%s]=%s', \urlencode($key), \urlencode($value));
+        }
+
+        return $path;
     }
 }

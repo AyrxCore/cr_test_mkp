@@ -32,7 +32,8 @@ readonly class SemanticButtonsProvider implements ProviderInterface
         } else {
             $entitiesSemanticButton = $this->upplerDynamicEntityService->getDynamicsEntities(
                 ['dynamic_fields'],
-                ['dynamic_entity_configuration_id' => $dynamicConfigId, 'enabled' => 1]
+                [],
+                $dynamicConfigId
             );
 
             return $this->semanticButtonFactory->createAndAddToCollection($entitiesSemanticButton);
