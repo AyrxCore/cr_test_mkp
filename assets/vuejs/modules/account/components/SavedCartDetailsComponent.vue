@@ -15,10 +15,10 @@
           class="loading flex h-[116px] w-full items-center justify-center rounded-lg px-6 py-2"
         />
       </div>
-      <div class="flex flex-col pr-4 md:ml-5 md:w-7/12">
+      <div class="mt-4 flex flex-col pr-4 md:my-2 md:ml-5 md:w-7/12">
         <RouterLink
           :to="{ name: PageList.PRODUCT, params: { slug: productSlug } }"
-          class="mt-4 font-cotext text-lg font-bold text-primary lg:text-2xl"
+          class="font-cotext text-lg font-bold text-primary lg:text-2xl"
         >
           {{ productName }}
         </RouterLink>
@@ -26,9 +26,6 @@
           <span>Vendu par: {{ productSeller }}</span>
           <span>Référence: {{ productReference }}</span>
         </span>
-        <span class="mt-2 flex text-sm text-green-400 lg:text-lg"
-          >En stock</span
-        >
       </div>
     </div>
     <div class="mt-4 flex w-full justify-end md:w-2/12 md:justify-start">

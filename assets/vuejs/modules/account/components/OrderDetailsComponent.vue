@@ -5,8 +5,8 @@
     <div class="flex md:w-8/12 lg:w-9/12">
       <div class="flex h-fit w-6/12 md:w-3/12">
         <img
-          :src="productImage"
           :alt="productName"
+          :src="productImage"
           class="h-full w-full object-contain"
         />
       </div>
@@ -22,9 +22,6 @@
           <span>Référence: {{ productReference }}</span>
           <span>Quantité: {{ item.quantity }}</span>
         </span>
-        <span class="mt-2 flex text-sm text-green-400 lg:text-lg"
-          >En stock</span
-        >
       </div>
     </div>
     <div class="mt-4 md:mt-0 md:w-4/12 lg:w-3/12">

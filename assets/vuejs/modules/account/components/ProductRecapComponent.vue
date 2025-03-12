@@ -2,7 +2,7 @@
   <div class="mx-auto h-full items-center bg-white">
     <div class="mb-1 flex w-full">
       <div class="ml-2 w-[2%]">
-        <input type="checkbox" name="select_product" />
+        <input name="select_product" type="checkbox" />
       </div>
       <div class="w-[13%]">
         <img
@@ -20,15 +20,13 @@
         <span class="text-lg text-gray-500">
           Référence: {{ product.reference }}
         </span>
-        <br />
-        <span class="mt-2 text-lg text-green-400">En stock</span>
       </div>
       <div class="w-[10%]">
         <input
           :value="product.qte"
-          type="text"
-          name="qte"
           class="w-14 rounded-lg border border-gray-300 text-center"
+          name="qte"
+          type="text"
         />
       </div>
       <div class="mr-3 w-[10%] text-center">

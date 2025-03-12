@@ -36,9 +36,6 @@
           <span>Vendu par: {{ productSeller }}</span>
           <span>Référence: {{ productReference }}</span>
         </span>
-        <span class="mt-2 flex text-sm text-green-400 lg:text-lg"
-          >En stock</span
-        >
       </div>
     </div>
     <div class="md:w-4/12 lg:w-3/12">
