@@ -266,7 +266,7 @@
         <ProductsCarouselComponent
           :loading="isLoadingSimilarProductsAndAccordsCadres"
           :products="similarProducts"
-          class="mb-12 mt-4"
+          class="mt-4"
           @click-left="sendGaEvent('click_product_slider_left')"
           @click-right="sendGaEvent('click_product_slider_right')"
           @click-add-cart="
@@ -299,7 +299,6 @@
         <AccordsCadreComponent
           :accords-cadres="similarAccordsCadres"
           :loading="isLoadingSimilarProductsAndAccordsCadres"
-          class="mb-8"
           @click-left="sendGaEvent('click_product_slider_fat_left')"
           @click-right="sendGaEvent('click_product_slider_fat_right')"
           @click-cta="sendGaEvent('click_product_slider_fat_cta', $event)"
@@ -308,6 +307,11 @@
         />
       </template>
       <!-- Fin bloc accords-cadres incontournables -->
+      <div class="mb-8 mt-2 text-xs text-gray-500">
+        Les références, photographies, remises et tarifs des produits fournis
+        sur la marketplace n’ont qu’une valeur indicative. Pour toute
+        confirmation d’information, nous vous invitons à nous contacter.
+      </div>
     </div>
     <div
       v-else
