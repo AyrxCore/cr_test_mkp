@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new GetCollection(
             openapiContext: ['summary' => 'Get remote products list', 'description' => 'It gets a list of products from remote data provider'],
             normalizationContext: ['groups' => ['products:get']]
-        )
+        ),
     ],
     provider: ProductProvider::class
 )]
@@ -80,7 +80,7 @@ final class Product
     #[Groups(['products:get', 'product:get'])]
     private ?float $priceReference = 0.0;
 
-    #[Groups(['product:get'])]
+    #[Groups(['products:get', 'product:get'])]
     private ?float $percent = 0;
 
     #[Groups(['products:get', 'product:get'])]

@@ -28,41 +28,6 @@ class ProductFactory extends AbstractFactory
         parent::__construct($this->cache);
     }
 
-    public function createAndAddToCollection(array $data): array
-    {
-        $products = [];
-        $this->cache->clear();
-        foreach ($data as $remoteProduct) {
-            $productCached = $this->cache->getItem('collection_product_'.$remoteProduct['id']);
-            if (!$productCached->isHit()) {
-                $session = $this->requestStack->getSession();
-                /** @var Account $account */
-                $account = $session->get('account');
-
-                $product = $this->initProduct($remoteProduct, $account);
-
-                $properties = $this->mapProperties($remoteProduct['properties']);
-                $product->setProperties($properties);
-
-                if (!$product->getIsAccordCadre()) {
-                    $product->setVariants($this->buildVariants($remoteProduct['variants']));
-                    $this->setDefaultVariantIdAndOptions($product);
-                }
-
-                $productCached->set($product);
-                $productCached->expiresAfter(new \DateInterval('PT1H')); // the item will be cached for 1 hour
-                $this->cache->save($productCached);
-            }
-            $products[] = $productCached->get();
-        }
-
-        \usort($products, function ($a, $b) {
-            return $b->getIsAccordCadre() - $a->getIsAccordCadre();
-        });
-
-        return $products;
-    }
-
     public function create(array $data): Product
     {
         $this->cache->clear();
@@ -94,6 +59,40 @@ class ProductFactory extends AbstractFactory
         }
 
         return $productCached->get();
+    }
+
+    public function createAndAddToCollection(array $data): array
+    {
+        $products = [];
+        $this->cache->clear();
+        foreach ($data as $remoteProduct) {
+            $productCached = $this->cache->getItem('collection_product_'.$remoteProduct['id']);
+            if (!$productCached->isHit()) {
+                $session = $this->requestStack->getSession();
+                /** @var Account $account */
+                $account = $session->get('account');
+
+                $product = $this->initProduct($remoteProduct, $account);
+
+                $properties = $this->mapProperties($remoteProduct['properties']);
+                $product->setProperties($properties);
+
+                if (!$product->getIsAccordCadre()) {
+                    $this->setVariantsAndCalculatePercent($product, $remoteProduct);
+                }
+
+                $productCached->set($product);
+                $productCached->expiresAfter(new \DateInterval('PT1H')); // the item will be cached for 1 hour
+                $this->cache->save($productCached);
+            }
+            $products[] = $productCached->get();
+        }
+
+        \usort($products, function ($a, $b) {
+            return $b->getIsAccordCadre() - $a->getIsAccordCadre();
+        });
+
+        return $products;
     }
 
     public function buildFilter($remoteFilters): array
@@ -202,49 +201,6 @@ class ProductFactory extends AbstractFactory
         return $product;
     }
 
-    private function mapProduct(Product &$product, array $data): void
-    {
-        $product->setReference($data['reference']);
-
-        $options = [];
-        foreach ($data['option_values'] as $option_value) {
-            $options[$option_value['option']['name']['default'] ?? ''][] = [
-                'parent_id' => $option_value['option']['id'],
-                'id' => $option_value['id'],
-                'value' => $option_value['value']['default'] ?? null,
-            ];
-        }
-        $product->setOptions($options);
-        $product->setVariants($this->buildVariantsOptions($data['variants']));
-
-        if ($product->getPriceReference() && $product->getPrice()) {
-            $priceDiff = $product->getPriceReference() - $product->getPrice();
-            $percent = \round(($priceDiff * 100) / $product->getPriceReference());
-            $product->setPercent($percent);
-        }
-        $this->setDefaultVariantIdAndOptions($product);
-    }
-
-    private function mapAccordCadre(Product &$product, Account $account): void
-    {
-        $account = $this->em->getRepository(Account::class)->find($account->getId());
-
-        $accordStatut = $this->em->getRepository(AccordStatut::class)->findOneBy([
-            'adherent' => $account->getAdherent()->getId(),
-            'accordId' => $product->getProperties()['accord-id'],
-        ]);
-
-        $status = $accordStatut ? $accordStatut->getStatus() : AccountAccordCadre::PROCESS_STATUS_NOT_ACTIVATED;
-
-        $accountAccordCadre = new AccountAccordCadre();
-        $accountAccordCadre->setAccountId($account->getId()->toRfc4122());
-        $accountAccordCadre->setStatus($status);
-        $accountAccordCadre->setAccordCadreId($product->getId());
-        $accountAccordCadre->setAccordId(new Uuid($product->getProperties()['accord-id']));
-
-        $product->setAccountAccordCadre($accountAccordCadre);
-    }
-
     private function checkIsAccordCadre($remoteProperties): bool
     {
         foreach ($remoteProperties as $property) {
@@ -254,6 +210,11 @@ class ProductFactory extends AbstractFactory
         }
 
         return false;
+    }
+
+    private function formatPrice($remotePrice): ?float
+    {
+        return $remotePrice !== null ? UpplerHelper::formatPrice($remotePrice['display_price']) : null;
     }
 
     private function mapProperties($remoteProperties): array
@@ -276,20 +237,15 @@ class ProductFactory extends AbstractFactory
         return $properties;
     }
 
-    private function buildVariantsOptions(array $remoteVariants): array
+    private function setVariantsAndCalculatePercent(Product &$product, array $data): void
     {
-        $options = [];
-        foreach ($remoteVariants as $variant) {
-            $variantOptions = [];
-            if (!empty($variant['option_values'])) {
-                foreach ($variant['option_values'] as $option_value) {
-                    $variantOptions[] = $option_value['id'];
-                }
-                $options[] = ['id' => $variant['id'], 'options' => $variantOptions];
-            }
+        $product->setVariants($this->buildVariants($data['variants']));
+        $this->setDefaultVariantIdAndOptions($product);
+        if ($product->getPriceReference() && $product->getPrice()) {
+            $priceDiff = $product->getPriceReference() - $product->getPrice();
+            $percent = \round(($priceDiff * 100) / $product->getPriceReference());
+            $product->setPercent($percent);
         }
-
-        return $options;
     }
 
     private function buildVariants(array $remoteVariants): array
@@ -302,16 +258,47 @@ class ProductFactory extends AbstractFactory
         return $variants;
     }
 
-    private function formatPrice($remotePrice): ?float
-    {
-        return $remotePrice !== null ? UpplerHelper::formatPrice($remotePrice['display_price']) : null;
-    }
-
     private function setDefaultVariantIdAndOptions(Product &$product): void
     {
         $variants = $product->getVariants();
         $firstVariant = \reset($variants);
         $product->setDefaultVariantId($firstVariant['id']);
         $product->setDefaultVariantOptions($firstVariant['options'] ?? []);
+    }
+
+    private function mapProduct(Product &$product, array $data): void
+    {
+        $product->setReference($data['reference']);
+
+        $options = [];
+        foreach ($data['option_values'] as $option_value) {
+            $options[$option_value['option']['name']['default'] ?? ''][] = [
+                'parent_id' => $option_value['option']['id'],
+                'id' => $option_value['id'],
+                'value' => $option_value['value']['default'] ?? null,
+            ];
+        }
+        $product->setOptions($options);
+        $this->setVariantsAndCalculatePercent($product, $data);
+    }
+
+    private function mapAccordCadre(Product &$product, Account $account): void
+    {
+        $account = $this->em->getRepository(Account::class)->find($account->getId());
+
+        $accordStatut = $this->em->getRepository(AccordStatut::class)->findOneBy([
+            'adherent' => $account->getAdherent()->getId(),
+            'accordId' => $product->getProperties()['accord-id'],
+        ]);
+
+        $status = $accordStatut ? $accordStatut->getStatus() : AccountAccordCadre::PROCESS_STATUS_NOT_ACTIVATED;
+
+        $accountAccordCadre = new AccountAccordCadre();
+        $accountAccordCadre->setAccountId($account->getId()->toRfc4122());
+        $accountAccordCadre->setStatus($status);
+        $accountAccordCadre->setAccordCadreId($product->getId());
+        $accountAccordCadre->setAccordId(new Uuid($product->getProperties()['accord-id']));
+
+        $product->setAccountAccordCadre($accountAccordCadre);
     }
 }

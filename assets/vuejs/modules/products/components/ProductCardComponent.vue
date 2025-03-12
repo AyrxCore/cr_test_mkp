@@ -15,12 +15,13 @@
       </div>
       <div class="flex items-center">
         <div
+          v-if="showProductDiscount"
           :style="{
             color: betterTextColor('primary'),
           }"
-          class="rounded-sm bg-primary p-1 text-sm"
+          class="text-md rounded-md bg-secondary px-2 py-1"
         >
-          Produit
+          -{{ product.percent }}%
         </div>
         <AddFavoriteComponent
           v-if="product.variants?.length === 2"
@@ -58,9 +59,9 @@
       <!-- Bloc texte -->
       <div class="flex h-3/5 w-full flex-col justify-between">
         <!-- Bloc titre -->
-        <div class="h-[30%]">
+        <div class="h-[25%]">
           <h3
-            class="truncate-custom truncate-custom-2 my-2 text-left text-sm font-bold text-primary md:text-base lg:text-lg"
+            class="truncate-custom truncate-custom-2 text-left text-sm font-bold text-primary md:text-base lg:text-lg"
           >
             <RouterLink
               :to="{
@@ -83,8 +84,15 @@
         </div>
         <!-- Fin bloc titre -->
 
+        <!-- Bloc nom partenaire -->
+        <div class="mt-1 h-[10%] text-primary">
+          {{ product.seller.name }}
+        </div>
+
+        <!-- Fin bloc nom partenaire -->
+
         <!-- Bloc description -->
-        <div class="h-[40%]">
+        <div class="h-[35%]">
           <p
             class="truncate-custom truncate-custom-3 mt-1 w-full justify-start text-left text-sm md:text-base lg:text-lg"
             v-html="productDescription"
@@ -174,11 +182,12 @@ import {
   getUpplerImage,
   betterTextColor,
 } from '@/vuejs/services/utils'
-import { ProductPageList } from '@/vuejs/router/pages-list'
-import { Product } from '@/vuejs/types/Product'
-import { Variant } from '@/vuejs/types/Product/Variant'
 
 import router from '@/vuejs/router'
+import { ProductPageList } from '@/vuejs/router/pages-list'
+
+import { Product } from '@/vuejs/types/Product'
+import { Variant } from '@/vuejs/types/Product/Variant'
 
 const emit = defineEmits([
   'click-add-cart',
@@ -197,14 +206,14 @@ const props = defineProps({
 
 const quantity = ref<number>(1)
 
-const showLineThroughPrice = computed(() => {
+const showLineThroughPrice = computed((): boolean => {
   return (
     props.product.priceReference &&
     props.product.priceReference !== props.product.price
   )
 })
 
-const variantId = computed(() => {
+const variantId = computed((): string | null => {
   if (2 === props.product.variants?.length) {
     const variant = props.product.variants.filter(function (el: Variant) {
       return el.sku != null
@@ -214,11 +223,15 @@ const variantId = computed(() => {
   return null
 })
 
-const productSlug = computed(() => {
+const productSlug = computed((): string => {
   return props.product.slug
 })
 
-const productDescription = computed(() => {
+const showProductDiscount = computed((): boolean => {
+  return props.product.percent > 0
+})
+
+const productDescription = computed((): string => {
   if (props.product.description?.length > 140) {
     return props.product.description.substring(0, 140) + '...'
   }
