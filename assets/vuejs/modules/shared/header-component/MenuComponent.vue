@@ -7,7 +7,8 @@
           class="flex items-center rounded border-b-2 border-b-transparent py-1 hover:opacity-75"
           @click.stop="toggleMenu"
         >
-          <MenuIconComponent class="mr-0.5 text-xl lg:w-auto" />
+          <MenuIconComponent class="lg:w-auto" />
+          <span class="ml-2 hidden text-sm lg:block"> Menu </span>
         </button>
 
         <MenuCategoryComponent
@@ -27,8 +28,8 @@
           name: ProductPageList.PRODUCTS,
           query: { category: category.id },
         }"
-        replace
         class="border-b-2 border-b-transparent px-0.5 text-sm hover:border-primary"
+        replace
         @click="
           sendGaEvent('click_header_category', {
             category_name: category.name,
