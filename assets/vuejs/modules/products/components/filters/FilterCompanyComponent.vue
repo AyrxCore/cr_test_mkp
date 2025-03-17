@@ -11,7 +11,7 @@
       @change="handleCompanySelection(props.company)"
     />
     <label :for="`companyRadio-${props.company.id}`" class="cursor-pointer">
-      {{ props.company.name }} ({{ props.company.productCount }})
+      {{ props.company.name }}
     </label>
   </div>
 </template>

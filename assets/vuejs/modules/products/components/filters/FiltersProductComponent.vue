@@ -15,9 +15,7 @@
       />
     </div>
     <template v-if="companies.length > 0">
-      <h3 class="text-base font-bold uppercase md:text-lg">
-        Partenaires ({{ companies.length }})
-      </h3>
+      <h3 class="text-base font-bold uppercase md:text-lg">Partenaires</h3>
       <FilterCompanyComponent
         v-for="(company, index) in companies"
         v-show="index < visibleCompanyFilter"
@@ -34,9 +32,7 @@
       </button>
     </template>
     <template v-if="categories.length > 0">
-      <h3 class="mt-4 text-base font-bold uppercase md:text-lg">
-        Catégories ({{ categories.length }})
-      </h3>
+      <h3 class="mt-4 text-base font-bold uppercase md:text-lg">Catégories</h3>
       <FilterCategoryComponent
         v-for="(category, index) in categories"
         v-show="index < visibleCategoryFilters"
@@ -61,7 +57,7 @@
         class="my-2 cursor-pointer text-sm"
       >
         <label :for="property.id" class="cursor-pointer">
-          {{ property.name }} ({{ property.productCount }})
+          {{ property.name }}
         </label>
         <select
           v-if="property.type === 'choice'"

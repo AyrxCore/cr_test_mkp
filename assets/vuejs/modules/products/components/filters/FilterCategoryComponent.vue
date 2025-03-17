@@ -10,7 +10,7 @@
         @change="handleCategorySelection(category.id)"
       />
       <label :for="`categoryRadio-${category.id}`" class="cursor-pointer">
-        {{ category.name }} ({{ category.productCount }})
+        {{ category.name }}
       </label>
       <Chevron2RightIconComponent
         v-if="category.children?.length > 0"
