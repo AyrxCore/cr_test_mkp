@@ -78,7 +78,8 @@ class ProductFactory extends AbstractFactory
                 $product->setProperties($properties);
 
                 if (!$product->getIsAccordCadre()) {
-                    $this->setVariantsAndCalculatePercent($product, $remoteProduct);
+                    $product->setVariants($this->buildVariants($remoteProduct['variants']));
+                    $this->setDefaultVariantsAndCalculatePercent($product, $remoteProduct);
                 }
 
                 $productCached->set($product);
@@ -237,17 +238,6 @@ class ProductFactory extends AbstractFactory
         return $properties;
     }
 
-    private function setVariantsAndCalculatePercent(Product &$product, array $data): void
-    {
-        $product->setVariants($this->buildVariants($data['variants']));
-        $this->setDefaultVariantIdAndOptions($product);
-        if ($product->getPriceReference() && $product->getPrice()) {
-            $priceDiff = $product->getPriceReference() - $product->getPrice();
-            $percent = \round(($priceDiff * 100) / $product->getPriceReference());
-            $product->setPercent($percent);
-        }
-    }
-
     private function buildVariants(array $remoteVariants): array
     {
         $variants = [];
@@ -256,6 +246,16 @@ class ProductFactory extends AbstractFactory
         }
 
         return $variants;
+    }
+
+    private function setDefaultVariantsAndCalculatePercent(Product &$product, array $data): void
+    {
+        $this->setDefaultVariantIdAndOptions($product);
+        if ($product->getPriceReference() && $product->getPrice()) {
+            $priceDiff = $product->getPriceReference() - $product->getPrice();
+            $percent = \round(($priceDiff * 100) / $product->getPriceReference());
+            $product->setPercent($percent);
+        }
     }
 
     private function setDefaultVariantIdAndOptions(Product &$product): void
@@ -279,7 +279,24 @@ class ProductFactory extends AbstractFactory
             ];
         }
         $product->setOptions($options);
-        $this->setVariantsAndCalculatePercent($product, $data);
+        $product->setVariants($this->buildVariantsOptions($data['variants']));
+        $this->setDefaultVariantsAndCalculatePercent($product, $data);
+    }
+
+    private function buildVariantsOptions(array $remoteVariants): array
+    {
+        $options = [];
+        foreach ($remoteVariants as $variant) {
+            $variantOptions = [];
+            if (!empty($variant['option_values'])) {
+                foreach ($variant['option_values'] as $option_value) {
+                    $variantOptions[] = $option_value['id'];
+                }
+                $options[] = ['id' => $variant['id'], 'options' => $variantOptions];
+            }
+        }
+
+        return $options;
     }
 
     private function mapAccordCadre(Product &$product, Account $account): void

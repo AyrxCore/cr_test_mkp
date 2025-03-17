@@ -37,22 +37,6 @@ class UpplerCartService extends AbstractUpplerService
         );
     }
 
-    public function createCart(): string
-    {
-        $res = $this->request(
-            'POST',
-            'v1/buyer/cart/',
-        );
-
-        if ($res->getStatusCode() !== Response::HTTP_CREATED) {
-            throw new BadRequestHttpException();
-        }
-
-        $headers = $res->getHeaders();
-
-        return $headers['location'][0];
-    }
-
     public function getCart(): array
     {
         $res = $this->request(
@@ -82,6 +66,52 @@ class UpplerCartService extends AbstractUpplerService
 
             return $this->getCart();
         }
+    }
+
+    public function isPaymentConfirmed(int $cartId): array|bool
+    {
+        $res = $this->request(
+            'GET',
+            'v1/buyer/cart/'.$cartId.'/transaction/confirm',
+            addCustomLog: true,
+        );
+
+        if ($res && $res->getStatusCode() === Response::HTTP_OK) {
+            return \json_decode($res->getContent(), true);
+        }
+
+        return false;
+    }
+
+    public function getPaymentMethods(int $cartId): array
+    {
+        $res = $this->request(
+            'GET',
+            'v1/buyer/cart/'.$cartId.'/payment-method',
+        );
+
+        $payments = [];
+        if ($res && $res->getStatusCode() === Response::HTTP_OK) {
+            $payments = \json_decode($res->getContent(), true);
+        }
+
+        return $payments;
+    }
+
+    public function createCart(): string
+    {
+        $res = $this->request(
+            'POST',
+            'v1/buyer/cart/',
+        );
+
+        if ($res->getStatusCode() !== Response::HTTP_CREATED) {
+            throw new BadRequestHttpException();
+        }
+
+        $headers = $res->getHeaders();
+
+        return $headers['location'][0];
     }
 
     public function getCartById(int $cartId): array|bool
@@ -115,7 +145,6 @@ class UpplerCartService extends AbstractUpplerService
             ],
             addCustomLog: true,
         );
-
         if ($res->getStatusCode() !== Response::HTTP_NO_CONTENT) {
             throw new BadRequestHttpException('Add item error');
         }
@@ -212,21 +241,6 @@ class UpplerCartService extends AbstractUpplerService
         }
     }
 
-    public function getPaymentMethods(int $cartId): array
-    {
-        $res = $this->request(
-            'GET',
-            'v1/buyer/cart/'.$cartId.'/payment-method',
-        );
-
-        $payments = [];
-        if ($res && $res->getStatusCode() === Response::HTTP_OK) {
-            $payments = \json_decode($res->getContent(), true);
-        }
-
-        return $payments;
-    }
-
     public function setPaymentMethod(int $cartId, int $paymentMethodId): array|bool
     {
         $hostname = $this->getHostname();
@@ -293,21 +307,6 @@ class UpplerCartService extends AbstractUpplerService
 
                 return $listErrors;
             }
-        }
-
-        return false;
-    }
-
-    public function isPaymentConfirmed(int $cartId): array|bool
-    {
-        $res = $this->request(
-            'GET',
-            'v1/buyer/cart/'.$cartId.'/transaction/confirm',
-            addCustomLog: true,
-        );
-
-        if ($res && $res->getStatusCode() === Response::HTTP_OK) {
-            return \json_decode($res->getContent(), true);
         }
 
         return false;
