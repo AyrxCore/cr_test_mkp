@@ -1,0 +1,44 @@
+{
+  "@context": "\/api\/contexts\/Seller",
+  "@id": "\/api\/sellers",
+  "@type": "hydra:Collection",
+  "hydra:member": [
+    {
+      "@id": "\/api\/sellers\/26",
+      "@type": "Seller",
+      "id": 26,
+      "name": "KRÖMM",
+      "description": "Franco de port à 449€ HT (sauf produit lourd et volumineux). \r\n45€ HT de frais de port pour une commande inférieure à 449€ HT. \r\nPour les produits lourds et volumineux, une grille spécifique s\u0027applique.",
+      "avatar": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/d4\/0f\/e751ba2240d6697e744a20f21d08.jpg",
+      "tos": []
+    },
+    {
+      "@id": "\/api\/sellers\/25",
+      "@type": "Seller",
+      "id": 25,
+      "name": "AEA - AIN ENERGIE AUTONOME",
+      "description": "Franco à 105€ HT pour les adhérents.\r\n10€ HT de frais de port pour une commande entre 50 et 105€ HT\r\n18€ HT de frais de port pour les commandes inférieures à 50€ HT",
+      "avatar": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/e3\/31\/a5a46ca53be781498b44085ca9ce.jpg",
+      "tos": []
+    },
+    {
+      "@id": "\/api\/sellers\/27",
+      "@type": "Seller",
+      "id": 27,
+      "name": "ALDA MAJUSCULE",
+      "description": "Franco à 50€ HT.\r\n7€ HT de frais de port pour une commande inférieure à 50€ HT.",
+      "avatar": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/ab\/b9\/2d7801781d79e920be51e43421e2.jpg",
+      "tos": []
+    },
+    {
+      "@id": "\/api\/sellers\/29",
+      "@type": "Seller",
+      "id": 29,
+      "name": "SIGNO DECO",
+      "description": "Franco à 50€ HT.\r\n15€ HT de frais de port pour une commande inférieure à 50€ HT.",
+      "avatar": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/81\/9a\/50e314a50d57f442d6f23d83d5f5.jpg",
+      "tos": []
+    }
+  ],
+  "hydra:totalItems": 4
+}

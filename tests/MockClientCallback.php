@@ -26,6 +26,11 @@ class MockClientCallback
             return $this->getProductsResponse($options);
         }
 
+        // Companies
+        if ($path === '/v1/buyer/search/company') {
+            return $this->getSellersResponse();
+        }
+
         // Dynamic entity
         if ($path === '/v1/administrator/dynamic-entity') {
             return $this->getDynamicEntityResponse($url);
@@ -107,5 +112,10 @@ class MockClientCallback
         }
 
         return new MockResponse();
+    }
+
+    private function getSellersResponse(): MockResponse
+    {
+        return new MockResponse(JsonHelper::parseJsonDataFile('_mocks/uppler-response/v1/buyer/search/sellers-list.json'));
     }
 }

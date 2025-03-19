@@ -45,4 +45,5 @@ export enum ProductPageList {
   CATEGORIES = 'CATEGORIES',
   PRODUCT = 'PRODUCT',
   ACCORD_CADRE = 'ACCORD_CADRE',
+  SELLERS = 'SELLERS',
 }

@@ -92,7 +92,7 @@
         <h3 class="text-title-primary">
           Ces partenaires peuvent aussi vous intéresser
         </h3>
-        <PartnersCarouselComponent
+        <SellersCarouselComponent
           class="mt-5"
           :params="sellersByCategoryParam"
           @click-partner-slider="
@@ -112,30 +112,30 @@
   </BaseTemplate>
 </template>
 <script lang="ts" setup>
+import { computed, ref, watch } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useRoute, useRouter } from 'vue-router'
+
+import { status } from '@/vuejs/modules/products'
+import { useProductStore } from '@/vuejs/stores/product'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import { useUserStore } from '@/vuejs/stores/user'
+import { useChannelStore } from '@/vuejs/stores/channel'
+import { Product } from '@/vuejs/types/Product'
+import { MainPageList } from '@/vuejs/router/pages-list'
+
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import HeaderPartnerComponent from '@/vuejs/modules/products/components/accord-cadre/HeaderAccordCadreComponent.vue'
-import { computed, ref, watch } from 'vue'
-import PartnersCarouselComponent from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
-import { Product } from '@/vuejs/types/Product'
-import { useRoute, useRouter } from 'vue-router'
-import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
+import SellersCarouselComponent from '@/vuejs/modules/shared/SellersCarouselComponent.vue'
 import ConditionsNegocieesComponent from '@/vuejs/modules/products/components/accord-cadre/ConditionsNegocieesComponent.vue'
-import { status } from '@/vuejs/modules/products'
+import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
+import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
 import ConditionsNotActivatedComponent from '@/vuejs/modules/products/components/accord-cadre/ConditionsNotActivatedComponent.vue'
 import ConditionsPendingOrActivated from '@/vuejs/modules/products/components/accord-cadre/ConditionsPendingOrActivatedComponent.vue'
 import ConditionsClientComponent from '@/vuejs/modules/products/components/accord-cadre/ConditionsClientComponent.vue'
 import EnSavoirPlusComponent from '@/vuejs/modules/products/components/accord-cadre/EnSavoirPlusComponent.vue'
-import { useProductStore } from '@/vuejs/stores/product'
-
-import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
-import { useChannelStore } from '@/vuejs/stores/channel'
-import { useUserStore } from '@/vuejs/stores/user'
-
 import PromotionnalComponent from '@/vuejs/modules/products/components/accord-cadre/PromotionnalComponent.vue'
 import RseEngagementComponent from '@/vuejs/modules/products/components/accord-cadre/RseEngagementComponent.vue'
-import { MainPageList } from '@/vuejs/router/pages-list'
-import { storeToRefs } from 'pinia'
 
 const route = useRoute()
 const router = useRouter()

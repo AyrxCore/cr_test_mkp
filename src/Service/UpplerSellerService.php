@@ -23,7 +23,7 @@ class UpplerSellerService extends AbstractUpplerService
         return \json_decode($res->getContent(), true);
     }
 
-    public function getSeller(int $sellerId = null): array
+    public function getSeller(int $sellerId): array
     {
         $res = $this->request(
             'GET',
@@ -37,7 +37,7 @@ class UpplerSellerService extends AbstractUpplerService
         return \json_decode($res->getContent(), true);
     }
 
-    public function getSellerPromotions(int $sellerId): array|null
+    public function getSellerPromotions(int $sellerId): ?array
     {
         $res = $this->request(
             'GET',

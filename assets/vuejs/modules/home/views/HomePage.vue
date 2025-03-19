@@ -94,7 +94,20 @@
             </RouterLink>
           </p>
         </div>
-        <PartnersCarousel class="mt-5" />
+        <SellersCarousel class="mt-5" />
+        <div class="flex justify-center">
+          <p class="mt-10">
+            <RouterLink
+              :style="{
+                color: betterTextColor('primary'),
+              }"
+              :to="{ name: ProductPageList.SELLERS }"
+              class="button button-primary"
+            >
+              Tous les partenaires
+            </RouterLink>
+          </p>
+        </div>
       </div>
 
       <template
@@ -175,17 +188,17 @@ import { betterTextColor } from '@/vuejs/services/utils'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
 import { NewsPageList, ProductPageList } from '@/vuejs/router/pages-list'
+import { Product } from '@/vuejs/types/Product'
 
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import AccordsCadreComponent from '@/vuejs/modules/home/component/AccordsCadreComponent.vue'
 import CarouselActualitesComponent from '@/vuejs/modules/home/component/CarouselActualitesComponent.vue'
 import ExpertContentsComponent from '@/vuejs/modules/home/component/ExpertContentsComponent.vue'
 import OurCategoriesComponent from '@/vuejs/modules/home/component/OurCategoriesComponent.vue'
-import PartnersCarousel from '@/vuejs/modules/shared/PartnersCarouselComponent.vue'
+import SellersCarousel from '@/vuejs/modules/shared/SellersCarouselComponent.vue'
 import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
 import ShowcaseModal from '@/vuejs/modules/home/component/ShowcaseModal.vue'
 import SemanticButtonsComponent from '@/vuejs/modules/home/component/SemanticButtonsComponent.vue'
-import { Product } from '@/vuejs/types/Product'
 
 const favoriteStore = useFavoriteStore()
 const productStore = useProductStore()

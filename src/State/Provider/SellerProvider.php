@@ -12,6 +12,10 @@ use App\Factory\SellerFactory;
 use App\Service\UpplerProductService;
 use App\Service\UpplerSellerService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 
 readonly class SellerProvider implements ProviderInterface
 {
@@ -23,33 +27,45 @@ readonly class SellerProvider implements ProviderInterface
     }
 
     /**
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
      * @throws \Exception
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): Seller|array|null
     {
         if ($operation instanceof CollectionOperationInterface) {
-            try {
-                $params = $context['filters'] ?? [];
-
-                $allUpplerSellers = $this->upplerSellerService->getSellers();
-                $allAdherentSellers = $this->upplerProductService->findAllSellers(params: $params);
-
-                $sellers = \array_filter($allUpplerSellers['results'], function ($seller) use ($allAdherentSellers) {
-                    return \array_key_exists($seller['id'], $allAdherentSellers);
-                });
-
-                return $this->sellerFactory->createAndAddToCollection($sellers);
-            } catch (\Exception $e) {
-                throw new BadRequestHttpException('An error occurred while retrieving the sellers.');
-            }
+            return $this->getSellers($context);
         }
 
-        $seller = $this->upplerSellerService->getSeller($uriVariables['id']);
+        return $this->getSeller($uriVariables['id']);
+    }
 
-        return $this->sellerFactory->create($seller);
+    private function getSellers(array $context = []): array
+    {
+        try {
+            $params = $context['filters'] ?? [];
+            $allUpplerSellers = $this->upplerSellerService->getSellers();
+            $allAdherentSellers = $this->upplerProductService->findAllSellers(params: $params);
+
+            $sellers = \array_filter($allUpplerSellers['results'], function ($seller) use ($allAdherentSellers) {
+                return \array_key_exists($seller['id'], $allAdherentSellers);
+            });
+
+            return $this->sellerFactory->createAndAddToCollection($sellers);
+        } catch (\Exception $e) {
+            throw new BadRequestHttpException('An error occurred while retrieving the sellers: '.$e->getMessage());
+        }
+    }
+
+    private function getSeller(int $sellerId): Seller
+    {
+        try {
+            $seller = $this->upplerSellerService->getSeller($sellerId);
+
+            return $this->sellerFactory->create($seller);
+        } catch (\Exception $e) {
+            throw new NotFoundHttpException('Seller not found.');
+        }
     }
 }

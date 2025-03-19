@@ -3,6 +3,7 @@ import { Seller, SellerPromotion, SellerStoreState } from '@/vuejs/types/Seller'
 import SellerHttpClient from '@/vuejs/services/httpclient/SellerHttpClient'
 import { notifyError } from '@/vuejs/services/utils'
 import { useChannelStore } from '@/vuejs/stores/channel'
+import { Category } from '@/vuejs/types/Product/Category'
 
 export const SELLER_IDS = {
   KROMM: 26,
@@ -66,6 +67,15 @@ export const useSellerStore = defineStore({
       if (this.promotions[sellerId]) return
       this.promotions[sellerId] =
         await SellerHttpClient.get().getSellerPromotions(sellerId)
+    },
+    async getSellersListing(params = {}): Promise<Seller[]> {
+      try {
+        return await SellerHttpClient.get().fetchSellersByParams(params)
+      } catch (error) {
+        notifyError(
+          `Une erreur est survenue lors du chargement des vendeurs, merci de contacter un administrateur.`,
+        )
+      }
     },
   },
   getters: {

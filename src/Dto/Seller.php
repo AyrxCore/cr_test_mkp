@@ -26,7 +26,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         ),
         new GetCollection(
             openapiContext: ['summary' => 'Get remote sellers list', 'description' => 'It gets a list of sellers from remote data provider']
-        )
+        ),
     ],
     provider: SellerProvider::class
 )]
@@ -36,21 +36,21 @@ final class Seller
     #[Groups(['products:get', 'product:get'])]
     private ?int $id = null;
     #[Groups(['products:get', 'product:get'])]
-    private ?string $name;
+    private ?string $name = null;
     #[Groups(['products:get', 'product:get'])]
-    private ?string $corporateName;
+    private ?string $corporateName = null;
     #[Groups(['products:get', 'product:get'])]
-    private ?string $description;
+    private ?string $description = null;
     #[Groups(['products:get', 'product:get'])]
-    private ?string $avatar;
+    private ?string $avatar = null;
     #[Groups(['products:get', 'product:get'])]
-    private ?array $tos;
+    private array $tos = [];
 
     #[Groups(['products:get'])]
-    private ?int $productCount;
+    private ?int $productCount = null;
 
     #[Groups(['products:get'])]
-    private ?bool $checked;
+    private ?bool $checked = null;
 
     public function getId(): ?int
     {

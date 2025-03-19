@@ -224,21 +224,34 @@ export const useProductStore = defineStore({
     },
     selectedSearchCategory(state): ProductCategory {
       const categories = state.products?.filters?.categories ?? []
-      return findCheckedItem(categories)
+      return findCheckedItemCategory(categories)
+    },
+    selectedSearchPartner(state): ProductCategory {
+      const companies = state.products?.filters?.companies ?? []
+      return findCheckedItemCompany(companies)
     },
   },
 })
 
-function findCheckedItem(categories: any[]): any | null {
+function findCheckedItemCategory(categories: any[]): any | null {
   for (const item of categories) {
     if (item.checked === true) {
       return item
     }
     if (item.children && item.children.length > 0) {
-      const childResult = findCheckedItem(item.children)
+      const childResult = findCheckedItemCategory(item.children)
       if (childResult) {
         return childResult
       }
+    }
+  }
+  return null
+}
+
+function findCheckedItemCompany(companies: any[]): any | null {
+  for (const item of companies) {
+    if (item.checked === true) {
+      return item
     }
   }
   return null

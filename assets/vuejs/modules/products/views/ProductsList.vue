@@ -126,6 +126,7 @@ const {
   products,
   selectedCategoryId,
   selectedSearchCategory,
+  selectedSearchPartner,
   selectedProperties,
   selectedCompanyId,
   searchTerms,
@@ -200,7 +201,11 @@ const termsOrCategoryFilterName = computed((): string => {
     return selectedSearchCategory.value.name
   }
 
-  return 'Recherche'
+  if (selectedSearchPartner.value) {
+    return selectedSearchPartner.value.name
+  }
+
+  return ''
 })
 
 watch(

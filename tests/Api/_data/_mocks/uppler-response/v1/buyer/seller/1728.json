@@ -1,0 +1,50 @@
+{
+    "id": 1728,
+    "name": "FRECHE LOCATION",
+    "corporate_name": null,
+    "description": [],
+    "slug": "freche-location",
+    "avatar": "09\/45\/7cf8d69c4ae40d91d13c6b14a749.png",
+    "avatar_url": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/09\/45\/7cf8d69c4ae40d91d13c6b14a749.png",
+    "vat": null,
+    "phone": null,
+    "type": null,
+    "state": 1,
+    "default_address": {
+        "id": 3207,
+        "first_name": null,
+        "last_name": null,
+        "company": "FRECHE LOCATION",
+        "province": null,
+        "country": {
+            "id": 83,
+            "name": {
+                "fr": "France",
+                "es": "Francia",
+                "default": "France"
+            }
+        },
+        "street": "8 rue d'Athènes",
+        "city": "Vitrolles",
+        "postcode": "13127"
+    },
+    "tos": null,
+    "number": "42154415600134",
+    "openings": [],
+    "support_email": null,
+    "support_phone": null,
+    "first_contact_title": null,
+    "first_contact_lastname": null,
+    "first_contact_firstname": null,
+    "second_contact_title": null,
+    "second_contact_lastname": null,
+    "second_contact_firstname": null,
+    "second_contact_email": null,
+    "second_contact_phone": null,
+    "website": null,
+    "company_number": null,
+    "external_id": null,
+    "dynamic_fields": [],
+    "parent_company": null,
+    "company_subordinations": []
+}
