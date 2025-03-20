@@ -259,6 +259,11 @@
     class="modal"
     @cancel="showContactForm = false"
   />
+  <StellantisModal
+    v-if="showStellantisModal"
+    class="modal"
+    @accept-stellantis="valideStellantis"
+  />
 </template>
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
@@ -268,6 +273,7 @@ import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vu
 import ArrowRightIcon from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import CGUModal from '@/vuejs/modules/login/component/CGUModal.vue'
+import StellantisModal from '@/vuejs/modules/login/component/StellantisModal.vue'
 import ContactModal from '@/vuejs/modules/contact/component/ContactModal.vue'
 import EyeIcon from '@/vuejs/modules/shared/icon/EyeIconComponent.vue'
 import EyeSlashIcon from '@/vuejs/modules/shared/icon/EyeSlashIconComponent.vue'
@@ -293,6 +299,8 @@ const accountSelectedId = ref<string>(null)
 const accountAcceptCGU = ref(null)
 const showCGUModal = ref<boolean>(false)
 const showContactForm = ref<boolean>(false)
+const showStellantisModal = ref<boolean>(false)
+const selectedAccount = ref(null)
 
 const { show: showAlert } = storeToRefs(alertStore)
 
@@ -305,79 +313,112 @@ const {
   channelPrivacyPolicyLink,
 } = storeToRefs(useChannelStore())
 
-const loginSubmit = async () => {
-  if (isLoading.value) return
-  alertStore.setClose()
-  isLoading.value = true
-
-  const accounts = await userStore.authenticate({
-    username: username.value.toLowerCase(),
-    password: password.value,
-  })
-
-  if (!accounts.length) {
-    isLoading.value = false
-    return false
-  }
-
-  if (accounts.length > 1) {
-    userAccounts.value = accounts
-  } else {
-    const [firstAccount] = accounts
-
-    accountSelectedId.value = firstAccount.id
-
-    if (firstAccount.acceptCGU) {
-      await selectAccount(accountSelectedId.value)
-    } else {
-      showCGUModal.value = true
-    }
-  }
-  isLoading.value = false
-}
-
-const toggleShowPassword = () => {
-  showPassword.value = !showPassword.value
-}
-
-const selectAccount = async (accountId) => {
+const handleAccountSelection = async (accountId: string, account?: Account) => {
   if (!accountId) {
     alertStore.setShow(
       'Vous devez sélectionner un compte acheteur pour vous connecter',
       AlertType.danger,
     )
-
     return
   }
 
+  const selected =
+    account || userAccounts.value.find((acc) => acc.id === accountId)
+  if (!selected) {
+    alertStore.setShow('Compte non trouvé', AlertType.danger)
+    return
+  }
+
+  selectedAccount.value = selected
+
+  if (!selected.acceptCGU) {
+    showCGUModal.value = true
+    return
+  }
+
+  if (
+    selected.adherent?.showModalStellantis &&
+    !selected.adherent?.stellantisModalValidated
+  ) {
+    showStellantisModal.value = true
+    return
+  }
+
+  await proceedWithAccountSelection(accountId)
+}
+
+const loginSubmit = async () => {
+  if (isLoading.value) return
+  alertStore.setClose()
   isLoading.value = true
 
-  const select = await userStore.selectUserAccount(accountId)
-  window.dataLayer?.push({
-    event: 'login',
-  })
+  try {
+    const accounts = await userStore.authenticate({
+      username: username.value.toLowerCase(),
+      password: password.value,
+    })
 
-  const target = getUrlParam('target')
-  select && (document.location.href = target ? `/${target}` : '/')
+    if (!accounts.length) {
+      isLoading.value = false
+      return false
+    }
 
-  isLoading.value = false
-}
-const onAccountClick = async () => {
-  if (!accountAcceptCGU.value && accountSelectedId.value) {
-    showCGUModal.value = true
-  } else {
-    await selectAccount(accountSelectedId.value)
+    if (accounts.length > 1) {
+      userAccounts.value = accounts
+      isLoading.value = false
+    } else {
+      const [firstAccount] = accounts
+      accountSelectedId.value = firstAccount.id
+      await handleAccountSelection(firstAccount.id, firstAccount)
+    }
+  } catch (error) {
+    console.error("Erreur lors de l'authentification:", error)
+    alertStore.setShow('Erreur de connexion', AlertType.danger)
+    isLoading.value = false
   }
+}
+
+const proceedWithAccountSelection = async (accountId: string) => {
+  isLoading.value = true
+
+  try {
+    await userStore.selectUserAccount(accountId)
+    window.dataLayer?.push({ event: 'login' })
+    const target = getUrlParam('target')
+    document.location.href = target ? `/${target}` : '/'
+  } catch (error) {
+    console.error('Erreur lors de la sélection du compte:', error)
+    alertStore.setShow('Erreur de sélection du compte', AlertType.danger)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+const onAccountClick = async () => {
+  await handleAccountSelection(accountSelectedId.value)
   sendGaEvent('click_siret_valider')
 }
 
-const onChangeBuyer = (acceptCgu) => {
+const onChangeBuyer = (acceptCgu: boolean) => {
   accountAcceptCGU.value = acceptCgu
 }
 
 const valideCGU = async () => {
   showCGUModal.value = false
-  await selectAccount(accountSelectedId.value)
+
+  if (
+    selectedAccount.value?.adherent?.showModalStellantis &&
+    !selectedAccount.value?.adherent?.stellantisModalValidated
+  ) {
+    showStellantisModal.value = true
+  } else {
+    await proceedWithAccountSelection(accountSelectedId.value)
+  }
+}
+
+const valideStellantis = async () => {
+  showStellantisModal.value = false
+  await proceedWithAccountSelection(accountSelectedId.value)
 }
 
 const eventClick = (eventName: string, url: string) => {
@@ -417,4 +458,8 @@ const contactAdherentsService = computed((): string => {
     'Joindre le service adhérents'
   )
 })
+
+const toggleShowPassword = () => {
+  showPassword.value = !showPassword.value
+}
 </script>

@@ -37,6 +37,8 @@ export interface Adherent {
   reducceServiceName: string | null
   reducceUrl: string | null
   adherentTarifShowcases: AdherentTarifShowcase[] | []
+  showModalStellantis?: boolean
+  stellantisModalValidated?: boolean
 }
 
 export interface Account extends ExternalApiDataEntity {

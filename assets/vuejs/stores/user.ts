@@ -192,7 +192,6 @@ export const useUserStore = defineStore({
       }
     },
   },
-
   getters: {
     isLogged(): boolean {
       return this.user !== null

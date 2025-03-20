@@ -6,10 +6,9 @@ namespace App\Controller;
 
 use App\Entity\Channel;
 use App\Repository\AccountRepository;
-use App\Service\AccordCadreSubscriptionService;
+use App\Service\StellantisService;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,8 +32,7 @@ class StellantisRattachementController extends AbstractController implements Cha
     public function __construct(
         private LoggerInterface $logger,
         private AccountRepository $accountRepository,
-        private AccordCadreSubscriptionService $subscriptionService,
-        private ParameterBagInterface $parameterBag
+        private StellantisService $stellantisService,
     ) {
     }
 
@@ -59,15 +57,14 @@ class StellantisRattachementController extends AbstractController implements Cha
             return $this->renderError('Aucun compte n\'a été trouvé pour le mail '.$email, $channel);
         }
 
-        $accords = $this->parameterBag->get('STELLANTIS_PARAMS')['ACCORDS_IDS'];
-
         foreach ($accounts as $account) {
-            \shuffle($accords);
-            $params = [
-                'accordId' => $accords[0],
-                'accordName' => 'Stellantis',
-            ];
-            $this->subscriptionService->subscription($params, $account->getId()->__toString(), $channel);
+            try {
+                $this->stellantisService->processStellantisSubscription($account);
+            } catch (\Exception $e) {
+                $this->logger->error('Error processing Stellantis subscription: '.$e->getMessage());
+
+                return $this->renderError('Une erreur est survenue lors du rattachement', $channel);
+            }
         }
 
         return $this->render('stellantis/index.html.twig', [
