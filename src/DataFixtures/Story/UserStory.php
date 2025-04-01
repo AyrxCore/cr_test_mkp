@@ -28,7 +28,6 @@ final class UserStory extends Story
             ->create([
                 'id' => 'ce7ed022-5789-11ec-b3a5-0af08f946010',
                 'name' => 'GROUPE QANTIS',
-                'reducceCode' => 'KKT26DIB',
                 'siret' => '53849238000026',
                 'street' => '185 ALLEE DES CYPRES',
                 'city' => 'LIMONEST',
@@ -93,7 +92,7 @@ final class UserStory extends Story
             'phone' => '04 05 06 07 08',
             'serviceFonction' => 'service produits',
             'user' => $user,
-            ]);
+        ]);
 
         UserFactory::createOne([
             'email' => 'api_user@qantis.co',

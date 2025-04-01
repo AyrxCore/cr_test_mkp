@@ -53,10 +53,6 @@ class Adherent
     private Collection $accounts;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['user:simple', 'adherent:get'])]
-    private ?string $reducceCode = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['adherent:get'])]
     private ?string $siret = null;
 
@@ -88,14 +84,6 @@ class Adherent
     private ?Channel $channel = null;
 
     private ?string $channelCode = null;
-
-    #[Groups(['user:simple'])]
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $reducceServiceName = null;
-
-    #[Groups(['user:simple'])]
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $reducceUrl = null;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     private ?self $parent = null;
@@ -187,18 +175,6 @@ class Adherent
                 $account->setAdherent(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getReducceCode(): ?string
-    {
-        return $this->reducceCode;
-    }
-
-    public function setReducceCode(?string $reducceCode): self
-    {
-        $this->reducceCode = $reducceCode;
 
         return $this;
     }
@@ -313,6 +289,22 @@ class Adherent
         return $this;
     }
 
+    public function getParent(): ?self
+    {
+        if ($this->parent === $this) {
+            return null;
+        }
+
+        return $this->parent;
+    }
+
+    public function setParent(?self $parent): self
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
     public function getChannel(): ?Channel
     {
         return $this->channel;
@@ -333,54 +325,6 @@ class Adherent
     public function setChannelCode(?string $channelCode): void
     {
         $this->channelCode = $channelCode;
-    }
-
-    public function getReducceServiceName(): ?string
-    {
-        if ($this->reducceServiceName !== null) {
-            return $this->reducceServiceName;
-        }
-
-        return $this->getParent()?->getReducceServiceName();
-    }
-
-    public function setReducceServiceName(?string $reducceServiceName): self
-    {
-        $this->reducceServiceName = $reducceServiceName;
-
-        return $this;
-    }
-
-    public function getReducceUrl(): ?string
-    {
-        if ($this->reducceUrl !== null) {
-            return $this->reducceUrl;
-        }
-
-        return $this->getParent()?->getReducceUrl();
-    }
-
-    public function setReducceUrl(?string $reducceUrl): self
-    {
-        $this->reducceUrl = $reducceUrl;
-
-        return $this;
-    }
-
-    public function getParent(): ?self
-    {
-        if ($this->parent === $this) {
-            return null;
-        }
-
-        return $this->parent;
-    }
-
-    public function setParent(?self $parent): self
-    {
-        $this->parent = $parent;
-
-        return $this;
     }
 
     public function getLibelleApe(): ?string

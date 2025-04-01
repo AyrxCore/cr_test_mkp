@@ -3,7 +3,9 @@
   "@id": "/api/me",
   "@type": "User",
   "email": "test@qantis.co",
-  "roles": ["ROLE_USER"],
+  "roles": [
+    "ROLE_USER"
+  ],
   "username": "test@qantis.co",
   "firstName": "Gaëtan",
   "lastName": "DE SAINTE MARIE",
@@ -17,7 +19,6 @@
     "adherent": {
       "@id": "/api/adherents/@uuid@",
       "@type": "Adherent",
-      "reducceCode": "KKT26DIB",
       "adherentTarifShowcases": [],
       "logo": "@string@"
     },
