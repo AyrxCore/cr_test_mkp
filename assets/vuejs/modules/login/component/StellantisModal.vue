@@ -1,7 +1,7 @@
 <template>
   <div class="modal-overlay">
     <div
-      class="mx-auto my-auto max-h-[90vh] w-[90%] rounded-xl bg-white px-4 py-6 text-black sm:w-[80%] md:w-[70%] lg:w-[50%] lg:px-8"
+      class="mx-auto my-auto max-h-[90vh] w-[90%] overflow-scroll rounded-xl bg-white px-4 py-6 text-black sm:w-[80%] md:w-[70%] lg:w-[50%] lg:px-8"
     >
       <h2 class="mb-6 mt-2 text-center text-xl font-bold sm:text-2xl">
         Conditions particulières Stellantis
@@ -46,7 +46,7 @@
           }"
           class="cursor-pointer text-xs text-primary sm:text-sm md:text-base"
         >
-          <input v-model="acceptStellantis" type="checkbox" class="mr-2" />
+          <input v-model="acceptStellantis" class="mr-2" type="checkbox" />
           J'accepte les conditions et je demande mon rattachement
         </label>
       </div>
