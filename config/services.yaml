@@ -40,7 +40,6 @@ parameters:
     STELLANTIS_MAIL:
       FROM: '%env(MAIL_FROM)%'
       TO: '%env(STELLANTIS_MAIL_TO)%'
-      CC: '%env(STELLANTIS_MAIL_CC)%'
 
 imports:
   - { resource: services/ }

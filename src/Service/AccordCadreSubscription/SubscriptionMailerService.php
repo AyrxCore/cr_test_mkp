@@ -6,7 +6,6 @@ namespace App\Service\AccordCadreSubscription;
 
 use App\Entity\Account;
 use App\Service\MailerProvider;
-use Exception;
 use Psr\Log\LoggerInterface;
 use Twig\Environment;
 
@@ -23,19 +22,18 @@ class SubscriptionMailerService
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function sendMail(
         Account $account,
         string $email,
-        ?string $accorName = null,
+        ?string $accordName,
         bool $isStellantis = false
     ): void {
-        $listEmails = [];
-        $listEmails = $this->getUserEmail($account, $email, $accorName);
-
         if ($isStellantis) {
-            $listEmails = \array_merge($listEmails, $this->getStellantisEmails($account));
+            $listEmails = $this->getStellantisEmails($account);
+        } else {
+            $listEmails = $this->getUserEmail($account, $email, $accordName);
         }
         try {
             foreach ($listEmails as $email) {
@@ -47,7 +45,7 @@ class SubscriptionMailerService
                     $email['options'] ?? []
                 );
             }
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             $this->logger->critical(
                 "Erreur d'envoi de mail pour une demande de subscription "
                 .$account->getUser()->getemail().' '.$account->getAdherent()->getName().' : '.
@@ -62,14 +60,14 @@ class SubscriptionMailerService
             [
                 'from' => $this->emailFrom,
                 'to' => $email,
-                'subject' => 'MARKETPLACE - Bénéficier des conditions pour la FAT ' . $accordName,
+                'subject' => 'MARKETPLACE - Bénéficier des conditions pour la FAT '.$accordName,
                 'template' => 'mails/request.accord.subscription.html.twig',
                 'params' => [
                     'fat' => $accordName,
                     'email' => $account->getUser()->getemail(),
-                    'nom' => $account->getUser()->getFirstName() . ' ' . $account->getUser()->getLastName(),
+                    'nom' => $account->getUser()->getFirstName().' '.$account->getUser()->getLastName(),
                     'societe' => $account->getAdherent()->getName(),
-                    'sugarLink' => $this->sugarLink . $account->getAdherent()->getId(),
+                    'sugarLink' => $this->sugarLink.$account->getAdherent()->getId(),
                 ],
             ],
         ];
@@ -78,11 +76,12 @@ class SubscriptionMailerService
     private function getStellantisEmails(Account $account): array
     {
         $parameters = $this->stellantisParams;
+
         return [
             [
                 'from' => $parameters['ADHERENT_MAIL']['FROM'],
                 'to' => \explode(';', $parameters['ADHERENT_MAIL']['TO']),
-                'subject' => 'Marketplace - ' . $account->getAdherent()->getSiret() . ' - Demande de rattachement au contrat QANTIS/STELLANTIS',
+                'subject' => 'Marketplace - '.$account->getAdherent()->getSiret().' - Demande de rattachement au contrat QANTIS/STELLANTIS',
                 'template' => 'mails/stellantis/to_adherent_service.html.twig',
                 'params' => [
                     'account' => $account,
@@ -92,13 +91,12 @@ class SubscriptionMailerService
             [
                 'from' => $parameters['STELLANTIS_MAIL']['FROM'],
                 'to' => \explode(';', $parameters['STELLANTIS_MAIL']['TO']),
-                'subject' => $account->getAdherent()->getSiret() . ' - Demande de rattachement au contrat STELLANTIS',
+                'subject' => $account->getAdherent()->getSiret().' - Demande de rattachement au contrat STELLANTIS',
                 'template' => 'mails/stellantis/to_stellantis.html.twig',
                 'params' => [
                     'account' => $account,
                     'horodatage' => new \DateTime('now'),
                 ],
-                'options' => ['cc' => \explode(',', $parameters['STELLANTIS_MAIL']['CC'])],
             ],
         ];
     }
