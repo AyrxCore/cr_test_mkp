@@ -163,6 +163,15 @@
             "ref": "1019e5c08d4821cb9b77f4891f8e9c31ff20ac6f"
         }
     },
+    "symfony/brevo-mailer": {
+        "version": "6.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "6.4",
+            "ref": "7c1038ceb733175f610a913a885a7c8b552b703a"
+        }
+    },
     "symfony/console": {
         "version": "5.4",
         "recipe": {
@@ -229,15 +238,6 @@
         "files": [
             "config/packages/lock.yaml"
         ]
-    },
-    "symfony/mailchimp-mailer": {
-        "version": "6.4",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "4.4",
-            "ref": "1be490e068472fc87e226cf54bc95fb6f2e49117"
-        }
     },
     "symfony/mailer": {
         "version": "6.4",
