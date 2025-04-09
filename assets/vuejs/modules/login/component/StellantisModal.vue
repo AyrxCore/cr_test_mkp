@@ -16,15 +16,15 @@
 
         <ol class="list-inside list-decimal space-y-2 pl-4">
           <li>
-            A immatriculer les véhicules en France et les utiliser à titre
+            À immatriculer les véhicules en France et les utiliser à titre
             principal en France.
           </li>
           <li>
-            A ce que chacun des véhicules soit utilisé par les salariés
+            À ce que chacun des véhicules soit utilisé par les salariés
             principalement pour leurs besoins professionnels.
           </li>
           <li>
-            A ce que chaque véhicule soit conservé pour une période minimum de
+            À ce que chaque véhicule soit conservé pour une période minimum de
             douze mois et ne soit pas revendu avant l'expiration de ce délai de
             conservation.
           </li>
@@ -54,6 +54,7 @@
       <div class="mt-6 flex justify-center">
         <ButtonComponent
           class="button-primary w-auto"
+          :is-loading="isLoading"
           @click="validateStellantis"
         >
           Valider
@@ -64,11 +65,18 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { onBeforeMount, onBeforeUnmount, ref } from 'vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 
+const props = defineProps({
+  isLoading: {
+    type: Boolean,
+    default: false,
+  },
+})
+
 const showAlert = ref<boolean>(false)
-const acceptStellantis = ref(false)
+const acceptStellantis = ref<boolean>(false)
 const emit = defineEmits(['accept-stellantis'])
 
 const validateStellantis = () => {
@@ -79,6 +87,13 @@ const validateStellantis = () => {
     return false
   }
 }
+
+onBeforeMount((): void => {
+  document.body.style.overflow = 'hidden'
+})
+onBeforeUnmount((): void => {
+  document.body.style.overflow = 'initial'
+})
 </script>
 
 <style scoped></style>

@@ -19,32 +19,30 @@
     <RouterLink
       :to="{ name: ProductPageList.SELLERS }"
       replace
-      class="sr-only rounded border-b-2 border-b-transparent bg-secondary text-center text-sm text-white hover:border-primary lg:not-sr-only lg:w-48 lg:p-2 lg:px-0.5"
+      class="sr-only w-fit min-w-fit rounded border-b-2 border-b-transparent bg-secondary text-center text-sm text-white hover:border-primary lg:not-sr-only lg:px-4 lg:py-2"
     >
       Tous les partenaires
     </RouterLink>
-    <div class="flex w-full items-center justify-around">
-      <div
+    <div
+      class="sr-only flex items-center justify-around lg:not-sr-only lg:w-fit"
+    >
+      <RouterLink
         v-for="category in listMenu"
         :key="category.id"
-        class="sr-only flex lg:not-sr-only"
+        :to="{
+          name: ProductPageList.PRODUCTS,
+          query: { category: category.id },
+        }"
+        class="ml-3 border-b-2 border-b-transparent px-0.5 text-center text-sm last:mr-3 hover:border-primary xl:ml-6 xl:last:mr-6"
+        replace
+        @click="
+          sendGaEvent('click_header_category', {
+            category_name: category.name,
+          })
+        "
       >
-        <RouterLink
-          :to="{
-            name: ProductPageList.PRODUCTS,
-            query: { category: category.id },
-          }"
-          class="border-b-2 border-b-transparent px-0.5 text-center text-sm hover:border-primary"
-          replace
-          @click="
-            sendGaEvent('click_header_category', {
-              category_name: category.name,
-            })
-          "
-        >
-          {{ category.name }}
-        </RouterLink>
-      </div>
+        {{ category.name }}
+      </RouterLink>
     </div>
   </div>
 </template>

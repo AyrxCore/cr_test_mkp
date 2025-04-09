@@ -2,6 +2,7 @@
   <template v-if="props.component === ''">
     <RouterView />
     <NotifComponent />
+    <InternalStellantisModal />
   </template>
   <LoginForm v-else-if="props.component === 'login'" />
   <PrehomeRightPart v-else-if="props.component === 'prehome-right-part'" />
@@ -39,14 +40,15 @@ import NotifComponent from '@/vuejs/modules/shared/NotifComponent.vue'
 import CmsPageComponent from '@/vuejs/modules/shared/CmsPageComponent.vue'
 import PrehomeRightPart from '@/vuejs/modules/login/component/PrehomeRightPart.vue'
 import FooterPrehome from '@/vuejs/modules/login/component/FooterPrehome.vue'
+import InternalStellantisModal from '@/vuejs/modules/shared/InternalStellantisModal.vue'
 
-import { useCategoryStore } from '@/vuejs/stores/category'
-import { useCartStore } from '@/vuejs/stores/cart'
-import { useChannelStore } from '@/vuejs/stores/channel'
 import { useBannerStore } from '@/vuejs/stores/banner'
+import { useCartStore } from '@/vuejs/stores/cart'
+import { useCategoryStore } from '@/vuejs/stores/category'
+import { useChannelStore } from '@/vuejs/stores/channel'
 
-import router from './router'
-import { CartPageList } from './router/pages-list'
+import router from '@/vuejs/router'
+import { CartPageList } from '@/vuejs/router/pages-list'
 import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
 
 const channelStore = useChannelStore()

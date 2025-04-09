@@ -5,11 +5,15 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Channel;
+use App\Events\UserAcceptStellantisModalEvent;
 use App\Repository\AccountRepository;
 use App\Service\StellantisService;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -30,9 +34,11 @@ class StellantisRattachementController extends AbstractController implements Cha
     ];
 
     public function __construct(
-        private LoggerInterface $logger,
-        private AccountRepository $accountRepository,
-        private StellantisService $stellantisService,
+        private readonly AccountRepository $accountRepository,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly LoggerInterface $logger,
+        private readonly RequestStack $requestStack,
+        private readonly StellantisService $stellantisService,
     ) {
     }
 
@@ -70,6 +76,22 @@ class StellantisRattachementController extends AbstractController implements Cha
         return $this->render('stellantis/index.html.twig', [
             'channel' => $channel,
         ]);
+    }
+
+    #[Route('/api/stellantis-subscription', name: 'stellantis_api_subscription', methods: ['POST'])]
+    public function subscription(): JsonResponse
+    {
+        $session = $this->requestStack->getSession();
+        $account = $this->accountRepository->find($session->get('account')->getId());
+
+        $this->eventDispatcher->dispatch(new UserAcceptStellantisModalEvent($account));
+
+        return new JsonResponse(
+            [
+                'status' => 'ok',
+                'message' => 'Subscription request sent successfully.',
+            ]
+        );
     }
 
     private function renderError(string $errorMessage, Channel $channel): Response

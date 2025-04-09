@@ -45,6 +45,12 @@ export default class ProductHttpClient extends BaseClientService {
       .then((response) => response.data)
   }
 
+  public updateStellantisSubscription<T extends []>(): Promise<T> {
+    return this.apiClient
+      .post<T>('stellantis-subscription')
+      .then((response) => response.data)
+  }
+
   public downloadPdfFile<T extends []>(url: string): Promise<T> {
     return this.apiClient
       .get(`edit-download-pdf-file?url=${url}`)
