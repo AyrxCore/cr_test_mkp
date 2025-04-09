@@ -2,7 +2,7 @@
   <template v-if="props.component === ''">
     <RouterView />
     <NotifComponent />
-    <InternalStellantisModal />
+    <InternalStellantisModal v-if="!userStore.isNeoAutoLogin" />
   </template>
   <LoginForm v-else-if="props.component === 'login'" />
   <PrehomeRightPart v-else-if="props.component === 'prehome-right-part'" />
@@ -46,6 +46,7 @@ import { useBannerStore } from '@/vuejs/stores/banner'
 import { useCartStore } from '@/vuejs/stores/cart'
 import { useCategoryStore } from '@/vuejs/stores/category'
 import { useChannelStore } from '@/vuejs/stores/channel'
+import { useUserStore } from '@/vuejs/stores/user'
 
 import router from '@/vuejs/router'
 import { CartPageList } from '@/vuejs/router/pages-list'
@@ -55,6 +56,8 @@ const channelStore = useChannelStore()
 const cartStore = useCartStore()
 const categoryStore = useCategoryStore()
 const bannerStore = useBannerStore()
+const userStore = useUserStore()
+
 const { currentChannel, channelDocuments } = storeToRefs(channelStore)
 
 const props = defineProps({
