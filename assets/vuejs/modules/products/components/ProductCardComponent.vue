@@ -68,15 +68,7 @@
                 name: ProductPageList.PRODUCT,
                 params: { slug: productSlug },
               }"
-              @click="
-                $emit('click-title', {
-                  partenaire_name: props.product.seller.name,
-                  partenaire_id: props.product.seller.id,
-                  product_name: props.product.name,
-                  product_id: props.product.id,
-                  qty_value: quantity,
-                })
-              "
+              @click="sendGAEventData('click-title')"
             >
               {{ product.name }}
             </RouterLink>
@@ -99,72 +91,17 @@
           />
         </div>
         <!-- Fin bloc description -->
-
-        <!-- Bloc prix -->
-        <div class="my-1 flex h-[10%] w-full items-center justify-start">
-          <span
-            v-if="product.price"
-            class="mr-2 text-lg font-bold text-primary md:text-base lg:text-lg"
-          >
-            {{ formatPrice(product.price) }}€
-          </span>
-          <span
-            v-if="showLineThroughPrice"
-            :class="{
-              'text-sm line-through': product.price,
-              'text-sm font-bold': product.price === null,
-            }"
-          >
-            {{ formatPrice(product.priceReference) }}€ HT
-          </span>
-        </div>
-        <!-- Fin bloc prix -->
-
-        <!-- Bloc quantité -->
-        <div class="mb-1 flex h-[20%] justify-end">
-          <div class="mt-1 flex w-full justify-between">
-            <div
-              v-if="product.variants?.length > 2"
-              class="mx-auto items-center"
-            >
-              <RouterLink
-                :to="{
-                  name: ProductPageList.PRODUCT,
-                  params: { slug: productSlug },
-                }"
-                class="button border-2 border-primary !text-primary shadow-none hover:scale-105 hover:!border-primary hover:!bg-white hover:!shadow-inner-darker focus:!bg-white"
-              >
-                Voir les options
-                <ArrowRightIconComponent class="ml-2 w-4 stroke-primary" />
-              </RouterLink>
-            </div>
-
-            <div v-else class="flex w-full justify-between">
-              <div class="flex items-center justify-start">
-                <ProductQuantityComponent
-                  :quantity="quantity"
-                  @update-quantity="updateQuantity"
-                />
-              </div>
-              <ButtonAddToCartComponent
-                :product="product"
-                :quantity="quantity"
-                :variant-id="variantId"
-                @click="
-                  $emit('click-add-cart', {
-                    partenaire_name: product.seller.name,
-                    partenaire_id: product.seller.id,
-                    product_name: product.name,
-                    product_id: product.id,
-                    qty_value: product.quantity,
-                  })
-                "
-              />
-            </div>
-          </div>
-        </div>
-        <!-- Fin bloc quantité -->
-        <!-- Fin bloc texte -->
+        <NotSellableProductCardButtonComponent
+          v-if="!product.sellable"
+          :product="product"
+        />
+        <ProductCardButtonsComponent
+          v-else
+          :product="product"
+          @click-add-cart="sendGAEventData('click-add-cart')"
+          @click-plus-qty="sendGAEventData('click-plus-qty')"
+          @click-moins-qty="sendGAEventData('click-moins-qty')"
+        />
       </div>
     </div>
   </div>
@@ -172,22 +109,18 @@
 <script lang="ts" setup>
 import { computed, PropType, ref } from 'vue'
 
-import ButtonAddToCartComponent from '@/vuejs/modules/shared/ButtonAddToCartComponent.vue'
-import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import AddFavoriteComponent from '@/vuejs/modules/products/components/AddFavoriteComponent.vue'
-import ProductQuantityComponent from '@/vuejs/modules/shared/ProductQuantityComponent.vue'
+import ProductCardButtonsComponent from '@/vuejs/modules/products/components/ProductCardButtonsComponent.vue'
+import NotSellableProductCardButtonComponent from '@/vuejs/modules/products/components/NotSellableProductCardButtonComponent.vue'
 
-import {
-  formatPrice,
-  getUpplerImage,
-  betterTextColor,
-} from '@/vuejs/services/utils'
+import { getUpplerImage, betterTextColor } from '@/vuejs/services/utils'
 
 import router from '@/vuejs/router'
 import { ProductPageList } from '@/vuejs/router/pages-list'
 
 import { Product } from '@/vuejs/types/Product'
 import { Variant } from '@/vuejs/types/Product/Variant'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const emit = defineEmits([
   'click-add-cart',
@@ -205,13 +138,6 @@ const props = defineProps({
 })
 
 const quantity = ref<number>(1)
-
-const showLineThroughPrice = computed((): boolean => {
-  return (
-    props.product.priceReference &&
-    props.product.priceReference !== props.product.price
-  )
-})
 
 const variantId = computed((): string | null => {
   if (2 === props.product.variants?.length) {
@@ -238,20 +164,16 @@ const productDescription = computed((): string => {
   return props.product.description
 })
 
-const updateQuantity = (event) => {
-  const eventName =
-    quantity.value > event.quantity ? 'click-moins-qty' : 'click-plus-qty'
-  emit(eventName)
-  quantity.value = event.quantity
-}
-
 const goToProductPage = () => {
   router.push({
     name: ProductPageList.PRODUCT,
     params: { slug: productSlug.value },
   })
+  sendGAEventData('click-img')
+}
 
-  emit('click-img', {
+const sendGAEventData = (eventName: string) => {
+  sendGaEvent(eventName, {
     partenaire_name: props.product.seller.name,
     partenaire_id: props.product.seller.id,
     product_name: props.product.name,

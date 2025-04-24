@@ -43,7 +43,7 @@ class Adherent
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['adherent:get'])]
+    #[Groups(['adherent:get', 'user:simple'])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'adherent', targetEntity: AccordStatut::class, orphanRemoval: true)]

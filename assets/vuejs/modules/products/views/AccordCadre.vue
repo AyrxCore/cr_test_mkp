@@ -3,18 +3,18 @@
     <LoadingComponent v-if="isLoading" />
     <div v-else-if="accord && !isLoading && !isInShowcase" class="m-auto my-4">
       <HeaderPartnerComponent
-        :name="accord.name"
-        :note="accord.properties.note_rse ?? null"
         :banner-desktop="accord.properties.banniere_partenaire"
         :banner-text="accord.properties.texte_banniere"
         :categories="accord.categories"
+        :name="accord.name"
+        :note="accord.properties.note_rse ?? null"
         @scroll-to="scrollTo('#sectionRse')"
       />
 
       <div class="mt-12 flex flex-col text-sm md:text-base lg:text-lg">
         <ConditionsNegocieesComponent
-          :properties="accord.properties"
           :accord-name="accord.name"
+          :properties="accord.properties"
         />
 
         <div class="mt-5 flex flex-col items-center bg-primary p-6 lg:mt-0">
@@ -28,28 +28,28 @@
               status.not_activated === currentStatus.status &&
               !accord.properties.process_fat_client?.length
             "
+            :accord-name="accord.name"
+            :current-status="currentStatus"
             :label="accord.properties.cta_text_not_activated"
             :text="
               currentChannel.code === 'QANTIS_ACHAT'
                 ? accord.properties.process_not_activated
                 : accord.properties.process_not_activated_mb
             "
-            :current-status="currentStatus"
-            :accord-name="accord.name"
           />
           <ConditionsClientComponent
             v-else-if="
               status.not_activated === currentStatus.status &&
               !!accord.properties.process_fat_client?.length
             "
-            :properties="accord.properties"
             :accord-name="accord.name"
+            :properties="accord.properties"
           />
           <ConditionsPendingOrActivated
             v-else-if="status.not_activated !== currentStatus.status"
+            :accord-name="accord.name"
             :current-status="currentStatus"
             :properties="accord.properties"
-            :accord-name="accord.name"
           />
         </div>
       </div>
@@ -83,8 +83,8 @@
         <PromotionnalComponent :properties="accord.properties" />
       </div>
       <EnSavoirPlusComponent
-        :properties="accord.properties"
         :accord-name="accord.name"
+        :properties="accord.properties"
       />
       <div id="sectionRse" class="scroll-mt-40" />
       <RseEngagementComponent :properties="accord.properties" />
@@ -93,14 +93,19 @@
           Ces partenaires peuvent aussi vous intéresser
         </h3>
         <SellersCarouselComponent
-          class="mt-5"
           :params="sellersByCategoryParam"
+          class="mt-5"
           @click-partner-slider="
             sendGaEvent('click_fat_frise_logos', {
               partenaire_name: $event,
             })
           "
         />
+      </div>
+      <div class="m-auto mb-8 mt-2 max-w-screen-94 text-xs text-gray-500">
+        Les références, photographies, remises et tarifs des produits fournis
+        sur la marketplace n’ont qu’une valeur indicative. Pour toute
+        confirmation d’information, nous vous invitons à nous contacter.
       </div>
     </div>
     <div

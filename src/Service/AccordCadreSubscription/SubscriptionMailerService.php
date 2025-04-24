@@ -17,7 +17,7 @@ class SubscriptionMailerService
         private Environment $twig,
         private string $emailFrom,
         private string $sugarLink,
-        private array $stellantisParams
+        private array $stellantisParams,
     ) {
     }
 
@@ -28,7 +28,7 @@ class SubscriptionMailerService
         Account $account,
         string $email,
         ?string $accordName,
-        bool $isStellantis = false
+        bool $isStellantis = false,
     ): void {
         if ($isStellantis) {
             $listEmails = $this->getStellantisEmails($account);
@@ -48,7 +48,7 @@ class SubscriptionMailerService
         } catch (\Exception $exception) {
             $this->logger->critical(
                 "Erreur d'envoi de mail pour une demande de subscription "
-                .$account->getUser()->getemail().' '.$account->getAdherent()->getName().' : '.
+                .$account->getUser()->getEmail().' '.$account->getAdherent()->getName().' : '.
                 $exception->getMessage()
             );
         }
@@ -64,7 +64,7 @@ class SubscriptionMailerService
                 'template' => 'mails/request.accord.subscription.html.twig',
                 'params' => [
                     'fat' => $accordName,
-                    'email' => $account->getUser()->getemail(),
+                    'email' => $account->getUser()->getEmail(),
                     'nom' => $account->getUser()->getFirstName().' '.$account->getUser()->getLastName(),
                     'societe' => $account->getAdherent()->getName(),
                     'sugarLink' => $this->sugarLink.$account->getAdherent()->getId(),

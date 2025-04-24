@@ -49,17 +49,17 @@
                   "
                   :key="`ac-${product.id}`"
                   :accord="product"
-                  class="mt-5 !h-full !w-full bg-white md:mt-0 md:max-w-[350px]"
+                  class="mt-3 !h-full !w-full bg-white md:mt-0 md:max-w-[350px]"
                   @show-showcase-modal="handleShowcaseModal"
                 />
-                <ProductComponent
+                <ProductCardComponent
                   v-else-if="
                     currentPartenaire === product.seller.id ||
                     currentPartenaire === null
                   "
                   :key="`p-${product.id}`"
                   :product="product"
-                  class="!h-auto !w-full md:max-w-[350px]"
+                  class="mt-3 !h-full !w-full bg-white md:mt-0 md:max-w-[350px]"
                 />
               </template>
             </div>
@@ -107,7 +107,8 @@ import FiltersProductComponent from '@/vuejs/modules/products/components/filters
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 import MobileFiltersProductsComponent from '@/vuejs/modules/products/components/filters/MobileFiltersProductsComponent.vue'
-import ProductComponent from '@/vuejs/modules/products/components/ProductCardComponent.vue'
+import ProductCardComponent from '@/vuejs/modules/products/components/ProductCardComponent.vue'
+import ShowcaseModal from '@/vuejs/modules/home/component/ShowcaseModal.vue'
 
 import router from '@/vuejs/router'
 import { ProductPageList } from '@/vuejs/router/pages-list'
@@ -116,7 +117,6 @@ import { useProductStore } from '@/vuejs/stores/product'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import { useUserStore } from '@/vuejs/stores/user'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
-import ShowcaseModal from '@/vuejs/modules/home/component/ShowcaseModal.vue'
 
 const route = useRoute()
 const productStore = useProductStore()
@@ -166,17 +166,16 @@ const loadMore = async () => {
 
 const loadProducts = async (paramsProducts: object) => {
   await productStore.fetchProductsByParams(paramsProducts)
-
   internalProducts.value.push(
     ...products.value.results.filter(
       (product) =>
+        (product.isAccordCadre && !product.sellable) ||
         product.isAccordCadre ||
         !adherentTarifShowcases.value.some(
           (showcase) => showcase.accordId === product.properties['accord-id'],
         ),
     ),
   )
-
   if (route.query.q) {
     const eventLabel =
       products.value?.resultsCount > 0

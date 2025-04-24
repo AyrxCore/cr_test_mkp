@@ -56,7 +56,7 @@ abstract class AbstractUpplerService
         bool $isAdmin = false,
         bool $withoutToken = false,
         bool $withCache = false,
-        bool $addCustomLog = false
+        bool $addCustomLog = false,
     ): bool|ResponseInterface {
         if ($withCache) {
             $store = new Store($this->httpCachePath);
@@ -67,6 +67,7 @@ abstract class AbstractUpplerService
         $origOptions = $options;
 
         $this->computeHeaders($path, $options, $isAdmin, $withoutToken);
+
         $inputData = ['method' => $method, 'path' => $path, 'options' => $options];
         $response = null;
         $errors = [];
@@ -96,10 +97,8 @@ abstract class AbstractUpplerService
         }
     }
 
-    // obtient un token pour l'administrateur et le stocke dans
-    // un fichier afin qu'il soit partagé entre toutes les sessions
-    // forceRefreh permet de forcer à refresh le token sans vérifier l'existant
-    // (utile en cas de retour 401 'invalid_grant' d'Uppler)
+    // obtient un token pour le user et le stocke en session
+
     public function getAdminToken($forceRefresh = false): bool
     {
         $fileSystem = new Filesystem();
@@ -129,25 +128,8 @@ abstract class AbstractUpplerService
         return true;
     }
 
-    // obtient un token pour le user et le stocke en session
-    public function getUserToken(Account $account): bool
-    {
-        $session = $this->requestStack->getSession();
-
-        $accessToken = $this->getToken($account->getUpplerClientId(), $account->getUpplerClientSecret());
-        if ($accessToken !== null) {
-            // on stocke les données du user en session
-            // elles seront utilisées pour toutes les requêtes vers Uppler durant cette session
-            $session->set('access_token', $accessToken);
-            $session->set('account', $account);
-
-            return true;
-        }
-
-        return false;
-    }
-
     // Obtient un accessToken depuis l'API Uppler pour le user propriétaire des clientId/clientSecret
+
     public function getToken(string $clientId, string $clientSecret): ?object
     {
         $res = $this->request(
@@ -172,7 +154,28 @@ abstract class AbstractUpplerService
         return null;
     }
 
-    // populate le bloc header de la requete
+    public function getUserToken(Account $account): bool
+    {
+        $session = $this->requestStack->getSession();
+
+        $accessToken = $this->getToken($account->getUpplerClientId(), $account->getUpplerClientSecret());
+        if ($accessToken !== null) {
+            // on stocke les données du user en session
+            // elles seront utilisées pour toutes les requêtes vers Uppler durant cette session
+            $session->set('access_token', $accessToken);
+            $session->set('account', $account);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    // obtient un token pour l'administrateur et le stocke dans
+    // un fichier afin qu'il soit partagé entre toutes les sessions
+    // forceRefreh permet de forcer à refresh le token sans vérifier l'existant
+    // (utile en cas de retour 401 'invalid_grant' d'Uppler)
+
     private function computeHeaders(string &$url, array &$options = [], $isAdmin = false, $withoutToken = false): void
     {
         $session = $this->requestStack->getSession();
@@ -213,12 +216,14 @@ abstract class AbstractUpplerService
         }
     }
 
+    // populate le bloc header de la requete
+
     private function checkResponse(
         ResponseInterface $res,
         string $method,
         string $url,
         array $options,
-        bool $isAdmin
+        bool $isAdmin,
     ): void {
         $errorData = \json_decode($res->getContent(false));
         // le token a expiré

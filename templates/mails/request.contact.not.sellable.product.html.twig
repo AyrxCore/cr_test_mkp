@@ -1,0 +1,19 @@
+<p>Bonjour,</p>
+<p>Cet adhérent nous a montré son intérêt pour un produit/service sur la Marketplace.</p>
+<p>Pouvez-vous le recontacter pour lui expliquer comment en bénéficier svp :</p>
+<ul>
+  <li>Société: {{ societe }} (<a href="{{ sugarLink }}" target="_blank">Voir dans SugarCRM</a>)
+  <li>Nom: {{ nom }}</li>
+  <li>Email: {{ email }}</li>
+  <li>Téléphone: {{ phone }}</li>
+</ul>
+<ul>
+  <li>Partenaire: {{ partner }}</li>
+  <li>Produit/service concerné: {{ product }}</li>
+</ul>
+{% if message is not null %}
+  <ul>
+    <li>Message de l'adhérent: {{ message }}</li>
+  </ul>
+{% endif %}
+<p>Merci !</p>

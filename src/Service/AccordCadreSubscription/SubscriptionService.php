@@ -25,14 +25,14 @@ class SubscriptionService
      */
     public function subscription(
         string $accordId,
-        Account $account
+        Account $account,
     ): bool {
         try {
             return $this->processAccordStatus($account, $accordId);
         } catch (\Exception $exception) {
             $this->logger->critical(
                 "Erreur d'envoi de demande de subscription "
-                .$account->getUser()->getemail().' '.$account->getAdherent()->getName().' : '.
+                .$account->getUser()->getEmail().' '.$account->getAdherent()->getName().' : '.
                 $exception->getMessage()
             );
 

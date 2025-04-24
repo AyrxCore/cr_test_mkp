@@ -87,7 +87,7 @@ services:
   _instanceof:
     \App\Controller\ChannelRepositoryAwareControllerInterface:
       calls:
-        - setChannelRepository: ['@App\Repository\ChannelRepository']
+        - setChannelRepository: [ '@App\Repository\ChannelRepository' ]
 
     # SERVICES UPPLER
     App\Service\AbstractUpplerService:
@@ -100,10 +100,10 @@ services:
 
   # Voter
   App\Security\Voter\FavoriteVoter:
-    tags: [{ name: security.voter }]
+    tags: [ { name: security.voter } ]
 
   App\Security\Voter\SavedCartVoter:
-    tags: [{ name: security.voter }]
+    tags: [ { name: security.voter } ]
 
   Sentry\Integration\IgnoreErrorsIntegration:
     arguments:
@@ -131,6 +131,11 @@ services:
       $emailFrom: '%env(MAIL_FROM)%'
       $stellantisParams: '%STELLANTIS_PARAMS%'
 
+  App\Service\RequestContactMailerService:
+    arguments:
+      $sugarLink: '%env(SUGAR_LINK)%'
+      $emailFrom: '%env(MAIL_FROM)%'
+
   Symfony\Component\DependencyInjection\ContainerInterface: '@service_container'
 
   Symfony\Component\Security\Http\AccessMapInterface: '@security.access_map'
@@ -138,12 +143,12 @@ services:
   App\EventListener\JWTExceptionListener:
     tags:
       - {
-          name: 'kernel.event_listener',
-          event: 'lexik_jwt_authentication.on_jwt_expired',
-          method: 'onJWTException',
-        }
+        name: 'kernel.event_listener',
+        event: 'lexik_jwt_authentication.on_jwt_expired',
+        method: 'onJWTException',
+      }
       - {
-          name: 'kernel.event_listener',
-          event: 'lexik_jwt_authentication.on_jwt_invalid',
-          method: 'onJWTException',
-        }
+        name: 'kernel.event_listener',
+        event: 'lexik_jwt_authentication.on_jwt_invalid',
+        method: 'onJWTException',
+      }

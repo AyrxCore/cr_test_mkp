@@ -36,6 +36,7 @@ export interface Adherent {
   adherentTarifShowcases: AdherentTarifShowcase[] | []
   showModalStellantis?: boolean
   stellantisModalValidated?: boolean
+  name?: string
 }
 
 export interface Account extends ExternalApiDataEntity {

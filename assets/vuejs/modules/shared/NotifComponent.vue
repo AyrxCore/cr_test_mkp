@@ -1,7 +1,7 @@
 <template>
   <NotificationGroup group="notif" position="bottom">
     <div
-      class="pointer-events-none fixed inset-x-0 bottom-0 z-50 flex items-start justify-end p-6"
+      class="pointer-events-none fixed inset-x-0 bottom-0 z-[150] flex items-start justify-end p-6"
     >
       <div class="w-full max-w-sm">
         <Notification

@@ -26,7 +26,7 @@
             :pagination="false"
             :show-nav="false"
             :space-between="10"
-            class="!ml-0 !mr-4 hidden xl:flex xl:h-[450px]"
+            class="hide-swiper-to-xl !ml-0 !mr-4 xl:h-[450px]"
             direction="vertical"
             loop
             watch-slides-progress
@@ -116,201 +116,118 @@
               </h3>
               Référence : {{ product.reference }}
               <!-- Bloc options -->
-              <div v-if="hasOptions" class="my-4">
-                <div class="mb-2 text-lg font-bold text-primary md:text-xl">
-                  Mes options
-                </div>
-                <div
-                  v-for="(children, key, index) in product.options"
-                  :key="key"
-                  class="mt-2 flex w-full items-center justify-between bg-white px-4 py-2"
-                >
-                  <span class="text-sm md:text-base lg:text-lg">
-                    {{ key }}
-                  </span>
-                  <select
-                    v-if="key && children.length > 0"
-                    v-model="option[index]"
-                    class="h-[1.75rem] w-1/2 border-none p-0"
-                    @change="updateProductVariant"
-                    @input="
-                      sendGaEvent('click_product_options', {
-                        product_name: product.name,
-                        partner_name: product.seller.name,
-                        partner_id: product.seller.id,
-                        option_id: option[index],
-                      })
-                    "
-                  >
-                    <option
-                      v-for="child in children"
-                      :key="child.id"
-                      :value="child.id"
-                    >
-                      {{ child.value }}
-                    </option>
-                  </select>
-                </div>
+              <div v-if="!product.sellable">
+                <NotSellableDetails :product="product" />
               </div>
-              <!-- End Bloc options -->
-            </div>
-            <!-- Fin product details -->
-            <!-- Quantité + prix -->
-            <div class="flex justify-between md:flex-col">
-              <div class="lg:my-6">
-                <div class="relative inline-flex items-center">
-                  <span class="mr-2 hidden md:block"> Quantité </span>
-                  <ProductQuantityComponent
-                    :quantity="product.quantity"
-                    @update-quantity="updateQuantity"
-                    @update-quantity-input="updateQuantityInput"
-                  />
-                </div>
-              </div>
-              <LoaderSharedComponent
-                v-if="isLoadingPrice"
-                class="text-secondary"
-                classes="loader-lg loader"
-              />
-              <div v-else class="mb-4 flex items-end">
-                <div
-                  v-if="product.price"
-                  class="mr-2 text-xl font-bold text-primary md:text-3xl"
-                >
-                  {{ product.price }}€ HT
-                </div>
-                <div
-                  v-if="product.priceReference"
-                  :class="{
-                    'text-sm text-gray-500 line-through md:text-base lg:text-lg':
-                      product.price,
-                    'text-xl font-bold text-primary': product.price === null,
-                  }"
-                >
-                  {{ product.priceReference }}€ HT
-                </div>
+              <div v-else>
+                <ProductDetails :product="product" />
               </div>
             </div>
-            <!-- Fin Quantité + prix -->
-            <!-- Bloc livraison -->
-            <div v-if="product.seller.description" class="mt-2">
-              <h4 class="text-lg md:text-xl">Infos livraison</h4>
-              <div class="mt-2 flex items-center">
-                <TruckIconComponent class="mr-4 w-8 shrink-0 md:w-6" />
-                {{ product.seller.description }}
-              </div>
-            </div>
-            <!-- Fin Livraison -->
-            <ProductAddToCartComponent
-              v-if="product"
-              :product="product"
-              class="mt-4 hidden lg:flex"
-            />
           </div>
         </div>
-      </div>
 
-      <Tabs class="mt-4">
-        <Tab
-          name="Description"
-          @click.native="
-            sendGaEvent('click_product_view_description', {
-              product_name: product.name,
-            })
+        <Tabs class="mt-4">
+          <Tab
+            name="Description"
+            @click.native="
+              sendGaEvent('click_product_view_description', {
+                product_name: product.name,
+              })
+            "
+          >
+            <p
+              class="whitespace-pre-line py-4 text-sm md:text-base"
+              v-html="product.description"
+            />
+          </Tab>
+          <Tab
+            v-if="Object.values(productProperties).length > 0"
+            name="Caractéristiques techniques"
+            @click.native="
+              sendGaEvent('click_product_view_caracteristics', {
+                product_name: product.name,
+              })
+            "
+          >
+            <table class="w-full table-auto">
+              <tbody>
+                <tr
+                  v-for="(property, key, index) in productProperties"
+                  :key="index"
+                  class="border text-sm text-primary md:text-base lg:text-lg"
+                >
+                  <td class="w-[20%] border p-2">{{ key }}</td>
+                  <td class="p-2">
+                    <a v-if="isUrl(property)" :href="property" target="_blank">
+                      Cliquez-ici
+                    </a>
+                    <span v-else>{{ property }}</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </Tab>
+        </Tabs>
+
+        <!-- Bloc produits similaire -->
+        <template
+          v-if="
+            isLoadingSimilarProductsAndAccordsCadres ||
+            similarProducts?.length > 0
           "
         >
-          <p
-            class="whitespace-pre-line py-4 text-sm md:text-base"
-            v-html="product.description"
+          <h3 class="text-title-primary mb-2 mt-4">
+            Sélection de produits similaires
+          </h3>
+          <ProductsCarouselComponent
+            :loading="isLoadingSimilarProductsAndAccordsCadres"
+            :products="similarProducts"
+            class="mt-4"
+            @click-left="sendGaEvent('click_product_slider_left')"
+            @click-right="sendGaEvent('click_product_slider_right')"
+            @click-add-cart="
+              sendGaEvent('click_product_slider_product_add_cart', $event)
+            "
+            @click-title="
+              sendGaEvent('click_product_slider_product_title', $event)
+            "
+            @click-img="sendGaEvent('click_product_slider_product_img', $event)"
+            @click-moins-qty="
+              sendGaEvent('click_product_slider_products_moins_qty', $event)
+            "
+            @click-plus-qty="
+              sendGaEvent('click_product_slider_products_plus_qty', $event)
+            "
           />
-        </Tab>
-        <Tab
-          v-if="Object.values(productProperties).length > 0"
-          name="Caractéristiques techniques"
-          @click.native="
-            sendGaEvent('click_product_view_caracteristics', {
-              product_name: product.name,
-            })
+        </template>
+        <!-- Fin bloc produits similaire -->
+
+        <!-- Bloc accords-cadres incontournables -->
+        <template
+          v-if="
+            isLoadingSimilarProductsAndAccordsCadres ||
+            similarAccordsCadres?.length > 0
           "
         >
-          <table class="w-full table-auto">
-            <tbody>
-              <tr
-                v-for="(property, key, index) in productProperties"
-                :key="index"
-                class="border text-sm text-primary md:text-base lg:text-lg"
-              >
-                <td class="w-[20%] border p-2">{{ key }}</td>
-                <td class="p-2">
-                  <a v-if="isUrl(property)" :href="property" target="_blank">
-                    Cliquez-ici
-                  </a>
-                  <span v-else>{{ property }}</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </Tab>
-      </Tabs>
-
-      <!-- Bloc produits similaire -->
-      <template
-        v-if="
-          isLoadingSimilarProductsAndAccordsCadres ||
-          similarProducts?.length > 0
-        "
-      >
-        <h3 class="text-title-primary mb-2 mt-4">
-          Sélection de produits similaires
-        </h3>
-        <ProductsCarouselComponent
-          :loading="isLoadingSimilarProductsAndAccordsCadres"
-          :products="similarProducts"
-          class="mt-4"
-          @click-left="sendGaEvent('click_product_slider_left')"
-          @click-right="sendGaEvent('click_product_slider_right')"
-          @click-add-cart="
-            sendGaEvent('click_product_slider_product_add_cart', $event)
-          "
-          @click-title="
-            sendGaEvent('click_product_slider_product_title', $event)
-          "
-          @click-img="sendGaEvent('click_product_slider_product_img', $event)"
-          @click-moins-qty="
-            sendGaEvent('click_product_slider_products_moins_qty', $event)
-          "
-          @click-plus-qty="
-            sendGaEvent('click_product_slider_products_plus_qty', $event)
-          "
-        />
-      </template>
-      <!-- Fin bloc produits similaire -->
-
-      <!-- Bloc accords-cadres incontournables -->
-      <template
-        v-if="
-          isLoadingSimilarProductsAndAccordsCadres ||
-          similarAccordsCadres?.length > 0
-        "
-      >
-        <h3 class="text-title-primary mb-2 mt-4">
-          Les accords-cadres incontournables
-        </h3>
-        <AccordsCadreComponent
-          :accords-cadres="similarAccordsCadres"
-          :loading="isLoadingSimilarProductsAndAccordsCadres"
-          @click-left="sendGaEvent('click_product_slider_fat_left')"
-          @click-right="sendGaEvent('click_product_slider_fat_right')"
-          @click-cta="sendGaEvent('click_product_slider_fat_cta', $event)"
-          @click-title="sendGaEvent('click_product_slider_fat_title', $event)"
-          @click-img="sendGaEvent('click_product_slider_fat_img', $event)"
-        />
-      </template>
-      <!-- Fin bloc accords-cadres incontournables -->
-      <div class="mb-8 mt-2 text-xs text-gray-500">
-        Les références, photographies, remises et tarifs des produits fournis
-        sur la marketplace n’ont qu’une valeur indicative. Pour toute
-        confirmation d’information, nous vous invitons à nous contacter.
+          <h3 class="text-title-primary mb-2 mt-4">
+            Les accords-cadres incontournables
+          </h3>
+          <AccordsCadreComponent
+            :accords-cadres="similarAccordsCadres"
+            :loading="isLoadingSimilarProductsAndAccordsCadres"
+            @click-left="sendGaEvent('click_product_slider_fat_left')"
+            @click-right="sendGaEvent('click_product_slider_fat_right')"
+            @click-cta="sendGaEvent('click_product_slider_fat_cta', $event)"
+            @click-title="sendGaEvent('click_product_slider_fat_title', $event)"
+            @click-img="sendGaEvent('click_product_slider_fat_img', $event)"
+          />
+        </template>
+        <!-- Fin bloc accords-cadres incontournables -->
+        <div class="mb-8 mt-2 text-xs text-gray-500">
+          Les références, photographies, remises et tarifs des produits fournis
+          sur la marketplace n’ont qu’une valeur indicative. Pour toute
+          confirmation d’information, nous vous invitons à nous contacter.
+        </div>
       </div>
     </div>
     <div
@@ -321,7 +238,7 @@
     </div>
   </BaseTemplate>
   <ProductAddToCartComponent
-    v-if="product"
+    v-if="product && product.sellable"
     :product="product"
     :show-price="true"
     class="z-10 flex lg:hidden"
@@ -338,12 +255,12 @@ import AddFavoriteComponent from '@/vuejs/modules/products/components/AddFavorit
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
-import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 import ProductAddToCartComponent from '@/vuejs/modules/products/components/ProductAddToCartComponent.vue'
-import ProductQuantityComponent from '@/vuejs/modules/shared/ProductQuantityComponent.vue'
 import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
-import TruckIconComponent from '@/vuejs/modules/shared/icon/TruckIconComponent.vue'
+import NotSellableDetails from '@/vuejs/modules/products/components/NotSellableDetails.vue'
+import ProductDetails from '@/vuejs/modules/products/components/ProductDetails.vue'
+import AccordsCadreComponent from '@/vuejs/modules/home/component/AccordsCadreComponent.vue'
 
 import { getUpplerImage, isUrl } from '@/vuejs/services/utils'
 import { PageList } from '@/vuejs/router'
@@ -353,7 +270,7 @@ import { useProductStore } from '@/vuejs/stores/product'
 import { useUserStore } from '@/vuejs/stores/user'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import sampleImg from '@/vuejs/assets/img/sample_product_img.png'
-import AccordsCadreComponent from '@/vuejs/modules/home/component/AccordsCadreComponent.vue'
+
 import { ProductPageList } from '@/vuejs/router/pages-list'
 
 const route = useRoute()
@@ -366,13 +283,18 @@ const { adherentTarifShowcases } = storeToRefs(useUserStore())
 const thumbsSwiper = ref(null)
 const option = ref([])
 const isLoading = ref<boolean>(false)
-const isLoadingPrice = ref<boolean>(false)
 const isLoadingSimilarProductsAndAccordsCadres = ref<boolean>(false)
 const similarProducts = ref<Product[]>([])
 const similarAccordsCadres = ref<Product[]>([])
 const product = ref<Product>()
 
-const FILTERED_PRODUCT_PROPERTIES = ['accord-id']
+const FILTERED_PRODUCT_PROPERTIES = [
+  'accord-id',
+  'vendable',
+  'pourcentage_de_remise',
+  'Formulaire avec message',
+  'accord-name',
+]
 
 onMounted(async () => {
   await favoriteStore.fetchFavorites()
@@ -400,10 +322,6 @@ const productTitle = computed((): string => {
   return product.value ? product.value.name : ''
 })
 
-const hasOptions = computed((): boolean => {
-  return Object.keys(product?.value.options)[0].length > 0
-})
-
 const productProperties = computed((): ProductProperties => {
   const productProperties = { ...product.value.properties }
   FILTERED_PRODUCT_PROPERTIES.forEach((key) => {
@@ -412,34 +330,8 @@ const productProperties = computed((): ProductProperties => {
   return productProperties
 })
 
-const updateQuantity = (event) => {
-  const gtmEventName =
-    product.value.quantity > event.quantity
-      ? 'click_product_moins_qty'
-      : 'click_product_plus_qty'
-  sendGaEvent(gtmEventName, {
-    product_name: product.value.name,
-    qty_value: event.quantity,
-  })
-  product.value.quantity = event.quantity
-}
-
-const updateQuantityInput = (event) => {
-  sendGaEvent('type_product_qty', {
-    product_name: product.value.name,
-    qty_value: event.quantity,
-  })
-  product.value.quantity = event.quantity
-}
-
 const setThumbsSwiper = (swiper) => {
   thumbsSwiper.value = swiper
-}
-
-const updateProductVariant = async () => {
-  isLoadingPrice.value = true
-  product.value = await productStore.changeVariant(product.value, option.value)
-  isLoadingPrice.value = false
 }
 
 const isInShowcase = computed<boolean>(() =>
@@ -479,7 +371,8 @@ watch(
           await productStore.findSimilarProducts(categoryId)
 
         similarProducts.value = productsAndAccordsCadres.results.filter(
-          (simProd) => simProd.id !== productId && !simProd.isAccordCadre,
+          (simProd) =>
+            simProd.id !== formattedProductId && !simProd.isAccordCadre,
         )
         similarAccordsCadres.value = productsAndAccordsCadres.results.filter(
           (simAccCad) => {
@@ -490,13 +383,20 @@ watch(
           },
         )
       }
-      isLoadingSimilarProductsAndAccordsCadres.value = false
-    } catch (error) {
     } finally {
       isLoading.value = false
+      isLoadingSimilarProductsAndAccordsCadres.value = false
     }
   },
 
   { immediate: true },
 )
 </script>
+
+<style lang="postcss" scoped>
+@media (max-width: 1280px) {
+  .hide-swiper-to-xl {
+    @apply hidden;
+  }
+}
+</style>

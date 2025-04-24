@@ -180,6 +180,15 @@ class ProductFactory extends AbstractFactory
         $isAccordCadre = $this->checkIsAccordCadre($data['properties']);
         $product->setIsAccordCadre($isAccordCadre);
 
+        $sellable = $this->checkSellableProperty($data['properties']);
+        $product->setSellable($sellable);
+
+        if (!$sellable) {
+            $product->setPercent($this->getNotSellablePercent($data['properties']));
+            $isFormWithMessage = $this->checkNotSellableFormType($data['properties']);
+            $product->setNotSellableFormWithMessage($isFormWithMessage);
+        }
+
         if (!$isAccordCadre) {
             $favorites = $this->em->getRepository(Favorite::class)->getFavoritesByAccountAndProductId($account, $data['id']);
             $product->setFavorites($favorites);
@@ -207,6 +216,47 @@ class ProductFactory extends AbstractFactory
         foreach ($remoteProperties as $property) {
             if ($property['property']['name']['default'] === 'accord_cadre') {
                 return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function checkSellableProperty($remoteProperties): bool
+    {
+        foreach ($remoteProperties as $property) {
+            if ($property['property']['name']['default'] === 'vendable') {
+                if ($property['value'] === 'non') {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        return true;
+    }
+
+    private function getNotSellablePercent($remoteProperties): ?float
+    {
+        foreach ($remoteProperties as $property) {
+            if ($property['property']['name']['default'] === 'pourcentage_de_remise') {
+                return (float) $property['value'];
+            }
+        }
+
+        return null;
+    }
+
+    private function checkNotSellableFormType($remoteProperties): bool
+    {
+        foreach ($remoteProperties as $property) {
+            if ($property['property']['name']['default'] === 'Formulaire avec message') {
+                if ($property['value'] === 'oui') {
+                    return true;
+                }
+
+                return false;
             }
         }
 

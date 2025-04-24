@@ -90,6 +90,12 @@ final class Product
     private bool $isAccordCadre = false;
 
     #[Groups(['products:get', 'product:get'])]
+    private bool $sellable = true;
+
+    #[Groups(['products:get', 'product:get'])]
+    private bool $notSellableFormWithMessage = false;
+
+    #[Groups(['products:get', 'product:get'])]
     private ?Seller $seller;
 
     #[Groups(['product:get'])]
@@ -271,6 +277,26 @@ final class Product
     public function setIsAccordCadre(bool $isAccordCadre): void
     {
         $this->isAccordCadre = $isAccordCadre;
+    }
+
+    public function isSellable(): bool
+    {
+        return $this->sellable;
+    }
+
+    public function setSellable(bool $sellable): void
+    {
+        $this->sellable = $sellable;
+    }
+
+    public function isNotSellableFormWithMessage(): bool
+    {
+        return $this->notSellableFormWithMessage;
+    }
+
+    public function setNotSellableFormWithMessage(bool $notSellableFormWithMessage): void
+    {
+        $this->notSellableFormWithMessage = $notSellableFormWithMessage;
     }
 
     public function getAccountAccordCadre(): ?AccountAccordCadre

@@ -23,6 +23,8 @@ export interface Product {
   seller?: Seller
   accountAccordCadre: AccountAccordCadre
   isAccordCadre?: boolean
+  sellable?: boolean
+  notSellableFormWithMessage?: boolean
   favorites?: Array<any>
   optionVariant: Array<any>
   similarProducts: Array<any>
@@ -49,6 +51,7 @@ export interface ProductFilters {
   companies?: Array<any>
   properties?: Array<any>
 }
+
 export interface ProductParameters extends ProductFilters {
   name?: string
 }

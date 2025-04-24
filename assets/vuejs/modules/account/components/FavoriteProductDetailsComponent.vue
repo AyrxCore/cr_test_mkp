@@ -4,14 +4,16 @@
   >
     <div class="flex md:w-8/12 lg:w-9/12">
       <div class="mr-2">
-        <input
-          v-if="product"
-          v-model="selectedProduct"
-          :disabled="isNeoAutoLogin"
-          class="checkbox-secondary"
-          type="checkbox"
-          @change="onSelectProduct"
-        />
+        <div v-if="product" class="w-4">
+          <input
+            v-if="product.sellable"
+            v-model="selectedProduct"
+            :disabled="isNeoAutoLogin"
+            class="checkbox-secondary"
+            type="checkbox"
+            @change="onSelectProduct"
+          />
+        </div>
       </div>
       <div class="flex w-6/12 md:w-3/12">
         <img
@@ -32,6 +34,12 @@
         >
           {{ productName }}
         </RouterLink>
+        <div
+          v-if="product && !product.sellable"
+          class="mt-2 w-fit rounded-sm bg-secondary px-2 py-1 text-white"
+        >
+          -{{ product?.percent }}% sur le tarif public
+        </div>
         <span class="mt-4 flex flex-col text-sm lg:text-lg">
           <span>Vendu par: {{ productSeller }}</span>
           <span>Référence: {{ productReference }}</span>
@@ -43,11 +51,14 @@
         <div
           class="flex w-full flex-row flex-wrap items-center justify-between md:w-auto"
         >
-          <span
-            class="mt-4 flex items-center text-sm font-bold text-primary md:text-base lg:text-xl"
-          >
-            {{ productPrice }}€ HT
-          </span>
+          <div class="flex items-center">
+            <span
+              v-if="product?.sellable"
+              class="mt-4 text-sm font-bold text-primary md:text-base lg:text-xl"
+            >
+              {{ productPrice }}€ HT
+            </span>
+          </div>
           <div class="bottom-0 flex items-start justify-between space-x-3">
             <button :disabled="isNeoAutoLogin" @click="openMoveProductForm">
               <ChangeIconComponent :fill="channelPrimaryColor" />

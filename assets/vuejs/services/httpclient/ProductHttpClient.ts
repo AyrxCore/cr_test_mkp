@@ -45,6 +45,15 @@ export default class ProductHttpClient extends BaseClientService {
       .then((response) => response.data)
   }
 
+  public sendContactRequestFromNotSellableProduct<T extends []>(
+    data: Object,
+  ): Promise<T> {
+    this.apiClient.defaults.headers['Content-Type'] = 'multipart/form-data'
+    return this.apiClient
+      .post<T>('not-sellable-contact-request', data)
+      .then((response) => response.data)
+  }
+
   public updateStellantisSubscription<T extends []>(): Promise<T> {
     return this.apiClient
       .post<T>('stellantis-subscription')

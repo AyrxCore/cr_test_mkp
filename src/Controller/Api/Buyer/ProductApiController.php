@@ -6,7 +6,9 @@ namespace App\Controller\Api\Buyer;
 
 use App\Context\ChannelContext;
 use App\Dto\AccountAccordCadre;
+use App\Repository\AccountRepository;
 use App\Service\AccordCadreSubscriptionService;
+use App\Service\RequestContactMailerService;
 use App\Service\UpplerProductService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,13 +19,14 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProductApiController extends AbstractController
 {
-    public const DEFAULT_PAGE_NUMBER = 1;
-    public const DEFAULT_PER_PAGE = 5;
+    public const int DEFAULT_PAGE_NUMBER = 1;
+    public const int DEFAULT_PER_PAGE = 5;
 
     public function __construct(
         private RequestStack $requestStack,
         private UpplerProductService $upplerProductService,
         private AccordCadreSubscriptionService $accordCadreSubscriptionService,
+        private RequestContactMailerService $requestContactMailerService, private readonly AccountRepository $accountRepository,
     ) {
     }
 
@@ -38,10 +41,42 @@ class ProductApiController extends AbstractController
     /**
      * @throws \Exception
      */
+    #[Route('/api/not-sellable-contact-request', name: 'not_sellable_contact_request', methods: ['POST'])]
+    public function notSellableContactRequest(
+        Request $request,
+        ChannelContext $channelContext,
+    ): JsonResponse {
+        $session = $this->requestStack->getSession();
+
+        $accountId = (string) $session->get('account')->getId();
+
+        $data = $request->request->all();
+
+        if (!isset($data['accordId'], $data['accordName'])) {
+            throw new BadRequestHttpException('Missing required parameters.');
+        }
+
+        $subscriptionParams = [
+            'accordId' => $data['accordId'],
+            'accordName' => $data['accordName'],
+        ];
+
+        $this->accordCadreSubscriptionService->subscription($subscriptionParams, $accountId, $channelContext->getChannel());
+
+        $account = $this->accountRepository->findOneBy(['id' => $accountId]);
+        $email = $channelContext->getChannel()->getChannelParameter()?->getEmail();
+        $this->requestContactMailerService->sendMail($account, $email, $data);
+
+        return new JsonResponse();
+    }
+
+    /**
+     * @throws \Exception
+     */
     #[Route('/api/accord-cadre-subscription', name: 'accord_cadre_subscription', methods: ['POST'])]
     public function subscription(
         Request $request,
-        ChannelContext $channelContext
+        ChannelContext $channelContext,
     ): JsonResponse {
         $session = $this->requestStack->getSession();
 
