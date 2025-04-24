@@ -17,7 +17,7 @@ class AccordCadreSubscriptionService
         private AccountRepository $accountRepository,
         private SubscriptionService $subscriptionService,
         private SubscriptionMailerService $subscriptionMailerService,
-        private array $stellantisParams
+        private array $stellantisParams,
     ) {
     }
 
@@ -28,6 +28,7 @@ class AccordCadreSubscriptionService
         array $params,
         string $accountId,
         Channel $channel,
+        bool $isSendEmail = true,
     ): bool {
         $account = $this->accountRepository->find($accountId);
 
@@ -41,7 +42,9 @@ class AccordCadreSubscriptionService
 
         if ($created) {
             $email = $channel->getChannelParameter()?->getEmail();
-            $this->subscriptionMailerService->sendMail($account, $email, $params['accordName'], $isStellantis);
+            if ($isSendEmail) {
+                $this->subscriptionMailerService->sendMail($account, $email, $params['accordName'], $isStellantis);
+            }
         }
 
         return $created;

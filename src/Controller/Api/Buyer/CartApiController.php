@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller\Api\Buyer;
 
+use App\Controller\ChannelAwareControllerInterface;
+use App\Controller\ChannelAwareControllerTrait;
 use App\Dto\CartPayment;
+use App\Message\CartSubscription;
 use App\Service\CartService;
 use App\Service\UpplerCartService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,12 +16,15 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Service\Attribute\Required;
 
 #[Route('/api/buyer/cart')]
-class CartApiController extends AbstractController
+class CartApiController extends AbstractController implements ChannelAwareControllerInterface
 {
+    use ChannelAwareControllerTrait;
+
     #[Required]
     public RequestStack $requestStack;
 
@@ -30,6 +36,9 @@ class CartApiController extends AbstractController
 
     #[Required]
     public UpplerCartService $upplerCartService;
+
+    #[Required]
+    public MessageBusInterface $messageBus;
 
     #[Route('', name: 'get_cart')]
     public function getCartAsBuyer(): JsonResponse
@@ -43,6 +52,7 @@ class CartApiController extends AbstractController
     public function confirmCartAsBuyer(int $cartId): Response
     {
         $cart = $this->upplerCartService->getCartById($cartId);
+
         if ($cart !== null && $cart['state'] !== 'confirmed') {
             $confirmed = $this->upplerCartService->isPaymentConfirmed($cartId);
 
@@ -57,11 +67,39 @@ class CartApiController extends AbstractController
                 $this->upplerCartService->confirmCart($cartId);
                 $this->cartService->processCartSavings($cart);
 
+                $productsIds = [];
+
+                foreach ($cart['orders'] as $order) {
+                    foreach ($order['items'] as $item) {
+                        $productsIds[] = $item['variant']['product']['id'];
+                    }
+                }
+
+                $session = $this->requestStack->getSession();
+                $accountId = (string) $session->get('account')->getId();
+
+                $this->messageBus->dispatch(new CartSubscription($productsIds, $accountId, $this->getChannel($this->requestStack->getCurrentRequest())));
+
                 return $this->redirect('/cart/confirmed/'.$cartId);
             }
         }
 
         return $this->redirect('/cart/payment-error');
+    }
+
+    #[Route('/{cartId}', name: 'get_cart_by_id')]
+    public function getCartById(int $cartId): Response
+    {
+        $cartResume = new \stdClass();
+        $cartResume->cart = $this->upplerCartService->getCartById($cartId);
+
+        if (!$cartResume->cart) {
+            throw new NotFoundHttpException();
+        }
+
+        $cartResume->confirmation = $this->upplerCartService->isPaymentConfirmed($cartId);
+
+        return new JsonResponse($cartResume);
     }
 
     #[Route('/{cartId}/shipments', name: 'get_cart_shipping_methods')]
@@ -74,19 +112,5 @@ class CartApiController extends AbstractController
         }
 
         return new JsonResponse($shippingMethods);
-    }
-
-    #[Route('/{cartId}', name: 'get_cart_by_id')]
-    public function getCartById(int $cartId): Response
-    {
-        $cartResume = new \stdClass();
-        $cartResume->cart = $this->upplerCartService->getCartById($cartId);
-
-        if (!$cartResume->cart) {
-            throw new NotFoundHttpException();
-        }
-        // $cartResume->confirmation = $this->upplerCartService->isPaymentConfirmed($cartId);
-
-        return new JsonResponse($cartResume);
     }
 }

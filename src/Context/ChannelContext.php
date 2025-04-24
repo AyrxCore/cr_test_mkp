@@ -13,7 +13,7 @@ class ChannelContext
 {
     public function __construct(
         private RequestStack $requestStack,
-        private ChannelRepository $channelRepository
+        private ChannelRepository $channelRepository,
     ) {
     }
 

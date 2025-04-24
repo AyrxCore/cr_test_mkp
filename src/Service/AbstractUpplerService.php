@@ -178,8 +178,6 @@ abstract class AbstractUpplerService
 
     private function computeHeaders(string &$url, array &$options = [], $isAdmin = false, $withoutToken = false): void
     {
-        $session = $this->requestStack->getSession();
-
         // pas de token nécessaire et env de dév on ajoute juste le header http_basic
         if ($this->upplerEnv === 'dev') {
             $options['auth_basic'] = ['quantis', 'jj0tFWJulNYjDc'];
@@ -194,6 +192,7 @@ abstract class AbstractUpplerService
             $this->getAdminToken();
             $accessToken = $this->adminToken;
         } else {
+            $session = $this->requestStack->getSession();
             if (
                 !$session->has('account') || empty($session->get('account'))
                 || !$session->has('access_token') || empty($session->get('access_token'))

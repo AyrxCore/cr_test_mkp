@@ -6,6 +6,9 @@ namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+
+use function Sentry\captureException;
+
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
@@ -88,7 +91,11 @@ class MailerProvider
         try {
             $this->mailer->send($email);
         } catch (TransportExceptionInterface $exception) {
+            if (\is_array($to)) {
+                $to = \implode(', ', $to);
+            }
             $this->logger->critical('Email non envoyé à '.$to.' : '.$exception->getMessage());
+            captureException($exception);
 
             return false;
         }

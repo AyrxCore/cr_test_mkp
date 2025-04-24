@@ -45,7 +45,7 @@ class UpplerProductService extends AbstractUpplerService
         return \json_decode($res->getContent(), true);
     }
 
-    public function findProductById(int $productId = null, array $filters = [], ?string $accountId = null): array
+    public function findProductById(?int $productId = null, array $filters = [], ?string $accountId = null): array
     {
         $filters = empty($filters) ? ['price', 'properties', 'variants', 'company'] : $filters;
         $urlFilters = null;
@@ -68,7 +68,31 @@ class UpplerProductService extends AbstractUpplerService
         return \json_decode($res->getContent(), true);
     }
 
-    public function findVariantById(int $variantId = null)
+    public function findProductByIdForAdmin(?int $productId = null): array
+    {
+        $filters = empty($filters) ? ['price', 'properties', 'variants', 'company'] : $filters;
+        $urlFilters = null;
+
+        if (!empty($filters)) {
+            foreach ($filters as $filter) {
+                $urlFilters .= $urlFilters === null ? '?expand[]='.$filter : '&expand[]='.$filter;
+            }
+        }
+
+        $res = $this->request(
+            'GET',
+            'v1/administrator/product/'.$productId.$urlFilters,
+            isAdmin: true
+        );
+
+        if ($res->getStatusCode() !== Response::HTTP_OK) {
+            throw new NotFoundHttpException('Product with ID: '.$productId.' not found');
+        }
+
+        return \json_decode($res->getContent(), true);
+    }
+
+    public function findVariantById(?int $variantId = null)
     {
         $res = $this->request(
             'GET',
@@ -77,27 +101,6 @@ class UpplerProductService extends AbstractUpplerService
 
         if ($res->getStatusCode() !== Response::HTTP_OK) {
             throw new NotFoundHttpException('Variant not found');
-        }
-
-        return \json_decode($res->getContent(), true);
-    }
-
-    /**
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
-     */
-    private function findAllFilters(int $page = 1, int $perPage = 1, array $params = []): array
-    {
-        $res = $this->request(
-            'POST',
-            'v1/buyer/search/product?page='.$page.'&perPage='.$perPage,
-            $params
-        );
-
-        if ($res->getStatusCode() !== Response::HTTP_OK) {
-            throw new NotFoundHttpException('Filters not found');
         }
 
         return \json_decode($res->getContent(), true);
@@ -125,7 +128,7 @@ class UpplerProductService extends AbstractUpplerService
     public function findAllSellers(int $page = 1, int $perPage = 1, array $params = []): array
     {
         $filters = [];
-        if(count($params) > 0) {
+        if (\count($params) > 0) {
             foreach ($params as $key => $param) {
                 $filters['json'][$key] = \json_decode($param);
             }
@@ -134,5 +137,26 @@ class UpplerProductService extends AbstractUpplerService
         $res = $this->findAllFilters($page, $perPage, $filters);
 
         return $res['filters']['company'];
+    }
+
+    /**
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
+     */
+    private function findAllFilters(int $page = 1, int $perPage = 1, array $params = []): array
+    {
+        $res = $this->request(
+            'POST',
+            'v1/buyer/search/product?page='.$page.'&perPage='.$perPage,
+            $params
+        );
+
+        if ($res->getStatusCode() !== Response::HTTP_OK) {
+            throw new NotFoundHttpException('Filters not found');
+        }
+
+        return \json_decode($res->getContent(), true);
     }
 }
