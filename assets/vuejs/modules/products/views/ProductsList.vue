@@ -38,8 +38,26 @@
               Votre recherche : {{ termsOrCategoryFilterName }}
             </h3>
             <div
-              class="flex h-auto flex-col items-stretch justify-items-center md:grid md:grid-cols-2 md:gap-5 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+              class="grid h-auto grid-cols-1 items-stretch justify-items-center md:grid-cols-2 md:gap-5 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
             >
+              <a
+                v-if="bannerSearchImg && allowBannerSearch"
+                :class="
+                  internalProducts.length < 5 ? 'row-start-1' : 'row-start-2'
+                "
+                :href="bannerSearchLink"
+                class="col-span-1 mt-9 h-[450px] w-full md:col-span-2 md:mt-0 xl:h-full"
+                target="_blank"
+              >
+                <div
+                  :style="{
+                    backgroundImage: 'url(' + bannerSearchImg + ')',
+                    backgroundPosition: 'center',
+                    backgroundSize: 'cover',
+                  }"
+                  class="h-full w-full rounded-lg"
+                />
+              </a>
               <template v-for="product in internalProducts" :key="product.id">
                 <AccordCadreComponent
                   v-if="
@@ -116,10 +134,15 @@ import { Product } from '@/vuejs/types/Product'
 import { useProductStore } from '@/vuejs/stores/product'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import { useUserStore } from '@/vuejs/stores/user'
+import { useBannerSearchStore } from '@/vuejs/stores/bannerSearch'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+
+import { getImage } from '@/vuejs/services/utils'
+import { BannerSearch } from '@/vuejs/types/BannerSearch'
 
 const route = useRoute()
 const productStore = useProductStore()
+const bannerSearchStore = useBannerSearchStore()
 const { adherentTarifShowcases } = storeToRefs(useUserStore())
 
 const {
@@ -145,9 +168,32 @@ const loadMoreLoading = ref<boolean>(false)
 const paramsProducts = ref(null)
 const showShowcaseModal = ref<boolean>(false)
 const accordSelected = ref<Product>(null)
+const allowBannerSearch = ref<boolean>(false)
 
 onBeforeMount(async () => {
   await favoriteStore.fetchFavorites()
+})
+
+const findBannerSearchForCategory = computed<BannerSearch>(() => {
+  return bannerSearchStore.bannersSearch.find(
+    (x) => x.category === paramsProducts.value.categories,
+  )
+})
+
+const bannerSearchImg = computed<string | null>(() => {
+  if (findBannerSearchForCategory.value) {
+    if (window.innerWidth < 768) {
+      return getImage(findBannerSearchForCategory.value.mobileImg)
+    }
+    return getImage(findBannerSearchForCategory.value.desktopImg)
+  }
+  return null
+})
+
+const bannerSearchLink = computed<string | null>(() => {
+  return findBannerSearchForCategory
+    ? findBannerSearchForCategory.value.link
+    : null
 })
 
 const handleShowcaseModal = (accord) => {
@@ -261,6 +307,13 @@ watch(
     if (routeObject.category) {
       productStore.setSelectedCategory(routeObject.category)
       paramsProducts.value.categories = routeObject.category
+      allowBannerSearch.value = false
+      if (!routeObject.company) {
+        allowBannerSearch.value = true
+        if (bannerSearchStore.bannersSearch.length === 0) {
+          await bannerSearchStore.init()
+        }
+      }
     }
 
     if (routeObject.company) {

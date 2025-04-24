@@ -6,31 +6,36 @@ namespace App\State\Provider;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
-use App\Dto\Banner;
-use App\Factory\BannerFactory;
+use App\Dto\BannerSearch;
+use App\Factory\BannerSearchFactory;
 use App\Service\UpplerDynamicEntityService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-readonly class BannerProvider implements ProviderInterface
+readonly class BannerSearchProvider implements ProviderInterface
 {
     public function __construct(
-        private BannerFactory $bannerFactory,
+        private BannerSearchFactory $bannerSearchFactory,
         private UpplerDynamicEntityService $upplerDynamicEntityService,
     ) {
     }
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
-        $dynamicEntityConfigurationId = Banner::DYNAMIC_CONFIG_ID;
+        $dynamicEntityConfigurationId = BannerSearch::DYNAMIC_CONFIG_ID;
 
-        $entitiesBanner = $this->upplerDynamicEntityService->getDynamicsEntities(
+        $entitiesBannerSearch = $this->upplerDynamicEntityService->getDynamicsEntities(
             ['dynamic_fields'],
             [],
             (string) $dynamicEntityConfigurationId
         );
 
-        if (!empty($entitiesBanner[0])) {
-            return $this->bannerFactory->create($entitiesBanner[0]);
+        if (\count($entitiesBannerSearch)) {
+            $bannersSearch = [];
+            foreach ($entitiesBannerSearch as $entity) {
+                $bannersSearch[] = $this->bannerSearchFactory->create($entity);
+            }
+
+            return $bannersSearch;
         }
 
         throw new NotFoundHttpException('Not Found');
