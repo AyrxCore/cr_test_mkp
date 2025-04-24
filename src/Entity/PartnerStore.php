@@ -5,34 +5,51 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\PartnerStoreRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: PartnerStoreRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection(),
+    ],
+    order: ['name' => 'ASC'],
+    paginationEnabled: false
+)]
+#[ApiResource()]
 class PartnerStore
 {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
+    #[Groups(['partner:read'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['partner:read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['partner:read'])]
     private ?string $address = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['partner:read'])]
     private ?string $phone = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['partner:read'])]
     private ?string $latitude = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['partner:read'])]
     private ?string $longitude = null;
 
     #[ORM\ManyToOne(inversedBy: 'partnerStores')]

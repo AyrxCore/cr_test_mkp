@@ -5,6 +5,7 @@ import {
   AuthenticateUserData,
   LoginResponse,
   PasswordChangeRequest,
+  UserLocation,
   UserStoreState,
 } from '@/vuejs/types/User'
 import { AlertType } from '@/vuejs/types/Alert'
@@ -22,6 +23,7 @@ export const useUserStore = defineStore({
     user: null,
     editingInfo: [],
     isNeoAutoLogin: getCookie('neoAutoLogin') === 'true',
+    userLocation: null,
   }),
 
   actions: {
@@ -191,6 +193,61 @@ export const useUserStore = defineStore({
         this.user = { ...this.user }
       }
     },
+    setGeolocationError(error: string): void {
+      if (!this.userLocation) {
+        this.userLocation = {
+          lat: 0,
+          lng: 0,
+          timestamp: 0,
+          error: error,
+        }
+      } else {
+        this.userLocation.error = error || null
+      }
+
+      localStorage.setItem('userLocation', JSON.stringify(this.userLocation))
+    },
+    saveUserLocation(location: { lat: number; lng: number }): void {
+      const isParis = location.lat === 48.8566 && location.lng === 2.3522
+
+      if (isParis) {
+        this.userLocation = {
+          ...location,
+          timestamp: Date.now(),
+          error: this.userLocation?.error || null,
+        }
+      } else {
+        this.userLocation = {
+          ...location,
+          timestamp: Date.now(),
+          error: null,
+        }
+      }
+
+      localStorage.setItem('userLocation', JSON.stringify(this.userLocation))
+    },
+    loadUserLocation(): void {
+      try {
+        const savedLocation = localStorage.getItem('userLocation')
+        if (savedLocation) {
+          const parsed = JSON.parse(savedLocation) as UserLocation
+
+          if (parsed.timestamp > Date.now() - 24 * 60 * 60 * 1000) {
+            this.userLocation = parsed
+          } else {
+            localStorage.removeItem('userLocation')
+          }
+        }
+      } catch (error) {
+        console.warn(
+          'Erreur lors du chargement de la position sauvegardée',
+          error,
+        )
+      }
+    },
+    getGeolocationErrorMessage(): string {
+      return this.userLocation?.error || ''
+    },
   },
   getters: {
     isLogged(): boolean {
@@ -198,6 +255,17 @@ export const useUserStore = defineStore({
     },
     adherentTarifShowcases(): AdherentTarifShowcase[] {
       return this.user?.account?.adherent?.adherentTarifShowcases || []
+    },
+    isGeolocationAvailable(): boolean {
+      return (
+        this.userLocation !== null &&
+        this.userLocation.timestamp > Date.now() - 24 * 60 * 60 * 1000
+      )
+    },
+    hasGeolocationError(): boolean {
+      return (
+        this.userLocation?.error !== null && this.userLocation?.error !== ''
+      )
     },
   },
 })

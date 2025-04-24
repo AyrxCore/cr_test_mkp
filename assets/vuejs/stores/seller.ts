@@ -3,7 +3,6 @@ import { Seller, SellerPromotion, SellerStoreState } from '@/vuejs/types/Seller'
 import SellerHttpClient from '@/vuejs/services/httpclient/SellerHttpClient'
 import { notifyError } from '@/vuejs/services/utils'
 import { useChannelStore } from '@/vuejs/stores/channel'
-import { Category } from '@/vuejs/types/Product/Category'
 
 export const SELLER_IDS = {
   KROMM: 26,

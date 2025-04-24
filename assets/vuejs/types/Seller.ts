@@ -45,3 +45,18 @@ export interface SellerStoreState {
     [key: number]: SellerPromotion[]
   }
 }
+
+export interface PartnerStore {
+  id: string
+  name: string
+  address: string
+  phone: string
+  latitude: number
+  longitude: number
+}
+
+export interface Partner {
+  id: number
+  name: string
+  partnerStores: PartnerStore[]
+}

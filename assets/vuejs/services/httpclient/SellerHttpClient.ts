@@ -1,6 +1,5 @@
 import BaseClientService from '@/vuejs/services/BaseClientService'
-import { Seller, SellerPromotion } from '@/vuejs/types/Seller'
-import { ProductCollection } from '@/vuejs/types/Product'
+import { Partner, Seller, SellerPromotion } from '@/vuejs/types/Seller'
 
 export default class SellerHttpClient extends BaseClientService {
   public fetchSellersByParams<T extends []>(params): Promise<Seller[]> {
@@ -32,5 +31,16 @@ export default class SellerHttpClient extends BaseClientService {
     return this.apiClient
       .get(`sellers/${id}/promotions`)
       .then((response) => response.data)
+  }
+
+  public fetchPartnerByUpplerId<T extends Partner>(
+    upplerId: string,
+  ): Promise<T | T[]> {
+    return this.apiClient
+      .get<T[]>(`partners?upplerId=${upplerId}`)
+      .then((response) => {
+        const data = response.data
+        return Array.isArray(data) && data.length > 0 ? data[0] : data
+      })
   }
 }

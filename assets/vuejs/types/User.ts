@@ -2,6 +2,7 @@ import { Account } from '@/vuejs/types/Account'
 import { ExternalApiDataEntity } from '@/vuejs/types/ExternalApiDataEntity'
 
 // Décrit l'objet user
+
 export interface User extends ExternalApiDataEntity {
   email: string
   roles: string[]
@@ -13,11 +14,19 @@ export interface User extends ExternalApiDataEntity {
   userInfoUpdateRequests: string[]
 }
 
+export interface UserLocation {
+  lat: number
+  lng: number
+  timestamp: number
+  error: string | null
+}
+
 // Décrit le state général du store user
 export interface UserStoreState {
   user: User
   editingInfo: string[]
   isNeoAutoLogin: boolean
+  userLocation: UserLocation | null
 }
 
 // Décrit le bloc de données nécessaire à l'obtention du token

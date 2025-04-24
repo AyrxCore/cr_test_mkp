@@ -4,28 +4,44 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\PartnerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: PartnerRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Get(normalizationContext: ['groups' => ['partner:read']]),
+        new GetCollection(normalizationContext: ['groups' => ['partner:read']]),
+    ],
+    order: ['name' => 'ASC'],
+    paginationEnabled: false
+)]
+#[ApiFilter(SearchFilter::class, properties: ['upplerId' => 'exact'])]
 class Partner
 {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
+    #[Groups(['partner:read'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['partner:read'])]
     private ?string $name;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    #[Groups(['partner:read'])]
     private ?string $description;
 
     #[ORM\Column(type: 'datetime_immutable')]
@@ -35,9 +51,11 @@ class Partner
     private ?\DateTimeImmutable $updatedAt;
 
     #[ORM\OneToMany(mappedBy: 'partner', targetEntity: PartnerStore::class, orphanRemoval: true)]
+    #[Groups(['partner:read'])]
     private Collection $partnerStores;
 
     #[ORM\Column(type: 'integer')]
+    #[Groups(['partner:read'])]
     private ?int $upplerId = null;
 
     public function __construct()
@@ -128,7 +146,7 @@ class Partner
         return $this;
     }
 
-    public function getUpplerId(): ?int
+    public function getSellerId(): ?int
     {
         return $this->upplerId;
     }
