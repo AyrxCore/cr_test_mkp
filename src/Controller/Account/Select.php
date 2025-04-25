@@ -70,7 +70,8 @@ class Select extends AbstractController
             }
 
             if (empty($account->getAdherent()->isStellantisModalValidated()) && $account->getAdherent()->isShowModalStellantis()) {
-                $this->eventDispatcher->dispatch(new UserAcceptStellantisModalEvent($account));
+                // TODO: Uncomment this when the modal is ready
+                // $this->eventDispatcher->dispatch(new UserAcceptStellantisModalEvent($account));
             }
 
             return new JsonResponse(['status' => 'ok']);

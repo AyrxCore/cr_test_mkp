@@ -335,14 +335,16 @@ const handleAccountSelection = async (accountId: string, account?: Account) => {
     showCGUModal.value = true
     return
   }
+  showStellantisModal.value = false
+  // TODO: Uncomment this when the modal is ready
 
-  if (
-    selected.adherent?.showModalStellantis &&
-    !selected.adherent?.stellantisModalValidated
-  ) {
-    showStellantisModal.value = true
-    return
-  }
+  // if (
+  //   selected.adherent?.showModalStellantis &&
+  //   !selected.adherent?.stellantisModalValidated
+  // ) {
+  //   showStellantisModal.value = true
+  //   return
+  // }
 
   await proceedWithAccountSelection(accountId)
 }
@@ -405,15 +407,19 @@ const onChangeBuyer = (acceptCgu: boolean) => {
 
 const valideCGU = async () => {
   showCGUModal.value = false
+    // TODO: Uncomment this when the modal is ready
 
-  if (
-    selectedAccount.value?.adherent?.showModalStellantis &&
-    !selectedAccount.value?.adherent?.stellantisModalValidated
-  ) {
-    showStellantisModal.value = true
-  } else {
-    await proceedWithAccountSelection(accountSelectedId.value)
-  }
+  // if (
+  //   selectedAccount.value?.adherent?.showModalStellantis &&
+  //   !selectedAccount.value?.adherent?.stellantisModalValidated
+  // ) {
+  //   showStellantisModal.value = true
+  //   showStellantisModal.value = false
+  // } else {
+  //   await proceedWithAccountSelection(accountSelectedId.value)
+  // }
+  await proceedWithAccountSelection(accountSelectedId.value)
+
 }
 
 const valideStellantis = async () => {

@@ -84,7 +84,8 @@ class StellantisRattachementController extends AbstractController implements Cha
         $session = $this->requestStack->getSession();
         $account = $this->accountRepository->find($session->get('account')->getId());
 
-        $this->eventDispatcher->dispatch(new UserAcceptStellantisModalEvent($account));
+        // TODO: Uncomment this when the modal is ready
+        // $this->eventDispatcher->dispatch(new UserAcceptStellantisModalEvent($account));
 
         return new JsonResponse(
             [

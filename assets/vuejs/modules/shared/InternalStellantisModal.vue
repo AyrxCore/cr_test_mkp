@@ -21,18 +21,21 @@ const hasAccepted = ref<boolean>(false)
 const isLoading = ref<boolean>(false)
 
 const showStellantisModal = computed<boolean>(() => {
-  const adherent = userStore.user?.account.adherent
-  return (
-    adherent?.showModalStellantis &&
-    !adherent?.stellantisModalValidated &&
-    !hasAccepted.value
-  )
+  // TODO: Uncomment this when the modal is ready
+  // const adherent = userStore.user?.account.adherent
+  return false
+  // return (
+  //   adherent?.showModalStellantis &&
+  //   !adherent?.stellantisModalValidated &&
+  //   !hasAccepted.value
+  // )
 })
 
 const onAccept = async (): Promise<void> => {
   try {
     isLoading.value = true
-    await ProductHttpClient.get().updateStellantisSubscription()
+    // TODO: Uncomment this when the modal is ready
+    // await ProductHttpClient.get().updateStellantisSubscription()
   } catch {
     notifyError('Veuillez contacter le support.')
   } finally {
