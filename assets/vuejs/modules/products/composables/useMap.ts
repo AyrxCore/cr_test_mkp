@@ -50,32 +50,6 @@ export function useMap() {
   }
 
   /**
-   * Handle marker click event - toggle tooltip visibility
-   * @param event Leaflet mouse event
-   * @param storeId The store ID that was clicked
-   */
-  const handleMarkerClick = (event: LeafletMouseEvent, storeId: string) => {
-    const index = fixedTooltips.value.indexOf(storeId)
-
-    if (index === -1) {
-      fixedTooltips.value = [storeId]
-    } else {
-      fixedTooltips.value.splice(index, 1)
-    }
-  }
-
-  /**
-   * Close a specific tooltip
-   * @param storeId The store ID whose tooltip should be closed
-   */
-  const closeTooltip = (storeId: string) => {
-    const index = fixedTooltips.value.indexOf(storeId)
-    if (index !== -1) {
-      fixedTooltips.value.splice(index, 1)
-    }
-  }
-
-  /**
    * Check if the device is mobile and update zoom accordingly
    */
   const checkIfMobile = () => {
@@ -104,8 +78,6 @@ export function useMap() {
     isMobile,
     createMarkerIcon,
     getTooltipOptions,
-    handleMarkerClick,
-    closeTooltip,
     checkIfMobile,
     recenterMap,
   }

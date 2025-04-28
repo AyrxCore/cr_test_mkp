@@ -21,8 +21,6 @@
               :is-mobile="isMobile"
               :create-marker-icon="createMarkerIcon"
               :tooltip-options="getTooltipOptions"
-              @marker-click="handleMarkerClick"
-              @tooltip-close="closeTooltip"
             />
           </template>
         </MapComponent>
@@ -43,13 +41,7 @@ import { useMap } from '@/vuejs/modules/products/composables/useMap'
 import MapComponent from '@/vuejs/modules/shared/map/MapComponent.vue'
 import StoreMarkersComponent from '@/vuejs/modules/products/components/map/StoreMarkersComponent.vue'
 
-const {
-  isMobile,
-  createMarkerIcon,
-  getTooltipOptions,
-  handleMarkerClick,
-  closeTooltip,
-} = useMap()
+const { isMobile, createMarkerIcon, getTooltipOptions } = useMap()
 
 const props = defineProps({
   sellerId: {
