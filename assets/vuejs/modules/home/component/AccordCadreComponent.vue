@@ -5,7 +5,17 @@
       isInShowcase ? 'border-gray-400' : 'border-secondary',
     ]"
   >
-    <div class="flex h-[50px] w-full items-center justify-end">
+    <div
+      :class="{ 'justify-between': accord.newTarifNotification }"
+      class="flex h-[50px] w-full items-center justify-end"
+    >
+      <div
+        v-if="accord.newTarifNotification"
+        class="flex items-center rounded-sm border border-secondary p-1 text-sm text-secondary"
+      >
+        <BellRingOutlineIconComponent class="fill-secondary" />
+        <span class="ml-1">Nouveau tarif</span>
+      </div>
       <LockIconComponent
         v-if="isInShowcase"
         :stroke="channelSecondaryColor"
@@ -145,6 +155,7 @@ import { betterTextColor } from '@/vuejs/services/utils'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import LockIconComponent from '@/vuejs/modules/shared/icon/LockIconComponent.vue'
 import CheckIconComponent from '@/vuejs/modules/shared/icon/CheckIconComponent.vue'
+import BellRingOutlineIconComponent from '@/vuejs/modules/shared/icon/BellRingOutlineIconComponent.vue'
 
 const { channelPrimaryColor, channelSecondaryColor } =
   storeToRefs(useChannelStore())

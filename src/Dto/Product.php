@@ -107,6 +107,9 @@ final class Product
     #[Groups(['product:get'])]
     private ?int $quantity = 0;
 
+    #[Groups(['products:get', 'product:get'])]
+    private bool $newTarifNotification = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -327,5 +330,15 @@ final class Product
     public function setQuantity(?int $quantity): void
     {
         $this->quantity = $quantity;
+    }
+
+    public function isNewTarifNotification(): bool
+    {
+        return $this->newTarifNotification;
+    }
+
+    public function setNewTarifNotification(bool $newTarifNotification): void
+    {
+        $this->newTarifNotification = $newTarifNotification;
     }
 }

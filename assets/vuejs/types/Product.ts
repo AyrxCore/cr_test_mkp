@@ -30,6 +30,7 @@ export interface Product {
   similarProducts: Array<any>
   selectedVariants: Array<any>
   quantity: number
+  newTarifNotification?: boolean
 }
 
 export interface ProductProperties {

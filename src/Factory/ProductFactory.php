@@ -183,6 +183,9 @@ class ProductFactory extends AbstractFactory
         $sellable = $this->checkSellableProperty($data['properties']);
         $product->setSellable($sellable);
 
+        $newTarifNotification = $this->checkNewTarifNotification($data['properties']);
+        $product->setNewTarifNotification($newTarifNotification);
+
         if (!$sellable) {
             $product->setPercent($this->getNotSellablePercent($data['properties']));
             $isFormWithMessage = $this->checkNotSellableFormType($data['properties']);
@@ -235,6 +238,20 @@ class ProductFactory extends AbstractFactory
         }
 
         return true;
+    }
+
+    private function checkNewTarifNotification($remoteProperties): bool
+    {
+        foreach ($remoteProperties as $property) {
+            if ($property['property']['name']['default'] === 'notification_nouveau_tarif') {
+                $newTarifNotificationDate = (new \DateTimeImmutable(\str_replace('/', '-', $property['value'])));
+                $today = new \DateTimeImmutable('today');
+
+                return $today <= $newTarifNotificationDate;
+            }
+        }
+
+        return false;
     }
 
     private function getNotSellablePercent($remoteProperties): ?float
