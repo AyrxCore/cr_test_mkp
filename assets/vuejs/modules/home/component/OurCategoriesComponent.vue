@@ -1,38 +1,33 @@
 <template>
-  <div class="mt-16 bg-white px-12 pt-6">
-    <div class="m-auto max-w-screen-98">
+  <div class="mt-16 bg-white pt-6">
+    <div class="m-auto max-w-screen-98 px-12">
       <h3 class="text-title-primary">
         Nos catégories de produits et d'accords-cadres
       </h3>
     </div>
-    <div class="ml-1 flex w-full flex-col text-lg sm:flex md:items-center">
-      <DropdownListComponent>
-        <template #button-label> Toutes les catégories</template>
-        <template #content>
-          <div class="list-categories">
-            <div
-              v-for="category in categories"
-              :key="category.id"
-              class="list-categories-items cursor-pointer hover:bg-primary hover:text-white"
-            >
-              <RouterLink
-                :to="{
-                  name: ProductPageList.PRODUCTS,
-                  query: { category: category.id },
-                }"
-                class="px-0.5 text-sm"
-                @click="
-                  sendGaEvent('click_cat_category', {
-                    category_name: category.name,
-                  })
-                "
-              >
-                {{ category.name }}
-              </RouterLink>
-            </div>
-          </div>
-        </template>
-      </DropdownListComponent>
+    <div class="flex w-full flex-col items-center pr-4 text-lg sm:flex">
+      <div class="list-categories">
+        <div
+          v-for="category in categories"
+          :key="category.id"
+          class="list-categories-items cursor-pointer hover:bg-primary hover:text-white"
+        >
+          <RouterLink
+            :to="{
+              name: ProductPageList.PRODUCTS,
+              query: { category: category.id },
+            }"
+            class="px-0.5 text-sm"
+            @click="
+              sendGaEvent('click_cat_category', {
+                category_name: category.name,
+              })
+            "
+          >
+            {{ category.name }}
+          </RouterLink>
+        </div>
+      </div>
       <div class="my-8">
         <router-link
           :to="{ name: ProductPageList.CATEGORIES }"
@@ -48,7 +43,6 @@
 
 <script lang="ts" setup>
 import { computed, onBeforeMount, onUnmounted, ref } from 'vue'
-import DropdownListComponent from '@/vuejs/modules/shared/DropdownListComponent.vue'
 import { useCategoryStore } from '@/vuejs/stores/category'
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
@@ -59,9 +53,7 @@ const categoryStore = useCategoryStore()
 const windowWidth = ref<number>(null)
 
 const categories = computed((): Category[] => {
-  return windowWidth.value <= 1280
-    ? categoryStore.categoriesSortedAlphabetically
-    : categoryStore.categoriesSortedAlphabetically.slice(0, 7)
+  return categoryStore.categoriesSortedAlphabetically.slice(0, 7)
 })
 
 const onResize = () => {
@@ -78,4 +70,8 @@ onUnmounted(() => {
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+::-webkit-scrollbar {
+  display: none;
+}
+</style>

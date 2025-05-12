@@ -255,22 +255,21 @@ const handleShowcaseModal = (accord) => {
 
 <style lang="scss">
 .list-categories {
-  @apply h-[366px] flex-wrap
+  @apply mt-2
+  flex h-auto w-full
   overflow-auto
-  rounded-lg bg-white p-1
-  text-left
-  text-gray-700
-  xl:relative xl:mt-2 xl:flex xl:h-auto
-  xl:overflow-auto xl:bg-transparent xl:p-0 xl:text-center;
+  rounded-lg
+  bg-transparent bg-white p-0 text-left
+  text-gray-700 md:flex-wrap;
 }
 
 .list-categories-items {
-  @apply my-2 items-center
-  border-2 border-solid border-primary
-  bg-white text-sm text-primary
-  sm:text-base xl:mx-4
-  xl:justify-center xl:rounded xl:px-2.5
-  xl:py-1.5 xl:text-lg;
+  @apply mx-4 my-2 items-center
+  justify-center text-nowrap rounded
+  border-2 border-solid
+  border-primary bg-white
+  px-2.5 py-1.5 text-lg
+  text-primary sm:text-base;
 }
 
 .dropdown:hover .dropdown-menu {
