@@ -43,21 +43,6 @@ export function getLatLng(store: PartnerStore): [number, number] {
   return [parseFloat(lat), parseFloat(lng)]
 }
 
-export function formatPhoneNumber(phone: string): string {
-  if (!phone) return ''
-
-  const cleaned = phone.replace(/\D/g, '')
-
-  if (cleaned.length === 10) {
-    return cleaned.replace(
-      /(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/,
-      '$1 $2 $3 $4 $5',
-    )
-  }
-
-  return phone
-}
-
 export function isValidStore(store: PartnerStore): boolean {
   return Boolean(
     store &&

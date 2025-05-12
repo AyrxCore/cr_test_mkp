@@ -22,7 +22,6 @@ use Symfony\Component\Uid\Uuid;
     order: ['name' => 'ASC'],
     paginationEnabled: false
 )]
-#[ApiResource()]
 class PartnerStore
 {
     #[ORM\Id]

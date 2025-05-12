@@ -23,7 +23,7 @@
           :href="`tel:${store.phone}`"
           class="text-xs font-medium text-blue-500 md:text-sm"
           @click.stop
-          >{{ formatPhoneNumber(store.phone) }}</a
+          >{{ store.phone }}</a
         >
       </p>
     </LPopup>
@@ -35,10 +35,7 @@ import { PropType } from 'vue'
 import type { DivIcon } from 'leaflet'
 import { LMarker, LPopup } from '@vue-leaflet/vue-leaflet'
 import { PartnerStore } from '@/vuejs/types/Seller'
-import {
-  formatPhoneNumber,
-  getLatLng,
-} from '@/vuejs/modules/products/utils/map-utils'
+import { getLatLng } from '@/vuejs/modules/products/utils/map-utils'
 
 defineProps({
   stores: {

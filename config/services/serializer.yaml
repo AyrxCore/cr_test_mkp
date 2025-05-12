@@ -46,3 +46,17 @@ services:
       $normalizer: '@api_platform.serializer.normalizer.item'
     tags:
       - { name: serializer.normalizer, priority: 100 }
+
+  app.serializer.normalizer.partner_store.jsonld:
+    class: App\Serializer\PartnerStoreNormalizer
+    arguments:
+      $normalizer: '@api_platform.jsonld.normalizer.item'
+    tags:
+      - { name: serializer.normalizer, priority: 100 }
+
+  app.serializer.normalizer.partner_store.json:
+    class: App\Serializer\PartnerStoreNormalizer
+    arguments:
+      $normalizer: '@api_platform.serializer.normalizer.item'
+    tags:
+      - { name: serializer.normalizer, priority: 100 }
