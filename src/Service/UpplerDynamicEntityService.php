@@ -30,15 +30,15 @@ class UpplerDynamicEntityService extends AbstractUpplerService
         ?string $dynamicEntityConfigurationId = null
     ): array {
         $path = $this->buildEntitiesPath($dynamicEntityConfigurationId, $expands, $criteria);
-
         $response = $this->request(
             method: 'GET',
             path: $path
         );
 
         $this->validateResponse($response);
+        $entities = \json_decode($response->getContent(), true);
 
-        return \json_decode($response->getContent(), true);
+        return $this->sortEntitiesByCreatedAt($entities);
     }
 
     private function buildCategoriesPath(array $expands): string
@@ -89,6 +89,25 @@ class UpplerDynamicEntityService extends AbstractUpplerService
         }
     }
 
+    private function sortEntitiesByCreatedAt(array $entities): array
+    {
+        if (empty($entities)) {
+            return [];
+        }
+
+        if (!isset($entities[0]['created_at'])) {
+            return $entities;
+        }
+
+        usort($entities, function ($a, $b) {
+            $dateA = strtotime($a['created_at']);
+            $dateB = strtotime($b['created_at']);
+            return $dateB - $dateA;
+        });
+
+        return $entities;
+    }
+
     private function buildEntitiesPath(
         ?string $dynamicEntityConfigurationId,
         array $expands,
@@ -100,14 +119,18 @@ class UpplerDynamicEntityService extends AbstractUpplerService
             $path .= "/{$dynamicEntityConfigurationId}/entities";
         }
 
-        $path .= '?sorting[created_at]=DESC';
+        $queryParams = [];
 
         foreach ($expands as $expand) {
-            $path .= \sprintf('&expand[]=%s', \urlencode($expand));
+            $queryParams[] = \sprintf('expand[]=%s', \urlencode($expand));
         }
 
         foreach ($criteria as $key => $value) {
-            $path .= \sprintf('&criteria[%s]=%s', \urlencode($key), \urlencode($value));
+            $queryParams[] = \sprintf('criteria[%s]=%s', \urlencode($key), \urlencode($value));
+        }
+
+        if (!empty($queryParams)) {
+            $path .= '?' . implode('&', $queryParams);
         }
 
         return $path;
