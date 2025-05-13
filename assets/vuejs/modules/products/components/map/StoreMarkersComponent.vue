@@ -2,13 +2,13 @@
   <LMarker
     v-for="store in stores"
     :key="store.id"
-    :lat-lng="getLatLng(store)"
     :icon="createMarkerIcon()"
+    :lat-lng="getLatLng(store)"
   >
     <LPopup v-if="store && store.id" :options="tooltipOptions(store.id)">
       <div class="flex w-full justify-between">
         <strong
-          class="text-sm font-bold leading-tight text-slate-900 md:text-base"
+          class="text-sm font-bold uppercase leading-tight text-slate-900 md:text-base"
         >
           {{ store.name }}
         </strong>
