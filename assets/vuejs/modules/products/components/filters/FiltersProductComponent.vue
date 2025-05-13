@@ -91,14 +91,15 @@
 import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
+import { filterType } from '@/vuejs/modules/products'
+import { useProductStore } from '@/vuejs/stores/product'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import { ProductCategory } from '@/vuejs/types/Product'
+
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import CloseIcon from '@/vuejs/modules/shared/icon/CloseIconComponent.vue'
 import FilterCategoryComponent from '@/vuejs/modules/products/components/filters/FilterCategoryComponent.vue'
 import FilterCompanyComponent from '@/vuejs/modules/products/components/filters/FilterCompanyComponent.vue'
-
-import { filterType } from '@/vuejs/modules/products'
-import { useProductStore } from '@/vuejs/stores/product'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const emit = defineEmits(['filter-product', 'close-filters'])
 
@@ -156,9 +157,24 @@ const filters = computed(() => {
   return productStore.products?.filters
 })
 
-const categories = computed(() => {
+const categories = computed((): ProductCategory[] => {
   return filters.value?.categories
+    ? sortCategories(filters.value.categories)
+    : []
 })
+
+const sortCategories = (categories: ProductCategory[]): ProductCategory[] => {
+  return [...categories]
+    .sort((catA: ProductCategory, catB: ProductCategory) =>
+      catA.name.localeCompare(catB.name),
+    )
+    .map((category) => ({
+      ...category,
+      ...(category.children?.length && {
+        children: sortCategories(category.children),
+      }),
+    }))
+}
 
 const companies = computed(() => {
   try {
