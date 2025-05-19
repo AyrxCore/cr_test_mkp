@@ -1,17 +1,21 @@
 <template>
-  <Modal>
+  <Modal :close="closeModal">
     <div
       v-if="seller"
-      class="my-4 mx-4 overflow-scroll rounded bg-white p-4 md:max-h-[800px] md:w-[600px]"
+      class="mx-4 my-4 rounded bg-white p-4 md:max-h-[800px] md:w-[600px]"
     >
       <div class="mb-4 underline">
         Conditions Générales de Vente de {{ seller.name }}
       </div>
-      <div v-if="seller.tos?.content" v-html="seller.tos.content" />
+      <div
+        v-if="seller.tos?.content"
+        class="max-h-[650px] overflow-y-scroll"
+        v-html="seller.tos.content"
+      />
       <div v-else class="italic">Conditions générales indisponibles</div>
       <div class="mt-4 text-center">
-        <ButtonComponent class="button-primary" @click="$emit('close')">
-          Fermer
+        <ButtonComponent class="button-primary" @click="$emit('validate')">
+          Valider
         </ButtonComponent>
       </div>
     </div>
@@ -31,9 +35,8 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits<{
-  (eventName: 'close'): void
-}>()
+const emit = defineEmits(['validate', 'close'])
+const closeModal = () => {
+  emit('close')
+}
 </script>
-
-<style scoped></style>

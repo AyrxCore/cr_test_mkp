@@ -59,6 +59,7 @@
             v-if="showTos"
             :seller="seller"
             @close="showTos = false"
+            @validate="validateCgu"
           />
         </p>
       </div>
@@ -112,6 +113,11 @@ const onTermsChange = (): void => {
   if (orderTermsOfSales.value) {
     cartStore.termsOfSales.push(props.order.seller.id)
   }
+}
+
+const validateCgu = (): void => {
+  orderTermsOfSales.value = true
+  showTos.value = false
 }
 </script>
 
