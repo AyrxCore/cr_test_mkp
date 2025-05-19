@@ -1,8 +1,18 @@
 <template>
   <div class="modal-overlay">
     <div
+      v-click-outside="() => $emit('cancel-stellantis')"
       class="mx-auto my-auto max-h-[90vh] w-[90%] overflow-scroll rounded-xl bg-white px-4 py-6 text-black sm:w-[80%] md:w-[70%] lg:w-[50%] lg:px-8"
     >
+      <div class="flex justify-end">
+        <ButtonComponent
+          class="!h-5 !px-3 text-xl font-bold !text-primary"
+          type="button"
+          @click="$emit('cancel-stellantis')"
+        >
+          <CloseIconComponent />
+        </ButtonComponent>
+      </div>
       <h2 class="mb-6 mt-2 text-center text-xl font-bold sm:text-2xl">
         Conditions particulières Stellantis
       </h2>
@@ -53,8 +63,8 @@
 
       <div class="mt-6 flex justify-center">
         <ButtonComponent
-          class="button-primary w-auto"
           :is-loading="isLoading"
+          class="button-primary w-auto"
           @click="validateStellantis"
         >
           Valider
@@ -67,6 +77,7 @@
 <script lang="ts" setup>
 import { onBeforeMount, onBeforeUnmount, ref } from 'vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
+import CloseIconComponent from '@/vuejs/modules/shared/icon/CloseIconComponent.vue'
 
 const props = defineProps({
   isLoading: {
@@ -77,7 +88,7 @@ const props = defineProps({
 
 const showAlert = ref<boolean>(false)
 const acceptStellantis = ref<boolean>(false)
-const emit = defineEmits(['accept-stellantis'])
+const emit = defineEmits(['accept-stellantis', 'cancel-stellantis'])
 
 const validateStellantis = () => {
   if (acceptStellantis.value) {

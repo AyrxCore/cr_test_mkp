@@ -267,5 +267,8 @@ export const useUserStore = defineStore({
         this.userLocation?.error !== null && this.userLocation?.error !== ''
       )
     },
+    isShouldHideStellantisModal(): boolean {
+      return this.user?.account?.adherent?.shouldHideStellantisModal || false
+    },
   },
 })

@@ -84,8 +84,7 @@ class StellantisRattachementController extends AbstractController implements Cha
         $session = $this->requestStack->getSession();
         $account = $this->accountRepository->find($session->get('account')->getId());
 
-        // TODO: Uncomment this when the modal is ready
-        // $this->eventDispatcher->dispatch(new UserAcceptStellantisModalEvent($account));
+        $this->eventDispatcher->dispatch(new UserAcceptStellantisModalEvent($account));
 
         return new JsonResponse(
             [
@@ -93,6 +92,16 @@ class StellantisRattachementController extends AbstractController implements Cha
                 'message' => 'Subscription request sent successfully.',
             ]
         );
+    }
+
+    #[Route('/api/cancel-stellantis-subscription', name: 'stellantis_api_cancel_subscription', methods: ['POST'])]
+    public function cancelSubscription(): JsonResponse
+    {
+        $session = $this->requestStack->getSession();
+        $account = $this->accountRepository->find($session->get('account')->getId());
+        $this->stellantisService->cancelStellantisSubscription($account);
+
+        return new JsonResponse();
     }
 
     private function renderError(string $errorMessage, Channel $channel): Response

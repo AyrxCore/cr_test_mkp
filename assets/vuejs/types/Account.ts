@@ -37,6 +37,7 @@ export interface Adherent {
   showModalStellantis?: boolean
   stellantisModalValidated?: boolean
   name?: string
+  shouldHideStellantisModal?: boolean
 }
 
 export interface Account extends ExternalApiDataEntity {

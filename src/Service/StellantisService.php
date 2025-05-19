@@ -16,7 +16,7 @@ class StellantisService
         private AccordCadreSubscriptionService $subscriptionService,
         private LoggerInterface $logger,
         #[Autowire('%STELLANTIS_PARAMS%')]
-        private array $stellantisParams
+        private array $stellantisParams,
     ) {
     }
 
@@ -45,5 +45,14 @@ class StellantisService
             $this->logger->error('Error processing Stellantis subscription: '.$e->getMessage());
             throw $e;
         }
+    }
+
+    public function cancelStellantisSubscription(Account $account): void
+    {
+        $adherent = $account->getAdherent();
+        $adherent
+            ->setStellantisModalValidated(true);
+        $this->em->persist($adherent);
+        $this->em->flush();
     }
 }

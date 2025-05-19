@@ -111,6 +111,12 @@ class Adherent
 
     private array $tarifShowcases = [];
 
+    #[ORM\Column]
+    private ?bool $hideStellantisModal = false;
+
+    #[Groups(['user:simple'])]
+    private ?bool $shouldHideStellantisModal = null;
+
     public function __construct()
     {
         $this->accordStatuts = new ArrayCollection();
@@ -421,5 +427,33 @@ class Adherent
     public function setTarifShowcases(array $tarifShowcases): void
     {
         $this->tarifShowcases = $tarifShowcases;
+    }
+
+    public function isHideStellantisModal(): ?bool
+    {
+        return $this->hideStellantisModal;
+    }
+
+    public function setHideStellantisModal(?bool $hideStellantisModal): static
+    {
+        $this->hideStellantisModal = $hideStellantisModal;
+
+        return $this;
+    }
+
+    public function isShouldHideStellantisModal(): ?bool
+    {
+        if ($this->hideStellantisModal === true) {
+            return $this->hideStellantisModal;
+        }
+
+        return $this->getParent()?->isShouldHideStellantisModal();
+    }
+
+    public function setShouldHideStellantisModal(?bool $shouldHideStellantisModal): static
+    {
+        $this->shouldHideStellantisModal = $shouldHideStellantisModal;
+
+        return $this;
     }
 }

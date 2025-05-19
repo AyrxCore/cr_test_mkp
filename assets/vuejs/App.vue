@@ -2,7 +2,9 @@
   <template v-if="props.component === ''">
     <RouterView />
     <NotifComponent />
-    <InternalStellantisModal v-if="!userStore.isNeoAutoLogin" />
+    <InternalStellantisModal
+      v-if="!userStore.isNeoAutoLogin && !userStore.isShouldHideStellantisModal"
+    />
   </template>
   <LoginForm v-else-if="props.component === 'login'" />
   <PrehomeRightPart v-else-if="props.component === 'prehome-right-part'" />

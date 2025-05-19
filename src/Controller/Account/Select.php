@@ -8,7 +8,6 @@ use App\Context\ChannelContext;
 use App\Entity\Account;
 use App\Entity\User;
 use App\Events\UserAcceptCGUEvent;
-use App\Events\UserAcceptStellantisModalEvent;
 use App\Service\UpplerAuthenticationService;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -67,11 +66,6 @@ class Select extends AbstractController
 
             if (empty($account->isAcceptCGU())) {
                 $this->eventDispatcher->dispatch(new UserAcceptCGUEvent($account));
-            }
-
-            if (empty($account->getAdherent()->isStellantisModalValidated()) && $account->getAdherent()->isShowModalStellantis()) {
-                // TODO: Uncomment this when the modal is ready
-                // $this->eventDispatcher->dispatch(new UserAcceptStellantisModalEvent($account));
             }
 
             return new JsonResponse(['status' => 'ok']);

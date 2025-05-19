@@ -259,11 +259,6 @@
     class="modal"
     @cancel="showContactForm = false"
   />
-  <StellantisModal
-    v-if="showStellantisModal"
-    class="modal"
-    @accept-stellantis="valideStellantis"
-  />
 </template>
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
@@ -273,7 +268,6 @@ import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vu
 import ArrowRightIcon from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import CGUModal from '@/vuejs/modules/login/component/CGUModal.vue'
-import StellantisModal from '@/vuejs/modules/login/component/StellantisModal.vue'
 import ContactModal from '@/vuejs/modules/contact/component/ContactModal.vue'
 import EyeIcon from '@/vuejs/modules/shared/icon/EyeIconComponent.vue'
 import EyeSlashIcon from '@/vuejs/modules/shared/icon/EyeSlashIconComponent.vue'
@@ -299,7 +293,6 @@ const accountSelectedId = ref<string>(null)
 const accountAcceptCGU = ref(null)
 const showCGUModal = ref<boolean>(false)
 const showContactForm = ref<boolean>(false)
-const showStellantisModal = ref<boolean>(false)
 const selectedAccount = ref(null)
 
 const { show: showAlert } = storeToRefs(alertStore)
@@ -335,16 +328,6 @@ const handleAccountSelection = async (accountId: string, account?: Account) => {
     showCGUModal.value = true
     return
   }
-  showStellantisModal.value = false
-  // TODO: Uncomment this when the modal is ready
-
-  // if (
-  //   selected.adherent?.showModalStellantis &&
-  //   !selected.adherent?.stellantisModalValidated
-  // ) {
-  //   showStellantisModal.value = true
-  //   return
-  // }
 
   await proceedWithAccountSelection(accountId)
 }
@@ -407,23 +390,6 @@ const onChangeBuyer = (acceptCgu: boolean) => {
 
 const valideCGU = async () => {
   showCGUModal.value = false
-    // TODO: Uncomment this when the modal is ready
-
-  // if (
-  //   selectedAccount.value?.adherent?.showModalStellantis &&
-  //   !selectedAccount.value?.adherent?.stellantisModalValidated
-  // ) {
-  //   showStellantisModal.value = true
-  //   showStellantisModal.value = false
-  // } else {
-  //   await proceedWithAccountSelection(accountSelectedId.value)
-  // }
-  await proceedWithAccountSelection(accountSelectedId.value)
-
-}
-
-const valideStellantis = async () => {
-  showStellantisModal.value = false
   await proceedWithAccountSelection(accountSelectedId.value)
 }
 
