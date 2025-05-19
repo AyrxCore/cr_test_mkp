@@ -26,21 +26,35 @@
         >
           <!-- Bloc image -->
           <div class="mx-auto flex h-[191px] justify-center rounded-lg px-1">
-            <img
-              :src="contenu?.mise_en_avant_homepage_img_desktop"
-              alt="Picture"
-              class="w-full items-center sm:mx-auto"
-            />
+            <RouterLink
+              :to="{
+                name: PageList.NEWS_ITEM,
+                params: { slug: contenu?.slug },
+              }"
+            >
+              <img
+                :src="contenu?.mise_en_avant_homepage_img_desktop"
+                alt="Picture"
+                class="w-full items-center sm:mx-auto"
+              />
+            </RouterLink>
           </div>
           <!-- Fin bloc image -->
 
           <!-- Bloc nom et description -->
           <div class="mt-6 flex w-full flex-col justify-start">
-            <h3
-              class="truncate-custom truncate-custom-2 mb-5 text-[23px] font-bold text-primary"
+            <RouterLink
+              :to="{
+                name: PageList.NEWS_ITEM,
+                params: { slug: contenu?.slug },
+              }"
             >
-              {{ contenu?.articleTitle }}
-            </h3>
+              <h3
+                class="truncate-custom truncate-custom-2 mb-5 text-[23px] font-bold text-primary"
+              >
+                {{ contenu?.articleTitle }}
+              </h3>
+            </RouterLink>
             <div class="h-[100px]">
               <p class="truncate-custom truncate-custom-3 text-lg">
                 {{ contenu?.articleTeaser }}
@@ -66,11 +80,12 @@
 </template>
 
 <script lang="ts" setup>
+import { PropType } from 'vue'
 import { SwiperSlide } from 'swiper/vue'
 import { PageList } from '@/vuejs/router'
-import { PropType } from 'vue'
 import { ExpertContent } from '@/vuejs/types/ExpertContent'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
+
 const props = defineProps({
   contents: {
     required: true,
@@ -78,5 +93,3 @@ const props = defineProps({
   },
 })
 </script>
-
-<style scoped></style>
