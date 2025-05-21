@@ -28,16 +28,16 @@
         btnGoBack.addEventListener('click', function (event) {
           event.preventDefault();
           sendEvent('prehome_click_back');
-          if(document.getElementById('baseHtml').dataset.externalScripts === '1') {
-            gtag('event', 'click_prehome_back', buildStandardGaData());
+          if (document.getElementById('baseHtml').dataset.externalScripts === '1') {
+            sendEvent('click_prehome_back');
           }
           window.location.href = btnGoBack.attributes.href.value;
         })
         form.addEventListener('submit', function (event) {
           event.preventDefault();
           sendEvent('prehome_click_valider');
-          if(document.getElementById('baseHtml').dataset.externalScripts === '1') {
-            gtag('event', form.dataset.eventName, buildStandardGaData());
+          if (document.getElementById('baseHtml').dataset.externalScripts === '1') {
+            sendEvent(form.dataset.eventName);
           }
           form.submit();
         });

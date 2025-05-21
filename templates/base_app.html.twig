@@ -20,8 +20,6 @@
 
   {% if settings.useExternalScriptsTags and isNeoAutoLogin == false %}
     {% include '_partials/_gtm-header.html.twig' %}
-    {% include '_partials/_clarity-header.html.twig' %}
-    {% include '_partials/_ga-header.html.twig' %}
   {% endif %}
   {# Keep javascripts block at the end of the head to avoid css order problems #}
   {% block javascripts %}
@@ -36,7 +34,17 @@
 {% block body %}{% endblock %}
 {% if settings.getChatbot %}
   <script>
-    !function(e,r,i,t){if(!e[t]){e[t]=function(){(e[t].q=e[t].q||[]).push(arguments)},e[t].l=1*new Date;var n=r.createElement("script"),a=r.getElementsByTagName("script")[0];n.async=1,n.src="https://assets-courier.lkbd.io/script/courier.js";var o=r.createElement("div");o.id="lkbCourier",r.body.appendChild(o),a.parentNode.insertBefore(n,a)}}(window,document,0,"Courier"),Courier({bot:'{{ settings.getChatbot }}'});
+    !function (e, r, i, t) {
+      if (!e[t]) {
+        e[t] = function () {
+          (e[t].q = e[t].q || []).push(arguments)
+        }, e[t].l = 1 * new Date;
+        var n = r.createElement("script"), a = r.getElementsByTagName("script")[0];
+        n.async = 1, n.src = "https://assets-courier.lkbd.io/script/courier.js";
+        var o = r.createElement("div");
+        o.id = "lkbCourier", r.body.appendChild(o), a.parentNode.insertBefore(n, a)
+      }
+    }(window, document, 0, "Courier"), Courier({bot: '{{ settings.getChatbot }}'});
   </script>
 {% endif %}
 </body>

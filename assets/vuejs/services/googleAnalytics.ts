@@ -1,6 +1,5 @@
 import { useUserStore } from '@/vuejs/stores/user'
 import { useChannelStore } from '@/vuejs/stores/channel'
-import { event } from 'vue-gtag'
 import { getIdFromIri } from '@/vuejs/services/formatter'
 
 /**
@@ -29,7 +28,7 @@ export const sendGaEvent = (eventName: string, additionalData = null) => {
     channelStore.currentChannel.name,
   )
   data = additionalData ? { ...data, ...additionalData } : data
-  event(eventName, data)
+  window.dataLayer?.push({ event: eventName, ...data })
 }
 
 const userBrowser = () => {
