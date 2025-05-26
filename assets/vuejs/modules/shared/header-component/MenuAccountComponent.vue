@@ -81,7 +81,7 @@ const listAccountGlobal = ref<any[]>([
     routeName: AccountPageList.ACCOUNT,
   },
   {
-    label: 'Mes listes de produits favoris',
+    label: 'Mes favoris',
     routeName: AccountPageList.FAVORITES_LIST,
     condition: OPTIONAL_FRONT_BLOCKS.FAVORITES,
   },

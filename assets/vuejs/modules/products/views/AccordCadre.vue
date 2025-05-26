@@ -3,10 +3,7 @@
     <LoadingComponent v-if="isLoading" />
     <div v-else-if="accord && !isLoading && !isInShowcase" class="m-auto my-4">
       <HeaderPartnerComponent
-        :banner-desktop="accord.properties.banniere_partenaire"
-        :banner-text="accord.properties.texte_banniere"
-        :categories="accord.categories"
-        :name="accord.name"
+        :accord="accord"
         :note="accord.properties.note_rse ?? null"
         @scroll-to="scrollTo('#sectionRse')"
       />

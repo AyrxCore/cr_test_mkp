@@ -57,7 +57,7 @@
               :to="{ name: AccountPageList.FAVORITES_LIST }"
               @click="sendGaEvent('click_footer_mes_favoris')"
             >
-              Mes listes de produits favoris
+              Mes favoris
             </RouterLink>
           </li>
           <li

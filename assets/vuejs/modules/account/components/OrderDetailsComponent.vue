@@ -18,9 +18,9 @@
           {{ productName }}
         </RouterLink>
         <span class="flex flex-col text-sm lg:text-lg">
-          <span>Vendu par: {{ productSeller }}</span>
-          <span>Référence: {{ productReference }}</span>
-          <span>Quantité: {{ item.quantity }}</span>
+          <span>Vendu par : {{ productSeller }}</span>
+          <span>Référence : {{ productReference }}</span>
+          <span>Quantité : {{ item.quantity }}</span>
         </span>
       </div>
     </div>

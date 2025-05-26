@@ -1,9 +1,7 @@
 <template>
   <AccountPage>
     <template #right-side>
-      <h3 class="text-title-primary mb-2 mt-2 xl:mt-0">
-        Mes listes de produits favoris
-      </h3>
+      <h3 class="text-title-primary mb-2 mt-2 xl:mt-0">Mes favoris</h3>
       <FavoriteFormModal
         v-if="showFormFavorite"
         :error-submit="errorSubmit"
@@ -17,7 +15,7 @@
         <AlertSharedComponent />
       </div>
       <div
-        class="mt-8 mb-2.5 hidden items-center px-2.5 text-sm md:flex lg:text-base"
+        class="mb-2.5 mt-8 hidden items-center px-2.5 text-sm md:flex lg:text-base"
       >
         <div class="w-5/12">Nom de la liste</div>
         <div class="w-2/12">Créée le</div>

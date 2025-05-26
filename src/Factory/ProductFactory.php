@@ -192,10 +192,8 @@ class ProductFactory extends AbstractFactory
             $product->setNotSellableFormWithMessage($isFormWithMessage);
         }
 
-        if (!$isAccordCadre) {
-            $favorites = $this->em->getRepository(Favorite::class)->getFavoritesByAccountAndProductId($account, $data['id']);
-            $product->setFavorites($favorites);
-        }
+        $favorites = $this->em->getRepository(Favorite::class)->getFavoritesByAccountAndProductId($account, $data['id']);
+        $product->setFavorites($favorites);
 
         if ($data['company']['id']) {
             $product->setSeller($this->sellerFactory->create($data['company']));

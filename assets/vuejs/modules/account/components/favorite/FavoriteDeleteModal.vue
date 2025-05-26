@@ -1,6 +1,6 @@
 <template>
   <FavoriteModal @cancel="onCancelClick">
-    <template #title> Supprimer une liste de produits favoris</template>
+    <template #title> Supprimer une liste de favoris</template>
     <template #content>
       <div class="px-5">
         <div v-if="favorite">
@@ -12,8 +12,8 @@
             <label class="mt-2 flex items-center text-white">
               <input
                 v-model="moveItem"
-                type="checkbox"
                 class="mr-2 mt-1 cursor-pointer border border-white lg:mt-0"
+                type="checkbox"
               />
               <span class="mr-1 text-xs md:text-sm lg:text-base"
                 >Déplacer les produits de la liste vers une autre liste avant de
@@ -28,7 +28,7 @@
                 Vous devez sélectionner une liste
               </span>
               <select v-if="moveItem" v-model="selectedFavorite">
-                <option value="" disabled selected>
+                <option disabled selected value="">
                   Sélectionner une liste
                 </option>
                 <option
@@ -52,8 +52,8 @@
             Annuler
           </ButtonComponent>
           <ButtonComponent
-            class="button-primary"
             :is-loading="isLoading"
+            class="button-primary"
             @click="onDeleteFavorite"
           >
             Supprimer

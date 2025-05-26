@@ -6,7 +6,7 @@
       <div class="mr-2">
         <div v-if="product" class="w-4">
           <input
-            v-if="product.sellable"
+            v-if="product.sellable && !product.isAccordCadre"
             v-model="selectedProduct"
             :disabled="isNeoAutoLogin"
             class="checkbox-secondary"
@@ -22,6 +22,7 @@
           alt="Image produit"
           class="flex h-full w-full max-w-max cursor-pointer items-center"
         />
+
         <div
           v-else
           class="loading flex h-[116px] w-full items-center justify-center rounded-lg px-6 py-2"
@@ -29,20 +30,30 @@
       </div>
       <div class="flex w-6/12 flex-col md:ml-5 md:w-7/12">
         <RouterLink
+          v-if="product && !product.isAccordCadre"
           :to="{ name: PageList.PRODUCT, params: { slug: productSlug } }"
           class="mt-4 text-lg font-bold text-primary lg:text-2xl"
         >
           {{ productName }}
         </RouterLink>
+        <RouterLink
+          v-else
+          :to="{ name: PageList.ACCORD_CADRE, params: { slug: productSlug } }"
+          class="mt-4 text-lg font-bold text-primary lg:text-2xl"
+        >
+          {{ productName }}
+        </RouterLink>
         <div
-          v-if="product && !product.sellable"
+          v-if="product && !product.sellable && !product.isAccordCadre"
           class="mt-2 w-fit rounded-sm bg-secondary px-2 py-1 text-white"
         >
           -{{ product?.percent }}% sur le tarif public
         </div>
         <span class="mt-4 flex flex-col text-sm lg:text-lg">
-          <span>Vendu par: {{ productSeller }}</span>
-          <span>Référence: {{ productReference }}</span>
+          <span>Vendu par : {{ productSeller }}</span>
+          <span v-if="product && !product.isAccordCadre"
+            >Référence: {{ productReference }}</span
+          >
         </span>
       </div>
     </div>
@@ -53,7 +64,7 @@
         >
           <div class="flex items-center">
             <span
-              v-if="product?.sellable"
+              v-if="product?.sellable && !product.isAccordCadre"
               class="mt-4 text-sm font-bold text-primary md:text-base lg:text-xl"
             >
               {{ productPrice }}€ HT
@@ -187,7 +198,10 @@ onMounted(async (): Promise<void> => {
 })
 
 const productImage = computed((): string => {
-  return product.value ? product.value.images[0] : null
+  if (product.value?.isAccordCadre) {
+    return product.value.properties['logo_partenaire']
+  }
+  return product.value?.images[0]
 })
 
 const productSlug = computed((): string => {

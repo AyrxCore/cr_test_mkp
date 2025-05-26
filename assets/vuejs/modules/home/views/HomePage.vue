@@ -15,7 +15,7 @@
             Découvrez les partenaires et leurs conditions&nbsp;!
           </p>
         </div>
-        <div class="relative m-auto mt-1 max-w-screen-94 md:mt-5">
+        <div class="m-auto mt-1 max-w-screen-94 md:mt-5">
           <AccordsCadreComponent
             :accords-cadres="productsAccordsCadre?.results"
             :loading="!productsAccordsCadre"
@@ -71,8 +71,6 @@
           />
         </div>
       </div>
-      <!-- Fin bloc sélection de produits -->
-
       <div
         v-if="
           channelStore.isAllowedToShow(
@@ -182,11 +180,10 @@ import { storeToRefs } from 'pinia'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { useExpertContentStore } from '@/vuejs/stores/expertContent'
 import { useUserStore } from '@/vuejs/stores/user'
-import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import { useProductStore } from '@/vuejs/stores/product'
-import { betterTextColor } from '@/vuejs/services/utils'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
+import { betterTextColor } from '@/vuejs/services/utils'
 import { NewsPageList, ProductPageList } from '@/vuejs/router/pages-list'
 import { Product } from '@/vuejs/types/Product'
 
@@ -200,7 +197,6 @@ import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselCo
 import ShowcaseModal from '@/vuejs/modules/home/component/ShowcaseModal.vue'
 import SemanticButtonsComponent from '@/vuejs/modules/home/component/SemanticButtonsComponent.vue'
 
-const favoriteStore = useFavoriteStore()
 const productStore = useProductStore()
 const expertContentStore = useExpertContentStore()
 const channelStore = useChannelStore()
@@ -223,9 +219,6 @@ onBeforeMount(async () => {
     channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.EXPERT_CONTENT_HOMEPAGE)
   ) {
     promises.push(expertContentStore.init())
-  }
-  if (channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.FAVORITES)) {
-    promises.push(favoriteStore.fetchFavorites())
   }
   await Promise.all(promises)
 })

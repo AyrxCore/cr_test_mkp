@@ -139,7 +139,7 @@ const props = defineProps({
 
 const quantity = ref<number>(1)
 
-const variantId = computed((): string | null => {
+const variantId = computed((): number | null => {
   if (2 === props.product.variants?.length) {
     const variant = props.product.variants.filter(function (el: Variant) {
       return el.sku != null

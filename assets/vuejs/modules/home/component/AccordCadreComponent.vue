@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      'flex flex-col items-center rounded-lg border-4 border-solid p-4',
+      'relative flex flex-col items-center rounded-lg border-4 border-solid p-4',
       isInShowcase ? 'border-gray-400' : 'border-secondary',
     ]"
   >
@@ -21,18 +21,13 @@
         :stroke="channelSecondaryColor"
         class="mr-2"
       />
-      <div
-        :class="{
-          'bg-secondary': !isInShowcase,
-          'bg-gray-400': isInShowcase,
-        }"
-        :style="{
-          color: betterTextColor('secondary'),
-        }"
-        class="rounded-sm p-1 text-sm"
-      >
-        Accord-cadre
-      </div>
+      <AddFavoriteComponent
+        v-else
+        :favorites-product="accord.favorites"
+        :product-id="accord.id"
+        :product-name="accord.name"
+        class="ml-4"
+      />
     </div>
 
     <div class="flex h-full w-full flex-col items-center">
@@ -152,6 +147,7 @@ import { AdherentTarifShowcase } from '@/vuejs/types/AdherentTarifShowcase'
 
 import { betterTextColor } from '@/vuejs/services/utils'
 
+import AddFavoriteComponent from '@/vuejs/modules/products/components/AddFavoriteComponent.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import LockIconComponent from '@/vuejs/modules/shared/icon/LockIconComponent.vue'
 import CheckIconComponent from '@/vuejs/modules/shared/icon/CheckIconComponent.vue'

@@ -23,8 +23,8 @@
           {{ productName }}
         </RouterLink>
         <span class="flex flex-col text-sm lg:text-lg">
-          <span>Vendu par: {{ productSeller }}</span>
-          <span>Référence: {{ productReference }}</span>
+          <span>Vendu par : {{ productSeller }}</span>
+          <span>Référence : {{ productReference }}</span>
         </span>
       </div>
     </div>

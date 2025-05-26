@@ -62,6 +62,7 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\HasLifecycleCallbacks]
 class Favorite
 {
+    public const int FAT_VARIANT_ID = 0;
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
@@ -195,7 +196,7 @@ class Favorite
     public function addFavoriteProduct(FavoriteProduct $favoriteProduct): self
     {
         foreach ($this->favoriteProducts as $product) {
-            if ($favoriteProduct->getUpplerVariantId() === $product->getUpplerVariantId()) {
+            if ($favoriteProduct->getUpplerVariantId() === $product->getUpplerVariantId() && $favoriteProduct->getUpplerVariantId() !== self::FAT_VARIANT_ID) {
                 throw new \Exception(\sprintf('Le produit %s existe déjà dans la liste %s', $favoriteProduct->getUpplerProductName(), $this->name));
             }
         }

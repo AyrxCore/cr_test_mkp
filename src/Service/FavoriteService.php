@@ -23,10 +23,39 @@ class FavoriteService
     {
     }
 
+    public function addProductToFavorites(array $favoriteIds, int $productId, int $variantId, string $name): void
+    {
+        $account = $this->requestStack->getSession()->get('account');
+
+        $oldSelectedFavorites = $this->em->getRepository(FavoriteProduct::class)->getFavoritesProductsByAccountAndProductId($account, $productId);
+
+        $favoritesIdToRemove = \array_diff($oldSelectedFavorites, $favoriteIds);
+        $favoritesIdToAdd = \array_diff($favoriteIds, $oldSelectedFavorites);
+
+        foreach ($favoritesIdToRemove as $favoriteProductId) {
+            $this->removeProductFromFavorites($favoriteProductId);
+        }
+
+        foreach ($favoritesIdToAdd as $favoriteId) {
+            $this->addProductToFavorite($favoriteId, $productId, $variantId, $name, false);
+        }
+
+        $this->em->flush();
+    }
+
+    public function removeProductFromFavorites(string $favoriteProductId): bool
+    {
+        $favoriteProduct = $this->em->getRepository(FavoriteProduct::class)->find($favoriteProductId);
+        $this->em->remove($favoriteProduct);
+        $this->em->flush();
+
+        return true;
+    }
+
     public function addProductToFavorite($favoriteId, int $productId, int $variantId, string $name, bool $flush = true)
     {
         try {
-            if ($this->getFavoriteProduct($favoriteId, $variantId)) {
+            if ($variantId !== Favorite::FAT_VARIANT_ID && $this->getFavoriteProduct($favoriteId, $variantId)) {
                 return null;
             }
             /** @var Favorite $favorite */
@@ -47,26 +76,6 @@ class FavoriteService
         } catch (\Exception $exception) {
             return $exception->getMessage();
         }
-    }
-
-    public function addProductToFavorites(array $favoriteIds, int $productId, int $variantId, string $name): void
-    {
-        $account = $this->requestStack->getSession()->get('account');
-
-        $oldSelectedFavorites = $this->em->getRepository(FavoriteProduct::class)->getFavoritesProductsByAccountAndProductId($account, $productId);
-
-        $favoritesIdToRemove = \array_diff($oldSelectedFavorites, $favoriteIds);
-        $favoritesIdToAdd = \array_diff($favoriteIds, $oldSelectedFavorites);
-
-        foreach ($favoritesIdToRemove as $favoriteProductId) {
-            $this->removeProductFromFavorites($favoriteProductId);
-        }
-
-        foreach ($favoritesIdToAdd as $favoriteId) {
-            $this->addProductToFavorite($favoriteId, $productId, $variantId, $name, false);
-        }
-
-        $this->em->flush();
     }
 
     /**
@@ -111,15 +120,6 @@ class FavoriteService
         $this->em->clear();
 
         return $favoriteToReceive;
-    }
-
-    public function removeProductFromFavorites(string $favoriteProductId): bool
-    {
-        $favoriteProduct = $this->em->getRepository(FavoriteProduct::class)->find($favoriteProductId);
-        $this->em->remove($favoriteProduct);
-        $this->em->flush();
-
-        return true;
     }
 
     private function getFavoriteProduct($favoriteId, $variantId): ?FavoriteProduct

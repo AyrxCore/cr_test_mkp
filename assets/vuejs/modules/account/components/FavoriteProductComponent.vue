@@ -33,7 +33,7 @@
         >
           <EditIconComponent :stroke="channelPrimaryColor" class="mr-2" />
         </button>
-        <template #popper> Editer une liste de produits favoris</template>
+        <template #popper> Editer une liste de favoris</template>
       </VTooltip>
       <VTooltip :triggers="['hover', 'focus']" class="flex">
         <button
@@ -44,7 +44,7 @@
         >
           <TrashIconComponent :stroke="channelPrimaryColor" />
         </button>
-        <template #popper> Supprimer une liste de produits favoris</template>
+        <template #popper> Supprimer une liste de favoris</template>
       </VTooltip>
     </div>
     <FavoriteFormModal

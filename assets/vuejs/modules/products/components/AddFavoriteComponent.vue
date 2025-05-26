@@ -1,106 +1,123 @@
 <template>
   <div
     v-if="channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.FAVORITES)"
-    v-click-outside="onOutsideBlock"
     class="flex items-center justify-end"
   >
-    <button class="flex text-gray-500" @click="onOpenFavorite">
-      <HeartIconComponent
-        :fill="
-          currentSelectedFavorites.length > 0
-            ? channelSecondaryColor
-            : '#FFFFFF'
-        "
-        :stroke="
-          currentSelectedFavorites.length > 0
-            ? channelSecondaryColor
-            : '#000000'
-        "
-        class="lg:h-auto lg:w-auto"
-      />
-    </button>
+    <div class="flex cursor-pointer" @click="onOpenFavorite">
+      <div v-if="hasFavoriteLabel" class="mr-2 underline">
+        <template v-if="currentSelectedFavorites.length > 0"
+          >Retirer de
+        </template>
+        <template v-else>Ajouter à</template>
+        mes favoris
+      </div>
+      <button class="flex text-gray-500">
+        <HeartIconComponent
+          :fill="
+            currentSelectedFavorites.length > 0
+              ? channelSecondaryColor
+              : '#FFFFFF'
+          "
+          :stroke="
+            currentSelectedFavorites.length > 0
+              ? channelSecondaryColor
+              : '#000000'
+          "
+          class="lg:h-auto lg:w-auto"
+        />
+      </button>
+    </div>
 
-    <div v-if="showTooltip" class="modal-overlay">
-      <div class="z-[9] mx-3 rounded p-3 md:p-0 lg:mx-0">
-        <div class="flex w-full">
-          <div class="tooltip">
-            <form
-              v-if="showList"
-              class="flex w-full flex-col space-y-2"
-              @submit.prevent="addProductToFavorite"
-            >
-              <h3 class="font-bold text-primary">
-                Ajouter à une liste de produits favoris
-              </h3>
-              <hr />
-              <span
-                v-if="showErrorNotSelected"
-                class="bg-orange-200 p-3 text-base text-gray-600"
+    <Modal v-if="showTooltip" :close="onOutsideBlock">
+      <div class="fixed">
+        <div class="z-[9] mx-3 rounded p-3 md:p-0 lg:mx-0">
+          <div class="flex w-full">
+            <div class="tooltip mt-10">
+              <form
+                v-if="showList"
+                class="flex w-full flex-col space-y-2"
+                @submit.prevent="addProductToFavorite"
               >
-                Veuillez sélectionner une liste de favori</span
-              >
-
-              <div
-                v-if="favorites"
-                class="c-scrollbar flex max-h-[250px] flex-col overflow-y-auto px-1"
-              >
-                <div v-for="favoriteItem in favorites" :key="favoriteItem.id">
-                  <label class="my-1 flex items-center text-base text-gray-600">
-                    <input
-                      v-model="newSelectedFavorites"
-                      :checked="isChecked(favoriteItem)"
-                      :value="favoriteItem.id"
-                      class="checkbox-secondary"
-                      type="checkbox"
-                      @change="handleChange"
-                    />
-                    <span class="ml-2">{{ favoriteItem.name }}</span>
-                  </label>
-                </div>
-              </div>
-              <div class="flex px-1">
-                <input
-                  v-model.trim="newFavorite"
-                  class="ml-1 w-full rounded py-0"
-                  placeholder="Ajouter une nouvelle liste"
-                  type="text"
-                />
-              </div>
-
-              <div class="!mt-5 flex justify-end">
-                <ButtonComponent
-                  :disabled="
-                    disableAddButton &&
-                    (newFavorite === null || newFavorite === '')
-                  "
-                  :is-loading="addProductToFavoriteLoading"
-                  class="button-primary !h-10"
+                <h3 class="font-bold text-primary">Gestion des favoris</h3>
+                <span class="my-2"
+                  >Ajouter/retirer<span class="mx-2 font-bold italic">{{
+                    productName
+                  }}</span
+                  >de vos listes de favoris ?</span
                 >
-                  {{ addButtonName }}
-                </ButtonComponent>
-                <ButtonComponent
-                  class="button-primary-outline ml-2 flex !h-10 justify-end !py-2"
-                  type="button"
-                  @click="onOutsideBlock"
-                  >Annuler
-                </ButtonComponent>
-              </div>
-            </form>
+                <hr />
+                <span
+                  v-if="showErrorNotSelected"
+                  class="bg-orange-200 p-3 text-base text-gray-600"
+                >
+                  Veuillez sélectionner une liste de favoris</span
+                >
+
+                <div
+                  v-if="favorites"
+                  class="c-scrollbar flex max-h-[250px] flex-col overflow-y-auto px-1"
+                >
+                  <div v-for="favoriteItem in favorites" :key="favoriteItem.id">
+                    <label
+                      class="my-2 flex cursor-pointer items-center text-base text-gray-600"
+                    >
+                      <input
+                        v-model="newSelectedFavorites"
+                        :checked="isChecked(favoriteItem)"
+                        :value="favoriteItem.id"
+                        class="checkbox-secondary"
+                        type="checkbox"
+                        @change="handleChange"
+                      />
+                      <span class="ml-2">{{ favoriteItem.name }}</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="flex px-1">
+                  <input
+                    v-model.trim="newFavorite"
+                    class="my-2 ml-1 w-full rounded py-0"
+                    placeholder="Ajouter une nouvelle liste"
+                    type="text"
+                  />
+                </div>
+
+                <div class="!mt-5 flex justify-end">
+                  <ButtonComponent
+                    class="button-primary-outline flex !h-10 justify-end !py-2"
+                    type="button"
+                    @click="onOutsideBlock"
+                    >Annuler
+                  </ButtonComponent>
+                  <ButtonComponent
+                    :disabled="
+                      disableAddButton &&
+                      (newFavorite === null || newFavorite === '')
+                    "
+                    :is-loading="addProductToFavoriteLoading"
+                    class="button-primary ml-2 !h-10"
+                  >
+                    {{ addButtonName }}
+                  </ButtonComponent>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </Modal>
   </div>
 </template>
 <script lang="ts" setup>
-import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
-import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import { useFavoriteStore } from '@/vuejs/stores/favorite'
-import { useChannelStore } from '@/vuejs/stores/channel'
 import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
+import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
+import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
+import { useFavoriteStore } from '@/vuejs/stores/favorite'
+import { useChannelStore } from '@/vuejs/stores/channel'
 import { arrayEqual, notifySuccess } from '@/vuejs/services/utils'
 import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
+import { useProductStore } from '@/vuejs/stores/product'
 
 const props = defineProps({
   productId: {
@@ -108,8 +125,8 @@ const props = defineProps({
     required: true,
   },
   variantId: {
-    required: true,
     type: Number,
+    default: null,
   },
   productName: {
     required: true,
@@ -119,10 +136,15 @@ const props = defineProps({
     type: Array,
     default: null,
   },
+  hasFavoriteLabel: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const channelStore = useChannelStore()
 const favoriteStore = useFavoriteStore()
+const productStore = useProductStore()
 const { favorites } = storeToRefs(favoriteStore)
 const showTooltip = ref<boolean>(false)
 const showList = ref<boolean>(true)
@@ -153,6 +175,8 @@ const onOutsideBlock = () => {
   showTooltip.value = false
   showErrorNotSelected.value = false
   newFavorite.value = null
+  newSelectedFavorites.value = props.favoritesProduct
+  disableAddButton.value = true
   emit('toggleFavorite', { showTooltip: showTooltip.value })
 }
 
@@ -209,23 +233,21 @@ const addProductToFavorite = async () => {
       )
 
       if (favoritesNotChanged.length < currentSelectedFavorites.value.length) {
-        notifySuccess(
-          `Le produit ${props.productName} a été retiré des favoris`,
-        )
+        notifySuccess(`${props.productName} a été retiré des favoris`)
       }
       if (
         newSelectedFavorites.value.length > 0 &&
         newSelectedFavorites.value.length > favoritesNotChanged.length
       ) {
-        notifySuccess(
-          `Le produit ${props.productName} a été ajouté aux favoris`,
-        )
+        notifySuccess(`${props.productName} a été ajouté aux favoris`)
       }
 
       currentSelectedFavorites.value = newSelectedFavorites.value
       emit('addFavoriteList', newFavorite.value)
       onOutsideBlock()
       await favoriteStore.fetchFavorites()
+      await productStore.initSliderAccordsCadres()
+      await productStore.initSliderProductsSelection()
     } catch (error) {}
 
     addProductToFavoriteLoading.value = false
@@ -238,7 +260,7 @@ const addProductToFavorite = async () => {
 
 <style scoped>
 .tooltip {
-  @apply flex flex-col items-center justify-center rounded-lg border border-2 border-primary bg-white p-2.5 shadow-[0_20px_250px_25px] shadow-gray-600;
+  @apply flex max-w-[330px] flex-col items-center justify-center rounded-lg border border-2 bg-white p-7 shadow-[0_20px_250px_25px] shadow-gray-600 md:max-w-[600px];
 }
 
 .c-scrollbar::-webkit-scrollbar {

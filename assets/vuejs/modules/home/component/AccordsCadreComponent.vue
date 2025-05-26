@@ -1,5 +1,5 @@
 <template>
-  <div v-if="accordsCadres?.length > 0" class="relative mt-1 md:mt-5">
+  <div v-if="accordsCadres?.length > 0" class="mt-1 md:mt-5">
     <CarouselListSharedComponent
       :breakpoints="{
         1600: {
@@ -28,7 +28,7 @@
       <SwiperSlide
         v-for="accord in accordsCadres"
         :key="accord.id"
-        class="!flex !h-auto items-stretch justify-center overflow-hidden bg-white"
+        class="relative !flex !h-auto items-stretch justify-center overflow-hidden bg-white"
       >
         <AccordCadreComponent
           :accord="accord"

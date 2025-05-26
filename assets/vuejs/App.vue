@@ -49,6 +49,7 @@ import { useCartStore } from '@/vuejs/stores/cart'
 import { useCategoryStore } from '@/vuejs/stores/category'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { useUserStore } from '@/vuejs/stores/user'
+import { useFavoriteStore } from '@/vuejs/stores/favorite'
 
 import router from '@/vuejs/router'
 import { CartPageList } from '@/vuejs/router/pages-list'
@@ -59,6 +60,7 @@ const cartStore = useCartStore()
 const categoryStore = useCategoryStore()
 const bannerStore = useBannerStore()
 const userStore = useUserStore()
+const favoriteStore = useFavoriteStore()
 
 const { currentChannel, channelDocuments } = storeToRefs(channelStore)
 
@@ -80,6 +82,9 @@ onBeforeMount(async () => {
       channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.BANNER_FLASH_HOMEPAGE)
     ) {
       promises.push(bannerStore.init())
+    }
+    if (channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.FAVORITES)) {
+      promises.push(favoriteStore.fetchFavorites())
     }
     await Promise.all(promises)
   }

@@ -8,8 +8,8 @@
 @font-face {
   font-family: 'CoText';
   src: url('/fonts/CoTextCorp-Regular.woff2') format('woff2'),
-    url('/fonts/CoTextCorp-Regular.woff') format('woff'),
-    url('/fonts/CoTextCorp-Regular.ttf') format('truetype');
+  url('/fonts/CoTextCorp-Regular.woff') format('woff'),
+  url('/fonts/CoTextCorp-Regular.ttf') format('truetype');
 }
 
 @font-face {
@@ -50,13 +50,14 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+
   &.truncate-custom-2 {
     -webkit-line-clamp: 2;
-    }
+  }
 
   &.truncate-custom-3 {
-      -webkit-line-clamp: 3;
-    }
+    -webkit-line-clamp: 3;
+  }
 }
 
 .modal-overlay {
@@ -69,6 +70,16 @@
   justify-content: center;
   background-color: #00000080;
   z-index: 1000;
+}
+
+.vue-universal-modal {
+  /* Change dimmed color */
+  background-color: #00000080 !important;
+}
+
+.vue-universal-modal-content {
+  /* Align to top (flex-direction property value is set to column) */
+  justify-content: flex-start !important;
 }
 
 .checkbox-secondary {

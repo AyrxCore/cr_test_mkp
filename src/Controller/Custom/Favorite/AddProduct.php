@@ -29,6 +29,7 @@ class AddProduct extends AbstractController
     {
         $options = $request->getPayload()->all();
         $productId = (int) $options['productId'] ?? null;
+        // if variantId === 0 -> FAT
         $variantId = (int) $options['variantId'] ?? null;
         $productName = $options['productName'] ?? null;
         $selectedFavorites = !empty($options['selectedFavorites']) ? $options['selectedFavorites'] : [];

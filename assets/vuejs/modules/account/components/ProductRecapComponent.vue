@@ -14,11 +14,11 @@
       <div class="ml-2 w-[45%]">
         <h3 class="text-[22px] font-bold text-primary">{{ product.name }}</h3>
         <span class="text-lg text-gray-500">
-          Vendu par: {{ product.seller }}
+          Vendu par : {{ product.seller }}
         </span>
         <br />
         <span class="text-lg text-gray-500">
-          Référence: {{ product.reference }}
+          Référence : {{ product.reference }}
         </span>
       </div>
       <div class="w-[10%]">

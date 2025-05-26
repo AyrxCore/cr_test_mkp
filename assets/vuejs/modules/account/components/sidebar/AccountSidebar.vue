@@ -40,7 +40,7 @@ const listProfilMenuGlobal = ref<any[]>([
     gaEventName: 'click_account_contact_detail',
   },
   {
-    name: 'Mes listes de produits favoris',
+    name: 'Mes favoris',
     id: AccountPageList.FAVORITES_LIST,
     url: AccountPageList.FAVORITES_LIST,
     condition: OPTIONAL_FRONT_BLOCKS.FAVORITES,

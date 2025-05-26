@@ -29,42 +29,52 @@
             @submit-favorite="onSubmitFavorite"
           />
 
-          <div class="mb-2.5 hidden items-center text-sm md:flex lg:text-base">
-            <div class="md:w-8/12 lg:w-9/12">Description des articles</div>
-            <div class="flex justify-start md:w-4/12 lg:w-3/12">
-              Prix unitaire
+          <div v-if="favorite.favoriteProducts.length > 0">
+            <div
+              class="mb-2.5 hidden items-center text-sm md:flex lg:text-base"
+            >
+              <div class="md:w-8/12 lg:w-9/12">Description</div>
+              <div class="flex justify-start md:w-4/12 lg:w-3/12">
+                Prix unitaire
+              </div>
+            </div>
+            <FavoritesProductsDetailsComponent
+              v-for="(favoriteProduct, key) in favorite.favoriteProducts"
+              :key="key"
+              :favorite-id="favorite.id"
+              :favorite-product="favoriteProduct"
+              @remove-product="onRemoveProduct"
+              @move-product="onMoveProduct"
+              @selected-product="addProductSelectedToList"
+              @remove-selected-product="removeProductSelectedToList"
+            />
+            <div class="mt-6 flex flex-col md:flex-row md:justify-end">
+              <ButtonComponent
+                :disabled="isNeoAutoLogin"
+                class="button-primary-outline"
+                @click="refreshFavoriteItems(favorite.id)"
+              >
+                Mettre à jour la liste
+              </ButtonComponent>
+              <ButtonComponent
+                :disabled="listItemToAddCart.length === 0 || isNeoAutoLogin"
+                :is-loading="isAddToCartLoading"
+                class="button-primary ml-8 mt-5 md:mt-0"
+                @click="addToCart"
+              >
+                Ajouter au panier
+              </ButtonComponent>
+            </div>
+            <div class="mt-6">
+              Les prix affichés sont donnés à titre indicatif et peuvent être
+              mis à jour par les vendeurs
             </div>
           </div>
-          <FavoritesProductsDetailsComponent
-            v-for="(favoriteProduct, key) in favorite.favoriteProducts"
-            :key="key"
-            :favorite-id="favorite.id"
-            :favorite-product="favoriteProduct"
-            @remove-product="onRemoveProduct"
-            @move-product="onMoveProduct"
-            @selected-product="addProductSelectedToList"
-            @remove-selected-product="removeProductSelectedToList"
-          />
-          <div class="mt-6 flex flex-col md:flex-row md:justify-end">
-            <ButtonComponent
-              :disabled="isNeoAutoLogin"
-              class="button-primary-outline"
-              @click="refreshFavoriteItems(favorite.id)"
-            >
-              Mettre à jour la liste
-            </ButtonComponent>
-            <ButtonComponent
-              :disabled="listItemToAddCart.length === 0 || isNeoAutoLogin"
-              :is-loading="isAddToCartLoading"
-              class="button-primary mt-5 ml-8 md:mt-0"
-              @click="addToCart"
-            >
-              Ajouter au panier
-            </ButtonComponent>
-          </div>
-          <div class="mt-6">
-            Les prix affichés sont donnés à titre indicatif et peuvent être mis
-            à jour par les vendeurs
+          <div
+            v-else
+            class="flex h-[100px] w-full items-center justify-center rounded-sm bg-white"
+          >
+            Aucune entrée dans votre liste de favoris
           </div>
         </div>
         <div

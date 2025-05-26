@@ -22,7 +22,11 @@
     </div>
     <ArrowDownIconComponent class="ml-2" />
   </div>
-  <MenuAccountComponent v-if="isMenuOpen" v-model="isMenuOpen" class="modal" />
+  <MenuAccountComponent
+    v-if="isMenuOpen"
+    v-model="isMenuOpen"
+    class="modal-overlay"
+  />
 </template>
 
 <script lang="ts" setup>
