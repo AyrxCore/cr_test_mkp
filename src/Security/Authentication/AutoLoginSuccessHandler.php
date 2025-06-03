@@ -8,6 +8,7 @@ use App\Controller\ChannelAwareControllerInterface;
 use App\Controller\ChannelAwareControllerTrait;
 use App\Entity\User;
 use App\Events\UserAcceptCGUEvent;
+use App\Repository\AccountRepository;
 use App\Service\UpplerAuthenticationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -26,12 +27,13 @@ class AutoLoginSuccessHandler implements AuthenticationSuccessHandlerInterface, 
     use ChannelAwareControllerTrait;
 
     public function __construct(
-        public EventDispatcherInterface $eventDispatcher,
-        public EntityManagerInterface $entityManager,
-        public JWTTokenManagerInterface $JWTManager,
-        public RequestStack $requestStack,
-        public UpplerAuthenticationService $upplerAuthenticationService,
-        public UrlGeneratorInterface $router,
+        private readonly AccountRepository $accountRepository,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly JWTTokenManagerInterface $JWTManager,
+        private readonly RequestStack $requestStack,
+        private readonly UpplerAuthenticationService $upplerAuthenticationService,
+        private readonly UrlGeneratorInterface $router,
     ) {
     }
 
@@ -50,7 +52,17 @@ class AutoLoginSuccessHandler implements AuthenticationSuccessHandlerInterface, 
                 throw new \Exception();
             }
 
-            if (!$account = $user->getFirstEnabledAccount($channel)) {
+            if ($isNeoAutoLogin) {
+                $account = $this->accountRepository->findOneBy([
+                    'enabled' => true,
+                    'user' => $user,
+                    'contactId' => $request->query->get('contactId'),
+                ]);
+            } else {
+                $account = $user->getFirstEnabledAccount($channel);
+            }
+
+            if (!$account) {
                 throw new \Exception('No account available');
             }
 

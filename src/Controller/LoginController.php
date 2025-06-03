@@ -277,7 +277,7 @@ class LoginController extends AbstractController implements ChannelAwareControll
             $loginLinkDetails = $loginLinkHandler->createLoginLink($user);
 
             return new JsonResponse([
-                'url' => $loginLinkDetails->getUrl().'&neoAutoLogin=true',
+                'url' => $loginLinkDetails->getUrl().'&neoAutoLogin=true&contactId='.$contactId,
             ]);
         }
 
