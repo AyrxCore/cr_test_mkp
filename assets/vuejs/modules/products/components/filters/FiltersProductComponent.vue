@@ -70,8 +70,8 @@
           <option
             v-for="child in property.children"
             :key="child.id"
-            :value="child.value"
             :data-key="child.id"
+            :value="child.value"
           >
             {{ child.name }}
           </option>
@@ -95,6 +95,7 @@ import { filterType } from '@/vuejs/modules/products'
 import { useProductStore } from '@/vuejs/stores/product'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { ProductCategory } from '@/vuejs/types/Product'
+import { sortCategories } from '@/vuejs/services/categories'
 
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import CloseIcon from '@/vuejs/modules/shared/icon/CloseIconComponent.vue'
@@ -162,19 +163,6 @@ const categories = computed((): ProductCategory[] => {
     ? sortCategories(filters.value.categories)
     : []
 })
-
-const sortCategories = (categories: ProductCategory[]): ProductCategory[] => {
-  return [...categories]
-    .sort((catA: ProductCategory, catB: ProductCategory) =>
-      catA.name.localeCompare(catB.name),
-    )
-    .map((category) => ({
-      ...category,
-      ...(category.children?.length && {
-        children: sortCategories(category.children),
-      }),
-    }))
-}
 
 const companies = computed(() => {
   try {

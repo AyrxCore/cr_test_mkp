@@ -13,7 +13,7 @@
     <template v-if="categories.length > 0">
       <h3 class="mt-4 text-base font-bold uppercase md:text-lg">Catégories</h3>
       <FilterCategoryComponent
-        v-for="(category, index) in categories"
+        v-for="(category, index) in sortedCategories"
         v-show="index < visibleCategoryFilters"
         :key="category.id"
         :category="category"
@@ -35,16 +35,18 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed, PropType, ref } from 'vue'
+import { useRoute } from 'vue-router'
 
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import CloseIcon from '@/vuejs/modules/shared/icon/CloseIconComponent.vue'
 import FilterCategoryComponent from '@/vuejs/modules/products/components/filters/FilterCategoryComponent.vue'
 
 import router from '@/vuejs/router'
+import { sortCategories } from '@/vuejs/services/categories'
 import { ProductPageList } from '@/vuejs/router/pages-list'
-import { useRoute } from 'vue-router'
 import { useSellerStore } from '@/vuejs/stores/seller'
+import { ProductCategory } from '@/vuejs/types/Product'
 
 const sellerStore = useSellerStore()
 
@@ -54,7 +56,7 @@ const emit = defineEmits(['filter-product', 'close-filters'])
 const props = defineProps({
   categories: {
     required: true,
-    type: Array,
+    type: Object as PropType<ProductCategory[]>,
   },
 })
 
@@ -70,6 +72,10 @@ const changeFilterCategory = (categoryId: number): void => {
     query: { category: categoryId },
   })
 }
+
+const sortedCategories = computed((): ProductCategory[] => {
+  return sortCategories(props.categories)
+})
 
 const clearFilters = (): void => {
   sellerStore.allSellers = []

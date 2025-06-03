@@ -1,17 +1,19 @@
 <template>
   <div class="my-3 text-left text-sm">
-    <div class="flex items-center">
-      <input
-        :id="`categoryRadio-${category.id}`"
-        :checked="category.checked"
-        :value="category.id"
-        type="radio"
-        class="mr-3 cursor-pointer"
-        @change="handleCategorySelection(category.id)"
-      />
-      <label :for="`categoryRadio-${category.id}`" class="cursor-pointer">
-        {{ category.name }}
-      </label>
+    <div class="flex items-center justify-between">
+      <div>
+        <input
+          :id="`categoryRadio-${category.id}`"
+          :checked="category.checked"
+          :value="category.id"
+          class="mr-3 cursor-pointer"
+          type="radio"
+          @change="handleCategorySelection(category.id)"
+        />
+        <label :for="`categoryRadio-${category.id}`" class="cursor-pointer">
+          {{ category.name }}
+        </label>
+      </div>
       <Chevron2RightIconComponent
         v-if="category.children?.length > 0"
         :class="{
