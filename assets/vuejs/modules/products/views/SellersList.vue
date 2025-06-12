@@ -34,9 +34,12 @@
               </p>
             </div>
             <MobileFiltersSellersComponent v-if="categoriesFilters" />
-
+            <AlphabetNavigatorComponent
+              :items="sellersSortedAlphabetically"
+              @update:floatingStatus="handleFloatingStatus"
+            />
             <div
-              class="flex h-auto flex-col items-stretch justify-items-center md:grid md:grid-cols-2 md:gap-5 lg:grid-cols-5"
+              class="flex h-auto flex-col items-stretch justify-items-center sm:grid sm:grid-cols-2 md:grid-cols-3 md:gap-5 lg:grid-cols-4 2xl:grid-cols-5"
             >
               <template
                 v-for="seller in sellersSortedAlphabetically"
@@ -44,7 +47,10 @@
               >
                 <SellerCardComponent
                   :seller="seller"
-                  class="mt-5 !h-full !w-full bg-white md:mt-0 md:max-w-[350px]"
+                  :id="`letter-${seller.name.charAt(0).toUpperCase()}`"
+                  class="mt-5 !h-full bg-white md:mt-0 md:!w-full md:max-w-[350px]"
+                  :class="{ '!w-10/12': isFloatingActive }"
+                  data-letter-section
                 />
               </template>
             </div>
@@ -69,7 +75,9 @@ import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import SellerCardComponent from '@/vuejs/modules/products/components/SellerCardComponent.vue'
 import FiltersSellerComponent from '@/vuejs/modules/products/components/filters/FiltersSellerComponent.vue'
-import MobileFiltersSellersComponent from '@/vuejs/modules/products/components/filters/MobileFiltersSellersComponent.vue'
+import MobileFiltersSellersComponent
+  from '@/vuejs/modules/products/components/filters/MobileFiltersSellersComponent.vue'
+import AlphabetNavigatorComponent from '@/vuejs/modules/shared/AlphabetNavigatorComponent.vue'
 
 const sellerStore = useSellerStore()
 const route = useRoute()
@@ -82,6 +90,7 @@ const paramsSellers = ref(null)
 const resultNotFound = ref<boolean>(false)
 const title = `Tous mes partenaires en un clin d'oeil`
 const sellers = ref(null)
+const isFloatingActive = ref<boolean>(false)
 
 const categoriesFilters = computed((): Array<ProductCategory> => {
   return products.value?.filters?.categories
@@ -92,9 +101,16 @@ const sellersSortedAlphabetically = computed((): Array<Seller> => {
     return a.name.localeCompare(b.name)
   })
 })
+
+const handleFloatingStatus = (status: boolean) => {
+  isFloatingActive.value = status
+}
+
 watch(
   () => route.query,
   async (routeObject) => {
+    if (Object.keys(routeObject).length === 1 && routeObject.letter) return
+
     sellersLoading.value = true
     paramsProducts.value = {
       page: 1,

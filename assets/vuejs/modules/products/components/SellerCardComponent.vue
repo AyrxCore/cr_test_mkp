@@ -11,7 +11,7 @@
           class="pointer h-[107px] w-1/3 object-contain md:w-full"
         />
         <div
-          class="text-title-default-size mb-1 ml-3 w-2/3 text-start font-bold text-primary md:ml-0 md:w-auto md:text-center md:text-xl lg:text-lg"
+          class="text-md mb-1 ml-3 w-2/3 text-start font-bold text-primary md:ml-0 md:w-auto md:text-center md:text-xl lg:text-lg"
         >
           {{ seller?.name }}
         </div>
