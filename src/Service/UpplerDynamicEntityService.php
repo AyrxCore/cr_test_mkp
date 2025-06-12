@@ -27,16 +27,23 @@ class UpplerDynamicEntityService extends AbstractUpplerService
     public function getDynamicsEntities(
         array $expands = [],
         array $criteria = [],
-        ?string $dynamicEntityConfigurationId = null
+        ?string $dynamicEntityConfigurationId = null,
     ): array {
-        $path = $this->buildEntitiesPath($dynamicEntityConfigurationId, $expands, $criteria);
-        $response = $this->request(
-            method: 'GET',
-            path: $path
-        );
+        $page = 1;
+        $entities = [];
+        do {
+            $path = $this->buildEntitiesPath($dynamicEntityConfigurationId, $expands, $criteria, $page);
+            $response = $this->request(
+                method: 'GET',
+                path: $path
+            );
 
-        $this->validateResponse($response);
-        $entities = \json_decode($response->getContent(), true);
+            $this->validateResponse($response);
+            $additionalEntities = \json_decode($response->getContent(), true);
+
+            $entities = \array_merge($entities, $additionalEntities);
+            ++$page;
+        } while ($response->getStatusCode() === Response::HTTP_PARTIAL_CONTENT && !empty($additionalEntities));
 
         return $this->sortEntitiesByCreatedAt($entities);
     }
@@ -89,37 +96,20 @@ class UpplerDynamicEntityService extends AbstractUpplerService
         }
     }
 
-    private function sortEntitiesByCreatedAt(array $entities): array
-    {
-        if (empty($entities)) {
-            return [];
-        }
-
-        if (!isset($entities[0]['created_at'])) {
-            return $entities;
-        }
-
-        usort($entities, function ($a, $b) {
-            $dateA = strtotime($a['created_at']);
-            $dateB = strtotime($b['created_at']);
-            return $dateB - $dateA;
-        });
-
-        return $entities;
-    }
-
     private function buildEntitiesPath(
         ?string $dynamicEntityConfigurationId,
         array $expands,
-        array $criteria
+        array $criteria,
+        int $page,
+        int $perPage = 100,
     ): string {
         $path = 'v1/buyer/dynamic-entity-configuration';
 
         if ($dynamicEntityConfigurationId) {
-            $path .= "/{$dynamicEntityConfigurationId}/entities";
+            $path .= "/$dynamicEntityConfigurationId/entities";
         }
 
-        $queryParams = [];
+        $queryParams = ["page={$page}", "perPage={$perPage}"];
 
         foreach ($expands as $expand) {
             $queryParams[] = \sprintf('expand[]=%s', \urlencode($expand));
@@ -130,9 +120,29 @@ class UpplerDynamicEntityService extends AbstractUpplerService
         }
 
         if (!empty($queryParams)) {
-            $path .= '?' . implode('&', $queryParams);
+            $path .= '?'.\implode('&', $queryParams);
         }
 
         return $path;
+    }
+
+    private function sortEntitiesByCreatedAt(array $entities): array
+    {
+        if (empty($entities)) {
+            return [];
+        }
+
+        if (!isset($entities[0]['created_at'])) {
+            return $entities;
+        }
+
+        \usort($entities, function ($a, $b) {
+            $dateA = \strtotime($a['created_at']);
+            $dateB = \strtotime($b['created_at']);
+
+            return $dateB - $dateA;
+        });
+
+        return $entities;
     }
 }
