@@ -1,37 +1,89 @@
 <template>
   <BaseTemplate>
-    <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 px-5 sm:px-8">
-      <breadcrumb-shared-component current-page="Page non trouvée" />
-      <div class="m-auto my-2 w-[100%] max-w-screen-2xl">
-        <div class="mt-10 flex">
-          <div>
-            <h3 class="text-title-primary mb-10 flex-col">
-              <span class="flex">Erreur 404</span>
-              <span class="flex font-bold">Page introuvable</span>
+    <div class="m-auto flex-1 xl:!pt-5">
+      <div class="xs:w-[100%] m-auto my-10 max-w-screen-2xl px-5 sm:px-8">
+        <div class="m-auto w-[100%] max-w-screen-2xl">
+          <h3 class="mb-10 flex-col text-4xl font-bold text-primary">
+            <span class="flex font-bold">Page introuvable</span>
+          </h3>
+          <p class="w-full text-lg md:text-xl">
+            La page que vous recherchez n'existe pas ou n'existe plus.
+          </p>
+          <RouterLink
+            class="button button-primary mb-4 mt-10 w-full md:w-auto"
+            :to="{ name: PageList.HOME_PAGE }"
+          >
+            <ArrowRightIconComponent class="mr-2 w-4 stroke-white" />
+            Retour à la page d'accueil
+          </RouterLink>
+        </div>
+      </div>
+
+      <div class="bg-white py-8">
+        <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl px-5 sm:px-8">
+          <div class="m-auto my-2 w-[100%] max-w-screen-2xl">
+            <h3 class="text-title-primary mb-3">
+              Les accords-cadres incontournables
             </h3>
-            <p class="w-1/2 text-sm md:text-lg">
-              Nous sommes désolés, la page que vous cherchez n'a pas été
-              trouvée. Nous vous proposons de retourner à la page d'accueil ou
-              bien de découvrir toutes nos catégories d'achats.
+            <p class="text-sm sm:text-lg">
+              Découvrez les partenaires et leurs conditions&nbsp;!
             </p>
-            <RouterLink
-              class="button button-primary mt-10 mb-16 w-full md:w-auto"
-              :to="{ name: PageList.HOME_PAGE }"
-            >
-              <ArrowRightIconComponent class="mr-2 w-4 stroke-white" />
-              Retour à la page d'accueil
-            </RouterLink>
+            <div class="mt-1 md:mt-5">
+              <AccordsCadreComponent
+                :accords-cadres="productsAccordsCadre?.results"
+                :loading="!productsAccordsCadre"
+                class="nav-mobile-only"
+                @click-left="sendGaEvent('click_404_slider_fat_left')"
+                @click-right="sendGaEvent('click_404_slider_fat_right')"
+                @click-cta="sendGaEvent('click_404_slider_fat_cta', $event)"
+                @click-title="sendGaEvent('click_404_slider_fat_title', $event)"
+                @click-img="sendGaEvent('click_404_slider_fat_img', $event)"
+                @show-showcase-modal="handleShowcaseModal"
+              />
+              <ShowcaseModal
+                v-if="showShowcaseModal"
+                :accord="accordSelected"
+                class="modal"
+                @cancel="showShowcaseModal = false"
+              />
+            </div>
           </div>
         </div>
       </div>
     </div>
   </BaseTemplate>
 </template>
+
 <script lang="ts" setup>
+import { onBeforeMount, ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
-import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
+
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
+import AccordsCadreComponent from '@/vuejs/modules/home/component/AccordsCadreComponent.vue'
+import ShowcaseModal from '@/vuejs/modules/home/component/ShowcaseModal.vue'
+
 import { PageList } from '@/vuejs/router'
+
+import { useProductStore } from '@/vuejs/stores/product'
+import { Product } from '@/vuejs/types/Product'
+
+const productStore = useProductStore()
+const { productsAccordsCadre } = storeToRefs(productStore)
+
+const showShowcaseModal = ref<boolean>(false)
+const accordSelected = ref<Product>(null)
+
+const handleShowcaseModal = (accord) => {
+  accordSelected.value = accord
+  showShowcaseModal.value = true
+}
+
+onBeforeMount(async () => {
+  await productStore.initSliderAccordsCadres()
+})
 </script>
 
 <style scoped></style>
