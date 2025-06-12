@@ -3,21 +3,21 @@ import { SemanticButton } from '@/vuejs/types/SemanticButton'
 import SemanticButtonsHttpClient from '@/vuejs/services/httpclient/SemanticButtonsHttpClient'
 
 export interface SemanticButtonsStoreState {
-  semanticButtons: SemanticButton[]
+  semanticButtonsConfig: SemanticButton[]
 }
 
 export const useSemanticButtonsStore = defineStore({
   id: 'semanticButtons',
 
   state: (): SemanticButtonsStoreState => ({
-    semanticButtons: [],
+    semanticButtonsConfig: [],
   }),
 
   actions: {
     async init() {
-      if (this.semanticButtons.length === 0) {
+      if (this.semanticButtonsConfig.length === 0) {
         try {
-          this.semanticButtons =
+          this.semanticButtonsConfig =
             await SemanticButtonsHttpClient.get().getSemanticButtons()
         } catch (error) {}
       }
@@ -25,13 +25,16 @@ export const useSemanticButtonsStore = defineStore({
   },
   getters: {
     semanticButtonsSectionTitle() {
-      return this.semanticButtons.find(
+      return this.semanticButtonsConfig.find(
         (sb) => typeof sb.sectionTitle !== 'undefined',
       )
     },
-    getSemanticButtons() {
-      return this.semanticButtons.filter(
-        (sb) => typeof sb.sectionTitle === 'undefined',
+    semanticButtons() {
+      return this.semanticButtonsConfig.filter(
+        (sb) =>
+          typeof sb.sectionTitle === 'undefined' &&
+          typeof sb.label !== 'undefined' &&
+          typeof sb.search !== 'undefined',
       )
     },
   },

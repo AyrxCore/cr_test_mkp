@@ -31,6 +31,9 @@ class SemanticButtonFactory extends AbstractFactory
                 case 'sem_btn_homepage_section_title':
                     $semanticButton->setSectionTitle($fieldValue);
                     break;
+                case 'sem_btn_homepage_channel':
+                    $semanticButton->setChannel($fieldValue);
+                    break;
             }
         }
 

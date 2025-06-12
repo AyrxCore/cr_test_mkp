@@ -7,13 +7,12 @@ namespace App\State\Provider;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Context\ChannelContext;
+use App\Dto\SemanticButton;
 use App\Factory\SemanticButtonFactory;
 use App\Service\UpplerDynamicEntityService;
 
 readonly class SemanticButtonsProvider implements ProviderInterface
 {
-    private const string CUSTOM_CATEGORY_NAME_KEY = 'SEMANTIC_BUTTONS_HOMEPAGE';
-
     public function __construct(
         private SemanticButtonFactory $semanticButtonFactory,
         private UpplerDynamicEntityService $upplerDynamicEntityService,
@@ -23,20 +22,16 @@ readonly class SemanticButtonsProvider implements ProviderInterface
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
-        $channel = $this->channelContext->getChannel();
+        $entitiesSemanticButton = $this->upplerDynamicEntityService->getDynamicsEntities(
+            ['dynamic_fields'],
+            [],
+            (string) SemanticButton::DYNAMIC_CONFIG_ID
+        );
 
-        $dynamicConfigId = $channel->getChannelOptionValueByKey(self::CUSTOM_CATEGORY_NAME_KEY);
+        $semanticButtons = $this->semanticButtonFactory->createAndAddToCollection($entitiesSemanticButton);
 
-        if (!$dynamicConfigId) {
-            return [];
-        } else {
-            $entitiesSemanticButton = $this->upplerDynamicEntityService->getDynamicsEntities(
-                ['dynamic_fields'],
-                [],
-                $dynamicConfigId
-            );
-
-            return $this->semanticButtonFactory->createAndAddToCollection($entitiesSemanticButton);
-        }
+        return \array_values(\array_filter($semanticButtons, function ($semanticButton) {
+            return $semanticButton->getChannel() === $this->channelContext->getChannel()->getCode();
+        }));
     }
 }

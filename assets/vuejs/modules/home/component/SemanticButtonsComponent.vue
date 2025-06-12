@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="getSemanticButtons.length > 0"
+    v-if="semanticButtons.length > 0"
     class="m-auto mt-4 max-w-screen-94 md:px-0"
   >
     <div class="mt-10 sm:w-[45rem]">
@@ -10,7 +10,7 @@
     </div>
     <div class="list-semantic-buttons m-auto max-w-screen-94">
       <div
-        v-for="semanticButton in getSemanticButtons"
+        v-for="semanticButton in semanticButtons"
         :key="semanticButton.id"
         class="list-semantic-buttons-items cursor-pointer uppercase hover:bg-primary hover:text-white"
       >
@@ -36,7 +36,7 @@ import { ProductPageList } from '@/vuejs/router/pages-list'
 import { useSemanticButtonsStore } from '@/vuejs/stores/semanticButtons'
 
 const semanticButtonsStore = useSemanticButtonsStore()
-const { semanticButtonsSectionTitle, getSemanticButtons } = storeToRefs(
+const { semanticButtonsSectionTitle, semanticButtons } = storeToRefs(
   useSemanticButtonsStore(),
 )
 
