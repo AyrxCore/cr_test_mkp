@@ -79,11 +79,32 @@
         <div class="flex flex-col md:flex-row md:justify-between lg:flex-col">
           <div class="md:mt-0">
             <h3 class="mb-6 lg:mb-7">Paiement sécurisé par&nbsp;:</h3>
-            <img
-              :src="lemonwayLogoImg"
-              alt="header"
-              class="logo-lemonway mt-[0.5rem]"
-            />
+            <div class="flex flex-col">
+              <a
+                class="mb-3"
+                href="https://www.lemonway.com/conditions-generales-dutilisation"
+                target="_blank"
+              >
+                <img
+                  :src="lemonwayLogoImg"
+                  alt="header"
+                  class="logo-lemonway"
+                />
+              </a>
+              <span class="text-xs">
+                Enregistrement sous l'identifiant 95577 par l’Autorité de
+                Contrôle Prudentiel et de Résolution (ACPR) comme agent
+                prestataire de services de paiement de Lemonway (établissement
+                de paiement dont le siège social est situé au 8 rue du Sentier,
+                75002 Paris, agréé par l’ACPR sous le numéro 16568)
+                <a
+                  class="underline"
+                  href="https://www.regafi.fr/"
+                  target="_blank"
+                  >Regafi</a
+                >
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -117,7 +138,7 @@
     <hr class="mx-6 mb-4 md:mx-12" />
     <div class="justify-between px-8 pb-6 md:mx-16 md:flex md:px-0">
       <div
-        class="flex w-full flex-col md:w-1/2 md:flex-row md:items-center md:justify-between"
+        class="flex w-full flex-col md:w-3/5 md:flex-row md:items-center md:justify-between"
       >
         <div class="mb-4 mr-4 md:mb-0">
           <a
@@ -147,6 +168,14 @@
             @click="sendGaEvent('click_footer_politique_confidentialite')"
           >
             Politique de confidentialité
+          </a>
+        </div>
+        <div class="mb-4 mr-4 md:mb-0">
+          <a
+            href="https://www.lemonway.com/conditions-generales-dutilisation"
+            target="_blank"
+          >
+            Conditions générales d’utilisation Lemonway
           </a>
         </div>
       </div>
