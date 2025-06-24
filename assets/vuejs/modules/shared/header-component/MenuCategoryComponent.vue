@@ -14,10 +14,10 @@
         </div>
         <div class="my-4">
           <router-link
-            :to="{ name: ProductPageList.CATEGORIES }"
+            :to="{ name: ProductPageList.SELLERS }"
             class="text-2xl font-bold tracking-wide hover:bg-gray-200"
           >
-            Toutes les catégories
+            Tous les partenaires
           </router-link>
         </div>
         <div
