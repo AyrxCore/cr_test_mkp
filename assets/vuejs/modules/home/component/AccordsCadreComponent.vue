@@ -1,5 +1,5 @@
 <template>
-  <div v-if="accordsCadres?.length > 0" class="mt-1 md:mt-5">
+  <div v-if="accordsCadres?.length > 0" class="relative mt-1 md:mt-5">
     <CarouselListSharedComponent
       :breakpoints="{
         1600: {

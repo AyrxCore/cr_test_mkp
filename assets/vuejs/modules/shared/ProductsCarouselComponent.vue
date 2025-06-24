@@ -1,5 +1,5 @@
 <template>
-  <div v-if="products?.length > 0" class="mt-1 md:mt-5">
+  <div v-if="products?.length > 0" class="relative mt-1 md:mt-5">
     <CarouselListSharedComponent
       :breakpoints="{
         1600: {
@@ -27,7 +27,7 @@
       <SwiperSlide
         v-for="product in props.products"
         :key="product.id"
-        class="relative !flex !h-auto items-stretch justify-center overflow-hidden rounded-lg bg-white"
+        class="!flex !h-auto items-stretch justify-center overflow-hidden rounded-lg bg-white"
       >
         <ProductComponent
           :product="product"
