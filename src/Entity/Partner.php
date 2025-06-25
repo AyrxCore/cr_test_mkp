@@ -146,7 +146,7 @@ class Partner
         return $this;
     }
 
-    public function getSellerId(): ?int
+    public function getUpplerId(): ?int
     {
         return $this->upplerId;
     }

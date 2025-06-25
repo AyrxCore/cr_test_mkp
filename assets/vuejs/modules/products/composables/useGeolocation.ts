@@ -32,7 +32,7 @@ export function useGeolocation() {
 
     if (!navigator.geolocation) {
       handleGeolocationFailure(
-        'La géolocalisation n\'est pas supportée par votre navigateur',
+        "La géolocalisation n'est pas supportée par votre navigateur",
       )
       return
     }
@@ -54,22 +54,22 @@ export function useGeolocation() {
       },
       (error) => {
         console.error('Erreur de géolocalisation:', error)
-        let errorMessage = 'La géolocalisation n\'a pas pu être effectuée'
-        console.log('error', error)
+        let errorMessage = "La géolocalisation n'a pas pu être effectuée"
 
         if (
           window.location.protocol === 'http:' &&
           error.code === error.PERMISSION_DENIED
         ) {
           errorMessage =
-            'La géolocalisation n\'est pas disponible en HTTP. Essayez en HTTPS ou vérifiez les paramètres de votre navigateur'
+            "La géolocalisation n'est pas disponible en HTTP. Essayez en HTTPS ou vérifiez les paramètres de votre navigateur"
         } else {
           switch (error.code) {
             case error.PERMISSION_DENIED:
-              errorMessage = 'Vous avez refusé l\'accès à votre position dans votre navigateur'
+              errorMessage =
+                "Vous avez refusé l'accès à votre position dans votre navigateur"
               break
             case error.POSITION_UNAVAILABLE:
-              errorMessage = 'Votre position n\'est pas disponible actuellement'
+              errorMessage = "Votre position n'est pas disponible actuellement"
               break
             case error.TIMEOUT:
               errorMessage = 'La demande de géolocalisation a expiré'

@@ -1,6 +1,7 @@
 <template>
   <div
-    class="relative h-80 w-full overflow-hidden rounded-lg md:h-[550px] lg:h-[700px]"
+    class="relative w-full overflow-hidden rounded-lg"
+    :class="heightClass || 'h-64 md:h-96 lg:h-[500px]'"
   >
     <div
       v-if="isLoading"
@@ -14,7 +15,7 @@
     <LMap
       :zoom="zoom"
       :center="center"
-      :use-global-leaflet="false"
+      :use-global-leaflet="true"
       class="z-0 h-full w-full"
       :options="getMapOptions(enableZoom)"
       @update:zoom="$emit('update:zoom', $event)"
@@ -34,7 +35,6 @@
 
 <script lang="ts" setup>
 import { LMap, LTileLayer } from '@vue-leaflet/vue-leaflet'
-import 'leaflet/dist/leaflet.css'
 import * as L from 'leaflet'
 import type { Map as LeafletMap } from 'leaflet'
 import {
@@ -63,6 +63,11 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  heightClass: {
+    type: String,
+    required: false,
+    default: null,
+  },
 })
 
 const emit = defineEmits<{
@@ -83,7 +88,9 @@ const onMapReady = (mapInstance: LeafletMap) => {
     mapInstance.options.tap = true
     mapInstance.options.touchZoom = true
     mapInstance.options.bounceAtZoomLimits = false
+
     emit('map-ready', mapInstance)
+
     isLoading.value = false
   } catch (error) {
     console.error("Erreur lors de l'initialisation de la carte:", error)

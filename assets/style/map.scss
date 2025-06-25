@@ -1,46 +1,57 @@
-
-
-// Popup responsive styles
 .leaflet-popup-tip-container,
 .leaflet-popup-tip {
   display: none !important;
 }
+
 .leaflet-popup {
   margin-bottom: 6px !important;
 }
 
 @media (max-width: 767px) {
   .leaflet-popup-content-wrapper {
-    min-width: 140px !important;
-    max-width: 200px !important;
-    padding: 8px 8px !important;
+    min-width: 160px !important;
+    max-width: 240px !important;
+    padding: 4px 4px !important;
     border-radius: 0.5rem !important;
   }
+
   .leaflet-popup-content {
     font-size: 13px !important;
     line-height: 1.2 !important;
     padding: 0 !important;
+    margin: 0 !important;
   }
+
   .leaflet-popup-content strong {
     font-size: 14px !important;
     font-weight: 700 !important;
     line-height: 1.2 !important;
+    margin: 0 !important;
   }
+
   .leaflet-popup-content p,
   .leaflet-popup-content a {
     font-size: 12px !important;
     line-height: 1.35 !important;
-    margin: 0.6em 0 !important;
+    margin: 0.2em 0 !important;
   }
 }
 
 @media (min-width: 768px) {
+  .leaflet-popup-content-wrapper {
+    padding: 2px 2px !important;
+  }
+
+  .leaflet-popup-content {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
 
   .leaflet-popup-content p,
   .leaflet-popup-content a {
     font-size: 14px !important;
     line-height: 1.35 !important;
-    margin: 0.4em 0 !important;
+    margin: 0.1em 0 !important;
   }
 }
 
@@ -64,4 +75,50 @@
   border: 2px solid rgba(0, 0, 0, 0.2);
   background-clip: padding-box;
   touch-action: manipulation;
+}
+
+.marker-cluster-small,
+.marker-cluster-medium,
+.marker-cluster-large,
+.marker-cluster {
+  background: transparent !important;
+
+  div {
+    background: var(--primary-color) !important;
+    background-color: var(--primary-color) !important;
+    border-radius: 50% !important;
+    border: none !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    span {
+      color: white !important;
+      font-weight: bold !important;
+      font-size: 14px !important;
+      line-height: 1 !important;
+      margin: 0 !important;
+    }
+  }
+}
+
+.leaflet-bottom.leaflet-right {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+}
+
+.map-geolocation-control {
+  order: 1 !important;
+}
+
+.leaflet-control-zoom {
+  order: 2 !important;
+}
+
+.leaflet-control-attribution {
+  order: 3 !important;
 }

@@ -22,7 +22,20 @@
               class="w-full"
               :categories="categoriesFilters"
             />
+            <p class="mt-8 text-center">
+              <RouterLink
+                :style="{
+                  color: betterTextColor('primary'),
+                }"
+                :to="{ name: MainPageList.PARTNERS_MAP }"
+                class="button button-primary !px-4"
+              >
+                <MarkerIconComponent size="30" />
+                Carte des partenaires
+              </RouterLink>
+            </p>
           </div>
+
           <div class="flex w-full grow-0 flex-col">
             <div class="mb-4 flex flex-col">
               <h3 class="mb-2 text-2xl text-primary">
@@ -69,14 +82,17 @@ import { useSellerStore } from '@/vuejs/stores/seller'
 import { useProductStore } from '@/vuejs/stores/product'
 import { Seller } from '@/vuejs/types/Seller'
 import { ProductCategory } from '@/vuejs/types/Product'
+import { betterTextColor } from '@/vuejs/services/utils'
+
+import { MainPageList } from '@/vuejs/router/pages-list'
 
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import SellerCardComponent from '@/vuejs/modules/products/components/SellerCardComponent.vue'
 import FiltersSellerComponent from '@/vuejs/modules/products/components/filters/FiltersSellerComponent.vue'
-import MobileFiltersSellersComponent
-  from '@/vuejs/modules/products/components/filters/MobileFiltersSellersComponent.vue'
+import MarkerIconComponent from '@/vuejs/modules/shared/icon/MarkerIconComponent.vue'
+import MobileFiltersSellersComponent from '@/vuejs/modules/products/components/filters/MobileFiltersSellersComponent.vue'
 import AlphabetNavigatorComponent from '@/vuejs/modules/shared/AlphabetNavigatorComponent.vue'
 
 const sellerStore = useSellerStore()

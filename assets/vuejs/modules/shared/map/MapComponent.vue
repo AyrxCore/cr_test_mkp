@@ -1,15 +1,18 @@
 <template>
-  <div
-    class="relative"
-    :class="{ 'rounded-md': !isMobile }"
-  >
+  <div class="relative" :class="{ 'rounded-md': !isMobile }">
     <slot name="title" />
+
+    <AddressSearchComponent
+      v-if="isGeolocationActive"
+      :class="[isMobile ? 'mb-4' : 'absolute left-4 top-4 z-[15] md:block']"
+    />
 
     <div class="relative">
       <BaseMap
         :zoom="zoom"
         :center="userPositionCoords || center"
         :enable-zoom="enableZoom"
+        :height-class="heightClass"
         class="w-full"
         @update:zoom="zoom = $event"
         @update:center="handleCenterUpdate"
@@ -24,16 +27,31 @@
             :color="poiColor"
             fill
           />
+          <LMarker
+            v-if="selectedAddress"
+            :icon="createMarkerIcon('text-red-500')"
+            :lat-lng="[
+              parseFloat(selectedAddress.lat),
+              parseFloat(selectedAddress.lon),
+            ]"
+          >
+          </LMarker>
         </template>
-
         <template #controls>
-          <LControl v-if="enableControls" position="bottomright">
+          <LControl
+            v-if="enableControls"
+            position="bottomright"
+            class="map-geolocation-control"
+          >
             <MapControls v-if="isGeolocationActive" @recenter="recenterMap" />
           </LControl>
         </template>
       </BaseMap>
 
-      <div v-if="!isGeolocationActive && enableGeolocation" class="absolute inset-0">
+      <div
+        v-if="!isGeolocationActive && enableGeolocation"
+        class="absolute inset-0"
+      >
         <GeolocationComponent
           :is-loading="isLoading"
           @geolocation-request="handleGeolocation"
@@ -54,14 +72,19 @@
 
 <script lang="ts" setup>
 import { computed, watch, onMounted, onBeforeUnmount } from 'vue'
-import { LCircle, LControl } from '@vue-leaflet/vue-leaflet'
+import { LMarker, LCircle, LControl } from '@vue-leaflet/vue-leaflet'
 import type { Map as LeafletMap } from 'leaflet'
 
 import { useGeolocation } from '@/vuejs/modules/products/composables/useGeolocation'
-import { useMap } from '@/vuejs/modules/products/composables/useMap'
+import {
+  leafletMap,
+  selectedAddress,
+  useMap,
+} from '@/vuejs/modules/products/composables/useMap'
 
 import BaseMap from '@/vuejs/modules/shared/map/BaseMap.vue'
 
+import AddressSearchComponent from '@/vuejs/modules/shared/map/AddressSearchComponent.vue'
 import GeolocationComponent from '@/vuejs/modules/shared/map/GeolocationComponent.vue'
 import GeolocationStatusComponent from '@/vuejs/modules/shared/map/GeolocationStatusComponent.vue'
 import MapControls from '@/vuejs/modules/shared/map/MapControls.vue'
@@ -77,6 +100,11 @@ defineProps<{
   enableGeolocation?: boolean
   enableControls?: boolean
   enableZoom?: boolean
+  heightClass?: string
+}>()
+
+const emit = defineEmits<{
+  'map-ready': [map: LeafletMap]
 }>()
 
 const {
@@ -90,13 +118,13 @@ const {
 } = useGeolocation()
 
 const {
-  leafletMap,
   zoom,
   center,
   fixedTooltips,
   isMobile,
   checkIfMobile,
   recenterMap,
+  createMarkerIcon,
 } = useMap()
 
 const circleRadius = computed(() => {
@@ -147,6 +175,8 @@ const onMapReady = (mapInstance: LeafletMap) => {
     mapInstance.options.tap = true
     mapInstance.options.touchZoom = true
     mapInstance.options.bounceAtZoomLimits = false
+
+    emit('map-ready', mapInstance)
   } catch (error) {
     console.error("Erreur lors de l'initialisation de la carte:", error)
   }

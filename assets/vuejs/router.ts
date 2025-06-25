@@ -5,6 +5,7 @@ import Home from '@/vuejs/modules/home/views/HomePage.vue'
 import Contact from '@/vuejs/modules/contact/views/ContactPage.vue'
 import NotFoundPage from '@/vuejs/modules/PageNotFound.vue'
 import LegalDocument from '@/vuejs/modules/LegalDocument.vue'
+import MapPage from '@/vuejs/modules/map/views/MapPage.vue'
 
 import { routes as productsRoutes } from '@/vuejs/modules/products/routerProducts'
 import { routes as actualitesRoutes } from '@/vuejs/modules/actualites/routerActualites'
@@ -77,6 +78,11 @@ const routes: RouteRecordRaw[] = [
     path: '/page-not-found',
     name: PageList.PAGE_NOT_FOUND,
     component: NotFoundPage,
+  },
+  {
+    path: '/map',
+    name: PageList.PARTNERS_MAP,
+    component: MapPage,
   },
   ...productsRoutes,
   ...actualitesRoutes,

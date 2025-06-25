@@ -2,6 +2,12 @@ import '@/style/main.scss'
 import 'vue-universal-modal/dist/index.css'
 import 'floating-vue/dist/style.css'
 
+/** LEAFLET */
+import L from 'leaflet'
+globalThis.L = L
+import 'leaflet/dist/leaflet.css'
+import 'vue-leaflet-markercluster/dist/style.css'
+
 import { createHead } from '@unhead/vue'
 import { createApp } from 'vue'
 import App from './vuejs/App.vue'

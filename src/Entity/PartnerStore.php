@@ -7,7 +7,9 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use App\Dto\MapStoreDataDto;
 use App\Repository\PartnerStoreRepository;
+use App\State\Provider\PartnerStoreMapProvider;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -18,6 +20,12 @@ use Symfony\Component\Uid\Uuid;
     operations: [
         new Get(),
         new GetCollection(),
+        new GetCollection(
+            uriTemplate: '/partner-stores/map-data',
+            output: MapStoreDataDto::class,
+            provider: PartnerStoreMapProvider::class,
+            normalizationContext: ['groups' => ['map:read']],
+        ),
     ],
     order: ['name' => 'ASC'],
     paginationEnabled: false

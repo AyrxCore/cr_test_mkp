@@ -1,8 +1,13 @@
 import BaseClientService from '@/vuejs/services/BaseClientService'
-import { Partner, Seller, SellerPromotion } from '@/vuejs/types/Seller'
+import {
+  Partner,
+  Seller,
+  SellerPromotion,
+  MapApiResponse,
+} from '@/vuejs/types/Seller'
 
 export default class SellerHttpClient extends BaseClientService {
-  public fetchSellersByParams<T extends []>(params): Promise<Seller[]> {
+  public fetchSellersByParams(params): Promise<Seller[]> {
     const queryString = Object.keys(params)
       .map((key) => {
         if (typeof params[key] === 'object') {
@@ -16,18 +21,16 @@ export default class SellerHttpClient extends BaseClientService {
         }
       })
       .join('&')
-    return this.apiClient.get<T>(`sellers?${queryString}`).then((response) => {
+    return this.apiClient.get(`sellers?${queryString}`).then((response) => {
       return response.data
     })
   }
 
-  public getSeller<T extends []>(id: number): Promise<Seller> {
+  public getSeller(id: number): Promise<Seller> {
     return this.apiClient.get(`sellers/${id}`).then((response) => response.data)
   }
 
-  public getSellerPromotions<T extends []>(
-    id: number,
-  ): Promise<SellerPromotion[]> {
+  public getSellerPromotions(id: number): Promise<SellerPromotion[]> {
     return this.apiClient
       .get(`sellers/${id}/promotions`)
       .then((response) => response.data)
@@ -42,5 +45,19 @@ export default class SellerHttpClient extends BaseClientService {
         const data = response.data
         return Array.isArray(data) && data.length > 0 ? data[0] : data
       })
+  }
+
+  /**
+   * Récupère les données de la map (stores + catégories) depuis le back-end
+   */
+  public fetchMapData(categoryId?: number): Promise<MapApiResponse> {
+    let url = 'partner-stores/map-data'
+    if (categoryId) {
+      url += `?categoryId=${categoryId}`
+    }
+
+    return this.apiClient
+      .get<MapApiResponse>(url)
+      .then((response) => response.data)
   }
 }
