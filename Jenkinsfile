@@ -35,6 +35,10 @@ pipeline {
                 }
             }
 
+            environment {
+                DOCKER_BUILDKIT = '1'
+            }
+
             steps {
                 script{
                     sh 'env'
