@@ -14,6 +14,11 @@ import type { AddressSearchResult } from '@/vuejs/services/searchAddressapi'
 export const leafletMap = ref<LeafletMap | null>(null)
 export const selectedAddress = ref<AddressSearchResult | null>(null)
 
+export function cleanupMapReference() {
+  leafletMap.value = null
+  selectedAddress.value = null
+}
+
 export function getDisplayedName(result: AddressSearchResult): string {
   if (result.address) {
     const {
@@ -60,11 +65,20 @@ export function useMap() {
     })
   }
 
-  /**
-   * Get tooltip options based on store ID and active state
-   * @param storeId The store ID to check
-   * @returns Tooltip options object
-   */
+  const isMapValid = (map: LeafletMap | null): boolean => {
+    try {
+      return !!(
+        map &&
+        map._container &&
+        map._loaded &&
+        typeof map.setView === 'function' &&
+        !map._destroyed
+      )
+    } catch {
+      return false
+    }
+  }
+
   const getTooltipOptions = (storeId: string) => {
     return {
       permanent: fixedTooltips.value.includes(storeId),
@@ -75,24 +89,22 @@ export function useMap() {
     }
   }
 
-  /**
-   * Check if the device is mobile and update zoom accordingly
-   */
   const checkIfMobile = () => {
     isMobile.value = window.innerWidth < 768
-    if (leafletMap.value) {
+    if (isMapValid(leafletMap.value)) {
       zoom.value = isMobile.value ? MOBILE_ZOOM : DEFAULT_ZOOM
     }
   }
 
-  /**
-   * Recenter the map on the current center position
-   */
   const recenterMap = () => {
-    if (leafletMap.value && center.value) {
-      const newZoom = isMobile.value ? MOBILE_ZOOM : DEFAULT_ZOOM
-      leafletMap.value.setView(center.value, newZoom)
-      zoom.value = newZoom
+    if (isMapValid(leafletMap.value) && center.value) {
+      try {
+        const newZoom = isMobile.value ? MOBILE_ZOOM : DEFAULT_ZOOM
+        leafletMap.value!.setView(center.value, newZoom)
+        zoom.value = newZoom
+      } catch (error) {
+        console.warn('Erreur lors du recentrage de la carte:', error)
+      }
     }
   }
 
@@ -106,5 +118,7 @@ export function useMap() {
     getTooltipOptions,
     checkIfMobile,
     recenterMap,
+    isMapValid,
+    cleanupMapReference,
   }
 }

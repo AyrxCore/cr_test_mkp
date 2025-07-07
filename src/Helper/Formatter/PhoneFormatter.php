@@ -25,7 +25,7 @@ class PhoneFormatter
         'FR' => [
             'patterns' => [
                 9 => ['/(\d)(\d{2})(\d{2})(\d{2})(\d{2})/' => '$1 $2 $3 $4 $5'],
-                'default' => 3, 
+                'default' => 3,
             ],
             'addZeroPrefix' => true,
         ],
@@ -117,15 +117,20 @@ class PhoneFormatter
             );
         }
 
-        if ($phoneInfo['countryCode'] === null
-            && \str_starts_with((string) $phoneInfo['nationalNumber'], '0')
-            && \strlen($phoneInfo['nationalNumber']) === 10) {
-            return \preg_replace('/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/', '$1 $2 $3 $4 $5', $phoneInfo['nationalNumber']);
+        if ($phoneInfo['countryCode'] === null) {
+            $nationalNumber = $phoneInfo['nationalNumber'];
+
+            if (\strlen($nationalNumber) === 9) {
+                $nationalNumber = '0'.$nationalNumber;
+            }
+
+            if (\strlen($nationalNumber) === 10 && \str_starts_with($nationalNumber, '0')) {
+                return \preg_replace('/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/', '$1 $2 $3 $4 $5', $nationalNumber);
+            }
         }
 
         return null;
     }
-
 
     private function extractPhoneInfo(string $phone): ?array
     {

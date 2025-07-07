@@ -1,3 +1,22 @@
+export interface StoreData {
+  id: string
+  name: string
+  address: string
+  phone: string
+  latitude: string
+  longitude: string
+  upplerId?: number
+  logo?: string
+  partnerName?: string
+}
+
+export interface Partner {
+  id: number
+  name: string
+  partnerStores: StoreData[]
+  upplerId?: number
+}
+
 export interface Seller {
   id: number
   name: string
@@ -46,42 +65,12 @@ export interface SellerStoreState {
   }
 }
 
-export interface PartnerStore {
-  id: string
-  name: string
-  address: string
-  phone: string
-  latitude: number
-  longitude: number
-  upplerId?: number
-  partnerLogo?: string
-}
-
-export interface Partner {
-  id: number
-  name: string
-  partnerStores: PartnerStore[]
-  upplerId?: number
-}
-
-export interface MapStoreData {
-  id: string
-  name: string
-  address: string
-  phone: string
-  latitude: string
-  longitude: string
-  upplerId?: number
-  partnerName?: string
-  partnerLogo?: string
-}
-
 export interface MapCategoryData {
   id: string
   name: string
 }
 
 export interface MapApiResponse {
-  stores: MapStoreData[]
+  stores: StoreData[]
   categories: MapCategoryData[]
 }

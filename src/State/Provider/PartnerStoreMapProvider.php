@@ -88,7 +88,7 @@ readonly class PartnerStoreMapProvider implements ProviderInterface
                         longitude: $store->getLongitude(),
                         upplerId: $partner->getUpplerId(),
                         partnerName: $partner->getName(),
-                        partnerLogo: $upplerInfo['logo'] ?? null
+                        logo: $upplerInfo['logo'] ?? null
                     );
                 }
             }

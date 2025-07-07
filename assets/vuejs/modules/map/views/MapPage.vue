@@ -28,7 +28,7 @@
         <MobileFiltersMapComponent
           v-if="categories.length > 0"
           :categories="categories"
-          :selected-category="selectedCategoryId?.toString() || null"
+          :selected-category="selectedCategoryString"
           @category-changed="handleCategoryChange"
         />
         <div class="my-2 flex flex-col justify-between lg:flex-row">
@@ -38,7 +38,7 @@
             <MapFiltersComponent
               v-if="categories.length > 0"
               :categories="categories"
-              :selected-category="selectedCategoryId?.toString() || null"
+              :selected-category="selectedCategoryString"
               @category-changed="handleCategoryChange"
             />
           </div>
@@ -58,7 +58,18 @@
                 height-class="h-[45vh] xl:h-[500px]"
               >
                 <template #markers>
-                  <StoreMarkersComponent :stores="adaptedStores" />
+                  <LMarkerClusterGroup :show-coverage-on-hover="false">
+                    <LMarker
+                      v-for="store in stores"
+                      :key="store.id"
+                      :icon="markerIcon"
+                      :lat-lng="getLatLng(store.latitude, store.longitude)"
+                    >
+                      <LPopup :options="getTooltipOptions(store.id)">
+                        <StorePopupContent :store="store" />
+                      </LPopup>
+                    </LMarker>
+                  </LMarkerClusterGroup>
                 </template>
               </MapComponent>
 
@@ -77,45 +88,36 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onBeforeMount, ref } from 'vue'
+import { onBeforeMount, ref, computed } from 'vue'
+import { LMarkerClusterGroup } from 'vue-leaflet-markercluster'
+import { LMarker, LPopup } from '@vue-leaflet/vue-leaflet'
 
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 import MapFiltersComponent from '@/vuejs/modules/map/components/MapFiltersComponent.vue'
 import MobileFiltersMapComponent from '@/vuejs/modules/map/components/MobileFiltersMapComponent.vue'
-import StoreMarkersComponent from '@/vuejs/modules/products/components/map/StoreMarkersComponent.vue'
 import MapComponent from '@/vuejs/modules/shared/map/MapComponent.vue'
+import StorePopupContent from '@/vuejs/modules/products/components/map/StorePopupContent.vue'
 
+import { useMap } from '@/vuejs/modules/products/composables/useMap'
+import { getLatLng } from '@/vuejs/modules/products/utils/map-utils'
 import { ProductPageList } from '@/vuejs/router/pages-list'
-import {
-  MapStoreData,
-  MapCategoryData,
-  PartnerStore,
-} from '@/vuejs/types/Seller'
+import { StoreData, MapCategoryData } from '@/vuejs/types/Seller'
 import SellerHttpClient from '@/vuejs/services/httpclient/SellerHttpClient'
 
-// Les fonctions sont maintenant directement utilisées dans StoreMarkersComponent
+const { createMarkerIcon, getTooltipOptions } = useMap()
 
 const isLoading = ref<boolean>(true)
 const isFilterLoading = ref<boolean>(false)
-const stores = ref<MapStoreData[]>([])
+const stores = ref<StoreData[]>([])
 const categories = ref<MapCategoryData[]>([])
 const selectedCategoryId = ref<number | null>(null)
 
-// Adapter les données pour le composant StoreMarkersComponent
-const adaptedStores = computed<PartnerStore[]>(() => {
-  return stores.value.map((store) => ({
-    id: store.id,
-    name: store.name,
-    address: store.address,
-    phone: store.phone,
-    latitude: parseFloat(store.latitude),
-    longitude: parseFloat(store.longitude),
-    upplerId: store.upplerId,
-    partnerLogo: store.partnerLogo,
-  }))
-})
+const markerIcon = computed(() => createMarkerIcon('text-primary'))
+const selectedCategoryString = computed(
+  () => selectedCategoryId.value?.toString() || null,
+)
 
 const handleCategoryChange = async (categoryId: string | null) => {
   isFilterLoading.value = true
@@ -133,10 +135,6 @@ const handleCategoryChange = async (categoryId: string | null) => {
   }
 }
 
-/**
- * Charge les données de la map depuis le back-end
- * Remplace toute la logique complexe qui était faite côté front
- */
 const loadMapData = async (categoryId?: number | null) => {
   try {
     const mapData = await SellerHttpClient.get().fetchMapData(

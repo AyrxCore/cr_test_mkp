@@ -9,6 +9,7 @@ use ApiPlatform\State\ProviderInterface;
 use App\Dto\AccordStoreView;
 use App\Dto\AccordView;
 use App\Entity\Accord;
+use App\Helper\Formatter\PhoneFormatter;
 use App\Repository\AccordRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -16,6 +17,7 @@ readonly class AccordProvider implements ProviderInterface
 {
     public function __construct(
         private AccordRepository $accordRepository,
+        private PhoneFormatter $phoneFormatter
     ) {
     }
 
@@ -27,7 +29,15 @@ readonly class AccordProvider implements ProviderInterface
             throw new NotFoundHttpException('Accord not found');
         }
 
-        $stores = $accord->hasStore() ? $this->getStores($accord) : [];
+        $stores = [];
+        if ($accord->hasStore()) {
+            $directStores = $this->getAccordStores($accord);
+            if (!empty($directStores)) {
+                $stores = $directStores;
+            } else {
+                $stores = $this->getPartnerStores($accord);
+            }
+        }
 
         return new AccordView(
             (string) $accord->getId(),
@@ -37,20 +47,28 @@ readonly class AccordProvider implements ProviderInterface
         );
     }
 
-    private function getStores(Accord $accord): array
+    private function getAccordStores(Accord $accord): array
     {
-        $partnerStores = $accord->getStores()->count() === 0
-            ? $accord->getPartner()->getPartnerStores()->toArray()
-            : $accord->getStores()->toArray();
+        return $this->mapStoresToViews($accord->getStores()->toArray());
+    }
 
+    private function getPartnerStores(Accord $accord): array
+    {
+        return $this->mapStoresToViews($accord->getPartner()->getPartnerStores()->toArray());
+    }
+
+    private function mapStoresToViews(array $stores): array
+    {
         return \array_map(
             fn ($store) => new AccordStoreView(
+                (string) $store->getId(),
                 $store->getName(),
                 $store->getAddress(),
                 $store->getLatitude(),
-                $store->getLongitude()
+                $store->getLongitude(),
+                $this->phoneFormatter->format($store->getPhone()),
             ),
-            $partnerStores
+            $stores
         );
     }
 }

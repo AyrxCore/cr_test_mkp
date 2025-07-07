@@ -36,7 +36,7 @@ class Accord
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $logo = null;
 
     #[ORM\Column]
@@ -45,8 +45,8 @@ class Accord
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\Column]
-    private ?bool $hasStore = null;
+    #[ORM\Column(options: ['default' => false])]
+    private bool $hasStore = false;
 
     #[ORM\ManyToMany(targetEntity: PartnerStore::class, orphanRemoval: true)]
     private Collection $stores;
@@ -157,12 +157,12 @@ class Accord
         return $this;
     }
 
-    public function hasStore(): ?bool
+    public function hasStore(): bool
     {
         return $this->hasStore;
     }
 
-    public function setHasStore(?bool $hasStore): void
+    public function setHasStore(bool $hasStore): void
     {
         $this->hasStore = $hasStore;
     }

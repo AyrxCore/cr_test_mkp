@@ -1,5 +1,4 @@
 import type { LatLngTuple } from 'leaflet'
-import { PartnerStore } from '@/vuejs/types/Seller'
 
 export const PARIS_COORDINATES = [48.8566, 2.3522] as LatLngTuple
 export const DEFAULT_ZOOM = 12
@@ -32,24 +31,13 @@ export const getZoomControl = (enableZoom = true) => {
   }
 }
 
-export function getLatLng(store: PartnerStore): [number, number] {
-  if (!store || !store.latitude || !store.longitude) {
+export function getLatLng(
+  latitude: string,
+  longitude: string,
+): [number, number] {
+  if (!latitude || !longitude) {
     return PARIS_COORDINATES
   }
 
-  const lat = String(store.latitude)
-  const lng = String(store.longitude)
-
-  return [parseFloat(lat), parseFloat(lng)]
-}
-
-export function isValidStore(store: PartnerStore): boolean {
-  return Boolean(
-    store &&
-      store.id &&
-      store.latitude &&
-      store.longitude &&
-      !isNaN(parseFloat(String(store.latitude))) &&
-      !isNaN(parseFloat(String(store.longitude))),
-  )
+  return [parseFloat(latitude), parseFloat(longitude)]
 }

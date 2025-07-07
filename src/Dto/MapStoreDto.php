@@ -34,7 +34,7 @@ readonly class MapStoreDto
         public ?string $partnerName = null,
 
         #[Groups(['map:read'])]
-        public ?string $partnerLogo = null,
+        public ?string $logo = null,
     ) {
     }
 }

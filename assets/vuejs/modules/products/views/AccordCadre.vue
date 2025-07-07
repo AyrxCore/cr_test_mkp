@@ -83,7 +83,7 @@
         :accord-name="accord.name"
         :properties="accord.properties"
       />
-      <PartnersStoreMap :seller-id="accord?.seller?.id || null" />
+      <PartnerStoresMap :accord="accord" />
       <div id="sectionRse" class="scroll-mt-40" />
       <RseEngagementComponent :properties="accord.properties" />
       <div class="mb-12 mt-8 px-6 lg:px-12">
@@ -140,7 +140,7 @@ import ConditionsClientComponent from '@/vuejs/modules/products/components/accor
 import EnSavoirPlusComponent from '@/vuejs/modules/products/components/accord-cadre/EnSavoirPlusComponent.vue'
 import PromotionnalComponent from '@/vuejs/modules/products/components/accord-cadre/PromotionnalComponent.vue'
 import RseEngagementComponent from '@/vuejs/modules/products/components/accord-cadre/RseEngagementComponent.vue'
-import PartnersStoreMap from '@/vuejs/modules/products/components/accord-cadre/PartnersStoreMap.vue'
+import PartnerStoresMap from '@/vuejs/modules/products/components/accord-cadre/PartnerStoresMap.vue'
 
 const route = useRoute()
 const router = useRouter()

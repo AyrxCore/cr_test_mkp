@@ -34,8 +34,7 @@
               parseFloat(selectedAddress.lat),
               parseFloat(selectedAddress.lon),
             ]"
-          >
-          </LMarker>
+          />
         </template>
         <template #controls>
           <LControl
@@ -71,7 +70,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, watch, onMounted, onBeforeUnmount } from 'vue'
+import { computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { LMarker, LCircle, LControl } from '@vue-leaflet/vue-leaflet'
 import type { Map as LeafletMap } from 'leaflet'
 
@@ -125,6 +124,8 @@ const {
   checkIfMobile,
   recenterMap,
   createMarkerIcon,
+  isMapValid,
+  cleanupMapReference,
 } = useMap()
 
 const circleRadius = computed(() => {
@@ -166,9 +167,20 @@ const onMapReady = (mapInstance: LeafletMap) => {
 
     const savedLocation = loadSavedLocation()
     if (savedLocation) {
-      requestAnimationFrame(() => {
-        mapInstance.setView(savedLocation, zoom.value)
-        center.value = savedLocation
+      nextTick(() => {
+        try {
+          if (isMapValid(mapInstance)) {
+            mapInstance.setView(savedLocation, zoom.value)
+            center.value = savedLocation
+          }
+        } catch (error) {
+          console.warn(
+            'Erreur lors du chargement de la position sauvegardée:',
+            error,
+          )
+          // Fallback: mettre à jour seulement les valeurs réactives
+          center.value = savedLocation
+        }
       })
     }
 
@@ -194,18 +206,26 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   window.removeEventListener('resize', checkIfMobile)
+
+  cleanupMapReference()
 })
 
 watch(
   () => userPosition.value,
   (newPosition) => {
-    if (newPosition) {
+    if (newPosition && leafletMap.value) {
       const [lat, lng] = Array.isArray(newPosition)
         ? newPosition
         : [newPosition.lat, newPosition.lng]
-      if (leafletMap.value) {
+
+      try {
         const newZoom = isMobile.value ? MOBILE_ZOOM : DEFAULT_ZOOM
         leafletMap.value.setView([lat, lng], newZoom)
+        zoom.value = newZoom
+        center.value = [lat, lng]
+      } catch (error) {
+        console.warn('Erreur lors de la mise à jour de la carte:', error)
+        const newZoom = isMobile.value ? MOBILE_ZOOM : DEFAULT_ZOOM
         zoom.value = newZoom
         center.value = [lat, lng]
       }
