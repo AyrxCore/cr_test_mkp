@@ -20,13 +20,26 @@
       >
         <template #markers>
           <slot name="markers" />
-          <LCircle
-            v-if="isGeolocationActive && enableGeolocation"
-            :lat-lng="userPositionCoords"
-            :radius="circleRadius"
-            :color="poiColor"
-            fill
-          />
+          <template v-if="isGeolocationActive && enableGeolocation">
+            <LCircle
+              :lat-lng="userPositionCoords"
+              :radius="circleRadius * 1.6"
+              color="#b3c8e3"
+              :fill-color="'#b3c8e3'"
+              :fill-opacity="0.5"
+              :weight="0"
+              fill
+            />
+            <LCircle
+              :lat-lng="userPositionCoords"
+              :radius="circleRadius * 0.9"
+              color="white"
+              :fill-color="'#4285f4'"
+              :fill-opacity="1"
+              :weight="1.5"
+              fill
+            />
+          </template>
           <LMarker
             v-if="selectedAddress"
             :icon="createMarkerIcon('text-red-500')"
@@ -95,7 +108,6 @@ import {
 } from '@/vuejs/modules/products/utils/map-utils'
 
 defineProps<{
-  poiColor: string
   enableGeolocation?: boolean
   enableControls?: boolean
   enableZoom?: boolean
