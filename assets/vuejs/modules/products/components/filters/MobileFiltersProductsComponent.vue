@@ -11,7 +11,7 @@
       v-if="filters"
       v-click-outside="() => (showFilters = false)"
       :filters="filters"
-      class="fixed left-0 bottom-0 z-50 h-[66%] w-screen overflow-scroll rounded-b-none"
+      class="fixed bottom-0 left-0 z-50 h-[66%] w-screen overflow-scroll rounded-b-none"
       @filter-product="emit('filter-products')"
       @close-filters="showFilters = false"
     />

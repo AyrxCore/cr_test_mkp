@@ -46,6 +46,18 @@
                 conditions négociées
               </p>
             </div>
+            <div class="lg:hidden">
+              <RouterLink
+                :style="{
+                  color: betterTextColor('primary'),
+                }"
+                :to="{ name: MainPageList.PARTNERS_MAP }"
+                class="my-2 flex w-full items-center justify-center gap-2 !rounded-none border border-gray-300 !bg-white px-4 py-2 !text-primary"
+              >
+                <MarkerIconComponent size="30" />
+                <span class="text-lg">Carte des partenaires</span>
+              </RouterLink>
+            </div>
             <MobileFiltersSellersComponent v-if="categoriesFilters" />
             <AlphabetNavigatorComponent
               :items="sellersSortedAlphabetically"
