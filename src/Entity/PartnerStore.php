@@ -133,7 +133,7 @@ class PartnerStore
         return $this->partner;
     }
 
-    public function setPartner(Partner $partner): static
+    public function setPartner(?Partner $partner): static
     {
         $this->partner = $partner;
 

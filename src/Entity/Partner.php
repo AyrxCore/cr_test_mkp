@@ -54,13 +54,17 @@ class Partner
     #[Groups(['partner:read'])]
     private Collection $partnerStores;
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'integer', nullable: true)]
     #[Groups(['partner:read'])]
     private ?int $upplerId = null;
+
+    #[ORM\OneToMany(mappedBy: 'partner', targetEntity: Accord::class)]
+    private Collection $accords;
 
     public function __construct()
     {
         $this->partnerStores = new ArrayCollection();
+        $this->accords = new ArrayCollection();
     }
 
     public function getId(): ?Uuid
@@ -154,6 +158,35 @@ class Partner
     public function setUpplerId(int $upplerId): static
     {
         $this->upplerId = $upplerId;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Accord>
+     */
+    public function getAccords(): Collection
+    {
+        return $this->accords;
+    }
+
+    public function addAccord(Accord $accord): static
+    {
+        if (!$this->accords->contains($accord)) {
+            $this->accords->add($accord);
+            $accord->setPartner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAccord(Accord $accord): static
+    {
+        if ($this->accords->removeElement($accord)) {
+            if ($accord->getPartner() === $this) {
+                $accord->setPartner(null);
+            }
+        }
 
         return $this;
     }

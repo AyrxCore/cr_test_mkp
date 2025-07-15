@@ -1,6 +1,6 @@
 <template>
   <div class="m-2 w-56 cursor-auto overflow-hidden break-words md:m-4 md:w-64">
-    <div class="my-2 flex flex-col gap-1">
+    <div class="mb-2 flex flex-col gap-1">
       <div class="flex justify-start">
         <slot name="logo">
           <img
@@ -63,8 +63,8 @@
 
 <script lang="ts" setup>
 import { PropType, computed } from 'vue'
-import { StoreData } from '@/vuejs/types/Seller'
 import { ProductPageList } from '@/vuejs/router/pages-list'
+import { StoreData } from '@/vuejs/types/Seller'
 
 const props = defineProps({
   store: {

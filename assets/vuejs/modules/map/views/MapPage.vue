@@ -20,7 +20,6 @@
         current-page="Carte des partenaires"
       />
       <div class="mt-4 flex w-full flex-col">
-        <!-- Titre mobile au-dessus des filtres -->
         <h3 class="text-title-primary mb-4 mt-2 block lg:hidden">
           Les partenaires à proximité
         </h3>
@@ -44,7 +43,6 @@
           </div>
 
           <div class="flex w-full flex-grow flex-col">
-            <!-- Titre desktop/tablette caché en mobile -->
             <h3 class="text-title-primary mb-4 mt-2 hidden lg:block xl:mt-0">
               Les partenaires à proximité
             </h3>
@@ -66,13 +64,25 @@
                       :lat-lng="getLatLng(store.latitude, store.longitude)"
                     >
                       <LPopup :options="getTooltipOptions(store.id)">
-                        <StorePopupContent :store="store" />
+                        <StorePopupContent :store="store">
+                          <template #logo>
+                            <LogoCarousel
+                              v-if="store.accordLogos?.length"
+                              :logos="store.accordLogos"
+                            />
+                            <img
+                              v-else-if="store.logo"
+                              :src="store.logo"
+                              :alt="store.name"
+                              class="h-12 w-auto object-contain"
+                            />
+                          </template>
+                        </StorePopupContent>
                       </LPopup>
                     </LMarker>
                   </LMarkerClusterGroup>
                 </template>
               </MapComponent>
-
               <div
                 v-if="isFilterLoading"
                 class="absolute left-0 right-0 top-0 z-10 flex h-[45vh] items-center justify-center rounded-lg bg-gray-500/50 xl:h-[500px]"
@@ -92,19 +102,20 @@ import { onBeforeMount, ref, computed } from 'vue'
 import { LMarkerClusterGroup } from 'vue-leaflet-markercluster'
 import { LMarker, LPopup } from '@vue-leaflet/vue-leaflet'
 
+import { ProductPageList } from '@/vuejs/router/pages-list'
+import { useMap } from '@/vuejs/modules/products/composables/useMap'
+import SellerHttpClient from '@/vuejs/services/httpclient/SellerHttpClient'
+import { StoreData, MapCategoryData } from '@/vuejs/types/Seller'
+import { getLatLng } from '@/vuejs/modules/products/utils/map-utils'
+
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 import MapFiltersComponent from '@/vuejs/modules/map/components/MapFiltersComponent.vue'
 import MobileFiltersMapComponent from '@/vuejs/modules/map/components/MobileFiltersMapComponent.vue'
 import MapComponent from '@/vuejs/modules/shared/map/MapComponent.vue'
+import LogoCarousel from '@/vuejs/modules/products/components/map/LogoCarousel.vue'
 import StorePopupContent from '@/vuejs/modules/products/components/map/StorePopupContent.vue'
-
-import { useMap } from '@/vuejs/modules/products/composables/useMap'
-import { getLatLng } from '@/vuejs/modules/products/utils/map-utils'
-import { ProductPageList } from '@/vuejs/router/pages-list'
-import { StoreData, MapCategoryData } from '@/vuejs/types/Seller'
-import SellerHttpClient from '@/vuejs/services/httpclient/SellerHttpClient'
 
 const { createMarkerIcon, getTooltipOptions } = useMap()
 

@@ -35,6 +35,9 @@ readonly class MapStoreDto
 
         #[Groups(['map:read'])]
         public ?string $logo = null,
+
+        #[Groups(['map:read'])]
+        public array $accordLogos = [],
     ) {
     }
 }

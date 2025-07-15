@@ -106,19 +106,21 @@ class UpplerPartnerService
                     'companies' => $upplerIds,
                     'categories' => [$categoryId],
                 ],
-                expands: ['company'],
+                expands: [],
                 page: 1,
-                perPage: 100
+                perPage: 1
             );
 
+            $companiesInFilters = $result['filters']['company'] ?? [];
+
             $partnerIds = [];
-            foreach ($result['results'] ?? [] as $product) {
-                if (isset($product['company']['id'])) {
-                    $partnerIds[] = $product['company']['id'];
+            foreach ($companiesInFilters as $company) {
+                if (isset($company['id']) && \in_array($company['id'], $upplerIds, true)) {
+                    $partnerIds[] = $company['id'];
                 }
             }
 
-            return \array_unique($partnerIds);
+            return $partnerIds;
         } catch (BadRequestHttpException $e) {
             $this->apiLogger->error('Erreur lors de la récupération des partenaires par catégorie', [
                 'error' => $e->getMessage(),

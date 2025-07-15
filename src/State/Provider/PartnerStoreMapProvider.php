@@ -7,9 +7,8 @@ namespace App\State\Provider;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Dto\MapStoreDataDto;
-use App\Dto\MapStoreDto;
-use App\Helper\Formatter\PhoneFormatter;
 use App\Repository\PartnerRepository;
+use App\Service\MapStoreBuilderService;
 use App\Service\UpplerPartnerService;
 use Psr\Log\LoggerInterface;
 
@@ -19,91 +18,55 @@ readonly class PartnerStoreMapProvider implements ProviderInterface
         private readonly UpplerPartnerService $upplerPartnerService,
         private readonly PartnerRepository $partnerRepository,
         private readonly LoggerInterface $logger,
-        private readonly PhoneFormatter $phoneFormatter,
+        private readonly MapStoreBuilderService $mapStoreBuilderService,
     ) {
     }
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): MapStoreDataDto
     {
         try {
-            $categoryId = isset($context['filters']['categoryId']) ? (int) $context['filters']['categoryId'] : null;
+            $categoryId = $this->extractCategoryId($context);
+            $allPartnerUpplerIds = $this->getAllAuthorizedPartnerIds();
 
-            // 1. Récupérer les partenaires autorisés depuis Uppler
-            $authorizedUpplerIds = $this->upplerPartnerService->getAuthorizedPartnerIds();
-
-            if (empty($authorizedUpplerIds)) {
-                return new MapStoreDataDto([], []);
+            if (empty($allPartnerUpplerIds)) {
+                return $this->createEmptyResponse();
             }
 
-            // 2. Récupérer les partenaires en base qui ont des stores
-            $allPartnersInDb = $this->partnerRepository->findAuthorizedPartnersWithStores($authorizedUpplerIds);
-            $allPartnerUpplerIdsInDb = \array_map(fn ($p) => $p->getUpplerId(), $allPartnersInDb);
+            $categories = $this->getCategories($allPartnerUpplerIds);
 
-            if (empty($allPartnerUpplerIdsInDb)) {
-                return new MapStoreDataDto([], []);
+            $finalUpplerIds = $categoryId
+            ? $this->upplerPartnerService->getPartnersWithCategory($allPartnerUpplerIds, $categoryId)
+            : $allPartnerUpplerIds;
+
+            if (empty($finalUpplerIds)) {
+                return new MapStoreDataDto([], $categories);
             }
 
-            // 3. Récupérer les catégories disponibles et les filtrer
-            $categories = $this->getCategories($allPartnerUpplerIdsInDb);
-
-            // 4. Déterminer les partenaires finaux pour les stores (avec ou sans filtre catégorie)
-            if ($categoryId) {
-                $partnersWithCategory = $this->upplerPartnerService->getPartnersWithCategory($allPartnerUpplerIdsInDb, $categoryId);
-
-                if (empty($partnersWithCategory)) {
-                    return new MapStoreDataDto([], $categories);
-                }
-
-                $finalUpplerIds = \array_intersect($partnersWithCategory, $allPartnerUpplerIdsInDb);
-            } else {
-                $finalUpplerIds = $allPartnerUpplerIdsInDb;
-            }
-
-            // 5. Récupérer les partenaires de la base de données avec leurs stores (filtrés si nécessaire)
-            $partners = $this->partnerRepository->findAuthorizedPartnersWithStores($finalUpplerIds);
-
-            // 6. Récupérer les données Uppler (logos, etc.)
-            $upplerData = $this->upplerPartnerService->getPartnersData($finalUpplerIds);
-
-            // Log pour diagnostiquer les logos
-            $logosCount = \count(\array_filter($upplerData, fn ($p) => !empty($p['logo'] ?? null)));
-            $this->logger->info('Données Uppler récupérées pour la map', [
-                'partnersCount' => \count($upplerData),
-                'logosCount' => $logosCount,
-                'samplePartner' => !empty($upplerData) ? \array_slice($upplerData, 0, 1, true) : null,
-            ]);
-
-            // 7. Combiner les données et créer les DTOs pour les stores
-            $stores = [];
-            foreach ($partners as $partner) {
-                $upplerInfo = $upplerData[$partner->getUpplerId()] ?? null;
-
-                foreach ($partner->getPartnerStores() as $store) {
-                    $stores[] = new MapStoreDto(
-                        id: (string) $store->getId(),
-                        name: $store->getName(),
-                        address: $store->getAddress(),
-                        phone: $this->phoneFormatter->format($store->getPhone()),
-                        latitude: $store->getLatitude(),
-                        longitude: $store->getLongitude(),
-                        upplerId: $partner->getUpplerId(),
-                        partnerName: $partner->getName(),
-                        logo: $upplerInfo['logo'] ?? null
-                    );
-                }
-            }
+            $stores = $this->mapStoreBuilderService->buildStores($finalUpplerIds);
 
             return new MapStoreDataDto($stores, $categories);
         } catch (\Exception $e) {
-            $this->logger->error('Erreur lors de la récupération des données de la map', [
-                'error' => $e->getMessage(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
+            $this->logError($e);
 
-            // Retourner des données vides en cas d'erreur
-            return new MapStoreDataDto([], []);
+            return $this->createEmptyResponse();
         }
+    }
+
+    private function extractCategoryId(array $context): ?int
+    {
+        return isset($context['filters']['categoryId']) ? (int) $context['filters']['categoryId'] : null;
+    }
+
+    private function getAllAuthorizedPartnerIds(): array
+    {
+        $authorizedUpplerIds = $this->upplerPartnerService->getAuthorizedPartnerIds();
+        if (empty($authorizedUpplerIds)) {
+            return [];
+        }
+
+        $partnersInDb = $this->partnerRepository->findAuthorizedPartnersWithStores($authorizedUpplerIds);
+
+        return \array_map(fn ($p) => $p->getUpplerId(), $partnersInDb);
     }
 
     private function getCategories(array $partnerUpplerIdsWithStores): array
@@ -111,26 +74,55 @@ readonly class PartnerStoreMapProvider implements ProviderInterface
         try {
             $categories = $this->upplerPartnerService->getAvailableCategories($partnerUpplerIdsWithStores);
 
-            $formattedCategories = [
-                ['id' => 'all', 'name' => 'Toutes les catégories'],
-            ];
-
-            foreach ($categories as $category) {
-                if (!isset($category['parentId']) || $category['parentId'] === 0 || $category['parentId'] === null) {
-                    $formattedCategories[] = [
-                        'id' => (string) $category['id'],
-                        'name' => $category['name'],
-                    ];
-                }
-            }
-
-            return $formattedCategories;
+            return $this->formatCategories($categories);
         } catch (\Exception $e) {
             $this->logger->error('Erreur lors de la récupération des catégories', [
                 'error' => $e->getMessage(),
             ]);
 
-            return [['id' => 'all', 'name' => 'Toutes les catégories']];
+            return $this->getDefaultCategories();
         }
+    }
+
+    private function formatCategories(array $categories): array
+    {
+        $formattedCategories = $this->getDefaultCategories();
+
+        foreach ($categories as $category) {
+            if ($this->isTopLevelCategory($category)) {
+                $formattedCategories[] = [
+                    'id' => (string) $category['id'],
+                    'name' => $category['name'],
+                ];
+            }
+        }
+
+        return $formattedCategories;
+    }
+
+    private function isTopLevelCategory(array $category): bool
+    {
+        return !isset($category['parentId'])
+            || $category['parentId'] === 0
+            || $category['parentId'] === null;
+    }
+
+    private function getDefaultCategories(): array
+    {
+        return [['id' => 'all', 'name' => 'Toutes les catégories']];
+    }
+
+    private function createEmptyResponse(): MapStoreDataDto
+    {
+        return new MapStoreDataDto([], $this->getDefaultCategories());
+    }
+
+    private function logError(\Exception $e): void
+    {
+        $this->logger->error('Erreur lors de la récupération des données de la map', [
+            'error' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+        ]);
     }
 }

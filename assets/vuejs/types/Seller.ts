@@ -1,3 +1,9 @@
+export interface AccordLogo {
+  logo: string
+  name: string
+  id: string
+}
+
 export interface StoreData {
   id: string
   name: string
@@ -8,8 +14,8 @@ export interface StoreData {
   upplerId?: number
   logo?: string
   partnerName?: string
+  accordLogos?: AccordLogo[]
 }
-
 export interface Partner {
   id: number
   name: string
