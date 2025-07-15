@@ -8,6 +8,7 @@ parameters:
   uppler_api_url: '%env(UPPLER_API_URL)%'
   uppler_admin_client_id: '%env(UPPLER_ADMIN_CLIENT_ID)%'
   uppler_admin_client_secret: '%env(UPPLER_ADMIN_CLIENT_SECRET)%'
+  uppler_webhook_secret: '%env(UPPLER_WEBHOOK_SECRET)%'
   http_cache_path: '%kernel.project_dir%/var/cache/%env(APP_ENV)%'
   #fichier qui stocke le token admin en cours
   uppler_admin_token_file: '%kernel.project_dir%/var/'

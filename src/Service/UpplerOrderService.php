@@ -85,4 +85,22 @@ class UpplerOrderService extends AbstractUpplerService
 
         return ['headers' => $res->getHeaders(), 'content' => \bin2hex($res->getContent())];
     }
+
+    public function getOrderByIdAsAdmin(int $orderId): array
+    {
+        $res = $this->request(
+            'GET',
+            'v1/administrator/order/'.$orderId,
+            [],
+            true,
+        );
+
+        if ($res && $res->getStatusCode() !== Response::HTTP_OK) {
+            $this->apiLogger->error($res->getStatusCode()." La commande avec l'ID: ".$orderId." n'a pas été trouvée");
+
+            throw new NotFoundHttpException("La commande avec l'ID ".$orderId." n'a pas été trouvée");
+        }
+
+        return \json_decode($res->getContent(), true);
+    }
 }

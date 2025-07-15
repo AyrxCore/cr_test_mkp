@@ -25,7 +25,7 @@ class DefaultController extends AbstractController implements ChannelAwareContro
     #[Route(
         '/{route}',
         name: 'app',
-        requirements: ['route' => '^(?!.*_wdt|_profiler|login|conditions-generales-d-utilisation|mentions-legales|politique-de-confidentialite|rattachement-stellantis|maintenance|api).+']
+        requirements: ['route' => '^(?!.*_wdt|_profiler|login|conditions-generales-d-utilisation|mentions-legales|politique-de-confidentialite|rattachement-stellantis|maintenance|api|uppler-webhook).+']
     )]
     public function index(Request $request): Response
     {

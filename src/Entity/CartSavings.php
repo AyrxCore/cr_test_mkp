@@ -47,10 +47,23 @@ class CartSavings
     #[ORM\Column]
     private ?int $itemsTotal = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $orderState = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null;
+
     #[ORM\PrePersist]
-    public function onPrePersist()
+    public function onPrePersist(): void
     {
+        $this->updatedAt = new \DateTimeImmutable('now');
         $this->createdAt = new \DateTimeImmutable('now');
+    }
+
+    #[ORM\PreUpdate]
+    public function onPreUpdate(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable('now');
     }
 
     public function getId(): ?Uuid
@@ -164,5 +177,29 @@ class CartSavings
     public function getItemsTotal(): ?int
     {
         return $this->itemsTotal;
+    }
+
+    public function getOrderState(): ?string
+    {
+        return $this->orderState;
+    }
+
+    public function setOrderState(?string $orderState): static
+    {
+        $this->orderState = $orderState;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
     }
 }
