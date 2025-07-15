@@ -7,7 +7,7 @@
     class="flex cursor-pointer items-center"
     @click.stop="toggleMenu"
   >
-    <UserPlainIconComponent v-if="!isNeoAutoLogin" />
+    <UserPlainIconComponent v-if="!isNeoAutoLogin" class="ml-4 lg:ml-0" />
     <UserAutoLoginIconComponent v-else class="fill-primary stroke-primary" />
     <div class="hidden text-lg md:ml-3 md:block md:max-w-[250px]">
       <span v-if="!isNeoAutoLogin"

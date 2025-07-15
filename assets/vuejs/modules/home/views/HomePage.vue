@@ -93,8 +93,10 @@
           </p>
         </div>
         <SellersCarousel class="mt-5" />
-        <div class="flex justify-center">
-          <p class="mt-10">
+        <div
+          class="mt-10 flex flex-col items-center justify-center md:flex-row"
+        >
+          <div>
             <RouterLink
               :style="{
                 color: betterTextColor('primary'),
@@ -104,7 +106,16 @@
             >
               Tous les partenaires
             </RouterLink>
-          </p>
+          </div>
+          <div>
+            <RouterLink
+              :to="{ name: MainPageList.PARTNERS_MAP }"
+              class="button button-primary-outline ml-0 mt-4 flex items-center md:ml-4 md:mt-0"
+            >
+              <MarkerIconComponent class="mr-2" size="24" />
+              Localiser les partenaires
+            </RouterLink>
+          </div>
         </div>
       </div>
 
@@ -184,7 +195,11 @@ import { useProductStore } from '@/vuejs/stores/product'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
 import { betterTextColor } from '@/vuejs/services/utils'
-import { NewsPageList, ProductPageList } from '@/vuejs/router/pages-list'
+import {
+  MainPageList,
+  NewsPageList,
+  ProductPageList,
+} from '@/vuejs/router/pages-list'
 import { Product } from '@/vuejs/types/Product'
 
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
@@ -196,6 +211,7 @@ import SellersCarousel from '@/vuejs/modules/shared/SellersCarouselComponent.vue
 import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
 import ShowcaseModal from '@/vuejs/modules/home/component/ShowcaseModal.vue'
 import SemanticButtonsComponent from '@/vuejs/modules/home/component/SemanticButtonsComponent.vue'
+import MarkerIconComponent from '@/vuejs/modules/shared/icon/MarkerIconComponent.vue'
 
 const productStore = useProductStore()
 const expertContentStore = useExpertContentStore()

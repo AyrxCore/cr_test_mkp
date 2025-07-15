@@ -18,8 +18,8 @@
     </div>
     <RouterLink
       :to="{ name: ProductPageList.SELLERS }"
-      replace
       class="sr-only w-fit min-w-fit rounded border-b-2 border-b-transparent bg-secondary text-center text-sm text-white hover:border-primary lg:not-sr-only lg:px-4 lg:py-2"
+      replace
     >
       Tous les partenaires
     </RouterLink>

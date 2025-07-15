@@ -2,12 +2,11 @@
   <nav class="sticky top-0 z-30 w-full bg-white py-1 shadow-md lg:pb-3">
     <div class="mx-auto items-center px-4 lg:flex">
       <div class="flex justify-between">
-        <MenuComponent class="w-1/4 lg:hidden" />
-        <LogoComponent class="w-1/2" />
-        <div
-          class="mr-4 flex w-1/4 items-center justify-end md:w-full lg:hidden"
-        >
-          <AccountComponent />
+        <MenuComponent class="lg:hidden" />
+        <LogoComponent />
+        <div class="mr-4 flex items-center justify-end lg:hidden">
+          <StoreLocHeaderButton />
+          <AccountComponent class="ml-4" />
           <CartButtonComponent class="ml-4" />
         </div>
       </div>
@@ -15,11 +14,12 @@
         <SearchComponent @search-product="search" />
       </div>
       <div
-        class="hidden items-center lg:ml-4 lg:flex lg:min-w-[350px] lg:justify-evenly xl:ml-0 xl:min-w-[650px]"
+        class="hidden items-center lg:ml-4 lg:flex lg:min-w-[400px] lg:justify-evenly xl:ml-0 xl:min-w-[800px]"
       >
         <div class="hidden xl:flex">
           <ContactUsButtonComponent />
         </div>
+        <StoreLocHeaderButton />
         <AccountComponent />
         <CartButtonComponent class="lg:ml-4 xl:ml-0" />
       </div>
@@ -40,6 +40,8 @@ import router from '@/vuejs/router'
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import { useProductStore } from '@/vuejs/stores/product'
 import { useChannelStore } from '@/vuejs/stores/channel'
+import MarkerIconComponent from '@/vuejs/modules/shared/icon/MarkerIconComponent.vue'
+import StoreLocHeaderButton from '@/vuejs/modules/shared/StoreLocHeaderButton.vue'
 
 const productStore = useProductStore()
 
