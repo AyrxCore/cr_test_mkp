@@ -24,10 +24,13 @@ readonly class CartSubscriptionHandler
         foreach ($productsIds as $productId) {
             /** @var Product $product */
             $product = $this->upplerProductService->findProductByIdForAdmin($productId);
-            $params = [
-                'accordId' => $this->getAccordId($product['properties']),
-            ];
-            $this->accordCadreSubscriptionService->subscription($params, $message->getAccountId(), $message->getChannel(), isSendEmail: false);
+            $accordId = $this->getAccordId($product['properties']);
+            if ($accordId) {
+                $params = [
+                    'accordId' => $accordId,
+                ];
+                $this->accordCadreSubscriptionService->subscription($params, $message->getAccountId(), $message->getChannel(), isSendEmail: false);
+            }
         }
     }
 
