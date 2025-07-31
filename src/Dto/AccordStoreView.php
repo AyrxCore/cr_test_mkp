@@ -12,7 +12,7 @@ final class AccordStoreView
         public string $address,
         public string $latitude,
         public string $longitude,
-        public string $phone,
+        public ?string $phone,
     ) {
     }
 }

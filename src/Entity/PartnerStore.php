@@ -47,7 +47,7 @@ class PartnerStore
     #[Groups(['partner:read'])]
     private ?string $address = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['partner:read'])]
     private ?string $phone = null;
 
@@ -97,7 +97,7 @@ class PartnerStore
         return $this->phone;
     }
 
-    public function setPhone(string $phone): static
+    public function setPhone(?string $phone): static
     {
         $this->phone = $phone;
 
