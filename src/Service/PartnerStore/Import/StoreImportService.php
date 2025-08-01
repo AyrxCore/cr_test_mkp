@@ -41,7 +41,7 @@ class StoreImportService
             );
         }
 
-        $this->removeExistingStores($partner, $io);
+        $this->removeExistingStores($partner, $validatedAccord, $io);
 
         $io->progressStart(\count($stores));
         $successCount = 0;
@@ -70,14 +70,28 @@ class StoreImportService
         return $successCount;
     }
 
-    private function removeExistingStores(Partner $partner, SymfonyStyle $io): void
+    private function removeExistingStores(Partner $partner, ?Accord $validatedAccord, SymfonyStyle $io): void
     {
-        $existingStores = $this->partnerStoreRepository->findBy(['partner' => $partner]);
-        $deletedStoresCount = \count($existingStores);
-        $this->partnerStoreRepository->removeByPartnerId($partner->getId());
+        if ($validatedAccord) {
+            $existingStores = $validatedAccord->getStores();
+            $deletedStoresCount = $existingStores->count();
 
-        if ($deletedStoresCount > 0) {
-            $io->text("🗑️  Suppression de {$deletedStoresCount} ancien(s) magasin(s)");
+            foreach ($existingStores as $store) {
+                $validatedAccord->removeStore($store);
+                $this->entityManager->remove($store);
+            }
+
+            if ($deletedStoresCount > 0) {
+                $io->text("🗑️  Suppression de {$deletedStoresCount} ancien(s) magasin(s) de l'accord {$validatedAccord->getName()}");
+            }
+        } else {
+            $existingStores = $this->partnerStoreRepository->findBy(['partner' => $partner]);
+            $deletedStoresCount = \count($existingStores);
+            $this->partnerStoreRepository->removeByPartnerId($partner->getId());
+
+            if ($deletedStoresCount > 0) {
+                $io->text("🗑️  Suppression de {$deletedStoresCount} ancien(s) magasin(s) du partner {$partner->getName()}");
+            }
         }
     }
 
