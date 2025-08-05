@@ -7,14 +7,11 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-/**
- * Make partner_store.phone field nullable.
- */
-final class Version20250123140000 extends AbstractMigration
+final class Version20250804140000 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Make partner_store.phone field nullable to distinguish between no phone and invalid phone';
+        return '';
     }
 
     public function up(Schema $schema): void
