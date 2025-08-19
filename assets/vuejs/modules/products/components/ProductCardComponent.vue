@@ -23,6 +23,15 @@
         >
           -{{ product.percent }}%
         </div>
+        <div
+          v-else-if="!product.sellable && !product.percent"
+          :style="{
+            color: betterTextColor('primary'),
+          }"
+          class="text-md rounded-md bg-secondary px-2 py-1"
+        >
+          Offre sur-mesure
+        </div>
         <AddFavoriteComponent
           v-if="product.variants?.length === 2"
           :favorites-product="product.favorites"

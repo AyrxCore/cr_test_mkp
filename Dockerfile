@@ -21,7 +21,7 @@ CMD ["yarn"]
 FROM php:8.3-fpm AS php
 
 RUN apt-get update && \
-  apt-get install -y --no-install-recommends libssl-dev zlib1g-dev curl git unzip netcat-traditional libxml2-dev libpq-dev libzip-dev libpng-dev supervisor && \
+  apt-get install -y --no-install-recommends libssl-dev zlib1g-dev curl git unzip netcat-traditional libxml2-dev libpq-dev libzip-dev libpng-dev supervisor libicu-dev && \
   pecl install apcu xdebug && \
   docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql && \
   docker-php-ext-install -j$(nproc) zip opcache intl pdo_pgsql pgsql pcntl gd && \
@@ -63,7 +63,7 @@ USER www-data
 COPY --chown=www-data:www-data . ./
 
 # Composer dependencies and public files must be owned by www-data
-# Disable cache for now as current Docker install on Jenkins server is old and 
+# Disable cache for now as current Docker install on Jenkins server is old and
 # cause a directory /var/www/var/cache owned by root to remain after build
 # causing crash on container start as PHP user www-data cannot write to /var/www/var/cache
 # RUN --mount=type=cache,uid=33,gid=33,target=/var/www/.composer/cache \

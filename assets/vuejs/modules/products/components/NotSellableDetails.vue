@@ -2,7 +2,10 @@
   <div
     class="rounded-xs my-12 w-fit bg-secondary p-3 text-center text-xl font-bold text-white"
   >
-    -{{ product.percent }}% sur le tarif public
+    <template v-if="product.percent">
+      -{{ product.percent }}% sur le tarif public
+    </template>
+    <template v-else>Offre sur-mesure</template>
   </div>
   <div class="mb-6">
     <h4 class="text-xl font-bold">Comment bénéficier de l'offre ?</h4>
