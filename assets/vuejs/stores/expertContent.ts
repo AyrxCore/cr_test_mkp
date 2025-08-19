@@ -21,73 +21,79 @@ export const useExpertContentStore = defineStore({
   }),
 
   actions: {
-    async init(): Promise<ExpertContent[]> {
+    async init(): Promise<void> {
       if (!this.expertContents.length) {
         await this.findExpertsContents()
       }
       if (!this.categories.length) {
         await this.findExpertsContentsCategories()
       }
+
       this.expertContents.forEach((expertContent: ExpertContent) => {
         const category = this.getCategoryColorByName(expertContent.categoryName)
-        expertContent.categoryColor = category.color
-      })
-
-      return this.expertContents
-    },
-
-    async initExpertContent(slug: string) {
-      if (!this.categories.length) {
-        await this.findExpertsContentsCategories()
-      }
-      let currentExpertContent = null
-      this.expertContents.forEach((expertContent: ExpertContent) => {
-        if (expertContent.slug === slug) {
-          currentExpertContent = expertContent
+        if (category) {
+          expertContent.categoryColor = category.color
         }
       })
+    },
+
+    async initExpertContent(slug: string): Promise<ExpertContent | null> {
+      if (!this.expertContents.length) {
+        await this.init()
+      }
+
+      let currentExpertContent = this.expertContents.find(
+        (expertContent: ExpertContent) => expertContent.slug === slug
+      ) || null
+
       if (!currentExpertContent) {
         try {
-          currentExpertContent =
-            await ExpertContentHttpClient.get().getExpertContent(slug)
-          const category = this.getCategoryColorByName(
-            currentExpertContent.categoryName,
-          )
-          currentExpertContent.categoryColor = category.color
-        } catch (error) {}
+          currentExpertContent = await ExpertContentHttpClient.get().getExpertContent(slug)
+
+          if (currentExpertContent) {
+            this.expertContents.push(currentExpertContent)
+
+            const category = this.getCategoryColorByName(currentExpertContent.categoryName)
+            if (category) {
+              currentExpertContent.categoryColor = category.color
+            }
+          }
+        } catch (error) {
+          console.error('❌ Error loading expert content:', error)
+          return null
+        }
       }
 
       return currentExpertContent
     },
 
-    async findExpertsContentsCategories(): Promise<[]> {
+    async findExpertsContentsCategories(): Promise<void> {
       try {
-        this.categories =
-          await ExpertContentHttpClient.get().findExpertsContentsCategories()
+        this.categories = await ExpertContentHttpClient.get().findExpertsContentsCategories()
       } catch (error) {
-        return []
+        console.error('❌ Error loading categories:', error)
+        this.categories = []
       }
     },
-    async findExpertsContents(): Promise<[]> {
+
+    async findExpertsContents(): Promise<void> {
       try {
-        this.expertContents =
-          await ExpertContentHttpClient.get().findExpertsContents()
+        this.expertContents = await ExpertContentHttpClient.get().findExpertsContents()
       } catch (error) {
-        return []
+        console.error('❌ Error loading expert contents:', error)
+        this.expertContents = []
       }
     },
-    getCategoryColorByName(categoryName: string) {
-      return this.categories.find((category: ExpertContentCategory) => {
-        if (category.name === categoryName) {
-          return category.color
-        }
-        return null
-      })
+
+    getCategoryColorByName(categoryName: string): ExpertContentCategory | undefined {
+      return this.categories.find((category: ExpertContentCategory) =>
+        category.name === categoryName
+      )
     },
   },
 
   getters: {
-    getExpertsContentsCategories() {
+    getExpertsContentsCategories(): ExpertContentCategory[] {
       return this.categories
     },
   },

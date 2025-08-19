@@ -100,7 +100,7 @@
 
 <script lang="ts" setup>
 import { format } from 'date-fns'
-import { computed, onBeforeMount, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 import ArrowRigntIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
@@ -129,10 +129,6 @@ const formattedDate = computed((): string => {
   return format(new Date(currentExpertContent.value.date), 'dd/MM/yyyy')
 })
 
-onBeforeMount(async () => {
-  await expertContent.init()
-})
-
 const pageTitle = computed(() => {
   return currentExpertContent.value
     ? currentExpertContent.value.articleTitle
@@ -142,8 +138,8 @@ const pageTitle = computed(() => {
 const contents = computed(() => {
   return expertContent.expertContents.filter(
     (c) =>
-      c.categoryName === currentExpertContent.value.categoryName &&
-      c.slug !== currentExpertContent.value.slug,
+      c.categoryName === currentExpertContent.value?.categoryName &&
+      c.slug !== currentExpertContent.value?.slug,
   )
 })
 
@@ -156,6 +152,7 @@ watch(
         currentExpertContent.value = await expertContent.initExpertContent(slug)
       }
     } catch (error) {
+      console.error('❌ Error loading expert content:', error)
     } finally {
       isLoading.value = false
     }

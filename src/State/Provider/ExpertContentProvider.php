@@ -22,6 +22,7 @@ readonly class ExpertContentProvider implements ProviderInterface
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
+
         return $operation instanceof CollectionOperationInterface
             ? $this->handleCollection()
             : $this->handleSingle($uriVariables);
@@ -41,15 +42,21 @@ readonly class ExpertContentProvider implements ProviderInterface
     {
         $entities = $this->upplerDynamicEntityService->getDynamicsEntities(
             expands: ['dynamic_fields'],
-            criteria: ['slug' => (string) $uriVariables['slug']]
+            dynamicEntityConfigurationId: (string) ExpertContent::DYNAMIC_CONFIG_ID
         );
 
-        if (empty($entities)) {
+        $filteredEntities = \array_filter($entities, function ($entity) use ($uriVariables) {
+            return $entity['slug'] === $uriVariables['slug'];
+        });
+
+        if (empty($filteredEntities)) {
             throw new NotFoundHttpException(
                 \sprintf('News with slug: %s does not exist', $uriVariables['slug'])
             );
         }
 
-        return $this->expertContentFactory->create($entities[0]);
+        $entity = \reset($filteredEntities);
+
+        return $this->expertContentFactory->create($entity);
     }
 }

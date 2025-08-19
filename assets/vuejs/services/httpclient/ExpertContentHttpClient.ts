@@ -14,9 +14,10 @@ export default class ExpertContentHttpClient extends BaseClientService {
     })
   }
 
-  public getExpertContent<T extends []>(slug: string): Promise<ExpertContent> {
+  public getExpertContent(slug: string): Promise<ExpertContent> {
     return this.apiClient.get(`expert-contents/${slug}`).then((response) => {
       return response.data
     })
   }
 }
+
