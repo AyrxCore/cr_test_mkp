@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      'relative flex flex-col items-center rounded-lg border-4 border-solid p-4',
+      'relative mb-4 flex flex-col items-center rounded-lg border-4 border-solid p-4',
       isInShowcase ? 'border-gray-400' : 'border-secondary',
     ]"
   >
@@ -33,7 +33,7 @@
     <div class="flex h-full w-full flex-col items-center">
       <div class="my-1 flex w-full items-center">
         <div
-          class="mx-auto flex h-[200px] max-w-[200px] items-center justify-center rounded-lg"
+          class="mx-auto flex h-[190px] max-w-[200px] items-center justify-center rounded-lg"
           @click="
             $emit('click-img', {
               partenaire_name: accord.seller.name,

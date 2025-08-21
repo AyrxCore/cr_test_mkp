@@ -38,7 +38,7 @@
               Votre recherche : {{ termsOrCategoryFilterName }}
             </h3>
             <div
-              class="grid h-auto grid-cols-1 items-stretch justify-items-center md:grid-cols-2 md:gap-5 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+              class="grid h-auto grid-cols-1 items-stretch justify-items-center gap-3 md:grid-cols-2 md:gap-5 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
             >
               <a
                 v-if="bannerSearchImg && allowBannerSearch"

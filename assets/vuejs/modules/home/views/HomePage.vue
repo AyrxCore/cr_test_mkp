@@ -6,7 +6,7 @@
       </div>
 
       <!-- Bloc accords cadre -->
-      <div class="mt-10 bg-white px-12 py-8">
+      <div class="mt-10 bg-white px-6 py-8 md:px-12">
         <div class="m-auto max-w-screen-98">
           <h3 class="text-title-primary mb-3">
             Les accords-cadres incontournables
