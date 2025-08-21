@@ -13,7 +13,7 @@
               class="m-auto flex flex-col md:grid md:grid-cols-2 md:gap-4 lg:grid-cols-3"
             >
               <div v-for="content in expertContents" :key="content.id">
-                <ActualiteComponentComponent :content="content" />
+                <ActualiteComponent :content="content" />
               </div>
             </div>
           </div>
@@ -50,7 +50,7 @@
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import { onMounted, ref } from 'vue'
-import ActualiteComponentComponent from '@/vuejs/modules/actualites/components/ActualiteComponent.vue'
+import ActualiteComponent from '@/vuejs/modules/actualites/components/ActualiteComponent.vue'
 import { useExpertContentStore } from '@/vuejs/stores/expertContent'
 import { storeToRefs } from 'pinia'
 import { ExpertContent } from '@/vuejs/types/ExpertContent'

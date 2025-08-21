@@ -8,7 +8,7 @@
         )
       "
     >
-      <div class="relative mt-2">
+      <div class="news-carousel relative mt-2">
         <CarouselListSharedComponent
           :autoplay="{
             delay: 3000,
@@ -23,6 +23,7 @@
           }"
           :slides-per-view="1"
           :space-between="20"
+          :pagination="true"
           class="swiper-nav-outside"
           loop
         >
@@ -85,3 +86,9 @@ const channelStore = useChannelStore()
 const { expertContents } = storeToRefs(expertContent)
 const { channel } = storeToRefs(channelStore)
 </script>
+
+<style lang="postcss" scoped>
+.news-carousel :deep(.swiper-pagination) {
+  transform: translateY(calc(100% + 14px));
+}
+</style>
