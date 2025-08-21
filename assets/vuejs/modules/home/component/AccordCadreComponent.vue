@@ -29,106 +29,111 @@
         class="ml-4"
       />
     </div>
-
-    <div class="flex h-full w-full flex-col items-center">
-      <div class="my-1 flex w-full items-center">
-        <div
-          class="mx-auto flex h-[190px] max-w-[200px] items-center justify-center rounded-lg"
-          @click="
-            $emit('click-img', {
+    <Component
+      :is="!isInShowcase ? 'RouterLink' : 'div'"
+      :class="
+        !isInShowcase
+          ? 'block'
+          : [
+              { 'pointer-events-none': contactRequested },
+              '!text-wrap',
+              'cursor-pointer',
+            ]
+      "
+      :to="
+        !isInShowcase
+          ? {
+              name: ProductPageList.ACCORD_CADRE,
+              params: { slug: accord.slug },
+            }
+          : null
+      "
+      @click="
+        !isInShowcase
+          ? $emit('click-accord-cadre-card', {
               partenaire_name: accord.seller.name,
               partenaire_id: accord.seller.id,
             })
-          "
-        >
-          <component
-            :is="isInShowcase ? 'div' : 'RouterLink'"
-            :to="isInShowcase ? null : productLink"
-            class="block"
+          : $emit('show-showcase-modal', accord)
+      "
+    >
+      <div class="flex h-[410px] flex-col items-center">
+        <div class="my-1 flex w-full items-center">
+          <div
+            class="mx-auto flex h-[180px] max-w-[200px] items-center justify-center rounded-lg"
           >
-            <img
-              :alt="`Image ${accord.name}`"
-              :class="{ 'pointer-events-none': contactRequested }"
-              :src="properties.logo_partenaire"
-              class="max-h-[150px] cursor-pointer items-center sm:flex md:max-h-[139px] lg:max-h-[191px] lg:w-full lg:max-w-max"
-              @click="handleShowcaseModal"
-            />
-          </component>
-        </div>
-      </div>
-
-      <div class="flex h-3/5 w-full flex-col justify-between">
-        <div class="h-[30%]">
-          <h3
-            :class="{ 'pointer-events-none': contactRequested }"
-            class="truncate-custom truncate-custom-2 text-title-default-size my-2 cursor-pointer text-center font-bold text-primary md:text-xl lg:text-lg"
-            @click="
-              $emit('click-title', {
-                partenaire_name: accord.seller.name,
-                partenaire_id: accord.seller.id,
-              })
-            "
-          >
-            <RouterLink
-              v-if="!isInShowcase"
-              :to="{
-                name: ProductPageList.ACCORD_CADRE,
-                params: { slug: accord.slug },
-              }"
+            <component
+              :is="isInShowcase ? 'div' : 'RouterLink'"
+              :to="isInShowcase ? null : productLink"
               class="block"
             >
-              {{ accord.name }}
-            </RouterLink>
-            <span v-else @click="$emit('show-showcase-modal', accord)">{{
-              accord.name
-            }}</span>
-          </h3>
+              <img
+                :alt="`Image ${accord.name}`"
+                :class="{ 'pointer-events-none': contactRequested }"
+                :src="properties.logo_partenaire"
+                class="max-h-[150px] cursor-pointer items-center sm:flex md:max-h-[139px] lg:max-h-[191px] lg:w-full lg:max-w-max"
+                @click="handleShowcaseModal"
+              />
+            </component>
+          </div>
         </div>
 
-        <div>
-          <p
-            class="description truncate-custom truncate-custom-3 mb-4 px-2 text-center"
-            v-html="accord.description"
-          />
-        </div>
+        <div class="flex h-3/5 w-full flex-col justify-between">
+          <div class="h-[30%]">
+            <h3
+              :class="{ 'pointer-events-none': contactRequested }"
+              class="truncate-custom truncate-custom-2 text-title-default-size my-2 cursor-pointer text-center font-bold text-primary md:text-xl lg:text-lg"
+            >
+              <RouterLink
+                v-if="!isInShowcase"
+                :to="{
+                  name: ProductPageList.ACCORD_CADRE,
+                  params: { slug: accord.slug },
+                }"
+                class="block"
+              >
+                {{ accord.name }}
+              </RouterLink>
+              <span v-else @click="$emit('show-showcase-modal', accord)">{{
+                accord.name
+              }}</span>
+            </h3>
+          </div>
 
-        <div class="mt-1 flex w-full justify-center">
-          <ButtonComponent
-            v-if="isInShowcase"
-            :class="[
-              contactButtonClass,
-              { 'pointer-events-none': contactRequested },
-              '!text-wrap',
-            ]"
-            @click="$emit('show-showcase-modal', accord)"
-          >
-            {{ buttonText }}
-            <CheckIconComponent
-              v-if="contactRequested"
-              :stroke="channelPrimaryColor"
-              class="ml-2"
+          <div>
+            <p
+              class="description truncate-custom truncate-custom-3 mb-4 px-2 text-center"
+              v-html="accord.description"
             />
-          </ButtonComponent>
-          <RouterLink
-            v-else
-            :style="{ color: betterTextColor('primary') }"
-            :to="{
-              name: ProductPageList.ACCORD_CADRE,
-              params: { slug: accord.slug },
-            }"
-            class="button button-primary flex items-center justify-center"
-            @click="
-              $emit('click-cta', {
-                partenaire_name: accord.seller.name,
-                partenaire_id: accord.seller.id,
-              })
-            "
-          >
-            Consulter l'accord&#8209;cadre
-          </RouterLink>
+          </div>
+
+          <div class="mt-1 flex w-full justify-center">
+            <ButtonComponent
+              v-if="isInShowcase"
+              :class="[
+                contactButtonClass,
+                { 'pointer-events-none': contactRequested },
+                '!text-wrap',
+              ]"
+            >
+              {{ buttonText }}
+              <CheckIconComponent
+                v-if="contactRequested"
+                :stroke="channelPrimaryColor"
+                class="ml-2"
+              />
+            </ButtonComponent>
+            <div
+              v-else
+              :style="{ color: betterTextColor('primary') }"
+              class="button button-primary flex items-center justify-center"
+            >
+              Consulter l'accord&#8209;cadre
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </Component>
   </div>
 </template>
 
@@ -164,12 +169,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits([
-  'click-cta',
-  'click-title',
-  'click-img',
-  'show-showcase-modal',
-])
+const emit = defineEmits(['click-accord-cadre-card', 'show-showcase-modal'])
 
 const properties = computed<any[]>(() => props.accord.properties)
 

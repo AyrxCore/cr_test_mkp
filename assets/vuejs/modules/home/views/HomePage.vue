@@ -21,9 +21,7 @@
             :loading="!productsAccordsCadre"
             @click-left="sendGaEvent('click_product_slider_fat_left')"
             @click-right="sendGaEvent('click_product_slider_fat_right')"
-            @click-cta="sendGaEvent('click_product_slider_fat_cta', $event)"
-            @click-title="sendGaEvent('click_product_slider_fat_title', $event)"
-            @click-img="sendGaEvent('click_product_slider_fat_img', $event)"
+            @click-cta="sendGaEvent('click_product_slider_fat', $event)"
             @show-showcase-modal="handleShowcaseModal"
           />
           <ShowcaseModal
@@ -58,10 +56,9 @@
             @click-add-cart="
               sendGaEvent('click_slider_home_products_cta', $event)
             "
-            @click-title="
-              sendGaEvent('click_slider_home_products_title', $event)
+            @click-accord-cadre-card="
+              sendGaEvent('click_slider_home_products', $event)
             "
-            @click-img="sendGaEvent('click_slider_home_products_img', $event)"
             @click-moins-qty="
               sendGaEvent('click_slider_home_products_moins_qty', $event)
             "

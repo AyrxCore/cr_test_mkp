@@ -45,60 +45,68 @@
     <!-- Fin bloc header -->
 
     <div class="flex h-full w-full flex-col items-center">
-      <!-- Bloc image -->
-      <div class="my-1 flex w-full items-center">
-        <div
-          class="mx-auto flex h-[200px] max-w-[200px] items-center justify-center rounded-lg"
-        >
-          <img
-            v-if="product.images[0]"
-            :alt="product.name"
-            :src="getUpplerImage(product.images[0])"
-            class="flex h-full w-full cursor-pointer items-center object-contain lg:max-w-max"
-            @click="goToProductPage"
-          />
+      <RouterLink
+        :to="{
+          name: ProductPageList.PRODUCT,
+          params: { slug: productSlug },
+        }"
+        @click="sendGAEventData('click-product-card')"
+      >
+        <!-- Bloc image -->
+        <div class="my-1 flex w-full items-center">
           <div
-            v-else
-            class="loading flex h-[116px] w-full items-center justify-center rounded-lg px-6 py-2"
-          />
+            class="mx-auto flex h-[200px] max-w-[200px] items-center justify-center rounded-lg"
+          >
+            <img
+              v-if="product.images[0]"
+              :alt="product.name"
+              :src="getUpplerImage(product.images[0])"
+              class="flex h-full w-full cursor-pointer items-center object-contain lg:max-w-max"
+            />
+            <div
+              v-else
+              class="loading flex h-[116px] w-full items-center justify-center rounded-lg px-6 py-2"
+            />
+          </div>
         </div>
-      </div>
+      </RouterLink>
       <!-- Fin bloc image -->
 
       <!-- Bloc texte -->
       <div class="flex h-3/5 w-full flex-col justify-between">
-        <!-- Bloc titre -->
-        <div class="h-[25%]">
-          <h3
-            class="truncate-custom truncate-custom-2 text-left text-sm font-bold text-primary md:text-base lg:text-lg"
-          >
-            <RouterLink
-              :to="{
-                name: ProductPageList.PRODUCT,
-                params: { slug: productSlug },
-              }"
-              @click="sendGAEventData('click-title')"
+        <RouterLink
+          :to="{
+            name: ProductPageList.PRODUCT,
+            params: { slug: productSlug },
+          }"
+          class="contents"
+          @click="sendGAEventData('click-product-card')"
+        >
+          <!-- Bloc titre -->
+          <div class="h-[25%]">
+            <h3
+              class="truncate-custom truncate-custom-2 text-left text-sm font-bold text-primary md:text-base lg:text-lg"
             >
               {{ product.name }}
-            </RouterLink>
-          </h3>
-        </div>
-        <!-- Fin bloc titre -->
+            </h3>
+          </div>
+          <!-- Fin bloc titre -->
 
-        <!-- Bloc nom partenaire -->
-        <div class="mt-1 h-[10%] text-primary">
-          {{ product.seller.name }}
-        </div>
+          <!-- Bloc nom partenaire -->
+          <div class="mt-1 h-[10%] text-primary">
+            {{ product.seller.name }}
+          </div>
 
-        <!-- Fin bloc nom partenaire -->
+          <!-- Fin bloc nom partenaire -->
 
-        <!-- Bloc description -->
-        <div class="h-[35%]">
-          <p
-            class="truncate-custom truncate-custom-3 mt-1 w-full justify-start text-left text-sm md:text-base lg:text-lg"
-            v-html="productDescription"
-          />
-        </div>
+          <!-- Bloc description -->
+          <div class="h-[35%]">
+            <p
+              class="truncate-custom truncate-custom-3 mt-1 w-full justify-start text-left text-sm md:text-base lg:text-lg"
+              v-html="productDescription"
+            />
+          </div>
+        </RouterLink>
         <!-- Fin bloc description -->
         <NotSellableProductCardButtonComponent
           v-if="!product.sellable"
@@ -133,8 +141,7 @@ import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const emit = defineEmits([
   'click-add-cart',
-  'click-title',
-  'click-img',
+  'click-product-card',
   'click-moins-qty',
   'click-plus-qty',
 ])
@@ -172,14 +179,6 @@ const productDescription = computed((): string => {
   }
   return props.product.description
 })
-
-const goToProductPage = () => {
-  router.push({
-    name: ProductPageList.PRODUCT,
-    params: { slug: productSlug.value },
-  })
-  sendGAEventData('click-img')
-}
 
 const sendGAEventData = (eventName: string) => {
   sendGaEvent(eventName, {

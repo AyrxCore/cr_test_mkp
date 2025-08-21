@@ -32,9 +32,7 @@
       >
         <AccordCadreComponent
           :accord="accord"
-          @click-cta="$emit('click-cta', $event)"
-          @click-title="$emit('click-title', $event)"
-          @click-img="$emit('click-img', $event)"
+          @click-accord-cadre-card="$emit('click-accord-cadre-card', $event)"
           @show-showcase-modal="$emit('show-showcase-modal', $event)"
         />
       </SwiperSlide>
@@ -67,9 +65,7 @@ const props = defineProps({
 const emit = defineEmits([
   'click-left',
   'click-right',
-  'click-cta',
-  'click-title',
-  'click-img',
+  'click-accord-cadre-card',
   'show-showcase-modal',
 ])
 </script>
