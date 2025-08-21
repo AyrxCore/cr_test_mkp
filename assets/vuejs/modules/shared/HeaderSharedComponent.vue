@@ -10,7 +10,7 @@
           <CartButtonComponent class="ml-4" />
         </div>
       </div>
-      <div class="mb-2 mt-4 lg:my-4 lg:w-[100%]">
+      <div class="mb-2 mt-4 lg:ml-2 lg:my-4 lg:w-[100%]">
         <SearchComponent @search-product="search" />
       </div>
       <div

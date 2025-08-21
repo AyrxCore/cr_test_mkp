@@ -10,7 +10,7 @@
       </div>
       <div
         v-if="adherentLogoImg"
-        class="ml-1 flex max-w-[125px] items-center md:max-w-[175px]"
+        class="ml-1 mr-2 flex max-w-[125px] items-center md:max-w-[175px] lg:mr-0"
       >
         <img :src="adherentLogoImg" alt="Logo Adhérent" />
       </div>
