@@ -31,7 +31,7 @@ class UpplerAuthenticationService extends AbstractUpplerService
         // si l'accessToken a été récupéré, il doit être en session,
         // si c'est le cas, on stocke aussi les infos du tokenUser
         if ($session->has('access_token') && !empty($session->get('access_token'))) {
-            if($isConnectionLogged) {
+            if ($isConnectionLogged) {
                 $account->setLastConnexion(new DateTime('now'));
                 $this->em->persist($account);
 

@@ -9,8 +9,7 @@ export interface FavoriteStoreState {
   favorite: Favorite
 }
 
-export const useFavoriteStore = defineStore({
-  id: 'favorite',
+export const useFavoriteStore = defineStore('favorite', {
   state: (): FavoriteStoreState => ({
     favorites: [],
     favorite: null,
@@ -46,9 +45,8 @@ export const useFavoriteStore = defineStore({
 
     async update(favorite: Favorite) {
       try {
-        const updatedFavorite = await FavoriteHttpClient.get(true).update(
-          favorite,
-        )
+        const updatedFavorite =
+          await FavoriteHttpClient.get(true).update(favorite)
         notifySuccess(`La liste ${favorite.name} a été mise à jour`)
         return updatedFavorite
       } catch (error) {
@@ -88,9 +86,7 @@ export const useFavoriteStore = defineStore({
       try {
         const response = await FavoriteHttpClient.get(true).moveProduct(
           favoriteProductId,
-          {
-            favoriteId,
-          },
+          { favoriteId },
         )
         notifySuccess(response.message)
       } catch (error) {

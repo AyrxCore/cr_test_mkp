@@ -8,7 +8,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-
 class UserAcceptCGUSubscriber implements EventSubscriberInterface
 {
     #[Required]
@@ -33,5 +32,4 @@ class UserAcceptCGUSubscriber implements EventSubscriberInterface
         $this->em->persist($account);
         $this->em->flush();
     }
-
 }

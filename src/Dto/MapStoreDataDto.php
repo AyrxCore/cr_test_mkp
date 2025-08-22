@@ -11,7 +11,6 @@ readonly class MapStoreDataDto
     public function __construct(
         #[Groups(['map:read'])]
         public array $stores = [],
-
         #[Groups(['map:read'])]
         public array $categories = [],
     ) {

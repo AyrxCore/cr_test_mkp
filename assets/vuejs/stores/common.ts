@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 
-export const useCommonStore = defineStore({
-  id: 'common',
+export const useCommonStore = defineStore('common', {
   state: () => ({
     channelCode: null as string | null,
   }),

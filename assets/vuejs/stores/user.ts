@@ -17,8 +17,7 @@ import { getCookie } from '@/vuejs/services/utils'
 import UserHttpClient from '@/vuejs/services/httpclient/UserHttpClient'
 import { getErrorMessage } from '@/vuejs/services/login'
 
-export const useUserStore = defineStore({
-  id: 'user',
+export const useUserStore = defineStore('user', {
   state: (): UserStoreState => ({
     user: null,
     editingInfo: [],
@@ -92,7 +91,7 @@ export const useUserStore = defineStore({
         })
         this.user.externalApiData.subaccount.billing_address = id
         notifySuccess(
-          `L'adresse de facturation par défaut a été modifiée avec succès`,
+          "L'adresse de facturation par défaut a été modifiée avec succès",
         )
       } catch (error) {
         notifyError(
@@ -109,7 +108,7 @@ export const useUserStore = defineStore({
         })
         this.user.externalApiData.subaccount.shipping_address = id
         notifySuccess(
-          `L'adresse de livraison par défaut a été modifiée avec succès`,
+          "L'adresse de livraison par défaut a été modifiée avec succès",
         )
       } catch (error) {
         notifyError(
@@ -125,7 +124,7 @@ export const useUserStore = defineStore({
           accountId: this.user.account.id,
         })
         notifySuccess(
-          `La demande de modification d'email de contact a été enregistrée avec succès`,
+          "La demande de modification d'email de contact a été enregistrée avec succès",
         )
         await this.getCurrentUserData()
       } catch (error) {
@@ -149,9 +148,7 @@ export const useUserStore = defineStore({
 
         notifySuccess('Les détails du profil ont été modifiés avec succès')
 
-        await router.push({
-          name: PageList.ACCOUNT,
-        })
+        await router.push({ name: PageList.ACCOUNT })
       } catch (error) {
         notifyError(
           'Une erreur est survenue, veuillez contacter le service technique',
@@ -174,9 +171,7 @@ export const useUserStore = defineStore({
 
         notifySuccess('Le mot de passe a été modifié avec succès')
 
-        await router.push({
-          name: PageList.ACCOUNT,
-        })
+        await router.push({ name: PageList.ACCOUNT })
       } catch (error) {
         notifyError(
           'Une erreur est survenue, veuillez contacter le service technique',
@@ -195,12 +190,7 @@ export const useUserStore = defineStore({
     },
     setGeolocationError(error: string): void {
       if (!this.userLocation) {
-        this.userLocation = {
-          lat: 0,
-          lng: 0,
-          timestamp: 0,
-          error: error,
-        }
+        this.userLocation = { lat: 0, lng: 0, timestamp: 0, error: error }
       } else {
         this.userLocation.error = error || null
       }
@@ -217,11 +207,7 @@ export const useUserStore = defineStore({
           error: this.userLocation?.error || null,
         }
       } else {
-        this.userLocation = {
-          ...location,
-          timestamp: Date.now(),
-          error: null,
-        }
+        this.userLocation = { ...location, timestamp: Date.now(), error: null }
       }
 
       localStorage.setItem('userLocation', JSON.stringify(this.userLocation))

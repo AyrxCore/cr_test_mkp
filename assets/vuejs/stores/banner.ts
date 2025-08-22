@@ -6,9 +6,7 @@ export interface BannerStoreState {
   banner: Banner
 }
 
-export const useBannerStore = defineStore({
-  id: 'banner',
-
+export const useBannerStore = defineStore('banner', {
   state: (): BannerStoreState => ({
     banner: null,
   }),

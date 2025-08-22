@@ -265,15 +265,18 @@ class ChannelParameter
         return $this;
     }
 
-    public function getNoReplyEmail(): ?string {
+    public function getNoReplyEmail(): ?string
+    {
         return $this->noReplyEmail;
     }
 
-    public function setNoReplyEmail(?string $noReplyEmail): void {
+    public function setNoReplyEmail(?string $noReplyEmail): void
+    {
         $this->noReplyEmail = $noReplyEmail;
     }
 
-    public function getEmailFrom(): ?string {
+    public function getEmailFrom(): ?string
+    {
         return $this->noReplyEmail ?? $this->email;
     }
 }

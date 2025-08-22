@@ -15,8 +15,8 @@ class MaintenanceListener
 {
     public function __construct(
         private RouterInterface $router,
-        private SettingsService $settingService)
-    {
+        private SettingsService $settingService
+    ) {
     }
 
     public function onKernelRequest(RequestEvent $event)

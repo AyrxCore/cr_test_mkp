@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface as SfNormalizerI
 class AccountNormalizer extends AbstractNormalizer
 {
     public function __construct(
-        SfNormalizerInterface                      $normalizer,
+        SfNormalizerInterface $normalizer,
         private readonly UpplerBuyerCompanyService $upplerBuyerCompanyService,
     ) {
         $this->normalizer = $normalizer;

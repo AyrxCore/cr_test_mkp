@@ -5,10 +5,17 @@ import axios, {
   AxiosResponse,
 } from 'axios'
 
-import store from '@/vuejs/store'
 import { useCommonStore } from '@/vuejs/stores/common'
 
-const commonStore = useCommonStore(store)
+// Initialisation différée pour éviter l'erreur "no active Pinia"
+let commonStore: ReturnType<typeof useCommonStore> | null = null
+
+const getCommonStore = () => {
+  if (!commonStore) {
+    commonStore = useCommonStore()
+  }
+  return commonStore
+}
 
 class DefaultClientService {
   public client: AxiosInstance
@@ -29,7 +36,8 @@ class DefaultClientService {
     this.client.interceptors.request.use(
       (config: AxiosRequestConfig): AxiosRequestConfig => {
         if (!config.url.includes('/channels/by-host/')) {
-          config.headers['X-channel'] = commonStore.channelCode
+          const store = getCommonStore()
+          config.headers['X-channel'] = store.channelCode
         }
 
         return config

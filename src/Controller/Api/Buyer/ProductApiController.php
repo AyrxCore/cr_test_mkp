@@ -26,7 +26,8 @@ class ProductApiController extends AbstractController
         private RequestStack $requestStack,
         private UpplerProductService $upplerProductService,
         private AccordCadreSubscriptionService $accordCadreSubscriptionService,
-        private RequestContactMailerService $requestContactMailerService, private readonly AccountRepository $accountRepository,
+        private RequestContactMailerService $requestContactMailerService,
+        private readonly AccountRepository $accountRepository,
     ) {
     }
 

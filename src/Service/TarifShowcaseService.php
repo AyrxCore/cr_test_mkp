@@ -35,7 +35,6 @@ class TarifShowcaseService
         $this->removeUnusedTarifShowcases($existingAccordIds);
 
         $this->em->flush();
-
     }
 
     private function updateAndUnsetTarifShowcase(array &$existingAccordIds, Uuid $accordId, Uuid $tarifId): void

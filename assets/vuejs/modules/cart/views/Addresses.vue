@@ -90,17 +90,14 @@
 import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
+import { useHead } from '@unhead/vue'
 
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import CartRightSideComponent from '@/vuejs/modules/cart/components/CartRightSideComponent.vue'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 
-import {
-  formatAddress,
-  notifyError,
-  setHeadTitle,
-} from '@/vuejs/services/utils'
+import { formatAddress, notifyError } from '@/vuejs/services/utils'
 import { useAddressStore } from '@/vuejs/stores/address'
 import { useCartStore } from '@/vuejs/stores/cart'
 import { Address } from '@/vuejs/types/Address'
@@ -193,16 +190,16 @@ const selectAddress = async (type: string): Promise<void> => {
     data.billingAddressId = selectedBillingAddressId.value
   }
   isLoading.value = true
-  await cartStore.updateCartAddress({
-    cartId: cartStore.cart.id,
-    ...data,
-  })
+  await cartStore.updateCartAddress({ cartId: cartStore.cart.id, ...data })
   selectedShippingAddressId.value = 0
   selectedBillingAddressId.value = 0
   isLoading.value = false
 }
 
-setHeadTitle('Adresses | QANTIS Marketplace')
+useHead({
+  title: 'Adresses | QANTIS Marketplace',
+  meta: [{ property: 'og:title', content: 'Adresses | QANTIS Marketplace' }],
+})
 </script>
 
 <style scoped></style>

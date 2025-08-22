@@ -10,7 +10,6 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\Entity(repositoryClass: AccordStatutRepository::class)]
 class AccordStatut
 {
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -81,5 +80,4 @@ class AccordStatut
 
         return $this;
     }
-
 }

@@ -12,8 +12,7 @@ import {
 import { arrayEqual, hexToBinary, notifyError } from '@/vuejs/services/utils'
 import { useChannelStore } from '@/vuejs/stores/channel'
 
-export const useProductStore = defineStore({
-  id: 'product',
+export const useProductStore = defineStore('product', {
   state: (): ProductStoreState => ({
     products: {
       filters: {},

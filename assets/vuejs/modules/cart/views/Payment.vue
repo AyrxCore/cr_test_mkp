@@ -46,6 +46,7 @@
 import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
+import { useHead } from '@unhead/vue'
 
 import CartRightSideComponent from '@/vuejs/modules/cart/components/CartRightSideComponent.vue'
 import PaymentMethodComponent from '@/vuejs/modules/cart/components/PaymentMethodComponent.vue'
@@ -53,7 +54,7 @@ import SepaIconComponent from '@/vuejs/modules/shared/icon/SepaIconComponent.vue
 import TownHallIcon from '@/vuejs/modules/shared/icon/TownHallIconComponent.vue'
 import cbLogos from '@/vuejs/assets/img/cb-icons.png'
 
-import { getImage, notifyError, setHeadTitle } from '@/vuejs/services/utils'
+import { getImage, notifyError } from '@/vuejs/services/utils'
 import { useCartStore } from '@/vuejs/stores/cart'
 import { PageList } from '@/vuejs/router'
 import { PaymentMethod } from '@/vuejs/types/Cart'
@@ -97,9 +98,7 @@ const selectCB = async () => {
 
 const selectSEPA = async (method: PaymentMethod) => {
   cartStore.selectedSepa = method
-  router.push({
-    name: PageList.CART_PAYMENT_SEPA,
-  })
+  router.push({ name: PageList.CART_PAYMENT_SEPA })
 }
 
 const selectMandatAdmin = async () => {
@@ -116,7 +115,10 @@ const selectMandatAdmin = async () => {
   }
 }
 
-setHeadTitle('Paiement | QANTIS Marketplace')
+useHead({
+  title: 'Paiement | QANTIS Marketplace',
+  meta: [{ property: 'og:title', content: 'Paiement | QANTIS Marketplace' }],
+})
 </script>
 
 <style scoped></style>

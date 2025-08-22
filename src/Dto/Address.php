@@ -21,11 +21,13 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Put(
             openapiContext: ['summary' => 'Editer une adresse', 'description' => 'Permet d\'éditer adresse pour une company'],
             normalizationContext: ['groups' => ['address:update']],
-            validate: true),
+            validate: true
+        ),
         new Post(
             openapiContext: ['summary' => 'Créer une nouvelle adresse', 'description' => 'Permet de créer une nouvelle adresse pour une company'],
             normalizationContext: ['groups' => ['address:create']],
-            validate: true),
+            validate: true
+        ),
         new GetCollection()
     ],
     provider: AddressProvider::class,

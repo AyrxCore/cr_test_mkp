@@ -7,7 +7,6 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class UserInfoUpdateEvent extends Event
 {
-
     protected $user;
 
     public function __construct(User $user)
@@ -25,5 +24,4 @@ class UserInfoUpdateEvent extends Event
         $this->user = $user;
         return $this;
     }
-
 }

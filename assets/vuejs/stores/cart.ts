@@ -22,10 +22,7 @@ import {
   SepaData,
 } from '@/vuejs/types/Cart'
 
-const channelStore = useChannelStore()
-
-export const useCartStore = defineStore({
-  id: 'cart',
+export const useCartStore = defineStore('cart', {
   state: (): CartStoreState => ({
     cart: null,
     termsOfSales: [],
@@ -45,7 +42,7 @@ export const useCartStore = defineStore({
       } catch (error) {
         this.cart = {}
         notifyError(
-          `Une erreur est survenue lors du chargement du panier, merci de contacter un administrateur.`,
+          'Une erreur est survenue lors du chargement du panier, merci de contacter un administrateur.',
         )
       }
     },
@@ -56,10 +53,7 @@ export const useCartStore = defineStore({
         }
 
         const products = []
-        products.push({
-          variantId,
-          quantity,
-        })
+        products.push({ variantId, quantity })
 
         await CartHttpClient.get().addProductsToCartAsBuyer({
           cartId: this.cart.id,
@@ -72,7 +66,7 @@ export const useCartStore = defineStore({
         notifySuccess('La référence du produit a été ajoutée au panier')
       } catch (error) {
         notifyError(
-          `L'ajout au panier est impossible, merci de contacter un administrateur.`,
+          "L'ajout au panier est impossible, merci de contacter un administrateur.",
         )
         throw new Error()
       }
@@ -105,7 +99,7 @@ export const useCartStore = defineStore({
         await CartHttpClient.get(true).updateCartAsBuyer(data)
       } catch (error) {
         notifyError(
-          `Une erreur est survenue lors de la modification du panier, merci de contacter un administrateur.`,
+          'Une erreur est survenue lors de la modification du panier, merci de contacter un administrateur.',
         )
         throw new Error()
       }
@@ -115,7 +109,7 @@ export const useCartStore = defineStore({
         await CartHttpClient.get().deleteProductFromCartAsBuyer(id)
       } catch (error) {
         notifyError(
-          `Une erreur est survenue lors de la modification du panier, merci de contacter un administrateur.`,
+          'Une erreur est survenue lors de la modification du panier, merci de contacter un administrateur.',
         )
         throw new Error()
       }
@@ -127,7 +121,7 @@ export const useCartStore = defineStore({
         this.cart.billing_address = { id: data.billingAddressId }
       } catch (error) {
         notifyError(
-          `Une erreur est survenue lors du choix de l'adresse, merci de contacter un administrateur.`,
+          "Une erreur est survenue lors du choix de l'adresse, merci de contacter un administrateur.",
         )
       }
     },
@@ -136,7 +130,7 @@ export const useCartStore = defineStore({
         await CartHttpClient.get(true).updateOrderShipping(data)
       } catch (error) {
         notifyError(
-          `Une erreur est survenue lors du choix de la méthode de livraison, merci de contacter un administrateur.`,
+          'Une erreur est survenue lors du choix de la méthode de livraison, merci de contacter un administrateur.',
         )
       }
     },
@@ -150,7 +144,7 @@ export const useCartStore = defineStore({
         })
       } catch (error) {
         notifyError(
-          `Une erreur est survenue lors du choix de la méthode de paiement, merci de contacter un administrateur.`,
+          'Une erreur est survenue lors du choix de la méthode de paiement, merci de contacter un administrateur.',
         )
       }
     },
@@ -172,7 +166,7 @@ export const useCartStore = defineStore({
         })
       } catch (error) {
         notifyError(
-          `Une erreur est survenue lors de la sauvegarde de vos informations, merci de contacter un administrateur.`,
+          'Une erreur est survenue lors de la sauvegarde de vos informations, merci de contacter un administrateur.',
         )
         throw error?.response?.data?.errors
       }
@@ -182,7 +176,7 @@ export const useCartStore = defineStore({
         return await CartHttpClient.get().findCartById(id)
       } catch (error) {
         notifyError(
-          `Une erreur est survenue, merci de contacter un administrateur.`,
+          'Une erreur est survenue, merci de contacter un administrateur.',
         )
       }
     },
@@ -192,7 +186,7 @@ export const useCartStore = defineStore({
           await CartHttpClient.get().getCartShippingMethods(cartId)
       } catch (error) {
         notifyError(
-          `Une erreur est survenue lors du chargement des méthodes de livraison, merci de contacter un administrateur.`,
+          'Une erreur est survenue lors du chargement des méthodes de livraison, merci de contacter un administrateur.',
         )
       }
     },
@@ -202,7 +196,7 @@ export const useCartStore = defineStore({
           await CompanyHttpClient.get().getExistingMandates()
       } catch (error) {
         notifyError(
-          `Une erreur est survenue lors du chargement des mandats, merci de contacter un administrateur.`,
+          'Une erreur est survenue lors du chargement des mandats, merci de contacter un administrateur.',
         )
       }
     },
@@ -247,6 +241,7 @@ export const useCartStore = defineStore({
       )
     },
     showMandatAdminPayment(): boolean {
+      const channelStore = useChannelStore()
       return (
         !!this.mandatAdminPaymentMethod &&
         channelStore.isAllowedToShow('HAS_MANDAT_ADMIN_PAYMENT')

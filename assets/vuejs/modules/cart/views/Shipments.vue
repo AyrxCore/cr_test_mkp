@@ -34,6 +34,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
+import { useHead } from '@unhead/vue'
 
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
@@ -43,7 +44,7 @@ import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 
 import { useCartStore } from '@/vuejs/stores/cart'
 import { PageList } from '@/vuejs/router'
-import { notifyError, setHeadTitle } from '@/vuejs/services/utils'
+import { notifyError } from '@/vuejs/services/utils'
 
 const router = useRouter()
 const cartStore = useCartStore()
@@ -76,7 +77,10 @@ const goToPayment = async (): Promise<void> => {
   router.push({ name: PageList.CART_PAYMENT })
 }
 
-setHeadTitle('Livraison | QANTIS Marketplace')
+useHead({
+  title: 'Livraison | QANTIS Marketplace',
+  meta: [{ property: 'og:title', content: 'Livraison | QANTIS Marketplace' }],
+})
 </script>
 
 <style scoped></style>

@@ -83,7 +83,9 @@ class AccordValidationService
         if (empty($partnerAccords)) {
             $io->warning("⚠️  Aucun accord trouvé pour le partner {$partner->getName()}");
         } else {
-            $accordNames = \array_map(function ($accord) { return $accord->getName(); }, $partnerAccords);
+            $accordNames = \array_map(function ($accord) {
+                return $accord->getName();
+            }, $partnerAccords);
             $io->text('✓ '.\count($partnerAccords).' accord(s) du partner seront marqués hasStore=true : '.\implode(', ', $accordNames));
         }
 

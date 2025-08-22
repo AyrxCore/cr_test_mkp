@@ -1,9 +1,7 @@
 import { defineStore } from 'pinia'
 import { AlertStoreState, AlertType } from '@/vuejs/types/Alert'
 
-export const useAlertStore = defineStore({
-  id: 'alert',
-
+export const useAlertStore = defineStore('alert', {
   state: (): AlertStoreState => ({
     show: false,
     message: '',

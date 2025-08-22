@@ -13,10 +13,7 @@ import {
   HOME_PRODUCTS_SELECTION_PROPERTY,
 } from '@/vuejs/services/const'
 
-const commonStore = useCommonStore()
-
-export const useChannelStore = defineStore({
-  id: 'channel',
+export const useChannelStore = defineStore('channel', {
   state: (): ChannelStoreState => ({
     currentChannel: null,
   }),
@@ -27,6 +24,7 @@ export const useChannelStore = defineStore({
         const channel: Channel =
           await ChannelHttpClient.get().getChannelByHost(hostname)
 
+        const commonStore = useCommonStore()
         commonStore.setChannelCode(channel.code)
 
         this.currentChannel = {

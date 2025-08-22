@@ -17,8 +17,8 @@ class CartService
     #[Required]
     public EntityManagerInterface $em;
 
-    public function __construct(
-    ) {
+    public function __construct()
+    {
     }
 
     public function processCartSavings(array $cart): void

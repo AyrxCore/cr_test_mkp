@@ -1,9 +1,9 @@
-@import 'node_modules/tailwindcss/base';
-@import 'node_modules/tailwindcss/components';
-@import 'node_modules/tailwindcss/utilities';
-@import 'form';
-@import 'tabs';
-@import 'map';
+@use 'tailwindcss/base';
+@use 'tailwindcss/components';
+@use 'tailwindcss/utilities';
+@use 'form';
+@use 'tabs';
+@use 'map';
 
 @font-face {
   font-family: 'CoText';

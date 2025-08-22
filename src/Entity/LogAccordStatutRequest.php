@@ -9,7 +9,6 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\Entity(repositoryClass: LogAccordStatutRequestRepository::class)]
 class LogAccordStatutRequest
 {
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -65,5 +64,4 @@ class LogAccordStatutRequest
 
         return $this;
     }
-
 }

@@ -2,8 +2,6 @@
 
 namespace App\Events;
 
-
-
 use App\Entity\Account;
 use Symfony\Contracts\EventDispatcher\Event;
 

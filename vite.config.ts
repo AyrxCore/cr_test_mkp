@@ -3,6 +3,9 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import pkg from './package.json'
 import { resolve } from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const twigRefreshPlugin = {
   name: 'twig-refresh',
@@ -10,9 +13,7 @@ const twigRefreshPlugin = {
     watcher.add(resolve('../templates/**/*.twig'))
     watcher.on('change', function (path) {
       if (path.endsWith('.twig')) {
-        ws.send({
-          type: 'full-reload',
-        })
+        ws.send({ type: 'full-reload' })
       }
     })
   },
@@ -29,34 +30,18 @@ export default defineConfig({
   plugins: [twigRefreshPlugin, vue()],
   server: {
     port: 3003,
-    watch: {
-      disableGlobbing: false,
-    },
-    hmr: {
-      protocol: 'ws',
-      host: 'localhost',
-      port: 3003,
-    },
+    watch: { disableGlobbing: false },
+    hmr: { protocol: 'ws', host: 'localhost', port: 3003 },
   },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './assets'),
-    },
-  },
+  resolve: { alias: { '@': path.resolve(__dirname, './assets') } },
   build: {
     manifest: true,
     assetsDir: '',
     outDir: '../public/assets/',
     rollupOptions: {
-      output: {
-        manualChunks: undefined,
-      },
-      input: {
-        'main.ts': './assets/main.ts',
-      },
+      output: { manualChunks: undefined },
+      input: { 'main.ts': './assets/main.ts' },
     },
   },
-  define: {
-    __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
-  },
+  define: { __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false },
 })

@@ -16,7 +16,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class AddUserCommand extends Command
 {
-
     public function __construct(private UserService $userService)
     {
         parent::__construct();
@@ -40,5 +39,4 @@ class AddUserCommand extends Command
 
         return Command::SUCCESS;
     }
-
 }

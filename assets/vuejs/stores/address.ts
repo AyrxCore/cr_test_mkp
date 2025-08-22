@@ -19,8 +19,7 @@ import {
   setAddressForUpdate,
 } from '@/vuejs/services/company'
 
-export const useAddressStore = defineStore({
-  id: 'address',
+export const useAddressStore = defineStore('address', {
   state: (): AddressStoreState => ({
     addresses: [],
     currentAddress: null,

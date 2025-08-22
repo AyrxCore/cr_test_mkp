@@ -11,9 +11,7 @@ export interface ExpertContentStoreState {
   slug: string
 }
 
-export const useExpertContentStore = defineStore({
-  id: 'expertContent',
-
+export const useExpertContentStore = defineStore('expertContent', {
   state: (): ExpertContentStoreState => ({
     categories: [],
     expertContents: [],

@@ -4,12 +4,9 @@ import SellerHttpClient from '@/vuejs/services/httpclient/SellerHttpClient'
 import { notifyError } from '@/vuejs/services/utils'
 import { useChannelStore } from '@/vuejs/stores/channel'
 
-export const SELLER_IDS = {
-  KROMM: 26,
-}
+export const SELLER_IDS = { KROMM: 26 }
 
-export const useSellerStore = defineStore({
-  id: 'seller',
+export const useSellerStore = defineStore('seller', {
   state: (): SellerStoreState => ({
     allSellers: [],
     sellersByParams: [],
@@ -36,7 +33,7 @@ export const useSellerStore = defineStore({
         return this.allSellers
       } catch (error) {
         notifyError(
-          `Une erreur est survenue lors du chargement des vendeurs, merci de contacter un administrateur.`,
+          'Une erreur est survenue lors du chargement des vendeurs, merci de contacter un administrateur.',
         )
       }
     },
@@ -54,7 +51,7 @@ export const useSellerStore = defineStore({
         return this.sellersByParams[paramKey]
       } catch (error) {
         notifyError(
-          `Une erreur est survenue lors du chargement des vendeurs, merci de contacter un administrateur.`,
+          'Une erreur est survenue lors du chargement des vendeurs, merci de contacter un administrateur.',
         )
       }
     },
@@ -72,7 +69,7 @@ export const useSellerStore = defineStore({
         return await SellerHttpClient.get().fetchSellersByParams(params)
       } catch (error) {
         notifyError(
-          `Une erreur est survenue lors du chargement des vendeurs, merci de contacter un administrateur.`,
+          'Une erreur est survenue lors du chargement des vendeurs, merci de contacter un administrateur.',
         )
       }
     },

@@ -11,8 +11,7 @@ export interface SavedCartStoreState {
   savedCarts?: SavedCart[]
 }
 
-export const useSavedCartStore = defineStore({
-  id: 'savedCart',
+export const useSavedCartStore = defineStore('savedCart', {
   state: (): SavedCartStoreState => ({
     savedCarts: [],
   }),

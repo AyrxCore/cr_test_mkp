@@ -6,9 +6,7 @@ export interface BannerSearchStoreState {
   bannersSearch: BannerSearch[]
 }
 
-export const useBannerSearchStore = defineStore({
-  id: 'bannerSearch',
-
+export const useBannerSearchStore = defineStore('bannerSearch', {
   state: (): BannerSearchStoreState => ({
     bannersSearch: [],
   }),

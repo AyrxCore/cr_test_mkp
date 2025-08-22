@@ -1,6 +1,5 @@
 import { notify } from 'notiwind'
 import Cookies from 'js-cookie'
-import { useHead } from '@unhead/vue'
 
 import { Address } from '../types/Address'
 import imgDefault from '@/vuejs/assets/img/default-image.png'
@@ -40,26 +39,13 @@ export function getUrlParam(name: string): string | null {
 
 export function notifyError(text: string, time: number = 10000): void {
   notify(
-    {
-      group: 'notif',
-      type: 'error',
-      title: 'Une erreur est survenue',
-      text,
-    },
+    { group: 'notif', type: 'error', title: 'Une erreur est survenue', text },
     time,
   )
 }
 
 export function notifySuccess(text: string, time: number = 10000): void {
-  notify(
-    {
-      group: 'notif',
-      type: 'success',
-      title: 'Succès !',
-      text,
-    },
-    time,
-  )
+  notify({ group: 'notif', type: 'success', title: 'Succès !', text }, time)
 }
 
 export function arrayEqual(arr1, arr2): boolean {
@@ -123,17 +109,4 @@ export function getCookie(name: string | undefined): string | undefined {
   }
 
   return Cookies.get(name)
-}
-
-export function setHeadTitle(title: string): void {
-  useHead({
-    title: title,
-
-    meta: [
-      {
-        property: 'og:title',
-        content: title,
-      },
-    ],
-  })
 }

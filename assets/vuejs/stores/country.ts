@@ -7,8 +7,7 @@ import { CountryStoreState } from '@/vuejs/types/Country'
 import CountryHttpClient from '@/vuejs/services/httpclient/CountryHttpClient'
 import { SelectOption } from '@/vuejs/types/Select'
 
-export const useCountryStore = defineStore({
-  id: 'country',
+export const useCountryStore = defineStore('country', {
   state: (): CountryStoreState => ({
     countries: [],
   }),
@@ -28,10 +27,7 @@ export const useCountryStore = defineStore({
     },
     getCountriesForSelect(): SelectOption[] {
       return this.countries.map((country) => {
-        return {
-          label: country.name,
-          value: country.id,
-        }
+        return { label: country.name, value: country.id }
       })
     },
   },

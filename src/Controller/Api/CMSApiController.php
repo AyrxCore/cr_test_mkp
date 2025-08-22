@@ -2,7 +2,6 @@
 
 namespace App\Controller\Api;
 
-
 use App\Service\UpplerPageService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;

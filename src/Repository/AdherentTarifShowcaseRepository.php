@@ -20,5 +20,4 @@ class AdherentTarifShowcaseRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, AdherentTarifShowcase::class);
     }
-
 }

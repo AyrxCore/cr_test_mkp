@@ -4,8 +4,7 @@ import OrderHttpClient from '@/vuejs/services/httpclient/OrderHttpClient'
 import { AlertType } from '@/vuejs/types/Alert'
 import { useAlertStore } from '@/vuejs/stores/alert'
 
-export const useOrderStore = defineStore({
-  id: 'order',
+export const useOrderStore = defineStore('order', {
   state: (): OrderStoreState => ({
     orders: [],
   }),

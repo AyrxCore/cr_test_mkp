@@ -5,8 +5,7 @@ import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
 import { getErrorMessage } from '@/vuejs/services/login'
 import CmsHttpClient from '@/vuejs/services/httpclient/CmsHttpClient'
 
-export const useCmsStore = defineStore({
-  id: 'cms',
+export const useCmsStore = defineStore('cms', {
   state: () => ({}),
 
   actions: {

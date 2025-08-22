@@ -6,9 +6,7 @@ export interface SemanticButtonsStoreState {
   semanticButtonsConfig: SemanticButton[]
 }
 
-export const useSemanticButtonsStore = defineStore({
-  id: 'semanticButtons',
-
+export const useSemanticButtonsStore = defineStore('semanticButtons', {
   state: (): SemanticButtonsStoreState => ({
     semanticButtonsConfig: [],
   }),

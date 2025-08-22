@@ -28,7 +28,6 @@ readonly class AdherentPersistProcessor implements ProcessorInterface
 
         $this->accordStatutService->processAccordStatutAttachments($data->getAttachments(), $adherent);
         $this->tarifShowcaseService->processTarifShowcases($data->getTarifShowcases(), $adherent);
-
     }
 
     private function getAdherent(Uuid $adherentId): Adherent

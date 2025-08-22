@@ -9,9 +9,7 @@
           OPTIONAL_FRONT_BLOCKS.BANNER_FLASH_HOMEPAGE,
         )
       "
-      :style="{
-        color: betterTextColor('primary'),
-      }"
+      :style="{ color: betterTextColor('primary') }"
       class="bg-primary p-4 text-center"
     >
       <p class="text-sm md:w-auto md:text-base lg:text-lg">
@@ -35,9 +33,7 @@
       @click="toTop"
     >
       <ChevronDownIconComponent
-        :style="{
-          color: betterTextColor('secondary'),
-        }"
+        :style="{ color: betterTextColor('secondary') }"
         class="rotate-180"
       />
     </div>
@@ -47,8 +43,9 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onBeforeMount, onMounted, reactive, watch } from 'vue'
+import { computed, onBeforeMount, onMounted, reactive } from 'vue'
 import { storeToRefs } from 'pinia'
+import { useHead } from '@unhead/vue'
 
 import HeaderSharedComponent from '@/vuejs/modules/shared/HeaderSharedComponent.vue'
 import FooterSharedComponent from '@/vuejs/modules/shared/FooterSharedComponent.vue'
@@ -56,7 +53,7 @@ import ChevronDownIconComponent from '@/vuejs/modules/shared/icon/ChevronDownIco
 
 import { useBannerStore } from '@/vuejs/stores/banner'
 import { useChannelStore } from '@/vuejs/stores/channel'
-import { betterTextColor, setHeadTitle } from '@/vuejs/services/utils'
+import { betterTextColor } from '@/vuejs/services/utils'
 import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
 import { useUserStore } from '@/vuejs/stores/user'
 
@@ -68,11 +65,7 @@ const userStore = useUserStore()
 let broadcastChannel = null
 
 const props = defineProps({
-  title: {
-    required: false,
-    type: String,
-    default: '',
-  },
+  title: { required: false, type: String, default: '' },
 })
 
 onBeforeMount(() => {
@@ -89,11 +82,17 @@ onMounted(() => {
 
 const scTimer = reactive({ value: null })
 const scY = reactive({ value: 0 })
+
 const pageTitle = computed((): string => {
   return (
     (props.title.length && `${props.title} | ${channel.value.name}`) ||
     channel.value.name
   )
+})
+
+useHead({
+  title: pageTitle,
+  meta: computed(() => [{ property: 'og:title', content: pageTitle.value }]),
 })
 
 const handleScroll = () => {
@@ -106,10 +105,7 @@ const handleScroll = () => {
 }
 
 const toTop = () => {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth',
-  })
+  window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
 const handleBeforeUnload = (event) => {
@@ -128,12 +124,4 @@ const handleLogout = async () => {
     window.location.reload()
   }
 }
-
-watch(
-  () => pageTitle.value,
-  () => {
-    setHeadTitle(pageTitle.value)
-  },
-  { immediate: true },
-)
 </script>

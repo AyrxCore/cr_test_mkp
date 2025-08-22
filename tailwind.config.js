@@ -3,15 +3,11 @@ const defaultTheme = require('tailwindcss/defaultTheme')
 const colors = require('tailwindcss/colors')
 
 module.exports = {
-  mode: 'jit',
-  content: {
-    enabled: process.env.NODE_ENV === 'production',
-    content: [
-      './assets/**/*.{vue,ts}',
-      './src/**/*.{html,js}',
-      './templates/**/*.html.twig',
-    ],
-  },
+  content: [
+    './assets/**/*.{vue,ts}',
+    './src/**/*.{html,js}',
+    './templates/**/*.html.twig',
+  ],
   theme: {
     extend: {
       // here's how to extend fonts if needed
@@ -43,7 +39,6 @@ module.exports = {
   },
   plugins: [
     require('@tailwindcss/aspect-ratio'),
-    require('@tailwindcss/line-clamp'),
     require('@tailwindcss/typography'),
     require('@tailwindcss/forms'),
     plugin(function ({ addVariant, e, postcss }) {
@@ -62,5 +57,10 @@ module.exports = {
       })
     }),
   ],
-  safelist: ['bg-gray-100'],
+  safelist: [
+    {
+      pattern: /^bg-gray-100$/,
+      variants: ['hover', 'even'],
+    },
+  ],
 }

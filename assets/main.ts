@@ -8,7 +8,7 @@ globalThis.L = L
 import 'leaflet/dist/leaflet.css'
 import 'vue-leaflet-markercluster/dist/style.css'
 
-import { createHead } from '@unhead/vue'
+import { createHead } from '@unhead/vue/client'
 import { createApp } from 'vue'
 import App from './vuejs/App.vue'
 import router from '@/vuejs/router'
@@ -41,9 +41,7 @@ if (twigEntryPoint) {
   app.use(store).directive('click-outside', clickOutside)
   app.use(router)
   app.use(head)
-  app.use(VueUniversalModal, {
-    teleportTarget: '#modals',
-  })
+  app.use(VueUniversalModal, { teleportTarget: '#modals' })
   app.use(FloatingVue)
   app.mount('#app')
 }

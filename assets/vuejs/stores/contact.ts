@@ -8,8 +8,7 @@ export interface ContactStoreState {
   motifs?: []
 }
 
-export const useContactStore = defineStore({
-  id: 'contact',
+export const useContactStore = defineStore('contact', {
   state: (): ContactStoreState => ({
     contact: {
       lastName: null,
