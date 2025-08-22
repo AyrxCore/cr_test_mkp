@@ -2,8 +2,12 @@ when@prod:
   sentry:
     dsn: '%env(SENTRY_DSN)%'
     options:
-      integrations:
-        - 'Sentry\Integration\IgnoreErrorsIntegration'
+      ignore_exceptions:
+        - 'Symfony\Component\ErrorHandler\Error\FatalError'
+        - 'Symfony\Component\Debug\Exception\FatalErrorException'
+        - 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException'
+        - 'Symfony\Component\Security\Core\Exception\AuthenticationException'
+        - 'App\Exception\AutoLoginException'
       send_default_pii: true
     tracing:
       enabled: false
