@@ -2,10 +2,7 @@
   <div class="relative" :class="{ 'rounded-md': !isMobile }">
     <slot name="title" />
 
-    <AddressSearchComponent
-      v-if="isGeolocationActive"
-      :class="[isMobile ? 'mb-4' : 'absolute left-4 top-4 z-[15] md:block']"
-    />
+    <AddressSearchComponent v-if="isGeolocationActive" class="mb-4" />
 
     <div class="relative">
       <BaseMap

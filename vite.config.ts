@@ -30,6 +30,7 @@ export default defineConfig({
   plugins: [twigRefreshPlugin, vue()],
   server: {
     port: 3003,
+    cors: true,
     watch: { disableGlobbing: false },
     hmr: { protocol: 'ws', host: 'localhost', port: 3003 },
   },
