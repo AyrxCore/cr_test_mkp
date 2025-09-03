@@ -117,6 +117,7 @@ const onTermsChange = (): void => {
 
 const validateCgu = (): void => {
   orderTermsOfSales.value = true
+  onTermsChange()
   showTos.value = false
 }
 </script>
