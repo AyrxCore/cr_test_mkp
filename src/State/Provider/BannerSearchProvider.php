@@ -9,7 +9,6 @@ use ApiPlatform\State\ProviderInterface;
 use App\Dto\BannerSearch;
 use App\Factory\BannerSearchFactory;
 use App\Service\UpplerDynamicEntityService;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 readonly class BannerSearchProvider implements ProviderInterface
 {
@@ -19,7 +18,7 @@ readonly class BannerSearchProvider implements ProviderInterface
     ) {
     }
 
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
     {
         $dynamicEntityConfigurationId = BannerSearch::DYNAMIC_CONFIG_ID;
 
@@ -29,15 +28,11 @@ readonly class BannerSearchProvider implements ProviderInterface
             (string) $dynamicEntityConfigurationId
         );
 
-        if (\count($entitiesBannerSearch)) {
-            $bannersSearch = [];
-            foreach ($entitiesBannerSearch as $entity) {
-                $bannersSearch[] = $this->bannerSearchFactory->create($entity);
-            }
-
-            return $bannersSearch;
+        $bannersSearch = [];
+        foreach ($entitiesBannerSearch as $entity) {
+            $bannersSearch[] = $this->bannerSearchFactory->create($entity);
         }
 
-        throw new NotFoundHttpException('Not Found');
+        return $bannersSearch;
     }
 }

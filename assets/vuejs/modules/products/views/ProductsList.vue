@@ -262,10 +262,13 @@ watch(
   ],
   () => {
     const queryValue = { ...route.query }
+
     searchTerms.value ? (queryValue.q = searchTerms.value) : delete queryValue.q
+
     selectedCategoryId.value
       ? (queryValue.category = selectedCategoryId.value)
       : delete queryValue.category
+
     selectedCompanyId.value
       ? (queryValue.company = selectedCompanyId.value)
       : delete queryValue.company
@@ -311,7 +314,7 @@ watch(
       if (!routeObject.company) {
         allowBannerSearch.value = true
         if (bannerSearchStore.bannersSearch.length === 0) {
-          await bannerSearchStore.init()
+          bannerSearchStore.init()
         }
       }
     }
