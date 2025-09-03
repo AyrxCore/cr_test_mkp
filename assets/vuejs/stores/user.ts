@@ -16,6 +16,7 @@ import { notifyError, notifySuccess } from '@/vuejs/services/utils'
 import { getCookie } from '@/vuejs/services/utils'
 import UserHttpClient from '@/vuejs/services/httpclient/UserHttpClient'
 import { getErrorMessage } from '@/vuejs/services/login'
+import { useCartStore } from './cart'
 
 export const useUserStore = defineStore('user', {
   state: (): UserStoreState => ({
@@ -115,6 +116,15 @@ export const useUserStore = defineStore('user', {
           'Une erreur est survenue, veuillez contacter le service technique',
         )
       }
+    },
+    updateCartAddressesWithDefault(): void {
+      const cartStore = useCartStore()
+      cartStore.updateCartAddress({
+        cartId: cartStore.cart.id,
+        billingAddressId: this.user.externalApiData.subaccount.billing_address,
+        shippingAddressId:
+          this.user.externalApiData.subaccount.shipping_address,
+      })
     },
     async updateUserAccountEmail(): Promise<void> {
       try {

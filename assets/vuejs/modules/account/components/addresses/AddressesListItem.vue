@@ -43,9 +43,7 @@
 import { computed, PropType, ref } from 'vue'
 import router from '@/vuejs/router'
 import { storeToRefs } from 'pinia'
-import EditIconComponent from '@/vuejs/modules/shared/icon/EditIconComponent.vue'
-import StarIconComponent from '@/vuejs/modules/shared/icon/StarIconComponent.vue'
-import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
+
 import { Address } from '@/vuejs/types/Address'
 import { AccountPageList } from '@/vuejs/router/pages-list'
 import { useUserStore } from '@/vuejs/stores/user'
@@ -53,6 +51,10 @@ import { useAddressStore } from '@/vuejs/stores/address'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { ADDRESS_BILLING, ADDRESS_SHIPPING } from '@/vuejs/services/const'
+
+import EditIconComponent from '@/vuejs/modules/shared/icon/EditIconComponent.vue'
+import StarIconComponent from '@/vuejs/modules/shared/icon/StarIconComponent.vue'
+import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 
 const userStore = useUserStore()
 const addressStore = useAddressStore()
@@ -104,6 +106,7 @@ const onDefaultAdressSelect = async (e: Event) => {
     await userStore.updateUserDefaultShippingAddress(props.address.id)
   }
   isItemLoading.value = false
+  userStore.updateCartAddressesWithDefault()
   const gaEventName =
     props.type === ADDRESS_BILLING
       ? 'click_adresse_default_billing'
