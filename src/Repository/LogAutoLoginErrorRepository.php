@@ -26,10 +26,10 @@ class LogAutoLoginErrorRepository extends ServiceEntityRepository
 
     public function save(LogAutoLoginError $logAutoLoginException, bool $flush = true): void
     {
-        $this->_em->persist($logAutoLoginException);
+        $this->getEntityManager()->persist($logAutoLoginException);
 
         if ($flush) {
-            $this->_em->flush();
+            $this->getEntityManager()->flush();
         }
     }
 
