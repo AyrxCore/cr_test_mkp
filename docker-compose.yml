@@ -86,7 +86,7 @@ services:
       - dev-qantis
 
   db:
-    image: postgres:14
+    image: postgres:17.5
     hostname: db-mkp
     environment:
       POSTGRES_PASSWORD: password
