@@ -24,6 +24,7 @@
       Tous les partenaires
     </RouterLink>
     <div
+      v-if="isLoaded"
       class="sr-only flex items-center justify-around lg:not-sr-only lg:w-fit"
     >
       <RouterLink
@@ -43,6 +44,27 @@
       >
         {{ category.name }}
       </RouterLink>
+      <RouterLink
+        v-if="sustainableCategoryUi"
+        :to="{
+          name: ProductPageList.PRODUCTS,
+          query: { category: SUSTAINABLE_PURCHASES_CATEGORY_ID },
+        }"
+        class="ml-3 inline-flex items-center border-b-2 border-b-transparent px-0.5 text-center text-sm last:mr-3 hover:border-green-qantis xl:ml-6 xl:last:mr-6"
+        :class="sustainableCategoryUi?.textClass"
+        replace
+        @click="
+          sendGaEvent('click_header_category', {
+            category_name: 'Achats durables',
+          })
+        "
+      >
+        <component
+          :is="sustainableCategoryUi?.icon"
+          class="mr-1 h-[1em] w-[1em] shrink-0 align-middle"
+        />
+        Achats durables
+      </RouterLink>
     </div>
   </div>
 </template>
@@ -52,20 +74,24 @@ import { computed, ref } from 'vue'
 
 import { storeToRefs } from 'pinia'
 
-import MenuCategoryComponent from '@/vuejs/modules/shared/header-component/MenuCategoryComponent.vue'
-import MenuIconComponent from '@/vuejs/modules/shared/icon/MenuIconComponent.vue'
-
 import { ProductPageList } from '@/vuejs/router/pages-list'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { useCategoryStore } from '@/vuejs/stores/category'
 import { useChannelStore } from '@/vuejs/stores/channel'
-
+import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { Category } from '@/vuejs/types/Product/Category'
+
+import {
+  CATEGORY_CONFIGS,
+  CategoryConfig,
+  SUSTAINABLE_PURCHASES_CATEGORY_ID,
+} from '@/vuejs/constants/categoryConfigs'
+import MenuCategoryComponent from '@/vuejs/modules/shared/header-component/MenuCategoryComponent.vue'
+import MenuIconComponent from '@/vuejs/modules/shared/icon/MenuIconComponent.vue'
 
 const isMenuOpen = ref<boolean>(false)
 
 const { channel } = storeToRefs(useChannelStore())
-const { categories } = storeToRefs(useCategoryStore())
+const { categories, isLoaded } = storeToRefs(useCategoryStore())
 
 const toggleMenu = (): void => {
   isMenuOpen.value = !isMenuOpen.value
@@ -77,7 +103,6 @@ const listMenu = computed((): Category[] => {
   const categoryIds = customCategories
     ? customCategories.split(',').map(Number)
     : []
-
   if (categoryIds.length) {
     const filteredCategories = categories.value.filter((category: Category) =>
       categoryIds.includes(category.id),
@@ -89,5 +114,12 @@ const listMenu = computed((): Category[] => {
   }
 
   return categories.value.slice(0, 6)
+})
+
+const sustainableCategoryUi = computed((): CategoryConfig | null => {
+  const hasAccess = categories.value.some(
+    (c: Category) => c.id === SUSTAINABLE_PURCHASES_CATEGORY_ID,
+  )
+  return hasAccess ? CATEGORY_CONFIGS[SUSTAINABLE_PURCHASES_CATEGORY_ID] : null
 })
 </script>

@@ -62,12 +62,14 @@
 </template>
 <script lang="ts" setup>
 import { computed, onBeforeMount, onUnmounted, PropType, ref } from 'vue'
+
 import { ProductPageList } from '@/vuejs/router/pages-list'
+import { Product } from '@/vuejs/types/Product'
+
 import AddFavoriteComponent from '@/vuejs/modules/products/components/AddFavoriteComponent.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import LeafIconComponent from '@/vuejs/modules/shared/icon/LeafIconComponent.vue'
 import InformationIconComponent from '@/vuejs/modules/shared/icon/InformationIconComponent.vue'
-import { Product } from '@/vuejs/types/Product'
 
 const emit = defineEmits(['scroll-to'])
 

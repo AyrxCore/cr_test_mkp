@@ -4,11 +4,13 @@ import { Category } from '@/vuejs/types/Product/Category'
 
 export interface CategoryStoreState {
   categories: []
+  isLoaded: boolean
 }
 
 export const useCategoryStore = defineStore('category', {
   state: (): CategoryStoreState => ({
     categories: [],
+    isLoaded: false,
   }),
 
   actions: {
@@ -17,8 +19,10 @@ export const useCategoryStore = defineStore('category', {
         if (this.categories.length === 0) {
           this.categories = await CategoryHttpClient.get().getCategories()
         }
-      } catch (error) {
+      } catch {
         return []
+      } finally {
+        this.isLoaded = true
       }
     },
   },

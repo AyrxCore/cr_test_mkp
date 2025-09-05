@@ -6,8 +6,17 @@
     <component
       :is="category.children.length > 0 ? 'span' : 'RouterLink'"
       :to="{ name: ProductPageList.PRODUCTS, query: { category: category.id } }"
+      :class="[
+        categoryConfig?.textClass,
+        { 'inline-flex items-center': !!categoryConfig?.icon },
+      ]"
       replace
     >
+      <component
+        v-if="categoryConfig?.icon"
+        :is="categoryConfig.icon"
+        class="mr-2 h-4 w-4"
+      />
       {{ category.name }}
     </component>
     <Chevron2RightIconComponent
@@ -27,11 +36,18 @@
     />
   </div>
 </template>
+
 <script lang="ts" setup>
-import { PropType, ref } from 'vue'
-import Chevron2RightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
+import { PropType, ref, computed } from 'vue'
+
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import { Category } from '@/vuejs/types/Product/Category'
+
+import {
+  CATEGORY_CONFIGS,
+  CategoryConfig,
+} from '@/vuejs/constants/categoryConfigs'
+import Chevron2RightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
 
 const props = defineProps({
   category: {
@@ -43,6 +59,10 @@ const props = defineProps({
 const emit = defineEmits(['selectCategory', 'closeMenu'])
 
 const showChildren = ref<boolean>(false)
+
+const categoryConfig = computed(
+  (): CategoryConfig => CATEGORY_CONFIGS[props.category.id],
+)
 
 const selectCategory = () => {
   if (props.category.children.length > 0) {
