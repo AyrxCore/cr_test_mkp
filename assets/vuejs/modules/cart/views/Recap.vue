@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-8 mb-2 flex items-center justify-between">
+  <div class="mb-2 mt-8 flex items-center justify-between">
     <h3 class="text-title-primary">
       Panier
       <span class="uppercase">{{ user.externalApiData.buyer.name }}</span>
@@ -59,24 +59,25 @@
     </CartRightSideComponent>
   </div>
 </template>
+
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { onMounted, ref } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 
-import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
+import { CartPageList } from '@/vuejs/router/pages-list'
+import { useCartStore } from '@/vuejs/stores/cart'
+import { useUserStore } from '@/vuejs/stores/user'
+import { useSavedCartStore } from '@/vuejs/stores/savedCart'
+import { useChannelStore } from '@/vuejs/stores/channel'
+import { formatCartItemsGtmEvent, sendGtmEvent } from '@/vuejs/services/gtm'
+import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
+
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import CartOrderComponent from '@/vuejs/modules/cart/components/CartOrderComponent.vue'
 import CartRightSideComponent from '@/vuejs/modules/cart/components/CartRightSideComponent.vue'
 import SavedCartModal from '@/vuejs/modules/account/components/savedCart/SavedCartModal.vue'
-
-import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
-import { CartPageList } from '@/vuejs/router/pages-list'
-import { useCartStore } from '@/vuejs/stores/cart'
-import { gtmCartTrackingEvent } from '@/vuejs/modules/cart'
-import { useUserStore } from '@/vuejs/stores/user'
-import { useSavedCartStore } from '@/vuejs/stores/savedCart'
-import { useChannelStore } from '@/vuejs/stores/channel'
+import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 
 const router = useRouter()
 const cartStore = useCartStore()
@@ -98,13 +99,17 @@ const goToAdress = async (): Promise<void> => {
   if (!cartStore.hasAllTermsChecked) {
     error.value = 'Veuillez accepter les conditions générales'
   } else {
-    await gtmCartTrackingEvent('begin_checkout', cart.value)
     router.push({ name: CartPageList.CART_ADDRESSES })
   }
 }
 
-onMounted(async () => {
-  await gtmCartTrackingEvent('view_cart', cart.value)
+onMounted(() => {
+  sendGtmEvent('view_cart', {
+    ecommerce: {
+      currency: 'EUR',
+      items: formatCartItemsGtmEvent(cart.value),
+    },
+  })
 })
 
 const openSaveCartForm = () => {
@@ -122,5 +127,3 @@ const onSubmitSavedCart = async (event) => {
   isLoading.value = false
 }
 </script>
-
-<style lang="postcss"></style>

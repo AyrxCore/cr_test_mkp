@@ -3,7 +3,11 @@
     <RouterLink
       :to="{ name: PageList.HOME_PAGE }"
       class="flex justify-center text-xl font-bold"
-      @click="sendGaEvent('click_header_logo')"
+      @click="
+        sendGtmEvent('logo_click', {
+          origin_url: router.currentRoute.value.fullPath,
+        })
+      "
     >
       <div class="flex max-w-[125px] items-center md:max-w-[175px]">
         <img :src="primaryLogo" alt="Logo" />
@@ -19,13 +23,14 @@
 </template>
 
 <script lang="ts" setup>
-import { getImage } from '@/vuejs/services/utils'
-import { PageList } from '@/vuejs/router'
+import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
+
+import router, { PageList } from '@/vuejs/router'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { useUserStore } from '@/vuejs/stores/user'
-import { storeToRefs } from 'pinia'
-import { computed } from 'vue'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import { getImage } from '@/vuejs/services/utils'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
 
 const channelStore = useChannelStore()
 const userStore = useUserStore()

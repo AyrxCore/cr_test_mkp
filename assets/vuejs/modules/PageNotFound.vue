@@ -10,8 +10,8 @@
             La page que vous recherchez n'existe pas ou n'existe plus.
           </p>
           <RouterLink
-            class="button button-primary mb-4 mt-10 w-full md:w-auto"
             :to="{ name: PageList.HOME_PAGE }"
+            class="button button-primary mb-4 mt-10 w-full md:w-auto"
           >
             <ArrowRightIconComponent class="mr-2 w-4 stroke-white" />
             Retour à la page d'accueil
@@ -33,11 +33,6 @@
                 :accords-cadres="productsAccordsCadre?.results"
                 :loading="!productsAccordsCadre"
                 class="nav-mobile-only"
-                @click-left="sendGaEvent('click_404_slider_fat_left')"
-                @click-right="sendGaEvent('click_404_slider_fat_right')"
-                @click-cta="sendGaEvent('click_404_slider_fat_cta', $event)"
-                @click-title="sendGaEvent('click_404_slider_fat_title', $event)"
-                @click-img="sendGaEvent('click_404_slider_fat_img', $event)"
                 @show-showcase-modal="handleShowcaseModal"
               />
               <ShowcaseModal
@@ -57,18 +52,15 @@
 <script lang="ts" setup>
 import { onBeforeMount, ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
-
-import BaseTemplate from '@/vuejs/BaseTemplate.vue'
-
-import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
-import AccordsCadreComponent from '@/vuejs/modules/home/component/AccordsCadreComponent.vue'
-import ShowcaseModal from '@/vuejs/modules/home/component/ShowcaseModal.vue'
 
 import { PageList } from '@/vuejs/router'
-
 import { useProductStore } from '@/vuejs/stores/product'
 import { Product } from '@/vuejs/types/Product'
+
+import BaseTemplate from '@/vuejs/BaseTemplate.vue'
+import AccordsCadreComponent from '@/vuejs/modules/home/component/AccordsCadreComponent.vue'
+import ShowcaseModal from '@/vuejs/modules/home/component/ShowcaseModal.vue'
+import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 
 const productStore = useProductStore()
 const { productsAccordsCadre } = storeToRefs(productStore)

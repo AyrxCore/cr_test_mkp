@@ -5,8 +5,8 @@
         <slot name="logo">
           <img
             v-if="store.logo"
-            :src="store.logo"
             :alt="store.name"
+            :src="store.logo"
             class="h-12 w-auto object-contain"
           />
         </slot>
@@ -38,8 +38,8 @@
         <slot name="phone">
           <a
             v-if="store.phone"
-            :href="phoneAction.href"
             :class="phoneAction.class"
+            :href="phoneAction.href"
             @click.stop
           >
             {{ phoneAction.text }}
@@ -48,10 +48,16 @@
         <slot name="link">
           <RouterLink
             v-if="store.upplerId"
+            :class="sellerAction.class"
             :to="sellerAction.to"
             target="_blank"
-            :class="sellerAction.class"
-            @click.stop
+            @click.stop="
+              sendGtmEvent('partner_locator_cta_click', {
+                link_text: sellerAction.text,
+                link_url: router.resolve(sellerAction.to).fullPath,
+                origin_url: router.currentRoute.value.fullPath,
+              })
+            "
           >
             {{ sellerAction.text }}
           </RouterLink>
@@ -63,7 +69,10 @@
 
 <script lang="ts" setup>
 import { PropType, computed } from 'vue'
+
+import router from '@/vuejs/router'
 import { ProductPageList } from '@/vuejs/router/pages-list'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
 import { StoreData } from '@/vuejs/types/Seller'
 
 const props = defineProps({

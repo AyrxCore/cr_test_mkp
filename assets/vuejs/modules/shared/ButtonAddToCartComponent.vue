@@ -1,30 +1,30 @@
 <template>
   <ButtonComponent
-    class="button-primary"
+    :is-loading="isLoading"
     :style="{
       color: betterTextColor('primary'),
     }"
-    :is-loading="isLoading"
+    class="button-primary"
     @click="addToCart"
   >
     <ShoppingCartIconComponent
-      class="mr-2 w-4"
       :stroke="betterTextColor('primary')"
+      class="mr-2 w-4"
     />
     Ajouter
   </ButtonComponent>
 </template>
 
 <script lang="ts" setup>
+import { PropType, ref } from 'vue'
+
+import { useCartStore } from '@/vuejs/stores/cart'
+import { betterTextColor } from '@/vuejs/services/utils'
+import { Product } from '@/vuejs/types/Product'
+
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
-import { PropType, ref } from 'vue'
-import { useCartStore } from '@/vuejs/stores/cart'
-import { Product } from '@/vuejs/types/Product'
-import { addProductToCartGoogleAnalytics } from '@/vuejs/modules/products'
-import { betterTextColor } from '@/vuejs/services/utils'
 
-const cartStore = useCartStore()
 const props = defineProps({
   product: {
     required: true,
@@ -47,6 +47,8 @@ const props = defineProps({
   },
 })
 
+const cartStore = useCartStore()
+
 const isLoading = ref<boolean>(false)
 
 const addToCart = async (): Promise<void> => {
@@ -55,17 +57,9 @@ const addToCart = async (): Promise<void> => {
   try {
     await cartStore.addProductToCart(props.variantId, props.quantity)
     isLoading.value = false
-    await addProductToCartGoogleAnalytics(
-      props.product,
-      props.variantId,
-      props.quantity,
-      props.price,
-    )
   } catch (e) {
   } finally {
     isLoading.value = false
   }
 }
 </script>
-
-<style scoped></style>

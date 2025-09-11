@@ -24,18 +24,8 @@
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         var form = document.querySelector('form');
-        var btnGoBack = document.querySelector('#btn-go-back');
-        btnGoBack.addEventListener('click', function (event) {
-          event.preventDefault();
-          sendEvent('prehome_click_back');
-          if (document.getElementById('baseHtml').dataset.externalScripts === '1') {
-            sendEvent('click_prehome_back');
-          }
-          window.location.href = btnGoBack.attributes.href.value;
-        })
         form.addEventListener('submit', function (event) {
           event.preventDefault();
-          sendEvent('prehome_click_valider');
           if (document.getElementById('baseHtml').dataset.externalScripts === '1') {
             sendEvent(form.dataset.eventName);
           }
@@ -43,23 +33,6 @@
         });
 
       });
-
-      function sendEvent(event) {
-        var marketplace = {{ channel.name|json_encode|raw }};
-        var data = {
-          device: Screen.orientation > 1 ? 'phone' : 'desktop',
-          screen_size: window.innerWidth + 'x' + window.innerHeight,
-          page_url: window.location.href,
-          marketplace: marketplace,
-        };
-
-        if (!window.dataLayer) return;
-
-        window.dataLayer.push({
-          event: event,
-          ...data,
-        });
-      }
     </script>
   {% endblock %}
 {% endblock %}

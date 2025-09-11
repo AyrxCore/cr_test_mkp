@@ -16,14 +16,6 @@
         v-model="option[index]"
         class="h-[1.75rem] w-1/2 border-none p-0"
         @change="updateProductVariant"
-        @input="
-          sendGaEvent('click_product_options', {
-            product_name: product.name,
-            partner_name: product.seller.name,
-            partner_id: product.seller.id,
-            option_id: option[index],
-          })
-        "
       >
         <option v-for="child in children" :key="child.id" :value="child.id">
           {{ child.value }}
@@ -85,15 +77,14 @@
 <script lang="ts" setup>
 import { computed, onMounted, PropType, ref } from 'vue'
 
+import { useFavoriteStore } from '@/vuejs/stores/favorite'
+import { useProductStore } from '@/vuejs/stores/product'
+import { Product } from '@/vuejs/types/Product'
+
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 import ProductAddToCartComponent from '@/vuejs/modules/products/components/ProductAddToCartComponent.vue'
 import ProductQuantityComponent from '@/vuejs/modules/shared/ProductQuantityComponent.vue'
 import TruckIconComponent from '@/vuejs/modules/shared/icon/TruckIconComponent.vue'
-
-import { Product } from '@/vuejs/types/Product'
-import { useFavoriteStore } from '@/vuejs/stores/favorite'
-import { useProductStore } from '@/vuejs/stores/product'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const props = defineProps({
   product: {
@@ -116,22 +107,10 @@ const hasOptions = computed((): boolean => {
 })
 
 const updateQuantity = (event) => {
-  const gtmEventName =
-    props.product.quantity > event.quantity
-      ? 'click_product_moins_qty'
-      : 'click_product_plus_qty'
-  sendGaEvent(gtmEventName, {
-    product_name: props.product.name,
-    qty_value: event.quantity,
-  })
   props.product.quantity = event.quantity
 }
 
 const updateQuantityInput = (event) => {
-  sendGaEvent('type_product_qty', {
-    product_name: props.product.name,
-    qty_value: event.quantity,
-  })
   props.product.quantity = event.quantity
 }
 

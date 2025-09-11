@@ -35,14 +35,17 @@
       <ButtonDownloadFileWithLogo
         v-if="cta1.name && cta1.url"
         :disabled="isNeoAutoLogin"
-        :event-params="{
-          product_name: props.accordName,
-          state_rattachement: props.currentStatus.status,
-        }"
         :name="cta1.name"
         :url="formatUrlWithChannelCode(cta1.url)"
         classes="button-primary mx-auto mb-6 border-2 border-solid !border-white"
-        event-name="click_fat_cta_1"
+        @click="
+          sendGtmEvent('fat_cta_generic_click', {
+            type: 'link',
+            link_text: cta1.name,
+            link_url: formatUrlWithChannelCode(cta1.url),
+            origin_url: router.currentRoute.value.fullPath,
+          })
+        "
       />
       <a
         v-else-if="cta1.name && cta1.mailto"
@@ -51,7 +54,14 @@
         }"
         :href="cta1.mailto"
         class="button button-primary mx-auto mb-6 border-2 border-solid !border-white"
-        @click="gtmEvent(1)"
+        @click="
+          sendGtmEvent('fat_cta_generic_click', {
+            type: 'email',
+            link_text: cta1.name,
+            link_url: cta1.mailto,
+            origin_url: router.currentRoute.value.fullPath,
+          })
+        "
       >
         <span>
           {{ cta1.name }}
@@ -60,14 +70,17 @@
       <ButtonDownloadFileWithLogo
         v-if="cta2.name && cta2.url"
         :disabled="isNeoAutoLogin"
-        :event-params="{
-          product_name: props.accordName,
-          state_rattachement: props.currentStatus.status,
-        }"
         :name="cta2.name"
         :url="formatUrlWithChannelCode(cta2.url)"
         classes="button-primary mx-auto mb-6 border-2 border-solid !border-white"
-        event-name="click_fat_cta_2"
+        @click="
+          sendGtmEvent('fat_cta_generic_click', {
+            type: 'link',
+            link_text: cta2.name,
+            link_url: cta2.url,
+            origin_url: router.currentRoute.value.fullPath,
+          })
+        "
       />
       <a
         v-else-if="cta2.name && cta2.mailto"
@@ -76,7 +89,14 @@
         }"
         :href="cta2.mailto"
         class="button button-primary mx-auto mb-6 border-2 border-solid !border-white"
-        @click="gtmEvent(2)"
+        @click="
+          sendGtmEvent('fat_cta_generic_click', {
+            type: 'email',
+            link_text: cta2.name,
+            link_url: cta2.mailto,
+            origin_url: router.currentRoute.value.fullPath,
+          })
+        "
       >
         <span>
           {{ cta2.name }}
@@ -85,19 +105,23 @@
     </div>
   </div>
 </template>
+
 <script lang="ts" setup>
 import { computed, PropType } from 'vue'
 import { storeToRefs } from 'pinia'
-import CheckIconComponent from '@/vuejs/modules/shared/icon/CheckIconComponent.vue'
-import PendingIconComponent from '@/vuejs/modules/shared/icon/PendingIconComponent.vue'
-import ButtonDownloadFileWithLogo from '@/vuejs/modules/products/components/accord-cadre/ButtonDownloadFileWithLogo.vue'
-import { status } from '@/vuejs/modules/products'
-import { AccountAccordCadre } from '@/vuejs/types/AccountAccordCadre'
-import { betterTextColor } from '@/vuejs/services/utils'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
-import { formatUrlWithChannelCode } from '@/vuejs/services/formatter'
+
+import router from '@/vuejs/router'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { useUserStore } from '@/vuejs/stores/user'
+import { betterTextColor } from '@/vuejs/services/utils'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
+import { formatUrlWithChannelCode } from '@/vuejs/services/formatter'
+import { AccountAccordCadre } from '@/vuejs/types/AccountAccordCadre'
+import { status } from '@/vuejs/modules/products'
+
+import ButtonDownloadFileWithLogo from '@/vuejs/modules/products/components/accord-cadre/ButtonDownloadFileWithLogo.vue'
+import CheckIconComponent from '@/vuejs/modules/shared/icon/CheckIconComponent.vue'
+import PendingIconComponent from '@/vuejs/modules/shared/icon/PendingIconComponent.vue'
 
 const props = defineProps({
   currentStatus: {
@@ -162,14 +186,4 @@ const cta2 = computed(() => {
     }
   }
 })
-
-const gtmEvent = (ctaNumber: number) => {
-  const eventName = ctaNumber === 1 ? 'click_fat_cta_1' : 'click_fat_cta_2'
-  sendGaEvent(eventName, {
-    product_name: props.accordName,
-    state_rattachement: props.currentStatus.status,
-  })
-}
 </script>
-
-<style scoped></style>

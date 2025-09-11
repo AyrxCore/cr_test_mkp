@@ -36,7 +36,15 @@
           <li class="mb-1">
             <RouterLink
               :to="{ name: AccountPageList.ACCOUNT }"
-              @click="sendGaEvent('click_footer_account')"
+              @click="
+                sendGtmEvent('footer_click', {
+                  link_text: $event.target.innerText,
+                  link_url: router.resolve({
+                    name: AccountPageList.ACCOUNT,
+                  }).fullPath,
+                  origin_url: router.currentRoute.value.fullPath,
+                })
+              "
             >
               Mon compte
             </RouterLink>
@@ -44,7 +52,15 @@
           <li class="mb-1">
             <RouterLink
               :to="{ name: AccountPageList.ORDERS }"
-              @click="sendGaEvent('click_footer_mes_commandes')"
+              @click="
+                sendGtmEvent('footer_click', {
+                  link_text: $event.target.innerText,
+                  link_url: router.resolve({
+                    name: AccountPageList.ORDERS,
+                  }).fullPath,
+                  origin_url: router.currentRoute.value.fullPath,
+                })
+              "
             >
               Mes commandes
             </RouterLink>
@@ -55,7 +71,15 @@
           >
             <RouterLink
               :to="{ name: AccountPageList.FAVORITES_LIST }"
-              @click="sendGaEvent('click_footer_mes_favoris')"
+              @click="
+                sendGtmEvent('footer_click', {
+                  link_text: $event.target.innerText,
+                  link_url: router.resolve({
+                    name: AccountPageList.FAVORITES_LIST,
+                  }).fullPath,
+                  origin_url: router.currentRoute.value.fullPath,
+                })
+              "
             >
               Mes favoris
             </RouterLink>
@@ -68,7 +92,15 @@
           >
             <RouterLink
               :to="{ name: AccountPageList.SAVED_CARTS }"
-              @click="sendGaEvent('click_footer_mes_paniers')"
+              @click="
+                sendGtmEvent('footer_click', {
+                  link_text: $event.target.innerText,
+                  link_url: router.resolve({
+                    name: AccountPageList.SAVED_CARTS,
+                  }).fullPath,
+                  origin_url: router.currentRoute.value.fullPath,
+                })
+              "
             >
               Mes paniers sauvegardés
             </RouterLink>
@@ -101,8 +133,9 @@
                   class="underline"
                   href="https://www.regafi.fr/"
                   target="_blank"
-                  >Regafi</a
                 >
+                  Regafi
+                </a>
               </span>
             </div>
           </div>
@@ -115,9 +148,19 @@
             <RouterLink
               :to="{ name: PageList.CONTACT_PAGE }"
               class="flex items-center border-none"
+              @click="
+                sendGtmEvent('contact_click', {
+                  position: 'footer',
+                  link_text: $event.target.innerText,
+                  link_url: router.resolve({
+                    name: PageList.CONTACT_PAGE,
+                  }).fullPath,
+                  origin_url: router.currentRoute.value.fullPath,
+                })
+              "
             >
               <MailIconComponent class="mr-4" fill="white" />
-              <span>Contactez-nous par message</span>
+              Contactez-nous par message
             </RouterLink>
           </li>
           <li>
@@ -145,7 +188,6 @@
             v-if="channelDocuments?.generalTermsOfUse"
             :href="channelGeneralTermsOfUseLink"
             target="_blank"
-            @click="sendGaEvent('click_footer_cgu')"
           >
             Conditions générales d'utilisation
           </a>
@@ -155,7 +197,6 @@
             v-if="channelDocuments?.legalTerms"
             :href="channelLegalTermsLink"
             target="_blank"
-            @click="sendGaEvent('click_footer_mentions_legales')"
           >
             Mentions légales
           </a>
@@ -165,7 +206,6 @@
             v-if="channelDocuments?.privacyPolicy"
             :href="channelPrivacyPolicyLink"
             target="_blank"
-            @click="sendGaEvent('click_footer_politique_confidentialite')"
           >
             Politique de confidentialité
           </a>
@@ -184,6 +224,12 @@
           class="flex h-10 w-10 items-center justify-center rounded-full bg-white"
           href="https://www.youtube.com/channel/UCP-ZzEGFZ4rtW0Yx8u1ZDMQ"
           target="_blank"
+          @click="
+            sendGtmEvent('social_media_click', {
+              link_url: $event.currentTarget.href,
+              origin_url: router.currentRoute.value.fullPath,
+            })
+          "
         >
           <YoutubeIconComponent class="fill-primary stroke-white" />
         </a>
@@ -191,6 +237,12 @@
           class="flex h-10 w-10 items-center justify-center rounded-full bg-white"
           href="https://twitter.com/QANTIS_co"
           target="_blank"
+          @click="
+            sendGtmEvent('social_media_click', {
+              link_url: $event.currentTarget.href,
+              origin_url: router.currentRoute.value.fullPath,
+            })
+          "
         >
           <TwitterIconComponent class="fill-primary stroke-white" />
         </a>
@@ -198,6 +250,12 @@
           class="flex h-10 w-10 items-center justify-center rounded-full bg-white"
           href="https://www.linkedin.com/company/qantis-co/mycompany/"
           target="_blank"
+          @click="
+            sendGtmEvent('social_media_click', {
+              link_url: $event.currentTarget.href,
+              origin_url: router.currentRoute.value.fullPath,
+            })
+          "
         >
           <LinkedinIconComponent class="fill-primary stroke-primary" />
         </a>
@@ -210,21 +268,21 @@
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 
-import { betterTextColor, getImage } from '@/vuejs/services/utils'
-import { useChannelStore } from '@/vuejs/stores/channel'
+import router, { PageList } from '@/vuejs/router'
 import { AccountPageList } from '@/vuejs/router/pages-list'
-import { PageList } from '@/vuejs/router'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import { useChannelStore } from '@/vuejs/stores/channel'
+import { betterTextColor, getImage } from '@/vuejs/services/utils'
+import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
 
-import YoutubeIconComponent from '@/vuejs/modules/shared/icon/YoutubeIconComponent.vue'
-import TwitterIconComponent from '@/vuejs/modules/shared/icon/TwitterIconComponent.vue'
-import LinkedinIconComponent from '@/vuejs/modules/shared/icon/LinkedinIconComponent.vue'
 import QantisLogoComponent from '@/vuejs/modules/shared/icon/QantisLogoComponent.vue'
 import lemonwayLogo from '@/vuejs/assets/img/lemonway_footer_logo.png'
 import coqVertLogo from '@/vuejs/assets/img/coq_vert_footer_logo.png'
 import MailIconComponent from '@/vuejs/modules/shared/icon/MailIconComponent.vue'
 import PhoneIconComponent from '@/vuejs/modules/shared/icon/PhoneIconComponent.vue'
-import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
+import YoutubeIconComponent from '@/vuejs/modules/shared/icon/YoutubeIconComponent.vue'
+import TwitterIconComponent from '@/vuejs/modules/shared/icon/TwitterIconComponent.vue'
+import LinkedinIconComponent from '@/vuejs/modules/shared/icon/LinkedinIconComponent.vue'
 
 const lemonwayLogoImg = getImage(lemonwayLogo)
 const coqVertLogoImg = getImage(coqVertLogo)

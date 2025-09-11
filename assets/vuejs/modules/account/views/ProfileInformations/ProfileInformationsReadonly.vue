@@ -44,10 +44,7 @@
               }"
               :to="{ name: PageList.CONTACT_INFORMATION_PASSWORD_CHANGE }"
             >
-              <EditIconComponent
-                :stroke="channelPrimaryColor"
-                @click="sendGaEvent('click_account_edit_password')"
-              />
+              <EditIconComponent :stroke="channelPrimaryColor" />
             </RouterLink>
           </div>
         </div>
@@ -72,10 +69,7 @@
               }"
               :to="{ name: PageList.CONTACT_INFORMATION_DETAILS_EDIT }"
             >
-              <EditIconComponent
-                :stroke="channelPrimaryColor"
-                @click="sendGaEvent('click_account_edit_info')"
-              />
+              <EditIconComponent :stroke="channelPrimaryColor" />
             </RouterLink>
           </div>
         </div>
@@ -84,15 +78,17 @@
     </template>
   </AccountPage>
 </template>
+
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
+
 import { PageList } from '@/vuejs/router'
-import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
-import EditIconComponent from '@/vuejs/modules/shared/icon/EditIconComponent.vue'
 import { useUserStore } from '@/vuejs/stores/user'
 import { useChannelStore } from '@/vuejs/stores/channel'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+
+import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
+import EditIconComponent from '@/vuejs/modules/shared/icon/EditIconComponent.vue'
 
 const { user, isNeoAutoLogin } = storeToRefs(useUserStore())
 const { channelPrimaryColor } = storeToRefs(useChannelStore())

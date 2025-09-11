@@ -9,7 +9,15 @@
         <RouterLink
           :to="{ name: AccountPageList.ACCOUNT }"
           class="flex items-center py-2.5 font-bold hover:text-secondary"
-          @click="sendGaEvent('click_header_mon_compte')"
+          @click="
+            sendGtmEvent('account_click', {
+              link_text: $event.target.innerText,
+              link_url: router.resolve({
+                name: AccountPageList.ACCOUNT,
+              }).fullPath,
+              origin_url: router.currentRoute.value.fullPath,
+            })
+          "
         >
           <UserIcon :stroke="channelPrimaryColor" class="mr-3" />
           <span>Mon compte</span>
@@ -25,7 +33,15 @@
         :key="key"
         :to="{ name: value.routeName }"
         class="flex items-center py-2.5 hover:text-secondary"
-        @click="sendGaEvent(value.gtmEventName)"
+        @click="
+          sendGtmEvent('account_click', {
+            link_text: value.label,
+            link_url: router.resolve({
+              name: value.routeName,
+            }).fullPath,
+            origin_url: router.currentRoute.value.fullPath,
+          })
+        "
       >
         <ChevronRightIcon
           class="mr-4 fill-primary stroke-primary hover:stroke-secondary"
@@ -48,20 +64,17 @@
 import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
+import router from '@/vuejs/router'
+import { AccountPageList } from '@/vuejs/router/pages-list'
+import { useUserStore } from '@/vuejs/stores/user'
+import { useChannelStore } from '@/vuejs/stores/channel'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
+import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
+
 import CloseIcon from '@/vuejs/modules/shared/icon/CloseIconComponent.vue'
 import UserIcon from '@/vuejs/modules/shared/icon/UserIconComponent.vue'
 import DisconnectIcon from '@/vuejs/modules/shared/icon/DisconnectIconComponent.vue'
-
-import { useUserStore } from '@/vuejs/stores/user'
-import { useChannelStore } from '@/vuejs/stores/channel'
-import { AccountPageList } from '@/vuejs/router/pages-list'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
-import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
 import ChevronRightIcon from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
-
-const emit = defineEmits(['update:modelValue'])
-
-const { channelPrimaryColor } = storeToRefs(useChannelStore())
 
 const props = defineProps({
   modelValue: {
@@ -70,11 +83,16 @@ const props = defineProps({
   },
 })
 
+const { channelPrimaryColor } = storeToRefs(useChannelStore())
+const userStore = useUserStore()
+const channelStore = useChannelStore()
+
+const emit = defineEmits(['update:modelValue'])
+
 const listAccountGlobal = ref<any[]>([
   {
     label: 'Mes commandes',
     routeName: AccountPageList.ORDERS,
-    gtmEventName: 'click_header_mes_commandes',
   },
   {
     label: 'Mes coordonnées',
@@ -98,17 +116,12 @@ const listAccount = computed(() => {
   )
 })
 
-const userStore = useUserStore()
-const { user } = storeToRefs(userStore)
-const channelStore = useChannelStore()
-
 const closeMenu = (): void => {
   emit('update:modelValue', false)
 }
 
 const onLogout = async (e: Event): Promise<void> => {
   e.preventDefault()
-  sendGaEvent('click_header_log_out')
   await userStore.logout()
   location.reload()
 }

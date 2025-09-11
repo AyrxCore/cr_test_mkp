@@ -108,16 +108,20 @@
     </Modal>
   </div>
 </template>
+
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
-import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
+import { storeToRefs } from 'pinia'
+
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import { useChannelStore } from '@/vuejs/stores/channel'
+import { useProductStore } from '@/vuejs/stores/product'
 import { arrayEqual, notifySuccess } from '@/vuejs/services/utils'
 import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
-import { useProductStore } from '@/vuejs/stores/product'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
+
+import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
+import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.vue'
 
 const props = defineProps({
   productId: {
@@ -168,6 +172,17 @@ const emit = defineEmits([
 
 const onOpenFavorite = () => {
   showTooltip.value = true
+  sendGtmEvent('add_to_wishlist', {
+    ecommerce: {
+      currency: 'EUR',
+      items: [
+        {
+          item_id: props.productId,
+          item_name: props.productName,
+        },
+      ],
+    },
+  })
   emit('toggleFavorite', { showTooltip: showTooltip.value })
   emit('openFavorite')
 }

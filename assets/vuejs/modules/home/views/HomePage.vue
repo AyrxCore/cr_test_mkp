@@ -19,9 +19,6 @@
           <AccordsCadreComponent
             :accords-cadres="productsAccordsCadre?.results"
             :loading="!productsAccordsCadre"
-            @click-left="sendGaEvent('click_product_slider_fat_left')"
-            @click-right="sendGaEvent('click_product_slider_fat_right')"
-            @click-cta="sendGaEvent('click_product_slider_fat', $event)"
             @show-showcase-modal="handleShowcaseModal"
           />
           <ShowcaseModal
@@ -51,20 +48,6 @@
           <ProductsCarouselComponent
             :loading="!productsSelection"
             :products="filteredProductsSelection"
-            @click-left="sendGaEvent('click_slider_home_products_left')"
-            @click-right="sendGaEvent('click_slider_home_products_right')"
-            @click-add-cart="
-              sendGaEvent('click_slider_home_products_cta', $event)
-            "
-            @click-accord-cadre-card="
-              sendGaEvent('click_slider_home_products', $event)
-            "
-            @click-moins-qty="
-              sendGaEvent('click_slider_home_products_moins_qty', $event)
-            "
-            @click-plus-qty="
-              sendGaEvent('click_slider_home_products_plus_qty', $event)
-            "
           />
         </div>
       </div>
@@ -189,7 +172,6 @@ import { useChannelStore } from '@/vuejs/stores/channel'
 import { useExpertContentStore } from '@/vuejs/stores/expertContent'
 import { useUserStore } from '@/vuejs/stores/user'
 import { useProductStore } from '@/vuejs/stores/product'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
 import { betterTextColor } from '@/vuejs/services/utils'
 import {

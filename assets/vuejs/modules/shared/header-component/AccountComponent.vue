@@ -33,14 +33,12 @@
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
+import { useUserStore } from '@/vuejs/stores/user'
+
 import MenuAccountComponent from '@/vuejs/modules/shared/header-component/MenuAccountComponent.vue'
 import UserPlainIconComponent from '@/vuejs/modules/shared/icon/UserPlainIconComponent.vue'
 import ArrowDownIconComponent from '@/vuejs/modules/shared/icon/ArrowDownIconComponent.vue'
 import UserAutoLoginIconComponent from '@/vuejs/modules/shared/icon/UserAutoLoginIconComponent.vue'
-
-import { useUserStore } from '@/vuejs/stores/user'
-
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const userStore = useUserStore()
 
@@ -51,6 +49,5 @@ const isMenuOpen = ref<boolean>(false)
 
 const toggleMenu = (): void => {
   isMenuOpen.value = !isMenuOpen.value
-  sendGaEvent('click_header_account')
 }
 </script>

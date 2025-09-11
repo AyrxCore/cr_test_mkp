@@ -97,25 +97,27 @@
     </template>
   </AccountPage>
 </template>
+
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
+
 import { PageList } from '@/vuejs/router'
-import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
-import FavoritesProductsDetailsComponent from '@/vuejs/modules/account/components/FavoriteProductDetailsComponent.vue'
-import FavoriteFormModal from '@/vuejs/modules/account/components/favorite/FavoriteAddEditModal.vue'
-import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import ArrowLeftIconComponent from '@/vuejs/modules/shared/icon/ArrowLeftIconComponent.vue'
-import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
-import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
-import { addProductToCartGoogleAnalytics } from '@/vuejs/modules/products'
-import { Favorite } from '@/vuejs/types/Favorite'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { useUserStore } from '@/vuejs/stores/user'
 import { useCartStore } from '@/vuejs/stores/cart'
 import { useAlertStore } from '@/vuejs/stores/alert'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
+import { formatProductGtmEvent, sendGtmEvent } from '@/vuejs/services/gtm'
+import { Favorite } from '@/vuejs/types/Favorite'
+
+import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
+import FavoritesProductsDetailsComponent from '@/vuejs/modules/account/components/FavoriteProductDetailsComponent.vue'
+import FavoriteFormModal from '@/vuejs/modules/account/components/favorite/FavoriteAddEditModal.vue'
+import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
+import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
+import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
+import ArrowLeftIconComponent from '@/vuejs/modules/shared/icon/ArrowLeftIconComponent.vue'
 
 const route = useRoute()
 
@@ -138,14 +140,12 @@ const favoriteName = computed(() => {
 })
 const openFavoriteForm = () => {
   showFormFavorite.value = true
-  sendGaEvent('click_favorite_details_rename')
 }
 
 const refreshFavoriteItems = async (id) => {
   isLoading.value = true
   favorite.value = await favoriteStore.findFavoriteById(id)
   isLoading.value = false
-  sendGaEvent('click_favorite_details_update_list')
 }
 
 onMounted(async () => {
@@ -221,14 +221,19 @@ const addToCart = async () => {
   await cartStore.addProductsToCart(cartProducts.value)
 
   for (const [, value] of Object.entries(listItemToAddCart.value)) {
-    await addProductToCartGoogleAnalytics(value.product, value.variantId, 1)
+    sendGtmEvent('add_to_cart', {
+      ecommerce: {
+        currency: 'EUR',
+        value: value.product.price * value.product.quantity,
+        items: formatProductGtmEvent([value.product]),
+      },
+    })
   }
   isAddToCartLoading.value = false
 
   isLoading.value = true
   favorite.value = await favoriteStore.findFavoriteById(favorite.value.id)
   isLoading.value = false
-  sendGaEvent('click_favorite_details_add_cart')
 }
 
 watch(
@@ -242,5 +247,3 @@ watch(
   { immediate: true },
 )
 </script>
-
-<style scoped></style>

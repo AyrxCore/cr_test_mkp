@@ -5,7 +5,6 @@
         :title="favorite.public ? 'Liste partagée' : ''"
         :to="{ name: PageList.FAVORITES_DETAILS, params: { id: favorite.id } }"
         class="flex items-center font-bold text-primary underline"
-        @click="sendGaEvent('click_favorites_details')"
       >
         {{ favorite.name }}
         <MultipleUserComponent
@@ -66,22 +65,24 @@
     />
   </div>
 </template>
+
 <script lang="ts" setup>
 import { computed, PropType, ref } from 'vue'
-import { format } from 'date-fns'
 import { storeToRefs } from 'pinia'
+import { format } from 'date-fns'
+
 import { PageList } from '@/vuejs/router'
-import EditIconComponent from '@/vuejs/modules/shared/icon/EditIconComponent.vue'
-import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
-import FavoriteFormModal from '@/vuejs/modules/account/components/favorite/FavoriteAddEditModal.vue'
-import FavoriteDeleteModal from '@/vuejs/modules/account/components/favorite/FavoriteDeleteModal.vue'
-import MultipleUserComponent from '@/vuejs/modules/shared/icon/MultipleUserComponent.vue'
-import { AlertType } from '@/vuejs/types/Alert'
-import { Favorite } from '@/vuejs/types/Favorite'
 import { useAlertStore } from '@/vuejs/stores/alert'
 import { useUserStore } from '@/vuejs/stores/user'
 import { useChannelStore } from '@/vuejs/stores/channel'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import { AlertType } from '@/vuejs/types/Alert'
+import { Favorite } from '@/vuejs/types/Favorite'
+
+import FavoriteFormModal from '@/vuejs/modules/account/components/favorite/FavoriteAddEditModal.vue'
+import FavoriteDeleteModal from '@/vuejs/modules/account/components/favorite/FavoriteDeleteModal.vue'
+import MultipleUserComponent from '@/vuejs/modules/shared/icon/MultipleUserComponent.vue'
+import EditIconComponent from '@/vuejs/modules/shared/icon/EditIconComponent.vue'
+import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
 
 const emit = defineEmits(['submitFavorite', 'deleteFavorite', 'changeValue'])
 
@@ -118,12 +119,10 @@ const updatedAt = computed(() => {
 
 const openFavoriteForm = () => {
   showFormEditFavorite.value = true
-  sendGaEvent('click_favorites_edit')
 }
 
 const openDeleteFavoriteForm = () => {
   deleteFavorite.value = true
-  sendGaEvent('click_favorites_delete')
 }
 const onSubmitFavorite = async (event) => {
   emit('submitFavorite', {

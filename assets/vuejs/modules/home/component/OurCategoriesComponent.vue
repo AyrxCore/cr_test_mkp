@@ -19,8 +19,12 @@
             }"
             class="px-0.5 text-sm"
             @click="
-              sendGaEvent('click_cat_category', {
-                category_name: category.name,
+              sendGtmEvent('cat_category_click', {
+                link_text: $event.target.innerText,
+                link_url: router.resolve({
+                  name: ProductPageList.CATEGORIES,
+                }).fullPath,
+                origin_url: router.currentRoute.value.fullPath,
               })
             "
           >
@@ -29,13 +33,21 @@
         </div>
       </div>
       <div class="my-8">
-        <router-link
+        <RouterLink
           :to="{ name: ProductPageList.CATEGORIES }"
           class="text-md text-primary underline"
-          @click="sendGaEvent('click_cat_voir_plus')"
+          @click="
+            sendGtmEvent('cat_category_click', {
+              link_text: $event.target.innerText,
+              link_url: router.resolve({
+                name: ProductPageList.CATEGORIES,
+              }).fullPath,
+              origin_url: router.currentRoute.value.fullPath,
+            })
+          "
         >
           Voir plus
-        </router-link>
+        </RouterLink>
       </div>
     </div>
   </div>
@@ -43,9 +55,11 @@
 
 <script lang="ts" setup>
 import { computed, onBeforeMount, onUnmounted, ref } from 'vue'
-import { useCategoryStore } from '@/vuejs/stores/category'
+
+import router from '@/vuejs/router'
 import { ProductPageList } from '@/vuejs/router/pages-list'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import { useCategoryStore } from '@/vuejs/stores/category'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
 import { Category } from '@/vuejs/types/Product/Category'
 
 const categoryStore = useCategoryStore()

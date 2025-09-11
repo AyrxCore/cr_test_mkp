@@ -4,6 +4,7 @@ import { ExternalApiDataEntity } from '@/vuejs/types/ExternalApiDataEntity'
 // Décrit l'objet user
 
 export interface User extends ExternalApiDataEntity {
+  id: string
   email: string
   roles: string[]
   account: Account

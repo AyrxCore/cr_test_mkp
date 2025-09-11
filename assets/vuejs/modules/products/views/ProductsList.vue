@@ -48,6 +48,12 @@
                 :href="bannerSearchLink"
                 class="col-span-1 mt-9 h-[450px] w-full md:col-span-2 md:mt-0 xl:h-full"
                 target="_blank"
+                @click="
+                  sendGtmEvent('promotion_click', {
+                    link_url: bannerSearchLink,
+                    origin_url: router.currentRoute.value.fullPath,
+                  })
+                "
               >
                 <div
                   :style="{
@@ -112,10 +118,22 @@
     />
   </BaseTemplate>
 </template>
+
 <script lang="ts" setup>
 import { computed, onBeforeMount, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
+import { useRoute } from 'vue-router'
+
+import router from '@/vuejs/router'
+import { ProductPageList } from '@/vuejs/router/pages-list'
+import { useProductStore } from '@/vuejs/stores/product'
+import { useFavoriteStore } from '@/vuejs/stores/favorite'
+import { useUserStore } from '@/vuejs/stores/user'
+import { useBannerSearchStore } from '@/vuejs/stores/bannerSearch'
+import { formatProductGtmEvent, sendGtmEvent } from '@/vuejs/services/gtm'
+import { getImage } from '@/vuejs/services/utils'
+import { Product } from '@/vuejs/types/Product'
+import { BannerSearch } from '@/vuejs/types/BannerSearch'
 
 import AccordCadreComponent from '@/vuejs/modules/home/component/AccordCadreComponent.vue'
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
@@ -127,18 +145,6 @@ import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 import MobileFiltersProductsComponent from '@/vuejs/modules/products/components/filters/MobileFiltersProductsComponent.vue'
 import ProductCardComponent from '@/vuejs/modules/products/components/ProductCardComponent.vue'
 import ShowcaseModal from '@/vuejs/modules/home/component/ShowcaseModal.vue'
-
-import router from '@/vuejs/router'
-import { ProductPageList } from '@/vuejs/router/pages-list'
-import { Product } from '@/vuejs/types/Product'
-import { useProductStore } from '@/vuejs/stores/product'
-import { useFavoriteStore } from '@/vuejs/stores/favorite'
-import { useUserStore } from '@/vuejs/stores/user'
-import { useBannerSearchStore } from '@/vuejs/stores/bannerSearch'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
-
-import { getImage } from '@/vuejs/services/utils'
-import { BannerSearch } from '@/vuejs/types/BannerSearch'
 
 const route = useRoute()
 const productStore = useProductStore()
@@ -174,6 +180,20 @@ onBeforeMount(async () => {
   await favoriteStore.fetchFavorites()
 })
 
+watch(
+  () => [products.value],
+  () => {
+    if (products.value.resultsCount !== 0) {
+      sendGtmEvent('view_item_list', {
+        ecommerce: {
+          item_list_id: selectedCategoryId.value ?? selectedCompanyId.value,
+          items: formatProductGtmEvent(products.value.results),
+        },
+      })
+    }
+  },
+)
+
 const findBannerSearchForCategory = computed<BannerSearch>(() => {
   return bannerSearchStore.bannersSearch.find(
     (x) => x.category === paramsProducts.value.categories,
@@ -207,7 +227,6 @@ const loadMore = async () => {
   await loadProducts(paramsProducts.value)
   currentCount.value += perPage.value
   loadMoreLoading.value = false
-  sendGaEvent('click_resultats_more')
 }
 
 const loadProducts = async (paramsProducts: object) => {
@@ -227,8 +246,7 @@ const loadProducts = async (paramsProducts: object) => {
       products.value?.resultsCount > 0
         ? 'view_search_results'
         : 'no_search_results'
-    await window.dataLayer?.push({
-      event: eventLabel,
+    sendGtmEvent(eventLabel, {
       search_term: route.query.q,
     })
   }

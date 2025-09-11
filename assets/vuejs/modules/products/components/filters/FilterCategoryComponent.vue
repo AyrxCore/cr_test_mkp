@@ -9,6 +9,12 @@
           class="mr-3 cursor-pointer"
           type="radio"
           @change="handleCategorySelection(category.id)"
+          @click="
+            sendGtmEvent('select_filter', {
+              filter_category: category.name,
+              origin_url: router.currentRoute.value.fullPath,
+            })
+          "
         />
         <label :for="`categoryRadio-${category.id}`" class="cursor-pointer">
           {{ category.name }}
@@ -39,8 +45,12 @@
 
 <script lang="ts" setup>
 import { PropType, onMounted, ref } from 'vue'
-import Chevron2RightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
+
+import router from '@/vuejs/router'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
 import { Category } from '@/vuejs/types/Product/Category'
+
+import Chevron2RightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
 
 const props = defineProps({
   category: {

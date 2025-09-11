@@ -40,13 +40,16 @@
 <script lang="ts" setup>
 import { PropType, ref, computed } from 'vue'
 
-import { ProductPageList } from '@/vuejs/router/pages-list'
-import { Category } from '@/vuejs/types/Product/Category'
+import router from '@/vuejs/router'
 
+import { ProductPageList } from '@/vuejs/router/pages-list'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
+import { Category } from '@/vuejs/types/Product/Category'
 import {
   CATEGORY_CONFIGS,
   CategoryConfig,
 } from '@/vuejs/constants/categoryConfigs'
+
 import Chevron2RightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
 
 const props = defineProps({
@@ -68,9 +71,15 @@ const selectCategory = () => {
   if (props.category.children.length > 0) {
     emit('selectCategory', props.category)
   } else {
+    sendGtmEvent('menu_click', {
+      link_text: props.category.name,
+      link_url: router.resolve({
+        name: ProductPageList.PRODUCTS,
+        query: { category: props.category.id },
+      }).fullPath,
+      origin_url: router.currentRoute.value.fullPath,
+    })
     emit('closeMenu')
   }
 }
 </script>
-
-<style scoped></style>

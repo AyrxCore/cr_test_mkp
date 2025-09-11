@@ -13,7 +13,7 @@
             >
               Annuler
             </ButtonComponent>
-            <ButtonComponent class="button-primary" :is-loading="isLoading">
+            <ButtonComponent :is-loading="isLoading" class="button-primary">
               Enregistrer
             </ButtonComponent>
           </div>
@@ -24,12 +24,15 @@
 </template>
 
 <script lang="ts" setup>
-import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import { onMounted, ref } from 'vue'
+
+import { useSavedCartStore } from '@/vuejs/stores/savedCart'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
+import { SavedCart } from '@/vuejs/types/SavedCart'
+
+import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import DefaultModal from '@/vuejs/modules/account/pages/DefaultModalPage.vue'
 import SavedCartForm from '@/vuejs/modules/account/components/savedCart/SavedCartForm.vue'
-import { SavedCart } from '@/vuejs/types/SavedCart'
-import { useSavedCartStore } from '@/vuejs/stores/savedCart'
 
 const props = defineProps({
   savedCartId: {
@@ -73,6 +76,7 @@ const onSubmit = async () => {
     savedCart: savedCart.value,
     isEditing: props.isEditing,
   })
+  sendGtmEvent('save_the_cart_click')
 }
 </script>
 

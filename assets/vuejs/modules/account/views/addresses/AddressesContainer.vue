@@ -83,17 +83,17 @@
     </template>
   </AccountPage>
 </template>
+
 <script lang="ts" setup>
 import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import router from '@/vuejs/router'
 import { AccountPageList } from '@/vuejs/router/pages-list'
-import { ADDRESS_BILLING, ADDRESS_SHIPPING } from '@/vuejs/services/const'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { useAddressStore } from '@/vuejs/stores/address'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { useUserStore } from '@/vuejs/stores/user'
+import { ADDRESS_BILLING, ADDRESS_SHIPPING } from '@/vuejs/services/const'
 
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
@@ -116,10 +116,5 @@ const onCreateAddressClick = (type: string) => {
     name: AccountPageList.ADDRESS_CREATE,
     params: { type },
   })
-  const gaEventName =
-    type === ADDRESS_BILLING
-      ? 'click_adresse_add_billing'
-      : 'click_adresse_add_shipping'
-  sendGaEvent(gaEventName)
 }
 </script>

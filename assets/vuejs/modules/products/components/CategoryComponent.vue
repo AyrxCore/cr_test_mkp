@@ -1,21 +1,16 @@
 <template>
   <h3
-    class="mt-6 flex items-center text-left text-primary"
     :class="{
       'text-base font-bold lg:text-lg': !category.parentId,
       'flex justify-between': category.parentId !== null,
     }"
+    class="mt-6 flex items-center text-left text-primary"
   >
     <RouterLink
       :to="{
         name: ProductPageList.PRODUCTS,
         query: { category: category.id },
       }"
-      @click="
-        sendGaEvent('click_all_cat_target', {
-          cat_name: category.name,
-        })
-      "
     >
       {{ category.name }}
     </RouterLink>
@@ -38,12 +33,14 @@
     />
   </div>
 </template>
+
 <script lang="ts" setup>
 import { PropType, ref } from 'vue'
-import Chevron2RightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
+
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import { Category } from '@/vuejs/types/Product/Category'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+
+import Chevron2RightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
 
 defineProps({
   category: {
@@ -58,5 +55,3 @@ const toggleChildren = () => {
   showChildren.value = !showChildren.value
 }
 </script>
-
-<style scoped></style>

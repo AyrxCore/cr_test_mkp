@@ -1,7 +1,7 @@
 <template>
   <BaseTemplate title="Contact">
     <div
-      class="xs:w-[100%] m-auto mt-4 mb-24 max-w-screen-2xl flex-1 px-5 sm:px-8"
+      class="xs:w-[100%] m-auto mb-24 mt-4 max-w-screen-2xl flex-1 px-5 sm:px-8"
     >
       <BreadcrumbSharedComponent
         current-page="Contact"
@@ -20,20 +20,17 @@
             class="mb-5 flex flex-col rounded-lg bg-white py-6 text-center lg:py-8"
           >
             <PhoneIconComponent
-              class="mx-auto mb-4 w-full stroke-secondary"
-              :width="40"
               :height="40"
+              :width="40"
+              class="mx-auto mb-4 w-full stroke-secondary"
             />
             <h4 class="mb-2 text-2xl font-bold text-primary">Par téléphone</h4>
             <div class="flex justify-center">
               <span class="w-full text-lg">
                 Appelez-nous au
-                <a
-                  class="underline"
-                  :href="`tel:${channel.phoneNumber}`"
-                  @click="sendGaEvent('click_contact_tel')"
-                  >{{ formattedPhoneNumber }}</a
-                >
+                <a :href="`tel:${channel.phoneNumber}`" class="underline">{{
+                  formattedPhoneNumber
+                }}</a>
                 <br />
                 du lundi au vendredi de 8h30 à 18h
               </span>
@@ -43,20 +40,17 @@
             class="mb-5 flex flex-col rounded-lg bg-white py-6 text-center lg:h-[180px] lg:py-8"
           >
             <MailIconComponent
-              class="mx-auto mb-4 w-full stroke-secondary text-secondary"
-              :width="40"
               :height="40"
+              :width="40"
+              class="mx-auto mb-4 w-full stroke-secondary text-secondary"
             />
             <h4 class="mb-2 text-2xl font-bold text-primary">Par email</h4>
             <div class="flex justify-center">
               <span class="flex w-full justify-center text-lg">
                 à
-                <RouterLink
-                  to="#topFormContact"
-                  class="ml-1 underline"
-                  @click="sendGaEvent('click_contact_mail')"
-                  >{{ channel.email }}</RouterLink
-                >
+                <a :href="`mailto:${channel.email}`" class="ml-1 underline">
+                  {{ channel.email }}
+                </a>
               </span>
             </div>
           </div>
@@ -75,18 +69,18 @@
     </div>
   </BaseTemplate>
 </template>
+
 <script lang="ts" setup>
 import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
+
+import { useChannelStore } from '@/vuejs/stores/channel'
 
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import FormContact from '@/vuejs/modules/contact/component/FormComponent.vue'
 import MailIconComponent from '@/vuejs/modules/shared/icon/MailIconComponent.vue'
 import PhoneIconComponent from '@/vuejs/modules/shared/icon/PhoneIconComponent.vue'
-
-import { storeToRefs } from 'pinia'
-import { useChannelStore } from '@/vuejs/stores/channel'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const { channel, formattedPhoneNumber } = storeToRefs(useChannelStore())
 

@@ -16,7 +16,7 @@
         <div class="grid-rows grid grid-flow-col gap-6">
           <div class="mb-6">
             <LabelField title="Mot de passe actuel" />
-            <InputField v-model="currentPassword" type="password" required />
+            <InputField v-model="currentPassword" required type="password" />
           </div>
         </div>
         <div class="grid-rows grid grid-flow-col gap-6">
@@ -24,9 +24,9 @@
             <LabelField title="Nouveau mot de passe" />
             <InputField
               v-model="newPassword"
-              type="password"
-              required
               :class="classes"
+              required
+              type="password"
             />
           </div>
         </div>
@@ -35,9 +35,9 @@
             <LabelField title="Confirmation" />
             <InputField
               v-model="confirmation"
-              type="password"
-              required
               :class="classes"
+              required
+              type="password"
             />
           </div>
         </div>
@@ -49,7 +49,7 @@
           >
             Annuler
           </ButtonComponent>
-          <ButtonComponent class="button-primary" :is-loading="isLoading">
+          <ButtonComponent :is-loading="isLoading" class="button-primary">
             Enregistrer
           </ButtonComponent>
         </div>
@@ -57,16 +57,18 @@
     </template>
   </AccountPage>
 </template>
+
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
+
 import router, { PageList } from '@/vuejs/router'
+import { useUserStore } from '@/vuejs/stores/user'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
 
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import InputField from '@/vuejs/modules/shared/formfields/InputField.vue'
 import LabelField from '@/vuejs/modules/shared/formfields/LabelField.vue'
-
-import { useUserStore } from '@/vuejs/stores/user'
 
 const currentPassword = ref<string>('')
 const newPassword = ref<string>('')

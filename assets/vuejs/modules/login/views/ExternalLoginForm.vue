@@ -51,9 +51,7 @@
             <a
               class="text-sm font-medium text-gray-500 underline"
               href="javascript:void(0)"
-              @click="
-                eventClick('click_prehome_forgot_pass', '/login/reset-password')
-              "
+              @click="clickForgotPassword"
             >
               Mot de passe oublié ?
             </a>
@@ -62,7 +60,6 @@
                 :is-loading="isLoading"
                 class="button-primary w-full font-bold md:w-1/2"
                 type="submit"
-                @click="sendGaEvent('click_prehome_login')"
               >
                 Se connecter
               </ButtonComponent>
@@ -80,9 +77,7 @@
               <a
                 class="button button-primary-outline"
                 href="/login/first-signin"
-                @click="
-                  eventClick('click_prehome_activate', '/login/first-signin')
-                "
+                @click="sendGtmEvent('prehome_activate_account_click')"
               >
                 Activer mon compte
                 <ArrowRightIcon
@@ -99,19 +94,14 @@
                   <a
                     :href="`tel:${channel?.phoneNumber}`"
                     class="text-secondary underline lg:text-right"
-                    @click="
-                      eventClick(
-                        'click_prehome_tel',
-                        `tel:${channel?.phoneNumber}`,
-                      )
-                    "
+                    @click="eventClick(`tel:${channel?.phoneNumber}`)"
                     >{{ channelPhoneNumber }}</a
                   >
                   du lundi au vendredi de 8h30 à 18h ou via
                   <button
                     class="text-secondary underline"
                     type="button"
-                    @click="contactModal('click_prehome_email')"
+                    @click="showContactForm = true"
                   >
                     {{ channel?.email }}
                   </button></span
@@ -137,7 +127,7 @@
           :href="channelLegalTermsLink"
           class="text-gray-500"
           target="_blank"
-          @click="eventClick('click_prehome_mentions', channelLegalTermsLink)"
+          @click="eventClick(channelLegalTermsLink)"
         >
           Mentions légales
         </a>
@@ -146,7 +136,7 @@
           :href="channelPrivacyPolicyLink"
           class="text-gray-500"
           target="_blank"
-          @click="eventClick('click_prehome_polconf', channelPrivacyPolicyLink)"
+          @click="eventClick(channelPrivacyPolicyLink)"
         >
           Politique de confidentialité
         </a>
@@ -155,7 +145,7 @@
           :href="channelGeneralTermsOfUseLink"
           class="text-gray-500"
           target="_blank"
-          @click="eventClick('click_prehome_cgu', channelGeneralTermsOfUseLink)"
+          @click="eventClick(channelGeneralTermsOfUseLink)"
         >
           Conditions Générales d'Utilisation
         </a>
@@ -260,12 +250,20 @@
     @cancel="showContactForm = false"
   />
 </template>
+
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
+import { useAlertStore } from '@/vuejs/stores/alert'
+import { useUserStore } from '@/vuejs/stores/user'
+import { useChannelStore } from '@/vuejs/stores/channel'
+import { getUrlParam } from '@/vuejs/services/utils'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
+import { AlertType } from '@/vuejs/types/Alert'
+import { Account } from '@/vuejs/types/Account'
+
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
-import ArrowRightIcon from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import CGUModal from '@/vuejs/modules/login/component/CGUModal.vue'
 import ContactModal from '@/vuejs/modules/contact/component/ContactModal.vue'
@@ -273,14 +271,7 @@ import EyeIcon from '@/vuejs/modules/shared/icon/EyeIconComponent.vue'
 import EyeSlashIcon from '@/vuejs/modules/shared/icon/EyeSlashIconComponent.vue'
 import HelpIconComponent from '@/vuejs/modules/shared/icon/HelpIconComponent.vue'
 import MailIcon from '@/vuejs/modules/shared/icon/MailIconComponent.vue'
-
-import { getUrlParam } from '@/vuejs/services/utils'
-import { AlertType } from '@/vuejs/types/Alert'
-import { useAlertStore } from '@/vuejs/stores/alert'
-import { useUserStore } from '@/vuejs/stores/user'
-import { useChannelStore } from '@/vuejs/stores/channel'
-import { Account } from '@/vuejs/types/Account'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import ArrowRightIcon from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 
 const username = ref<string>('')
 const password = ref<string>('')
@@ -368,8 +359,8 @@ const proceedWithAccountSelection = async (accountId: string) => {
 
   try {
     await userStore.selectUserAccount(accountId)
-    window.dataLayer?.push({ event: 'login' })
     const target = getUrlParam('target')
+    sendGtmEvent('login')
     document.location.href = target ? `/${target}` : '/'
   } catch (error) {
     console.error('Erreur lors de la sélection du compte:', error)
@@ -381,7 +372,6 @@ const proceedWithAccountSelection = async (accountId: string) => {
 
 const onAccountClick = async () => {
   await handleAccountSelection(accountSelectedId.value)
-  sendGaEvent('click_siret_valider')
 }
 
 const onChangeBuyer = (acceptCgu: boolean) => {
@@ -393,19 +383,13 @@ const valideCGU = async () => {
   await proceedWithAccountSelection(accountSelectedId.value)
 }
 
-const eventClick = (eventName: string, url: string) => {
-  try {
-    sendGaEvent(eventName)
-  } catch (e) {
-    console.error(e)
-  } finally {
-    document.location.href = url
-  }
+const clickForgotPassword = () => {
+  sendGtmEvent('prehome_forgot_passwd_click')
+  eventClick('/login/reset-password')
 }
 
-const contactModal = (eventName: string) => {
-  sendGaEvent(eventName)
-  showContactForm.value = true
+const eventClick = (url: string) => {
+  document.location.href = url
 }
 
 const isFirst = computed((): string => {

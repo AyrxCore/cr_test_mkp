@@ -14,11 +14,16 @@
             selectedCategory === category.id ||
             (selectedCategory === null && category.id === 'all')
           "
-          type="radio"
-          name="category"
           class="h-4 w-4 text-primary focus:ring-primary"
+          name="category"
+          type="radio"
           @change="
             handleCategoryChange(category.id === 'all' ? null : category.id)
+          "
+          @click="
+            sendGtmEvent('partner_locator_filter', {
+              filter_category: category.name,
+            })
           "
         />
         <label
@@ -34,6 +39,8 @@
 
 <script lang="ts" setup>
 import { PropType } from 'vue'
+
+import { sendGtmEvent } from '@/vuejs/services/gtm'
 
 const props = defineProps({
   categories: {

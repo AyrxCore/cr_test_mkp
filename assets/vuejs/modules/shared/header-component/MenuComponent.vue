@@ -37,8 +37,13 @@
         class="ml-3 border-b-2 border-b-transparent px-0.5 text-center text-sm last:mr-3 hover:border-primary xl:ml-6 xl:last:mr-6"
         replace
         @click="
-          sendGaEvent('click_header_category', {
-            category_name: category.name,
+          sendGtmEvent('menu_click', {
+            link_text: category.name,
+            link_url: router.resolve({
+              name: ProductPageList.PRODUCTS,
+              query: { category: category.id },
+            }).fullPath,
+            origin_url: router.currentRoute.value.fullPath,
           })
         "
       >
@@ -46,16 +51,21 @@
       </RouterLink>
       <RouterLink
         v-if="sustainableCategoryUi"
+        :class="sustainableCategoryUi?.textClass"
         :to="{
           name: ProductPageList.PRODUCTS,
           query: { category: SUSTAINABLE_PURCHASES_CATEGORY_ID },
         }"
         class="ml-3 inline-flex items-center border-b-2 border-b-transparent px-0.5 text-center text-sm last:mr-3 hover:border-green-qantis xl:ml-6 xl:last:mr-6"
-        :class="sustainableCategoryUi?.textClass"
         replace
         @click="
-          sendGaEvent('click_header_category', {
-            category_name: 'Achats durables',
+          sendGtmEvent('menu_click', {
+            link_text: 'Achats durables',
+            link_url: router.resolve({
+              name: ProductPageList.PRODUCTS,
+              query: { category: SUSTAINABLE_PURCHASES_CATEGORY_ID },
+            }).fullPath,
+            origin_url: router.currentRoute.value.fullPath,
           })
         "
       >
@@ -71,32 +81,27 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-
 import { storeToRefs } from 'pinia'
 
+import router from '@/vuejs/router'
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import { useCategoryStore } from '@/vuejs/stores/category'
 import { useChannelStore } from '@/vuejs/stores/channel'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
 import { Category } from '@/vuejs/types/Product/Category'
-
 import {
   CATEGORY_CONFIGS,
   CategoryConfig,
   SUSTAINABLE_PURCHASES_CATEGORY_ID,
 } from '@/vuejs/constants/categoryConfigs'
+
 import MenuCategoryComponent from '@/vuejs/modules/shared/header-component/MenuCategoryComponent.vue'
 import MenuIconComponent from '@/vuejs/modules/shared/icon/MenuIconComponent.vue'
-
-const isMenuOpen = ref<boolean>(false)
 
 const { channel } = storeToRefs(useChannelStore())
 const { categories, isLoaded } = storeToRefs(useCategoryStore())
 
-const toggleMenu = (): void => {
-  isMenuOpen.value = !isMenuOpen.value
-  sendGaEvent('click_header_all_categories')
-}
+const isMenuOpen = ref<boolean>(false)
 
 const listMenu = computed((): Category[] => {
   const customCategories = channel?.value?.options?.CUSTOM_HEADER_CATEGORIES
@@ -115,6 +120,11 @@ const listMenu = computed((): Category[] => {
 
   return categories.value.slice(0, 6)
 })
+
+const toggleMenu = (): void => {
+  isMenuOpen.value = !isMenuOpen.value
+  sendGtmEvent('menu_selector_click')
+}
 
 const sustainableCategoryUi = computed((): CategoryConfig | null => {
   const hasAccess = categories.value.some(

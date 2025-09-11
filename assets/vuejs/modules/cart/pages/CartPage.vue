@@ -54,13 +54,14 @@
 import { computed, onMounted, ref } from 'vue'
 import { RouteRecordName, useRouter } from 'vue-router'
 
+import { CartPageList } from '@/vuejs/router/pages-list'
+import { useCartStore } from '@/vuejs/stores/cart'
+import { useAddressStore } from '@/vuejs/stores/address'
+
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import CartBreadcrumbItemComponent from '@/vuejs/modules/cart/components/CartBreadcrumbItemComponent.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
-import { CartPageList } from '@/vuejs/router/pages-list'
-import { useCartStore } from '@/vuejs/stores/cart'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
-import { useAddressStore } from '@/vuejs/stores/address'
 
 const router = useRouter()
 const cartStore = useCartStore()
@@ -78,5 +79,3 @@ onMounted(async () => {
   loadingCart.value = false
 })
 </script>
-
-<style scoped></style>

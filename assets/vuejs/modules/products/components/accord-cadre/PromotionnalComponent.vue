@@ -27,12 +27,12 @@
 </template>
 
 <script lang="ts" setup>
-import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
 import { betterTextColor, openInNewTab } from '@/vuejs/services/utils'
 import { formatUrlWithChannelCode } from '@/vuejs/services/formatter'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+
+import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 
 const props = defineProps({
   properties: {
@@ -44,7 +44,6 @@ const props = defineProps({
 const channelStore = useChannelStore()
 
 const openingNewTab = (url: string) => {
-  sendGaEvent('click_cta_promotionnal')
   openInNewTab(formatUrlWithChannelCode(url))
 }
 </script>

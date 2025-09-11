@@ -50,7 +50,14 @@
           name: ProductPageList.PRODUCT,
           params: { slug: productSlug },
         }"
-        @click="sendGAEventData('click-product-card')"
+        @click="
+          sendGtmEvent('select_item', {
+            ecommerce: {
+              item_list_id: selectedCategoryId ?? selectedCompanyId,
+              items: formatProductGtmEvent([product]),
+            },
+          })
+        "
       >
         <!-- Bloc image -->
         <div class="my-1 flex w-full items-center">
@@ -80,7 +87,14 @@
             params: { slug: productSlug },
           }"
           class="contents"
-          @click="sendGAEventData('click-product-card')"
+          @click="
+            sendGtmEvent('select_item', {
+              ecommerce: {
+                item_list_id: selectedCategoryId ?? selectedCompanyId,
+                items: formatProductGtmEvent([product]),
+              },
+            })
+          "
         >
           <!-- Bloc titre -->
           <div class="h-[25%]">
@@ -112,32 +126,29 @@
           v-if="!product.sellable"
           :product="product"
         />
-        <ProductCardButtonsComponent
-          v-else
-          :product="product"
-          @click-add-cart="sendGAEventData('click-add-cart')"
-          @click-plus-qty="sendGAEventData('click-plus-qty')"
-          @click-moins-qty="sendGAEventData('click-moins-qty')"
-        />
+        <ProductCardButtonsComponent v-else :product="product" />
       </div>
     </div>
   </div>
 </template>
+
 <script lang="ts" setup>
 import { computed, PropType, ref } from 'vue'
+import { storeToRefs } from 'pinia'
+
+import { ProductPageList } from '@/vuejs/router/pages-list'
+import { useProductStore } from '@/vuejs/stores/product'
+import { getUpplerImage, betterTextColor } from '@/vuejs/services/utils'
+import { formatProductGtmEvent, sendGtmEvent } from '@/vuejs/services/gtm'
+import { Product } from '@/vuejs/types/Product'
+import { Variant } from '@/vuejs/types/Product/Variant'
 
 import AddFavoriteComponent from '@/vuejs/modules/products/components/AddFavoriteComponent.vue'
 import ProductCardButtonsComponent from '@/vuejs/modules/products/components/ProductCardButtonsComponent.vue'
 import NotSellableProductCardButtonComponent from '@/vuejs/modules/products/components/NotSellableProductCardButtonComponent.vue'
 
-import { getUpplerImage, betterTextColor } from '@/vuejs/services/utils'
-
-import router from '@/vuejs/router'
-import { ProductPageList } from '@/vuejs/router/pages-list'
-
-import { Product } from '@/vuejs/types/Product'
-import { Variant } from '@/vuejs/types/Product/Variant'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+const productStore = useProductStore()
+const { selectedCategoryId, selectedCompanyId } = storeToRefs(productStore)
 
 const emit = defineEmits([
   'click-add-cart',
@@ -179,14 +190,4 @@ const productDescription = computed((): string => {
   }
   return props.product.description
 })
-
-const sendGAEventData = (eventName: string) => {
-  sendGaEvent(eventName, {
-    partenaire_name: props.product.seller.name,
-    partenaire_id: props.product.seller.id,
-    product_name: props.product.name,
-    product_id: props.product.id,
-    qty_value: quantity.value,
-  })
-}
 </script>

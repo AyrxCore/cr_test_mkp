@@ -72,12 +72,14 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import CloseIcon from '@/vuejs/modules/shared/icon/CloseIconComponent.vue'
-import MenuCategoryChildComponent from '@/vuejs/modules/shared/header-component/MenuCategoryChildComponent.vue'
-import ChevronLeftIconComponent from '@/vuejs/modules/shared/icon/ChevronLeftIconComponent.vue'
+
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import { useCategoryStore } from '@/vuejs/stores/category'
 import { Category } from '@/vuejs/types/Product/Category'
+
+import MenuCategoryChildComponent from '@/vuejs/modules/shared/header-component/MenuCategoryChildComponent.vue'
+import ChevronLeftIconComponent from '@/vuejs/modules/shared/icon/ChevronLeftIconComponent.vue'
+import CloseIcon from '@/vuejs/modules/shared/icon/CloseIconComponent.vue'
 
 const emit = defineEmits(['update:modelValue'])
 

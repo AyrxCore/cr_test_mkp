@@ -64,8 +64,8 @@
       </div>
       <div class="col-span-2 m-auto mt-4 lg:mt-0">
         <RouterLink
-          class="button button-primary-outline"
           :to="{ name: PageList.ADDRESSES }"
+          class="button button-primary-outline"
         >
           Gérer mes adresses
         </RouterLink>
@@ -86,23 +86,25 @@
     </CartRightSideComponent>
   </div>
 </template>
+
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useHead } from '@unhead/vue'
 
-import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
+import { PageList } from '@/vuejs/router'
+import { useAddressStore } from '@/vuejs/stores/address'
+import { useCartStore } from '@/vuejs/stores/cart'
+import { ADDRESS_BILLING, ADDRESS_SHIPPING } from '@/vuejs/services/const'
+import { formatCartItemsGtmEvent, sendGtmEvent } from '@/vuejs/services/gtm'
+import { formatAddress, notifyError } from '@/vuejs/services/utils'
+import { Address } from '@/vuejs/types/Address'
+
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import CartRightSideComponent from '@/vuejs/modules/cart/components/CartRightSideComponent.vue'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
-
-import { formatAddress, notifyError } from '@/vuejs/services/utils'
-import { useAddressStore } from '@/vuejs/stores/address'
-import { useCartStore } from '@/vuejs/stores/cart'
-import { Address } from '@/vuejs/types/Address'
-import { PageList } from '@/vuejs/router'
-import { ADDRESS_BILLING, ADDRESS_SHIPPING } from '@/vuejs/services/const'
+import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 
 const router = useRouter()
 const cartStore = useCartStore()
@@ -200,6 +202,13 @@ useHead({
   title: 'Adresses | QANTIS Marketplace',
   meta: [{ property: 'og:title', content: 'Adresses | QANTIS Marketplace' }],
 })
-</script>
 
-<style scoped></style>
+onMounted(() => {
+  sendGtmEvent('begin_checkout', {
+    ecommerce: {
+      currency: 'EUR',
+      items: formatCartItemsGtmEvent(cart.value),
+    },
+  })
+})
+</script>

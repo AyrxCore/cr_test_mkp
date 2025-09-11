@@ -40,8 +40,12 @@
           :quantity="product.quantity"
           :variant-id="product.defaultVariantId"
           @click="
-            sendGaEvent('click_product_add_cart', {
-              product_name: product.name,
+            sendGtmEvent('add_to_cart', {
+              ecommerce: {
+                currency: 'EUR',
+                value: product.price * product.quantity,
+                items: formatProductGtmEvent([product]),
+              },
             })
           "
         />
@@ -52,23 +56,6 @@
           :variant-id="product.defaultVariantId"
           class="ml-5 lg:hidden"
           @toggle-favorite="onToggleFavoriteTooltip"
-          @open-favorite="
-            sendGaEvent('click_product_favorite', {
-              product_name: product.name,
-            })
-          "
-          @select-favorite="
-            sendGaEvent('click_product_select_favorite_list', {
-              product_name: product.name,
-              favorite_list_name: $event,
-            })
-          "
-          @add-favorite-list="
-            sendGaEvent('type_product_favorite_list', {
-              product_name: product.name,
-              favorite_list_name: $event,
-            })
-          "
         />
       </div>
     </div>
@@ -76,13 +63,14 @@
 </template>
 
 <script lang="ts" setup>
-import ButtonAddToCartComponent from '@/vuejs/modules/shared/ButtonAddToCartComponent.vue'
 import { PropType, ref } from 'vue'
-import { Product } from '@/vuejs/types/Product'
-import AddFavoriteComponent from '@/vuejs/modules/products/components/AddFavoriteComponent.vue'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
-const tooltipFavoriteIsOpened = ref(false)
+import { formatProductGtmEvent, sendGtmEvent } from '@/vuejs/services/gtm'
+import { Product } from '@/vuejs/types/Product'
+
+import ButtonAddToCartComponent from '@/vuejs/modules/shared/ButtonAddToCartComponent.vue'
+import AddFavoriteComponent from '@/vuejs/modules/products/components/AddFavoriteComponent.vue'
+
 const props = defineProps({
   product: {
     required: true,
@@ -95,9 +83,9 @@ const props = defineProps({
   },
 })
 
+const tooltipFavoriteIsOpened = ref<boolean>(false)
+
 const onToggleFavoriteTooltip = (event) => {
   tooltipFavoriteIsOpened.value = event.showTooltip
 }
 </script>
-
-<style scoped></style>

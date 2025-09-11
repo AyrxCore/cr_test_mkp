@@ -1,14 +1,14 @@
 <template>
   <div class="modal-overlay">
     <div
-      v-click-outside="() => $emit('cancel-stellantis')"
+      v-click-outside="() => closeModalStellantis"
       class="mx-auto my-auto max-h-[90vh] w-[90%] overflow-scroll rounded-xl bg-white px-4 py-6 text-black sm:w-[80%] md:w-[70%] lg:w-[50%] lg:px-8"
     >
       <div class="flex justify-end">
         <ButtonComponent
           class="!h-5 !px-3 text-xl font-bold !text-primary"
           type="button"
-          @click="$emit('cancel-stellantis')"
+          @click="closeModalStellantis"
         >
           <CloseIconComponent />
         </ButtonComponent>
@@ -76,6 +76,10 @@
 
 <script lang="ts" setup>
 import { onBeforeMount, onBeforeUnmount, ref } from 'vue'
+
+import router from '@/vuejs/router'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
+
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import CloseIconComponent from '@/vuejs/modules/shared/icon/CloseIconComponent.vue'
 
@@ -93,10 +97,18 @@ const emit = defineEmits(['accept-stellantis', 'cancel-stellantis'])
 const validateStellantis = () => {
   if (acceptStellantis.value) {
     emit('accept-stellantis')
+    sendGtmEvent('modal_stellantis_cta_click', {
+      origin_url: router.currentRoute.value.fullPath,
+    })
   } else {
     showAlert.value = true
     return false
   }
+}
+
+const closeModalStellantis = () => {
+  emit('cancel-stellantis')
+  sendGtmEvent('modal_stellantis_close')
 }
 
 onBeforeMount((): void => {
@@ -106,5 +118,3 @@ onBeforeUnmount((): void => {
   document.body.style.overflow = 'initial'
 })
 </script>
-
-<style scoped></style>

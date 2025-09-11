@@ -61,25 +61,27 @@
     </template>
   </AccountPage>
 </template>
+
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
+
+import { useUserStore } from '@/vuejs/stores/user'
+import { useAlertStore } from '@/vuejs/stores/alert'
+import { useCartStore } from '@/vuejs/stores/cart'
+import { useSavedCartStore } from '@/vuejs/stores/savedCart'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
+import { SavedCart } from '@/vuejs/types/SavedCart'
+
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
 import SavedCartDetailsComponent from '@/vuejs/modules/account/components/SavedCartDetailsComponent.vue'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
+import SavedCartModal from '@/vuejs/modules/account/components/savedCart/SavedCartModal.vue'
 import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
 import EditIconComponent from '@/vuejs/modules/shared/icon/EditIconComponent.vue'
-import SavedCartModal from '@/vuejs/modules/account/components/savedCart/SavedCartModal.vue'
-import { addProductToCartGoogleAnalytics } from '@/vuejs/modules/products'
-import { SavedCart } from '@/vuejs/types/SavedCart'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
-import { useUserStore } from '@/vuejs/stores/user'
-import { useAlertStore } from '@/vuejs/stores/alert'
-import { useCartStore } from '@/vuejs/stores/cart'
-import { useSavedCartStore } from '@/vuejs/stores/savedCart'
 
 const { isNeoAutoLogin } = storeToRefs(useUserStore())
 const cartStore = useCartStore()
@@ -91,7 +93,6 @@ const isEditLoading = ref<boolean>(false)
 const showForm = ref<boolean>(false)
 const isLoadingModal = ref<boolean>(false)
 const isLoading = ref<boolean>(false)
-const listItemToAddCart = ref([])
 const alertStore = useAlertStore()
 const cartProducts = ref([])
 
@@ -102,7 +103,6 @@ const name = computed(() => {
 })
 const openSavedCartForm = () => {
   showForm.value = true
-  sendGaEvent('click_saved_cart_details_rename')
 }
 
 onMounted(async () => {
@@ -135,8 +135,18 @@ const addToCart = async () => {
   isAddToCartLoading.value = true
   await cartStore.addProductsToCart(cartProducts.value)
 
-  for (const [, value] of Object.entries(listItemToAddCart.value)) {
-    await addProductToCartGoogleAnalytics(value.product, value.variantId, 1)
+  for (const [, value] of Object.entries(cartProducts.value)) {
+    sendGtmEvent('add_to_cart', {
+      ecommerce: {
+        currency: 'EUR',
+        items: [
+          {
+            variant_id: value.variantId,
+            quantity: value.quantity,
+          },
+        ],
+      },
+    })
   }
 
   isAddToCartLoading.value = false
@@ -161,11 +171,8 @@ watch(
     }
 
     isLoading.value = false
-    sendGaEvent('click_saved_cart_order')
   },
 
   { immediate: true },
 )
 </script>
-
-<style scoped></style>

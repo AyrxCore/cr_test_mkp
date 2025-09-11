@@ -50,10 +50,13 @@
       "
       @click="
         !isInShowcase
-          ? $emit('click-accord-cadre-card', {
-              partenaire_name: accord.seller.name,
-              partenaire_id: accord.seller.id,
-            })
+          ? sendGtmEvent('fat_click', {
+                link_url: router.resolve({
+                  name: ProductPageList.ACCORD_CADRE,
+                  params: { slug: accord.slug },
+                }).fullPath,
+                origin_url: router.currentRoute.value.fullPath,
+              })
           : $emit('show-showcase-modal', accord)
       "
     >
@@ -61,11 +64,11 @@
         <div class="my-1 flex w-full items-center">
           <div
             class="mx-auto flex h-[180px] max-w-[200px] items-center justify-center rounded-lg"
-          >
-            <component
-              :is="isInShowcase ? 'div' : 'RouterLink'"
-              :to="isInShowcase ? null : productLink"
-              class="block"
+        >
+          <component
+            :is="isInShowcase ? 'div' : 'RouterLink'"
+            :to="isInShowcase ? null : productLink"
+            class="block"
             >
               <img
                 :alt="`Image ${accord.name}`"
@@ -139,18 +142,17 @@
 
 <script lang="ts" setup>
 import { computed, PropType } from 'vue'
-import { RouteLocationRaw } from 'vue-router'
 import { storeToRefs } from 'pinia'
+import { RouteLocationRaw } from 'vue-router'
 
+import router from '@/vuejs/router'
+import { ProductPageList } from '@/vuejs/router/pages-list'
 import { useUserStore } from '@/vuejs/stores/user'
 import { useChannelStore } from '@/vuejs/stores/channel'
-
-import { ProductPageList } from '@/vuejs/router/pages-list'
-
+import { betterTextColor } from '@/vuejs/services/utils'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
 import { Product } from '@/vuejs/types/Product'
 import { AdherentTarifShowcase } from '@/vuejs/types/AdherentTarifShowcase'
-
-import { betterTextColor } from '@/vuejs/services/utils'
 
 import AddFavoriteComponent from '@/vuejs/modules/products/components/AddFavoriteComponent.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'

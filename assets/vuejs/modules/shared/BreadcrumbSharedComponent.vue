@@ -2,7 +2,19 @@
   <nav class="w-full text-sm text-black">
     <ol class="list-reset hidden text-xs lg:flex">
       <li class="inline-flex items-center">
-        <RouterLink :to="{ name: PageList.HOME_PAGE }">Accueil</RouterLink>
+        <RouterLink
+          :to="{ name: PageList.HOME_PAGE }"
+          @click="
+            sendGtmEvent('breadcrumb_click', {
+              link_text: $event.target.innerText,
+              link_url: router.resolve({
+                name: PageList.HOME_PAGE,
+              }).fullPath,
+              origin_url: router.currentRoute.value.fullPath,
+            })
+          "
+          >Accueil
+        </RouterLink>
         <ChevronRightIconComponent class="mx-1 h-3" />
       </li>
       <li
@@ -13,25 +25,22 @@
         <RouterLink
           :to="list.url ?? '#'"
           @click="
-            sendGaEvent(gtmEventName, {
-              product_name: list.name,
+            sendGtmEvent('breadcrumb_click', {
+              link_text: $event.target.innerText,
+              link_url: list.url ? router.resolve(list.url).fullPath : '#',
+              origin_url: router.currentRoute.value.fullPath,
             })
           "
-          >{{ list.name }}</RouterLink
-        >
+          >{{ list.name }}
+        </RouterLink>
         <ChevronRightIconComponent class="mx-1 h-3" />
       </li>
       <li class="font-extrabold">{{ currentPage }}</li>
     </ol>
     <RouterLink
       v-if="lastBreadcrumbUrl"
-      class="inline-flex items-center lg:hidden"
       :to="lastBreadcrumbUrl.url ?? '#'"
-      @click="
-        sendGaEvent(gtmEventName, {
-          product_name: lastBreadcrumbUrl.name,
-        })
-      "
+      class="inline-flex items-center lg:hidden"
     >
       <ChevronRightIconComponent class="mr-1 h-3 rotate-180" />
       {{ lastBreadcrumbUrl.name }}
@@ -42,10 +51,10 @@
 <script lang="ts" setup>
 import { computed, PropType } from 'vue'
 
-import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
+import router, { PageList } from '@/vuejs/router'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
 
-import { PageList } from '@/vuejs/router'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
 
 const props = defineProps({
   listUrl: {
@@ -56,10 +65,6 @@ const props = defineProps({
   currentPage: {
     required: true,
     type: String,
-  },
-  gtmEventName: {
-    type: String,
-    default: '',
   },
 })
 

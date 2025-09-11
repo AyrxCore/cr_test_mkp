@@ -12,7 +12,7 @@
       @click="sendSubmission"
     >
       <ArrowRightIconComponent class="h-4 w-4" />
-      <span>{{ label ?? 'Bénéficiez des conditions' }}</span>
+      {{ label ?? 'Bénéficiez des conditions' }}
     </ButtonComponent>
     <ModalValidationBeneficePartnerModal
       v-if="showSuccesModal"
@@ -26,18 +26,22 @@
     />
   </div>
 </template>
+
 <script lang="ts" setup>
 import { PropType, ref } from 'vue'
 import { storeToRefs } from 'pinia'
+
+import router from '@/vuejs/router.ts'
+import { useUserStore } from '@/vuejs/stores/user'
+import ProductHttpClient from '@/vuejs/services/httpclient/ProductHttpClient'
+import { AccountAccordCadre } from '@/vuejs/types/AccountAccordCadre'
+import { status } from '@/vuejs/modules/products'
+
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import ModalValidationBeneficePartnerModal from '@/vuejs/modules/products/components/accord-cadre/ValidationBeneficeModal.vue'
 import ModalValidationBeneficeErrorModal from '@/vuejs/modules/products/components/accord-cadre/ValidationBeneficeErrorModal.vue'
-import { AccountAccordCadre } from '@/vuejs/types/AccountAccordCadre'
-import { status } from '@/vuejs/modules/products'
-import ProductHttpClient from '@/vuejs/services/httpclient/ProductHttpClient'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
-import { useUserStore } from '@/vuejs/stores/user'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
 
 const { isNeoAutoLogin } = storeToRefs(useUserStore())
 
@@ -78,15 +82,16 @@ const sendSubmission = async () => {
 
     if (status.value.pending === response) {
       showSuccesModal.value = true
+      sendGtmEvent('fat_cta_rattachement_click', {
+        link_text: props.label ?? 'Bénéficiez des conditions',
+        origin_url: router.currentRoute.value.fullPath,
+      })
     } else {
       showErrorModal.value = true
     }
   } catch (error) {
     isLoading.value = false
   }
-  sendGaEvent('click_fat_cta_not_activated', {
-    product_name: props.accordName,
-  })
 }
 
 const closeModal = () => {

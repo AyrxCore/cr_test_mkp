@@ -1,22 +1,32 @@
 <template>
   <div class="my-2 flex cursor-pointer items-center text-left text-sm">
     <input
+      :id="`companyRadio-${company.id}`"
       v-model="companyRadio"
-      :value="props.company.id"
-      :checked="props.company.checked"
-      :id="`companyRadio-${props.company.id}`"
+      :checked="company.checked"
+      :value="company.id"
+      class="mr-3 cursor-pointer"
       name="companyRadio"
       type="radio"
-      class="mr-3 cursor-pointer"
-      @change="handleCompanySelection(props.company)"
+      @change="handleCompanySelection(company)"
+      @click="
+        sendGtmEvent('select_filter', {
+          filter_partner: company.name,
+          origin_url: router.currentRoute.value.fullPath,
+        })
+      "
     />
-    <label :for="`companyRadio-${props.company.id}`" class="cursor-pointer">
-      {{ props.company.name }}
+    <label :for="`companyRadio-${company.id}`" class="cursor-pointer">
+      {{ company.name }}
     </label>
   </div>
 </template>
+
 <script lang="ts" setup>
 import { ref } from 'vue'
+
+import router from '@/vuejs/router'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
 
 const props = defineProps({
   company: {
@@ -33,5 +43,3 @@ const handleCompanySelection = async (company) => {
   await emit('change-company', { company_id: company.id })
 }
 </script>
-
-<style scoped></style>

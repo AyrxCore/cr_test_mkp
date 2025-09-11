@@ -56,20 +56,22 @@
     </template>
   </AccountPage>
 </template>
+
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
+
+import { useFavoriteStore } from '@/vuejs/stores/favorite'
+import { useAlertStore } from '@/vuejs/stores/alert'
+import { useUserStore } from '@/vuejs/stores/user'
+import { notifyError } from '@/vuejs/services/utils'
+
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 import FavoritesProductsComponent from '@/vuejs/modules/account/components/FavoriteProductComponent.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import FavoriteFormModal from '@/vuejs/modules/account/components/favorite/FavoriteAddEditModal.vue'
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
-import { useFavoriteStore } from '@/vuejs/stores/favorite'
-import { useAlertStore } from '@/vuejs/stores/alert'
-import { useUserStore } from '@/vuejs/stores/user'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
-import { notifyError } from '@/vuejs/services/utils'
 
 const alertStore = useAlertStore()
 const favoriteStore = useFavoriteStore()
@@ -88,7 +90,6 @@ onMounted(async () => {
 })
 const openFavoriteForm = () => {
   showFormFavorite.value = true
-  sendGaEvent('click_favorites_add')
 }
 
 const onSubmitFavorite = async (event) => {

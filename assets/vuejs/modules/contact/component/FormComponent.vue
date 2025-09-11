@@ -2,9 +2,9 @@
   <!-- Bloc formulaire -->
   <div v-if="contact">
     <MessageSquareIconComponent
-      class="mx-auto mb-2 w-full stroke-secondary"
-      :width="40"
       :height="40"
+      :width="40"
+      class="mx-auto mb-2 w-full stroke-secondary"
     />
     <h4 class="mb-3 text-center text-2xl font-bold text-primary">
       Directement en nous laissant un message
@@ -19,13 +19,8 @@
             v-model="contact.motif"
             class="border-1 relative h-[55px] w-full rounded-md border-gray-200"
             required
-            @change="
-              sendGaEvent('click_contact_demande_type', {
-                demande_value: motifs[contact.motif],
-              })
-            "
           >
-            <option disabled value="" class="text-gray-500">
+            <option class="text-gray-500" disabled value="">
               Votre demande concerne *
             </option>
             <option
@@ -42,39 +37,39 @@
             <div class="mb-3 pt-0">
               <input
                 v-model="contact.lastName"
-                type="text"
-                placeholder="Votre nom *"
                 class="border-1 relative h-[55px] w-full rounded-lg border-gray-200 bg-white px-3 placeholder-gray-400"
+                placeholder="Votre nom *"
                 required
+                type="text"
               />
             </div>
             <div class="mb-3 pt-0">
               <input
                 v-model="contact.firstName"
-                type="text"
-                placeholder="Votre prénom *"
                 class="border-1 relative h-[55px] w-full rounded-lg border-gray-200 bg-white px-3 placeholder-gray-400"
+                placeholder="Votre prénom *"
                 required
+                type="text"
               />
             </div>
             <div class="mb-3 pt-0">
               <input
                 v-model="contact.email"
-                type="email"
-                placeholder="Votre email *"
-                title="Ex: votre_email@test.fr"
                 class="border-1 relative h-[55px] w-full rounded-lg border-gray-200 bg-white px-3 placeholder-gray-400"
+                placeholder="Votre email *"
                 required
+                title="Ex: votre_email@test.fr"
+                type="email"
               />
             </div>
             <div class="flex flex-col pt-0">
               <input
                 v-model="contact.phone"
-                type="tel"
-                pattern="^((\+)33|0)[1-9](\d{2}){4}$"
-                title="Ex: 0478123456"
-                placeholder="Votre téléphone (Optionnel)"
                 class="border-1 relative h-[55px] w-full rounded-lg border-gray-200 bg-white px-3 placeholder-gray-400"
+                pattern="^((\+)33|0)[1-9](\d{2}){4}$"
+                placeholder="Votre téléphone (Optionnel)"
+                title="Ex: 0478123456"
+                type="tel"
               />
             </div>
           </div>
@@ -82,32 +77,31 @@
             <div class="mb-3 flex flex-col pt-0">
               <input
                 v-model="contact.accordCadreName"
-                type="text"
-                placeholder="Nom partenaire / accord-cadre (Optionnel)"
                 class="border-1 relative h-[55px] w-full rounded-lg border-gray-200 bg-white px-3 placeholder-gray-400"
+                placeholder="Nom partenaire / accord-cadre (Optionnel)"
+                type="text"
               />
             </div>
             <div class="pt-0">
               <textarea
                 v-model="contact.description"
-                placeholder="Votre message *"
                 class="border-1 relative h-full w-full resize-none rounded-lg border-gray-200 bg-white px-3 py-3 placeholder-gray-400"
-                rows="7"
+                placeholder="Votre message *"
                 required
+                rows="7"
               />
             </div>
           </div>
         </div>
         <div class="mt-2 flex justify-end">
           <ButtonComponent
-            type="submit"
-            class="button-primary mt-2 md:w-auto"
             :is-loading="isLoading"
-            @click="sendGaEvent('click_contact_send')"
+            class="button-primary mt-2 md:w-auto"
+            type="submit"
           >
             <ArrowRightIconComponent
-              class="mr-2 w-4"
               :stroke="betterTextColor('primary')"
+              class="mr-2 w-4"
             />
             Envoyer
           </ButtonComponent>
@@ -117,17 +111,20 @@
   </div>
   <!-- Fin Bloc formulaire -->
 </template>
+
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
-import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
-import MessageSquareIconComponent from '@/vuejs/modules/shared/icon/MessageSquareIconComponent.vue'
-import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
+
 import { useContactStore } from '@/vuejs/stores/contact'
 import { useAlertStore } from '@/vuejs/stores/alert'
-import { AlertType } from '@/vuejs/types/Alert'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
 import { betterTextColor } from '@/vuejs/services/utils'
+import { AlertType } from '@/vuejs/types/Alert'
+
+import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
+import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
+import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
+import MessageSquareIconComponent from '@/vuejs/modules/shared/icon/MessageSquareIconComponent.vue'
 
 onMounted(async () => {
   await contactStore.init()
@@ -156,9 +153,11 @@ const sendEmail = async () => {
     response.message,
     response.error === true ? AlertType.danger : AlertType.success,
   )
+  sendGtmEvent('contact_form_submission', {
+    form_type: 'contact',
+    subject: motifs[contact.value.motif],
+  })
 
   isLoading.value = false
 }
 </script>
-
-<style scoped></style>

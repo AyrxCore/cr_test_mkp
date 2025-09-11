@@ -42,12 +42,27 @@
       }
       document.addEventListener('DOMContentLoaded', initApp)
 
+      window.addEventListener("load", (event) => {
+        sendEvent('datalayer_ready', {
+          marketplace: {{ channel.name|json_encode|raw }}
+        });
+      })
+
       function openModal(id) {
         document.getElementById(id).style.display = 'block';
       }
 
       function closeModal(id) {
         document.getElementById(id).style.display = 'none';
+      }
+
+      function sendEvent(event, data) {
+        if (!window.dataLayer) return;
+
+        window.dataLayer.push({
+          event: event,
+          ...data,
+        });
       }
     </script>
   {% endblock %}

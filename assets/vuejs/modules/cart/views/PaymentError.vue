@@ -1,5 +1,5 @@
 <template>
-  <h3 class="mt-10 mb-1 text-[23px] text-primary md:text-[35px]">
+  <h3 class="mb-1 mt-10 text-[23px] text-primary md:text-[35px]">
     Erreur lors de la finalisation de commande
   </h3>
   <div class="mb-10 flex w-1/2 bg-orange-100 p-3">
@@ -17,20 +17,9 @@
     Contactez-nous
   </RouterLink>
 </template>
+
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { PageList } from '@/vuejs/router'
+
 import MailIconLightComponent from '@/vuejs/modules/shared/icon/MailIconLightComponent.vue'
-import { onMounted } from 'vue'
-import { gtmCartTrackingEvent } from '@/vuejs/modules/cart'
-import { useCartStore } from '@/vuejs/stores/cart'
-
-const cartStore = useCartStore()
-
-const { cart } = storeToRefs(cartStore)
-onMounted(async () => {
-  await gtmCartTrackingEvent('payment_error', cart.value)
-})
 </script>
-
-<style scoped></style>

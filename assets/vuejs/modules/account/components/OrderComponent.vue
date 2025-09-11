@@ -11,9 +11,9 @@
         <div class="flex items-center space-x-2 md:my-2">
           <span>Statut :</span>
           <span
-            class="mt-1 ml-2 w-fit rounded-md px-1 py-1 text-[14px] text-white"
             :class="ORDER_STATUS[order.state].color"
             :title="ORDER_STATUS[order.state].name"
+            class="ml-2 mt-1 w-fit rounded-md px-1 py-1 text-[14px] text-white"
             >{{ ORDER_STATUS[order.state].name }}</span
           >
         </div>
@@ -28,9 +28,9 @@
             <div class="flex items-center space-x-2">
               <span>Statut :</span>
               <span
-                class="ml-2 w-fit rounded-md px-1 py-1 text-[14px] text-white"
                 :class="SHIPPING_STATUS[order.shippingState].color"
                 :title="SHIPPING_STATUS[order.shippingState].name"
+                class="ml-2 w-fit rounded-md px-1 py-1 text-[14px] text-white"
                 >{{ SHIPPING_STATUS[order.shippingState].name }}</span
               >
             </div>
@@ -51,7 +51,12 @@
         <ButtonDownloadInvoiceComponent
           v-if="order.paymentId"
           :payment-id="order.paymentId"
-          @click="sendGaEvent('click_orders_download')"
+          @click="
+            sendGtmEvent('order_download', {
+              order_id: order.id,
+              order_price: formatPrice(order.total),
+            })
+          "
         />
         <RouterLink
           :to="{
@@ -59,28 +64,36 @@
             params: { id: order.id },
           }"
           class="rounded-lg border border-primary p-0.5"
-          @click="sendGaEvent('click_orders_details')"
+          @click="
+            sendGtmEvent('order_view', {
+              order_id: order.id,
+              order_price: formatPrice(order.total),
+            })
+          "
         >
           <EyeIconComponent
-            class="h-[18px] w-[18px]"
             :stroke="channelPrimaryColor"
+            class="h-[18px] w-[18px]"
           />
         </RouterLink>
       </div>
     </div>
   </div>
 </template>
+
 <script lang="ts" setup>
 import { computed, PropType } from 'vue'
-import { Order } from '@/vuejs/types/Order'
+import { storeToRefs } from 'pinia'
+
+import { PageList } from '@/vuejs/router'
+import { useChannelStore } from '@/vuejs/stores/channel'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
 import { formatDateFr, formatPrice } from '@/vuejs/services/utils'
 import { ORDER_STATUS, SHIPPING_STATUS } from '@/vuejs/services/const'
-import EyeIconComponent from '@/vuejs/modules/shared/icon/EyeIconComponent.vue'
-import { PageList } from '@/vuejs/router'
+import { Order } from '@/vuejs/types/Order'
+
 import ButtonDownloadInvoiceComponent from '@/vuejs/modules/account/components/ButtonDownloadInvoiceComponent.vue'
-import { storeToRefs } from 'pinia'
-import { useChannelStore } from '@/vuejs/stores/channel'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import EyeIconComponent from '@/vuejs/modules/shared/icon/EyeIconComponent.vue'
 
 const props = defineProps({
   order: {

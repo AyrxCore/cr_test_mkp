@@ -29,14 +29,7 @@
         :key="product.id"
         class="!flex !h-auto items-stretch justify-center overflow-hidden rounded-lg bg-white"
       >
-        <ProductComponent
-          :product="product"
-          @click-add-cart="$emit('click-add-cart', $event)"
-          @click-title="$emit('click-title', $event)"
-          @click-img="$emit('click-img', $event)"
-          @click-moins-qty="$emit('click-moins-qty', $event)"
-          @click-plus-qty="$emit('click-plus-qty', $event)"
-        />
+        <ProductComponent :product="product" />
       </SwiperSlide>
     </CarouselListSharedComponent>
   </div>
@@ -49,15 +42,7 @@ import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListShar
 import ProductComponent from '@/vuejs/modules/products/components/ProductCardComponent.vue'
 import ProductsLoadingCarouselComponent from '@/vuejs/modules/shared/ProductsLoadingCarouselComponent.vue'
 
-const emit = defineEmits([
-  'click-left',
-  'click-right',
-  'click-add-cart',
-  'click-title',
-  'click-img',
-  'click-moins-qty',
-  'click-plus-qty',
-])
+const emit = defineEmits(['click-left', 'click-right'])
 
 const props = defineProps({
   products: {

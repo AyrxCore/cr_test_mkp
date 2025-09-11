@@ -60,19 +60,6 @@
           <ProductsCarouselComponent
             :loading="isLoading"
             :products="partnerProducts"
-            @click-left="sendGaEvent('click_fat_slider_left')"
-            @click-right="sendGaEvent('click_fat_slider_right')"
-            @click-add-cart="
-              sendGaEvent('click_fat_slider_product_add_cart', $event)
-            "
-            @click-title="sendGaEvent('click_fat_slider_product_title', $event)"
-            @click-img="sendGaEvent('click_fat_slider_product_img', $event)"
-            @click-moins-qty="
-              sendGaEvent('click_fat_slider_product_moins_qty', $event)
-            "
-            @click-plus-qty="
-              sendGaEvent('click_fat_slider_product_plus_qty', $event)
-            "
           />
         </div>
       </div>
@@ -93,11 +80,6 @@
         <SellersCarouselComponent
           :params="sellersByCategoryParam"
           class="mt-5"
-          @click-partner-slider="
-            sendGaEvent('click_fat_frise_logos', {
-              partenaire_name: $event,
-            })
-          "
         />
       </div>
       <div class="m-auto mb-8 mt-2 max-w-screen-94 text-xs text-gray-500">
@@ -120,13 +102,12 @@ import { computed, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
 
-import { status } from '@/vuejs/modules/products'
+import { MainPageList } from '@/vuejs/router/pages-list'
 import { useProductStore } from '@/vuejs/stores/product'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { useUserStore } from '@/vuejs/stores/user'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { Product } from '@/vuejs/types/Product'
-import { MainPageList } from '@/vuejs/router/pages-list'
+import { status } from '@/vuejs/modules/products'
 
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import HeaderPartnerComponent from '@/vuejs/modules/products/components/accord-cadre/HeaderAccordCadreComponent.vue'

@@ -99,20 +99,22 @@
     </div>
   </div>
 </template>
+
 <script lang="ts" setup>
 import { computed, onMounted, PropType, ref } from 'vue'
 import { storeToRefs } from 'pinia'
+
 import { PageList } from '@/vuejs/router'
-import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
-import ChangeIconComponent from '@/vuejs/modules/shared/icon/ChangeIconComponent.vue'
-import ProductDeleteModal from '@/vuejs/modules/account/components/favorite/ProductRemoveModal.vue'
-import ProductMoveModal from '@/vuejs/modules/account/components/favorite/ProductMoveModal.vue'
-import { Product } from '@/vuejs/types/Product'
-import { FavoriteProduct } from '@/vuejs/types/Favorite'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { useProductStore } from '@/vuejs/stores/product'
 import { useUserStore } from '@/vuejs/stores/user'
+import { FavoriteProduct } from '@/vuejs/types/Favorite'
+import { Product } from '@/vuejs/types/Product'
+
+import ProductDeleteModal from '@/vuejs/modules/account/components/favorite/ProductRemoveModal.vue'
+import ProductMoveModal from '@/vuejs/modules/account/components/favorite/ProductMoveModal.vue'
+import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
+import ChangeIconComponent from '@/vuejs/modules/shared/icon/ChangeIconComponent.vue'
 
 const emit = defineEmits([
   'removeProduct',
@@ -148,12 +150,10 @@ const props = defineProps({
 
 const openRemoveForm = () => {
   removeProduct.value = true
-  sendGaEvent('click_favorite_details_delete')
 }
 
 const openMoveProductForm = () => {
   moveProduct.value = true
-  sendGaEvent('click_favorite_details_update_product')
 }
 
 const onSelectProduct = () => {

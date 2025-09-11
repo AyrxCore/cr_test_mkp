@@ -49,15 +49,17 @@
     </div>
   </div>
 </template>
+
 <script lang="ts" setup>
-import { computed, onBeforeMount, onMounted, PropType, ref } from 'vue'
+import { computed, onMounted, PropType, ref } from 'vue'
+
+import { PageList } from '@/vuejs/router'
+import { useProductStore } from '@/vuejs/stores/product'
 import { formatPrice } from '@/vuejs/services/utils'
 import { Product } from '@/vuejs/types/Product'
-import { useProductStore } from '@/vuejs/stores/product'
-import { PageList } from '@/vuejs/router'
-import ProductQuantityComponent from '../../shared/ProductQuantityComponent.vue'
 import { SavedCartProduct } from '@/vuejs/types/SavedCart'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+
+import ProductQuantityComponent from '../../shared/ProductQuantityComponent.vue'
 
 const emit = defineEmits(['changeQuantity'])
 const props = defineProps({
@@ -100,7 +102,6 @@ const changeQuantity = async (event) => {
     quantity: quantity.value,
     price: product.value.price * quantity.value,
   })
-  sendGaEvent('click_saved_cart_qty')
 }
 
 const productImage = computed((): string => {

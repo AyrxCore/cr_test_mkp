@@ -7,7 +7,6 @@
           params: { id: savedCart.id },
         }"
         class="font-bold text-primary underline"
-        @click="sendGaEvent('click_saved_carts_details')"
       >
         {{ savedCart.name }}
       </RouterLink>
@@ -27,7 +26,6 @@
           }"
           class="flex"
           title="Visualisez le contenu du panier sauvegardé"
-          @click="sendGaEvent('click_saved_carts_details')"
         >
           <EyeIconComponent :stroke="channelPrimaryColor" class="mr-2" />
         </RouterLink>
@@ -77,20 +75,22 @@
     </div>
   </div>
 </template>
+
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import { PageList } from '@/vuejs/router'
 import { format } from 'date-fns'
-import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
-import SavedCartModal from '@/vuejs/modules/account/components/savedCart/SavedCartModal.vue'
-import EyeIconComponent from '@/vuejs/modules/shared/icon/EyeIconComponent.vue'
-import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
-import SavedCartDeleteModal from '@/vuejs/modules/account/components/savedCart/SavedCartDeleteModal.vue'
-import SavedCartAddToCartModal from '@/vuejs/modules/account/components/savedCart/SavedCartAddToCartModal.vue'
+
+import { PageList } from '@/vuejs/router'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { useUserStore } from '@/vuejs/stores/user'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+
+import SavedCartModal from '@/vuejs/modules/account/components/savedCart/SavedCartModal.vue'
+import SavedCartDeleteModal from '@/vuejs/modules/account/components/savedCart/SavedCartDeleteModal.vue'
+import SavedCartAddToCartModal from '@/vuejs/modules/account/components/savedCart/SavedCartAddToCartModal.vue'
+import TrashIconComponent from '@/vuejs/modules/shared/icon/TrashIconComponent.vue'
+import EyeIconComponent from '@/vuejs/modules/shared/icon/EyeIconComponent.vue'
+import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartIconComponent.vue'
 
 const props = defineProps({
   savedCart: {
@@ -119,12 +119,10 @@ const nbProducts = computed(() => {
 
 const openDeleteForm = () => {
   showDeleteForm.value = true
-  sendGaEvent('click_saved_carts_delete')
 }
 
 const openAddToCartConfirm = () => {
   showAddToCartConfirm.value = true
-  sendGaEvent('click_saved_carts_edit')
 }
 const onSubmitSavedCart = (event) => {
   emit('submit', {

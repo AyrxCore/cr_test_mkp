@@ -69,13 +69,6 @@
                   :alt="`${product.name} main image ${key}`"
                   :src="getUpplerImage(img)"
                   class="h-auto sm:mx-auto"
-                  @click.stop="
-                    sendGaEvent('click_product_img', {
-                      product_name: product.name,
-                      partner_name: product.seller.name,
-                      partner_id: product.seller.id,
-                    })
-                  "
                 />
               </SwiperSlide>
               <SwiperSlide v-if="!product.images?.length">
@@ -127,14 +120,7 @@
         </div>
 
         <Tabs class="mt-4">
-          <Tab
-            name="Description"
-            @click.native="
-              sendGaEvent('click_product_view_description', {
-                product_name: product.name,
-              })
-            "
-          >
+          <Tab name="Description">
             <p
               class="whitespace-pre-line py-4 text-sm md:text-base"
               v-html="product.description"
@@ -143,11 +129,6 @@
           <Tab
             v-if="Object.values(productProperties).length > 0"
             name="Caractéristiques techniques"
-            @click.native="
-              sendGaEvent('click_product_view_caracteristics', {
-                product_name: product.name,
-              })
-            "
           >
             <table class="w-full table-auto">
               <tbody>
@@ -183,21 +164,6 @@
             :loading="isLoadingSimilarProductsAndAccordsCadres"
             :products="similarProducts"
             class="mt-4"
-            @click-left="sendGaEvent('click_product_slider_left')"
-            @click-right="sendGaEvent('click_product_slider_right')"
-            @click-add-cart="
-              sendGaEvent('click_product_slider_product_add_cart', $event)
-            "
-            @click-title="
-              sendGaEvent('click_product_slider_product_title', $event)
-            "
-            @click-img="sendGaEvent('click_product_slider_product_img', $event)"
-            @click-moins-qty="
-              sendGaEvent('click_product_slider_products_moins_qty', $event)
-            "
-            @click-plus-qty="
-              sendGaEvent('click_product_slider_products_plus_qty', $event)
-            "
           />
         </template>
         <!-- Fin bloc produits similaire -->
@@ -215,11 +181,6 @@
           <AccordsCadreComponent
             :accords-cadres="similarAccordsCadres"
             :loading="isLoadingSimilarProductsAndAccordsCadres"
-            @click-left="sendGaEvent('click_product_slider_fat_left')"
-            @click-right="sendGaEvent('click_product_slider_fat_right')"
-            @click-cta="sendGaEvent('click_product_slider_fat_cta', $event)"
-            @click-title="sendGaEvent('click_product_slider_fat_title', $event)"
-            @click-img="sendGaEvent('click_product_slider_fat_img', $event)"
           />
         </template>
         <!-- Fin bloc accords-cadres incontournables -->
@@ -244,12 +205,22 @@
     class="z-10 flex lg:hidden"
   />
 </template>
+
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
 import { SwiperSlide } from 'swiper/vue'
 import { Tab, Tabs } from 'vue3-tabs-component'
-import { storeToRefs } from 'pinia'
+
+import { PageList } from '@/vuejs/router'
+import { ProductPageList } from '@/vuejs/router/pages-list'
+import { useFavoriteStore } from '@/vuejs/stores/favorite'
+import { useProductStore } from '@/vuejs/stores/product'
+import { useUserStore } from '@/vuejs/stores/user'
+import { getUpplerImage, isUrl } from '@/vuejs/services/utils'
+import { formatProductGtmEvent, sendGtmEvent } from '@/vuejs/services/gtm'
+import { Product, ProductProperties } from '@/vuejs/types/Product'
 
 import AddFavoriteComponent from '@/vuejs/modules/products/components/AddFavoriteComponent.vue'
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
@@ -261,17 +232,7 @@ import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselCo
 import NotSellableDetails from '@/vuejs/modules/products/components/NotSellableDetails.vue'
 import ProductDetails from '@/vuejs/modules/products/components/ProductDetails.vue'
 import AccordsCadreComponent from '@/vuejs/modules/home/component/AccordsCadreComponent.vue'
-
-import { getUpplerImage, isUrl } from '@/vuejs/services/utils'
-import { PageList } from '@/vuejs/router'
-import { Product, ProductProperties } from '@/vuejs/types/Product'
-import { useFavoriteStore } from '@/vuejs/stores/favorite'
-import { useProductStore } from '@/vuejs/stores/product'
-import { useUserStore } from '@/vuejs/stores/user'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import sampleImg from '@/vuejs/assets/img/sample_product_img.png'
-
-import { ProductPageList } from '@/vuejs/router/pages-list'
 
 const route = useRoute()
 const router = useRouter()
@@ -383,6 +344,13 @@ watch(
           },
         )
       }
+      sendGtmEvent('view_item', {
+        ecommerce: {
+          currency: 'EUR',
+          value: product.value.price * product.value.quantity,
+          items: formatProductGtmEvent([product.value]),
+        },
+      })
     } finally {
       isLoading.value = false
       isLoadingSimilarProductsAndAccordsCadres.value = false

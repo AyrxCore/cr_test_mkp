@@ -38,7 +38,15 @@
                 params: { slug: content.slug },
               }"
               class="truncate-custom truncate-custom-2 text-primary"
-              @click="sendGaEvent('click_homepage_banner_news')"
+              @click="
+                sendGtmEvent('homepage_banner_click', {
+                  link_url: router.resolve({
+                    name: NewsPageList.NEWS_ITEM,
+                    params: { slug: content.slug },
+                  }).fullPath,
+                  origin_url: router.currentRoute.value.fullPath,
+                })
+              "
             >
               <img
                 :src="content.slider_img_mobile"
@@ -68,17 +76,19 @@
     </div>
   </div>
 </template>
+
 <script lang="ts" setup>
-import { SwiperSlide } from 'swiper/vue'
 import { storeToRefs } from 'pinia'
+import { SwiperSlide } from 'swiper/vue'
 
-import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
-
+import router from '@/vuejs/router'
 import { NewsPageList } from '@/vuejs/router/pages-list'
-import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 import { useExpertContentStore } from '@/vuejs/stores/expertContent'
 import { useChannelStore } from '@/vuejs/stores/channel'
+import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
+
+import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
 
 const expertContent = useExpertContentStore()
 const channelStore = useChannelStore()

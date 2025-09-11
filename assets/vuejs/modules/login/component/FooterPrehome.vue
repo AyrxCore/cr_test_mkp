@@ -9,14 +9,13 @@
         <a
           :href="`tel:${channel?.phoneNumber}`"
           class="text-secondary underline lg:text-right"
-          @click="sendGaEvent('click_prehome_tel')"
-          >{{ channelPhoneNumber }}</a
-        >
+          >{{ channelPhoneNumber }}
+        </a>
         ou par mail
       </p>
       <ButtonComponent
-        type="button"
         class="button-primary-outline mx-auto mt-5 w-full items-center !px-6 !text-primary sm:flex sm:w-auto sm:px-8 lg:mt-10"
+        type="button"
         @click="EmailContactGtmEvent()"
       >
         <MailIcon
@@ -27,20 +26,22 @@
     </div>
     <ContactModal
       v-if="showContactForm"
-      class="modal"
       :is-loading="isLoading"
+      class="modal"
       @cancel="showContactForm = false"
     />
   </div>
 </template>
+
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
+
 import { useChannelStore } from '@/vuejs/stores/channel'
-import MailIcon from '@/vuejs/modules/shared/icon/MailIconComponent.vue'
+
 import ContactModal from '@/vuejs/modules/contact/component/ContactModal.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
+import MailIcon from '@/vuejs/modules/shared/icon/MailIconComponent.vue'
 
 const { channel, formattedPhoneNumber: channelPhoneNumber } =
   storeToRefs(useChannelStore())
@@ -49,7 +50,6 @@ const showContactForm = ref<boolean>(false)
 const isLoading = ref<boolean>(false)
 const EmailContactGtmEvent = () => {
   showContactForm.value = true
-  sendGaEvent('click_prehome_email')
 }
 
 const customerService = computed((): string => {

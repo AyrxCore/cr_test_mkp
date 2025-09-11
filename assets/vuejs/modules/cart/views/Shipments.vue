@@ -19,8 +19,8 @@
       <template #title>Récapitulatif panier</template>
       <template #button-next>
         <ButtonComponent
-          class="button-primary mt-3 w-full"
           :disabled="!allShipmentsLoaded"
+          class="button-primary mt-3 w-full"
           @click="goToPayment"
         >
           <ArrowRightIconComponent class="h-4 w-4" />
@@ -30,21 +30,22 @@
     </CartRightSideComponent>
   </div>
 </template>
+
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useHead } from '@unhead/vue'
 
-import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
+import { PageList } from '@/vuejs/router'
+import { useCartStore } from '@/vuejs/stores/cart'
+import { notifyError, setHeadTitle } from '@/vuejs/services/utils'
+
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import CartRightSideComponent from '@/vuejs/modules/cart/components/CartRightSideComponent.vue'
 import CartShipmentComponent from '@/vuejs/modules/cart/components/CartShipmentComponent.vue'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
-
-import { useCartStore } from '@/vuejs/stores/cart'
-import { PageList } from '@/vuejs/router'
-import { notifyError } from '@/vuejs/services/utils'
+import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 
 const router = useRouter()
 const cartStore = useCartStore()
@@ -82,5 +83,3 @@ useHead({
   meta: [{ property: 'og:title', content: 'Livraison | QANTIS Marketplace' }],
 })
 </script>
-
-<style scoped></style>

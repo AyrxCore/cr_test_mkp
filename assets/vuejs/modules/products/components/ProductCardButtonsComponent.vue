@@ -47,12 +47,12 @@
           :quantity="quantity"
           :variant-id="variantId"
           @click="
-            $emit('click-add-cart', {
-              partenaire_name: product.seller.name,
-              partenaire_id: product.seller.id,
-              product_name: product.name,
-              product_id: product.id,
-              qty_value: product.quantity,
+            sendGtmEvent('add_to_cart', {
+              ecommerce: {
+                currency: 'EUR',
+                value: product.price * quantity,
+                items: formatProductGtmEvent([product]),
+              },
             })
           "
         />
@@ -61,19 +61,19 @@
   </div>
   <!-- Fin bloc quantité -->
 </template>
+
 <script lang="ts" setup>
 import { computed, PropType, ref } from 'vue'
 
-import ButtonAddToCartComponent from '@/vuejs/modules/shared/ButtonAddToCartComponent.vue'
-import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
-import ProductQuantityComponent from '@/vuejs/modules/shared/ProductQuantityComponent.vue'
-
-import { formatPrice } from '@/vuejs/services/utils'
-
 import { ProductPageList } from '@/vuejs/router/pages-list'
-
+import { formatPrice } from '@/vuejs/services/utils'
+import { formatProductGtmEvent, sendGtmEvent } from '@/vuejs/services/gtm'
 import { Product } from '@/vuejs/types/Product'
 import { Variant } from '@/vuejs/types/Product/Variant'
+
+import ButtonAddToCartComponent from '@/vuejs/modules/shared/ButtonAddToCartComponent.vue'
+import ProductQuantityComponent from '@/vuejs/modules/shared/ProductQuantityComponent.vue'
+import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 
 const emit = defineEmits([
   'click-add-cart',

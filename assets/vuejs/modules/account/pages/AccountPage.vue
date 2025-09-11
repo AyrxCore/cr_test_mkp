@@ -51,7 +51,6 @@
                         <a
                           :href="`tel:${channel.phoneNumber}`"
                           class="hover:font-bold"
-                          @click="sendGaEvent('click_account_phone')"
                         >
                           {{ channelPhoneNumber }}
                         </a>
@@ -60,7 +59,6 @@
                         <a
                           :href="`mailto:${channel.email}`"
                           class="hover:font-bold"
-                          @click="sendGaEvent('click_account_email')"
                         >
                           {{ channel.email }}
                         </a>
@@ -84,8 +82,6 @@
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
-import { betterTextColor } from '@/vuejs/services/utils'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { useUserStore } from '@/vuejs/stores/user'
 
@@ -94,7 +90,6 @@ import AccountSidebar from '@/vuejs/modules/account/components/sidebar/AccountSi
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import DropdownListComponent from '@/vuejs/modules/shared/DropdownListComponent.vue'
 import DisconnectIconComponent from '@/vuejs/modules/shared/icon/DisconnectIconComponent.vue'
-import RedirectionIconComponent from '@/vuejs/modules/shared/icon/RedirectionIconComponent.vue'
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
@@ -108,7 +103,6 @@ const {
 const onLogout = async (e: Event): Promise<void> => {
   e.preventDefault()
   ;(await userStore.logout()) && location.reload()
-  sendGaEvent('click_account_logout')
 }
 
 const customerService = computed((): string => {

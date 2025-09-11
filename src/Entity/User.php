@@ -44,7 +44,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    #[Groups(['account:get'])]
+    #[Groups(['account:get', 'user:simple'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 180)]
@@ -162,21 +162,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return (string) $this->username;
     }
 
-    /**
-     * @see UserInterface
-     */
-    public function getRoles(): array
+    public function setUsername(string $username): self
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return \array_unique($roles);
-    }
-
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
+        $this->username = $username;
 
         return $this;
     }
@@ -207,6 +195,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function hasRole($role): bool
     {
         return \in_array(\strtoupper($role), $this->getRoles(), true);
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return \array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
     }
 
     /**
@@ -242,13 +249,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
-    }
-
-    public function setUsername(string $username): self
-    {
-        $this->username = $username;
-
-        return $this;
     }
 
     public function getFirstName(): ?string
@@ -341,11 +341,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isEnabled(): ?bool
-    {
-        return $this->enabled;
-    }
-
     public function setEnabled(bool $enabled): self
     {
         $this->enabled = $enabled;
@@ -389,7 +384,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getFirstEnabledAccount(Channel $channel = null): ?Account
+    public function getFirstEnabledAccount(?Channel $channel = null): ?Account
     {
         /** @var Account $account */
         foreach ($this->accounts as $account) {
@@ -399,6 +394,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return null;
+    }
+
+    public function isEnabled(): ?bool
+    {
+        return $this->enabled;
     }
 
     public function getEmailChangingToken(): ?string

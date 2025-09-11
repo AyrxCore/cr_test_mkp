@@ -2,15 +2,12 @@
   <AccountPage>
     <template #right-side>
       <h3 class="text-title-primary mb-6 mt-2 xl:mt-0">Editer une adresse</h3>
-      <AddressForm
-        @submit-address="sendGaEvent('click_edit_save')"
-        @abort-cancel-address="sendGaEvent('click_edit_cancel')"
-      />
+      <AddressForm />
     </template>
   </AccountPage>
 </template>
+
 <script lang="ts" setup>
 import AddressForm from '@/vuejs/modules/account/components/address/AddressForm.vue'
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 </script>

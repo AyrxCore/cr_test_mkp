@@ -119,14 +119,15 @@
 import { computed, PropType, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
-import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import CheckCircleIconComponent from '@/vuejs/modules/shared/icon/CheckCircleIconComponent.vue'
-import AlertCircleOutlineIconComponent from '@/vuejs/modules/shared/icon/AlertCircleOutlineIconComponent.vue'
-
-import { Product } from '@/vuejs/types/Product'
 import { useUserStore } from '@/vuejs/stores/user'
 import ProductHttpClient from '@/vuejs/services/httpclient/ProductHttpClient'
 import { notifyError } from '@/vuejs/services/utils'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
+import { Product } from '@/vuejs/types/Product'
+
+import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
+import CheckCircleIconComponent from '@/vuejs/modules/shared/icon/CheckCircleIconComponent.vue'
+import AlertCircleOutlineIconComponent from '@/vuejs/modules/shared/icon/AlertCircleOutlineIconComponent.vue'
 
 const props = defineProps({
   product: {
@@ -164,6 +165,9 @@ const onFormSubmit = async () => {
     }
 
     await ProductHttpClient.get().sendContactRequestFromNotSellableProduct(data)
+    sendGtmEvent('contact_form_submission', {
+      form_type: 'not_sellable_product',
+    })
     requestContactSent.value = true
   } catch (error) {
     notifyError(

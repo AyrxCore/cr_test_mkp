@@ -25,23 +25,18 @@
         <a
           v-for="(cta, key) in allCta"
           :key="key"
-          target="_blank"
           :href="cta.link"
           class="underline"
-          @click="
-            sendGaEvent(cta.eventName, {
-              product_name: props.accordName,
-            })
-          "
+          target="_blank"
           >{{ cta.text }}</a
         >
       </div>
     </div>
   </div>
 </template>
+
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
 const props = defineProps({
   properties: {
@@ -74,5 +69,3 @@ const allCta = computed(() => {
   return data
 })
 </script>
-
-<style scoped></style>

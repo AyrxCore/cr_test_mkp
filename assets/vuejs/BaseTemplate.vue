@@ -16,7 +16,17 @@
         <span class="mr-0 lg:mr-2">
           {{ banner.text }}
         </span>
-        <a :href="banner.ctaLink" class="underline">
+        <a
+          :href="banner.ctaLink"
+          class="underline"
+          @click="
+            sendGtmEvent('flash_banner_click', {
+              link_text: $event.target.innerText,
+              link_url: banner.ctaLink,
+              origin_url: router.currentRoute.value.fullPath,
+            })
+          "
+        >
           {{ banner.ctaTxt }}
         </a>
       </p>
@@ -47,15 +57,17 @@ import { computed, onBeforeMount, onMounted, reactive } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useHead } from '@unhead/vue'
 
+import router from '@/vuejs/router'
+import { useBannerStore } from '@/vuejs/stores/banner'
+import { useChannelStore } from '@/vuejs/stores/channel'
+import { useUserStore } from '@/vuejs/stores/user'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
+import { betterTextColor } from '@/vuejs/services/utils'
+import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
+
 import HeaderSharedComponent from '@/vuejs/modules/shared/HeaderSharedComponent.vue'
 import FooterSharedComponent from '@/vuejs/modules/shared/FooterSharedComponent.vue'
 import ChevronDownIconComponent from '@/vuejs/modules/shared/icon/ChevronDownIconComponent.vue'
-
-import { useBannerStore } from '@/vuejs/stores/banner'
-import { useChannelStore } from '@/vuejs/stores/channel'
-import { betterTextColor } from '@/vuejs/services/utils'
-import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
-import { useUserStore } from '@/vuejs/stores/user'
 
 const channelStore = useChannelStore()
 const { channel } = storeToRefs(channelStore)
@@ -69,6 +81,10 @@ const props = defineProps({
 })
 
 onBeforeMount(() => {
+  sendGtmEvent('datalayer_ready', {
+    marketplace: channelStore.currentChannel.name,
+    user_id: userStore.user.id,
+  })
   if (userStore.isNeoAutoLogin) {
     broadcastChannel = new BroadcastChannel('logout_channel')
     broadcastChannel.onmessage = handleLogoutMessage

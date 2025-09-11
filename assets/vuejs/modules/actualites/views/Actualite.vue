@@ -6,8 +6,8 @@
       class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 px-5 sm:px-8"
     >
       <BreadcrumbSharedComponent
-        :list-url="listUrl"
         :current-page="currentExpertContent.articleTitle"
+        :list-url="listUrl"
         gtm-event-name="click_actualite_breadcrumbs"
       />
       <div
@@ -19,8 +19,8 @@
             {{ currentExpertContent.articleTitle }}
           </h3>
           <span
-            class="mr-2 w-max rounded-md px-2 py-1 text-white"
             :style="{ background: currentExpertContent.categoryColor }"
+            class="mr-2 w-max rounded-md px-2 py-1 text-white"
           >
             {{ currentExpertContent.categoryName }}
           </span>
@@ -41,8 +41,15 @@
           >
             <a
               :href="currentExpertContent.ctaLink"
-              target="_blank"
               class="button button-primary mt-4 font-bold text-white"
+              target="_blank"
+              @click="
+                sendGtmEvent('cta_news_click', {
+                  link_text: currentExpertContent.ctaTxt,
+                  link_url: currentExpertContent.ctaLink,
+                  origin_url: router.currentRoute.value.fullPath,
+                })
+              "
             >
               <ArrowRigntIconComponent
                 class="mr-2 w-4 items-center"
@@ -99,19 +106,22 @@
 </template>
 
 <script lang="ts" setup>
-import { format } from 'date-fns'
 import { computed, ref, watch } from 'vue'
+import { format } from 'date-fns'
 import { useRoute } from 'vue-router'
 
-import ArrowRigntIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
+import router from '@/vuejs/router'
+import { NewsPageList } from '@/vuejs/router/pages-list'
+import { useExpertContentStore } from '@/vuejs/stores/expertContent'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
+import { ExpertContent } from '@/vuejs/types/ExpertContent'
+
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import ExpertContentsComponent from '@/vuejs/modules/home/component/ExpertContentsComponent.vue'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
-import { useExpertContentStore } from '@/vuejs/stores/expertContent'
-import { ExpertContent } from '@/vuejs/types/ExpertContent'
-import { NewsPageList } from '@/vuejs/router/pages-list'
 import WarningIconComponent from '@/vuejs/modules/shared/icon/WarningIconComponent.vue'
+import ArrowRigntIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 
 const route = useRoute()
 const expertContent = useExpertContentStore()
@@ -160,5 +170,3 @@ watch(
   { immediate: true },
 )
 </script>
-
-<style scoped></style>

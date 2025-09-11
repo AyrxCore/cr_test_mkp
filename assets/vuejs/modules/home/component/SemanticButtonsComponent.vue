@@ -20,6 +20,16 @@
             query: { q: semanticButton.search },
           }"
           class="px-0.5 text-sm"
+          @click="
+            sendGtmEvent('semantics_cta_click', {
+              link_text: $event.target.innerText,
+              link_url: router.resolve({
+                name: ProductPageList.PRODUCTS,
+                query: { q: semanticButton.search },
+              }).fullPath,
+              origin_url: router.currentRoute.value.fullPath,
+            })
+          "
         >
           {{ semanticButton.label }}
         </RouterLink>
@@ -32,8 +42,10 @@
 import { computed, onBeforeMount } from 'vue'
 import { storeToRefs } from 'pinia'
 
+import router from '@/vuejs/router'
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import { useSemanticButtonsStore } from '@/vuejs/stores/semanticButtons'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
 
 const semanticButtonsStore = useSemanticButtonsStore()
 const { semanticButtonsSectionTitle, semanticButtons } = storeToRefs(

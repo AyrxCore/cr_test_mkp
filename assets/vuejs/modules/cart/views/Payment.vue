@@ -4,13 +4,13 @@
     <div class="col-span-3 flex flex-col lg:grid lg:grid-cols-2 lg:gap-2">
       <PaymentMethodComponent
         v-if="CBPaymentMethod"
-        :method="CBPaymentMethod"
         :is-loading="isCBLoading"
+        :method="CBPaymentMethod"
         class="lg:mr-4"
         @select-method="selectCB"
       >
         <template #method-icon>
-          <img class="m-auto h-20" :src="cbLogosImg" alt="CB Icons" />
+          <img :src="cbLogosImg" alt="CB Icons" class="m-auto h-20" />
         </template>
       </PaymentMethodComponent>
       <PaymentMethodComponent
@@ -24,8 +24,8 @@
       </PaymentMethodComponent>
       <PaymentMethodComponent
         v-if="showMandatAdminPayment"
-        :method="mandatAdminPaymentMethod"
         :is-loading="isMandatAdminLoading"
+        :method="mandatAdminPaymentMethod"
         class="lg:mr-4"
         @select-method="selectMandatAdmin"
       >
@@ -42,22 +42,24 @@
     </CartRightSideComponent>
   </div>
 </template>
+
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useHead } from '@unhead/vue'
 
+import { PageList } from '@/vuejs/router'
+import { useCartStore } from '@/vuejs/stores/cart'
+import { getImage, notifyError, setHeadTitle } from '@/vuejs/services/utils'
+import { formatCartItemsGtmEvent, sendGtmEvent } from '@/vuejs/services/gtm'
+import { PaymentMethod } from '@/vuejs/types/Cart'
+
 import CartRightSideComponent from '@/vuejs/modules/cart/components/CartRightSideComponent.vue'
 import PaymentMethodComponent from '@/vuejs/modules/cart/components/PaymentMethodComponent.vue'
 import SepaIconComponent from '@/vuejs/modules/shared/icon/SepaIconComponent.vue'
-import TownHallIcon from '@/vuejs/modules/shared/icon/TownHallIconComponent.vue'
 import cbLogos from '@/vuejs/assets/img/cb-icons.png'
-
-import { getImage, notifyError } from '@/vuejs/services/utils'
-import { useCartStore } from '@/vuejs/stores/cart'
-import { PageList } from '@/vuejs/router'
-import { PaymentMethod } from '@/vuejs/types/Cart'
+import TownHallIcon from '@/vuejs/modules/shared/icon/TownHallIconComponent.vue'
 
 const cartStore = useCartStore()
 const router = useRouter()
@@ -87,6 +89,12 @@ const selectCB = async () => {
     CBPaymentMethod.value.id,
   )
   if (payment.payment_url) {
+    sendGtmEvent('add_payment_info', {
+      ecommerce: {
+        currency: 'EUR',
+        items: formatCartItemsGtmEvent(cartStore.cart),
+      },
+    })
     window.location.replace(payment.payment_url)
   } else {
     notifyError(
@@ -98,6 +106,12 @@ const selectCB = async () => {
 
 const selectSEPA = async (method: PaymentMethod) => {
   cartStore.selectedSepa = method
+  sendGtmEvent('add_payment_info', {
+    ecommerce: {
+      currency: 'EUR',
+      items: formatCartItemsGtmEvent(cartStore.cart),
+    },
+  })
   router.push({ name: PageList.CART_PAYMENT_SEPA })
 }
 
@@ -107,6 +121,12 @@ const selectMandatAdmin = async () => {
     mandatAdminPaymentMethod.value.id,
   )
   if (result) {
+    sendGtmEvent('add_payment_info', {
+      ecommerce: {
+        currency: 'EUR',
+        items: formatCartItemsGtmEvent(cartStore.cart),
+      },
+    })
     window.location.replace(
       `${window.location.origin}/api/buyer/cart/${cartStore.cart.id}/confirm`,
     )
@@ -119,6 +139,13 @@ useHead({
   title: 'Paiement | QANTIS Marketplace',
   meta: [{ property: 'og:title', content: 'Paiement | QANTIS Marketplace' }],
 })
-</script>
 
-<style scoped></style>
+onMounted(() => {
+  sendGtmEvent('add_shipping_info', {
+    ecommerce: {
+      currency: 'EUR',
+      items: formatCartItemsGtmEvent(cartStore.cart),
+    },
+  })
+})
+</script>

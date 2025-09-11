@@ -8,16 +8,12 @@
       :key="keyItem"
       class="flex items-center md:text-base"
     >
-      <AccountSidebarBlockItem
-        :item="item"
-        @click-link="sendGaEvent(item.gaEventName)"
-      />
+      <AccountSidebarBlockItem :item="item" />
     </p>
   </div>
 </template>
-<script lang="ts" setup>
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
 
+<script lang="ts" setup>
 import AccountSidebarBlockItem from '@/vuejs/modules/account/components/sidebar/AccountSidebarBlockItem.vue'
 
 const props = defineProps({

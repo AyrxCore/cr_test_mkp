@@ -87,20 +87,20 @@
     </template>
   </div>
 </template>
+
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
-import { filterType } from '@/vuejs/modules/products'
 import { useProductStore } from '@/vuejs/stores/product'
-import { sendGaEvent } from '@/vuejs/services/googleAnalytics'
-import { ProductCategory } from '@/vuejs/types/Product'
 import { sortCategories } from '@/vuejs/services/categories'
+import { ProductCategory } from '@/vuejs/types/Product'
+import { filterType } from '@/vuejs/modules/products'
 
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import CloseIcon from '@/vuejs/modules/shared/icon/CloseIconComponent.vue'
 import FilterCategoryComponent from '@/vuejs/modules/products/components/filters/FilterCategoryComponent.vue'
 import FilterCompanyComponent from '@/vuejs/modules/products/components/filters/FilterCompanyComponent.vue'
+import CloseIcon from '@/vuejs/modules/shared/icon/CloseIconComponent.vue'
 
 const emit = defineEmits(['filter-product', 'close-filters'])
 
@@ -128,29 +128,16 @@ const showMoreFilters = (type: string) => {
 
 const changeFilterCompany = (event) => {
   productStore.setSelectedCompany(event.company_id)
-  sendGaEvent('click_resultats_filtre', {
-    filter_name: 'company',
-    filter_value: event.company_id,
-  })
 }
 
 const changeFilterCategory = (categoryId: number) => {
   productStore.setSelectedCategory(categoryId)
-  sendGaEvent('click_resultats_filtre', {
-    filter_name: 'category',
-    filter_value: categoryId,
-  })
 }
 
 const changeFilterProperties = (event) => {
   productStore.setSelectedProperty({
     property_id: event.target.selectedOptions[0].dataset.key,
     value: (event.target as HTMLInputElement).value,
-  })
-  sendGaEvent('click_resultats_filtre', {
-    filter_name: 'property',
-    filter_property: event.target.selectedOptions[0].dataset.key,
-    filter_value: (event.target as HTMLInputElement).value,
   })
 }
 
@@ -177,6 +164,5 @@ const companies = computed(() => {
 
 const clearFilters = () => {
   productStore.clearFilters()
-  sendGaEvent('click_resultats_reinit')
 }
 </script>
