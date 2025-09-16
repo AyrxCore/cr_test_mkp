@@ -1,44 +1,51 @@
 api_platform:
-  title: "Qantis - MarketPlace API"
-  description: "Cette API expose des endpoint permettant de synchroniser la marketplace avec les données Uppler"
+  title: 'Qantis - MarketPlace API'
+  description: 'Cette API expose des endpoint permettant de synchroniser la marketplace avec les données Uppler'
   version: '1.0.0'
+
   http_cache:
     public: false
     invalidation:
       enabled: false
+
   mapping:
-    paths: [
-      '%kernel.project_dir%/src/Entity',
-      '%kernel.project_dir%/src/Dto'
-    ]
+    paths: ['%kernel.project_dir%/src/Entity', '%kernel.project_dir%/src/Dto']
+
   patch_formats:
-    json: [ 'application/merge-patch+json' ]
-    jsonld: [ 'application/ld+json' ]
+    json: ['application/merge-patch+json']
+    jsonld: ['application/ld+json']
+
   formats:
-    jsonld: [ 'application/ld+json' ]
-    jsonhal: [ 'application/hal+json' ]
-    jsonapi: [ 'application/vnd.api+json' ]
-    json: [ 'application/json' ]
-    xml: [ 'application/xml', 'text/xml' ]
-    yaml: [ 'application/x-yaml' ]
-    csv: [ 'text/csv' ]
-    html: [ 'text/html' ]
-    myformat: [ 'application/vnd.myformat' ]
+    jsonld:
+      mime_types: ['application/ld+json']
+    json:
+      mime_types: ['application/json']
+    xml:
+      mime_types: ['application/xml', 'text/xml']
+    yaml:
+      mime_types: ['application/x-yaml']
+    csv:
+      mime_types: ['text/csv']
+    html:
+      mime_types: ['text/html']
+    myformat:
+      mime_types: ['application/vnd.myformat']
+
   swagger:
-    versions: [ 3 ]
     api_keys:
       apiKey:
         name: Authorization
         type: header
+
   exception_to_status:
     # The 4 following handlers are registered by default, keep those lines to prevent unexpected side effects
     Symfony\Component\Serializer\Exception\ExceptionInterface: 400 # Use a raw status code (recommended)
-    ApiPlatform\Core\Exception\InvalidArgumentException: !php/const Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST
-    ApiPlatform\Core\Exception\FilterValidationException: 400
+    ApiPlatform\Exception\InvalidArgumentException: !php/const Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST
+    ApiPlatform\Exception\FilterValidationException: 400
     Doctrine\ORM\OptimisticLockException: 409
 
     # Validation exception
-    ApiPlatform\Core\Bridge\Symfony\Validator\Exception\ValidationException: !php/const Symfony\Component\HttpFoundation\Response::HTTP_UNPROCESSABLE_ENTITY
+    ApiPlatform\Symfony\Validator\Exception\ValidationException: !php/const Symfony\Component\HttpFoundation\Response::HTTP_UNPROCESSABLE_ENTITY
 
     # Custom mapping
     App\Exception\UserAccountException: 404 # Here is the handler for our custom exception

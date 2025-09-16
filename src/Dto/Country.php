@@ -8,15 +8,19 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\OpenApi\Model\Operation;
 use App\State\Provider\CountryProvider;
 
 #[ApiResource(
     operations: [
         new Get(),
         new GetCollection(
-            openapiContext: ['summary' => 'Liste des pays', 'description' => 'Permet de récupérer la liste des pays paginée et filtrable'],
-            validate: true
-        )
+            uriTemplate: '/countries',
+            openapi: new Operation(
+                summary: 'Liste des pays',
+                description: 'Permet de récupérer la liste des pays paginée et filtrable'
+            ),
+        ),
     ],
     provider: CountryProvider::class
 )]
@@ -47,14 +51,6 @@ final class Country
     public function setName(string $name): ?self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function hydrate(\stdClass $data): self
-    {
-        $this->id = $data->id;
-        $this->name = $data->name->fr;
 
         return $this;
     }

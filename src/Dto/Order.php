@@ -8,17 +8,23 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\OpenApi\Model\Operation;
 use App\State\Provider\OrderProvider;
 
 #[ApiResource(
     operations: [
         new Get(
             requirements: ['id' => '\\d+'],
-            openapiContext: ['summary' => 'Récupérer un historique par son identifiant', 'description' => 'Cette opération permet de récupérer les informations d\'une commande en spécifiant son identifiant unique.']
+            openapi: new Operation(
+                summary: 'Récupérer un historique par son identifiant',
+                description: 'Cette opération permet de récupérer les informations d\'une commande en spécifiant son identifiant unique.'
+            )
         ),
         new GetCollection(
-            openapiContext: ['summary' => 'Liste des commandes', 'description' => 'Cette opération permet de récupérer la liste des commandes associées à un acheteur.'],
-            validate: true
+            openapi: new Operation(
+                summary: 'Liste des commandes',
+                description: 'Cette opération permet de récupérer la liste des commandes associées à un acheteur.'
+            ),
         ),
     ],
     provider: OrderProvider::class

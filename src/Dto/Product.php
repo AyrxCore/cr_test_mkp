@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\OpenApi\Model\Operation;
 use App\State\Provider\ProductProvider;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -19,7 +20,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
             normalizationContext: ['groups' => ['product:get']]
         ),
         new GetCollection(
-            openapiContext: ['summary' => 'Get remote products list', 'description' => 'It gets a list of products from remote data provider'],
+            openapi: new Operation(
+                summary: 'Get remote products list',
+                description: 'It gets a list of products from remote data provider'
+            ),
             normalizationContext: ['groups' => ['products:get']]
         ),
     ],

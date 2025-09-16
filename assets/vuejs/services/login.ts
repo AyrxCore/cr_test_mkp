@@ -16,7 +16,7 @@ export function getErrorMessage(errorCode: string): string {
         'Votre adresse email et/ou votre mot de passe semblent incorrects - veuillez réessayer'
       break
     default:
-      message = 'Une erreur est survenue'
+      message = 'Une erreur est survenue.'
       break
   }
   return message

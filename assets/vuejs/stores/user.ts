@@ -51,18 +51,18 @@ export const useUserStore = defineStore('user', {
         return []
       }
     },
-
     async selectUserAccount(id: string): Promise<boolean> {
       const alertStore = useAlertStore()
       try {
         await UserHttpClient.get().selectUserAccount(id)
-
         return true
       } catch (error) {
-        alertStore.setShow(
-          getErrorMessage(error.response.data.message),
-          AlertType.danger,
-        )
+        await UserHttpClient.get()
+          .logout()
+          .catch(() => {})
+
+        this.user = null
+        alertStore.setShow(getErrorMessage(''), AlertType.danger)
         return false
       }
     },

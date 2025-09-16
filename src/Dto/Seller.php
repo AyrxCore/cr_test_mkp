@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\OpenApi\Model\Operation;
 use App\Controller\Api\SellerPromotions;
 use App\State\Provider\SellerProvider;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -22,10 +23,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
             uriTemplate: '/sellers/{id}/promotions',
             requirements: ['id' => '\\d+'],
             controller: SellerPromotions::class,
-            openapiContext: ['summary' => 'Add multiple item to cart']
+            openapi: new Operation(
+                summary: 'Get seller promotions"'
+            )
         ),
         new GetCollection(
-            openapiContext: ['summary' => 'Get remote sellers list', 'description' => 'It gets a list of sellers from remote data provider']
+            openapi: new Operation(
+                summary: 'Get remote sellers list',
+                description: 'It gets a list of sellers from remote data provider'
+            )
         ),
     ],
     provider: SellerProvider::class

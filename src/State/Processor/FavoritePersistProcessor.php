@@ -25,10 +25,19 @@ class FavoritePersistProcessor implements ProcessorInterface
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): mixed
     {
         try {
-            if (($context['operation'] ?? null) instanceof Post) {
+            if ($operation instanceof Post) {
                 $session = $this->requestStack->getSession();
-                $account = $this->accountRepository->find($session->get('account')->getId());
-                $data->setAccount($account);
+                $accountId = $session?->get('account')?->getId();
+                if ($accountId) {
+                    $account = $this->accountRepository->find($accountId);
+                    if ($account !== null) {
+                        $data->setAccount($account);
+                    } else {
+                        throw new \RuntimeException('Compte introuvable pour l\'identifiant présent en session');
+                    }
+                } else {
+                    throw new \RuntimeException('Aucun compte en session');
+                }
             }
             $this->em->persist($data);
             $this->em->flush();

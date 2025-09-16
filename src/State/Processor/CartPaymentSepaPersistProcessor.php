@@ -20,7 +20,7 @@ class CartPaymentSepaPersistProcessor implements ProcessorInterface
 
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): JsonResponse
     {
-        if (($context['operation'] ?? null) instanceof Patch) {
+        if ($operation instanceof Patch) {
             if ($data->getMandateId() === null && \in_array(null, [$data->getIban(), $data->getBic(), $data->getOwnerName(), $data->getPhone()], true)) {
                 throw new BadRequestException('Sepa informations missing');
             }

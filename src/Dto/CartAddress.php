@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\OpenApi\Model\Operation;
 use App\State\Processor\CartAddressPersistProcessor;
 use App\State\Provider\CartAddressProvider;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -17,10 +18,12 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(),
         new Patch(
-            openapiContext: ['summary' => 'Update cart adresses'],
+            openapi: new Operation(
+                summary: 'Update cart adresses'
+            ),
             validate: true
         ),
-        new Post()
+        new Post(),
     ],
     provider: CartAddressProvider::class,
     processor: CartAddressPersistProcessor::class

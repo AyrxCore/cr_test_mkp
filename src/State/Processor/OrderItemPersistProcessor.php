@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\State\Processor;
 
 use ApiPlatform\Metadata\Operation;
@@ -16,11 +18,12 @@ readonly class OrderItemPersistProcessor implements ProcessorInterface
 
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): mixed
     {
-        if (($context['operation'] ?? null) instanceof Patch) {
+        if ($operation instanceof Patch) {
             $this->upplerCartService->updateOrderItemQuantity(
                 $data->getId(),
                 $data->getQuantity(),
             );
+
             return $data;
         }
         throw new BadRequestException('Persist error');

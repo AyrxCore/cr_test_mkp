@@ -260,6 +260,7 @@ import { useUserStore } from '@/vuejs/stores/user'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { getUrlParam } from '@/vuejs/services/utils'
 import { sendGtmEvent } from '@/vuejs/services/gtm'
+import UserHttpClient from '@/vuejs/services/httpclient/UserHttpClient'
 import { AlertType } from '@/vuejs/types/Alert'
 import { Account } from '@/vuejs/types/Account'
 
@@ -358,13 +359,18 @@ const proceedWithAccountSelection = async (accountId: string) => {
   isLoading.value = true
 
   try {
-    await userStore.selectUserAccount(accountId)
-    const target = getUrlParam('target')
-    sendGtmEvent('login')
-    document.location.href = target ? `/${target}` : '/'
-  } catch (error) {
-    console.error('Erreur lors de la sélection du compte:', error)
-    alertStore.setShow('Erreur de sélection du compte', AlertType.danger)
+    const success = await userStore.selectUserAccount(accountId)
+    if (success) {
+      window['dataLayer']?.push({ event: 'login' })
+      const target = getUrlParam('target')
+      sendGtmEvent('login')
+      document.location.href = target ? `/${target}` : '/'
+    }
+  } catch {
+    await UserHttpClient.get()
+      .logout()
+      .catch(() => {})
+    userStore.user = null
   } finally {
     isLoading.value = false
   }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Dto;
 
-use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Metadata\ApiProperty;
 
 final class Property implements \JsonSerializable
 {

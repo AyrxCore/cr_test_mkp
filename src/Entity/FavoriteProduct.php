@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
-use ApiPlatform\Metadata\Patch;
-use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\OpenApi\Model\Operation;
 use App\Repository\FavoriteProductRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
@@ -20,19 +23,28 @@ use Symfony\Component\Uid\Uuid;
         ),
         new Delete(
             uriTemplate: '/favorite-products/{id}',
-            openapiContext: ['summary' => 'Supprimer un produit lié à un favori']
+            openapi: new Operation(
+                summary: 'Supprimer un produit lié à un favori'
+            )
         ),
         new Post(
             routeName: 'add_product_to_favorites_collection',
-            openapiContext: ['summary' => 'Ajouter un produit à une liste de favori', 'description' => 'Cette opération permet d\'ajouter un produit à une ou plusieurs liste de favori.'],
+            openapi: new Operation(
+                summary: 'Ajouter un produit à une liste de favori',
+                description: 'Cette opération permet d\'ajouter un produit à une ou plusieurs liste de favori.'
+            ),
         ),
         new Patch(
             routeName: 'move_products_to_other_favorites_collection',
-            openapiContext: ['summary' => 'Déplacer tous les produits vers une autre liste de favori'],
+            openapi: new Operation(
+                summary: 'Déplacer tous les produits vers une autre liste de favori'
+            ),
         ),
         new Post(
             routeName: 'move_product_to_favorites_collection',
-            openapiContext: ['summary' => 'Déplacer un produit vers une autre liste de favori'],
+            openapi: new Operation(
+                summary: 'Déplacer un produit vers une autre liste de favori'
+            ),
         )]
 )]
 #[ORM\Entity(repositoryClass: FavoriteProductRepository::class)]

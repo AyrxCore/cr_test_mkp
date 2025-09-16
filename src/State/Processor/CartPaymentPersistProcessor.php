@@ -20,7 +20,7 @@ readonly class CartPaymentPersistProcessor implements ProcessorInterface
 
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): JsonResponse
     {
-        if (($context['operation'] ?? null) instanceof Patch) {
+        if ($operation instanceof Patch) {
             $result = $this->upplerCartService->setPaymentMethod(
                 $data->getId(),
                 $data->getPaymentMethodId(),

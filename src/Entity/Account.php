@@ -7,6 +7,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\OpenApi\Model\Operation;
 use App\Repository\AccountRepository;
 use App\State\Provider\AccountProvider;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -24,7 +25,10 @@ use Symfony\Component\Uid\Uuid;
             security: 'is_granted("ROLE_API") or object.getUser() == user'
         ),
         new Get(
-            openapiContext: ['summary' => 'Select an Account', 'description' => 'Select an Account to use when communicating with Uppler'],
+            openapi: new Operation(
+                summary: 'Select an Account',
+                description: 'Select an Account to use when communicating with Uppler'
+            ),
             name: 'account_select',
         ),
         new GetCollection(

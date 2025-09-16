@@ -116,7 +116,7 @@ class UpplerProductService extends AbstractUpplerService
     {
         $res = $this->findAllFilters($page, $perPage);
 
-        return $res['filters']['category'];
+        return $res['filters']['category'] ?? [];
     }
 
     /**
@@ -136,7 +136,7 @@ class UpplerProductService extends AbstractUpplerService
 
         $res = $this->findAllFilters($page, $perPage, $filters);
 
-        return $res['filters']['company'];
+        return $res['filters']['company'] ?? [];
     }
 
     /**

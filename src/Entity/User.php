@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use ApiPlatform\Action\NotFoundAction;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\Symfony\Action\NotFoundAction;
 use App\Repository\UserRepository;
 use App\State\Provider\UserMeItemProvider;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -30,7 +31,10 @@ use Symfony\Component\Uid\Uuid;
         new Get(
             uriTemplate: '/me',
             defaults: ['id' => '7de7d979-b89a-4ea7-bb98-2772cf91fa84'],
-            openapiContext: ['summary' => 'Get current user info', 'description' => 'Get current user info'],
+            openapi: new Operation(
+                summary: 'Get current user info',
+                description: 'Get current user info'
+            ),
             normalizationContext: ['groups' => ['user:simple', 'user:me', 'user:external_api_data:subaccount', 'user:external_api_data:buyer']],
             provider: UserMeItemProvider::class
         )]

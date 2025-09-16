@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\OpenApi\Model\Operation;
 use App\Repository\AdherentRepository;
 use App\State\Processor\AdherentPersistProcessor;
 use App\State\Provider\AdherentProvider;
@@ -24,7 +25,11 @@ use Symfony\Component\Uid\Uuid;
             normalizationContext: ['groups' => ['user:simple', 'adherent:get']]
         ),
         new Patch(
-            openapiContext: ['summary' => 'Modifier un adherent', 'description' => 'Permet de mettre à jour le channel, le code bonuus et les rattachements'],
+            openapi: new Operation(
+                summary: 'Modifier un adherent',
+                description: 'Permet de mettre à jour le channel, le code bonuus et les rattachements'
+            ),
+            security: "is_granted('ROLE_API')",
             validate: true
         ),
         new Post(),

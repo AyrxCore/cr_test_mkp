@@ -19,7 +19,7 @@ readonly class OrderShippingPersistProcessor implements ProcessorInterface
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): mixed
     {
         try {
-            if (($context['operation'] ?? null) instanceof Patch) {
+            if ($operation instanceof Patch) {
                 $this->upplerCartService->setShippingMethod(
                     $data->getCartId(),
                     $data->getId(),
@@ -28,6 +28,7 @@ readonly class OrderShippingPersistProcessor implements ProcessorInterface
 
                 return $data;
             }
+            throw new BadRequestException('Persist error');
         } catch (\Throwable $e) {
             throw new BadRequestException('Update shipping method error');
         }

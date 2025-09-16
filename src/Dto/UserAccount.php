@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\OpenApi\Model\Operation;
 use App\State\Processor\UserAccountPersistProcessor;
 use App\State\Provider\UserAccountProvider;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,17 +20,25 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Get(
-            openapiContext: ['summary' => 'Editer un account', 'description' => 'Permet d\'enregistrer des modifications dans un account uppler']
+            openapi: new Operation(
+                summary: 'Editer un account',
+                description: 'Permet d\'enregistrer des modifications dans un account uppler'
+            )
         ),
         new Patch(
-            openapiContext: ['summary' => 'Modifier un account', 'description' => 'Permet d\'enregistrer des modifications dans un account uppler'],
+            openapi: new Operation(
+                summary: 'Modifier un account',
+                description: 'Permet d\'enregistrer des modifications dans un account uppler'
+            ),
             validate: true,
         ),
         new Post(
-            openapiContext: ['summary' => 'Déclarer un account Uppler', 'description' => 'Permet de créer un account Uppler sur la marketplace
-            en passant toutes les infos de ce compte. Un compte utilisateur est automatiquement créé si nécessaire'],
+            openapi: new Operation(
+                summary: 'Déclarer un account Uppler',
+                description: 'Permet de créer un account Uppler sur la marketplace\n            en passant toutes les infos de ce compte. Un compte utilisateur est automatiquement créé si nécessaire'
+            ),
             validate: true,
-        )
+        ),
     ],
     provider: UserAccountProvider::class,
     processor: UserAccountPersistProcessor::class

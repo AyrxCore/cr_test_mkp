@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use ApiPlatform\OpenApi\Model\Operation;
 use App\State\Processor\AddressPersistProcessor;
 use App\State\Provider\AddressProvider;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -19,16 +20,22 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(),
         new Put(
-            openapiContext: ['summary' => 'Editer une adresse', 'description' => 'Permet d\'éditer adresse pour une company'],
+            openapi: new Operation(
+                summary: 'Editer une adresse',
+                description: 'Permet d\'éditer adresse pour une company'
+            ),
             normalizationContext: ['groups' => ['address:update']],
             validate: true
         ),
         new Post(
-            openapiContext: ['summary' => 'Créer une nouvelle adresse', 'description' => 'Permet de créer une nouvelle adresse pour une company'],
+            openapi: new Operation(
+                summary: 'Créer une nouvelle adresse',
+                description: 'Permet de créer une nouvelle adresse pour une company'
+            ),
             normalizationContext: ['groups' => ['address:create']],
             validate: true
         ),
-        new GetCollection()
+        new GetCollection(),
     ],
     provider: AddressProvider::class,
     processor: AddressPersistProcessor::class
@@ -48,7 +55,7 @@ final class Address
     private ?string $name;
 
     #[Groups(['address:create', 'address:update'])]
-    private string|null $type;
+    private ?string $type;
 
     #[Assert\NotBlank(message: 'company cannot be null', groups: ['create'])]
     #[Groups(['address:create', 'address:update'])]
@@ -120,12 +127,12 @@ final class Address
         return $this;
     }
 
-    public function getType(): string|null
+    public function getType(): ?string
     {
         return $this->type;
     }
 
-    public function setType(string|null $type): self
+    public function setType(?string $type): self
     {
         $this->type = $type;
 

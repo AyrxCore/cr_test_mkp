@@ -21,9 +21,9 @@ readonly class AddressPersistProcessor implements ProcessorInterface
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): mixed
     {
         try {
-            if (($context['operation'] ?? null) instanceof Put) {
+            if ($operation instanceof Put) {
                 $this->upplerAddressService->updateAddress($data);
-            } elseif (($context['operation'] ?? null) instanceof Post) {
+            } elseif ($operation instanceof Post) {
                 return $this->addressFactory->create($this->upplerAddressService->createAddress($data));
             } else {
                 throw new BadRequestHttpException();

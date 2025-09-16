@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\OpenApi\Model\Operation;
 use App\State\Provider\ExpertContentProvider;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -19,8 +20,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
         ),
         new GetCollection(
             uriTemplate: '/expert-contents',
-            openapiContext: ['summary' => 'Liste des contenus experts', 'description' => 'Permet de récupérer les derniers contenus experts']
-        )
+            openapi: new Operation(
+                summary: 'Liste des contenus experts',
+                description: 'Permet de récupérer les derniers contenus experts'
+            )
+        ),
     ],
     provider: ExpertContentProvider::class
 )]

@@ -30,7 +30,7 @@ readonly class SavedCartPersistProcessor implements ProcessorInterface
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): mixed
     {
         try {
-            if (($context['operation'] ?? null) instanceof Post) {
+            if ($operation instanceof Post) {
                 $data = $this->addProductsToCart($data);
             }
 

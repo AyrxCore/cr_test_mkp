@@ -32,10 +32,9 @@ export default class UserHttpClient extends BaseClientService {
     return accounts
   }
 
-  public selectUserAccount<T extends []>(id: string): Promise<T> {
-    return this.apiClient
-      .get<T>(`accounts/${id}/select`)
-      .then((response) => response.data)
+  public async selectUserAccount(id: string): Promise<any> {
+    const response = await this.apiClient.get(`accounts/${id}/select`)
+    return response.data
   }
 
   public getUserMe<T extends User>(): Promise<T> {

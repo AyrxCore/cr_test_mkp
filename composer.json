@@ -7,7 +7,7 @@
     "php": ">=8.3",
     "ext-ctype": "*",
     "ext-iconv": "*",
-    "api-platform/core": "~3.2.0",
+    "api-platform/core": "~4.1.19",
     "cron/cron-bundle": "^3.1",
     "doctrine/doctrine-bundle": "^2.7",
     "doctrine/doctrine-migrations-bundle": "^3.2",

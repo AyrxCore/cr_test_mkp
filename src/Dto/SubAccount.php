@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Patch;
+use ApiPlatform\OpenApi\Model\Operation;
 use App\State\Processor\SubAccountPersistProcessor;
 use App\State\Provider\SubAccountProvider;
 use Symfony\Component\Uid\Uuid;
@@ -17,9 +18,13 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(),
         new Patch(
-            openapiContext: ['summary' => 'Editer un account', 'description' => 'Permet d\'enregistrer des modifications dans un account uppler'],
+            openapi: new Operation(
+                summary: 'Editer un account',
+                description: 'Permet d\'enregistrer des modifications dans un account uppler'
+            ),
+            normalizationContext: ['groups' => ['update']],
             validate: true
-        )
+        ),
     ],
     provider: SubAccountProvider::class,
     processor: SubAccountPersistProcessor::class

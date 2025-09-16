@@ -7,6 +7,7 @@ namespace App\Dto;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\OpenApi\Model\Operation;
 use App\State\Provider\CompanyMandateProvider;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -14,7 +15,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new GetCollection(
             uriTemplate: '/company/mandates',
-            openapiContext: ['Liste des mandats existants pour la company de l\'utilisateur']
+            openapi: new Operation(
+                summary: 'Liste des mandats existants pour la company de l\'utilisateur'
+            )
         ),
     ],
     provider: CompanyMandateProvider::class

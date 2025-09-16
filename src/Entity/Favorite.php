@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\OpenApi\Model\Operation;
 use App\Repository\FavoriteRepository;
 use App\State\Processor\FavoritePersistProcessor;
 use App\State\Processor\FavoriteRemoveProcessor;
@@ -29,20 +30,28 @@ use Symfony\Component\Uid\Uuid;
             security: "is_granted('VIEW_FAVORITE', object)"
         ),
         new Patch(
-            openapiContext: ['summary' => 'Modifier une liste de favori', 'description' => 'Permet de mettre a jour le nom et la visibilité d\'une liste de favoris'],
+            openapi: new Operation(
+                summary: 'Modifier une liste de favori',
+                description: 'Permet de mettre a jour le nom et la visibilité d\'une liste de favoris'
+            ),
             normalizationContext: ['groups' => ['update']],
             security: "is_granted('EDIT_FAVORITE', object)",
             validate: true
         ),
         new Delete(
-            openapiContext: ['summary' => 'Supprimer une liste de favori'],
+            openapi: new Operation(
+                summary: 'Supprimer une liste de favori'
+            ),
             security: "is_granted('DELETE_FAVORITE', object)",
             validate: true,
             processor: FavoriteRemoveProcessor::class
         ),
         new GetCollection(),
         new Post(
-            openapiContext: ['summary' => 'Créer une nouvelle liste de favori', 'description' => 'Permet de créer une nouvelle liste de favori'],
+            openapi: new Operation(
+                summary: 'Créer une nouvelle liste de favori',
+                description: 'Permet de créer une nouvelle liste de favori'
+            ),
             validate: true
         ),
     ],

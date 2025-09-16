@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\OpenApi\Model\Operation;
 use App\Repository\SavedCartRepository;
 use App\State\Processor\SavedCartPersistProcessor;
 use App\State\Processor\SavedCartRemoveProcessor;
@@ -29,28 +30,38 @@ use Symfony\Component\Uid\Uuid;
         ),
         new Patch(
             uriTemplate: '/saved-carts/{id}',
-            openapiContext: ['summary' => 'Modifier une liste de panier', 'description' => 'Permet de mettre a jour le nom et la visibilité d\'une liste de panier sauvegardé'],
+            openapi: new Operation(
+                summary: 'Modifier une liste de panier',
+                description: 'Permet de mettre a jour le nom et la visibilité d\'une liste de panier sauvegardé'
+            ),
             normalizationContext: ['groups' => ['update']],
             security: 'is_granted(\'MANAGE_SAVED_CART\', object)',
             validate: true
         ),
         new Delete(
             uriTemplate: '/saved-carts/{id}',
-            openapiContext: ['summary' => 'Supprimer une liste de panier sauvegardé'],
+            openapi: new Operation(
+                summary: 'Supprimer une liste de panier sauvegardé'
+            ),
             security: 'is_granted(\'MANAGE_SAVED_CART\', object)',
             validate: true,
             processor: SavedCartRemoveProcessor::class
         ),
         new Get(
             uriTemplate: '/saved-carts/{id}/products',
-            openapiContext: ['summary' => 'Afficher la liste des produits liés à un panier sauvegardé']
+            openapi: new Operation(
+                summary: 'Afficher la liste des produits liés à un panier sauvegardé'
+            )
         ),
         new GetCollection(
             uriTemplate: '/saved-carts'
         ),
         new Post(
             uriTemplate: '/saved-carts',
-            openapiContext: ['summary' => 'Créer une nouvelle liste de panier sauvegardé', 'description' => 'Permet de créer une nouvelle liste de panier sauvegardé'],
+            openapi: new Operation(
+                summary: 'Créer une nouvelle liste de panier sauvegardé',
+                description: 'Permet de créer une nouvelle liste de panier sauvegardé'
+            ),
             validate: true
         ),
     ],

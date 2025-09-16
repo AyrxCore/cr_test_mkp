@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\UserInfoUpdateRequestRepository;
@@ -104,17 +106,11 @@ class UserInfoUpdateRequest
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getOldValue(): ?string
     {
         return $this->oldValue;
     }
 
-    /**
-     * @param string|null $oldValue
-     */
     public function setOldValue(?string $oldValue): void
     {
         $this->oldValue = $oldValue;

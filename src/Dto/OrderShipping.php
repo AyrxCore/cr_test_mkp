@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\OpenApi\Model\Operation;
 use App\State\Processor\OrderShippingPersistProcessor;
 use App\State\Provider\OrderShippingProvider;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -17,7 +18,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(),
         new Patch(
-            openapiContext: ['summary' => 'Update order shipping'],
+            openapi: new Operation(
+                summary: 'Update order shipping'
+            ),
             validate: true
         ),
         new Post(),

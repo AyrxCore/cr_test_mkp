@@ -7,14 +7,17 @@ namespace App\Dto;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\OpenApi\Model\Operation;
 use App\State\Provider\InvoiceProvider;
 
 #[ApiResource(
     operations: [
         new Get(
             uriTemplate: '/invoices/{id}/download',
-            openapiContext: ['summary' => 'Télécharger la facture de la commande', 'description' => 'Cette opération permet de télécharger le fichier pdf  d\'une commande en spécifiant l\'identifiant de la facture.']
-        )
+            openapi: new Operation(
+                summary: 'Télécharger la facture de la commande',
+                description: 'Cette opération permet de télécharger le fichier pdf  d\'une commande en spécifiant l\'identifiant de la facture.'
+            )),
     ],
     provider: InvoiceProvider::class
 )]

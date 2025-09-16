@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use ApiPlatform\Action\NotFoundAction;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\Symfony\Action\NotFoundAction;
 use App\Repository\ChannelRepository;
 use App\State\Provider\ChannelProvider;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -27,9 +28,12 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Get(
             uriTemplate: '/channels/by-host/{hostname}',
-            outputFormats: 'json',
-            uriVariables: 'hostname',
-            openapiContext: ['summary' => 'Retrieves a Channel by its hostname', 'parameters' => [['name' => 'hostname', 'in' => 'path', 'required' => true, 'type' => 'string', 'description' => 'The hostname of the Channel']]],
+            outputFormats: ['json' => ['application/json']],
+            uriVariables: ['hostname'],
+            openapi: new Operation(
+                summary: 'Retrieves a Channel by its hostname',
+                description: 'Retrieve a Channel using its hostname'
+            ),
             normalizationContext: ['groups' => ['channel:get']],
             provider: ChannelProvider::class
         ),
@@ -76,9 +80,6 @@ class Channel
     #[ApiProperty(
         description: 'Unique code of the channel',
         example: 'QANTIS_MARKETPLACE',
-        openapiContext: [
-            'example' => 'QANTIS_MARKETPLACE',
-        ],
     )]
     private ?string $code = null;
 

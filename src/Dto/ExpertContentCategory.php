@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\OpenApi\Model\Operation;
 use App\State\Provider\ExpertContentCategoryProvider;
 
 #[ApiResource(
@@ -15,8 +16,11 @@ use App\State\Provider\ExpertContentCategoryProvider;
         new Get(),
         new GetCollection(
             uriTemplate: '/expert-content-categories',
-            openapiContext: ['summary' => 'Liste des categories de contenus experts', 'description' => 'Permet de récupérer les categories des contenus experts']
-        )
+            openapi: new Operation(
+                summary: 'Liste des categories de contenus experts',
+                description: 'Permet de récupérer les categories des contenus experts'
+            )
+        ),
     ],
     provider: ExpertContentCategoryProvider::class
 )]

@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\OpenApi\Model\Operation;
 use App\Controller\Api\AddOrderItemToCart;
 use App\State\Processor\OrderItemPersistProcessor;
 use App\State\Processor\OrderItemRemoveProcessor;
@@ -20,19 +21,26 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(),
         new Patch(
-            openapiContext: ['summary' => 'Update order item quantity'],
+            openapi: new Operation(
+                summary: 'Update order item quantity'
+            ),
             validate: true,
+            validationContext: ['groups' => ['update']],
             processor: OrderItemPersistProcessor::class
         ),
         new Delete(
-            openapiContext: ['summary' => 'Delete order item'],
+            openapi: new Operation(
+                summary: 'Delete order item'
+            ),
             validate: true,
             processor: OrderItemRemoveProcessor::class
         ),
         new Post(
             uriTemplate: '/order_items',
             controller: AddOrderItemToCart::class,
-            openapiContext: ['summary' => 'Add item to cart']
+            openapi: new Operation(
+                summary: 'Add item to cart'
+            )
         ),
     ],
     provider: OrderItemProvider::class
@@ -42,7 +50,7 @@ final class OrderItem
     #[ApiProperty(identifier: true)]
     private ?int $id = null;
 
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(groups: ['create', 'update'])]
     #[Assert\Type('integer', message: '(quantity) Integer required')]
     private ?int $quantity = null;
     #[Assert\Type('integer', message: '(cartId) Integer required')]
