@@ -1,5 +1,4 @@
 export interface ExpertContent {
-
   id: number
   slug: string
   date: Date
@@ -23,6 +22,7 @@ export interface ExpertContent {
 }
 
 export interface ExpertContentCategory {
+  id: number
   name: string
   color: string
 }

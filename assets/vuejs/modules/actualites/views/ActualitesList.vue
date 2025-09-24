@@ -7,14 +7,20 @@
         <!-- Bloc liste des actus -->
         <div class="m-auto my-2 flex w-full flex-col-reverse lg:flex-row">
           <div class="w-full lg:w-4/5 lg:pr-5">
-            <LoadingComponent v-if="expertContents.length === 0" />
+            <LoadingComponent v-if="isLoading" />
             <div
-              v-else
+              v-else-if="expertContents && expertContents.length > 0"
               class="m-auto flex flex-col md:grid md:grid-cols-2 md:gap-4 lg:grid-cols-3"
             >
               <div v-for="content in expertContents" :key="content.id">
                 <ActualiteComponent :content="content" />
               </div>
+            </div>
+            <div
+              v-else
+              class="m-auto my-4 flex max-w-screen-2xl flex-col items-center bg-orange-200 px-5 py-5 text-orange-500"
+            >
+              <span class="flex"> Aucun contenu expert n'a été trouvé </span>
             </div>
           </div>
           <div
@@ -47,22 +53,30 @@
   </BaseTemplate>
 </template>
 <script lang="ts" setup>
-import BaseTemplate from '@/vuejs/BaseTemplate.vue'
-import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import { onMounted, ref } from 'vue'
-import ActualiteComponent from '@/vuejs/modules/actualites/components/ActualiteComponent.vue'
-import { useExpertContentStore } from '@/vuejs/stores/expertContent'
 import { storeToRefs } from 'pinia'
-import { ExpertContent } from '@/vuejs/types/ExpertContent'
+
+import { useExpertContentStore } from '@/vuejs/stores/expertContent'
+
+import BaseTemplate from '@/vuejs/BaseTemplate.vue'
+import ActualiteComponent from '@/vuejs/modules/actualites/components/ActualiteComponent.vue'
+import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import DropdownListComponent from '../../shared/DropdownListComponent.vue'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 
 const expertContentStore = useExpertContentStore()
-const { getExpertsContentsCategories } = storeToRefs(expertContentStore)
-const expertContents = ref<ExpertContent[]>([])
+const { getExpertsContentsCategories, expertContents } =
+  storeToRefs(expertContentStore)
+const isLoading = ref<boolean>(true)
 
 onMounted(async () => {
-  expertContents.value = await expertContentStore.init()
+  try {
+    await expertContentStore.init()
+  } catch (error) {
+    console.error('❌ Error loading expert contents:', error)
+  } finally {
+    isLoading.value = false
+  }
 })
 </script>
 
