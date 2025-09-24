@@ -3,7 +3,7 @@
     <div
       v-if="modelValue"
       v-click-outside="closeMenu"
-      class="!lg:h-auto c-scrollbar absolute left-0 top-0 z-10 flex h-[80vh] w-4/5 flex-col overflow-auto bg-white px-5 py-2.5 text-sm shadow sm:left-24 sm:top-36 sm:w-auto sm:rounded"
+      class="!lg:h-auto c-scrollbar absolute left-0 top-0 z-10 flex h-[80vh] w-4/5 flex-col overflow-auto bg-white px-5 py-2.5 text-sm shadow sm:left-24 sm:top-36 sm:w-[425px] sm:rounded"
     >
       <div v-if="showAllCategories">
         <div class="mt-3">

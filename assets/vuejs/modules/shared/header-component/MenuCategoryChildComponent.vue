@@ -1,9 +1,9 @@
 <template>
   <h3
     class="mt-1 flex cursor-pointer items-center text-left"
-    @click.capture.stop="selectCategory"
+    @click.stop="selectCategory"
   >
-    <component
+    <Component
       :is="category.children.length > 0 ? 'span' : 'RouterLink'"
       :to="{ name: ProductPageList.PRODUCTS, query: { category: category.id } }"
       :class="[
@@ -12,13 +12,13 @@
       ]"
       replace
     >
-      <component
+      <Component
         v-if="categoryConfig?.icon"
         :is="categoryConfig.icon"
         class="mr-2 h-4 w-4"
       />
       {{ category.name }}
-    </component>
+    </Component>
     <Chevron2RightIconComponent
       v-if="category.children.length > 0"
       :class="{
