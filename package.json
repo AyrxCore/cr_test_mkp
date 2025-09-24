@@ -37,6 +37,7 @@
     "tailwindcss": "^3.4.1",
     "uuidv4": "^6.2.13",
     "vue": "^3.5.18",
+    "vue-data-ui": "^3.1.1",
     "vue-gtag": "^3.5.2",
     "vue-leaflet-markercluster": "^0.6.1",
     "vue-router": "^4.5.1",

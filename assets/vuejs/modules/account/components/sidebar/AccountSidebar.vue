@@ -1,15 +1,5 @@
 <template>
-  <AccountSidebarBlock
-    :items="[
-      {
-        name: 'Mes commandes',
-        id: AccountPageList.ORDERS,
-        url: AccountPageList.ORDERS,
-        gaEventName: 'click_account_orders',
-      },
-    ]"
-    :title="'Ma consommation'"
-  />
+  <AccountSidebarBlock :items="listOrdersAndData" :title="'Ma consommation'" />
   <AccountSidebarBlock :items="listProfilMenu" title="Mon profil" />
   <AccountSidebarBlock
     :items="[
@@ -17,20 +7,25 @@
         name: 'Adresses',
         id: AccountPageList.ADDRESSES,
         url: AccountPageList.ADDRESSES,
-        gaEventName: 'click_account_adresses',
       },
     ]"
     title="Mon organisation"
   />
 </template>
+
 <script lang="ts" setup>
-import { AccountPageList } from '@/vuejs/router/pages-list'
-import AccountSidebarBlock from '@/vuejs/modules/account/components/sidebar/AccountSidebarBlock.vue'
 import { computed, ref } from 'vue'
-import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
+import { storeToRefs } from 'pinia'
+
+import { AccountPageList } from '@/vuejs/router/pages-list'
 import { useChannelStore } from '@/vuejs/stores/channel'
+import { useUserStore } from '@/vuejs/stores/user.ts'
+import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
+
+import AccountSidebarBlock from '@/vuejs/modules/account/components/sidebar/AccountSidebarBlock.vue'
 
 const channelStore = useChannelStore()
+const { hasNoAdherentData } = storeToRefs(useUserStore())
 
 const listProfilMenuGlobal = ref<any[]>([
   {
@@ -55,9 +50,30 @@ const listProfilMenuGlobal = ref<any[]>([
   },
 ])
 
-const listProfilMenu = computed(() => {
+const listProfilMenu = computed((): any[] => {
   return listProfilMenuGlobal.value.filter(
     (x) => !x.condition || channelStore.isAllowedToShow(x.condition),
   )
+})
+
+const listOrdersAndData = computed((): any[] => {
+  const data = []
+  const orderMenu = {
+    name: 'Mes commandes',
+    id: AccountPageList.ORDERS,
+    url: AccountPageList.ORDERS,
+  }
+  const dataMenu = {
+    name: 'Mes données de consommation',
+    id: AccountPageList.DASHBOARD,
+    url: AccountPageList.DASHBOARD,
+  }
+
+  data.push(orderMenu)
+
+  if (!hasNoAdherentData.value) {
+    data.push(dataMenu)
+  }
+  return data
 })
 </script>

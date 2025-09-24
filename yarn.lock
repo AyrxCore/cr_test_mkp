@@ -4303,6 +4303,11 @@ vite@^5.2.2:
   optionalDependencies:
     fsevents "~2.3.3"
 
+vue-data-ui@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/vue-data-ui/-/vue-data-ui-3.1.1.tgz#5c008421a73ed205a9e060b79a073f19b9262d0c"
+  integrity sha512-0Iy6qqeng2L00SL28CE2LGi9Vdhbjc1UIlgK1KygaD5rOyhAbvfh4ehPwcOOvACW+EJVcHJUOLGEV1b87w8e2g==
+
 vue-eslint-parser@^10.2.0:
   version "10.2.0"
   resolved "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-10.2.0.tgz#cb53f89b14c7f5bf6a95c9532e3b2961ab619d61"

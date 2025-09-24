@@ -86,6 +86,7 @@ const props = defineProps({
 const { channelPrimaryColor } = storeToRefs(useChannelStore())
 const userStore = useUserStore()
 const channelStore = useChannelStore()
+const { hasNoAdherentData } = storeToRefs(useUserStore())
 
 const emit = defineEmits(['update:modelValue'])
 
@@ -110,10 +111,18 @@ const listAccountGlobal = ref<any[]>([
   },
 ])
 
-const listAccount = computed(() => {
-  return listAccountGlobal.value.filter(
+const listAccount = computed((): any[] => {
+  const data = listAccountGlobal.value.filter(
     (x) => !x.condition || channelStore.isAllowedToShow(x.condition),
   )
+
+  if (!hasNoAdherentData.value) {
+    data.unshift({
+      label: 'Mes données de consommation',
+      routeName: AccountPageList.DASHBOARD,
+    })
+  }
+  return data
 })
 
 const closeMenu = (): void => {

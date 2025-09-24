@@ -16,6 +16,7 @@ import SavedCartsPage from '@/vuejs/modules/account/views/SavedCarts.vue'
 import OrdersValidationPage from '@/vuejs/modules/account/views/OrdersValidation.vue'
 
 import { AccountPageList } from '@/vuejs/router/pages-list'
+import Dashboard from '@/vuejs/modules/account/views/Dashboard.vue'
 
 export const routes: RouteRecordRaw[] = [
   {
@@ -96,6 +97,11 @@ export const routes: RouteRecordRaw[] = [
         path: 'orders/validation',
         component: OrdersValidationPage,
         name: AccountPageList.ORDERS_VALIDATION,
+      },
+      {
+        path: 'dashboard',
+        component: Dashboard,
+        name: AccountPageList.DASHBOARD,
       },
     ],
   },

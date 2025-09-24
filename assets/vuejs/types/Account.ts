@@ -38,6 +38,8 @@ export interface Adherent {
   stellantisModalValidated?: boolean
   name?: string
   shouldHideStellantisModal?: boolean
+  usedAccords?: number
+  availableAccords?: number
 }
 
 export interface Account extends ExternalApiDataEntity {

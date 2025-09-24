@@ -10,13 +10,14 @@ import {
 } from '@/vuejs/types/User'
 import { AlertType } from '@/vuejs/types/Alert'
 import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
-import { Account } from '@/vuejs/types/Account'
+import { Account, Adherent } from '@/vuejs/types/Account'
 import { AdherentTarifShowcase } from '@/vuejs/types/AdherentTarifShowcase'
 import { notifyError, notifySuccess } from '@/vuejs/services/utils'
 import { getCookie } from '@/vuejs/services/utils'
 import UserHttpClient from '@/vuejs/services/httpclient/UserHttpClient'
 import { getErrorMessage } from '@/vuejs/services/login'
 import { useCartStore } from './cart'
+import { computed } from 'vue'
 
 export const useUserStore = defineStore('user', {
   state: (): UserStoreState => ({
@@ -265,6 +266,12 @@ export const useUserStore = defineStore('user', {
     },
     isShouldHideStellantisModal(): boolean {
       return this.user?.account?.adherent?.shouldHideStellantisModal || false
+    },
+    hasNoAdherentData(): boolean {
+      return (
+        !this.user?.account?.adherent.usedAccords ||
+        !this.user?.account?.adherent.availableAccords
+      )
     },
   },
 })

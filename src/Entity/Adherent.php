@@ -122,6 +122,14 @@ class Adherent
     #[Groups(['user:simple'])]
     private ?bool $shouldHideStellantisModal = null;
 
+    #[ORM\Column(nullable: true)]
+    #[Groups(['user:simple'])]
+    private ?int $availableAccords = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['user:simple'])]
+    private ?int $usedAccords = null;
+
     public function __construct()
     {
         $this->accordStatuts = new ArrayCollection();
@@ -458,6 +466,30 @@ class Adherent
     public function setShouldHideStellantisModal(?bool $shouldHideStellantisModal): static
     {
         $this->shouldHideStellantisModal = $shouldHideStellantisModal;
+
+        return $this;
+    }
+
+    public function getAvailableAccords(): ?int
+    {
+        return $this->availableAccords;
+    }
+
+    public function setAvailableAccords(int $availableAccords): static
+    {
+        $this->availableAccords = $availableAccords;
+
+        return $this;
+    }
+
+    public function getUsedAccords(): ?int
+    {
+        return $this->usedAccords;
+    }
+
+    public function setUsedAccords(int $usedAccords): static
+    {
+        $this->usedAccords = $usedAccords;
 
         return $this;
     }

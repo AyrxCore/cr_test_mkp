@@ -14,6 +14,7 @@ export enum AccountPageList {
   SAVED_CARTS = 'SAVED_CARTS',
   SAVED_CARTS_DETAILS = 'SAVED_CARTS_DETAILS',
   ORDERS_VALIDATION = 'ORDERS_VALIDATION',
+  DASHBOARD = 'DASHBOARD',
 }
 
 export enum NewsPageList {

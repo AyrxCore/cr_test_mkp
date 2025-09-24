@@ -1,6 +1,7 @@
 import '@/style/main.scss'
 import 'vue-universal-modal/dist/index.css'
 import 'floating-vue/dist/style.css'
+import 'vue-data-ui/style.css'
 
 /** LEAFLET */
 import L from 'leaflet'
