@@ -4,6 +4,8 @@ import {
   Seller,
   SellerPromotion,
   MapApiResponse,
+  MapApiLightResponse,
+  StoreData,
 } from '@/vuejs/types/Seller'
 
 export default class SellerHttpClient extends BaseClientService {
@@ -50,14 +52,23 @@ export default class SellerHttpClient extends BaseClientService {
   /**
    * Récupère les données de la map (stores + catégories) depuis le back-end
    */
-  public fetchMapData(categoryId?: number): Promise<MapApiResponse> {
+  public fetchMapData(
+    categoryId?: number,
+    signal?: AbortSignal,
+  ): Promise<MapApiResponse> {
     let url = 'partner-stores/map-data'
     if (categoryId) {
       url += `?categoryId=${categoryId}`
     }
 
     return this.apiClient
-      .get<MapApiResponse>(url)
+      .get<MapApiResponse>(url, { signal })
+      .then((response) => response.data)
+  }
+
+  public fetchStoreDetail(id: string): Promise<StoreData> {
+    return this.apiClient
+      .get<StoreData>(`partner-stores/${id}/detail`)
       .then((response) => response.data)
   }
 }

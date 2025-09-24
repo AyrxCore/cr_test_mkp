@@ -8,7 +8,9 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use App\Dto\MapStoreDataDto;
+use App\Dto\StoreDetailDto;
 use App\Repository\PartnerStoreRepository;
+use App\State\Provider\PartnerStoreDetailProvider;
 use App\State\Provider\PartnerStoreMapProvider;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
@@ -26,6 +28,10 @@ use Symfony\Component\Uid\Uuid;
             provider: PartnerStoreMapProvider::class,
             normalizationContext: ['groups' => ['map:read']],
         ),
+        new Get(
+            uriTemplate: '/partner-stores/{id}/detail',
+            output: StoreDetailDto::class,
+            provider: PartnerStoreDetailProvider::class, ),
     ],
     order: ['name' => 'ASC'],
     paginationEnabled: false

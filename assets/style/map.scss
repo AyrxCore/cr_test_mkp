@@ -7,6 +7,15 @@
   margin-bottom: 6px !important;
 }
 
+/* Largeur fixe des popups pour stabilité visuelle (chargement/détails) */
+.leaflet-popup-content-wrapper {
+  max-width: none !important;
+}
+
+.leaflet-popup-content {
+  width: 293px !important;
+}
+
 @media (max-width: 767px) {
   .leaflet-popup-content-wrapper {
     min-width: 160px !important;
@@ -16,6 +25,7 @@
   }
 
   .leaflet-popup-content {
+    width: 240px !important;
     font-size: 13px !important;
     line-height: 1.2 !important;
     padding: 0 !important;

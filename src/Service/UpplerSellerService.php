@@ -51,4 +51,20 @@ class UpplerSellerService extends AbstractUpplerService
 
         return null;
     }
+
+    public function getSellersAdmin(): array
+    {
+        $res = $this->request(
+            method: 'GET',
+            path: 'v1/administrator/seller',
+            options: [],
+            isAdmin: true,
+            withCache: false,
+        );
+        if ($res->getStatusCode() !== Response::HTTP_OK) {
+            throw new NotFoundHttpException('Not found');
+        }
+
+        return \json_decode($res->getContent(), true);
+    }
 }

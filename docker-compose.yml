@@ -32,6 +32,9 @@ services:
       - .env.dev
       - .env.local
     command: sh -c "bin/console cron:start --blocking -n"
+    # Run as root to avoid permission issues locally
+    # In prod www-data is used to run container
+    user: root
     volumes:
       - ./:/var/www/
     environment:

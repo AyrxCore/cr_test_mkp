@@ -8,13 +8,19 @@ use App\Helper\UpplerHelper;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 class UpplerPartnerService
 {
+    public const CACHE_ONE_DAY = 86400;
+    private const ALL_LOGOS_CACHE_KEY = 'all_partner_logos';
+
     public function __construct(
         private readonly UpplerProductService $upplerProductService,
         private readonly UpplerSellerService $upplerSellerService,
         private readonly LoggerInterface $apiLogger,
+        private readonly CacheInterface $cache,
     ) {
     }
 
@@ -37,34 +43,70 @@ class UpplerPartnerService
         }
     }
 
-    public function getPartnersData(array $upplerIds): array
+    public function getPartnerLogoFromCacheOrAdmin(int $upplerId): ?string
     {
-        if (empty($upplerIds)) {
-            return [];
+        if ($upplerId <= 0) {
+            return null;
         }
 
         try {
-            $allSellers = UpplerHelper::getAllPaginatedResults(
-                fn ($perPage, $page) => $this->upplerSellerService->getSellers($perPage, $page)
-            );
+            $allLogos = $this->getAllPartnerLogos();
 
-            $partnersData = [];
-            foreach ($allSellers as $seller) {
-                if (\in_array($seller['id'], $upplerIds, true)) {
-                    $partnersData[$seller['id']] = [
-                        'logo' => $seller['logo'] ?? $seller['avatar_url'] ?? null,
-                    ];
-                }
+            if (isset($allLogos[$upplerId])) {
+                return $allLogos[$upplerId];
             }
 
-            return $partnersData;
-        } catch (\Exception $e) {
-            $this->apiLogger->error('Erreur lors de la récupération des données partenaires via UpplerSellerService', [
+            $seller = $this->upplerSellerService->getSeller($upplerId);
+
+            return $seller['logo'] ?? ($seller['avatar_url'] ?? null);
+        } catch (\Throwable $e) {
+            $this->apiLogger->error('Erreur lors de la récupération du logo partenaire', [
+                'upplerId' => $upplerId,
                 'error' => $e->getMessage(),
             ]);
 
-            throw new ServiceUnavailableHttpException(null, 'Impossible de récupérer les données des partenaires', $e);
+            return null;
         }
+    }
+
+    /**
+     * Récupère tous les logos partenaires depuis le cache ou l'API.
+     */
+    public function getAllPartnerLogos(): array
+    {
+        return $this->cache->get(self::ALL_LOGOS_CACHE_KEY, function (ItemInterface $item) {
+            $item->expiresAfter(self::CACHE_ONE_DAY);
+            try {
+                $allSellers = UpplerHelper::getAllPaginatedResults(
+                    fn ($perPage, $page) => $this->upplerSellerService->getSellersAdmin($perPage, $page)
+                );
+
+                $logos = [];
+                foreach ($allSellers as $seller) {
+                    $id = (int) ($seller['id'] ?? 0);
+                    if ($id <= 0) {
+                        continue;
+                    }
+
+                    $logo = $seller['logo'] ?? ($seller['avatar_url'] ?? null);
+                    if (!empty($logo)) {
+                        $logos[$id] = $logo;
+                    }
+                }
+
+                $this->apiLogger->info('Cache global logos créé', [
+                    'count' => \count($logos),
+                ]);
+
+                return $logos;
+            } catch (\Throwable $e) {
+                $this->apiLogger->error('Erreur lors de la création du cache global logos', [
+                    'error' => $e->getMessage(),
+                ]);
+
+                return [];
+            }
+        });
     }
 
     public function getAvailableCategories(array $authorizedUpplerIds): array

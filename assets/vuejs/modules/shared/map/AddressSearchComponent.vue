@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full md:w-auto"
+    class="relative w-full md:w-auto"
     v-click-outside="() => (displayResults = false)"
   >
     <div
@@ -27,7 +27,7 @@
 
     <div
       v-if="displayResults"
-      class="mt-2 max-h-60 w-full overflow-y-auto rounded-md border border-gray-300 bg-white shadow-sm md:w-96"
+      class="mt-2 max-h-60 w-full overflow-y-auto rounded-md border border-gray-300 bg-white shadow-sm md:absolute md:top-full md:z-50 md:mt-1 md:w-96"
     >
       <div v-if="!results.length" class="p-2 text-sm text-slate-500">
         Aucun résultat

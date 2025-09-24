@@ -1,10 +1,18 @@
 <template>
   <ButtonComponent
-    class="my-2 w-full !rounded-none border border-gray-300 !bg-white !text-primary lg:!hidden"
-    @click.stop="showFilters = true"
+    class="relative my-2 w-full !rounded-none border border-gray-300 !bg-white !text-primary lg:!hidden"
+    :disabled="isLoading"
+    @click.stop="!isLoading && (showFilters = true)"
   >
-    <FilterIconComponent />
-    <span class="text-lg">Filtrer</span>
+    <template v-if="isLoading">
+      <div
+        class="absolute inset-0 flex items-center justify-center rounded bg-gray-500/50"
+      >
+        <LoadingComponent />
+      </div>
+    </template>
+    <FilterIconComponent :class="{ 'opacity-50': isLoading }" />
+    <span class="text-lg" :class="{ 'opacity-50': isLoading }">Filtrer</span>
   </ButtonComponent>
   <div v-if="showFilters" class="modal-overlay">
     <div
@@ -49,6 +57,7 @@
 import { ref, PropType } from 'vue'
 
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
+import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 import MapFiltersComponent from '@/vuejs/modules/map/components/MapFiltersComponent.vue'
 import FilterIconComponent from '@/vuejs/modules/shared/icon/FilterIconComponent.vue'
 
@@ -61,6 +70,11 @@ defineProps({
     type: String,
     required: false,
     default: null,
+  },
+  isLoading: {
+    type: Boolean,
+    required: false,
+    default: false,
   },
 })
 

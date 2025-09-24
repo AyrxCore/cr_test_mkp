@@ -16,6 +16,12 @@ export interface StoreData {
   partnerName?: string
   accordLogos?: AccordLogo[]
 }
+
+export interface StoreLightData {
+  id: string
+  latitude: string
+  longitude: string
+}
 export interface Partner {
   id: number
   name: string
@@ -78,5 +84,10 @@ export interface MapCategoryData {
 
 export interface MapApiResponse {
   stores: StoreData[]
+  categories: MapCategoryData[]
+}
+
+export interface MapApiLightResponse {
+  stores: StoreLightData[]
   categories: MapCategoryData[]
 }
