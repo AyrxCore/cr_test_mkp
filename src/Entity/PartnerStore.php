@@ -69,6 +69,14 @@ class PartnerStore
     #[ORM\JoinColumn(nullable: false)]
     private ?Partner $partner = null;
 
+    #[ORM\Column(type: 'datetime_immutable')]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
     public function getId(): ?Uuid
     {
         return $this->id;
@@ -142,6 +150,18 @@ class PartnerStore
     public function setPartner(?Partner $partner): static
     {
         $this->partner = $partner;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }
