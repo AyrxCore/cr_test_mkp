@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\GetCollection;
 use App\Repository\PartnerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -60,6 +61,9 @@ class Partner
 
     #[ORM\OneToMany(mappedBy: 'partner', targetEntity: Accord::class)]
     private Collection $accords;
+
+    #[ORM\Column(type: Types::JSONB, nullable: true)]
+    private ?array $rattachementRecipients = null;
 
     public function __construct()
     {
@@ -187,6 +191,18 @@ class Partner
                 $accord->setPartner(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getRattachementRecipients(): ?array
+    {
+        return $this->rattachementRecipients;
+    }
+
+    public function setRattachementRecipients(?array $rattachementRecipients): static
+    {
+        $this->rattachementRecipients = $rattachementRecipients;
 
         return $this;
     }
