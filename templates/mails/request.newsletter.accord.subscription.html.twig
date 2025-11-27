@@ -1,0 +1,13 @@
+<p>Bonjour,</p>
+<p>Je vous confirme par ce message ma volonté de bénéficier de l'accord-cadre <span class="font-bold">{{ partnerName }}</span>.</p>
+<p>Merci de bien vouloir procéder à mon rattachement et à la création de mon compte à partir des informations ci-dessous :<br/><br/></p>
+<p><strong>Raison sociale</strong> : {{ adherent.name }}</p>
+<p><strong>SIRET</strong> : {{ adherent.siret }}</p>
+<p><strong>Activité</strong> : {{ adherent.activiteApe }}</p>
+<p><strong>Adresse</strong> : {{ adherent.street }} {{ adherent.postalCode }} {{ adherent.city }}</p>
+<p><strong>Nom / Prénom</strong> : {{ account.user.firstname }} {{ account.user.lastname }}</p>
+<p><strong>Fonction</strong> : {{ account.serviceFonctionLabel }}</p>
+<p><strong>Email</strong> : {{ account.user.email }}</p>
+<p><strong>Téléphone</strong> : {{ account.phone }}</p>
+<p><strong>Nom du service achat concerné</strong> : {{ service }} <br/><br/></p>
+<p>Cordialement,</p>

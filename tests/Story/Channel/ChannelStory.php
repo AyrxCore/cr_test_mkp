@@ -19,7 +19,7 @@ final class ChannelStory extends Story
             ChannelFactory::new()->create([
                 'name' => 'QANTIS Test',
                 'code' => 'QANTIS_TEST',
-                'hostname' => 'test.qantis.co',
+                'hostname' => 'localhost',
             ])
         );
     }

@@ -4,7 +4,7 @@ security:
     Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
   # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
   role_hierarchy:
-    ROLE_SUPER_ADMIN: [ROLE_SUPER_ADMIN]
+    ROLE_SUPER_ADMIN: [ ROLE_SUPER_ADMIN ]
     ROLE_ADMIN: ROLE_ADMIN
     ROLE_API: ROLE_API
   providers:
@@ -36,7 +36,7 @@ security:
       login_link:
         check_route: login_check
         lifetime: 300
-        signature_properties: ['id']
+        signature_properties: [ 'id' ]
         success_handler: App\Security\Authentication\AutoLoginSuccessHandler
         failure_handler: App\Security\Authentication\AutoLoginFailureHandler
 

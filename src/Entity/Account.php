@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\OpenApi\Model\Operation;
+use App\Enum\ServiceFonction;
 use App\Repository\AccountRepository;
 use App\State\Provider\AccountProvider;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -119,6 +120,8 @@ class Account
 
     #[ORM\Column(type: 'uuid', nullable: true)]
     private ?Uuid $contactId = null;
+
+    private string $serviceFonctionLabel = '';
 
     public function __construct()
     {
@@ -442,5 +445,10 @@ class Account
         $this->contactId = $contactId;
 
         return $this;
+    }
+
+    public function getServiceFonctionLabel(): ?string
+    {
+        return $this->serviceFonction ? ServiceFonction::format($this->serviceFonction) : null;
     }
 }

@@ -21,10 +21,10 @@ final class AccountFactory extends PersistentObjectFactory
     {
         return [
             'acceptCGU' => self::faker()->boolean(),
-            'createdAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
+            'createdAt' => self::faker()->dateTime(),
             'enabled' => false,
-            'lastConnexion' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'updatedAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
+            'lastConnexion' => self::faker()->dateTime(),
+            'updatedAt' => self::faker()->dateTime(),
             'upplerClientId' => self::faker()->regexify('[0-9]{3,4}_[0-9a-z]{50}'),
             'upplerClientSecret' => self::faker()->regexify('[0-9a-z]{50}'),
             'upplerCompanyId' => self::faker()->randomNumber(3),

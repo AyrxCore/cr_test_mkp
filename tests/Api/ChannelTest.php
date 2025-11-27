@@ -8,7 +8,7 @@ use App\Tests\Story\Channel\ChannelStory;
 
 \it('returns 404 on collection operations', function (
     string $method,
-    string $expectedResponse
+    string $expectedResponse,
 ) {
     $client = $this::createClientWithCredentials();
 
@@ -81,7 +81,7 @@ use App\Tests\Story\Channel\ChannelStory;
 
     $client = $this::createClient();
 
-    $client->request('GET', '/api/channels/by-host/test.qantis.local', [
+    $client->request('GET', '/api/channels/by-host/localhost', [
         'headers' => ['Accept' => 'application/json'],
     ]);
 

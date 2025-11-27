@@ -324,6 +324,27 @@ class Adherent
         return $this;
     }
 
+    public function getRootParent(?self $adherent = null): ?self
+    {
+        if (!$adherent) {
+            $adherent = $this;
+        }
+
+        if (
+            $adherent->getParent()?->getParent()?->getId() === $adherent->getId()
+        ) {
+            return null;
+        }
+
+        $parent = $adherent->getParent();
+
+        if ($parent == null) {
+            return $adherent;
+        } else {
+            return $this->getRootParent($parent);
+        }
+    }
+
     public function getChannel(): ?Channel
     {
         return $this->channel;
