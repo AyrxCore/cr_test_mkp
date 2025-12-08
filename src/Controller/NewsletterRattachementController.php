@@ -26,7 +26,7 @@ class NewsletterRattachementController extends AbstractController implements Cha
 {
     use ChannelAwareControllerTrait;
 
-    private const CACHE_NAME = 'allow_unique_link';
+    private const string CACHE_NAME = 'allow_unique_link';
 
     public function __construct(
         private readonly AccountRepository $accountRepository,
@@ -48,13 +48,40 @@ class NewsletterRattachementController extends AbstractController implements Cha
     public function index(Request $request): Response
     {
         $channel = $this->getChannel($request);
+        $email = $request->get('email') ?? null;
+        $partnerId = $request->get('partnerId') ?? null;
 
+        if (\filter_var($email, \FILTER_VALIDATE_EMAIL) === false) {
+            return $this->renderError('L\'adresse email '.$email.'est invalide', $channel);
+        }
+
+        try {
+            $partner = $this->partnerRepository->find($partnerId);
+            if (!$partner) {
+                throw new \Exception();
+            }
+        } catch (\Throwable $e) {
+            return $this->renderError('Fournisseur non identifié', $channel);
+        }
+
+        return $this->render('newsletter/loading.html.twig', [
+            'channel' => $channel,
+            'partnerName' => $partner->getName(),
+            'email' => $email,
+            'partnerId' => $partnerId,
+        ]);
+    }
+
+    #[Route('/rattachement-newsletter/process', name: 'rattachement_newsletter_process', methods: ['POST'])]
+    public function process(Request $request): Response
+    {
+        $channel = $this->getChannel($request);
         $email = $request->get('email') ?? null;
         $partnerId = $request->get('partnerId') ?? null;
         $host = $request->headers->get('host', '');
 
         if (\filter_var($email, \FILTER_VALIDATE_EMAIL) === false) {
-            return $this->renderError('L\'adresse email '.$email.' est invalide', $channel);
+            return $this->renderError('L\'adresse email '.$email.'est invalide', $channel);
         }
 
         try {
@@ -89,7 +116,7 @@ class NewsletterRattachementController extends AbstractController implements Cha
                     $this->mailerProvider->send(
                         $channel->getChannelParameter()->getEmail(),
                         $partner->getRattachementRecipients(),
-                        'Demande de rattachement à l’accord-cadre '.$partner->getName(),
+                        'Demande de rattachement à l\'accord-cadre '.$partner->getName(),
                         $this->twig->render('mails/request.newsletter.accord.subscription.html.twig', [
                             'partnerName' => $partner->getName(),
                             'adherent' => $adherent,
@@ -117,9 +144,20 @@ class NewsletterRattachementController extends AbstractController implements Cha
         $cacheItem->set(['partnerId' => $partnerId, 'email' => $email, 'host' => $host]);
         $this->cache->save($cacheItem);
 
+        return $this->redirectToRoute('rattachement_newsletter_success', [
+            'partnerName' => $partner->getName(),
+        ]);
+    }
+
+    #[Route('/rattachement-newsletter/success', name: 'rattachement_newsletter_success', methods: ['GET'])]
+    public function success(Request $request): Response
+    {
+        $channel = $this->getChannel($request);
+        $partnerName = $request->query->get('partnerName', '');
+
         return $this->render('newsletter/index.html.twig', [
             'channel' => $channel,
-            'partnerName' => $partner->getName(),
+            'partnerName' => $partnerName,
         ]);
     }
 

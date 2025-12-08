@@ -18,20 +18,31 @@ use Symfony\Component\HttpFoundation\Response;
     $this->entityManager = $this->client->getContainer()->get('doctrine')->getManager();
 });
 
+\it('loads loading page', function () {
+    $response = $this->client->request('GET', '/rattachement-newsletter', [
+        'query' => [
+            'email' => 'valid@email.com',
+            'partnerId' => (string) $this->partner->getId(),
+        ]]);
+
+    \expect($response->getStatusCode())->toBe(Response::HTTP_OK);
+    \expect($response->getContent())->toContain('Traitement en cours');
+})->group('ApiNewsletterRattachementController');
+
 \it('shows error if email is invalid', function () {
     $email = 'email-invalide';
-    $response = $this->client->request('GET', '/rattachement-newsletter', [
+    $response = $this->client->request('POST', '/rattachement-newsletter/process', [
         'query' => [
             'email' => $email,
             'partnerId' => 1,
         ]]);
 
     \expect($response->getStatusCode())->toBe(Response::HTTP_OK);
-    \expect($response->getContent())->toContain('L&#039;adresse email '.$email.' est invalide');
+    \expect($response->getContent())->toContain('L&#039;adresse email '.$email.'est invalide');
 })->group('ApiNewsletterRattachementController');
 
 \it('shows error if partner does not exist', function () {
-    $response = $this->client->request('GET', '/rattachement-newsletter', [
+    $response = $this->client->request('POST', '/rattachement-newsletter/process', [
         'query' => [
             'email' => 'valid@email.com',
             'partnerId' => 99999,
@@ -44,7 +55,7 @@ use Symfony\Component\HttpFoundation\Response;
 \it('shows error if no account found for email', function () {
     $email = 'unknown@email.com';
 
-    $response = $this->client->request('GET', '/rattachement-newsletter', [
+    $response = $this->client->request('POST', '/rattachement-newsletter/process', [
         'query' => [
             'email' => $email,
             'partnerId' => (string) $this->partner->getId(),
@@ -66,14 +77,13 @@ use Symfony\Component\HttpFoundation\Response;
     $this->subscriptionServiceMock->shouldReceive('subscription')
         ->andReturn(true);
 
-    $response = $this->client->request('GET', '/rattachement-newsletter', [
+    $response = $this->client->request('POST', '/rattachement-newsletter/process', [
         'query' => [
             'email' => $email,
             'partnerId' => $partnerId,
         ]]);
 
-    \expect($response->getStatusCode())->toBe(Response::HTTP_OK);
-    \expect($response->getContent())->toContain('Votre demande a bien été transmise');
+    \expect($response->getStatusCode())->toBe(Response::HTTP_FOUND);
 })->group('ApiNewsletterRattachementController');
 
 \it('not sending email if rattachement recipients for partner is null', function () {
@@ -82,19 +92,17 @@ use Symfony\Component\HttpFoundation\Response;
     $this->entityManager->persist($this->partner);
     $this->entityManager->flush();
     $email = 'test@qantis.co';
-    $host = 'localhost';
 
     $this->subscriptionServiceMock->shouldReceive('subscription')
         ->andReturn(true);
 
-    $response = $this->client->request('GET', '/rattachement-newsletter', [
+    $response = $this->client->request('POST', '/rattachement-newsletter/process', [
         'query' => [
             'email' => $email,
             'partnerId' => $partnerId,
         ]]);
 
-    \expect($response->getStatusCode())->toBe(Response::HTTP_OK);
-    \expect($response->getContent())->toContain('Votre demande a bien été transmise');
+    \expect($response->getStatusCode())->toBe(Response::HTTP_FOUND);
 
     $this->assertEmailCount(0);
 
@@ -105,14 +113,13 @@ use Symfony\Component\HttpFoundation\Response;
 \it('successfully processes subscription when account and partner exist', function () {
     $this->cache->clear();
 
-    $response = $this->client->request('GET', '/rattachement-newsletter', [
+    $response = $this->client->request('POST', '/rattachement-newsletter/process', [
         'query' => [
             'email' => 'test@qantis.co',
             'partnerId' => (string) $this->partner->getId(),
         ]]);
 
-    \expect($response->getStatusCode())->toBe(Response::HTTP_OK);
-    \expect($response->getContent())->toContain('Votre demande a bien été transmise');
+    \expect($response->getStatusCode())->toBe(Response::HTTP_FOUND);
 
     $this->assertEmailCount(1);
 
