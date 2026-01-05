@@ -29,10 +29,6 @@
         >
           <div class="my-4">
             <div v-if="!accordShowcaseIsRequested" class="mb-4 text-center">
-              <div class="mb-4">
-                Votre adhésion doit évoluer afin d’accéder à l’offre de ce
-                partenaire.
-              </div>
               <div>
                 Cliquez sur le bouton ci-dessous pour confirmer votre requête et
                 notre équipe reprendra contact avec vous.
