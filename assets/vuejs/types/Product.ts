@@ -25,6 +25,7 @@ export interface Product {
   isAccordCadre?: boolean
   sellable?: boolean
   notSellableFormWithMessage?: boolean
+  formWithMessageFat?: boolean
   favorites?: Array<any>
   optionVariant: Array<any>
   similarProducts: Array<any>

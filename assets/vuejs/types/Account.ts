@@ -52,6 +52,7 @@ export interface Account extends ExternalApiDataEntity {
   editingSubAccount: SubAccount
   acceptCGU: boolean
   user: User
+  phone?: string
 }
 
 export interface DefaultBillingAddressToUpdate {

@@ -20,8 +20,8 @@
       <div class="space-y-4 text-sm">
         <p>
           Pour bénéficier de nos protocoles Stellantis sur les marques Jeep,
-          Alfa Romeo, Opel, Peugeot, DS, Fiat et Citroën et demander à être
-          rattaché au contrat QANTIS, vous vous engagez :
+          Alfa Romeo, Opel, Peugeot, DS, Fiat, Citroën, Lancia et Abarth et
+          demander à être rattaché au contrat QANTIS, vous vous engagez :
         </p>
 
         <ol class="list-inside list-decimal space-y-2 pl-4">

@@ -44,6 +44,7 @@
           />
           <ConditionsPendingOrActivated
             v-else-if="status.not_activated !== currentStatus.status"
+            :accord="accord"
             :accord-name="accord.name"
             :current-status="currentStatus"
             :properties="accord.properties"

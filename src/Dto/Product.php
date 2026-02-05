@@ -114,6 +114,9 @@ final class Product
     #[Groups(['products:get', 'product:get'])]
     private bool $newTarifNotification = false;
 
+    #[Groups(['products:get', 'product:get'])]
+    private bool $formWithMessageFat = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -344,5 +347,15 @@ final class Product
     public function setNewTarifNotification(bool $newTarifNotification): void
     {
         $this->newTarifNotification = $newTarifNotification;
+    }
+
+    public function isFormWithMessageFat(): bool
+    {
+        return $this->formWithMessageFat;
+    }
+
+    public function setFormWithMessageFat(bool $formWithMessageFat): void
+    {
+        $this->formWithMessageFat = $formWithMessageFat;
     }
 }

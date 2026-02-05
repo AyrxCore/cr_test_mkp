@@ -192,6 +192,11 @@ class ProductFactory extends AbstractFactory
             $product->setNotSellableFormWithMessage($isFormWithMessage);
         }
 
+        if ($isAccordCadre) {
+            $isFormWithMessageFat = $this->checkNotSellableFormType($data['properties']);
+            $product->setFormWithMessageFat($isFormWithMessageFat);
+        }
+
         $favorites = $this->em->getRepository(Favorite::class)->getFavoritesByAccountAndProductId($account, $data['id']);
         $product->setFavorites($favorites);
 
