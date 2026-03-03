@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use App\Validator\PasswordStrength;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -24,6 +25,7 @@ class ResettingType extends AbstractType
                     'type' => PasswordType::class,
                     'required' => true,
                     'invalid_message' => 'Le mot de passe et sa confirmation doivent être identiques',
+                    'constraints' => [new PasswordStrength()],
                     'options' => [
                         'attr' => [
                             'class' => 'block mt-2 w-full rounded-lg border !border-black !ring-black p-2.5 text-sm text-gray-900 mb-5',

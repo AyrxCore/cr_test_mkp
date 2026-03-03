@@ -6,12 +6,14 @@ namespace App\Controller\Api;
 
 use App\Entity\User;
 use App\Entity\UserInfoUpdateRequest;
+use App\Validator\PasswordStrength;
 use App\Events\UserInfoUpdateEvent;
 use App\Service\UpplerAccountService;
 use App\Service\UpplerAuthenticationService;
 use App\Service\UpplerBuyerCompanyService;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -79,25 +81,35 @@ class UserApiController extends AbstractController
     public function changePassword(
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher,
-        EntityManagerInterface $em
-    ): JsonResponse {
+        EntityManagerInterface $em,
+        ValidatorInterface $validator,
+        ): JsonResponse {
         $data = \json_decode($request->getContent());
+        if (!$data || !isset($data->currentPassword, $data->password, $data->confirmation)) {
+            return new JsonResponse(['missing required fields'], Response::HTTP_BAD_REQUEST);
+        }
+
         /** @var User $user */
         $user = $this->getUser();
 
         if (!$userPasswordHasher->isPasswordValid($user, $data->currentPassword)) {
-            return new JsonResponse(['current password invalid'], Response::HTTP_BAD_REQUEST);
-        }
-
-        if ($data->password !== $data->confirmation) {
-            return new JsonResponse(['password and its confirmation must be identical'], Response::HTTP_BAD_REQUEST);
-        }
-
-        $newHashedPassword = $userPasswordHasher->hashPassword($user, $data->password);
-        $user->setPassword($newHashedPassword);
-        $em->persist($user);
-        $em->flush();
-
-        return new JsonResponse(['password changed'], Response::HTTP_OK);
+                return new JsonResponse(['current password invalid'], Response::HTTP_BAD_REQUEST);
+            }
+    
+            if ($data->password !== $data->confirmation) {
+                return new JsonResponse(['password and its confirmation must be identical'], Response::HTTP_BAD_REQUEST);
+            }
+    
+            $violations = $validator->validate($data->password, new PasswordStrength());
+            if (\count($violations) > 0) {
+                return new JsonResponse([(string) $violations->get(0)->getMessage()], Response::HTTP_BAD_REQUEST);
+            }
+    
+            $newHashedPassword = $userPasswordHasher->hashPassword($user, $data->password);
+            $user->setPassword($newHashedPassword);
+            $em->persist($user);
+            $em->flush();
+    
+            return new JsonResponse(['password changed'], Response::HTTP_OK);
     }
 }

@@ -176,17 +176,25 @@ export const useUserStore = defineStore('user', {
       }
       return false
     },
-    async updateUserPassword(data: PasswordChangeRequest): Promise<void> {
+    async updateUserPassword(data: PasswordChangeRequest): Promise<string | null> {
       try {
         await UserHttpClient.get(true).updateUserPassword(data)
 
         notifySuccess('Le mot de passe a été modifié avec succès')
 
         await router.push({ name: PageList.ACCOUNT })
-      } catch (error) {
-        notifyError(
-          'Une erreur est survenue, veuillez contacter le service technique',
-        )
+
+        return null
+      } catch (error: any) {
+        const message = error?.response?.data?.[0]
+        if (message === 'current password invalid') {
+          return 'Mot de passe actuel invalide'
+        }
+        else {
+          notifyError(
+            'Une erreur est survenue, veuillez contacter le service technique',
+          )
+        }
       }
     },
     updateContactRequested(accordId: string): void {

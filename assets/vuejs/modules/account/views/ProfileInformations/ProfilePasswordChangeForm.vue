@@ -16,28 +16,32 @@
         <div class="grid-rows grid grid-flow-col gap-6">
           <div class="mb-6">
             <LabelField title="Mot de passe actuel" />
-            <InputField v-model="currentPassword" required type="password" />
+            <PasswordInputField v-model="currentPassword" required />
           </div>
         </div>
         <div class="grid-rows grid grid-flow-col gap-6">
           <div class="mb-6">
             <LabelField title="Nouveau mot de passe" />
-            <InputField
+            <PasswordInputField
               v-model="newPassword"
-              :class="classes"
+              :classes="classes"
               required
-              type="password"
+              @focus="newPasswordFocused = true"
+              @blur="newPasswordFocused = false"
+            />
+            <PasswordStrengthChecklist
+              :password="newPassword"
+              :focused="newPasswordFocused"
             />
           </div>
         </div>
         <div class="grid-rows grid grid-flow-col gap-6">
           <div class="mb-6">
             <LabelField title="Confirmation" />
-            <InputField
+            <PasswordInputField
               v-model="confirmation"
-              :class="classes"
+              :classes="classes"
               required
-              type="password"
             />
           </div>
         </div>
@@ -63,17 +67,19 @@ import { computed, ref } from 'vue'
 
 import router, { PageList } from '@/vuejs/router'
 import { useUserStore } from '@/vuejs/stores/user'
-import { sendGtmEvent } from '@/vuejs/services/gtm'
+import { isPasswordValid } from '@/vuejs/composables/usePasswordStrength'
 
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import InputField from '@/vuejs/modules/shared/formfields/InputField.vue'
 import LabelField from '@/vuejs/modules/shared/formfields/LabelField.vue'
+import PasswordInputField from '@/vuejs/modules/shared/formfields/PasswordInputField.vue'
+import PasswordStrengthChecklist from '@/vuejs/modules/shared/formfields/PasswordStrengthChecklist.vue'
 
 const currentPassword = ref<string>('')
 const newPassword = ref<string>('')
 const confirmation = ref<string>('')
 const passwordError = ref<string>('')
+const newPasswordFocused = ref<boolean>(false)
 const userStore = useUserStore()
 const isLoading = ref<boolean>(false)
 
@@ -88,17 +94,26 @@ const classes = computed((): string => {
 })
 
 const onPasswordFormSubmit = async () => {
+  if (!isPasswordValid(newPassword.value)) {
+    passwordError.value =
+      'Le mot de passe ne respecte pas les consignes de sécurité'
+    return
+  }
   if (newPassword.value !== confirmation.value) {
     passwordError.value =
       'Le mot de passe et sa confirmation doivent être identiques'
     return
   }
   isLoading.value = true
-  await userStore.updateUserPassword({
+  const error = await userStore.updateUserPassword({
     currentPassword: currentPassword.value,
     password: newPassword.value,
     confirmation: confirmation.value,
   })
+
+  if (error) {
+    passwordError.value = error
+  }
 
   isLoading.value = false
 }
