@@ -57,25 +57,29 @@ final class UserAccount
     #[Assert\Email(message: 'email required', groups: ['create'])]
     private string $email = '';
 
-    #[Assert\NotBlank(message: 'upplerSubAccountId cannot be null', groups: ['create'])]
-    #[Assert\Type('integer', message: '(upplerSubAccountId) Integer required', groups: ['create'])]
-    private ?int $upplerSubAccountId = null;
+    #[Assert\AtLeastOneOf([
+        new Assert\IsNull(),
+        new Assert\Type('string', message: '(djustCustomerUserId) string required'),
+    ], groups: ['create'])]
+    private ?string $djustCustomerUserId = null;
 
-    #[Assert\NotBlank(message: 'upplerUserId cannot be null', groups: ['create'])]
-    #[Assert\Type('integer', message: '(upplerUserId) integer required', groups: ['create'])]
-    private ?int $upplerUserId = null;
+    #[Assert\AtLeastOneOf([
+        new Assert\IsNull(),
+        new Assert\Type('string', message: '(djustCustomerAccountId) string required'),
+    ], groups: ['create'])]
+    private ?string $djustCustomerAccountId = null;
 
-    #[Assert\NotBlank(message: 'upplerCompanyId cannot be null')]
-    #[Assert\Type('integer', message: '(upplerCompanyId) integer required')]
-    private ?int $upplerCompanyId = null;
+    #[Assert\AtLeastOneOf([
+        new Assert\IsNull(),
+        new Assert\Type('string', message: '(djustUsername) string required'),
+    ], groups: ['create'])]
+    private ?string $djustUsername = null;
 
-    #[Assert\NotBlank(message: 'upplerSubAccountClientId cannot be null')]
-    #[Assert\Type('string', message: '(upplerSubAccountClientId) string required')]
-    private string $upplerSubAccountClientId = '';
-
-    #[Assert\NotBlank(message: 'upplerSubAccountClientSecret cannot be null')]
-    #[Assert\Type('string', message: '(upplerSubAccountClientSecret) string required')]
-    private string $upplerSubAccountClientSecret = '';
+    #[Assert\AtLeastOneOf([
+        new Assert\IsNull(),
+        new Assert\Type('string', message: '(djustPassword) string required'),
+    ], groups: ['create'])]
+    private ?string $djustPassword = null;
 
     #[Assert\NotBlank(message: 'contactId cannot be null')]
     #[Assert\Type('string', message: '(contactId) string required')]
@@ -108,14 +112,44 @@ final class UserAccount
 
     private ?string $serviceFonction = '';
 
+    #[Assert\AtLeastOneOf([
+        new Assert\IsNull(),
+        new Assert\Type('integer', message: '(upplerSubAccountId) integer required'),
+    ])]
+    private ?int $upplerSubAccountId = null;
+
+    #[Assert\AtLeastOneOf([
+        new Assert\IsNull(),
+        new Assert\Type('integer', message: '(upplerUserId) integer required'),
+    ])]
+    private ?int $upplerUserId = null;
+
+    #[Assert\AtLeastOneOf([
+        new Assert\IsNull(),
+        new Assert\Type('integer', message: '(upplerCompanyId) integer required'),
+    ])]
+    private ?int $upplerCompanyId = null;
+
+    #[Assert\AtLeastOneOf([
+        new Assert\IsNull(),
+        new Assert\Type('string', message: '(upplerSubAccountClientId) string required'),
+    ])]
+    private ?string $upplerSubAccountClientId = null;
+
+    #[Assert\AtLeastOneOf([
+        new Assert\IsNull(),
+        new Assert\Type('string', message: '(upplerSubAccountClientSecret) string required'),
+    ])]
+    private ?string $upplerSubAccountClientSecret = null;
+
     public function getAccountId(): ?Uuid
     {
         return $this->accountId;
     }
 
-    public function setUserId(Uuid $id): ?self
+    public function setAccountId(Uuid $id): ?self
     {
-        $this->userId = $id;
+        $this->accountId = $id;
 
         return $this;
     }
@@ -125,9 +159,9 @@ final class UserAccount
         return $this->userId;
     }
 
-    public function setAccountId(Uuid $id): ?self
+    public function setUserId(Uuid $id): ?self
     {
-        $this->accountId = $id;
+        $this->userId = $id;
 
         return $this;
     }
@@ -144,12 +178,180 @@ final class UserAccount
         return $this;
     }
 
+    public function getDjustCustomerAccountId(): ?string
+    {
+        return $this->djustCustomerAccountId;
+    }
+
+    public function setDjustCustomerAccountId(?string $djustCustomerAccountId): self
+    {
+        $this->djustCustomerAccountId = $djustCustomerAccountId;
+
+        return $this;
+    }
+
+    public function getDjustCustomerUserId(): ?string
+    {
+        return $this->djustCustomerUserId;
+    }
+
+    public function setDjustCustomerUserId(?string $djustCustomerUserId): self
+    {
+        $this->djustCustomerUserId = $djustCustomerUserId;
+
+        return $this;
+    }
+
+    public function getDjustUsername(): ?string
+    {
+        return $this->djustUsername;
+    }
+
+    public function setDjustUsername(?string $djustUsername): self
+    {
+        $this->djustUsername = $djustUsername;
+
+        return $this;
+    }
+
+    public function getDjustPassword(): ?string
+    {
+        return $this->djustPassword;
+    }
+
+    public function setDjustPassword(?string $djustPassword): self
+    {
+        $this->djustPassword = $djustPassword;
+
+        return $this;
+    }
+
+    public function getContactId(): string
+    {
+        return $this->contactId;
+    }
+
+    public function setContactId(string $contactId): self
+    {
+        $this->contactId = $contactId;
+
+        return $this;
+    }
+
+    public function getAdherentId(): string
+    {
+        return $this->adherentId;
+    }
+
+    public function setAdherentId(string $adherentId): self
+    {
+        $this->adherentId = $adherentId;
+
+        return $this;
+    }
+
+    public function getAdherentName(): string
+    {
+        return $this->adherentName;
+    }
+
+    public function setAdherentName(string $adherentName): self
+    {
+        $this->adherentName = $adherentName;
+
+        return $this;
+    }
+
+    public function getAdherentParentId(): ?string
+    {
+        return $this->adherentParentId;
+    }
+
+    public function setAdherentParentId(?string $adherentParentId): self
+    {
+        $this->adherentParentId = $adherentParentId;
+
+        return $this;
+    }
+
+    public function getFirstname(): string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(string $firstname): self
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getLastname(): string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(string $lastname): self
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function isEnabled(): bool
+    {
+        return $this->isEnabled;
+    }
+
+    public function setIsEnabled(bool $isEnabled): self
+    {
+        $this->isEnabled = $isEnabled;
+
+        return $this;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?string $phone): self
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getServiceFonction(): ?string
+    {
+        return $this->serviceFonction;
+    }
+
+    public function setServiceFonction(?string $serviceFonction): self
+    {
+        $this->serviceFonction = $serviceFonction;
+
+        return $this;
+    }
+
+    public function getChannelCode(): ?string
+    {
+        return $this->channelCode;
+    }
+
+    public function setChannelCode(?string $channelCode): self
+    {
+        $this->channelCode = $channelCode;
+
+        return $this;
+    }
+
     public function getUpplerSubAccountId(): ?int
     {
         return $this->upplerSubAccountId;
     }
 
-    public function setUpplerSubAccountId(int $upplerSubAccountId): self
+    public function setUpplerSubAccountId(?int $upplerSubAccountId): self
     {
         $this->upplerSubAccountId = $upplerSubAccountId;
 
@@ -161,7 +363,7 @@ final class UserAccount
         return $this->upplerUserId;
     }
 
-    public function setUpplerUserId(int $upplerUserId): self
+    public function setUpplerUserId(?int $upplerUserId): self
     {
         $this->upplerUserId = $upplerUserId;
 
@@ -173,7 +375,7 @@ final class UserAccount
         return $this->upplerCompanyId;
     }
 
-    public function setUpplerCompanyId(int $upplerCompanyId): self
+    public function setUpplerCompanyId(?int $upplerCompanyId): self
     {
         $this->upplerCompanyId = $upplerCompanyId;
 
@@ -185,7 +387,7 @@ final class UserAccount
         return $this->upplerSubAccountClientId;
     }
 
-    public function setUpplerSubAccountClientId(string $upplerSubAccountClientId): self
+    public function setUpplerSubAccountClientId(?string $upplerSubAccountClientId): self
     {
         $this->upplerSubAccountClientId = $upplerSubAccountClientId;
 
@@ -197,110 +399,10 @@ final class UserAccount
         return $this->upplerSubAccountClientSecret;
     }
 
-    public function setUpplerSubAccountClientSecret(string $upplerSubAccountClientSecret): self
+    public function setUpplerSubAccountClientSecret(?string $upplerSubAccountClientSecret): self
     {
         $this->upplerSubAccountClientSecret = $upplerSubAccountClientSecret;
 
         return $this;
-    }
-
-    public function getContactId(): string
-    {
-        return $this->contactId;
-    }
-
-    public function setContactId(string $contactId): void
-    {
-        $this->contactId = $contactId;
-    }
-
-    public function getAdherentId(): string
-    {
-        return $this->adherentId;
-    }
-
-    public function setAdherentId(string $adherentId): void
-    {
-        $this->adherentId = $adherentId;
-    }
-
-    public function getAdherentName(): string
-    {
-        return $this->adherentName;
-    }
-
-    public function setAdherentName(string $adherentName): void
-    {
-        $this->adherentName = $adherentName;
-    }
-
-    public function getAdherentParentId(): ?string
-    {
-        return $this->adherentParentId;
-    }
-
-    public function setAdherentParentId(?string $adherentParentId): void
-    {
-        $this->adherentParentId = $adherentParentId;
-    }
-
-    public function getFirstname(): string
-    {
-        return $this->firstname;
-    }
-
-    public function setFirstname(string $firstname): void
-    {
-        $this->firstname = $firstname;
-    }
-
-    public function getLastname(): string
-    {
-        return $this->lastname;
-    }
-
-    public function setLastname(string $lastname): void
-    {
-        $this->lastname = $lastname;
-    }
-
-    public function isEnabled(): bool
-    {
-        return $this->isEnabled;
-    }
-
-    public function setIsEnabled(bool $isEnabled): void
-    {
-        $this->isEnabled = $isEnabled;
-    }
-
-    public function getPhone(): ?string
-    {
-        return $this->phone;
-    }
-
-    public function setPhone(?string $phone): void
-    {
-        $this->phone = $phone;
-    }
-
-    public function getServiceFonction(): ?string
-    {
-        return $this->serviceFonction;
-    }
-
-    public function setServiceFonction(?string $serviceFonction): void
-    {
-        $this->serviceFonction = $serviceFonction;
-    }
-
-    public function getChannelCode(): ?string
-    {
-        return $this->channelCode;
-    }
-
-    public function setChannelCode(?string $channelCode): void
-    {
-        $this->channelCode = $channelCode;
     }
 }

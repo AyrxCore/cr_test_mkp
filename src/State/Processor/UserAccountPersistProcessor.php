@@ -15,7 +15,6 @@ use App\Repository\ChannelRepository;
 use App\Repository\UserInfoUpdateRequestRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Uid\Uuid;
 
@@ -58,13 +57,10 @@ readonly class UserAccountPersistProcessor implements ProcessorInterface
                 $user->setEnabled(false);
                 $user->setPassword($this->userPasswordHasher->hashPassword($user, \uniqid()));
             }
-            $account = $this->accountRepository->findOneBy(
-                ['upplerClientId' => $data->getUpplerSubAccountClientId()]
-            );
-            if ($account) {
-                throw new BadRequestException('Account with this username already exist');
+            $account = $this->accountRepository->findOneByContactId($data->getContactId());
+            if (!$account) {
+                $account = new Account();
             }
-            $account = new Account();
         }
 
         $logEmail = $this->userInfoUpdateRequestRepository->findOneBy([
@@ -133,17 +129,22 @@ readonly class UserAccountPersistProcessor implements ProcessorInterface
 
         $this->em->persist($user);
 
-        $account->setUpplerSubAccountId($data->getUpplerSubAccountId());
-        $account->setUpplerClientId($data->getUpplerSubAccountClientId());
-        $account->setUpplerClientSecret($data->getUpplerSubAccountClientSecret());
-        $account->setUpplerUserId($data->getUpplerUserId());
-        $account->setUpplerCompanyId($data->getUpplerCompanyId());
-        $account->setServiceFonction($data->getServiceFonction());
-        $account->setPhone($data->getPhone());
-        $account->setUser($user);
-        $account->setEnabled($data->isEnabled());
-        $account->setAdherent($adh);
-        $account->setContactId(Uuid::fromString($data->getContactId()));
+        $account
+            ->setServiceFonction($data->getServiceFonction())
+            ->setPhone($data->getPhone())
+            ->setUser($user)
+            ->setEnabled($data->isEnabled())
+            ->setAdherent($adh)
+            ->setContactId(Uuid::fromString($data->getContactId()))
+            ->setDjustCustomerAccountId($data->getDjustCustomerAccountId())
+            ->setDjustCustomerUserId($data->getDjustCustomerUserId())
+            ->setDjustUsername($data->getDjustUsername())
+            ->setDjustPassword($data->getDjustPassword())
+            ->setUpplerSubAccountId($data->getUpplerSubAccountId())
+            ->setUpplerClientId($data->getUpplerSubAccountClientId())
+            ->setUpplerClientSecret($data->getUpplerSubAccountClientSecret())
+            ->setUpplerUserId($data->getUpplerUserId())
+            ->setUpplerCompanyId($data->getUpplerCompanyId());
 
         if (!$logPhone || ($logPhone->getValue() === $data->getPhone())) {
             $account->setPhone($data->getPhone());
@@ -155,7 +156,6 @@ readonly class UserAccountPersistProcessor implements ProcessorInterface
         }
 
         $this->em->persist($account);
-
         $this->em->flush();
 
         $data->setAccountId($account->getId());

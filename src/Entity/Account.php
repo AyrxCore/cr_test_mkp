@@ -49,15 +49,15 @@ class Account
     #[Groups(['user:simple', 'account:list', 'account:get'])]
     private ?Uuid $id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['user:simple', 'account:list', 'account:get'])]
     private ?int $upplerUserId = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['account:list', 'account:get'])]
     private ?int $upplerSubAccountId = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['account:list', 'account:get'])]
     private ?int $upplerCompanyId = null;
 
@@ -95,7 +95,7 @@ class Account
 
     #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'accounts')]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups(['user:simple'])]
+    #[Groups(['user:simple', 'account:get'])]
     private ?Adherent $adherent = null;
 
     #[ORM\OneToMany(mappedBy: 'account', targetEntity: CartSavings::class)]
@@ -120,6 +120,18 @@ class Account
 
     #[ORM\Column(type: 'uuid', nullable: true)]
     private ?Uuid $contactId = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $djustCustomerAccountId = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $djustCustomerUserId = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $djustUsername = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $djustPassword = null;
 
     private string $serviceFonctionLabel = '';
 
@@ -158,7 +170,7 @@ class Account
         return $this->upplerUserId;
     }
 
-    public function setUpplerUserId(int $upplerUserId): self
+    public function setUpplerUserId(?int $upplerUserId): self
     {
         $this->upplerUserId = $upplerUserId;
 
@@ -182,7 +194,7 @@ class Account
         return $this->upplerCompanyId;
     }
 
-    public function setUpplerCompanyId(int $upplerCompanyId): self
+    public function setUpplerCompanyId(?int $upplerCompanyId): self
     {
         $this->upplerCompanyId = $upplerCompanyId;
 
@@ -230,7 +242,7 @@ class Account
         return $this->upplerClientId;
     }
 
-    public function setUpplerClientId(string $upplerClientId): self
+    public function setUpplerClientId(?string $upplerClientId): self
     {
         $this->upplerClientId = $upplerClientId;
 
@@ -242,7 +254,7 @@ class Account
         return $this->upplerClientSecret;
     }
 
-    public function setUpplerClientSecret(string $upplerClientSecret): self
+    public function setUpplerClientSecret(?string $upplerClientSecret): self
     {
         $this->upplerClientSecret = $upplerClientSecret;
 
@@ -443,6 +455,54 @@ class Account
     public function setContactId(?Uuid $contactId): self
     {
         $this->contactId = $contactId;
+
+        return $this;
+    }
+
+    public function getDjustCustomerAccountId(): ?string
+    {
+        return $this->djustCustomerAccountId;
+    }
+
+    public function setDjustCustomerAccountId(?string $djustCustomerAccountId): static
+    {
+        $this->djustCustomerAccountId = $djustCustomerAccountId;
+
+        return $this;
+    }
+
+    public function getDjustCustomerUserId(): ?string
+    {
+        return $this->djustCustomerUserId;
+    }
+
+    public function setDjustCustomerUserId(?string $djustCustomerUserId): static
+    {
+        $this->djustCustomerUserId = $djustCustomerUserId;
+
+        return $this;
+    }
+
+    public function getDjustUsername(): ?string
+    {
+        return $this->djustUsername;
+    }
+
+    public function setDjustUsername(?string $djustUsername): static
+    {
+        $this->djustUsername = $djustUsername;
+
+        return $this;
+    }
+
+    public function getDjustPassword(): ?string
+    {
+        return $this->djustPassword;
+    }
+
+    public function setDjustPassword(?string $djustPassword): static
+    {
+        $this->djustPassword = $djustPassword;
 
         return $this;
     }
