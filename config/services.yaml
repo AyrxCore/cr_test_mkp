@@ -28,6 +28,8 @@ parameters:
       FIAT: 'b828903e-d469-11ed-8695-067e628b0734'
       CITROEN: '00477df2-5c2b-11ec-a27b-0af08f946010'
       JEEP: 'd43c8e24-d469-11ed-a959-025bcd73cb12'
+      LANCIA: '9b9adfb4-00d8-11f1-aeda-c1ba1303c176'
+      ABARTH: 'ae8972de-00d8-11f1-9176-a5702986ae35'
     ADHERENT_MAIL:
       FROM: '%env(MAIL_FROM)%'
       TO: '%env(ADH_SERV_MAIL_TO)%'
@@ -81,7 +83,7 @@ services:
   _instanceof:
     \App\Controller\ChannelRepositoryAwareControllerInterface:
       calls:
-        - setChannelRepository: [ '@App\Repository\ChannelRepository' ]
+        - setChannelRepository: ['@App\Repository\ChannelRepository']
 
     # SERVICES UPPLER
     App\Service\AbstractUpplerService:
@@ -94,10 +96,10 @@ services:
 
   # Voter
   App\Security\Voter\FavoriteVoter:
-    tags: [ { name: security.voter } ]
+    tags: [{ name: security.voter }]
 
   App\Security\Voter\SavedCartVoter:
-    tags: [ { name: security.voter } ]
+    tags: [{ name: security.voter }]
 
   App\DataFixtures\Story\ChannelStory:
     arguments:
@@ -129,12 +131,12 @@ services:
   App\EventListener\JWTExceptionListener:
     tags:
       - {
-        name: 'kernel.event_listener',
-        event: 'lexik_jwt_authentication.on_jwt_expired',
-        method: 'onJWTException',
-      }
+          name: 'kernel.event_listener',
+          event: 'lexik_jwt_authentication.on_jwt_expired',
+          method: 'onJWTException',
+        }
       - {
-        name: 'kernel.event_listener',
-        event: 'lexik_jwt_authentication.on_jwt_invalid',
-        method: 'onJWTException',
-      }
+          name: 'kernel.event_listener',
+          event: 'lexik_jwt_authentication.on_jwt_invalid',
+          method: 'onJWTException',
+        }
