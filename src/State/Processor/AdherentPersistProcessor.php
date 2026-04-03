@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\Entity\Adherent;
 use App\Repository\AdherentRepository;
+use App\Repository\ChannelRepository;
 use App\Service\AccordStatutService;
 use App\Service\TarifShowcaseService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -18,6 +19,7 @@ readonly class AdherentPersistProcessor implements ProcessorInterface
     public function __construct(
         private AdherentRepository $adherentRepository,
         private AccordStatutService $accordStatutService,
+        private ChannelRepository $channelRepository,
         private TarifShowcaseService $tarifShowcaseService,
     ) {
     }
@@ -26,6 +28,7 @@ readonly class AdherentPersistProcessor implements ProcessorInterface
     {
         $adherent = $this->getAdherent($data->getId());
 
+        $adherent->setChannel($this->channelRepository->findOneByCode($data->getChannelCode()));
         $this->accordStatutService->processAccordStatutAttachments($data->getAttachments(), $adherent);
         $this->tarifShowcaseService->processTarifShowcases($data->getTarifShowcases(), $adherent);
     }
