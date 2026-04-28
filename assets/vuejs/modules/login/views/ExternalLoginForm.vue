@@ -113,10 +113,10 @@
       </div>
       <p
         v-if="!channel?.whiteLabel"
-        class="hidden pb-2 text-[0.6rem] text-gray-500 lg:block"
+        class="pb-1 text-[0.6rem] text-gray-500 mb-11"
       >
         La marketplace QANTIS est un espace fermé et réservé aux adhérents de
-        notre centrale d'achats. Envie de rejoindre nos plus de 30 000 adhérents
+        notre centrale d'achats. Envie de rejoindre nos plus de 35 000 adhérents
         ? <a href="https://qantis.co/centrale-dachats/">C'est par ici !</a>
       </p>
       <div

@@ -1,4 +1,3 @@
-
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.dev.local
@@ -24,7 +23,6 @@ yarn-error.log
 /.vscode/launch.json
 /.vscode/
 
-
 ###> symfony/phpunit-bridge ###
 .phpunit.result.cache
 /phpunit.xml
@@ -34,6 +32,9 @@ yarn-error.log
 # /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
 aws-docker-creds
+
+# Certificats SSL locaux (générés via mkcert, ne jamais commiter)
+/docker/nginx/certs/
 
 ###> friendsofphp/php-cs-fixer ###
 /.php-cs-fixer.dist.php
