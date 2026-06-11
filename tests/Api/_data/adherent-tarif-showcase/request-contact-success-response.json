@@ -1,0 +1,9 @@
+{
+  "@context": "\/api\/contexts\/AdherentTarifShowcase",
+  "@id": "\/api\/adherent_tarif_showcases\/@integer@\/request-contact",
+  "@type": "AdherentTarifShowcase",
+  "id": "@integer@",
+  "accordId": "@string@",
+  "tarifId": "@string@",
+  "contactRequested": true
+}

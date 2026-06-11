@@ -7,10 +7,13 @@ namespace App\State\Processor;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\Entity\AdherentTarifShowcase;
+use App\Entity\User;
 use App\Service\MailerProvider;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Twig\Environment;
 
@@ -22,14 +25,28 @@ class AdherentTarifShowcaseContactRequestProcessor implements ProcessorInterface
         private RequestStack $requestStack,
         private Environment $twig,
         private readonly ParameterBagInterface $parameterBag,
+        private Security $security,
     ) {
     }
 
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): void
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): AdherentTarifShowcase
     {
         if (!$data instanceof AdherentTarifShowcase) {
             throw new BadRequestHttpException('Invalid data');
         }
+
+        /** @var User $currentUser */
+        $currentUser = $this->security->getUser();
+        
+        $userAdherentIds = $currentUser->getAccounts()
+            ->map(fn($account) => $account->getAdherent()?->getId())
+            ->filter(fn($id) => $id !== null)
+            ->toArray();
+        
+        if (!in_array($data->getAdherent()->getId(), $userAdherentIds, true)) {
+            throw new AccessDeniedHttpException('You do not have access to this showcase');
+        }
+
         $request = $this->requestStack->getCurrentRequest();
         $content = $request->getContent();
         $decodedContent = \json_decode($content, true);
@@ -39,6 +56,10 @@ class AdherentTarifShowcaseContactRequestProcessor implements ProcessorInterface
         }
 
         $accordName = $decodedContent['accordName'] ?? null;
+
+        if ($data->isContactRequested()) {
+            return $data;
+        }
 
         $data->setContactRequested(true);
         $this->entityManager->persist($data);
@@ -61,5 +82,7 @@ class AdherentTarifShowcaseContactRequestProcessor implements ProcessorInterface
             $subject,
             $this->twig->render('mails/request.adherent_tarif_showcase_open.html.twig', $emailData)
         );
+
+        return $data;
     }
 }

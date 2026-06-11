@@ -23,6 +23,7 @@ use Symfony\Component\Uid\Uuid;
             uriTemplate: '/adherent_tarif_showcases/{id}/request-contact',
             name: 'api_adherent_tarif_showcases_request_contact',
             processor: AdherentTarifShowcaseContactRequestProcessor::class,
+            normalizationContext: ['groups' => ['user:simple']],
         ),
     ],
 )]
