@@ -2,6 +2,17 @@
   <div class="flex min-h-screen flex-col">
     <HeaderSharedComponent />
 
+    <!-- TODO: TEMP MKP-1447 — à supprimer après le 28/06/2026 -->
+    <div
+      :style="{ color: betterTextColor('primary') }"
+      class="bg-primary p-4 text-center"
+    >
+      <p class="text-sm md:w-auto md:text-base lg:text-lg">
+        Votre Marketplace fait peau neuve ! Les commandes en ligne seront temporairement suspendues du 19 juin (16h) au 29 juin (12h). Merci de votre compréhension.
+      </p>
+    </div>
+    <!-- END TEMP MKP-1447 -->
+
     <div
       v-if="
         banner &&
