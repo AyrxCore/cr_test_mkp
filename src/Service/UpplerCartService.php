@@ -241,7 +241,7 @@ class UpplerCartService extends AbstractUpplerService
         }
     }
 
-    public function setPaymentMethod(int $cartId, int $paymentMethodId): array|bool
+    public function setPaymentMethod(int $cartId, string $paymentMethodType): array|bool
     {
         $hostname = $this->getHostname();
         $res = $this->request(
@@ -249,7 +249,7 @@ class UpplerCartService extends AbstractUpplerService
             'v1/buyer/cart/'.$cartId.'/payment-method',
             [
                 'json' => [
-                    'payment_method' => $paymentMethodId,
+                    'payment_method' => $paymentMethodType,
                     'callback_url' => 'https://'.$hostname.'/api/buyer/cart/'.$cartId.'/confirm',
                 ],
             ],

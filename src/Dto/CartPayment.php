@@ -30,16 +30,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 final class CartPayment
 {
-    // IDs des méthodes de paiements Uppler
-    public const CART_PAYMENT_CB = 8;
-    public const CART_PAYMENT_SEPA = [9, 10];
-    public const CART_PAYMENT_MANDAT_ADMIN = 11;
+    // Types de paiement Adyen
+    public const PAYMENT_TYPE_CB = 'scheme';
+    public const PAYMENT_TYPE_SEPA = 'bankTransfer_IBAN';
 
     #[ApiProperty(identifier: true)]
     private ?int $id = null;
 
-    #[Assert\Type('integer', message: '(paymentMethodId) Integer required')]
-    private ?int $paymentMethodId = null;
+    #[Assert\NotNull(message: '(paymentMethodType) Required')]
+    #[Assert\Choice(
+        choices: [self::PAYMENT_TYPE_CB, self::PAYMENT_TYPE_SEPA],
+        message: '(paymentMethodType) Invalid payment method type'
+    )]
+    private ?string $paymentMethodType = null;
 
     public function getId(): ?int
     {
@@ -53,14 +56,14 @@ final class CartPayment
         return $this;
     }
 
-    public function getPaymentMethodId(): ?int
+    public function getPaymentMethodType(): ?string
     {
-        return $this->paymentMethodId;
+        return $this->paymentMethodType;
     }
 
-    public function setPaymentMethodId(int $paymentMethodId): ?self
+    public function setPaymentMethodType(string $paymentMethodType): self
     {
-        $this->paymentMethodId = $paymentMethodId;
+        $this->paymentMethodType = $paymentMethodType;
 
         return $this;
     }

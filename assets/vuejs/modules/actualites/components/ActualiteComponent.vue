@@ -45,8 +45,8 @@
 </template>
 
 <script lang="ts" setup>
-import { format } from 'date-fns'
 import { computed, PropType } from 'vue'
+import { format } from 'date-fns'
 
 import { PageList } from '@/vuejs/router'
 import { ExpertContent } from '@/vuejs/types/ExpertContent'

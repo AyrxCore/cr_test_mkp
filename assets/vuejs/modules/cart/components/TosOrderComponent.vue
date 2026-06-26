@@ -8,9 +8,9 @@
         Conditions Générales de Vente de {{ seller.name }}
       </div>
       <div
-        v-if="seller.tos?.content"
+        v-if="seller.tos"
         class="max-h-[650px] overflow-y-scroll"
-        v-html="seller.tos.content"
+        v-html="seller.tos"
       />
       <div v-else class="italic">Conditions générales indisponibles</div>
       <div class="mt-4 text-center">
@@ -24,9 +24,9 @@
 <script lang="ts" setup>
 import { PropType } from 'vue'
 
-import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-
 import { Seller } from '@/vuejs/types/Seller'
+
+import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 
 const props = defineProps({
   seller: {

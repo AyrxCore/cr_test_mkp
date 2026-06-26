@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new Get(
             uriTemplate: '/sellers/{id}',
-            requirements: ['id' => '\\d+']
+            requirements: ['id' => '\\d+'],
         ),
         new Get(
             uriTemplate: '/sellers/{id}/promotions',
@@ -36,36 +36,53 @@ use Symfony\Component\Serializer\Annotation\Groups;
     ],
     provider: SellerProvider::class
 )]
-final class Seller
+class Seller
 {
     #[ApiProperty(identifier: true)]
     #[Groups(['products:get', 'product:get'])]
-    private ?int $id = null;
+    private ?string $id = null;
+
+    #[Groups(['products:get', 'product:get'])]
+    private ?string $externalId = null;
+
     #[Groups(['products:get', 'product:get'])]
     private ?string $name = null;
+
     #[Groups(['products:get', 'product:get'])]
     private ?string $corporateName = null;
+
     #[Groups(['products:get', 'product:get'])]
     private ?string $description = null;
+
     #[Groups(['products:get', 'product:get'])]
     private ?string $avatar = null;
+
     #[Groups(['products:get', 'product:get'])]
-    private array $tos = [];
+    private ?string $tos = null;
 
-    #[Groups(['products:get'])]
-    private ?int $productCount = null;
+    #[Groups(['products:get', 'product:get'])]
+    private ?string $supplierDeliveryInfo = null;
 
-    #[Groups(['products:get'])]
-    private ?bool $checked = null;
-
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
 
-    public function setId(int $id): self
+    public function setId(?string $id): self
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    public function getExternalId(): ?string
+    {
+        return $this->externalId;
+    }
+
+    public function setExternalId(?string $externalId): self
+    {
+        $this->externalId = $externalId;
 
         return $this;
     }
@@ -75,9 +92,11 @@ final class Seller
         return $this->name;
     }
 
-    public function setName(?string $name): void
+    public function setName(?string $name): self
     {
         $this->name = $name;
+
+        return $this;
     }
 
     public function getDescription(): ?string
@@ -85,9 +104,11 @@ final class Seller
         return $this->description;
     }
 
-    public function setDescription(?string $description): void
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
+
+        return $this;
     }
 
     public function getCorporateName(): ?string
@@ -95,9 +116,11 @@ final class Seller
         return $this->corporateName;
     }
 
-    public function setCorporateName(?string $corporateName): void
+    public function setCorporateName(?string $corporateName): self
     {
         $this->corporateName = $corporateName;
+
+        return $this;
     }
 
     public function getAvatar(): ?string
@@ -105,38 +128,32 @@ final class Seller
         return $this->avatar;
     }
 
-    public function setAvatar(?string $avatar): void
+    public function setAvatar(?string $avatar): self
     {
         $this->avatar = $avatar;
+
+        return $this;
     }
 
-    public function getTos(): ?array
+    public function getTos(): ?string
     {
         return $this->tos;
     }
 
-    public function setTos(?array $tos): void
+    public function setTos(?string $tos): self
     {
         $this->tos = $tos;
+
+        return $this;
     }
 
-    public function getProductCount(): ?int
+    public function getSupplierDeliveryInfo(): ?string
     {
-        return $this->productCount;
+        return $this->supplierDeliveryInfo;
     }
 
-    public function setProductCount(?int $productCount): void
+    public function setSupplierDeliveryInfo(?string $supplierDeliveryInfo): void
     {
-        $this->productCount = $productCount;
-    }
-
-    public function getChecked(): ?bool
-    {
-        return $this->checked;
-    }
-
-    public function setChecked(?bool $checked): void
-    {
-        $this->checked = $checked;
+        $this->supplierDeliveryInfo = $supplierDeliveryInfo;
     }
 }

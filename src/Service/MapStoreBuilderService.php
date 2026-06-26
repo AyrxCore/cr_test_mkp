@@ -7,22 +7,15 @@ namespace App\Service;
 use App\Dto\MapStoreDto;
 use App\Entity\Partner;
 use App\Entity\PartnerStore;
-use App\Repository\PartnerRepository;
-use Psr\Log\LoggerInterface;
 
 readonly class MapStoreBuilderService
 {
     public function __construct(
-        private UpplerPartnerService $upplerPartnerService,
-        private PartnerRepository $partnerRepository,
-        private LoggerInterface $logger,
     ) {
     }
 
-    public function buildStores(array $finalUpplerIds): array
+    public function buildStores(array $partners): array
     {
-        $partners = $this->partnerRepository->findAuthorizedPartnersWithStores($finalUpplerIds);
-
         $stores = [];
         foreach ($partners as $partner) {
             \array_push($stores, ...$this->createStoresForPartner($partner));

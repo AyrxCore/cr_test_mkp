@@ -11,18 +11,16 @@ class AddressFactory extends AbstractFactory
     public function create(array $data): Address
     {
         $address = new Address();
-        $address->setId($data['id']);
-        $address->setName($data['name']);
-        $address->setCompanyId($data['companies'][0]['id']);
-        $address->setCompany($data['companies'][0]['name']);
-        $address->setStreet($data['street']);
-        $address->setType($data['type']);
-        $address->setPostCode($data['postcode']);
-        $address->setCity($data['city']);
-        $address->setCountry($data['country']['id']);
-        $address->setLastName($data['last_name']);
-        $address->setFirstName($data['first_name']);
-        $address->setPhone($data['phone']);
+        $address->setId($data['id'] ?? null);
+        $address->setExternalId($data['externalId'] ?? null);
+        $address->setFullName($data['fullName'] ?? '');
+        $address->setAddress($data['address'] ?? '');
+        $address->setShipping(!empty($data['shipping']));
+        $address->setBilling(!empty($data['billing']));
+        $address->setZipcode($data['zipcode'] ?? '');
+        $address->setCity($data['city'] ?? '');
+        $address->setCountry($data['country'] ?? '');
+        $address->setPhone($data['phone'] ?? null);
 
         return $address;
     }

@@ -7,12 +7,14 @@ namespace App\State\Provider;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Factory\CategoryFactory;
-use App\Service\UpplerProductService;
+use App\Service\Djust\DjustCategoryService;
 
 readonly class CategoryProvider implements ProviderInterface
 {
-    public function __construct(private CategoryFactory $categoryFactory, private UpplerProductService $upplerProductService)
-    {
+    public function __construct(
+        private readonly CategoryFactory $categoryFactory,
+        private readonly DjustCategoryService $djustCategoryService,
+    ) {
     }
 
     /**
@@ -23,6 +25,6 @@ readonly class CategoryProvider implements ProviderInterface
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
-        return $this->categoryFactory->createAndAddToCollection($this->upplerProductService->findAllCategories());
+        return $this->categoryFactory->createAndAddToCollection($this->djustCategoryService->getAvailableCategories());
     }
 }

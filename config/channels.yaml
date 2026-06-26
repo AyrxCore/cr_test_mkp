@@ -25,6 +25,7 @@ parameters:
         - { name: 'SUPPLIER_PARTNERS_HOMEPAGE', value: null }
         - { name: 'EXPERT_CONTENT_HOMEPAGE', value: null }
         - { name: 'FAVORITES', value: null }
+        - { name: 'SAVED_CARTS', value: null }
         - { name: 'PRE_HOME_IMAGE', value: 'https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/prod/QANTIS_ACHATS/img-prehome-qantis.png' }
         - { name: 'PRE_HOME_TITLE', value: 'Pour tous vos achats, ayez le réflexe QANTIS!' }
         - { name: 'PRE_HOME_SUBTITLE', value: "Depuis 2001, QANTIS optimise et facilite les achats des entreprises et réseaux d'entreprises" }
@@ -88,6 +89,7 @@ parameters:
         - { name: 'SUPPLIER_PARTNERS_HOMEPAGE', value: null }
         - { name: 'EXPERT_CONTENT_HOMEPAGE', value: null }
         - { name: 'FAVORITES', value: null }
+        - { name: 'SAVED_CARTS', value: null }
         - { name: 'PRE_HOME_IMAGE', value: 'https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/pre-home/fspf-prehome-image.png' }
         - { name: 'PRE_HOME_TITLE', value: 'Optimisez vos achats professionnels grâce à FSPF Privilèges* !' }
         - { name: 'PRE_HOME_SUBTITLE', value: null }
@@ -119,6 +121,7 @@ parameters:
         - { name: 'SUPPLIER_PARTNERS_HOMEPAGE', value: null }
         - { name: 'EXPERT_CONTENT_HOMEPAGE', value: null }
         - { name: 'FAVORITES', value: null }
+        - { name: 'SAVED_CARTS', value: null }
         - { name: 'PRE_HOME_IMAGE', value: 'https://qantis-marketplace.s3.eu-west-1.amazonaws.com/assets/prod/UNEP/img-prehome-unep.png' }
         - { name: 'PRE_HOME_TITLE', value: 'Optimisez vos achats professionnels grâce au service achats Unep* !' }
         - { name: 'PRE_HOME_SUBTITLE', value: null }

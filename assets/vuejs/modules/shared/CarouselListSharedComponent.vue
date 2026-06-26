@@ -1,5 +1,6 @@
 <template>
   <Swiper
+    :class="{ 'overflow-visible': overflowVisible }"
     :modules="defaultModules"
     :navigation="{
       enabled: showNav,
@@ -12,6 +13,10 @@
       bulletClass: 'swiper-pagination-bullet',
       bulletActiveClass: 'swiper-pagination-bullet-active',
     }"
+    :breakpoints="breakpoints"
+    :slides-per-view="slidesPerView"
+    :space-between="spaceBetween"
+    :round-lengths="true"
     @swiper="emit('on-swipe')"
     @slide-change="emit('on-slide-change')"
   >
@@ -72,6 +77,26 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  breakpoints: {
+    required: false,
+    type: Object,
+    default: undefined,
+  },
+  slidesPerView: {
+    required: false,
+    type: Number,
+    default: 1,
+  },
+  spaceBetween: {
+    required: false,
+    type: Number,
+    default: 0,
+  },
+  overflowVisible: {
+    required: false,
+    type: Boolean,
+    default: false,
+  },
 })
 
 const defaultModules = computed(
@@ -119,15 +144,15 @@ const defaultModules = computed(
       @apply absolute bottom-0 top-0 z-10 flex cursor-pointer items-center text-primary;
 
       svg {
-        @apply h-8 w-8 rounded-full border-2 border-primary bg-white md:h-12 md:w-12 md:border-none md:bg-transparent;
+        @apply h-8 w-8 rounded-full border-2 border-primary bg-white;
       }
     }
     &-prev {
-      @apply left-[-16px] md:left-0;
+      @apply left-[-16px];
     }
 
     &-next {
-      @apply right-[-16px] md:right-0;
+      @apply right-[-16px];
 
       svg {
         @apply rotate-180;

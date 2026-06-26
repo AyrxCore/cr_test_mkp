@@ -17,5 +17,10 @@
     "lastName": "DE SAINTE MARIE",
     "enabled": true
   },
+  "adherent": {
+    "@id": "/api/adherents/@uuid@",
+    "@type": "Adherent",
+    "siret": "@string@"
+  },
   "enabled": true
 }

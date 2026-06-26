@@ -1,5 +1,9 @@
 <template>
-  <div v-if="accordsCadres?.length > 0" class="relative mt-1 md:mt-5">
+  <AccordsCadresLoadingCarouselComponent v-if="loading" />
+  <div
+    v-else-if="accordsCadres?.length > 0"
+    class="relative mt-1 md:mt-5"
+  >
     <CarouselListSharedComponent
       :breakpoints="{
         1600: {
@@ -21,6 +25,7 @@
       }"
       :slides-per-view="1"
       :space-between="20"
+      :overflow-visible="true"
       class="swiper-nav-outside"
       @click-left="$emit('click-left')"
       @click-right="$emit('click-right')"
@@ -37,7 +42,6 @@
       </SwiperSlide>
     </CarouselListSharedComponent>
   </div>
-  <AccordsCadresLoadingCarouselComponent v-else-if="loading" />
 </template>
 
 <script lang="ts" setup>
@@ -49,7 +53,7 @@ import AccordCadreComponent from '@/vuejs/modules/home/component/AccordCadreComp
 import AccordsCadresLoadingCarouselComponent from '@/vuejs/modules/shared/AccordsCadresLoadingCarouselComponent.vue'
 import { Product } from '@/vuejs/types/Product'
 
-const props = defineProps({
+defineProps({
   accordsCadres: {
     required: true,
     type: Array || (Object as PropType<Product>),
@@ -61,5 +65,5 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['click-left', 'click-right', 'show-showcase-modal'])
+defineEmits(['click-left', 'click-right', 'show-showcase-modal'])
 </script>

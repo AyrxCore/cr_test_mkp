@@ -6,6 +6,8 @@ namespace App\Serializer;
 
 use App\Entity\User;
 use App\Repository\AccountRepository;
+use App\Service\Account\CurrentAccountProvider;
+use App\Service\Djust\DjustCustomerAccountService;
 use App\Service\UpplerAccountService;
 use App\Service\UpplerBuyerCompanyService;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -20,6 +22,7 @@ class UserNormalizer extends AbstractNormalizer
         private readonly UpplerBuyerCompanyService $upplerBuyerCompanyService,
         private readonly RequestStack $requestStack,
         private readonly AccountRepository $accountRepository,
+        private readonly DjustCustomerAccountService $djustCustomerAccountService,
     ) {
         $this->normalizer = $normalizer;
     }
@@ -29,16 +32,29 @@ class UserNormalizer extends AbstractNormalizer
      *
      * @throws ExceptionInterface
      */
-    public function normalize($object, $format = null, array $context = []): float|int|bool|\ArrayObject|array|string|null
+    public function normalize($object, $format = null, array $context = []): array|null
     {
         $serializationGroups = $this->getSerializationGroups($context);
 
-        if (
-            \in_array('user:me', $serializationGroups, true)
-            && $sessionAccount = $this->requestStack->getSession()->get('account')
-        ) {
-            $account = $this->accountRepository->find($sessionAccount->getId());
-            $object->setCurrentAccount($account);
+        if (\in_array('user:me', $serializationGroups, true)) {
+            try {
+                $session = $this->requestStack->getSession();
+
+                // Récupération de l'ID account depuis la session
+                $accountData = $session->get(CurrentAccountProvider::SESSION_KEY_ACCOUNT);
+                $accountId = $accountData->getId();
+
+                if ($accountId) {
+                    // Récupération de l'entité fraîche depuis la BDD
+                    $account = $this->accountRepository->find($accountId);
+                    if ($account) {
+                        $object->setCurrentAccount($account);
+                    }
+                }
+            } catch (\Exception $e) {
+                // Session non disponible, on supprime la session pour rediriger vers la homepage
+                $session->remove(CurrentAccountProvider::SESSION_KEY_ACCOUNT);
+            }
         }
 
         return parent::normalize($object, $format, $context);
@@ -47,11 +63,6 @@ class UserNormalizer extends AbstractNormalizer
     public function supportsNormalization($data, $format = null): bool
     {
         return $data instanceof User && $this->normalizer->supportsNormalization($data, $format);
-    }
-
-    public function supportsDenormalization($data, $type, $format = null): bool
-    {
-        return $data instanceof User && $this->supportsDenormalization($data, $type, $format);
     }
 
     /**
@@ -68,10 +79,7 @@ class UserNormalizer extends AbstractNormalizer
             return null;
         }
 
-        $data = [
-            'subaccount' => null,
-            'buyer' => null,
-        ];
+        $data = [];
 
         if (\in_array('user:external_api_data:subaccount', $serializationGroups, true)) {
             $data['subaccount'] = $this->upplerAccountService->getUserSubAccountData();
@@ -79,12 +87,15 @@ class UserNormalizer extends AbstractNormalizer
 
         if (\in_array('user:external_api_data:buyer', $serializationGroups, true)) {
             $data['buyer'] = $this->upplerBuyerCompanyService->getUserBuyerData();
+
+            $customerAccount = $this->djustCustomerAccountService->getCustomerAccount();
+            if ($customerAccount !== null) {
+                $data['customerAccount'] = $customerAccount;
+            }
         }
 
-        if (!isset($data['subaccount'], $data['buyer'])) {
-            return null;
-        }
+        $data = \array_filter($data, fn ($value) => $value !== null);
 
-        return \json_decode(\json_encode($data));
+        return empty($data) ? null : \json_decode(\json_encode($data));
     }
 }

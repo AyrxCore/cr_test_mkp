@@ -35,10 +35,9 @@
       <div class="flex flex-row">
         <ButtonAddToCartComponent
           :class="{ 'w-full': showPrice }"
-          :price="product.price"
+          :disabled="disabled"
           :product="product"
           :quantity="product.quantity"
-          :variant-id="product.defaultVariantId"
           @click="
             sendGtmEvent('add_to_cart', {
               ecommerce: {
@@ -49,14 +48,14 @@
             })
           "
         />
-        <AddFavoriteComponent
+        <!-- <AddFavoriteComponent
           :favorites-product="product.favorites"
+          :offer-price-id="offerPriceExternalId"
           :product-id="product.id"
           :product-name="product.name"
-          :variant-id="product.defaultVariantId"
           class="ml-5 lg:hidden"
           @toggle-favorite="onToggleFavoriteTooltip"
-        />
+        /> -->
       </div>
     </div>
   </div>
@@ -77,6 +76,11 @@ const props = defineProps({
     type: Object as PropType<Product>,
   },
   showPrice: {
+    required: false,
+    type: Boolean,
+    default: false,
+  },
+  disabled: {
     required: false,
     type: Boolean,
     default: false,

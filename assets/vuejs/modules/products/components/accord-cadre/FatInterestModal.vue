@@ -11,7 +11,7 @@
         </ButtonComponent>
       </div>
       <h3 class="mb-10 text-center text-3xl font-bold text-primary">
-        Préciser mon besoin véhicule
+        Préciser mon besoin
       </h3>
       <FormFatInterest :accord="accord" @success="closeInterestModal" />
     </div>

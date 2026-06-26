@@ -12,6 +12,7 @@ import {
   AccountEmail,
   DefaultBillingAddressToUpdate,
   DefaultShippingAddressToUpdate,
+  SubAccountData,
 } from '@/vuejs/types/Account'
 
 export default class UserHttpClient extends BaseClientService {
@@ -62,7 +63,7 @@ export default class UserHttpClient extends BaseClientService {
       })
   }
 
-  public updateUserAccountDetails<T extends User>(subAccount): Promise<T> {
+  public updateUserAccountDetails(subAccount: SubAccountData & { accountId: string }): Promise<SubAccountData> {
     return this.apiClient
       .patch(`sub_accounts/${subAccount.id}`, subAccount)
       .then((response) => response.data)

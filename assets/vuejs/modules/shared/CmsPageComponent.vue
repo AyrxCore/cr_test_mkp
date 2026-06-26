@@ -1,28 +1,35 @@
 <template>
   <div class="container mx-auto my-10 mt-[5%] px-5 text-primary lg:px-0">
-    <div v-if="content" v-html="content" />
+    <div
+      v-if="content"
+      v-html="content"
+      class="px-3 [&_ol]:mb-3 [&_ol]:list-decimal [&_ol]:pl-5 [&_ul]:mb-3 [&_ul]:list-disc [&_ul]:pl-5"
+    />
     <LoadingComponent v-else />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { useCmsStore } from '@/vuejs/stores/cms'
-import { onMounted, ref } from 'vue'
+import { onMounted, computed } from 'vue'
+
+import { useLegalContentStore } from '../../stores/legalContent'
 
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 
-const cmsStore = useCmsStore()
-const content = ref()
+const legalContentStore = useLegalContentStore()
 
-const props = defineProps({
-  pageId: {
-    type: String,
-    required: true,
-  },
-})
+const props = defineProps<{
+  field: 'cgu' | 'legalTerms' | 'privacyPolicy'
+}>()
 
 onMounted(async (): Promise<void> => {
-  content.value = await cmsStore.getPageById(props.pageId)
+  if (!legalContentStore.legalContent) {
+    await legalContentStore.fetch()
+  }
+})
+
+const content = computed((): string | null | undefined => {
+  return legalContentStore.legalContent?.[props.field]
 })
 </script>
 

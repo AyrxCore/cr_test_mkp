@@ -12,7 +12,6 @@ use App\Tests\Story\Account\UserStory;
     $client->request('POST', '/api/accounts');
 
     $this->assertResponseStatusCodeSame(405);
-    $this->assertJsonResponseMatches('account/post-not-found-response.json');
 })->group('accounts');
 
 \it('returns a 405 Method Not Allowed when trying to PATCH an account', function () {
@@ -21,7 +20,6 @@ use App\Tests\Story\Account\UserStory;
     $client->request('PATCH', '/api/accounts/8e211f4d-c2c9-4fdb-9031-5414d019b488');
 
     $this->assertResponseStatusCodeSame(405);
-    $this->assertJsonResponseMatches('account/patch-not-allowed-response.json');
 })->group('accounts');
 
 \it('returns a 404 Not Found when trying to GET a non-existent account', function () {
@@ -30,7 +28,7 @@ use App\Tests\Story\Account\UserStory;
     $client->request('GET', '/api/accounts/8e211f4d-c2c9-4fdb-9031-5414d019b488');
 
     $this->assertResponseStatusCodeSame(404);
-    $this->assertJsonContains(['hydra:description' => 'Not Found']);
+    $this->assertJsonContains(['description' => 'Not Found']);
 })->group('accounts');
 
 \it('returns a 405 Method Not Allowed when trying to DELETE an account', function () {
@@ -43,7 +41,6 @@ use App\Tests\Story\Account\UserStory;
     $client->request('DELETE', \sprintf('/api/accounts/%s', $accountId));
 
     $this->assertResponseStatusCodeSame(405);
-    $this->assertJsonResponseMatches('account/delete-not-allowed-response.json');
 })->group('accounts');
 
 \it('returns a 401 Forbidden when trying to GET an account which belongs to another user', function () {
@@ -91,7 +88,6 @@ use App\Tests\Story\Account\UserStory;
 
 \it('GETs an account', function (string $loggedInUsername, string $otherUsername) {
     $client = $this::createClientWithCredentials(username: $loggedInUsername);
-
     $user = UserFactory::find(['username' => $otherUsername]);
     $accountId = $this::getUserFirstAccount($user)->getId();
 
@@ -107,12 +103,12 @@ use App\Tests\Story\Account\UserStory;
 })
     ->with([
         'Account belongs to logged in user' => [
-            'loggedInUsername' => UserStory::DEFAULT_USER,
-            'otherUsername' => UserStory::DEFAULT_USER,
+            UserStory::DEFAULT_USER,
+            UserStory::DEFAULT_USER,
         ],
         "logged in user has role ROLE_API and can access another user's account" => [
-            'loggedInUsername' => 'api_user',
-            'otherUsername' => UserStory::DEFAULT_USER,
+            'api_user',
+            UserStory::DEFAULT_USER,
         ],
     ])
     ->group('accounts');

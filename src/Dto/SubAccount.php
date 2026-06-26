@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\OpenApi\Model\Operation;
 use App\State\Processor\SubAccountPersistProcessor;
 use App\State\Provider\SubAccountProvider;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -32,23 +33,30 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class SubAccount
 {
     #[ApiProperty(identifier: true)]
+    #[Groups(['read', 'update'])]
     private ?int $id = null;
 
     #[Assert\Type('string', message: '(email) string required')]
+    #[Groups(['read', 'update'])]
     private ?string $email = null;
 
     #[Assert\Type('string', message: '(lastname) string required')]
+    #[Groups(['read', 'update'])]
     private ?string $lastName = null;
 
     #[Assert\Type('string', message: '(firstname) string required')]
+    #[Groups(['read', 'update'])]
     private ?string $firstName = null;
 
+    #[Groups(['read', 'update'])]
     private ?string $phone = '';
 
     #[Assert\Type('integer', message: '(shipping_address_id) Integer required')]
+    #[Groups(['read', 'update'])]
     private ?int $shippingAddressId = null;
 
     #[Assert\Type('integer', message: '(billing_address_id) Integer required')]
+    #[Groups(['read', 'update'])]
     private ?int $billingAddressId = null;
 
     private ?Uuid $accountId = null;

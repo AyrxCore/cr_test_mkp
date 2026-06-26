@@ -1,0 +1,33 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Enum\Djust;
+
+enum DjustCustomField: string
+{
+    case OFFER_ATTACHMENT = 'OFFER_ATTACHMENT';
+    case OFFER_PRICE_PRICING_PHRASE = 'OFFER_PRICE_PRICING_PHRASE';
+    case OFFER_PRICE_TOP_LABEL = 'OFFER_PRICE_TOP_LABEL';
+    case OFFER_TARIF_ID = 'OFFER_TARIF_ID';
+    case OFFER_TVA = 'OFFER_TVA';
+
+    case PRODUCT_ACCORD_ID = 'PRODUCT_ACCORD_ID';
+    case PRODUCT_ECOTAXE = 'PRODUCT_ECOTAXE';
+    case PRODUCT_FORM_WITH_MESSAGE = 'PRODUCT_FORM_WITH_MESSAGE';
+    case PRODUCT_FRANCO_LEVEL = 'PRODUCT_FRANCO_LEVEL';
+    case PRODUCT_FDP_LEVEL = 'PRODUCT_FDP_LEVEL';
+    case PRODUCT_SHIPPING_CATEGORY = 'PRODUCT_SHIPPING_CATEGORY';
+    case PRODUCT_TYPE = 'PRODUCT_TYPE';
+    case PRODUCT_WEIGHT = 'PRODUCT_WEIGHT';
+
+    case ORDER_SIRET_CLIENT = 'SIRET_CLIENT';
+    case ORDER_EMAIL_ADDRESS = 'EMAIL_ADDRESS';
+    case ORDER_LINE_ECO_TAX = 'ORDER_LINE_ECO_TAX';
+    case ORDER_TEL_NUMBER = 'TEL_NUMBER';
+
+    public function isAttachment(): bool
+    {
+        return $this === self::OFFER_ATTACHMENT;
+    }
+}

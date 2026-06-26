@@ -29,7 +29,7 @@
           </span>
           <div class="mt-5 h-[auto] rounded-lg">
             <p
-              class="whitespace-pre-line"
+              class="whitespace-pre-line [&_ol]:mb-3 [&_ol]:list-decimal [&_ol]:pl-5 [&_ul]:mb-3 [&_ul]:list-disc [&_ul]:pl-5"
               v-html="currentExpertContent.articleContent"
             />
           </div>

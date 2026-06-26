@@ -2,20 +2,18 @@
   <h3 class="text-title-primary mb-2 mt-8">Livraison</h3>
   <div class="flex flex-col-reverse lg:grid lg:grid-cols-4 lg:gap-4 lg:px-0">
     <div class="col-span-3">
-      <template v-if="!isLoadingMethods">
-        <CartShipmentComponent
-          v-for="(order, key) in cart.orders"
-          :order="order"
-          @loaded="shipmentsLoaded[key] = $event"
-        >
-          <template #order-index>
-            ({{ key + 1 }} sur {{ cart.orders.length }})
-          </template>
-        </CartShipmentComponent>
-      </template>
-      <LoadingComponent v-else />
+      <CartShipmentComponent
+        v-for="(cartOrder, key) in sortedCartOrders"
+        :key="key"
+        :cart-order="cartOrder"
+        @loaded="shipmentsLoaded[key] = $event"
+      >
+        <template #order-index>
+          ({{ key + 1 }} sur {{ sortedCartOrders.length }})
+        </template>
+      </CartShipmentComponent>
     </div>
-    <CartRightSideComponent :show-shipment-price="!isLoadingMethods">
+    <CartRightSideComponent :show-payment-methods="true">
       <template #title>Récapitulatif panier</template>
       <template #button-next>
         <ButtonComponent
@@ -32,19 +30,17 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useHead } from '@unhead/vue'
 
 import { PageList } from '@/vuejs/router'
 import { useCartStore } from '@/vuejs/stores/cart'
-import { notifyError, setHeadTitle } from '@/vuejs/services/utils'
 
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import CartRightSideComponent from '@/vuejs/modules/cart/components/CartRightSideComponent.vue'
 import CartShipmentComponent from '@/vuejs/modules/cart/components/CartShipmentComponent.vue'
-import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 
 const router = useRouter()
@@ -52,8 +48,16 @@ const cartStore = useCartStore()
 
 const { cart } = storeToRefs(cartStore)
 
-const isLoadingMethods = ref<boolean>(true)
 const shipmentsLoaded = ref<boolean[]>([])
+
+const sortedCartOrders = computed(() => {
+  if (!cart.value.cartOrders) return []
+  return [...cart.value.cartOrders].sort((a, b) => {
+    const nameA = a.seller.name?.toLowerCase() || ''
+    const nameB = b.seller.name?.toLowerCase() || ''
+    return nameA.localeCompare(nameB)
+  })
+})
 
 const allShipmentsLoaded = computed((): boolean => {
   return (
@@ -61,20 +65,8 @@ const allShipmentsLoaded = computed((): boolean => {
   )
 })
 
-onMounted(async (): Promise<void> => {
-  isLoadingMethods.value = true
-  await cartStore.getCartShippingMethods(cart.value.id)
-  isLoadingMethods.value = false
-})
-
 const goToPayment = async (): Promise<void> => {
-  if (isLoadingMethods.value) return
-  if (cart.value.orders.find((e) => e.shipments.length === 0)) {
-    notifyError(
-      'Une erreur est survenue dans le choix des méthodes de livraison.',
-    )
-    return
-  }
+  await cartStore.updateCustomerInfoInLogisticOrders()
   router.push({ name: PageList.CART_PAYMENT })
 }
 

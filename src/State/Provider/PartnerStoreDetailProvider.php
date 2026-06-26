@@ -10,7 +10,8 @@ use App\Dto\StoreDetailDto;
 use App\Entity\PartnerStore;
 use App\Helper\Formatter\PhoneFormatter;
 use App\Repository\PartnerStoreRepository;
-use App\Service\UpplerPartnerService;
+use App\Service\Account\CurrentAccountProvider;
+use App\Service\Djust\DjustSellerService;
 use Doctrine\ORM\EntityNotFoundException;
 use Psr\Log\LoggerInterface;
 
@@ -20,7 +21,8 @@ readonly class PartnerStoreDetailProvider implements ProviderInterface
         private PartnerStoreRepository $partnerStoreRepository,
         private PhoneFormatter $phoneFormatter,
         private LoggerInterface $logger,
-        private UpplerPartnerService $upplerPartnerService,
+        private DjustSellerService $djustSellerService,
+        private CurrentAccountProvider $currentAccountProvider,
     ) {
     }
 
@@ -37,19 +39,20 @@ readonly class PartnerStoreDetailProvider implements ProviderInterface
         }
 
         $partner = $store->getPartner();
-        $upplerId = $partner?->getUpplerId();
+        $partnerId = $partner ? (string) $partner->getId() : null;
 
         $accordLogos = $this->buildAccordLogos($store);
 
         $logo = null;
         if (!empty($accordLogos) && !empty($accordLogos[0]['logo'] ?? null)) {
             $logo = $accordLogos[0]['logo'];
-        } elseif ($upplerId) {
+        } elseif ($partnerId) {
             try {
-                $logo = $this->upplerPartnerService->getPartnerLogoFromCacheOrAdmin((int) $upplerId);
+                $customerAccountId = $this->currentAccountProvider->getAccount()?->getDjustCustomerAccountId();
+                $logo = $this->djustSellerService->getSellerLogo($partnerId, $customerAccountId);
             } catch (\Throwable $e) {
                 $this->logger->warning('Impossible de récupérer le logo partenaire (fallback)', [
-                    'upplerId' => $upplerId,
+                    'djustId' => $partnerId,
                     'error' => $e->getMessage(),
                 ]);
             }
@@ -62,7 +65,7 @@ readonly class PartnerStoreDetailProvider implements ProviderInterface
             phone: $this->phoneFormatter->format($store->getPhone()),
             latitude: $store->getLatitude(),
             longitude: $store->getLongitude(),
-            upplerId: $partner?->getUpplerId(),
+            djustId: $partnerId,
             partnerName: $partner?->getName(),
             logo: $logo,
             accordLogos: $accordLogos,

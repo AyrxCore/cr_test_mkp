@@ -57,7 +57,7 @@ class RequestContactMailerService
                 'subject' => 'Demande de prise de contact',
                 'template' => 'mails/request.contact.not.sellable.product.html.twig',
                 'params' => [
-                    'fat' => $params['accordName'],
+                    'fat' => $params['accordName'] ?? null,
                     'email' => $account->getUser()->getEmail(),
                     'nom' => $account->getUser()->getFirstName().' '.$account->getUser()->getLastName(),
                     'societe' => $account->getAdherent()->getName(),

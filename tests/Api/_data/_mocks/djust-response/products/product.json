@@ -1,0 +1,158 @@
+{
+  "id": "0000001138",
+  "sku": "10136",
+  "name": {
+    "fr-FR": "Cahier, format A5, linéature 6 / blanc, 32 pages - Lot de 20",
+    "FR": "Cahier, format A5, linéature 6 / blanc, 32 pages - Lot de 20"
+  },
+  "description": {
+    "fr-FR": "Découvrez le cahier Oxford, format A5, linéature 6 / blanc, 32 pages, un incontournable pour tous les professionnels à la recherche d'un support de qualité pour leurs prises de notes et leurs réunions.",
+    "FR": "Découvrez le cahier Oxford, format A5, linéature 6 / blanc, 32 pages, un incontournable pour tous les professionnels à la recherche d'un support de qualité pour leurs prises de notes et leurs réunions."
+  },
+  "productStatus": "ACTIVE",
+  "brand": "Oxford",
+  "gtin": null,
+  "imageLinks": [
+    "https://cdn.pre-prod.djust-app.com/img/0000000322_qantis/product/10137/2fa3da7f_c323f197_b15cc013_710644d7_b413f1bd_1764861914035-Cahier--17x22-cm--Grands-Carreaux--192-pages.jpg?width=1200&height=1200&format=png&fit=cover"
+  ],
+  "productPictures": [
+    {
+      "urls": [
+        {
+          "widthInPx": 1200,
+          "heightInPx": 1200,
+          "formatType": "PNG",
+          "sizeType": "LARGE",
+          "url": "https://cdn.pre-prod.djust-app.com/img/0000000322_qantis/product/10137/2fa3da7f_c323f197_b15cc013_710644d7_b413f1bd_1764861914035-Cahier--17x22-cm--Grands-Carreaux--192-pages.jpg?width=1200&height=1200&format=png&fit=cover"
+        },
+        {
+          "widthInPx": 100,
+          "heightInPx": 100,
+          "formatType": "PNG",
+          "sizeType": "SMALL",
+          "url": "https://cdn.pre-prod.djust-app.com/img/0000000322_qantis/product/10137/2fa3da7f_c323f197_b15cc013_710644d7_b413f1bd_1764861914035-Cahier--17x22-cm--Grands-Carreaux--192-pages.jpg?width=100&height=100&format=png&fit=cover"
+        },
+        {
+          "widthInPx": 400,
+          "heightInPx": 400,
+          "formatType": "PNG",
+          "sizeType": "MEDIUM",
+          "url": "https://cdn.pre-prod.djust-app.com/img/0000000322_qantis/product/10137/2fa3da7f_c323f197_b15cc013_710644d7_b413f1bd_1764861914035-Cahier--17x22-cm--Grands-Carreaux--192-pages.jpg?width=400&height=400&format=png&fit=cover"
+        },
+        {
+          "widthInPx": 1200,
+          "heightInPx": 1200,
+          "formatType": "WEBP",
+          "sizeType": "BO",
+          "url": "https://cdn.pre-prod.djust-app.com/img/0000000322_qantis/product/10137/2fa3da7f_c323f197_b15cc013_710644d7_b413f1bd_1764861914035-Cahier--17x22-cm--Grands-Carreaux--192-pages.jpg?width=1200&height=1200&format=webp&fit=contain"
+        }
+      ],
+      "isMain": true
+    }
+  ],
+  "classificationCategory": {
+    "id": "0000002565",
+    "name": "Produits non vendables",
+    "externalId": "PRODUCT_NOT_SELLABLE",
+    "externalSource": "CLIENT"
+  },
+  "mpn": null,
+  "externalId": "cahier_ext",
+  "externalSource": "CLIENT",
+  "djustProductUuid": "cahier_ext",
+  "productUnit": {
+    "type": "ITEM",
+    "unit": "item",
+    "id": "134"
+  },
+  "navigationCategories": [
+    {
+      "id": "0000001145",
+      "name": "Encre"
+    }
+  ],
+  "tags": [
+    {
+      "id": "0000001912",
+      "name": "made_in_france"
+    },
+    {
+      "id": "0000001913",
+      "name": "achat_durable"
+    }
+  ],
+  "attributeValues": [
+    {
+      "attribute": {
+        "id": "0000001750",
+        "name": {
+          "fr-FR": "Nom du partenaire",
+          "FR": "Nom du partenaire"
+        },
+        "type": "TEXT",
+        "externalId": "nompartenaire"
+      },
+      "value": "zerghtgfedza"
+    },
+    {
+      "attribute": {
+        "id": "0000002851",
+        "name": {
+          "fr-FR": "Level FDP",
+          "FR": "Level FDP"
+        },
+        "type": "TEXT",
+        "externalId": "PRODUCT_FDP_LEVEL"
+      },
+      "value": "2"
+    },
+    {
+      "attribute": {
+        "id": "0000002862",
+        "name": {
+          "fr-FR": "Level FRANCO",
+          "FR": "Level FRANCO"
+        },
+        "type": "TEXT",
+        "externalId": "PRODUCT_FRANCO_LEVEL"
+      },
+      "value": "1"
+    },
+    {
+      "attribute": {
+        "id": "0000002899",
+        "name": {
+          "fr-FR": "Type de produit",
+          "FR": "Type de produit"
+        },
+        "type": "LIST_TEXT",
+        "externalId": "PRODUCT_TYPE"
+      },
+      "value": ["NOT_SELLABLE"]
+    },
+    {
+      "attribute": {
+        "id": "0000004102",
+        "name": {
+          "fr-FR": "Formulaire avec message",
+          "FR": "Formulaire avec message"
+        },
+        "type": "LIST_TEXT",
+        "externalId": "PRODUCT_FORM_WITH_MESSAGE"
+      },
+      "value": ["Oui"]
+    }
+  ],
+  "info": {
+    "name": "Cahier, format A5, linéature 6 / blanc, 32 pages - Lot de 20",
+    "description": "Découvrez le cahier Oxford, format A5, linéature 6 / blanc, 32 pages, un incontournable pour tous les professionnels.",
+    "brand": "Oxford",
+    "sku": "10136",
+    "unit": {
+      "type": "ITEM",
+      "unit": "item",
+      "id": "134"
+    }
+  },
+  "isBundle": false
+}

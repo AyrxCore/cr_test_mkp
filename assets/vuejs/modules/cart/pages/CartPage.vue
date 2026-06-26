@@ -74,6 +74,21 @@ const currentRouteName = computed(
 )
 
 onMounted(async () => {
+  const isRedirectReturn3DS = [
+    'redirectResult',
+    'MD',
+    'cres',
+  ].some((param) => new URLSearchParams(window.location.search).has(param))
+
+  const isPaymentPage =
+    router.currentRoute.value.name === CartPageList.CART_PAYMENT ||
+    router.currentRoute.value.name === CartPageList.CART_PAYMENT_SEPA
+
+  if (isPaymentPage && isRedirectReturn3DS) {
+    loadingCart.value = false
+    return
+  }
+
   await addressStore.getAddresses()
   await cartStore.getCart()
   loadingCart.value = false

@@ -4,36 +4,24 @@
     <slot name="order-index" />
   </h2>
   <div class="mb-5 rounded-lg bg-white p-5">
-    <CartFrancoComponent :order="order" class="mb-4" />
     <p class="mb-4 font-bold text-primary">
       Sélectionnez votre méthode de livraison
     </p>
     <p class="mb-2 font-bold">Méthode(s) de livraison disponible(s) :</p>
     <div v-show="!isLoading">
-      <div
-        v-for="method in filteredShipmentMethods"
-        class="flex items-center pb-2"
-      >
+      <div class="flex items-center pb-2">
         <input
-          :id="`shipmentMethod-${method.shipping_method.id}`"
-          v-model="selectedShippingMethod"
-          :name="`shipmentMethod-${order.id}`"
-          :value="method.shipping_method.id"
+          :id="`shipmentMethod-${cartOrder.seller.name}`"
           class="checked:bg-secondary checked:hover:bg-secondary focus:bg-secondary focus:outline-none focus:ring-1 focus:ring-secondary checked:focus:bg-secondary checked:active:bg-secondary"
           type="radio"
-          @change="selectShippingMethod"
+          :checked="isChecked"
+          @change="isChecked = true"
         />
-        <label
-          :for="`shipmentMethod-${method.shipping_method.id}`"
-          class="pl-2"
-        >
-          {{ method.shipping_method.name.fr }} -
-          {{ hasReachedFranco ? 0 : method.amount / 100 }}€
+        <label :for="`shipmentMethod-${cartOrder.seller.name}`" class="pl-2">
+          Frais de port - {{ cartOrder.seller.name }} -
+          {{ cartOrder.shippingCostResult.shippingCost }}€
         </label>
       </div>
-      <template v-if="filteredShipmentMethods.length === 0">
-        Aucune méthode de livraison disponible
-      </template>
     </div>
     <LoaderSharedComponent v-show="isLoading" class="my-2" />
     <hr class="mt-2" />
@@ -41,7 +29,7 @@
       class="mt-4 flex cursor-pointer"
       @click="isDetailsOpen = !isDetailsOpen"
     >
-      {{ order.items.length }} référence(s)
+      {{ realProducts.length }} référence(s)
       <span class="ml-2 flex items-center font-bold text-secondary underline">
         <Chevron2RightIconComponent
           :class="{
@@ -61,18 +49,14 @@
       </thead>
       <tbody>
         <tr
-          v-for="(item, key) in order.items"
+          v-for="(item, key) in realProducts"
           :key="key"
           class="odd:bg-gray-50 even:bg-gray-100"
         >
           <td class="px-4 py-2">
-            <span class="text-primary">{{
-              item.variant.product.name.default
-            }}</span
+            <span class="text-primary">{{ item.name }}</span
             ><br />
-            <span class="text-sm">
-              Référence : {{ item.variant.product.reference }}
-            </span>
+            <span class="text-sm"> Référence : {{ item.sku }} </span>
           </td>
           <td>{{ item.quantity }}</td>
         </tr>
@@ -83,78 +67,46 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, PropType, ref } from 'vue'
-import { storeToRefs } from 'pinia'
 
-import CartFrancoComponent from '@/vuejs/modules/cart/components/CartFrancoComponent.vue'
-import Chevron2RightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
-import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
-
-import { useCartStore } from '@/vuejs/stores/cart'
-import { SELLER_IDS, useSellerStore } from '@/vuejs/stores/seller'
-import { Order, ShippingMethod } from '@/vuejs/types/Cart'
+import { useSellerStore } from '@/vuejs/stores/seller'
+import { CartOrder } from '@/vuejs/types/Cart'
 import { Seller } from '@/vuejs/types/Seller'
+import { PRODUCT_FDP_PREFIX } from '@/vuejs/services/const.ts'
 
-const cartStore = useCartStore()
+import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
+import Chevron2RightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
+
 const sellerStore = useSellerStore()
-const { getHasReachedFranco } = storeToRefs(sellerStore)
 
 const emit = defineEmits(['loaded'])
 
 const props = defineProps({
-  order: {
+  cartOrder: {
     required: true,
-    type: Object as PropType<Order>,
+    type: Object as PropType<CartOrder>,
   },
 })
 
 const isLoading = ref<boolean>(false)
 const isDetailsOpen = ref<boolean>(false)
-const shipmentMethods = cartStore.shippingMethods.filter((e) => {
-  return e.order.id === props.order.id
-})
-
-const hasReachedFranco = computed((): boolean => {
-  return getHasReachedFranco.value(props.order)
-})
-
-const filteredShipmentMethods = ref<ShippingMethod[]>(
-  shipmentMethods.filter((e) => {
-    if (props.order.seller.id === SELLER_IDS.KROMM) {
-      // LIVRAISON VOLUMINEUX KRÖMM
-      if (shipmentMethods.find((s) => s.shipping_method.id === 15)) {
-        return e.shipping_method.id !== 14
-      }
-    }
-    return true
-  }),
-)
-const selectedShippingMethod = ref<number>(
-  filteredShipmentMethods.value[0]?.shipping_method.id,
-)
+const isChecked = ref<boolean>(true)
 
 onMounted(async (): Promise<void> => {
   emit('loaded', false)
   isLoading.value = true
-  const sellerId = props.order.seller.id
+  const sellerId = props.cartOrder.seller.id
   await sellerStore.getSeller(sellerId)
-  await selectShippingMethod()
   isLoading.value = false
   emit('loaded', true)
 })
 
 const seller = computed((): Seller => {
-  return sellerStore.allSellers.find((e) => e.id === props.order.seller.id)
+  return sellerStore.allSellers.find((e) => e.id === props.cartOrder.seller.id)
 })
 
-const selectShippingMethod = async (): Promise<void> => {
-  if (!selectedShippingMethod.value) return
-  isLoading.value = true
-  await cartStore.updateOrderShipping({
-    cartId: cartStore.cart.id,
-    orderId: props.order.id,
-    shippingId: selectedShippingMethod.value,
-  })
-  await cartStore.getCart()
-  isLoading.value = false
-}
+const realProducts = computed(() => {
+  return props.cartOrder.products.filter(
+    (p) => !p.externalId?.startsWith(PRODUCT_FDP_PREFIX),
+  )
+})
 </script>

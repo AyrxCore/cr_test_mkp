@@ -16,10 +16,6 @@ final class AccountAccordCadre implements \JsonSerializable
 
     private ?Uuid $id = null;
 
-    private ?string $accountId = null;
-
-    private ?int $accordCadreId = null;
-
     private ?Uuid $accordId = null;
 
     private ?string $status = null;
@@ -36,26 +32,6 @@ final class AccountAccordCadre implements \JsonSerializable
     public function setId(?Uuid $id): void
     {
         $this->id = $id;
-    }
-
-    public function getAccountId(): ?string
-    {
-        return $this->accountId;
-    }
-
-    public function setAccountId(?string $accountId): void
-    {
-        $this->accountId = $accountId;
-    }
-
-    public function getAccordCadreId(): ?int
-    {
-        return $this->accordCadreId;
-    }
-
-    public function setAccordCadreId(?int $accordCadreId): void
-    {
-        $this->accordCadreId = $accordCadreId;
     }
 
     public function getAccordId(): ?Uuid

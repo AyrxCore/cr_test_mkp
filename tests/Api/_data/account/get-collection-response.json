@@ -1,8 +1,8 @@
 {
   "@context": "/api/contexts/Account",
   "@id": "/api/accounts",
-  "@type": "hydra:Collection",
-  "hydra:member": [
+  "@type": "Collection",
+  "member": [
     {
       "@id": "/api/accounts/@uuid@",
       "@type": "Account",
@@ -17,9 +17,7 @@
         "@type": "User",
         "id": "@uuid@",
         "email": "test@qantis.co",
-        "roles": [
-          "ROLE_USER"
-        ],
+        "roles": ["ROLE_USER"],
         "username": "test@qantis.co",
         "firstName": "Gaëtan",
         "lastName": "DE SAINTE MARIE",
@@ -30,12 +28,15 @@
         "@id": "/api/adherents/@uuid@",
         "@type": "Adherent",
         "adherentTarifShowcases": [],
-        "logo": "@string@"
+        "logo": "@string@",
+        "name": "@string@",
+        "showModalStellantis": false,
+        "stellantisModalValidated": false,
+        "siret": "@string@"
       },
       "enabled": true,
       "acceptCGU": "@boolean@",
-      "phone": "04 05 06 07 08",
-      "externalApiData": "@json@"
+      "phone": "04 05 06 07 08"
     }
   ]
 }

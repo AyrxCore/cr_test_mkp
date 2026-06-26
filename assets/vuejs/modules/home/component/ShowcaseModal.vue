@@ -89,11 +89,9 @@ const { adherentTarifShowcases } = storeToRefs(useUserStore())
 const emit = defineEmits(['cancel', 'submitFavorite', 'changeValue'])
 const showcaseLoading = ref<boolean>(false)
 
-const properties = computed<any[]>(() => props.accord.properties)
-
 const showcase = computed<AdherentTarifShowcase | undefined>(() =>
   adherentTarifShowcases.value.find(
-    (showcase) => showcase.accordId === properties.value['accord-id'],
+    (showcase) => showcase.accordId === props.accord.accordId,
   ),
 )
 
@@ -108,8 +106,7 @@ const showcaseId = computed<string | null>(() =>
 const accordShowcaseIsRequested = computed<boolean>(() =>
   adherentTarifShowcases.value.some((showcase) => {
     return (
-      showcase.accordId === props.accord.properties['accord-id'] &&
-      showcase.contactRequested
+      showcase.accordId === props.accord.accordId && showcase.contactRequested
     )
   }),
 )
@@ -128,9 +125,9 @@ async function handleContactRequest() {
     await adherentTarifShowcaseStore.handleRequestContactForShowcase(
       showcaseId.value,
       props.accord.name,
-      properties.value['accord-id'],
+      props.accord.accordId,
     )
-  } catch (error) {
+  } catch {
     onCancelClick()
     notifyError(
       `Erreur lors de la demande de contact pour l'accord ${props.accord.name}`,

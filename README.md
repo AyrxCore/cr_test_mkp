@@ -1,5 +1,40 @@
 # MarketPlace
 
+## 📚 Documentation
+
+| Document | Description |
+|----------|-------------|
+| [01 - Getting Started](docs/01-getting-started.md) | Installation et démarrage rapide |
+| [02 - Architecture](docs/02-architecture.md) | Architecture technique du projet |
+| [03 - Entités](docs/03-entities.md) | Modèle de données (User, Account, Channel...) |
+| [04 - Authentification](docs/04-authentication.md) | JWT, cookies HttpOnly, UserChecker |
+| [05 - Intégration Uppler](docs/05-uppler-integration.md) | API Uppler, OAuth2, tokens Admin/Buyer |
+| [06 - Frontend Vue.js](docs/06-frontend-vuejs.md) | Composition API, Pinia, TailwindCSS |
+| [07 - Backend Symfony](docs/07-backend-symfony.md) | API Platform 4, Services, Providers |
+| [08 - Tests](docs/08-tests.md) | Pest PHP, Foundry, stratégie de tests |
+| [09 - Channels Multi-tenant](docs/09-channels-multitenant.md) | Système multi-tenant par Channel |
+| [10 - Glossaire & FAQ](docs/10-glossary-faq.md) | Termes métier et questions fréquentes |
+| [11 - AI-Driven Development](docs/11-ai-driven-development.md) | 🤖 Guide pratique IA (agents, skills, prompts) |
+| [12 - AI Vision & Méthodologie](docs/12-ai-vision-methodologie.md) | 🤖 Vision et méthodologie AI-Driven |
+
+## 🤖 Agents & Copilot
+
+Ce projet utilise une configuration IA structurée pour guider GitHub Copilot :
+
+```
+.github/
+├── copilot-instructions.md      ← Instructions globales (lu automatiquement)
+├── git-commit-instructions.md   ← Guide commit conventionnel
+├── agents/                      ← 3 agents (Symfony, Vue.js, Architecte)
+├── skills/                      ← 8 skills (Clean Code, TDD, Sécurité, UI/UX...)
+├── prompts/                     ← 9 templates (Feature, Entity, Component, Bug, Tests...)
+└── ISSUE_TEMPLATE/              ← Template revue IA trimestrielle
+```
+
+> 📖 Voir [`docs/11-ai-driven-development.md`](docs/11-ai-driven-development.md) pour le guide d'utilisation complet.
+
+---
+
 ## Requirements
 
 - PHP >= 8
@@ -14,13 +49,16 @@
 $ make build
 ```
 
+> 🔐 **HTTPS en local** — Les certificats SSL ne sont pas dans le repo.  
+> Consulter [docs/https-local.md](docs/https-local.md) pour les générer avant le premier `make up`.
+
 ## Run project
 
 ```sh
 $ make up
 ```
 
-Access to http://localhost:8087
+Access to https://localhost:8087
 
 # Configuration
 

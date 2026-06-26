@@ -2,6 +2,7 @@
   <template v-if="props.component === ''">
     <RouterView />
     <NotifComponent />
+    <MarketplaceVersion />
     <InternalStellantisModal
       v-if="!userStore.isNeoAutoLogin && !userStore.isShouldHideStellantisModal"
     />
@@ -14,19 +15,19 @@
   <FormComponent v-else-if="props.component === 'contact-form'" />
   <CmsPageComponent
     v-else-if="props.component === 'mentions-legales' && currentChannel"
-    :page-id="channelDocuments?.legalTerms"
+    field="legalTerms"
   />
   <CmsPageComponent
     v-else-if="
       props.component === 'politique-de-confidentialite' && currentChannel
     "
-    :page-id="channelDocuments?.privacyPolicy"
+    field="privacyPolicy"
   />
   <CmsPageComponent
     v-else-if="
       props.component === 'conditions-generales-d-utilisation' && currentChannel
     "
-    :page-id="channelDocuments?.generalTermsOfUse"
+    field="cgu"
   />
 </template>
 
@@ -41,12 +42,16 @@ import { useCartStore } from '@/vuejs/stores/cart'
 import { useCategoryStore } from '@/vuejs/stores/category'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { useUserStore } from '@/vuejs/stores/user'
-import { useFavoriteStore } from '@/vuejs/stores/favorite'
+// TODO (MKP-1411): Décommenter quand les Favoris seront disponibles via DJUST
+// import { useFavoriteStore } from '@/vuejs/stores/favorite'
+import { useNewsStore } from '@/vuejs/stores/news'
+import { useSellerStore } from '@/vuejs/stores/seller'
 import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
 
 import LoginForm from '@/vuejs/modules/login/views/ExternalLoginForm.vue'
 import FormComponent from '@/vuejs/modules/contact/component/FormComponent.vue'
 import NotifComponent from '@/vuejs/modules/shared/NotifComponent.vue'
+import MarketplaceVersion from '@/vuejs/modules/shared/MarketplaceVersion.vue'
 import CmsPageComponent from '@/vuejs/modules/shared/CmsPageComponent.vue'
 import PrehomeRightPart from '@/vuejs/modules/login/component/PrehomeRightPart.vue'
 import FooterPrehome from '@/vuejs/modules/login/component/FooterPrehome.vue'
@@ -59,9 +64,12 @@ const cartStore = useCartStore()
 const categoryStore = useCategoryStore()
 const bannerStore = useBannerStore()
 const userStore = useUserStore()
-const favoriteStore = useFavoriteStore()
+// TODO (MKP-1411): Décommenter quand les Favoris seront disponibles via DJUST
+// const favoriteStore = useFavoriteStore()
+const newsStore = useNewsStore()
+const sellerStore = useSellerStore()
 
-const { currentChannel, channelDocuments } = storeToRefs(channelStore)
+const { currentChannel } = storeToRefs(channelStore)
 
 const props = defineProps({
   component: {
@@ -78,14 +86,17 @@ onBeforeMount(async () => {
   if (props.component === '') {
     const promises = []
     promises.push(categoryStore.getAllCategories())
+    promises.push(newsStore.initialize())
+    promises.push(sellerStore.getAllSellers())
     if (
       channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.BANNER_FLASH_HOMEPAGE)
     ) {
       promises.push(bannerStore.init())
     }
-    if (channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.FAVORITES)) {
-      promises.push(favoriteStore.fetchFavorites())
-    }
+    // TODO (MKP-1411): Appel temporairement désactivé - à rétablir quand les Favoris seront disponibles via DJUST
+    // if (channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.FAVORITES)) {
+    //   promises.push(favoriteStore.fetchFavorites())
+    // }
     await Promise.all(promises)
   }
 })
@@ -96,9 +107,11 @@ onMounted(async () => {
     props.component === '' &&
     ![
       CartPageList.CART_RECAP,
+      CartPageList.CART_PAYMENT,
+      CartPageList.CART_PAYMENT_SEPA,
       CartPageList.CART_PAYMENT_ERROR,
       CartPageList.CART_CONFIRMED,
-    ].includes(router.currentRoute.value.name)
+    ].includes(router.currentRoute.value.name as CartPageList)
   ) {
     await cartStore.getCart()
   }

@@ -19,7 +19,7 @@
         <MobileFiltersMapComponent
           v-if="categories.length > 0"
           :categories="categories"
-          :selected-category="selectedCategoryString"
+          :selected-category="selectedCategoryId"
           :is-loading="isFilterLoading"
           @category-changed="handleCategoryChange"
         />
@@ -32,7 +32,7 @@
               <MapFiltersComponent
                 v-if="categories.length > 0"
                 :categories="categories"
-                :selected-category="selectedCategoryString"
+                :selected-category="selectedCategoryId"
                 @category-changed="handleCategoryChange"
               />
               <div
@@ -143,11 +143,8 @@ import { LMarker, LPopup } from '@vue-leaflet/vue-leaflet'
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import { useMap } from '@/vuejs/modules/products/composables/useMap'
 import SellerHttpClient from '@/vuejs/services/httpclient/SellerHttpClient'
-import {
-  StoreLightData,
-  StoreData,
-  MapCategoryData,
-} from '@/vuejs/types/Seller'
+import { StoreLightData, StoreData } from '@/vuejs/types/Seller'
+import { Category } from '@/vuejs/types/Product/Category'
 import { getLatLng } from '@/vuejs/modules/products/utils/map-utils'
 
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
@@ -166,8 +163,8 @@ const isFilterLoading = ref<boolean>(false)
 const isLoadingStoreDetail = ref<boolean>(false)
 const lightStores = ref<StoreLightData[]>([])
 const storeDetails = ref<Map<string, StoreData>>(new Map())
-const categories = ref<MapCategoryData[]>([])
-const selectedCategoryId = ref<number | null>(null)
+const categories = ref<Category[]>([])
+const selectedCategoryId = ref<string | null>(null)
 const currentOpenedId = ref<string | null>(null)
 
 let currentAbortController: AbortController | null = null
@@ -178,9 +175,6 @@ const setPopupRef = (id: string, el: any) => {
 }
 
 const markerIcon = computed(() => createMarkerIcon('text-primary'))
-const selectedCategoryString = computed(
-  () => selectedCategoryId.value?.toString() || null,
-)
 
 const handleMarkerClick = async (storeId: string) => {
   currentOpenedId.value = storeId
@@ -245,7 +239,7 @@ const handleCategoryChange = async (categoryId: string | null) => {
     if (categoryId === 'all' || categoryId === null) {
       selectedCategoryId.value = null
     } else {
-      selectedCategoryId.value = parseInt(categoryId)
+      selectedCategoryId.value = categoryId
     }
 
     // Effacer seulement les détails des stores et la popup ouverte
@@ -254,14 +248,14 @@ const handleCategoryChange = async (categoryId: string | null) => {
 
     // Charger les nouvelles données sans effacer les catégories avant
     const mapData = await SellerHttpClient.get().fetchMapData(
-      selectedCategoryId.value !== null ? selectedCategoryId.value : undefined,
+      selectedCategoryId.value,
       signal,
     )
 
-    // Mettre à jour seulement si la requête n'a pas été annulée
+    // Mettre à jour seulement si la requête n'a pas été annulée.
+    // Les catégories restent celles du chargement initial (sans filtre) pour pouvoir changer de filtre sans repasser par « Toutes ».
     if (!signal.aborted) {
       lightStores.value = mapData.stores
-      categories.value = mapData.categories
     }
   } catch (error) {
     // Ne pas traiter les erreurs d'annulation
@@ -277,12 +271,12 @@ const handleCategoryChange = async (categoryId: string | null) => {
 }
 
 const loadMapData = async (
-  categoryId?: number | null,
+  categoryId?: string | null,
   signal?: AbortSignal,
 ) => {
   try {
     const mapData = await SellerHttpClient.get().fetchMapData(
-      categoryId !== null ? categoryId : undefined,
+      categoryId,
       signal,
     )
 

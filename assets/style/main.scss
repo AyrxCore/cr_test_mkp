@@ -108,3 +108,15 @@
     background-position: 0% 50%;
   }
 }
+
+// Fix Adyen 3DS challenge iframe : pleine hauteur sans scrollbar
+.adyen-checkout__threeds2__challenge--05 {
+  height: 75vh !important;
+  min-height: 400px !important;
+
+  .adyen-checkout__iframe--threeDSIframe {
+    height: 100% !important;
+    overflow: hidden !important;
+  }
+}
+

@@ -28,7 +28,7 @@ readonly class StoreDetailDto
         public ?string $longitude = null,
 
         #[Groups(['store:detail'])]
-        public ?int $upplerId = null,
+        public ?string $djustId = null,
 
         #[Groups(['store:detail'])]
         public ?string $partnerName = null,

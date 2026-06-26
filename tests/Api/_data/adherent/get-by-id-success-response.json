@@ -6,5 +6,7 @@
   "name": "GROUPE QANTIS TEST",
   "siret": "53849238000026",
   "logo": "@string@",
-  "adherentTarifShowcases": []
+  "adherentTarifShowcases": [],
+  "showModalStellantis": false,
+  "stellantisModalValidated": false
 }

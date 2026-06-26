@@ -10,10 +10,6 @@ export function getImage(urlImage: string): string {
   return new URL(urlImage, import.meta.url).href
 }
 
-export function openInNewTab(url) {
-  window.open(url, '_blank', 'noreferrer')
-}
-
 export function getUpplerImage(path: string | null) {
   return path !== null ? path : getImage(imgDefault)
 }
@@ -27,8 +23,8 @@ export function formatPrice(price: number): string {
 
 export function formatAddress(address: Address): string {
   if (!address) return null
-  return `${!address.company ? '' : address.company + ', '} ${address.street} ${
-    address.postcode
+  return `${address.fullName ? address.fullName + ', ' : ''}${address.address} ${
+    address.zipcode
   } ${address.city}`
 }
 
@@ -109,4 +105,36 @@ export function getCookie(name: string | undefined): string | undefined {
   }
 
   return Cookies.get(name)
+}
+
+export function useScrollToElement(elementId: string, heightOffset = 48) {
+  const element = document.getElementById(elementId)
+
+  if (element) {
+    // Calculer dynamiquement la hauteur de tous les éléments sticky au-dessus
+    const stickyElements = document.querySelectorAll('[class*="sticky"]')
+    let totalStickyHeight = 0
+
+    stickyElements.forEach((stickyEl) => {
+      const rect = stickyEl.getBoundingClientRect()
+      if (
+        rect.height > 0 &&
+        window.getComputedStyle(stickyEl).position === 'sticky'
+      ) {
+        totalStickyHeight += rect.height
+      }
+    })
+
+    const elementPosition = element.getBoundingClientRect().top + window.scrollY
+    const offsetPosition = elementPosition - totalStickyHeight - heightOffset
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth',
+    })
+  }
+}
+
+export function openInNewTab(url) {
+  window.open(url, '_blank', 'noreferrer')
 }

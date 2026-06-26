@@ -1,7 +1,7 @@
 {
   "@context": "/api/contexts/Error",
-  "@type": "hydra:Error",
-  "hydra:title": "An error occurred",
-  "hydra:description": "@string@.contains('News with slug: wrong-slug does not exist')",
+  "@type": "Error",
+  "title": "An error occurred",
+  "description": "@string@.contains('News with slug: wrong-slug does not exist')",
   "trace": "@array@"
 }

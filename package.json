@@ -20,6 +20,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@adyen/adyen-web": "^6.32.0",
     "@unhead/vue": "^2.0.14",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue-leaflet/vue-leaflet": "^0.10.1",

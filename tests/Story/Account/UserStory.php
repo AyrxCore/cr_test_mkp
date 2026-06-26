@@ -55,6 +55,9 @@ final class UserStory extends Story
             'adherent' => self::adherentQantisTest(),
             'enabled' => true,
             'phone' => '04 05 06 07 08',
+            'djustUsername' => 'michel@mail.fr',
+            'djustPassword' => '2MilB4yRRo9YcCBS2ntJFGVBRE1vT3R1bkJWZzNiYnEvY1U4Y1E9PQ==',
+            'djustCustomerAccountId' => '0000001648',
         ]);
     }
 }

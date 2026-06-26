@@ -64,17 +64,17 @@ use Symfony\Component\HttpFoundation\Cookie;
 })
     ->with([
         'user with ROLE_USER' => [
-            'username' => 'test@qantis.co',
-            'password' => '23AP4DF8',
-            'expectedStatusCode' => 204,
-            'roles' => ['ROLE_USER'],
-            'expectedResponse' => 'me/response_user_with_marketplace_access.json',
+            'test@qantis.co',
+            '23AP4DF8',
+            204,
+            ['ROLE_USER'],
+            'me/response_user_with_marketplace_access.json',
         ],
         'user with ROLE_API' => [
-            'username' => 'api_user',
-            'password' => '23AP4DF8',
-            'expectedStatusCode' => 204,
-            'roles' => ['ROLE_API', 'ROLE_USER'],
+            'api_user',
+            '23AP4DF8',
+            204,
+            ['ROLE_API', 'ROLE_USER'],
         ],
     ])
     ->group('authentication');
@@ -98,29 +98,29 @@ use Symfony\Component\HttpFoundation\Cookie;
 })
     ->with([
         'unknown user' => [
-            'username' => 'unknown_username',
-            'password' => 'some_password',
-            'error_message' => 'Identifiants invalides.',
+            'unknown_username',
+            'some_password',
+            'Identifiants invalides.',
         ],
         'wrong password' => [
-            'username' => 'test@qantis.co',
-            'password' => 'wrong_password',
-            'error_message' => 'Identifiants invalides.',
+            'test@qantis.co',
+            'wrong_password',
+            'Identifiants invalides.',
         ],
         'ROLE_API + user disabled' => [
-            'username' => 'test_role_api_user_disabled',
-            'password' => '000000',
-            'error_message' => 'user_disabled',
+            'test_role_api_user_disabled',
+            '000000',
+            'user_disabled',
         ],
         'user with disabled account' => [
-            'username' => 'test_user_with_disabled_account',
-            'password' => '000000',
-            'error_message' => 'user_empty_account',
+            'test_user_with_disabled_account',
+            '000000',
+            'user_empty_account',
         ],
         'user without account' => [
-            'username' => 'test_user_without_account',
-            'password' => '000000',
-            'error_message' => 'user_empty_account',
+            'test_user_without_account',
+            '000000',
+            'user_empty_account',
         ],
     ])
     ->group('authentication');

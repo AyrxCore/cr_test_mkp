@@ -1,7 +1,7 @@
 {
   "@context": "\/api\/contexts\/SavedCart",
   "@id": "\/api\/saved-carts",
-  "@type": "hydra:Collection",
-  "hydra:member": [],
-  "hydra:totalItems": 0
+  "@type": "Collection",
+  "member": [],
+  "totalItems": 0
 }

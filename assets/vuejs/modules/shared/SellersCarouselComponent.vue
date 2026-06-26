@@ -1,5 +1,5 @@
 <template>
-  <div class="relative m-auto max-w-screen-94">
+  <div class="isolate relative m-auto max-w-screen-92">
     <LoaderSharedComponent v-if="sellersLoading" class="m-auto" />
     <CarouselListSharedComponent
       v-else
@@ -20,12 +20,12 @@
       <SwiperSlide
         v-for="(seller, key) in sellers"
         :key="key"
-        class="!flex h-full items-center justify-center overflow-hidden rounded-lg bg-white p-1.5"
+        class="!flex h-full items-center justify-center overflow-hidden rounded-lg bg-white p-1.5 border border-primary"
       >
         <RouterLink
           :to="{
             name: ProductPageList.PRODUCTS,
-            query: { company: seller?.id },
+            query: { seller: seller?.externalId },
           }"
           replace
         >
@@ -41,8 +41,9 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { SwiperSlide } from 'swiper/vue'
+import { storeToRefs } from 'pinia'
 
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import { getUpplerImage } from '@/vuejs/services/utils'
@@ -61,15 +62,34 @@ const props = defineProps({
 const emit = defineEmits(['click-partner-slider'])
 
 const sellerStore = useSellerStore()
+const { carouselSellers } = storeToRefs(sellerStore)
 
 const sellersLoading = ref<boolean>(false)
 const sellers = ref<Seller[]>([])
 
+let stopCarouselWatch: (() => void) | undefined
+
 onMounted(async () => {
-  sellersLoading.value = true
-  sellers.value = !props.params
-    ? await sellerStore.getAllSellers()
-    : await sellerStore.getSellersByParams(props.params)
-  sellersLoading.value = false
+  if (props.params) {
+    sellersLoading.value = true
+    sellers.value = await sellerStore.getSellersByParams(props.params)
+    sellersLoading.value = false
+  } else {
+    sellers.value = carouselSellers.value
+    if (sellers.value.length === 0) {
+      sellersLoading.value = true
+      stopCarouselWatch = watch(carouselSellers, (val) => {
+        if (val.length > 0) {
+          sellers.value = val
+          sellersLoading.value = false
+          stopCarouselWatch?.()
+        }
+      })
+    }
+  }
+})
+
+onUnmounted(() => {
+  stopCarouselWatch?.()
 })
 </script>

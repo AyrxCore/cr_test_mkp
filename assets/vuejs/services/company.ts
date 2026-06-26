@@ -1,38 +1,32 @@
 import {
   Address,
   AddressToCreate,
-  AddressToUpdate,
 } from '@/vuejs/types/Address'
 
 export function setAddressForCreate(address: Address): AddressToCreate {
   return {
-    name: address.name,
-    companyId: address.companyId,
-    company: address.company,
-    type: address.type,
-    street: address.street,
-    postcode: address.postcode,
+    fullName: address.fullName,
+    address: address.address,
+    zipcode: address.zipcode,
     city: address.city,
     country: address.country,
-    lastName: address.lastName ? address.lastName : '',
-    firstName: address.firstName ? address.firstName : '',
     phone: address.phone ? address.phone : '',
+    shipping: address.shipping,
+    billing: address.billing,
   }
 }
 
-export function setAddressForUpdate(address: Address): AddressToUpdate {
+export function setAddressForUpdate(address: Address): Address {
   return {
     id: address.id,
-    name: address.name,
-    companyId: address.companyId,
-    company: address.company,
-    type: address.type,
-    street: address.street,
-    postcode: address.postcode,
+    externalId: address.externalId,
+    fullName: address.fullName,
+    address: address.address,
+    zipcode: address.zipcode,
     city: address.city,
     country: address.country,
-    lastName: address.lastName ? address.lastName : '',
-    firstName: address.firstName ? address.firstName : '',
     phone: address.phone ? address.phone : '',
+    shipping: address.shipping,
+    billing: address.billing,
   }
 }

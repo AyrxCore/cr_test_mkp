@@ -1,0 +1,33 @@
+{
+  "content": [
+    {
+      "reference": "CART-WITH-ECO-TAX-001",
+      "productCount": 2,
+      "orderLogistics": [
+        {
+          "reference": "LOGISTIC-ECO-A",
+          "lines": [
+            {
+              "id": "LINE-ECO-001",
+              "orderLogisticLineProductDto": {
+                "productAttributeValues": [
+                  {
+                    "attributeExternalId": "PRODUCT_ECOTAXE",
+                    "attributeValue": "5.00"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "LINE-ECO-002",
+              "orderLogisticLineProductDto": {
+                "productAttributeValues": []
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+

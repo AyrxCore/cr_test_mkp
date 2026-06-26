@@ -8,9 +8,6 @@ use App\DataFixtures\Factory\ChannelFactory;
 use App\Factory\SemanticButtonFactory;
 use App\Service\UpplerDynamicEntityService;
 use App\State\Provider\SemanticButtonsProvider;
-use Zenstruck\Foundry\Test\ResetDatabase;
-
-\uses(ResetDatabase::class);
 
 \it('returns semantic buttons array', function () {
     $semanticButtonFactory = $this->container->get(SemanticButtonFactory::class);
@@ -22,7 +19,6 @@ use Zenstruck\Foundry\Test\ResetDatabase;
     ]);
 
     $channelContext = Mockery::mock(ChannelContext::class);
-    $channelContext->shouldReceive('getChannel')->once()->andReturn($channel);
 
     $semanticButtonProvider = new SemanticButtonsProvider(
         $semanticButtonFactory,

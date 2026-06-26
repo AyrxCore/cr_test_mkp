@@ -1,31 +1,21 @@
 interface CommonAddress {
-  type: string
-  name: string
-  company: string
-  companyId: number
-  street: string
-  postcode: string
+  fullName: string
+  address: string
+  zipcode: string
   city: string
-  country: number
+  country: string
   phone: string
+  shipping: boolean
+  billing: boolean
 }
 
 export interface Address extends CommonAddress {
-  id: string | number | null
-  lastName: string
-  firstName: string
+  id: string | null
+  externalId: string | null
 }
 
-export interface AddressToCreate extends CommonAddress {
-  lastName: string
-  firstName: string
-}
+export type AddressToCreate = CommonAddress
 
-export interface AddressToUpdate extends CommonAddress {
-  id: string | number | null
-  lastName: string
-  firstName: string
-}
 
 export interface AddressStoreState {
   addresses: Address[]

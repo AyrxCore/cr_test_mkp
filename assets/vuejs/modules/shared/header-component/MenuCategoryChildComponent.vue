@@ -48,6 +48,7 @@ import { Category } from '@/vuejs/types/Product/Category'
 import {
   CATEGORY_CONFIGS,
   CategoryConfig,
+  SUSTAINABLE_PURCHASES_CATEGORY_ID,
 } from '@/vuejs/constants/categoryConfigs'
 
 import Chevron2RightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
@@ -63,9 +64,18 @@ const emit = defineEmits(['selectCategory', 'closeMenu'])
 
 const showChildren = ref<boolean>(false)
 
-const categoryConfig = computed(
-  (): CategoryConfig => CATEGORY_CONFIGS[props.category.id],
-)
+const categoryConfig = computed<CategoryConfig | undefined>(() => {
+  if (CATEGORY_CONFIGS[props.category.id]) {
+    return CATEGORY_CONFIGS[props.category.id]
+  }
+
+  // Fallback: certains channels peuvent exposer "Achats durables" avec un autre id.
+  if (props.category.name === 'Achats durables') {
+    return CATEGORY_CONFIGS[SUSTAINABLE_PURCHASES_CATEGORY_ID]
+  }
+
+  return undefined
+})
 
 const selectCategory = () => {
   if (props.category.children.length > 0) {

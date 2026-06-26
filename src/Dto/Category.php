@@ -27,39 +27,48 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 final class Category
 {
-    #[Groups(['products:get', 'product:get'])]
-    private ?int $id = null;
+    #[Groups(['products:get', 'product:get', 'map:read'])]
+    private ?string $id = null;
 
-    private ?int $parentId;
+    #[Groups(['products:get', 'product:get', 'map:read'])]
+    private ?string $externalId = null;
 
-    #[Groups(['products:get', 'product:get'])]
+    private ?string $parentId;
+
+    #[Groups(['products:get', 'product:get', 'map:read'])]
     private ?string $name;
 
-    private ?string $image;
+    #[Groups(['products:get', 'product:get', 'map:read'])]
+    private array $children = [];
 
-    private ?int $productCount;
-    private ?bool $checked;
-
-    private array $children;
-
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
 
-    public function setId(int $id): self
+    public function setId(string $id): self
     {
         $this->id = $id;
 
         return $this;
     }
 
-    public function getParentId(): ?int
+    public function getExternalId(): ?string
+    {
+        return $this->externalId;
+    }
+
+    public function setExternalId(?string $externalId): void
+    {
+        $this->externalId = $externalId;
+    }
+
+    public function getParentId(): ?string
     {
         return $this->parentId;
     }
 
-    public function setParentId(?int $parentId): void
+    public function setParentId(?string $parentId): void
     {
         $this->parentId = $parentId;
     }
@@ -74,26 +83,6 @@ final class Category
         $this->name = $name;
     }
 
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(?string $image): void
-    {
-        $this->image = $image;
-    }
-
-    public function getProductCount(): ?int
-    {
-        return $this->productCount;
-    }
-
-    public function setProductCount(?int $productCount): void
-    {
-        $this->productCount = $productCount;
-    }
-
     public function getChildren(): array
     {
         return $this->children;
@@ -102,15 +91,5 @@ final class Category
     public function setChildren(array $children): void
     {
         $this->children = $children;
-    }
-
-    public function getChecked(): ?bool
-    {
-        return $this->checked;
-    }
-
-    public function setChecked(?bool $checked): void
-    {
-        $this->checked = $checked;
     }
 }

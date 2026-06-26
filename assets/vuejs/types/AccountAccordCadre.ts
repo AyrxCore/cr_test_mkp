@@ -1,9 +1,13 @@
+export enum AccountAccordCadreStatus {
+  NOT_ACTIVATED = 'NOT_ACTIVATED',
+  PENDING = 'PENDING',
+  ACTIVATED = 'ACTIVATED',
+}
+
 export interface AccountAccordCadre {
-  accordCadreId: number
-  accordId: string
-  accountId: number
   id: string
-  status: string
+  accordId: string
+  status: AccountAccordCadreStatus
   createdAt: Date
   updatedAt: Date
 }

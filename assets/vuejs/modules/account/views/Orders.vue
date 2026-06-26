@@ -6,13 +6,13 @@
         La commande la plus récente apparaît en premier
       </span>
       <div
-        class="mt-5 hidden py-2.5 px-2.5 text-sm text-gray-500 md:flex lg:mt-10 lg:text-base"
+        class="mt-5 hidden px-2.5 py-2.5 text-sm text-gray-500 md:flex lg:mt-10 lg:text-base"
       >
         <div class="md:w-2/12 lg:w-3/12">Date de la commande</div>
         <div class="md:w-5/12 lg:w-4/12">Détails de la commande</div>
-        <div class="w-5/12">Livraison</div>
-        <div class="w-3/12">Total de la commande</div>
-        <div class="w-1/12"></div>
+        <div class="md:w-5/12">Livraison</div>
+        <div class="md:w-3/12">Total de la commande</div>
+        <div class="md:w-1/12"></div>
       </div>
       <LoadingComponent v-if="isLoading" />
       <div v-else-if="showAlert" class="lg:w-5/6">

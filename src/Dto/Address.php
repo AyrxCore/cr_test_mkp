@@ -44,7 +44,10 @@ final class Address
 {
     #[ApiProperty(identifier: true)]
     #[Groups(['address:update'])]
-    private ?int $id = null;
+    private ?string $id = null;
+
+    #[Groups(['address:update'])]
+    private ?string $externalId = null;
 
     #[Assert\Type('integer', message: '(upplerSubAccountId) Integer required', groups: ['create'])]
     #[Groups(['address:update'])]
@@ -52,22 +55,21 @@ final class Address
 
     #[Assert\Type('string', message: '(name) string required')]
     #[Groups(['address:create', 'address:update'])]
-    private ?string $name;
+    private ?string $fullName;
 
     #[Groups(['address:create', 'address:update'])]
-    private ?string $type;
+    private bool $shipping = false;
 
-    #[Assert\NotBlank(message: 'company cannot be null', groups: ['create'])]
     #[Groups(['address:create', 'address:update'])]
-    private string $company;
+    private bool $billing = false;
 
     #[Assert\NotBlank(message: 'street cannot be null', groups: ['create'])]
     #[Groups(['address:create', 'address:update'])]
-    private string $street;
+    private string $address;
 
     #[Assert\NotBlank(message: 'postcode cannot be null')]
     #[Groups(['address:create', 'address:update'])]
-    private string $postcode;
+    private string $zipcode;
 
     #[Assert\NotBlank(message: 'city cannot be null')]
     #[Assert\Type('string', message: '(city) string required')]
@@ -75,102 +77,92 @@ final class Address
     private string $city;
 
     #[Assert\NotBlank(message: 'country cannot be null')]
-    #[Assert\Type('integer', message: '(country) int required')]
+    #[Assert\Type('string', message: '(country) int required')]
     #[Groups(['address:create', 'address:update'])]
-    private int $country;
+    private string $country;
 
-    #[Assert\Type('string', message: '(lastName) string required')]
-    #[Groups(['address:create', 'address:update'])]
-    private ?string $lastName;
-
-    #[Assert\Type('string', message: '(firstName) string required')]
-    #[Groups(['address:create', 'address:update'])]
-    private ?string $firstName;
-
-    #[Assert\Type('string', message: '(phone) string required')]
     #[Groups(['address:create', 'address:update'])]
     private ?string $phone;
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
 
-    public function setId(?int $id): self
+    public function setId(?string $id): self
     {
         $this->id = $id;
 
         return $this;
     }
 
-    public function getCompanyId(): ?int
+    public function getExternalId(): ?string
     {
-        return $this->companyId;
+        return $this->externalId;
     }
 
-    public function setCompanyId(?int $companyId): self
+    public function setExternalId(?string $externalId): Address
     {
-        $this->companyId = $companyId;
+        $this->externalId = $externalId;
+        return $this;
+    }
+
+    public function getFullName(): string
+    {
+        return $this->fullName;
+    }
+
+    public function setFullName(string $fullName): self
+    {
+        $this->fullName = $fullName;
 
         return $this;
     }
 
-    public function getName(): string
+    public function isShipping(): bool
     {
-        return $this->name;
+        return $this->shipping;
     }
 
-    public function setName(string $name): self
+    public function setShipping(bool $shipping): self
     {
-        $this->name = $name;
+        $this->shipping = $shipping;
 
         return $this;
     }
 
-    public function getType(): ?string
+    public function isBilling(): bool
     {
-        return $this->type;
+        return $this->billing;
     }
 
-    public function setType(?string $type): self
+    public function setBilling(bool $billing): self
     {
-        $this->type = $type;
+        $this->billing = $billing;
 
         return $this;
     }
 
-    public function getCompany(): string
+    public function getAddress(): string
     {
-        return $this->company;
+        return $this->address;
     }
 
-    public function setCompany(string $company): self
+    public function setAddress(string $address): self
     {
-        $this->company = $company;
+        $this->address = $address;
 
         return $this;
     }
 
-    public function getStreet(): string
+    public function getZipCode(): string
     {
-        return $this->street;
+        return $this->zipcode;
     }
 
-    public function setStreet(string $street): self
+    public function setZipcode(string $zipcode): self
     {
-        $this->street = $street;
-
-        return $this;
-    }
-
-    public function getPostCode(): string
-    {
-        return $this->postcode;
-    }
-
-    public function setPostCode(string $postCode): self
-    {
-        $this->postcode = $postCode;
+        $this->zipcode = $zipcode;
 
         return $this;
     }
@@ -187,38 +179,14 @@ final class Address
         return $this;
     }
 
-    public function getCountry(): int
+    public function getCountry(): string
     {
         return $this->country;
     }
 
-    public function setCountry(int $country): self
+    public function setCountry(string $country): self
     {
         $this->country = $country;
-
-        return $this;
-    }
-
-    public function getLastName(): ?string
-    {
-        return $this->lastName;
-    }
-
-    public function setLastName(?string $lastName): self
-    {
-        $this->lastName = $lastName;
-
-        return $this;
-    }
-
-    public function getFirstName(): ?string
-    {
-        return $this->firstName;
-    }
-
-    public function setFirstName(?string $firstName): self
-    {
-        $this->firstName = $firstName;
 
         return $this;
     }

@@ -9,10 +9,12 @@ use App\Controller\ChannelAwareControllerTrait;
 use App\Entity\User;
 use App\Events\UserAcceptCGUEvent;
 use App\Repository\AccountRepository;
+use App\Service\Account\CurrentAccountProvider;
+use App\Service\Djust\DjustAuthenticationService;
 use App\Service\UpplerAuthenticationService;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -34,6 +36,8 @@ class AutoLoginSuccessHandler implements AuthenticationSuccessHandlerInterface, 
         private readonly RequestStack $requestStack,
         private readonly UpplerAuthenticationService $upplerAuthenticationService,
         private readonly UrlGeneratorInterface $router,
+        private readonly DjustAuthenticationService $djustAuthenticationService,
+        protected readonly LoggerInterface $djustLogger,
     ) {
     }
 
@@ -66,12 +70,22 @@ class AutoLoginSuccessHandler implements AuthenticationSuccessHandlerInterface, 
                 throw new \Exception('No account available');
             }
 
-            $authSuccess = $this->upplerAuthenticationService->authenticateUser(
+            $session = $this->requestStack->getSession();
+            $session->set(CurrentAccountProvider::SESSION_KEY_ACCOUNT, $account);
+
+            $authUpplerSuccess = $this->upplerAuthenticationService->authenticateUser(
                 $account,
                 !$isNeoAutoLogin
             );
 
-            if ($authSuccess && $session->has('access_token') && !empty($session->get('access_token'))) {
+            try {
+                //                TODO: Adaptation DJUST - authentification
+                $authDjustSuccess = $this->djustAuthenticationService->authenticateUser($account, !$isNeoAutoLogin);
+            } catch (\Throwable $e) {
+                $this->djustLogger->warning("Erreur lors de l'authentification Djust pour cet account :  ".$account->getId());
+            }
+
+            if ($authUpplerSuccess && $session->has('access_token') && !empty($session->get('access_token'))) {
                 if (empty($account->isAcceptCGU()) && !$isNeoAutoLogin) {
                     $event = new UserAcceptCGUEvent($account);
                     $this->eventDispatcher->dispatch($event);
@@ -87,7 +101,7 @@ class AutoLoginSuccessHandler implements AuthenticationSuccessHandlerInterface, 
             }
 
             return $response;
-        } catch (Exception) {
+        } catch (\Exception) {
             return $response;
         }
     }

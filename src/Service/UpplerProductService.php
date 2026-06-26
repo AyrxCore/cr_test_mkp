@@ -92,20 +92,6 @@ class UpplerProductService extends AbstractUpplerService
         return \json_decode($res->getContent(), true);
     }
 
-    public function findVariantById(?int $variantId = null)
-    {
-        $res = $this->request(
-            'GET',
-            'v1/buyer/variant/'.$variantId.'?expand[]=price'
-        );
-
-        if ($res->getStatusCode() !== Response::HTTP_OK) {
-            throw new NotFoundHttpException('Variant not found');
-        }
-
-        return \json_decode($res->getContent(), true);
-    }
-
     /**
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface

@@ -2,110 +2,86 @@
 
 declare(strict_types=1);
 
-use App\DataFixtures\Factory\AccountFactory;
-use App\DataFixtures\Factory\UserFactory;
+use App\Entity\Account;
+use App\Entity\User;
 use App\Security\UserChecker;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAccountStatusException;
 
 \it('throws an exception if api user is disabled', function () {
-    $user = UserFactory::new([
-        'enabled' => false,
-        'roles' => ['ROLE_API'],
-    ])
-        ->withoutPersisting()
-        ->create();
+    $user = \Mockery::mock(User::class);
+    $user->shouldReceive('isEnabled')->andReturn(false);
+    $user->shouldReceive('hasRole')->with('ROLE_API')->andReturn(true);
 
     $userChecker = new UserChecker();
     $userChecker->checkPreAuth($user);
     $userChecker->checkPostAuth($user);
 })
-    ->throws(CustomUserMessageAccountStatusException::class, 'user_disabled');
+    ->throws(CustomUserMessageAccountStatusException::class, 'user_disabled')
+    ->group('UnitUserChecker');
 
 \it('should not throw an exception if user is enabled and has ROLE_API role', function () {
     $this->expectNotToPerformAssertions();
 
-    $user = UserFactory::new([
-        'enabled' => true,
-        'roles' => ['ROLE_API'],
-    ])
-        ->withoutPersisting()
-        ->create();
+    $user = \Mockery::mock(User::class);
+    $user->shouldReceive('isEnabled')->andReturn(true);
+    $user->shouldReceive('hasRole')->with('ROLE_API')->andReturn(true);
 
     $userChecker = new UserChecker();
     $userChecker->checkPreAuth($user);
     $userChecker->checkPostAuth($user);
-});
+})->group('UnitUserChecker');
 
 \it('throws an exception if user has no account', function () {
-    $user = UserFactory::new([
-        'enabled' => true,
-    ])
-        ->withoutPersisting()
-        ->create();
+    $user = \Mockery::mock(User::class);
+    $user->shouldReceive('isEnabled')->andReturn(true);
+    $user->shouldReceive('hasRole')->with('ROLE_API')->andReturn(false);
+    $user->shouldReceive('getFirstEnabledAccount')->andReturn(null);
 
     $userChecker = new UserChecker();
     $userChecker->checkPreAuth($user);
     $userChecker->checkPostAuth($user);
 })
-    ->throws(CustomUserMessageAccountStatusException::class, 'user_empty_account');
+    ->throws(CustomUserMessageAccountStatusException::class, 'user_empty_account')
+    ->group('UnitUserChecker');
 
 \it('throws an exception if user has no enabled account', function () {
-    $account = AccountFactory::new(['enabled' => false])
-        ->withoutPersisting()
-        ->create();
-
-    $user = UserFactory::new([
-        'enabled' => true,
-    ])
-        ->withoutPersisting()
-        ->create();
-    $user->addAccount($account);
+    $user = \Mockery::mock(User::class);
+    $user->shouldReceive('isEnabled')->andReturn(true);
+    $user->shouldReceive('hasRole')->with('ROLE_API')->andReturn(false);
+    $user->shouldReceive('getFirstEnabledAccount')->andReturn(null);
 
     $userChecker = new UserChecker();
     $userChecker->checkPreAuth($user);
     $userChecker->checkPostAuth($user);
 })
-    ->throws(CustomUserMessageAccountStatusException::class, 'user_empty_account');
+    ->throws(CustomUserMessageAccountStatusException::class, 'user_empty_account')
+    ->group('UnitUserChecker');
 
 \it('throws an exception if user with account is disabled', function () {
-    $account = AccountFactory::new(['enabled' => true])
-        ->withoutPersisting()
-        ->create();
+    $account = \Mockery::mock(Account::class);
+    $account->shouldReceive('isEnabled')->andReturn(true);
 
-    $user = UserFactory::new([
-        'enabled' => false,
-    ])
-        ->withoutPersisting()
-        ->create();
-    $user->addAccount($account);
+    $user = \Mockery::mock(User::class);
+    $user->shouldReceive('isEnabled')->andReturn(false);
 
     $userChecker = new UserChecker();
     $userChecker->checkPreAuth($user);
     $userChecker->checkPostAuth($user);
-})
-    ->throws(CustomUserMessageAccountStatusException::class, 'user_disabled');
+})->throws(CustomUserMessageAccountStatusException::class, 'user_disabled')
+    ->group('UnitUserChecker');
 
 \it('should not throw an exception if user is enabled and has at least one enabled accounts', function () {
     $this->expectNotToPerformAssertions();
 
-    $account = AccountFactory::new(['enabled' => true])
-        ->withoutPersisting()
-        ->create();
+    $account = \Mockery::mock(Account::class);
+    $account->shouldReceive('isEnabled')->andReturn(true);
 
-    $account2 = AccountFactory::new(['enabled' => false])
-        ->withoutPersisting()
-        ->create();
-
-    $user = UserFactory::new([
-        'enabled' => true,
-        'roles' => [],
-    ])
-        ->withoutPersisting()
-        ->create();
-    $user->addAccount($account);
-    $user->addAccount($account2);
+    $user = \Mockery::mock(User::class);
+    $user->shouldReceive('isEnabled')->andReturn(true);
+    $user->shouldReceive('hasRole')->with('ROLE_API')->andReturn(false);
+    $user->shouldReceive('getFirstEnabledAccount')->andReturn($account);
 
     $userChecker = new UserChecker();
     $userChecker->checkPreAuth($user);
     $userChecker->checkPostAuth($user);
-});
+})->group('UnitUserChecker');

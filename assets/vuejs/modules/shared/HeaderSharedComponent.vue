@@ -10,7 +10,7 @@
           <CartButtonComponent class="ml-4" />
         </div>
       </div>
-      <div class="mb-2 mt-4 lg:ml-2 lg:my-4 lg:w-[100%]">
+      <div class="mb-2 mt-4 lg:my-4 lg:ml-2 lg:w-[100%]">
         <SearchComponent @search-product="search" />
       </div>
       <div
@@ -30,17 +30,18 @@
 
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
+
+import router from '@/vuejs/router'
+import { ProductPageList } from '@/vuejs/router/pages-list'
+import { useProductStore } from '@/vuejs/stores/product'
+import { useChannelStore } from '@/vuejs/stores/channel'
+
 import MenuComponent from '@/vuejs/modules/shared/header-component/MenuComponent.vue'
 import AccountComponent from '@/vuejs/modules/shared/header-component/AccountComponent.vue'
 import LogoComponent from '@/vuejs/modules/shared/header-component/LogoComponent.vue'
 import SearchComponent from '@/vuejs/modules/shared/header-component/SearchComponent.vue'
 import ContactUsButtonComponent from '@/vuejs/modules/shared/ContactUsButtonComponent.vue'
 import CartButtonComponent from '@/vuejs/modules/shared/CartButtonComponent.vue'
-import router from '@/vuejs/router'
-import { ProductPageList } from '@/vuejs/router/pages-list'
-import { useProductStore } from '@/vuejs/stores/product'
-import { useChannelStore } from '@/vuejs/stores/channel'
-import MarkerIconComponent from '@/vuejs/modules/shared/icon/MarkerIconComponent.vue'
 import StoreLocHeaderButton from '@/vuejs/modules/shared/StoreLocHeaderButton.vue'
 
 const productStore = useProductStore()
@@ -50,7 +51,7 @@ const { channelSecondaryColor } = storeToRefs(useChannelStore())
 const search = (event) => {
   productStore.setSelectedProperty(null)
   productStore.setSelectedCategory(null)
-  productStore.setSelectedCompany(null)
+  productStore.setSelectedSeller(null)
   router.push({
     name: ProductPageList.PRODUCTS,
     query: {

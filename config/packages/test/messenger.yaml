@@ -1,0 +1,16 @@
+framework:
+  messenger:
+    buses:
+      messenger.bus.default: ~
+    transports:
+      default: 'in-memory://'
+      mkp_sync: 'in-memory://'
+
+    routing:
+      # Route your messages to the transports
+      'App\Message\*': default
+      'App\Message\Marketplace\*': mkp_sync
+      'App\Message\Uppler\*': mkp_sync
+
+  profiler:
+    enabled: true

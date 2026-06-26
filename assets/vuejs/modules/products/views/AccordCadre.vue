@@ -1,167 +1,125 @@
 <template>
   <BaseTemplate :title="accordTitle">
     <LoadingComponent v-if="isLoading" />
-    <div v-else-if="accord && !isLoading && !isInShowcase" class="m-auto my-4">
-      <HeaderPartnerComponent
-        :accord="accord"
-        :note="accord.properties.note_rse ?? null"
-        @scroll-to="scrollTo('#sectionRse')"
-      />
-
-      <div class="mt-12 flex flex-col text-sm md:text-base lg:text-lg">
-        <ConditionsNegocieesComponent
-          :accord-name="accord.name"
-          :properties="accord.properties"
-        />
-
-        <div class="mt-5 flex flex-col items-center bg-primary p-6 lg:mt-0">
-          <h3
-            class="text-title-default-size mb-6 mt-5 text-center font-bold text-white"
-          >
-            Comment bénéficier des conditions négociées&nbsp;?
-          </h3>
-          <ConditionsNotActivatedComponent
-            v-if="
-              status.not_activated === currentStatus.status &&
-              !accord.properties.process_fat_client?.length
-            "
-            :accord-name="accord.name"
-            :current-status="currentStatus"
-            :label="accord.properties.cta_text_not_activated"
-            :text="
-              currentChannel.code === 'QANTIS_ACHAT'
-                ? accord.properties.process_not_activated
-                : accord.properties.process_not_activated_mb
-            "
+    <div
+      v-else-if="accordCadre?.accordCadreContent && !isLoading && !isInShowcase"
+      class="w-full bg-white"
+    >
+      <Banner class="px-6 sm:px-8 lg:px-14" />
+      <Navigation class="mx-2 mb-12 hidden sm:mx-4 md:block lg:mx-7" />
+      <div class="flex flex-col gap-8 px-6 pb-12 pt-12 sm:px-8 lg:flex-row lg:px-14">
+        <Presentation />
+        <NegociatedTerms />
+      </div>
+      <template
+        v-for="(block, index) in visibleBlocks"
+        :key="block.key"
+      >
+        <div
+          :class="getBlockContainerClass(index)"
+          :id="block.key === 'map' ? 'mapBlock' : undefined"
+        >
+          <Steps
+            v-if="block.key === 'steps'"
+            class="pb-12 pt-12 px-6 sm:px-8 md:flex-row lg:px-14"
           />
-          <ConditionsClientComponent
-            v-else-if="
-              status.not_activated === currentStatus.status &&
-              !!accord.properties.process_fat_client?.length
-            "
-            :accord-name="accord.name"
-            :properties="accord.properties"
+          <PartnerStoresMap
+            v-else-if="block.key === 'map'"
+            :accord="accordCadre"
+            @loaded="(hasStores) => { showMapBlock = hasStores }"
           />
-          <ConditionsPendingOrActivated
-            v-else-if="status.not_activated !== currentStatus.status"
-            :accord="accord"
-            :accord-name="accord.name"
-            :current-status="currentStatus"
-            :properties="accord.properties"
+          <SellersCarouselBlock
+            v-else-if="block.key === 'sellers'"
+            :params="sellersByCategoryParam"
           />
         </div>
-      </div>
-      <div v-if="partnerProducts.length > 0" class="m-auto max-w-screen-94">
-        <div class="mt-10 sm:w-[45rem]">
-          <h3 class="text-title-primary">
-            Sélection de produits du partenaire
-          </h3>
-        </div>
-        <div class="m-auto max-w-screen-94">
-          <ProductsCarouselComponent
-            :loading="isLoading"
-            :products="partnerProducts"
-          />
-        </div>
-      </div>
-      <div class="mx-auto my-8 max-w-screen-2xl md:px-5">
-        <PromotionnalComponent :properties="accord.properties" />
-      </div>
-      <EnSavoirPlusComponent
-        :accord-name="accord.name"
-        :properties="accord.properties"
-      />
-      <PartnerStoresMap :accord="accord" />
-      <div id="sectionRse" class="scroll-mt-40" />
-      <RseEngagementComponent :properties="accord.properties" />
-      <div class="mb-12 mt-8 px-6 lg:px-12">
-        <h3 class="text-title-primary">
-          Ces partenaires peuvent aussi vous intéresser
-        </h3>
-        <SellersCarouselComponent
-          :params="sellersByCategoryParam"
-          class="mt-5"
-        />
-      </div>
-      <div class="m-auto mb-8 mt-2 max-w-screen-94 text-xs text-gray-500">
-        Les références, photographies, remises et tarifs des produits fournis
-        sur la marketplace n’ont qu’une valeur indicative. Pour toute
-        confirmation d’information, nous vous invitons à nous contacter.
-      </div>
+      </template>
     </div>
     <div
-      v-else
-      class="xs:w-[100%] m-auto my-4 flex max-w-screen-2xl justify-center px-5 sm:px-8"
+      v-else-if="errorLoading"
+      class="m-auto my-12 w-5/6 rounded-md border p-2 text-center text-gray-500"
     >
-      Aucun accord cadre n'a été trouvé avec cette référence
+      Impossible de charger l'accord-cadre.
     </div>
+
+    <!-- Layers -->
+    <MoreInformationsLayer v-model="layers.showMoreInformationsLayer.value" />
+    <ConfirmationLayer v-model="layers.showConfirmationLayer.value" />
+    <SuccessLayer v-model="layers.showSuccessLayer.value" />
+    <NegociatedTermsLayer v-model="layers.showNegociatedTermsLayer.value" />
+    <FatInterestModal
+      v-if="accordCadre"
+      v-model="layers.showFatInterestModal.value"
+      :accord="accordCadre"
+    />
   </BaseTemplate>
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue'
+import { computed, provide, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
 
-import { MainPageList } from '@/vuejs/router/pages-list'
-import { useProductStore } from '@/vuejs/stores/product'
-import { useUserStore } from '@/vuejs/stores/user'
-import { useChannelStore } from '@/vuejs/stores/channel'
-import { Product } from '@/vuejs/types/Product'
-import { status } from '@/vuejs/modules/products'
+import { MainPageList } from '@/vuejs/router/pages-list.ts'
+import { useUserStore } from '@/vuejs/stores/user.ts'
+import { useAccordCadreStore } from '@/vuejs/stores/accordCadre.ts'
+import { useAccordCadreLayers } from '@/vuejs/modules/products/composables/useAccordCadreLayers'
 
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
-import HeaderPartnerComponent from '@/vuejs/modules/products/components/accord-cadre/HeaderAccordCadreComponent.vue'
-import SellersCarouselComponent from '@/vuejs/modules/shared/SellersCarouselComponent.vue'
-import ConditionsNegocieesComponent from '@/vuejs/modules/products/components/accord-cadre/ConditionsNegocieesComponent.vue'
+import Banner from '@/vuejs/modules/products/components/accord-cadre/blocks/Banner.vue'
+import MoreInformationsLayer from '@/vuejs/modules/products/components/accord-cadre/MoreInformationsLayer.vue'
+import ConfirmationLayer from '@/vuejs/modules/products/components/accord-cadre/ConfirmationLayer.vue'
+import SuccessLayer from '@/vuejs/modules/products/components/accord-cadre/SuccessLayer.vue'
+import NegociatedTermsLayer from '@/vuejs/modules/products/components/accord-cadre/NegociatedTermsLayer.vue'
+import FatInterestModal from '@/vuejs/modules/products/components/accord-cadre/FatInterestModal.vue'
+import Presentation from '@/vuejs/modules/products/components/accord-cadre/blocks/Presentation.vue'
+import NegociatedTerms from '@/vuejs/modules/products/components/accord-cadre/blocks/NegociatedTerms.vue'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
-import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
-import ConditionsNotActivatedComponent from '@/vuejs/modules/products/components/accord-cadre/ConditionsNotActivatedComponent.vue'
-import ConditionsPendingOrActivated from '@/vuejs/modules/products/components/accord-cadre/ConditionsPendingOrActivatedComponent.vue'
-import ConditionsClientComponent from '@/vuejs/modules/products/components/accord-cadre/ConditionsClientComponent.vue'
-import EnSavoirPlusComponent from '@/vuejs/modules/products/components/accord-cadre/EnSavoirPlusComponent.vue'
-import PromotionnalComponent from '@/vuejs/modules/products/components/accord-cadre/PromotionnalComponent.vue'
-import RseEngagementComponent from '@/vuejs/modules/products/components/accord-cadre/RseEngagementComponent.vue'
+import Navigation from '@/vuejs/modules/products/components/accord-cadre/Navigation.vue'
+import Steps from '@/vuejs/modules/products/components/accord-cadre/blocks/Steps.vue'
 import PartnerStoresMap from '@/vuejs/modules/products/components/accord-cadre/PartnerStoresMap.vue'
+import SellersCarouselBlock from '@/vuejs/modules/products/components/accord-cadre/blocks/SellersCarouselBlock.vue'
+
+const accordCadreStore = useAccordCadreStore()
+const { accordCadre, errorLoading, showStepsBlock } = storeToRefs(accordCadreStore)
+
+const showMapBlock = ref<boolean | null>(null)
+provide('showMapBlock', showMapBlock)
+
+const getBlockContainerClass = (index: number): string =>
+  index % 2 === 0 ? 'bg-gray-50 py-2' : 'bg-white'
+
+const visibleBlocks = computed(() =>
+  [
+    { key: 'steps', visible: showStepsBlock.value },
+    { key: 'map', visible: showMapBlock.value !== false },
+    { key: 'sellers', visible: true },
+  ].filter((b) => b.visible),
+)
+
+const sellersByCategoryParam = computed(() => {
+  const categoryId = accordCadre.value?.categories?.[0]?.id
+  return categoryId ? { categories: [categoryId] } : undefined
+})
+
+const { adherentTarifShowcases } = storeToRefs(useUserStore())
+
+// Gestion des layers via composable (UI state local)
+const layers = useAccordCadreLayers()
+provide('accordCadreLayers', layers)
 
 const route = useRoute()
 const router = useRouter()
-const accordStore = useProductStore()
-const channelStore = useChannelStore()
-const productStore = useProductStore()
-const accord = ref<Product>()
 const isLoading = ref<boolean>(false)
-const partnerProducts = ref<Product[]>()
-const { adherentTarifShowcases } = storeToRefs(useUserStore())
 
-const currentChannel = channelStore.currentChannel
-
-const sellersByCategoryParam = computed(() => {
-  return {
-    categories: [accord.value.categories[0].id],
-  }
-})
-
-const currentStatus = computed(() => {
-  return accord.value.accountAccordCadre
-})
-
-const scrollTo = (selector) => {
-  const element = document.querySelector(selector)
-  if (element) {
-    element.scrollIntoView({ behavior: 'smooth' })
-  }
-}
-
-const accordTitle = computed((): string => {
-  return accord.value ? accord.value.name : ''
+const accordTitle = computed<string>(() => {
+  return accordCadre.value ? accordCadre.value.name : ''
 })
 
 const isInShowcase = computed<boolean>(() =>
-  accord.value && accord.value.properties
+  accordCadre.value && accordCadre.value.properties
     ? adherentTarifShowcases.value.some(
-        (showcase) =>
-          showcase.accordId === accord.value!.properties['accord-id'],
+        (showcase) => showcase.accordId === accordCadre.value!.accordId,
       )
     : false,
 )
@@ -180,20 +138,11 @@ watch(
   () => route.params.slug as string,
   async (slug: string) => {
     isLoading.value = true
+    showMapBlock.value = null
     try {
       if (slug) {
-        const accordId = slug.split('-')
-        accord.value = await accordStore.findAccordCadreById(
-          accordId[accordId.length - 1],
-        )
-        if (!isInShowcase.value) {
-          partnerProducts.value = await productStore.findPartnerProducts(
-            accord.value.seller.id,
-          )
-        }
+        await accordCadreStore.findAccordCadreById(slug)
       }
-    } catch (error) {
-      console.error(error)
     } finally {
       isLoading.value = false
     }
@@ -201,13 +150,3 @@ watch(
   { immediate: true },
 )
 </script>
-
-<style scoped>
-.bloc-content {
-  @apply rounded-lg bg-white p-4 text-gray-500 md:p-7.5;
-}
-
-.condition-beneficiaire p {
-  @apply mb-4 text-sm md:text-base xl:text-lg;
-}
-</style>

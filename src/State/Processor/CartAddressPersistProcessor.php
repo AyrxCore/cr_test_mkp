@@ -7,30 +7,54 @@ namespace App\State\Processor;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\State\ProcessorInterface;
-use App\Service\UpplerCartService;
+use App\Dto\CartAddress;
+use App\Service\Djust\DjustCartService;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 readonly class CartAddressPersistProcessor implements ProcessorInterface
 {
-    public function __construct(private UpplerCartService $upplerCartService)
-    {
+    public function __construct(
+        private DjustCartService $djustCartService
+    ) {
     }
 
-    public function process($data, Operation $operation, array $uriVariables = [], array $context = []): mixed
+    public function process($data, Operation $operation, array $uriVariables = [], array $context = []): CartAddress
     {
-        try {
-            if ($operation instanceof Patch) {
-                $this->upplerCartService->updateCartAddress(
-                    $data->getId(),
-                    $data->getShippingAddressId(),
-                    $data->getBillingAddressId(),
-                );
+        if (!$data instanceof CartAddress) {
+            throw new BadRequestHttpException('Invalid data type');
+        }
 
-                return $data;
+        if (!$operation instanceof Patch) {
+            throw new BadRequestException('Only PATCH operation is supported');
+        }
+
+        try {
+            $cartId = $data->getCartId();
+
+            if (!$cartId) {
+                throw new BadRequestHttpException('Cart ID is required');
             }
-            throw new BadRequestException('Persist error');
+
+            if ($data->getBillingAddressExternalId() !== null) {
+                $this->djustCartService->updateCartBillingAddress(
+                    $cartId,
+                    $data->getBillingAddressExternalId()
+                );
+            }
+
+            if ($data->getShippingAddressExternalId() !== null) {
+                $this->djustCartService->updateCartShippingAddress(
+                    $cartId,
+                    $data->getShippingAddressExternalId()
+                );
+            }
+
+            return $data;
         } catch (\Throwable $e) {
-            throw new BadRequestException('Update cart addresses method error');
+            throw new BadRequestHttpException(
+                sprintf('Failed to update cart addresses: %s', $e->getMessage())
+            );
         }
     }
 }

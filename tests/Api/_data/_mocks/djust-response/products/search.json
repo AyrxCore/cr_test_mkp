@@ -1,0 +1,194 @@
+{
+  "products": {
+    "content": [
+      {
+        "offerPrice": {},
+        "offer": {
+          "customFields": [
+            {"externalId": "OFFER_TARIF_ID", "value": "tarif-renault"}
+          ]
+        },
+        "variant": {
+          "id": "0000001968",
+          "externalId": "fat-peugeot-2",
+          "sku": "10209",
+          "name": "Peugeot",
+          "description": "",
+          "pictureUrls": [],
+          "ean": "",
+          "mpn": ""
+        },
+        "product": {
+          "id": "0000001967",
+          "externalId": "peugeot",
+          "sku": "10208",
+          "name": "Peugeot",
+          "description": "",
+          "brand": "",
+          "mainPictureUrl": null,
+          "tags": [],
+          "unit": null,
+          "productUnit": "item"
+        },
+        "attributes": [
+          {
+            "name": "Accord id",
+            "externalId": "PRODUCT_ACCORD_ID",
+            "value": "010148ae-5c2b-11ec-bfa4-0af08f946010",
+            "values": ["010148ae-5c2b-11ec-bfa4-0af08f946010"]
+          },
+          {
+            "name": "Accord id",
+            "externalId": "PRODUCT_ACCORD_ID",
+            "value": "a99297e4-c179-11ec-ade5-0af08f946010",
+            "values": ["a99297e4-c179-11ec-ade5-0af08f946010"]
+          }
+        ],
+        "supplier": {
+          "id": "0000002975",
+          "name": "RENAULT",
+          "externalId": "e012cf7a-5827-11ec-b121-021d5312eaee"
+        },
+        "navigations": [
+          {
+            "externalId": "NAV_VEHICULES_SOLUTIONS_MOBILITE_ACHAT_LLD_LOA",
+            "name": "Achat, LLD et LOA"
+          },
+          {
+            "externalId": "NAV_VEHICULES_SOLUTIONS_MOBILITE",
+            "name": "Véhicules et solutions de mobilité"
+          },
+          {
+            "externalId": "Root_default",
+            "name": "Root_default"
+          }
+        ]
+      },
+      {
+        "offerPrice": {},
+        "offer": {
+          "customFields": [
+            {"externalId": "OFFER_TARIF_ID", "value": "tarif-stellantis"}
+          ]
+        },
+        "product": {
+          "id": "0000004033-fat",
+          "externalId": "stellantis-fat",
+          "sku": "FAT-STELLANTIS",
+          "name": "STELLANTIS Accord Cadre",
+          "description": "",
+          "brand": null,
+          "mainPictureUrl": null,
+          "tags": [],
+          "unit": null,
+          "productUnit": "item"
+        },
+        "variant": {
+          "id": "0000004034",
+          "externalId": "stellantis-fat-v1",
+          "sku": "FAT-STELLANTIS-V1",
+          "name": "STELLANTIS Accord Cadre",
+          "description": "",
+          "pictureUrls": [],
+          "ean": "",
+          "mpn": ""
+        },
+        "attributes": [],
+        "supplier": {
+          "id": "0000004033",
+          "name": "GROUPE STELLANTIS",
+          "externalId": "cc99d4c0-5827-11ec-8d6f-028bf10cd626"
+        },
+        "navigations": []
+      }
+    ],
+    "pageable": {
+      "pageNumber": 0,
+      "pageSize": 20,
+      "sort": [],
+      "offset": 0,
+      "unpaged": false,
+      "paged": true
+    },
+    "totalPages": 1,
+    "totalElements": 2,
+    "last": true,
+    "numberOfElements": 2,
+    "first": true,
+    "size": 20,
+    "number": 0,
+    "sort": [],
+    "empty": false
+  },
+  "facets": {
+    "brands": [
+      {
+        "id": "",
+        "name": ""
+      },
+      {
+        "id": "",
+        "name": "Peugeot"
+      }
+    ],
+    "attributes": [],
+    "suppliers": [
+      {
+        "id": "0000002975",
+        "name": "RENAULT",
+        "externalId": "e012cf7a-5827-11ec-b121-021d5312eaee"
+      },
+      {
+        "id": "0000004033",
+        "name": "GROUPE STELLANTIS",
+        "externalId": "cc99d4c0-5827-11ec-8d6f-028bf10cd626"
+      }
+    ],
+    "customFields": [],
+    "productTags": [
+      {
+        "id": "0000001912",
+        "name": "made_in_france"
+      },
+      {
+        "id": "0000001913",
+        "name": "achat_durable"
+      }
+    ],
+    "attributesRange": [],
+    "navigations": [
+      {
+        "id": "0000001001",
+        "externalId": "electronique",
+        "name": "Électronique"
+      },
+      {
+        "id": "0000001002",
+        "externalId": "ordinateurs",
+        "name": "Ordinateurs"
+      },
+      {
+        "id": "0000002001",
+        "externalId": "mobilier",
+        "name": "Mobilier"
+      },
+      {
+        "id": "0000002002",
+        "externalId": "bureau",
+        "name": "Bureau"
+      },
+      {
+        "id": "0000002003",
+        "externalId": "chaises",
+        "name": "Chaises"
+      },
+      {
+        "id": "0000004001",
+        "externalId": "consommables",
+        "name": "Consommables"
+      }
+    ],
+    "priceMin": 17,
+    "priceMax": 10000
+  }
+}

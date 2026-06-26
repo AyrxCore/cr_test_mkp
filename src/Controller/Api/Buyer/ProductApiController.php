@@ -6,37 +6,30 @@ namespace App\Controller\Api\Buyer;
 
 use App\Context\ChannelContext;
 use App\Dto\AccountAccordCadre;
+use App\Repository\AccordRepository;
 use App\Repository\AccountRepository;
 use App\Service\AccordCadreSubscriptionService;
 use App\Service\RequestContactMailerService;
 use App\Service\UpplerProductService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Uid\Uuid;
 
 class ProductApiController extends AbstractController
 {
-    public const int DEFAULT_PAGE_NUMBER = 1;
-    public const int DEFAULT_PER_PAGE = 5;
-
     public function __construct(
         private RequestStack $requestStack,
         private UpplerProductService $upplerProductService,
         private AccordCadreSubscriptionService $accordCadreSubscriptionService,
         private RequestContactMailerService $requestContactMailerService,
         private readonly AccountRepository $accountRepository,
+        private readonly AccordRepository $accordRepository,
     ) {
-    }
-
-    #[Route('/api/variant/{id}', name: 'get_variant')]
-    public function variant(int $id): JsonResponse
-    {
-        $variant = $this->upplerProductService->findVariantById($id);
-
-        return new JsonResponse($variant);
     }
 
     /**
@@ -51,18 +44,32 @@ class ProductApiController extends AbstractController
 
         $accountId = (string) $session->get('account')->getId();
 
-        $data = $request->request->all();
+        $data = \json_decode($request->getContent(), true);
 
-        if (!isset($data['accordId'], $data['accordName'])) {
-            throw new BadRequestHttpException('Missing required parameters.');
+        if ($data === null) {
+            throw new BadRequestHttpException('Invalid JSON data.');
         }
 
-        $subscriptionParams = [
-            'accordId' => $data['accordId'],
-            'accordName' => $data['accordName'],
-        ];
+        if (isset($data['accordId'])) {
+            if (!Uuid::isValid($data['accordId'])) {
+                throw new BadRequestHttpException('Invalid accord ID format.');
+            }
 
-        $this->accordCadreSubscriptionService->subscription($subscriptionParams, $accountId, $channelContext->getChannel());
+            $accord = $this->accordRepository->find(Uuid::fromString($data['accordId']));
+            if ($accord === null) {
+                throw new BadRequestException(\sprintf('Accord with ID %s not found.', $data['accordId']));
+            }
+
+            $data['accordName'] = $accord->getName();
+
+            // Souscrire à l'accord-cadre
+            $subscriptionParams = [
+                'accordId' => $data['accordId'],
+                'accordName' => $data['accordName'],
+            ];
+
+            $this->accordCadreSubscriptionService->subscription($subscriptionParams, $accountId, $channelContext->getChannel());
+        }
 
         $account = $this->accountRepository->findOneBy(['id' => $accountId]);
         $email = $channelContext->getChannel()->getChannelParameter()?->getEmail();

@@ -20,11 +20,6 @@ class AdherentNormalizer extends AbstractNormalizer
         return $data instanceof Adherent && $this->normalizer->supportsNormalization($data, $format);
     }
 
-    public function supportsDenormalization($data, $type, $format = null): bool
-    {
-        return $data instanceof Adherent && $this->supportsDenormalization($data, $type, $format);
-    }
-
     /**
      * @param Adherent $object
      */

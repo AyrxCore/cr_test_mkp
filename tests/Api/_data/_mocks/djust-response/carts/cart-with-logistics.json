@@ -1,0 +1,13 @@
+{
+  "content": [
+    {
+      "reference": "CART-WITH-LOGISTICS-001",
+      "productCount": 2,
+      "orderLogistics": [
+        { "reference": "LOGISTIC-SUPPLIER-A" },
+        { "reference": "LOGISTIC-SUPPLIER-B" }
+      ]
+    }
+  ]
+}
+

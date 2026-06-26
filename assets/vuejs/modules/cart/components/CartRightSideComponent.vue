@@ -19,7 +19,7 @@
           <div>Frais de livraison HT :</div>
           <div class="float-right flex items-center">
             <template v-if="showShipmentPrice">
-              {{ shipmentPrice }} €
+              {{ shipmentPriceDisplayed }} €
             </template>
             <VTooltip v-else :triggers="['hover', 'focus']">
               <InformationIconComponent class="text-primary" />
@@ -31,73 +31,64 @@
           </div>
         </div>
         <div
-          class="mb-2 inline-flex w-full justify-between text-sm font-bold text-primary md:text-base xl:text-lg"
+          class="inline-flex w-full justify-between text-sm font-bold text-primary md:text-base xl:text-lg"
         >
           <div>TOTAL HT :</div>
           <div class="float-right">
-            {{
-              showShipmentPrice
-                ? totalWithoutTaxesDisplayed
-                : subTotalWithoutTaxesDisplayed
-            }}€
+            {{ showShipmentPrice ? totalWithoutTaxesDisplayed : subTotalWithoutTaxesDisplayed }}€
           </div>
         </div>
         <div
+          v-if="ecoTaxTotalDisplayed"
+          class="mb-2 inline-flex w-full justify-end"
+        >
+          <span class="rounded py-0.5 text-xs text-gray-700">
+            dont {{ ecoTaxTotalDisplayed }}€ d'éco-part
+          </span>
+        </div>
+        <div
           v-if="showShipmentPrice"
-          class="inline-flex w-full justify-between text-sm md:text-base xl:text-lg"
+          class="mb-2 inline-flex w-full justify-between text-sm md:text-base xl:text-lg"
         >
           <div>TOTAL TTC :</div>
-          <div class="float-right">{{ totalDisplayed }}€</div>
+          <div class="float-right">{{ grandTotalDisplayed }}€</div>
         </div>
       </div>
       <div class="w-full md:pl-8 lg:px-0">
         <slot name="button-next" />
       </div>
     </div>
-    <div v-if="hasPaymentMethods" class="mt-5 flex flex-wrap gap-2">
-      <div v-if="!!CBPaymentMethod" class="rounded-lg bg-white p-2">
-        <img :src="cbPaymentImage" alt="CB Icons" class="max-h-8" />
-      </div>
-      <div v-if="SEPAPaymentMethods.length > 0" class="rounded-lg bg-white p-2">
-        <img :src="sepaPaymentImage" alt="SEPA Icon" class="max-h-8" />
-      </div>
-      <div v-if="showMandatAdminPayment" class="rounded-lg bg-white p-2">
-        <img
-          :src="mandatePaymentImage"
-          alt="Mandat administratif Icon"
-          class="max-h-8"
-        />
+    <div
+      v-if="showPaymentMethods && CBPaymentMethod"
+      class="flex flex-wrap gap-2"
+    >
+      <div class="mt-5 flex flex-wrap gap-2">
+        <div class="rounded-lg bg-white p-2">
+          <img :src="cbPaymentImage" alt="CB Icons" class="max-h-8" />
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
 
-import cbPaymentAsset from '@/vuejs/assets/img/payments/payment_cb.png'
-import sepaPaymentAsset from '@/vuejs/assets/img/payments/payment_sepa.png'
-import mandatePaymentAsset from '@/vuejs/assets/img/payments/payment_mandate.png'
-import InformationIconComponent from '@/vuejs/modules/shared/icon/InformationIconComponent.vue'
-
-import { formatPrice, getImage } from '@/vuejs/services/utils'
 import { useCartStore } from '@/vuejs/stores/cart'
+import { PRODUCT_FDP_PREFIX } from '@/vuejs/services/const'
+import { formatPrice, getImage } from '@/vuejs/services/utils'
+
+import InformationIconComponent from '@/vuejs/modules/shared/icon/InformationIconComponent.vue'
+import cbPaymentAsset from '@/vuejs/assets/img/payments/payment_cb.png'
 
 const cartStore = useCartStore()
 
-const { cart, CBPaymentMethod, SEPAPaymentMethods, showMandatAdminPayment } =
+const { cart, CBPaymentMethod, shippingCostTotal, shippingCostTotalWithTax } =
   storeToRefs(cartStore)
 
 const cbPaymentImage = getImage(cbPaymentAsset)
-const sepaPaymentImage = getImage(sepaPaymentAsset)
-const mandatePaymentImage = getImage(mandatePaymentAsset)
 
 const props = defineProps({
-  showNextButton: {
-    required: false,
-    type: Boolean,
-    default: true,
-  },
   hasPaymentMethods: {
     required: false,
     type: Boolean,
@@ -108,31 +99,51 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  showPaymentMethods: {
+    required: false,
+    type: Boolean,
+    default: false,
+  },
 })
 
 const subTotalWithoutTaxes = computed((): number => {
   let total: number = 0
-  cart.value.orders.forEach((o) => {
-    total += o.items_total_excluding_taxes
+  cart.value.cartOrders.forEach((ol) => {
+    ol.products.forEach((p) => {
+      if (!p.externalId?.startsWith(PRODUCT_FDP_PREFIX)) {
+        total += (p.price ?? 0) * (p.quantity ?? 0)
+      }
+    })
   })
   return total
 })
 
 const subTotalWithoutTaxesDisplayed = computed((): string => {
-  return formatPrice(subTotalWithoutTaxes.value / 100)
+  return formatPrice(subTotalWithoutTaxes.value)
+})
+
+const shipmentPriceDisplayed = computed((): string => {
+  return formatPrice(shippingCostTotal.value)
 })
 
 const totalWithoutTaxesDisplayed = computed((): string => {
-  return formatPrice(cart.value.total_excluding_taxes / 100)
+  return formatPrice(subTotalWithoutTaxes.value + shippingCostTotal.value)
 })
 
-const shipmentPrice = computed((): string => {
-  return formatPrice(
-    (cart.value.total_excluding_taxes - subTotalWithoutTaxes.value) / 100,
-  )
+
+const grandTotalDisplayed = computed((): string => {
+  return formatPrice(cart.value.totalPriceWithTax + shippingCostTotalWithTax.value)
 })
 
-const totalDisplayed = computed((): string => {
-  return formatPrice(cart.value.total / 100)
+const ecoTaxTotalDisplayed = computed((): string | null => {
+  let total = 0
+  cart.value?.cartOrders?.forEach((ol) => {
+    ol.products?.forEach((p) => {
+      if (!p.externalId?.startsWith(PRODUCT_FDP_PREFIX) && p.ecoTax) {
+        total += p.ecoTax * (p.quantity ?? 1)
+      }
+    })
+  })
+  return total > 0 ? formatPrice(total) : null
 })
 </script>

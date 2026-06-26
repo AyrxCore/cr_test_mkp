@@ -1,0 +1,99 @@
+[
+  {
+    "id": "0000004780",
+    "name": "BL COMMUNICATION",
+    "externalId": "d5d9987c-5827-11ec-bfef-0af08f946010",
+    "supplierStatus": "ACTIVE",
+    "totalOffers": 0,
+    "totalOrders": 0,
+    "totalSales": 0,
+    "supplierRating": null,
+    "description": null,
+    "additionalImageLink": [],
+    "logo": null,
+    "isDefault": false,
+    "evaluationCount": null,
+    "externalSource": "EXTERN",
+    "returnPolicy": null,
+    "createdAt": "2026-01-07T10:31:37.487232Z",
+    "updatedAt": "2026-01-07T10:35:35.826711Z",
+    "banner": null,
+    "paymentDueDate": {
+      "paymentDueDateDelay": 0,
+      "paymentDueDateMode": "SIMPLE"
+    },
+    "customFieldValues": []
+  },
+  {
+    "id": "0000000306",
+    "name": "ALPES CONTRÔLES",
+    "externalId": "8eb20aac-d641-11ee-8ca8-021d5312eaee",
+    "supplierStatus": "ACTIVE",
+    "totalOffers": 0,
+    "totalOrders": 0,
+    "totalSales": 0,
+    "supplierRating": null,
+    "description": "alpes controle bla bla bla bla lka\nzadazdzadazd\nazdazdazdazdzadzdad",
+    "additionalImageLink": [],
+    "logo": "https://s3.eu-west-3.amazonaws.com/djust.document.pre-prod/qantis/1757945568829-0d1b71d45447fecc58ac11e7a2b2.png",
+    "isDefault": false,
+    "evaluationCount": null,
+    "externalSource": "CLIENT",
+    "returnPolicy": "",
+    "createdAt": "2025-09-15T14:12:49.160517Z",
+    "updatedAt": "2026-01-14T09:37:55.700925Z",
+    "banner": null,
+    "paymentDueDate": {
+      "paymentDueDateDelay": 0,
+      "paymentDueDateMode": "SIMPLE"
+    },
+    "customFieldValues": [
+      {
+        "customField": {
+          "id": "0000005359",
+          "name": {
+            "FR": "CGV (format HTML)"
+          },
+          "externalId": "SUPPLIER_CGV",
+          "externalSource": "CLIENT",
+          "type": "LONG_TEXT",
+          "mandatory": false,
+          "status": "ACTIVE",
+          "sealedTarget": "SUPPLIER",
+          "role": null,
+          "indexable": false,
+          "faceted": false,
+          "searchable": false,
+          "sortable": false
+        },
+        "value": "Terms and conditions bla bla bla bla lka<br>zadazdzadazd<br>azdazdazdazdzadzdad",
+        "type": "LONG_TEXT"
+      }
+    ]
+  },
+  {
+    "id": "0000004781",
+    "name": "BBA EMBALLAGES",
+    "externalId": "53ef6a24-2d48-11ee-b4fb-021d5312eaee",
+    "supplierStatus": "ACTIVE",
+    "totalOffers": 0,
+    "totalOrders": 0,
+    "totalSales": 0,
+    "supplierRating": null,
+    "description": null,
+    "additionalImageLink": [],
+    "logo": null,
+    "isDefault": false,
+    "evaluationCount": null,
+    "externalSource": "EXTERN",
+    "returnPolicy": null,
+    "createdAt": "2026-01-07T10:31:37.490408Z",
+    "updatedAt": "2026-01-07T10:35:35.876790Z",
+    "banner": null,
+    "paymentDueDate": {
+      "paymentDueDateDelay": 0,
+      "paymentDueDateMode": "SIMPLE"
+    },
+    "customFieldValues": []
+  }
+]

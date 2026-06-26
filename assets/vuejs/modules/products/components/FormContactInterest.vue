@@ -140,7 +140,6 @@ import AlertCircleOutlineIconComponent from '@/vuejs/modules/shared/icon/AlertCi
 
 export interface ContactFormData {
   accordId: string
-  accordName: string
   productName: string
   partnerName: string
 }
@@ -165,7 +164,8 @@ const props = withDefaults(
     productLabel: 'Produit/service concerné',
     showMessage: false,
     messageRequired: false,
-    messagePlaceholder: 'Veuillez préciser votre besoin au partenaire (optionnel)',
+    messagePlaceholder:
+      'Veuillez préciser votre besoin au partenaire (optionnel)',
     closeOnSuccess: false,
     closeDelay: 2000,
   },
@@ -203,14 +203,16 @@ const onFormSubmit = async () => {
       messageTouched.value = true
     }
 
-    if (hasPhoneError.value || (props.messageRequired && hasMessageError.value)) {
+    if (
+      hasPhoneError.value ||
+      (props.messageRequired && hasMessageError.value)
+    ) {
       return
     }
     loadingSubmit.value = true
 
     const data = {
       accordId: props.formData.accordId,
-      accordName: props.formData.accordName,
       email: user.value.email,
       phone: phoneNumber.value,
       product: props.formData.productName,

@@ -133,7 +133,8 @@ const onChangeQuantity = async (event) => {
 
 const addToCart = async () => {
   isAddToCartLoading.value = true
-  await cartStore.addProductsToCart(cartProducts.value)
+  // TODO: adapter à la nouvelle méthode addProductsToCart
+  // await cartStore.addProductsToCart(cartProducts.value)
 
   for (const [, value] of Object.entries(cartProducts.value)) {
     sendGtmEvent('add_to_cart', {

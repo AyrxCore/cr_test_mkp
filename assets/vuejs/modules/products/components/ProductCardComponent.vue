@@ -9,7 +9,7 @@
       >
         <img
           :alt="product.seller.name"
-          :src="getUpplerImage(product.seller.avatar)"
+          :src="product.seller.avatar"
           class="h-full w-full object-contain"
         />
       </div>
@@ -24,22 +24,26 @@
           -{{ product.percent }}%
         </div>
         <div
-          v-else-if="!product.sellable && !product.percent"
+          v-else-if="
+            !productStore.isSellable(product) &&
+            !product.percent &&
+            product.productTopLabel
+          "
           :style="{
             color: betterTextColor('primary'),
           }"
-          class="text-md rounded-md bg-secondary px-2 py-1"
+          class="rounded-md bg-secondary px-2 py-1 text-sm"
         >
-          Offre sur-mesure
+          {{ product.productTopLabel }}
         </div>
-        <AddFavoriteComponent
+        <!-- <AddFavoriteComponent
           v-if="product.variants?.length === 2"
           :favorites-product="product.favorites"
           :product-id="product.id"
           :product-name="product.name"
           :variant-id="variantId"
           class="ml-4"
-        />
+        /> -->
       </div>
     </div>
     <!-- Fin bloc header -->
@@ -53,7 +57,7 @@
         @click="
           sendGtmEvent('select_item', {
             ecommerce: {
-              item_list_id: selectedCategoryId ?? selectedCompanyId,
+              item_list_id: selectedCategoryId ?? selectedSellerId,
               items: formatProductGtmEvent([product]),
             },
           })
@@ -90,7 +94,7 @@
           @click="
             sendGtmEvent('select_item', {
               ecommerce: {
-                item_list_id: selectedCategoryId ?? selectedCompanyId,
+                item_list_id: selectedCategoryId ?? selectedSellerId,
                 items: formatProductGtmEvent([product]),
               },
             })
@@ -110,20 +114,13 @@
           <div class="mt-1 h-[10%] text-primary">
             {{ product.seller.name }}
           </div>
-
           <!-- Fin bloc nom partenaire -->
-
-          <!-- Bloc description -->
-          <div class="h-[35%]">
-            <p
-              class="truncate-custom truncate-custom-3 mt-1 w-full justify-start text-left text-sm md:text-base lg:text-lg"
-              v-html="productDescription"
-            />
-          </div>
         </RouterLink>
-        <!-- Fin bloc description -->
+        <div v-if="visibleTags.length" class="mt-1 flex flex-wrap gap-2">
+          <ProductTagComponent v-for="tag in visibleTags" :key="tag.key" :tag="tag" compact />
+        </div>
         <NotSellableProductCardButtonComponent
-          v-if="!product.sellable"
+          v-if="!productStore.isSellable(product)"
           :product="product"
         />
         <ProductCardButtonsComponent v-else :product="product" />
@@ -133,7 +130,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, PropType, ref } from 'vue'
+import { computed, PropType } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import { ProductPageList } from '@/vuejs/router/pages-list'
@@ -141,21 +138,16 @@ import { useProductStore } from '@/vuejs/stores/product'
 import { getUpplerImage, betterTextColor } from '@/vuejs/services/utils'
 import { formatProductGtmEvent, sendGtmEvent } from '@/vuejs/services/gtm'
 import { Product } from '@/vuejs/types/Product'
-import { Variant } from '@/vuejs/types/Product/Variant'
+// import { Variant } from '@/vuejs/types/Product/Variant'
 
-import AddFavoriteComponent from '@/vuejs/modules/products/components/AddFavoriteComponent.vue'
+// import AddFavoriteComponent from '@/vuejs/modules/products/components/AddFavoriteComponent.vue'
 import ProductCardButtonsComponent from '@/vuejs/modules/products/components/ProductCardButtonsComponent.vue'
 import NotSellableProductCardButtonComponent from '@/vuejs/modules/products/components/NotSellableProductCardButtonComponent.vue'
+import ProductTagComponent from '@/vuejs/modules/products/components/ProductTagComponent.vue'
+import { useProductTags } from '@/vuejs/modules/products/composables/useProductTags'
 
 const productStore = useProductStore()
-const { selectedCategoryId, selectedCompanyId } = storeToRefs(productStore)
-
-const emit = defineEmits([
-  'click-add-cart',
-  'click-product-card',
-  'click-moins-qty',
-  'click-plus-qty',
-])
+const { selectedCategoryId, selectedSellerId } = storeToRefs(productStore)
 
 const props = defineProps({
   product: {
@@ -164,17 +156,15 @@ const props = defineProps({
   },
 })
 
-const quantity = ref<number>(1)
-
-const variantId = computed((): number | null => {
-  if (2 === props.product.variants?.length) {
-    const variant = props.product.variants.filter(function (el: Variant) {
-      return el.sku != null
-    })
-    return variant[0].id
-  }
-  return null
-})
+// const variantId = computed((): string | null => {
+//   if (2 === props.product.variants?.length) {
+//     const variant = props.product.variants.filter(function (el: Variant) {
+//       return el.externalId != null
+//     })
+//     return variant[0].id
+//   }
+//   return null
+// })
 
 const productSlug = computed((): string => {
   return props.product.slug
@@ -184,10 +174,5 @@ const showProductDiscount = computed((): boolean => {
   return props.product.percent > 0
 })
 
-const productDescription = computed((): string => {
-  if (props.product.description?.length > 140) {
-    return props.product.description.substring(0, 140) + '...'
-  }
-  return props.product.description
-})
+const { visibleTags } = useProductTags(computed(() => props.product.tags), 'card')
 </script>

@@ -5,9 +5,6 @@ declare(strict_types=1);
 use App\Dto\SemanticButton;
 use App\Factory\SemanticButtonFactory;
 use Psr\Cache\CacheItemPoolInterface;
-use Zenstruck\Foundry\Test\ResetDatabase;
-
-\uses(ResetDatabase::class);
 
 \it('creates a SemanticButton and caches it', function () {
     $adapterInterface = $this->container->get(CacheItemPoolInterface::class);

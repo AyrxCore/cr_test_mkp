@@ -59,9 +59,6 @@ class CartApiController extends AbstractController implements ChannelAwareContro
             $acceptedStatus = ['completed'];
 
             $paymentMethod = $cart['payment_method'];
-            if (isset($paymentMethod) && $paymentMethod['id'] === CartPayment::CART_PAYMENT_MANDAT_ADMIN) {
-                $acceptedStatus[] = 'new';
-            }
 
             if ($confirmed && \in_array($confirmed['status'], $acceptedStatus, true)) {
                 $this->upplerCartService->confirmCart($cartId);

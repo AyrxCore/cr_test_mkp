@@ -58,7 +58,7 @@ class Adherent
     private Collection $accounts;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adherent:get'])]
+    #[Groups(['adherent:get', 'account:get'])]
     private ?string $siret = null;
 
     private array $attachments = [];

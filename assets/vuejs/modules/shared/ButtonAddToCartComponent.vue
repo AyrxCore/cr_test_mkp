@@ -1,5 +1,6 @@
 <template>
   <ButtonComponent
+    :disabled="disabled"
     :is-loading="isLoading"
     :style="{
       color: betterTextColor('primary'),
@@ -16,7 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType, ref } from 'vue'
+import { computed, PropType, ref } from 'vue'
 
 import { useCartStore } from '@/vuejs/stores/cart'
 import { betterTextColor } from '@/vuejs/services/utils'
@@ -35,15 +36,10 @@ const props = defineProps({
     type: Number,
     default: 1,
   },
-  variantId: {
+  disabled: {
     required: false,
-    type: Number,
-    default: null,
-  },
-  price: {
-    required: false,
-    type: Number,
-    default: null,
+    type: Boolean,
+    default: false,
   },
 })
 
@@ -55,11 +51,21 @@ const addToCart = async (): Promise<void> => {
   if (!cartStore.cart) return
   isLoading.value = true
   try {
-    await cartStore.addProductToCart(props.variantId, props.quantity)
+    const data = [
+      {
+        offerPriceId: offerPriceExternalId.value,
+        quantity: props.quantity,
+      },
+    ]
+    await cartStore.addProductsToCart(data)
+    await cartStore.getCart()
     isLoading.value = false
-  } catch (e) {
   } finally {
     isLoading.value = false
   }
 }
+
+const offerPriceExternalId = computed<string>(() => {
+  return props.product.offerPriceExternalId ?? props.product.variants?.[0]?.offerPriceExternalId
+})
 </script>

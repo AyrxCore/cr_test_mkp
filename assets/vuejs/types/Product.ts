@@ -2,29 +2,40 @@ import { Price } from '@/vuejs/types/Product/Price'
 import { Seller } from '@/vuejs/types/Seller'
 import { AccountAccordCadre } from '@/vuejs/types/AccountAccordCadre'
 import { Category } from '@/vuejs/types/Product/Category'
+import { AccordCadreContent } from '@/vuejs/types/AccordCadre.ts'
+import { Variant } from '@/vuejs/types/Variant'
+
+export enum DjustProductType {
+  SELLABLE = 'SELLABLE',
+  NOT_SELLABLE = 'NOT_SELLABLE',
+  ACCORD_CADRE = 'ACCORD_CADRE',
+}
 
 export interface Product {
-  id: number
+  id: string
+  externalId?: string
   reference: string
   slug?: string
   name: string
   description?: string
   categories: Array<Category>
   images: Array<any>
-  options: Array<any>
+  options: Record<string, any[]>
   properties: ProductProperties
-  variants: []
-  defaultVariantId?: number
-  defaultVariantOptions: Array<any>
+  tags: string[]
+  variants?: Variant[]
+  defaultVariantId: string
   priceReference: number
   percent?: number
   price?: number
   basePrice?: Price
   seller?: Seller
-  accountAccordCadre: AccountAccordCadre
-  isAccordCadre?: boolean
-  sellable?: boolean
+  accountAccordCadre?: AccountAccordCadre
   notSellableFormWithMessage?: boolean
+  productType: DjustProductType
+  tarifId?: string
+  productTopLabel?: string
+  productPricingPhrase?: string
   formWithMessageFat?: boolean
   favorites?: Array<any>
   optionVariant: Array<any>
@@ -32,25 +43,31 @@ export interface Product {
   selectedVariants: Array<any>
   quantity: number
   newTarifNotification?: boolean
+  // Nouveaux champs pour Djust
+  minOrderQuantity?: number
+  maxOrderQuantity?: number
+  attachments?: Array<ProductAttachment>
+  accordCadreContent?: AccordCadreContent
+  accordId?: string
+  sku: string
+  shippingCategory?: string
+  ecoTax?: number | null
+  offerPriceExternalId?: string | null
+}
+
+export interface ProductAttachment {
+  name: string
+  url: string
+  type?: string
 }
 
 export interface ProductProperties {
   [key: string]: string
 }
 
-export interface ProductCategory {
-  id: number
-  checked: boolean
-  name: string
-  parentId: number
-  children: ProductCategory[]
-  image: string
-  productCount: number
-}
-
 export interface ProductFilters {
-  categories?: ProductCategory[]
-  companies?: Array<any>
+  categories?: Category[]
+  sellers?: Array<any>
   properties?: Array<any>
 }
 
@@ -64,6 +81,8 @@ export interface ProductCollection {
   results: Array<Product>
   page: number
   resultsCount: number
+  accordCadres?: Array<Product>
+  accordCadresCount?: number
 }
 
 export interface ProductStoreState {
@@ -73,7 +92,7 @@ export interface ProductStoreState {
   cart: []
   selectedCategoryId?: string
   selectedProperties?: object
-  selectedCompanyId?: string
+  selectedSellerId?: string
   searchTerms?: string
   productVariants: []
   productVariantsOptions: []

@@ -27,12 +27,12 @@
         </div>
         <div class="grid-rows grid grid-flow-col gap-6">
           <div class="mb-6">
-            <LabelField title="Téléphone fixe" />
+            <LabelField title="Téléphone" />
             <InputField
               v-model="userStore.editingInfo.phone"
               type="text"
-              pattern="^((\+)33|0)[1-9](\d{2}){4}$"
-              title="Ex: 0478123456"
+              pattern="^(?:0(?=(?:\D*\d){9}$)[\d\s]+|\+(?=(?:\D*\d){10,15}$)[\d\s]+)$"
+              title="Ex: +33 6 12 34 56 78 ou 0478123456 ou +352 27 86 14 50 (uniquement chiffres, espaces et +)"
             />
           </div>
         </div>

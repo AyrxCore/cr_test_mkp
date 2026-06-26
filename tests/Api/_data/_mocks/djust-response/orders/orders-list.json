@@ -1,0 +1,116 @@
+{
+  "content": [
+    {
+      "id": "0000012345",
+      "reference": "REF-2024-001",
+      "createdAt": "2024-01-15T10:00:00+00:00",
+      "updatedAt": "2024-01-16T12:00:00+00:00",
+      "validatedAt": "2024-01-16T11:00:00+00:00",
+      "orderLogisticPrices": {
+        "totalPriceWithTax": 150.50,
+        "totalPriceWithoutTax": 125.00,
+        "totalShippingFeesWithoutTax": 15.00
+      },
+      "orderLogistics": [
+        {
+          "id": "log-001",
+          "status": "CONFIRMED",
+          "shippingAddressSnapshot": {
+            "fullName": "Jean Dupont",
+            "address": "123 Rue de la Paix",
+            "additionalAddress": "Bâtiment A",
+            "zipcode": "75001",
+            "city": "Paris",
+            "country": "France"
+          },
+          "billingAddressSnapshot": {
+            "fullName": "Jean Dupont",
+            "address": "123 Rue de la Paix",
+            "zipcode": "75001",
+            "city": "Paris",
+            "country": "France"
+          },
+          "shippingTrackingUrl": "https://tracking.example.com/123",
+          "supplierSnapshot": {
+            "name": "Test Seller"
+          },
+          "lines": [
+            {
+              "quantity": 2,
+              "orderLogisticLineProductDto": {
+                "djustProductUuid": "prod-123",
+                "externalId": "ext-123",
+                "name": "Cahier A4",
+                "mainImageUrl": "https://example.com/image.jpg"
+              },
+              "orderLogisticLineProductVariantDto": {
+                "sku": "SKU-123",
+                "externalReference": "REF-123"
+              },
+              "orderLogisticLinePriceDto": {
+                "itemPriceWithoutTaxes": 50.00,
+                "totalPriceWithoutTaxes": 100.00
+              }
+            }
+          ],
+          "customFieldValues": [
+            {
+              "customField": {
+                "externalId": "COMMERCIAL_ORDER_PARTNER_INVOICE"
+              },
+              "value": "https://example.com/invoice-001.pdf"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "0000012346",
+      "reference": "REF-2024-002",
+      "createdAt": "2024-01-20T14:00:00+00:00",
+      "updatedAt": "2024-01-21T09:00:00+00:00",
+      "validatedAt": "2024-01-21T08:00:00+00:00",
+      "orderLogisticPrices": {
+        "totalPriceWithTax": 89.90,
+        "totalPriceWithoutTax": 75.00,
+        "totalShippingFeesWithoutTax": 10.00
+      },
+      "orderLogistics": [
+        {
+          "id": "log-002",
+          "status": "SHIPPED",
+          "shippingAddressSnapshot": {
+            "fullName": "Marie Martin",
+            "address": "456 Avenue Victor Hugo",
+            "zipcode": "69001",
+            "city": "Lyon",
+            "country": "France"
+          },
+          "supplierSnapshot": {
+            "name": "Another Seller"
+          },
+          "lines": [
+            {
+              "quantity": 1,
+              "orderLogisticLineProductDto": {
+                "djustProductUuid": "prod-456",
+                "externalId": "ext-456",
+                "name": "Stylos Bille",
+                "mainImageUrl": "https://example.com/pen.jpg"
+              },
+              "orderLogisticLineProductVariantDto": {
+                "sku": "SKU-456",
+                "externalReference": "REF-456"
+              },
+              "orderLogisticLinePriceDto": {
+                "itemPriceWithoutTaxes": 65.00,
+                "totalPriceWithoutTaxes": 65.00
+              }
+            }
+          ],
+          "customFieldValues": []
+        }
+      ]
+    }
+  ]
+}

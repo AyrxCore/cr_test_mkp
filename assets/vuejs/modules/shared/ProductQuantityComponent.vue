@@ -3,9 +3,9 @@
     <div class="num-in">
       <span
         :class="{
-          '!cursor-not-allowed': qte == 1,
+          '!cursor-not-allowed': qte <= minQty,
         }"
-        :disabled="qte == 1"
+        :disabled="qte <= minQty"
         :style="{
           color: betterTextColor('secondary'),
         }"
@@ -21,6 +21,10 @@
         @input="onInput"
       />
       <span
+        :class="{
+          '!cursor-not-allowed': qte >= maxQty,
+        }"
+        :disabled="qte >= maxQty"
         :style="{
           color: betterTextColor('secondary'),
         }"
@@ -33,7 +37,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { betterTextColor } from '@/vuejs/services/utils'
 
 const emit = defineEmits(['updateQuantity', 'updateQuantityInput'])
@@ -42,19 +46,37 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  minQuantity: {
+    type: Number,
+    default: 1,
+  },
+  maxQuantity: {
+    type: Number,
+    default: 999,
+  },
 })
 
-const qte = ref<number>(props.quantity)
+const minQty = computed(() => Math.max(1, props.minQuantity))
+const maxQty = computed(() => props.maxQuantity)
+
+const qte = ref<number|null>(Math.max(Math.max(1, props.minQuantity), props.quantity))
+
+watch(
+  () => props.quantity,
+  (newQty) => {
+    qte.value = Math.max(minQty.value, newQty)
+  },
+)
 
 const onInput = (event: InputEvent): void => {
-  const inputValue = event.target.value
-  const onlyNumbers = inputValue.replace(/[^0-9]/g, '') // Filtrer uniquement les chiffres
-  if (onlyNumbers === 0 && onlyNumbers !== '') {
-    qte.value = 1
-  } else if (onlyNumbers > 999) {
-    qte.value = 999
-  } else if (onlyNumbers.length === 0) {
-    qte.value = ''
+  const inputValue = (event.target as HTMLInputElement).value
+  const onlyNumbers = inputValue.replace(/[^0-9]/g, '')
+  if (onlyNumbers.length === 0) {
+    qte.value = null
+  } else if (parseInt(onlyNumbers) === 0) {
+    qte.value = minQty.value
+  } else if (parseInt(onlyNumbers) > maxQty.value) {
+    qte.value = maxQty.value
   } else {
     qte.value = parseInt(onlyNumbers)
   }
@@ -64,17 +86,19 @@ const onInput = (event: InputEvent): void => {
 }
 
 const onBlur = (): void => {
-  if (qte.value !== props.quantity && qte.value >= 1 && qte.value <= 999) {
-    emit('updateQuantity', {
-      quantity: qte.value,
-    })
-  } else {
-    qte.value = props.quantity
+  if (!qte.value || qte.value < minQty.value) {
+    qte.value = minQty.value
+    emit('updateQuantity', { quantity: qte.value })
+  } else if (qte.value > maxQty.value) {
+    qte.value = maxQty.value
+    emit('updateQuantity', { quantity: qte.value })
+  } else if (qte.value !== props.quantity) {
+    emit('updateQuantity', { quantity: qte.value })
   }
 }
 
 const decrement = (): void => {
-  if (qte.value > 1) {
+  if (qte.value > minQty.value) {
     qte.value--
     emit('updateQuantity', {
       quantity: qte.value,
@@ -83,7 +107,7 @@ const decrement = (): void => {
 }
 
 const increment = (): void => {
-  if (qte.value < 999) {
+  if (qte.value < maxQty.value) {
     qte.value++
     emit('updateQuantity', {
       quantity: qte.value,
@@ -103,7 +127,7 @@ const increment = (): void => {
 }
 
 .skin-7 .num-in span {
-  @apply float-left flex h-[30px] w-[24px] cursor-pointer items-center justify-center border border-x border-secondary bg-secondary  text-center text-base text-white md:text-lg lg:text-xl;
+  @apply float-left flex h-[30px] w-[24px] cursor-pointer items-center justify-center border border-x border-secondary bg-secondary text-center text-base text-white md:text-lg lg:text-xl;
   -webkit-transition: all 0.3s;
   -o-transition: all 0.3s;
   transition: all 0.3s;

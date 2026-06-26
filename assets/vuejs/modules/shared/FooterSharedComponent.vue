@@ -6,7 +6,7 @@
     class="footer pb-4"
   >
     <div
-      class="second-part grid grid-cols-1 gap-4 px-8 pb-5 pt-10 md:grid-cols-2 md:gap-8 md:px-16 xl:grid-cols-4 xl:gap-16"
+      class="second-part grid grid-cols-1 gap-4 px-8 pb-5 pt-10 md:grid-cols-2 md:gap-8 md:px-16 xl:grid-cols-3 xl:gap-16"
     >
       <div class="order-1 mb-2 md:mb-4">
         <h3 class="mb-4 md:mb-6 lg:mb-7">
@@ -65,81 +65,47 @@
               Mes commandes
             </RouterLink>
           </li>
-          <li
-            v-if="channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.FAVORITES)"
-            class="mb-1"
-          >
-            <RouterLink
-              :to="{ name: AccountPageList.FAVORITES_LIST }"
-              @click="
-                sendGtmEvent('footer_click', {
-                  link_text: $event.target.innerText,
-                  link_url: router.resolve({
-                    name: AccountPageList.FAVORITES_LIST,
-                  }).fullPath,
-                  origin_url: router.currentRoute.value.fullPath,
-                })
-              "
-            >
-              Mes favoris
-            </RouterLink>
-          </li>
-          <li
-            v-if="
-              channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.SAVED_CARTS)
-            "
-            class="mb-1"
-          >
-            <RouterLink
-              :to="{ name: AccountPageList.SAVED_CARTS }"
-              @click="
-                sendGtmEvent('footer_click', {
-                  link_text: $event.target.innerText,
-                  link_url: router.resolve({
-                    name: AccountPageList.SAVED_CARTS,
-                  }).fullPath,
-                  origin_url: router.currentRoute.value.fullPath,
-                })
-              "
-            >
-              Mes paniers sauvegardés
-            </RouterLink>
-          </li>
-        </ul>
-      </div>
-      <div class="order-4 mb-2 md:order-3 md:mb-4">
-        <div class="flex flex-col md:flex-row md:justify-between lg:flex-col">
-          <div class="md:mt-0">
-            <h3 class="mb-6 lg:mb-7">Paiement sécurisé par&nbsp;:</h3>
-            <div class="flex flex-col">
-              <a
-                class="mb-3"
-                href="https://www.lemonway.com/conditions-generales-dutilisation"
-                target="_blank"
+          <!--
+            TODO (MKP-1411): "Mes favoris" temporairement masqué dans le footer.
+            À rétablir (décommenter) quand la fonctionnalité Favoris sera disponible via DJUST.
+            <li class="mb-1">
+              <RouterLink
+                :to="{ name: AccountPageList.FAVORITES_LIST }"
+                @click="
+                  sendGtmEvent('footer_click', {
+                    link_text: $event.target.innerText,
+                    link_url: router.resolve({
+                      name: AccountPageList.FAVORITES_LIST,
+                    }).fullPath,
+                    origin_url: router.currentRoute.value.fullPath,
+                  })
+                "
               >
-                <img
-                  :src="lemonwayLogoImg"
-                  alt="header"
-                  class="logo-lemonway"
-                />
-              </a>
-              <span class="text-xs">
-                Enregistrement sous l'identifiant 95577 par l’Autorité de
-                Contrôle Prudentiel et de Résolution (ACPR) comme agent
-                prestataire de services de paiement de Lemonway (établissement
-                de paiement dont le siège social est situé au 8 rue du Sentier,
-                75002 Paris, agréé par l’ACPR sous le numéro 16568)
-                <a
-                  class="underline"
-                  href="https://www.regafi.fr/"
-                  target="_blank"
-                >
-                  Regafi
-                </a>
-              </span>
-            </div>
-          </div>
-        </div>
+                Mes favoris
+              </RouterLink>
+            </li>
+          -->
+          <!--
+            TODO (MKP-1411): "Mes paniers sauvegardés" temporairement masqué dans le footer.
+            À rétablir (décommenter) quand la fonctionnalité Paniers sauvegardés sera disponible via DJUST.
+            <li class="mb-1">
+              <RouterLink
+                :to="{ name: AccountPageList.SAVED_CARTS }"
+                @click="
+                  sendGtmEvent('footer_click', {
+                    link_text: $event.target.innerText,
+                    link_url: router.resolve({
+                      name: AccountPageList.SAVED_CARTS,
+                    }).fullPath,
+                    origin_url: router.currentRoute.value.fullPath,
+                  })
+                "
+              >
+                Mes paniers sauvegardés
+              </RouterLink>
+            </li>
+          -->
+        </ul>
       </div>
       <div class="order-2 mb-2 md:order-4 md:mb-4">
         <h3 class="mb-4 md:mb-6 lg:mb-7">Une question ?</h3>
@@ -212,10 +178,10 @@
         </div>
         <div class="mb-4 mr-4 md:mb-0">
           <a
-            href="https://www.lemonway.com/conditions-generales-dutilisation"
+            :href="djustPayTermsLink"
             target="_blank"
           >
-            Conditions générales d’utilisation Lemonway
+            Conditions générales d'utilisation Djust Pay
           </a>
         </div>
       </div>
@@ -272,11 +238,11 @@ import router, { PageList } from '@/vuejs/router'
 import { AccountPageList } from '@/vuejs/router/pages-list'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { betterTextColor, getImage } from '@/vuejs/services/utils'
-import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
+// TODO (MKP-1411): Import à décommenter quand les fonctionnalités Favoris/Paniers seront disponibles via DJUST
+// import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
 import { sendGtmEvent } from '@/vuejs/services/gtm'
 
 import QantisLogoComponent from '@/vuejs/modules/shared/icon/QantisLogoComponent.vue'
-import lemonwayLogo from '@/vuejs/assets/img/lemonway_footer_logo.png'
 import coqVertLogo from '@/vuejs/assets/img/coq_vert_footer_logo.png'
 import MailIconComponent from '@/vuejs/modules/shared/icon/MailIconComponent.vue'
 import PhoneIconComponent from '@/vuejs/modules/shared/icon/PhoneIconComponent.vue'
@@ -284,8 +250,8 @@ import YoutubeIconComponent from '@/vuejs/modules/shared/icon/YoutubeIconCompone
 import TwitterIconComponent from '@/vuejs/modules/shared/icon/TwitterIconComponent.vue'
 import LinkedinIconComponent from '@/vuejs/modules/shared/icon/LinkedinIconComponent.vue'
 
-const lemonwayLogoImg = getImage(lemonwayLogo)
 const coqVertLogoImg = getImage(coqVertLogo)
+const djustPayTermsLink = 'https://www.adyen.com/legal/adyen-terms-and-conditions'
 
 const channelStore = useChannelStore()
 
@@ -329,11 +295,6 @@ const memberArea = computed((): string => {
   @apply m-5 sm:mx-12 xl:mx-24;
 }
 
-.footer .logo-lemonway {
-  height: 45px;
-  width: 180px;
-  top: 289px;
-}
 
 .footer ul li a:hover {
   @apply border-b-2 border-secondary;

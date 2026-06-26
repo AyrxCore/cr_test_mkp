@@ -7,17 +7,25 @@ namespace App\State\Provider;
 use ApiPlatform\Metadata\CollectionOperationInterface;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
-use App\Controller\Api\Buyer\ProductApiController;
-use App\Factory\ProductFactory;
-use App\Service\UpplerProductService;
-use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use App\Dto\Product;
+use App\Enum\Djust\DjustProductType;
+use App\Factory\DjustProductFactory;
+use App\Mapper\DjustSearchParamsMapper;
+use App\Service\Djust\DjustProductService;
+use App\Service\Djust\Search\DjustSearchFiltersBuilder;
+use App\Service\Djust\Search\DjustSearchService;
+use App\Service\Djust\Search\Transformer\DjustSearchResultTransformer;
 
 readonly class ProductProvider implements ProviderInterface
 {
-    public function __construct(public UpplerProductService $upplerProductService, private ProductFactory $productFactory, private NormalizerInterface $normalizer)
-    {
+    public function __construct(
+        private DjustSearchParamsMapper $djustSearchParamsMapper,
+        private DjustSearchService $djustSearchService,
+        private DjustProductService $djustProductService,
+        private DjustProductFactory $djustProductFactory,
+        private DjustSearchFiltersBuilder $djustSearchFiltersBuilder,
+        private DjustSearchResultTransformer $searchResultTransformer,
+    ) {
     }
 
     /**
@@ -27,65 +35,108 @@ readonly class ProductProvider implements ProviderInterface
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
         if ($operation instanceof CollectionOperationInterface) {
-            try {
-                $filters = $context['filters'] ?? [];
-                $page = $filters['page'] ?? ProductApiController::DEFAULT_PAGE_NUMBER;
-                $perPage = $filters['perPage'] ?? ProductApiController::DEFAULT_PER_PAGE;
-                $withFilters = $filters['withFilters'] ?? false;
+            $filters = $context['filters'] ?? [];
+            $filters['sellers'] = isset($filters['sellers']) ? (array) $filters['sellers'] : [];
 
-                $apiResponse = $this->upplerProductService->findProducts(
-                    options: $this->buildSearchOptions($filters),
-                    page: (int) $page,
-                    perPage: (int) $perPage
+            if (!empty($filters['splitSearch'])) {
+                $search = $this->djustSearchService->searchSplit($context);
+                $accordCadres = $search['accordCadres']['content'] ?? [];
+                $mappedAccordCadres = \array_map(
+                    fn (array $item) => $this->searchResultTransformer->transformSearchResultItem($item),
+                    $accordCadres,
+                );
+                $accordCadresProducts = $this->filterDisplayableAccordCadres(
+                    $this->djustProductFactory->createAndAddToCollection($mappedAccordCadres)
                 );
 
-                $products = $this->normalizer->normalize($this->productFactory->createAndAddToCollection($apiResponse['results']), 'json', ['groups' => 'products:get']);
-                $result = new ArrayCollection();
-                $result->set('results', $products);
-
-                if ($withFilters) {
-                    $result->set('page', $apiResponse['page']);
-                    $result->set('resultsCount', $apiResponse['results_count']);
-                    $result->set('filters', $this->normalizer->normalize($this->productFactory->buildFilter($apiResponse['filters'])));
-                    $result->set('parameters', $this->productFactory->buildParameter($apiResponse['parameters']));
-                }
-
-                return [$result];
-            } catch (BadRequestHttpException $badRequestException) {
-                return [
-                    'error' => [
-                        'message' => 'An error occurred while retrieving the products.',
-                        'details' => $badRequestException->getMessage(),
+                return \array_merge(
+                    $this->buildSearchResponse($search, $filters),
+                    [
+                        'accordCadres' => $accordCadresProducts,
+                        'accordCadresCount' => \count($accordCadresProducts),
                     ],
-                ];
+                );
             }
+
+            $params = $this->djustSearchParamsMapper->fromContext($context);
+            $search = $this->djustSearchService->search($params);
+
+            return $this->buildSearchResponse($search, $filters);
         }
 
-        $product = $this->upplerProductService->findProductById($uriVariables['id']);
+        $externalId = (string) $uriVariables['id'];
 
-        return $this->productFactory->create($product);
+        $fullProduct = $this->djustProductService->getFullProduct($externalId);
+
+        return $this->djustProductFactory->create($fullProduct);
     }
 
-    private function buildSearchOptions(array $filters): array
+    private function buildSearchResponse(array $search, array $requestedFilters = []): array
     {
-        $options = [];
+        $products = $search['products']['content'] ?? [];
+        $mappedProducts = \array_map(
+            fn (array $item) => $this->searchResultTransformer->transformSearchResultItem($item),
+            $products,
+        );
+        $productDtos = $this->filterDisplayableProducts(
+            $this->djustProductFactory->createAndAddToCollection($mappedProducts)
+        );
 
-        if (!empty($filters['name'])) {
-            $options['name'] = $filters['name'];
+        $filters = $this->djustSearchFiltersBuilder->buildFilter($search['facets'] ?? [], $requestedFilters);
+
+        return [
+            'results' => $productDtos,
+            'resultsCount' => $search['products']['totalElements'] ?? \count($productDtos),
+            'page'         => $search['products']['pageable']['pageNumber'] ?? 0,
+            'totalPages'   => $search['products']['totalPages'] ?? 1,
+            'filters'      => $filters,
+        ];
+    }
+
+    /**
+     * @param Product[] $products
+     *
+     * @return Product[]
+     */
+    private function filterDisplayableProducts(array $products): array
+    {
+        return $this->filterProducts($products, fn (Product $p): bool => !$this->isInvalidAccordCadreProduct($p));
+    }
+
+    /**
+     * @param Product[] $products
+     *
+     * @return Product[]
+     */
+    private function filterDisplayableAccordCadres(array $products): array
+    {
+        return $this->filterProducts($products, fn (Product $p): bool => !$this->isInvalidAccordCadrePayload($p));
+    }
+
+    /**
+     * @param Product[]        $products
+     * @param callable(Product): bool $predicate
+     *
+     * @return Product[]
+     */
+    private function filterProducts(array $products, callable $predicate): array
+    {
+        return \array_values(\array_filter($products, $predicate));
+    }
+
+    private function isInvalidAccordCadreProduct(Product $product): bool
+    {
+        if ($product->getProductType() !== DjustProductType::ACCORD_CADRE->value) {
+            return false;
         }
 
-        if (!empty($filters['categories'])) {
-            $options['categories'] = [$filters['categories']];
-        }
+        return $this->isInvalidAccordCadrePayload($product);
+    }
 
-        if (!empty($filters['companies'])) {
-            $options['companies'] = [$filters['companies']];
-        }
-
-        if (!empty($filters['properties'])) {
-            $options['properties'] = [\json_decode($filters['properties'], true)];
-        }
-
-        return $options;
+    private function isInvalidAccordCadrePayload(Product $product): bool
+    {
+        return $product->getAccordCadreContent() === null
+            || $product->getAccordId() === null
+            || $product->getTarifId() === null;
     }
 }

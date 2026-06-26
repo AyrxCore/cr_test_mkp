@@ -1,5 +1,5 @@
 import BaseClientService from '@/vuejs/services/BaseClientService'
-import { AccordApiResponse } from '@/vuejs/types/Accord'
+import { AccordApiResponse } from '@/vuejs/types/AccordCadre.ts'
 
 export default class AccordHttpClient extends BaseClientService {
   public fetchAccordWithStores(accordId: string): Promise<AccordApiResponse> {

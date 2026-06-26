@@ -1,0 +1,56 @@
+{
+  "stories": [
+    {
+      "name": "GROUPE STELLANTIS",
+      "content": {
+        "accordCadreName": "GROUPE STELLANTIS",
+        "accordCadreType": "STANDARD",
+        "tarifId": "tarif-stellantis",
+        "labelCtaRattachement": "Activer mes avantages",
+        "urlCtaRattachement": "",
+        "statutsRattachement": [
+          {
+            "labelPending": "En cours d'activation",
+            "labelActivated": "Activé",
+            "labelNotActivated": "A activer"
+          }
+        ],
+        "body": [
+          {
+            "component": "bannerBlock",
+            "logoUrl": "https://example.com/logo-stellantis.jpg",
+            "imgBannerUrlDesktop": "https://example.com/banner-stellantis.jpg",
+            "imgBannerUrlMobile": "https://example.com/banner-stellantis-mobile.jpg",
+            "badgeTextBottom": "-50%"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RENAULT",
+      "content": {
+        "accordCadreName": "RENAULT",
+        "accordCadreType": "STANDARD",
+        "tarifId": "tarif-renault",
+        "labelCtaRattachement": "Activer mes avantages",
+        "urlCtaRattachement": "",
+        "statutsRattachement": [
+          {
+            "labelPending": "En cours d'activation",
+            "labelActivated": "Activé",
+            "labelNotActivated": "A activer"
+          }
+        ],
+        "body": [
+          {
+            "component": "bannerBlock",
+            "logoUrl": "https://example.com/logo-renault.jpg",
+            "imgBannerUrlDesktop": "https://example.com/banner-renault.jpg",
+            "imgBannerUrlMobile": "https://example.com/banner-renault-mobile.jpg",
+            "badgeTextBottom": "-30%"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "carts": [
+    {
+      "id": "0a28ec92-9b22-15e2-819b-2698f98500b8",
+      "name": "b14c66de-7554-4bf4-97d0-c5ed0618aab4",
+      "creationDate": "2025-12-16T09:58:38.214645Z",
+      "type": "CART",
+      "status": "INIT",
+      "numberOfProducts": 6,
+      "numberOfLines": 2,
+      "currency": "EUR",
+      "totalPrice": {
+        "priceWithoutTax": 81.0,
+        "priceWithTax": 81.0,
+        "taxAmount": 0e-8
+      },
+      "totalDiscountPrice": {
+        "priceWithoutTax": 81.0,
+        "priceWithTax": 81.0,
+        "taxAmount": 0e-8
+      },
+      "updatedAt": "2025-12-16T09:58:38.213766Z"
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "totalElement": 1,
+  "sort": []
+}

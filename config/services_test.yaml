@@ -1,2 +1,5 @@
 services:
-  App\Tests\MockClientCallback: ~
+  App\Tests\MockClientCallback:
+    arguments:
+      $djustBaseUrl: '%env(DJUST_API_BASE_URL)%'
+      $upplerBaseUrl: '%env(UPPLER_API_URL)%'

@@ -27,8 +27,8 @@
             :key="key"
             :saved-cart="savedCart"
             @cancel="showFormSavedCart = false"
-            @submit="onSubmit"
             @delete="onDelete"
+            @submit="onSubmit"
             @add-to-cart="onAddToCart"
           />
         </div>
@@ -97,7 +97,8 @@ const onAddToCart = async (event) => {
         quantity: value.quantity,
       })
     }
-    await cartStore.addProductsToCart(cartProducts)
+    // TODO: adapter à la nouvelle méthode addProductsToCart
+    // await cartStore.addProductsToCart(cartProducts)
 
     await savedCartStore.fetchSavedCarts()
     deleteSavedCart.value = false

@@ -1,8 +1,8 @@
 {
   "@context": "\/api\/contexts\/ExpertContent",
   "@id": "\/api\/expert-contents",
-  "@type": "hydra:Collection",
-  "hydra:member": [
+  "@type": "Collection",
+  "member": [
     {
       "@id": "\/api\/expert-contents\/optimisations-marketplace-1",
       "@type": "ExpertContent",
@@ -154,5 +154,5 @@
       "articleImgMobile": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/ee\/ca\/5d777701925353338453a81c3fdf.jpg"
     }
   ],
-  "hydra:totalItems": 5
+  "totalItems": 5
 }

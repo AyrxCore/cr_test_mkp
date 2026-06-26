@@ -8,7 +8,7 @@
         </h3>
         <div class="mt-5 items-center rounded-lg bg-white p-5">
           {{
-            formatAddress(selectedBillingAddress) ||
+            formatAddress(displayedBillingAddress) ||
             'Aucune adresse sélectionnée'
           }}
           <p v-if="billingAddresses.length > 0" class="mt-5">
@@ -18,11 +18,11 @@
               class="h-[35px] w-full rounded-md py-0 text-center placeholder-gray-400"
               @change="selectAddress(ADDRESS_BILLING)"
             >
-              <option :value="0">Choisir une autre adresse</option>
+              <option :value="''">Choisir une autre adresse</option>
               <option
                 v-for="address in billingAddresses"
-                :key="address.id"
-                :value="address.id"
+                :key="address.externalId"
+                :value="address.externalId"
               >
                 {{ formatAddress(address) }}
               </option>
@@ -49,11 +49,11 @@
               class="h-[35px] w-full rounded-md py-0 text-center placeholder-gray-400"
               @change="selectAddress(ADDRESS_SHIPPING)"
             >
-              <option :value="0">Choisir une autre adresse</option>
+              <option :value="''">Choisir une autre adresse</option>
               <option
                 v-for="address in shippingAddresses"
-                :key="address.id"
-                :value="address.id"
+                :key="address.externalId"
+                :value="address.externalId"
               >
                 {{ formatAddress(address) }}
               </option>
@@ -71,10 +71,13 @@
         </RouterLink>
       </div>
     </div>
-    <CartRightSideComponent :show-shipment-price="false">
+    <CartRightSideComponent :show-shipment-price="false" :show-payment-methods="true">
       <template #title>Récapitulatif panier</template>
       <template #button-next>
         <ButtonComponent
+          :disabled="
+            !selectedBillingAddress?.id || !selectedShippingAddress?.id
+          "
           :is-loading="isLoading"
           class="button-primary mt-3 w-full"
           @click="goToShipments"
@@ -111,55 +114,46 @@ const cartStore = useCartStore()
 const addressStore = useAddressStore()
 
 const {
-  defaultAddress,
   shippingAddresses: storeShippingAddresses,
   billingAddresses: storeBillingAddresses,
-  defaultBillingAddress,
-  defaultShippingAddress,
 } = storeToRefs(addressStore)
 
 const { cart } = storeToRefs(cartStore)
 
-const allShippingAddresses = [
-  ...storeShippingAddresses.value,
-  defaultAddress.value,
-]
+const allShippingAddresses = computed((): Address[] => storeShippingAddresses.value)
 
-const selectedShippingAddress = computed((): Address => {
-  const selected = allShippingAddresses.find(
-    (a) => a.id === cart.value.shipping_address?.id,
-  )
-  return selected || defaultShippingAddress.value
+const selectedShippingAddress = computed((): Address | null => {
+  return allShippingAddresses.value.find(
+    (a) => a.externalId === cart.value.shippingAddressExternalId,
+  ) ?? null
 })
 
 const shippingAddresses = computed((): Address[] => {
-  if (!selectedShippingAddress.value) return allShippingAddresses
-  return allShippingAddresses.filter(
-    (a) => a.id !== selectedShippingAddress.value.id,
+  if (!selectedShippingAddress.value) return allShippingAddresses.value
+  return allShippingAddresses.value.filter(
+    (a) => a.externalId !== selectedShippingAddress.value!.externalId,
   )
 })
 
-const allBillingAddresses = [
-  ...storeBillingAddresses.value,
-  defaultAddress.value,
-]
+const allBillingAddresses = computed((): Address[] => storeBillingAddresses.value)
 
-const selectedBillingAddress = computed((): Address => {
-  const selected = allBillingAddresses.find(
-    (a) => a.id === cart.value.billing_address?.id,
-  )
-  return selected || defaultBillingAddress.value
+const selectedBillingAddress = computed((): Address | null => {
+  return allBillingAddresses.value.find(
+    (a) => a.externalId === cart.value.billingAddressExternalId,
+  ) ?? null
 })
 const billingAddresses = computed((): Address[] => {
-  if (!selectedBillingAddress.value) return allBillingAddresses
-  return allBillingAddresses.filter(
-    (a) => a.id !== selectedBillingAddress.value.id,
+  if (!selectedBillingAddress.value) return allBillingAddresses.value
+  return allBillingAddresses.value.filter(
+    (a) => a.externalId !== selectedBillingAddress.value!.externalId,
   )
 })
 
-const selectedShippingAddressId = ref<number>(0)
-const selectedBillingAddressId = ref<number>(0)
+const selectedShippingAddressId = ref<string>('')
+const selectedBillingAddressId = ref<string>('')
 const isLoading = ref<boolean>(false)
+// Adresse affichée manuellement : mise à jour uniquement après la fin de toutes les requêtes
+const displayedBillingAddress = ref<Address | null>(null)
 
 const goToShipments = async (): Promise<void> => {
   if (!selectedBillingAddress.value || !selectedShippingAddress.value) {
@@ -169,8 +163,8 @@ const goToShipments = async (): Promise<void> => {
     return
   }
   if (
-    !cartStore.cart.shipping_address?.id ||
-    !cartStore.cart.billing_address?.id
+    !cartStore.cart.shippingAddressExternalId ||
+    !cartStore.cart.billingAddressExternalId
   ) {
     isLoading.value = true
     await selectAddress('all')
@@ -181,21 +175,32 @@ const goToShipments = async (): Promise<void> => {
 
 const selectAddress = async (type: string): Promise<void> => {
   const data = {
-    shippingAddressId:
-      selectedShippingAddress.value?.id || cartStore.cart.shipping_address?.id,
-    billingAddressId:
-      selectedBillingAddress.value?.id || cartStore.cart.billing_address?.id,
+    shippingAddressExternalId:
+      selectedShippingAddress.value?.externalId ||
+      cartStore.cart.shippingAddressExternalId,
+    billingAddressExternalId:
+      selectedBillingAddress.value?.externalId ||
+      cartStore.cart.billingAddressExternalId,
   }
   if (type === ADDRESS_SHIPPING) {
-    data.shippingAddressId = selectedShippingAddressId.value
+    data.shippingAddressExternalId = selectedShippingAddressId.value
   } else if (type === ADDRESS_BILLING) {
-    data.billingAddressId = selectedBillingAddressId.value
+    data.billingAddressExternalId = selectedBillingAddressId.value
   }
+
+  const isBillingUpdate = type === ADDRESS_BILLING || type === 'all'
+
   isLoading.value = true
   await cartStore.updateCartAddress({ cartId: cartStore.cart.id, ...data })
-  selectedShippingAddressId.value = 0
-  selectedBillingAddressId.value = 0
+  selectedShippingAddressId.value = ''
+  selectedBillingAddressId.value = ''
   isLoading.value = false
+
+  if (isBillingUpdate) {
+    await cartStore.fetchAdyenPaymentMethods()
+    // Mise à jour simultanée de l'adresse affichée et du picto (CBPaymentMethod vient d'être chargé)
+    displayedBillingAddress.value = selectedBillingAddress.value
+  }
 }
 
 useHead({
@@ -203,12 +208,23 @@ useHead({
   meta: [{ property: 'og:title', content: 'Adresses | QANTIS Marketplace' }],
 })
 
-onMounted(() => {
+onMounted(async () => {
   sendGtmEvent('begin_checkout', {
     ecommerce: {
       currency: 'EUR',
       items: formatCartItemsGtmEvent(cart.value),
     },
   })
+
+  // Initialiser l'adresse affichée avec la valeur courante du store
+  displayedBillingAddress.value = selectedBillingAddress.value
+
+  // Réinitialiser les moyens de paiement pour ne les afficher que sur la base de la requête de cette page
+  cartStore.resetPaymentMethods()
+
+  // Si une adresse de facturation est déjà associée au panier, charger les moyens de paiement
+  if (cartStore.cart?.billingAddressExternalId) {
+    await cartStore.fetchAdyenPaymentMethods()
+  }
 })
 </script>

@@ -9,29 +9,22 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Dto\Seller;
 use App\Factory\SellerFactory;
-use App\Service\UpplerProductService;
-use App\Service\UpplerSellerService;
+use App\Mapper\DjustSearchParamsMapper;
+use App\Service\Account\CurrentAccountProvider;
+use App\Service\Djust\DjustSellerService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 
 readonly class SellerProvider implements ProviderInterface
 {
     public function __construct(
+        private DjustSearchParamsMapper $djustSearchParamsMapper,
+        private DjustSellerService $djustSellerService,
         private SellerFactory $sellerFactory,
-        private UpplerProductService $upplerProductService,
-        private UpplerSellerService $upplerSellerService,
+        private CurrentAccountProvider $currentAccountProvider,
     ) {
     }
 
-    /**
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     * @throws \Exception
-     */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): Seller|array|null
     {
         if ($operation instanceof CollectionOperationInterface) {
@@ -44,26 +37,23 @@ readonly class SellerProvider implements ProviderInterface
     private function getSellers(array $context = []): array
     {
         try {
-            $params = $context['filters'] ?? [];
-            $allUpplerSellers = $this->upplerSellerService->getSellers();
-            $allAdherentSellers = $this->upplerProductService->findAllSellers(params: $params);
+            $customerAccountId = $this->currentAccountProvider->getAccount()?->getDjustCustomerAccountId();
+            $params = $this->djustSearchParamsMapper->fromContext($context);
+            $sellers = $this->djustSellerService->getValidSellers($customerAccountId, $params);
 
-            $sellers = \array_filter($allUpplerSellers['results'], function ($seller) use ($allAdherentSellers) {
-                return \array_key_exists($seller['id'], $allAdherentSellers);
-            });
-
-            return $this->sellerFactory->createAndAddToCollection($sellers);
+            return $this->sellerFactory->createAndAddToCollection($sellers, $customerAccountId);
         } catch (\Exception $e) {
             throw new BadRequestHttpException('An error occurred while retrieving the sellers: '.$e->getMessage());
         }
     }
 
-    private function getSeller(int $sellerId): Seller
+    private function getSeller(string $sellerId): Seller
     {
         try {
-            $seller = $this->upplerSellerService->getSeller($sellerId);
+            $customerAccountId = $this->currentAccountProvider->getAccount()?->getDjustCustomerAccountId();
+            $seller = $this->djustSellerService->getSeller($sellerId, $customerAccountId);
 
-            return $this->sellerFactory->create($seller);
+            return $this->sellerFactory->create($seller, $customerAccountId);
         } catch (\Exception $e) {
             throw new NotFoundHttpException('Seller not found.');
         }

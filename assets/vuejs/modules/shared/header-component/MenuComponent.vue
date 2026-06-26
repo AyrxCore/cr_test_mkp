@@ -105,12 +105,11 @@ const isMenuOpen = ref<boolean>(false)
 
 const listMenu = computed((): Category[] => {
   const customCategories = channel?.value?.options?.CUSTOM_HEADER_CATEGORIES
-  const categoryIds = customCategories
-    ? customCategories.split(',').map(Number)
-    : []
+  const categoryIds = customCategories ? customCategories.split(',') : []
   if (categoryIds.length) {
     const filteredCategories = categories.value.filter((category: Category) =>
-      categoryIds.includes(category.id),
+      categoryIds.includes(category.id) &&
+      category.id !== SUSTAINABLE_PURCHASES_CATEGORY_ID,
     )
     return filteredCategories.sort(
       (a: Category, b: Category) =>
@@ -118,7 +117,9 @@ const listMenu = computed((): Category[] => {
     )
   }
 
-  return categories.value.slice(0, 6)
+  return categories.value
+    .filter((c: Category) => c.id !== SUSTAINABLE_PURCHASES_CATEGORY_ID)
+    .slice(0, 6)
 })
 
 const toggleMenu = (): void => {

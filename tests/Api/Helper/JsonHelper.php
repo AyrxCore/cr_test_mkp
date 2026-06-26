@@ -8,8 +8,13 @@ class JsonHelper
 {
     public static function parseJsonDataFile($path): string
     {
+        return \json_encode(self::getJsonDataFile($path));
+    }
+
+    public static function getJsonDataFile($path): array
+    {
         $jsonFileContent = \file_get_contents(\sprintf('%s/../_data/%s', __DIR__, $path));
 
-        return \json_encode(\json_decode($jsonFileContent));
+        return \json_decode($jsonFileContent, true);
     }
 }

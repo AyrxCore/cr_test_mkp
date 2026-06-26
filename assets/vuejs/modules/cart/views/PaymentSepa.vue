@@ -142,7 +142,7 @@ const confirmForm = async () => {
 const selectSEPA = async (sepaData: SepaData) => {
   isSEPALoading.value = true
   try {
-    await cartStore.updateCartPaymentMethod(selectedSepa.value.id)
+    await cartStore.updateCartPaymentMethod(selectedSepa.value.type)
     const result = await cartStore.updateCartPaymentSepaInfos(sepaData)
     if (result?.signing_url) {
       window.location.replace(result?.signing_url)

@@ -63,15 +63,19 @@ export const routes: RouteRecordRaw[] = [
         component: AddressEdit,
         name: AccountPageList.ADDRESS_EDIT,
       },
+      // TODO (MKP-1411): Guard temporaire - retirer beforeEnter et rétablir les liens UI
+      // quand les Favoris seront disponibles via DJUST.
       {
         path: 'favorites',
         component: FavoritesProductsPage,
         name: AccountPageList.FAVORITES_LIST,
+        beforeEnter: () => ({ name: AccountPageList.ACCOUNT }), // TODO (MKP-1411): supprimer cette ligne
       },
       {
         path: 'favorites/:id',
         component: FavoritesProductsDetailsPage,
         name: AccountPageList.FAVORITES_DETAILS,
+        beforeEnter: () => ({ name: AccountPageList.ACCOUNT }), // TODO (MKP-1411): supprimer cette ligne
       },
       {
         path: 'orders',
@@ -83,15 +87,19 @@ export const routes: RouteRecordRaw[] = [
         component: OrderDetailsPage,
         name: AccountPageList.ORDER_DETAILS,
       },
+      // TODO (MKP-1411): Guard temporaire - retirer beforeEnter et rétablir les liens UI
+      // quand les Paniers sauvegardés seront disponibles via DJUST.
       {
         path: 'saved-carts',
         component: SavedCartsPage,
         name: AccountPageList.SAVED_CARTS,
+        beforeEnter: () => ({ name: AccountPageList.ACCOUNT }), // TODO (MKP-1411): supprimer cette ligne
       },
       {
         path: 'saved-carts/:id',
         component: SavedCartDetailsPage,
         name: AccountPageList.SAVED_CARTS_DETAILS,
+        beforeEnter: () => ({ name: AccountPageList.ACCOUNT }), // TODO (MKP-1411): supprimer cette ligne
       },
       {
         path: 'orders/validation',

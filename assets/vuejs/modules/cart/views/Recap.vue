@@ -4,46 +4,48 @@
       Panier
       <span class="uppercase">{{ user.externalApiData.buyer.name }}</span>
     </h3>
-    <ButtonComponent
-      v-if="
-        cart.orders &&
-        cart.orders.length > 0 &&
-        channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.SAVED_CARTS)
-      "
-      :disabled="isNeoAutoLogin"
-      class="button-primary-outline"
-      type="button"
-      @click="openSaveCartForm"
-    >
-      Sauvegarder le panier
-    </ButtonComponent>
-    <SavedCartModal
-      v-if="showSaveCartForm"
-      :is-loading="isLoading"
-      class="modal"
-      @cancel="showSaveCartForm = false"
-      @submit-saved-cart="onSubmitSavedCart"
-    />
+    <!--    <ButtonComponent-->
+    <!--      v-if="-->
+    <!--        cart.cartOrders &&-->
+    <!--        cart.cartOrders.length > 0 &&-->
+    <!--        channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.SAVED_CARTS)-->
+    <!--      "-->
+    <!--      :disabled="isNeoAutoLogin"-->
+    <!--      class="button-primary-outline"-->
+    <!--      type="button"-->
+    <!--      @click="openSaveCartForm"-->
+    <!--    >-->
+    <!--      Sauvegarder le panier-->
+    <!--    </ButtonComponent>-->
+    <!--    <SavedCartModal-->
+    <!--      v-if="showSaveCartForm"-->
+    <!--      :is-loading="isLoading"-->
+    <!--      class="modal"-->
+    <!--      @cancel="showSaveCartForm = false"-->
+    <!--      @submit-saved-cart="onSubmitSavedCart"-->
+    <!--    />-->
   </div>
 
-  <div class="flex flex-col-reverse lg:grid lg:grid-cols-4 lg:gap-4 lg:px-0">
+  <LoadingComponent v-if="isSyncing" />
+
+  <div v-else class="flex flex-col-reverse lg:grid lg:grid-cols-4 lg:gap-4 lg:px-0">
     <div
-      v-if="cart.orders && cart.orders.length > 0"
+      v-if="cartOrders && cartOrders.length > 0"
       class="col-span-3 mt-5 rounded-lg lg:mt-0"
     >
       <CartOrderComponent
-        v-for="(order, key) in cart.orders"
+        v-for="(order, key) in cartOrders"
         :key="order.id"
+        :cart-order="order"
         :class="{
-          'mb-5': cart.orders.length > 1 && key !== cart.orders.length,
+          'mb-5': cartOrders.length > 1 && key !== cartOrders.length,
         }"
-        :order="order"
       />
     </div>
     <template v-else>Votre panier est vide !</template>
 
     <CartRightSideComponent
-      v-if="cart.orders && cart.orders.length > 0"
+      v-if="cartOrders && cartOrders.length > 0"
       :show-shipment-price="false"
     >
       <template #title>Récapitulatif panier</template>
@@ -61,7 +63,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 
@@ -72,12 +74,14 @@ import { useSavedCartStore } from '@/vuejs/stores/savedCart'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { formatCartItemsGtmEvent, sendGtmEvent } from '@/vuejs/services/gtm'
 import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
+import { CartOrder } from '@/vuejs/types/Cart.ts'
 
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import CartOrderComponent from '@/vuejs/modules/cart/components/CartOrderComponent.vue'
 import CartRightSideComponent from '@/vuejs/modules/cart/components/CartRightSideComponent.vue'
 import SavedCartModal from '@/vuejs/modules/account/components/savedCart/SavedCartModal.vue'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
+import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 
 const router = useRouter()
 const cartStore = useCartStore()
@@ -88,6 +92,7 @@ const { cart } = storeToRefs(cartStore)
 
 const error = ref<string>(null)
 const showSaveCartForm = ref<boolean>(false)
+const isSyncing = ref<boolean>(true)
 cartStore.termsOfSales = []
 
 const userStore = useUserStore()
@@ -99,17 +104,28 @@ const goToAdress = async (): Promise<void> => {
   if (!cartStore.hasAllTermsChecked) {
     error.value = 'Veuillez accepter les conditions générales'
   } else {
-    router.push({ name: CartPageList.CART_ADDRESSES })
+    try {
+      await cartStore.updateEcoTaxInLogisticOrders()
+      router.push({ name: CartPageList.CART_ADDRESSES })
+    } catch (error) {
+      // L'erreur est déjà notifiée dans le store — on bloque juste la navigation
+    }
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   sendGtmEvent('view_cart', {
     ecommerce: {
       currency: 'EUR',
       items: formatCartItemsGtmEvent(cart.value),
     },
   })
+
+  try {
+    await cartStore.syncProductsFdp()
+  } finally {
+    isSyncing.value = false
+  }
 })
 
 const openSaveCartForm = () => {
@@ -126,4 +142,16 @@ const onSubmitSavedCart = async (event) => {
 
   isLoading.value = false
 }
+
+const cartOrders = computed((): CartOrder[] => {
+  if (!cart.value.cartOrders) {
+    return []
+  }
+
+  return [...cart.value.cartOrders].sort((a, b) => {
+    const nameA = a.seller.name?.toLowerCase() || ''
+    const nameB = b.seller.name?.toLowerCase() || ''
+    return nameA.localeCompare(nameB)
+  })
+})
 </script>

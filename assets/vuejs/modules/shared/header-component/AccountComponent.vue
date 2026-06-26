@@ -1,32 +1,34 @@
 <template>
-  <div
-    :class="{
-      'rounded-2xl border-4 border-solid border-primary px-2 py-2 md:py-0':
-        isNeoAutoLogin,
-    }"
-    class="flex cursor-pointer items-center"
-    @click.stop="toggleMenu"
-  >
-    <UserPlainIconComponent v-if="!isNeoAutoLogin" class="ml-4 lg:ml-0" />
-    <UserAutoLoginIconComponent v-else class="fill-primary stroke-primary" />
-    <div class="hidden text-lg md:ml-3 md:block md:max-w-[250px]">
-      <span v-if="!isNeoAutoLogin"
-        >Bienvenue {{ user.firstName }} {{ user.lastName }}</span
-      >
-      <span v-else class="font-bold text-primary"
-        >Connecté en tant que
-        <div class="text-black">
-          {{ user.firstName }} {{ user.lastName }}
-        </div></span
-      >
+  <div>
+    <div
+      :class="{
+        'rounded-2xl border-4 border-solid border-primary px-2 py-2 md:py-0':
+          isNeoAutoLogin,
+      }"
+      class="flex cursor-pointer items-center"
+      @click.stop="toggleMenu"
+    >
+      <UserPlainIconComponent v-if="!isNeoAutoLogin" class="ml-4 lg:ml-0" />
+      <UserAutoLoginIconComponent v-else class="fill-primary stroke-primary" />
+      <div class="hidden text-lg md:ml-3 md:block md:max-w-[250px]">
+        <span v-if="!isNeoAutoLogin"
+          >Bienvenue {{ user.firstName }} {{ user.lastName }}</span
+        >
+        <span v-else class="font-bold text-primary"
+          >Connecté en tant que
+          <div class="text-black">
+            {{ user.firstName }} {{ user.lastName }}
+          </div></span
+        >
+      </div>
+      <ArrowDownIconComponent class="ml-2" />
     </div>
-    <ArrowDownIconComponent class="ml-2" />
+    <MenuAccountComponent
+      v-if="isMenuOpen"
+      v-model="isMenuOpen"
+      class="modal-overlay"
+    />
   </div>
-  <MenuAccountComponent
-    v-if="isMenuOpen"
-    v-model="isMenuOpen"
-    class="modal-overlay"
-  />
 </template>
 
 <script lang="ts" setup>

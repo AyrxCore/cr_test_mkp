@@ -1,0 +1,314 @@
+{
+  "content": [
+    {
+      "offerInventory": {
+        "id": "0000003989",
+        "quantityPerItem": 1.0,
+        "stock": 999,
+        "status": "ACTIVE",
+        "currency": "EUR",
+        "packingType": "UNIT",
+        "productUnit": "item",
+        "variant": {
+          "id": "0000003987",
+          "skuProduct": "10136",
+          "skuVariant": "10417",
+          "name": "cahier bleu",
+          "description": "Cahier bleu avec plusieurs tarifs dégressifs",
+          "attributeValues": [
+            {
+              "attribute": {
+                "id": "0000002902",
+                "name": {
+                  "fr-FR": "Taille",
+                  "FR": "Taille"
+                },
+                "type": "LIST_TEXT",
+                "externalId": "VARIANT_SIZE"
+              },
+              "value": ["small"]
+            }
+          ],
+          "gtin": "cahier-bleu",
+          "ean": "cahier-bleu",
+          "mpn": "cahier-bleu",
+          "externalId": "cahier-bleu",
+          "status": "ACTIVE"
+        },
+        "maxOrderQuantity": null,
+        "minOrderQuantity": 0,
+        "leadTimeToShip": null,
+        "customFieldValues": [
+          {
+            "customField": {
+              "id": "0000003762",
+              "externalId": "OFFER_PRICE_PRICING_PHRASE",
+              "name": {
+                "FR": "Offre prix produit"
+              },
+              "type": "TEXT"
+            },
+            "value": {
+              "value": "À partir de x euros",
+              "type": "TEXT"
+            }
+          },
+          {
+            "customField": {
+              "id": "0000003763",
+              "externalId": "OFFER_PRICE_TOP_LABEL",
+              "name": {
+                "FR": "Produit top label"
+              },
+              "type": "TEXT"
+            },
+            "value": {
+              "value": "Offre exclusive",
+              "type": "TEXT"
+            }
+          },
+          {
+            "customField": {
+              "id": "0000003761",
+              "externalId": "OFFER_TARIF_ID",
+              "name": {
+                "FR": "ID du tarif"
+              },
+              "type": "TEXT"
+            },
+            "value": {
+              "value": "test-tarif-multi-ranges",
+              "type": "TEXT"
+            }
+          },
+          {
+            "customField": {
+              "id": "0000002982",
+              "externalId": "OFFER_ATTACHMENT",
+              "name": {
+                "FR": "Conditions négociées"
+              },
+              "type": "MEDIA"
+            },
+            "value": {
+              "value": "https://document.pre-prod.djust-app.com/qantis/Invoice-D1910D20-0025-1766498681129.pdf",
+              "type": "MEDIA"
+            }
+          }
+        ]
+      },
+      "supplier": {
+        "id": "0000000306",
+        "name": "ALPES CONTRÔLES",
+        "returnPolicy": "",
+        "customFieldValues": [
+          {
+            "customField": {
+              "id": "0000008426",
+              "name": {
+                "FR": "Infos livraison"
+              },
+              "externalId": "SUPPLIER_DELIVERY_INFO",
+              "type": "LONG_TEXT"
+            },
+            "value": "Franco de port dès 50€ HT d'achat sur la fourniture de bureau chez ALDA MAJUSCULE",
+            "type": "LONG_TEXT"
+          }
+        ]
+      },
+      "offerPrices": [
+        {
+          "id": "0000003990",
+          "externalId": "4c72b0e9-2a86-436f-b866-8c2bb726e3f8",
+          "offerPriceType": "GROUP",
+          "itemPerPack": 1,
+          "customerAccountId": null,
+          "customerTagId": "0000003223",
+          "priceRanges": [
+            {
+              "quantity": 1,
+              "price": {
+                "itemPrice": 20,
+                "itemPriceTTC": 20.0,
+                "unitPrice": 20.0,
+                "unitPriceTTC": 20.0
+              },
+              "discountPrice": {
+                "itemPrice": 18,
+                "itemPriceTTC": null,
+                "unitPrice": null,
+                "unitPriceTTC": null
+              }
+            },
+            {
+              "quantity": 2,
+              "price": {
+                "itemPrice": 20,
+                "itemPriceTTC": 20.0,
+                "unitPrice": 20.0,
+                "unitPriceTTC": 20.0
+              },
+              "discountPrice": {
+                "itemPrice": 14,
+                "itemPriceTTC": null,
+                "unitPrice": null,
+                "unitPriceTTC": null
+              }
+            },
+            {
+              "quantity": 4,
+              "price": {
+                "itemPrice": 20,
+                "itemPriceTTC": 20.0,
+                "unitPrice": 20.0,
+                "unitPriceTTC": 20.0
+              },
+              "discountPrice": {
+                "itemPrice": 13,
+                "itemPriceTTC": null,
+                "unitPrice": null,
+                "unitPriceTTC": null
+              }
+            },
+            {
+              "quantity": 8,
+              "price": {
+                "itemPrice": 20,
+                "itemPriceTTC": 20.0,
+                "unitPrice": 20.0,
+                "unitPriceTTC": 20.0
+              },
+              "discountPrice": {
+                "itemPrice": 12,
+                "itemPriceTTC": null,
+                "unitPrice": null,
+                "unitPriceTTC": null
+              }
+            }
+          ]
+        }
+      ],
+      "estimatedDeliveryDates": []
+    },
+    {
+      "offerInventory": {
+        "id": "0000004672",
+        "quantityPerItem": 1.0,
+        "stock": 333,
+        "status": "ACTIVE",
+        "currency": "EUR",
+        "packingType": "UNIT",
+        "productUnit": "item",
+        "variant": {
+          "id": "0000003991",
+          "skuProduct": "10136",
+          "skuVariant": "10418",
+          "name": "Cahier jaune",
+          "description": "Cahier jaune avec un seul tarif",
+          "attributeValues": [
+            {
+              "attribute": {
+                "id": "0000002902",
+                "name": {
+                  "fr-FR": "Taille",
+                  "FR": "Taille"
+                },
+                "type": "LIST_TEXT",
+                "externalId": "VARIANT_SIZE"
+              },
+              "value": ["medium"]
+            }
+          ],
+          "gtin": "cahier-jaune",
+          "ean": "cahier-jaune",
+          "mpn": "cahier-jaune",
+          "externalId": "cahier-jaune",
+          "status": "ACTIVE"
+        },
+        "maxOrderQuantity": null,
+        "minOrderQuantity": 0,
+        "leadTimeToShip": null,
+        "customFieldValues": [
+          {
+            "customField": {
+              "id": "0000003761",
+              "externalId": "OFFER_TARIF_ID",
+              "name": {
+                "FR": "ID du tarif"
+              },
+              "type": "TEXT"
+            },
+            "value": {
+              "value": "test-tarif-single-range",
+              "type": "TEXT"
+            }
+          }
+        ]
+      },
+      "supplier": {
+        "id": "0000000306",
+        "name": "ALPES CONTRÔLES",
+        "returnPolicy": "",
+        "customFieldValues": [
+          {
+            "customField": {
+              "id": "0000008426",
+              "name": {
+                "FR": "Infos livraison"
+              },
+              "externalId": "SUPPLIER_DELIVERY_INFO",
+              "type": "LONG_TEXT"
+            },
+            "value": "Franco de port dès 50€ HT d'achat sur la fourniture de bureau chez ALDA MAJUSCULE",
+            "type": "LONG_TEXT"
+          }
+        ]
+      },
+      "offerPrices": [
+        {
+          "id": "0000004673",
+          "externalId": "16085db2-d659-42b9-88bd-28e69ea9a3be",
+          "offerPriceType": "GROUP",
+          "itemPerPack": 1,
+          "customerAccountId": null,
+          "customerTagId": "0000003223",
+          "priceRanges": [
+            {
+              "quantity": 1,
+              "price": {
+                "itemPrice": 12,
+                "itemPriceTTC": 12.0,
+                "unitPrice": 12.0,
+                "unitPriceTTC": 12.0
+              },
+              "discountPrice": {
+                "itemPrice": 11,
+                "itemPriceTTC": null,
+                "unitPrice": null,
+                "unitPriceTTC": null
+              }
+            }
+          ]
+        }
+      ],
+      "estimatedDeliveryDates": []
+    }
+  ],
+  "empty": false,
+  "first": true,
+  "last": true,
+  "number": 0,
+  "numberOfElements": 2,
+  "pageable": {
+    "offset": 0,
+    "pageNumber": 0,
+    "pageSize": 20,
+    "paged": true,
+    "sort": [],
+    "unpaged": false
+  },
+  "size": 20,
+  "sort": [],
+  "totalElements": 2,
+  "totalPages": 1
+}

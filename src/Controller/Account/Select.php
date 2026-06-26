@@ -8,8 +8,11 @@ use App\Context\ChannelContext;
 use App\Entity\Account;
 use App\Entity\User;
 use App\Events\UserAcceptCGUEvent;
+use App\Service\Account\CurrentAccountProvider;
+use App\Service\Djust\DjustAuthenticationService;
 use App\Service\UpplerAuthenticationService;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -27,6 +30,8 @@ class Select extends AbstractController
         private RequestStack $requestStack,
         private Security $security,
         private UpplerAuthenticationService $upplerAuthenticationService,
+        private readonly DjustAuthenticationService $djustAuthenticationService,
+        protected readonly LoggerInterface $djustLogger,
     ) {
     }
 
@@ -57,11 +62,18 @@ class Select extends AbstractController
             if ($account->getAdherent()?->getChannel()?->getCode() !== $channel->getCode()) {
                 throw new AccessDeniedHttpException('Account is not linked to current channel');
             }
+            $session = $this->requestStack->getSession();
+            $session->set(CurrentAccountProvider::SESSION_KEY_ACCOUNT, $account);
 
-            $isAuthenticated = $this->upplerAuthenticationService->authenticateUser($account);
+            $isUpplerAuthenticated = $this->upplerAuthenticationService->authenticateUser($account);
 
-            if ($isAuthenticated && !$this->requestStack->getSession()->get('access_token')) {
-                throw new AccessDeniedHttpException("Vous n'avez pas accès à ce compte");
+            if ($isUpplerAuthenticated && !$this->requestStack->getSession()->get('access_token')) {
+                throw new AccessDeniedHttpException("Vous n'avez pas accès à ce compte Uppler");
+            }
+
+            $isDjustAuthenticated = $this->djustAuthenticationService->authenticateUser($account);
+            if (!$isDjustAuthenticated) {
+                throw new AccessDeniedHttpException();
             }
 
             if (empty($account->isAcceptCGU())) {

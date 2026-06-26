@@ -28,37 +28,27 @@ export default class SellerHttpClient extends BaseClientService {
     })
   }
 
-  public getSeller(id: number): Promise<Seller> {
+  public getSeller(id: string): Promise<Seller> {
     return this.apiClient.get(`sellers/${id}`).then((response) => response.data)
   }
 
-  public getSellerPromotions(id: number): Promise<SellerPromotion[]> {
+  public getSellerPromotions(id: string): Promise<SellerPromotion[]> {
     return this.apiClient
       .get(`sellers/${id}/promotions`)
       .then((response) => response.data)
   }
 
-  public fetchPartnerByUpplerId<T extends Partner>(
-    upplerId: string,
-  ): Promise<T | T[]> {
-    return this.apiClient
-      .get<T[]>(`partners?upplerId=${upplerId}`)
-      .then((response) => {
-        const data = response.data
-        return Array.isArray(data) && data.length > 0 ? data[0] : data
-      })
-  }
 
   /**
    * Récupère les données de la map (stores + catégories) depuis le back-end
    */
   public fetchMapData(
-    categoryId?: number,
+    categoryId: string | null,
     signal?: AbortSignal,
   ): Promise<MapApiResponse> {
     let url = 'partner-stores/map-data'
     if (categoryId) {
-      url += `?categoryId=${categoryId}`
+      url += `?categories=${categoryId}`
     }
 
     return this.apiClient

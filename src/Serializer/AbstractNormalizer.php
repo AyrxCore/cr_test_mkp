@@ -27,9 +27,15 @@ abstract class AbstractNormalizer implements NormalizerInterface
         return $data;
     }
 
+    public function supportsDenormalization($data, $type, $format = null, array $context = []): bool
+    {
+        // Par défaut, les normalizers custom ne gèrent pas la dénormalisation
+        return false;
+    }
+
     public function denormalize($data, string $type, string $format = null, array $context = [])
     {
-        return $this->denormalize($data, $type, $format, $context);
+        throw new \LogicException('This normalizer does not support denormalization');
     }
 
     public function setSerializer(SerializerInterface $serializer): void

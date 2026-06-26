@@ -1,6 +1,9 @@
 <template>
+  <!-- TODO (MKP-1411): Bouton "Ajouter aux favoris" (❤️) temporairement masqué sur les fiches produit.
+       À rétablir (restaurer le v-if ci-dessous) quand les Favoris seront disponibles via DJUST.
+       v-if="channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.FAVORITES)" -->
   <div
-    v-if="channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.FAVORITES)"
+    v-if="false"
     class="flex items-center justify-end"
   >
     <div class="flex cursor-pointer" @click="onOpenFavorite">
@@ -117,7 +120,8 @@ import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { useProductStore } from '@/vuejs/stores/product'
 import { arrayEqual, notifySuccess } from '@/vuejs/services/utils'
-import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
+// TODO (MKP-1411): Décommenter quand les Favoris seront disponibles via DJUST
+// import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
 import { sendGtmEvent } from '@/vuejs/services/gtm'
 
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
@@ -125,7 +129,7 @@ import HeartIconComponent from '@/vuejs/modules/shared/icon/HeartIconComponent.v
 
 const props = defineProps({
   productId: {
-    type: Number,
+    type: String,
     required: true,
   },
   variantId: {
@@ -146,7 +150,8 @@ const props = defineProps({
   },
 })
 
-const channelStore = useChannelStore()
+// TODO (MKP-1411): Décommenter quand les Favoris seront disponibles via DJUST
+// const channelStore = useChannelStore()
 const favoriteStore = useFavoriteStore()
 const productStore = useProductStore()
 const { favorites } = storeToRefs(favoriteStore)

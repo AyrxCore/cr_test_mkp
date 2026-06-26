@@ -47,7 +47,7 @@
         </slot>
         <slot name="link">
           <RouterLink
-            v-if="store.upplerId"
+            v-if="store.djustId"
             :class="sellerAction.class"
             :to="sellerAction.to"
             target="_blank"
@@ -91,7 +91,7 @@ const phoneAction = computed(() => ({
 const sellerAction = computed(() => ({
   to: {
     name: ProductPageList.PRODUCTS,
-    query: { company: props.store.upplerId },
+    query: { seller: props.store.djustId },
   },
   text: "Voir l'offre",
   class:

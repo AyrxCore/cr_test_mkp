@@ -8,48 +8,41 @@ use ApiPlatform\Metadata\CollectionOperationInterface;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Dto\Order;
-use App\Entity\Account;
 use App\Factory\OrderFactory;
-use App\Helper\UpplerHelper;
-use App\Service\UpplerOrderService;
-use Symfony\Component\HttpFoundation\RequestStack;
+use App\Service\Djust\DjustOrderService;
 
 readonly class OrderProvider implements ProviderInterface
 {
-    public function __construct(private RequestStack $requestStack, private UpplerOrderService $upplerOrderService, private OrderFactory $orderFactory)
-    {
+    public function __construct(
+        private DjustOrderService $djustOrderService,
+        private OrderFactory $orderFactory
+    ) {
     }
 
-    /**
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
-     * @throws \Exception
-     */
+    private const HIDDEN_STATUSES = ['CREATING', 'DRAFT_ORDER', 'DRAFT_ORDER_ON_HOLD'];
+
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
-        /** @var Account $account */
-        $account = $this->requestStack->getSession()->get('account');
-
         if ($operation instanceof CollectionOperationInterface) {
-            $remoteOrders = $this->upplerOrderService->getOrdersByUserId($account->getUpplerUserId());
-            $orders = $this->orderFactory->createAndAddToCollection($remoteOrders);
+            $remoteOrders = $this->djustOrderService->getOrders(['sort' => 'createdAt:desc']);
+            $visibleOrders = \array_values(\array_filter($remoteOrders, $this->isVisible(...)));
 
-            \usort($orders, function (Order $a, Order $b) {
-                return \strtotime($b->getCreatedAt()->format('Y-m-d')) - \strtotime($a->getCreatedAt()->format('Y-m-d'));
-            });
-
-            return $orders;
+            return $this->orderFactory->createAndAddToCollection($visibleOrders);
         }
 
-        $remoteOrder = $this->upplerOrderService->getOrderByIdAndUserId($uriVariables['id'], $account->getUpplerUserId());
+        $remoteOrder = $this->djustOrderService->getOrderById((string) $uriVariables['id']);
 
-        $orderNumber = UpplerHelper::getOrderNumber($remoteOrder);
-        if ($orderNumber === null) {
+        if ($remoteOrder === null || !$this->isVisible($remoteOrder)) {
             return null;
         }
 
         return $this->orderFactory->create($remoteOrder);
+    }
+
+    private function isVisible(array $remoteOrder): bool
+    {
+        $status = $remoteOrder['orderLogistics'][0]['status'] ?? 'DRAFT_ORDER';
+
+        return !\in_array($status, self::HIDDEN_STATUSES, true);
     }
 }

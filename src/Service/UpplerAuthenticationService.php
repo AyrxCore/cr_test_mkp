@@ -6,7 +6,6 @@ namespace App\Service;
 
 use App\Entity\Account;
 use App\Entity\LogAccountConnection;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
@@ -32,7 +31,7 @@ class UpplerAuthenticationService extends AbstractUpplerService
         // si c'est le cas, on stocke aussi les infos du tokenUser
         if ($session->has('access_token') && !empty($session->get('access_token'))) {
             if ($isConnectionLogged) {
-                $account->setLastConnexion(new DateTime('now'));
+                $account->setLastConnexion(new \DateTime('now'));
                 $this->em->persist($account);
 
                 $log = new LogAccountConnection();
@@ -42,6 +41,7 @@ class UpplerAuthenticationService extends AbstractUpplerService
 
                 $this->em->flush();
             }
+
             return true;
         }
 

@@ -21,11 +21,6 @@ class PartnerStoreNormalizer extends AbstractNormalizer
         return $data instanceof PartnerStore;
     }
 
-    public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
-    {
-        return $data instanceof PartnerStore;
-    }
-
     public function normalize($object, $format = null, array $context = []): array
     {
         $data = parent::normalize($object, $format, $context);

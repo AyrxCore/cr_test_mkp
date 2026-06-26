@@ -31,4 +31,5 @@ return (new PhpCsFixer\Config())
         'phpdoc_to_comment' => false, // needed for some phpstan annotation
         'visibility_required' => ['elements' => ['property', 'method', 'const']],
         'yoda_style' => ['equal' => false, 'identical' => false, 'less_and_greater' => false],
+        'nullable_type_declaration_for_default_null_value' => true,
     ]);

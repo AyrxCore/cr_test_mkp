@@ -1,5 +1,6 @@
 import { Product } from '@/vuejs/types/Product'
 import { Cart } from '@/vuejs/types/Cart.ts'
+import { useProductStore } from '@/vuejs/stores/product'
 
 export const sendGtmEvent = (eventName: string, additionalData = null) => {
   const eventData = { event: eventName, ...additionalData }
@@ -7,8 +8,9 @@ export const sendGtmEvent = (eventName: string, additionalData = null) => {
 }
 
 export const formatProductGtmEvent = (products: Product[]) => {
+  const productStore = useProductStore()
   return products
-    .filter((product) => !product.isAccordCadre)
+    .filter((product) => !productStore.isAccordCadre(product))
     .slice(0, 10)
     .map((product) => ({
       item_id: product.id,
@@ -21,17 +23,19 @@ export const formatProductGtmEvent = (products: Product[]) => {
 }
 
 export const formatCartItemsGtmEvent = (cart: Cart) => {
+  if (!cart?.cartOrders) return []
+
   const itemsObject = []
   let shippingValue = 0
-  Object.entries(cart.orders).forEach(([key, value], index) => {
-    Object.entries(value.items).forEach(
+  Object.entries(cart.cartOrders).forEach(([key, value], index) => {
+    Object.entries(value.products).forEach(
       ([childKey, childValue], childIIndex) => {
-        const price = childValue.total_excluding_taxes / 100
+        const price = childValue.unitPrice * childValue.quantity
         shippingValue += price
         itemsObject.push({
-          item_id: childValue.variant.product.id,
-          item_name: childValue.variant.product.name.default,
-          item_variant: childValue.variant.id,
+          item_id: childValue.offerPriceId,
+          item_name: childValue.name,
+          item_variant: childValue.variantId,
           price: price,
           quantity: childValue.quantity,
         })

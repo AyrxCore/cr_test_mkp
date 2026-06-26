@@ -1,16 +1,23 @@
 import { defineStore, storeToRefs } from 'pinia'
+
 import { useAlertStore } from '@/vuejs/stores/alert'
-import { AlertType } from '@/vuejs/types/Alert'
-import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
+import { useChannelStore } from '@/vuejs/stores/channel'
+import { useCategoryStore } from '@/vuejs/stores/category'
+import { useSellerStore } from '@/vuejs/stores/seller'
+
 import { getErrorMessage } from '@/vuejs/services/login'
 import ProductHttpClient from '@/vuejs/services/httpclient/ProductHttpClient'
+
+import { AlertType } from '@/vuejs/types/Alert'
+import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
 import {
   Product,
   ProductStoreState,
-  ProductCategory,
+  DjustProductType,
 } from '@/vuejs/types/Product'
 import { arrayEqual, hexToBinary, notifyError } from '@/vuejs/services/utils'
-import { useChannelStore } from '@/vuejs/stores/channel'
+import { Seller } from '@/vuejs/types/Seller'
+import { Category } from '@/vuejs/types/Product/Category'
 
 export const useProductStore = defineStore('product', {
   state: (): ProductStoreState => ({
@@ -26,7 +33,7 @@ export const useProductStore = defineStore('product', {
     cart: [],
     selectedCategoryId: null,
     selectedProperties: null,
-    selectedCompanyId: null,
+    selectedSellerId: null,
     searchTerms: null,
     productVariants: [],
     productVariantsOptions: [],
@@ -35,33 +42,61 @@ export const useProductStore = defineStore('product', {
 
   actions: {
     async fetchProductsByParams(params): Promise<void> {
+      const formattedParams = { ...params }
+
+      if (this.selectedCategoryId && this.selectedSearchCategory) {
+        formattedParams.categories = this.selectedSearchCategory.externalId
+      }
+      if (this.selectedSellerId) {
+        formattedParams.sellers = [this.selectedSearchSeller?.externalId ?? this.selectedSellerId]
+      }
+      if (this.selectedProperties) {
+        formattedParams.properties = this.selectedProperties
+      }
       try {
         this.products =
-          await ProductHttpClient.get().fetchProductsByParams(params)
+          await ProductHttpClient.get().fetchProductsByParams(formattedParams)
         return this.products
-      } catch (error) {}
+      } catch (error) {
+        notifyError(
+          'Une erreur est survenue lors de la récupération des produits.',
+        )
+        throw error
+      }
     },
     async initSliderAccordsCadres() {
       try {
         const { channelSliderAccordsCadresProperty } =
           storeToRefs(useChannelStore())
+
+        if (!channelSliderAccordsCadresProperty.value) {
+          this.productsAccordsCadre = null
+          return
+        }
+
         this.productsAccordsCadre =
-          await ProductHttpClient.get().fetchProductsByParams(
-            channelSliderAccordsCadresProperty.value,
-          )
+          await ProductHttpClient.get().fetchProductsByParams({
+            productTags: channelSliderAccordsCadresProperty.value,
+          })
       } catch (error) {}
     },
     async initSliderProductsSelection() {
       try {
         const { channelSliderProductsSelectionProperty } =
           storeToRefs(useChannelStore())
+
+        if (!channelSliderProductsSelectionProperty.value) {
+          this.productsSelection = null
+          return
+        }
+
         this.productsSelection =
-          await ProductHttpClient.get().fetchProductsByParams(
-            channelSliderProductsSelectionProperty.value,
-          )
+          await ProductHttpClient.get().fetchProductsByParams({
+            productTags: channelSliderProductsSelectionProperty.value,
+          })
       } catch (error) {}
     },
-    async initProduct(id: number) {
+    async initProduct(id: number | string) {
       const alertStore = useAlertStore()
       try {
         return await ProductHttpClient.get().findProductById(id)
@@ -89,34 +124,34 @@ export const useProductStore = defineStore('product', {
           }
           return null
         })
-        if (!variant) {
-          variant = await this.findVariantById(product.defaultVariantId)
-          this.productVariants.push(variant)
-        }
+        // Le variant par défaut est maintenant dans product.variants
+        // Plus besoin d'appel API séparé
 
-        product = this.updateProductVariant(product, variant)
+        if (variant) {
+          product = this.updateProductVariant(product, variant)
+        }
       } else {
         product.defaultVariantId = null
       }
 
       return product
     },
+    /**
+     * @deprecated Les variants sont inclus dans les données du produit
+     * Utilisé uniquement pour les anciennes commandes Uppler
+     */
     async findVariantById(id) {
-      const alertStore = useAlertStore()
-      try {
-        return await ProductHttpClient.get().findVariantById(id)
-      } catch (error) {
-        error.response.status === HttpStatusCodes.unauthorized &&
-          alertStore.setShow(
-            getErrorMessage(error.response.data.message),
-            AlertType.danger,
-          )
-      }
+      console.warn(
+        'findVariantById is deprecated - variants are now included in product data',
+      )
+      // Méthode conservée temporairement pour compatibilité avec anciennes commandes Uppler
+      // TODO: Migrer les composants qui utilisent cette méthode
+      return null
     },
     async findAccordCadreById(id) {
       const alertStore = useAlertStore()
       try {
-        return await ProductHttpClient.get().findAccordCadreById(id)
+        return await ProductHttpClient.get().findProductById(id)
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
           alertStore.setShow(
@@ -140,15 +175,15 @@ export const useProductStore = defineStore('product', {
           )
       }
     },
-    async findPartnerProducts(partnerId: number) {
+    async findPartnerProducts(partnerId: number | string) {
       const alertStore = useAlertStore()
       try {
         const partnerProducts = await this.fetchProductsByParams({
           perPage: 8,
-          companies: partnerId,
+          sellers: partnerId,
         })
 
-        return partnerProducts.results.filter((sp) => !sp.isAccordCadre)
+        return partnerProducts.results.filter((sp) => !this.isAccordCadre(sp))
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
           alertStore.setShow(
@@ -158,11 +193,17 @@ export const useProductStore = defineStore('product', {
       }
     },
     async findDefaultVariantProduct(product: Product) {
+      // Les variants sont maintenant inclus dans les données du produit Djust
+      // Plus besoin d'appel API séparé
       const alertStore = useAlertStore()
       try {
-        const variant = await this.findVariantById(product.defaultVariantId)
-        this.productVariants.push(variant)
-        this.updateProductVariant(product, variant)
+        const variant = product.variants?.find(
+          (v) => v.id === product.defaultVariantId,
+        )
+        if (variant) {
+          this.productVariants.push(variant)
+          this.updateProductVariant(product, variant)
+        }
       } catch (error) {
         error.response.status === HttpStatusCodes.unauthorized &&
           alertStore.setShow(
@@ -174,12 +215,14 @@ export const useProductStore = defineStore('product', {
     clearFilters() {
       this.selectedCategoryId = null
       this.selectedProperties = null
-      this.selectedCompanyId = null
-      this.searchTerms = null
+      this.selectedSellerId = null
     },
     async downloadPdfFile(url: string) {
       try {
-        const file = await ProductHttpClient.get().downloadPdfFile(url)
+        const file = await ProductHttpClient.get().downloadPdfFile<{
+          content: string
+          name: string
+        }>(url)
         const fileContentBinary = hexToBinary(file.content)
 
         const blob = new Blob([fileContentBinary], { type: 'application/pdf' })
@@ -197,8 +240,8 @@ export const useProductStore = defineStore('product', {
     setSelectedProperty(property) {
       this.selectedProperties = property
     },
-    setSelectedCompany(companyId) {
-      this.selectedCompanyId = companyId
+    setSelectedSeller(sellerId) {
+      this.selectedSellerId = sellerId
     },
     setSearchTerms(searchterms) {
       this.searchTerms = searchterms
@@ -217,41 +260,56 @@ export const useProductStore = defineStore('product', {
       return (
         !!this.selectedCategoryId ||
         !!this.selectedProperties ||
-        !!this.selectedCompanyId ||
-        !!this.searchTerms
+        !!this.selectedSellerId
       )
     },
-    selectedSearchCategory(state): ProductCategory {
-      const categories = state.products?.filters?.categories ?? []
-      return findCheckedItemCategory(categories)
+    selectedSearchCategory(): Category | undefined {
+      const categoryStore = useCategoryStore()
+
+      const findCategoryById = (
+        categories: Array<Category>,
+        id: string,
+      ): Category | undefined => {
+        for (const category of categories) {
+          if (category.id === id) {
+            return category
+          }
+          if (category.children && category.children.length > 0) {
+            const found = findCategoryById(category.children, id)
+            if (found) {
+              return found
+            }
+          }
+        }
+        return undefined
+      }
+
+      return findCategoryById(categoryStore.categories, this.selectedCategoryId)
     },
-    selectedSearchPartner(state): ProductCategory {
-      const companies = state.products?.filters?.companies ?? []
-      return findCheckedItemCompany(companies)
+    selectedSearchSeller(): Seller | undefined {
+      const sellerStore = useSellerStore()
+      const key = this.selectedSellerId
+      if (!key) {
+        return undefined
+      }
+      return sellerStore.allSellers.find(
+        (seller) => seller.externalId === key,
+      )
     },
+    isSellable:
+      () =>
+      (product: Product): boolean => {
+        return product.productType === DjustProductType.SELLABLE
+      },
+    isNotSellable:
+      () =>
+      (product: Product): boolean => {
+        return product.productType === DjustProductType.NOT_SELLABLE
+      },
+    isAccordCadre:
+      () =>
+      (product: Product): boolean => {
+        return product.productType === DjustProductType.ACCORD_CADRE
+      },
   },
 })
-
-function findCheckedItemCategory(categories: any[]): any | null {
-  for (const item of categories) {
-    if (item.checked === true) {
-      return item
-    }
-    if (item.children && item.children.length > 0) {
-      const childResult = findCheckedItemCategory(item.children)
-      if (childResult) {
-        return childResult
-      }
-    }
-  }
-  return null
-}
-
-function findCheckedItemCompany(companies: any[]): any | null {
-  for (const item of companies) {
-    if (item.checked === true) {
-      return item
-    }
-  }
-  return null
-}

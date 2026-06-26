@@ -26,11 +26,19 @@
           distinct.
         </p>
         <div
-          v-if="order.paymentId"
+          v-if="!order.orderPartners?.length && order.invoiceUrl"
           class="mt-5 flex flex-wrap items-center justify-center rounded-lg bg-white py-2 text-sm font-bold text-primary md:text-base lg:text-lg"
         >
-          <span class="mr-1">Télécharger la facture: </span>
-          <ButtonDownloadInvoiceComponent :payment-id="order.paymentId" />
+          <span class="mr-3">Télécharger la facture :</span>
+          <a
+            :href="order.invoiceUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="rounded-lg border border-primary p-0.5"
+            title="Télécharger la facture"
+          >
+            <DownloadIconComponent class="h-[18px] w-[18px] stroke-primary" />
+          </a>
         </div>
         <div class="mt-5 flex w-full rounded-lg bg-white p-5">
           <div
@@ -38,7 +46,6 @@
           >
             <div>Numéro de la commande:</div>
             <div>Date de la commande:</div>
-            <div>Etat de la commande:</div>
             <div>Total de la commande HT :</div>
             <div>Total de la commande TTC:</div>
           </div>
@@ -47,13 +54,6 @@
           >
             <div>{{ order.orderNumber }}</div>
             <div>{{ formatDateFr(order.createdAt) }}</div>
-            <div
-              class="mt-1 w-fit rounded-md px-1 text-[14px] text-white"
-              :class="ORDER_STATUS[order.state].color"
-              :title="ORDER_STATUS[order.state].name"
-            >
-              {{ ORDER_STATUS[order.state].name }}
-            </div>
             <div>
               <span class="mr-2 flex font-bold text-primary md:mr-0"
                 >{{ formatPrice(order.totalExcludingTaxes) }} € HT</span
@@ -73,16 +73,27 @@
           >
             <h3 class="font-bold text-primary">Adresse de livraison</h3>
             <div>{{ order.shippingAddress }}</div>
-            <div class="flex items-center">
-              Etat de la livraison:
-              <div
-                class="ml-2 mt-1 w-fit rounded-md px-1 text-[14px] text-white"
-                :class="SHIPPING_STATUS[order.shippingState].color"
-                :title="SHIPPING_STATUS[order.shippingState].name"
-              >
-                {{ SHIPPING_STATUS[order.shippingState].name }}
+            <template v-if="!order.orderPartners?.length">
+              <div class="flex items-center">
+                Etat de la livraison:
+                <div
+                  class="ml-2 mt-1 w-fit rounded-md px-1 text-[14px] text-white"
+                  :class="SHIPPING_STATUS[order.shippingState].color"
+                  :title="SHIPPING_STATUS[order.shippingState].name"
+                >
+                  {{ SHIPPING_STATUS[order.shippingState].name }}
+                </div>
               </div>
-            </div>
+              <a
+                v-if="order.shippingTrackingUrl"
+                :href="order.shippingTrackingUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-primary hover:underline"
+              >
+                Suivre ma livraison
+              </a>
+            </template>
           </div>
           <div
             class="flex w-1/2 flex-col items-start justify-center space-y-4 rounded-lg bg-white p-5 text-gray-500"
@@ -91,7 +102,73 @@
             <div>{{ order.billingAddress }}</div>
           </div>
         </div>
-        <div class="mt-5 flex w-full flex-col">
+        <template v-if="order.orderPartners?.length">
+          <div
+            v-for="(partner, pIdx) in order.orderPartners"
+            :key="pIdx"
+            class="mt-5 flex w-full flex-col rounded-lg border border-gray-200 bg-white p-5"
+          >
+            <h4 class="mb-3 font-bold text-primary">
+              {{ partner.partnerName || `Partenaire ${pIdx + 1}` }} – Réf.
+              {{ partner.reference }}
+            </h4>
+            <div class="mb-4 flex flex-wrap items-center gap-3">
+              <a
+                v-if="partner.invoiceUrl"
+                :href="partner.invoiceUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-2 rounded-lg border border-primary px-3 py-1.5 text-sm font-bold text-primary"
+                :title="`Télécharger la facture ${partner.reference}`"
+              >
+                <DownloadIconComponent
+                  class="h-[18px] w-[18px] stroke-primary"
+                />
+                Télécharger la facture
+              </a>
+              <div class="flex items-center gap-2">
+                <span class="text-sm text-gray-500">État livraison :</span>
+                <span
+                  class="w-fit rounded-md px-1 py-0.5 text-[14px] text-white"
+                  :class="SHIPPING_STATUS[partner.shippingState]?.color"
+                  :title="SHIPPING_STATUS[partner.shippingState]?.name"
+                >
+                  {{
+                    SHIPPING_STATUS[partner.shippingState]?.name ??
+                    partner.shippingState
+                  }}
+                </span>
+              </div>
+              <a
+                v-if="partner.shippingTrackingUrl"
+                :href="partner.shippingTrackingUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-sm text-primary hover:underline"
+              >
+                Suivre ma livraison
+              </a>
+            </div>
+            <div class="flex w-full flex-col">
+              <div class="hidden p-2 text-gray-500 md:flex">
+                <div class="flex md:w-8/12 lg:w-9/12">
+                  <span>Description d'article</span>
+                </div>
+                <div class="flex justify-between md:w-4/12 lg:w-3/12">
+                  <span>Prix unitaire</span>
+                  <span>Sous total</span>
+                </div>
+              </div>
+              <OrderDetailsComponent
+                v-for="(item, key) in partner.items"
+                :key="key"
+                :item="item"
+                :class="{ 'border-t border-gray-200 pt-6': key > 0 }"
+              />
+            </div>
+          </div>
+        </template>
+        <div v-else class="mt-5 flex w-full flex-col">
           <div class="hidden p-2 text-gray-500 md:flex">
             <div class="flex md:w-8/12 lg:w-9/12">
               <span>Description d'article</span>
@@ -101,7 +178,6 @@
               <span>Sous total</span>
             </div>
           </div>
-
           <OrderDetailsComponent
             v-for="(item, key) in order.items"
             :key="key"
@@ -115,9 +191,10 @@
               <div
                 class="mr-2 flex flex-col items-end justify-center space-y-3 text-sm text-gray-500"
               >
-                <div>Sous-total HT:</div>
-                <div>Frais de livraison HT:</div>
-                <div>Total TTC:</div>
+                <div>Sous-total HT :</div>
+                <div>Frais de livraison HT :</div>
+                <div>Total TTC :</div>
+                <div v-if="orderEcoTaxTotal">dont éco-part :</div>
               </div>
               <div
                 class="flex flex-col items-start justify-center space-y-3 text-sm text-gray-500"
@@ -125,6 +202,7 @@
                 <div>{{ formatPrice(order.totalExcludingTaxes) }} € HT</div>
                 <div>{{ formatPrice(order.shipmentAmount) }} € HT</div>
                 <div>{{ formatPrice(order.total) }} € TTC</div>
+                <div v-if="orderEcoTaxTotal">{{ orderEcoTaxTotal }}€</div>
               </div>
             </div>
           </div>
@@ -133,22 +211,25 @@
     </template>
   </AccountPage>
 </template>
+
 <script lang="ts" setup>
-import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
-import { ref, watch } from 'vue'
-import { useOrderStore } from '@/vuejs/stores/order'
-import { useRoute } from 'vue-router'
-import { Order } from '@/vuejs/types/Order'
-import { formatDateFr, formatPrice } from '@/vuejs/services/utils'
-import { ORDER_STATUS, SHIPPING_STATUS } from '@/vuejs/services/const'
+import { computed, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useAlertStore } from '@/vuejs/stores/alert'
-import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
+import { useRoute } from 'vue-router'
+
 import { AccountPageList } from '@/vuejs/router/pages-list'
-import ArrowLeftIconComponent from '@/vuejs/App.vue'
+import { useOrderStore } from '@/vuejs/stores/order'
+import { useAlertStore } from '@/vuejs/stores/alert'
+import { formatDateFr, formatPrice } from '@/vuejs/services/utils'
+import { SHIPPING_STATUS } from '@/vuejs/services/const'
+import { Order } from '@/vuejs/types/Order'
+
+import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
+import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
 import OrderDetailsComponent from '@/vuejs/modules/account/components/OrderDetailsComponent.vue'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
-import ButtonDownloadInvoiceComponent from '@/vuejs/modules/account/components/ButtonDownloadInvoiceComponent.vue'
+import DownloadIconComponent from '@/vuejs/modules/shared/icon/DownloadIconComponent.vue'
+import ArrowLeftIconComponent from '@/vuejs/modules/shared/icon/ArrowLeftIconComponent.vue'
 
 const route = useRoute()
 const orderStore = useOrderStore()
@@ -156,6 +237,18 @@ const order = ref<Order>()
 const isLoading = ref<boolean>(false)
 const alertStore = useAlertStore()
 const { show: showAlert } = storeToRefs(alertStore)
+
+const orderEcoTaxTotal = computed((): string | null => {
+  if (!order.value) return null
+  const allItems = order.value.orderPartners?.length
+    ? order.value.orderPartners.flatMap((p) => p.items)
+    : (order.value.items ?? [])
+  const total = allItems.reduce((sum, item) => {
+    const unitEcoTax = item.eco_tax ?? 0
+    return sum + unitEcoTax * (item.quantity ?? 1)
+  }, 0)
+  return total > 0 ? formatPrice(total) : null
+})
 
 watch(
   () => route.params.id as string,
@@ -174,5 +267,3 @@ watch(
   { immediate: true },
 )
 </script>
-
-<style scoped></style>

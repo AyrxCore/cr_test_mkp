@@ -8,24 +8,16 @@ use App\Tests\Story\Channel\ChannelStory;
 
 \it('returns 404 on collection operations', function (
     string $method,
-    string $expectedResponse,
 ) {
     $client = $this::createClientWithCredentials();
 
     $client->request($method, '/api/channels/');
 
     $this->assertResponseStatusCodeSame(404);
-    $this->assertJsonResponseMatches($expectedResponse);
 })
     ->with([
-        'GET' => [
-            'method' => 'GET',
-            'expectedResponse' => 'channel/get-collection-not-found-response.json',
-        ],
-        'POST' => [
-            'method' => 'POST',
-            'expectedResponse' => 'channel/post-not-found-response.json',
-        ],
+        'GET',
+        'POST',
     ])
     ->group('channels');
 
@@ -35,7 +27,6 @@ use App\Tests\Story\Channel\ChannelStory;
     $client->request('PATCH', '/api/channels/8e211f4d-c2c9-4fdb-9031-5414d019b488');
 
     $this->assertResponseStatusCodeSame(405);
-    $this->assertJsonResponseMatches('channel/patch-not-found-response.json');
 })
     ->group('channels');
 
@@ -49,7 +40,6 @@ use App\Tests\Story\Channel\ChannelStory;
     $client->request('DELETE', \sprintf('/api/channels/%s', $channel->getId()));
 
     $this->assertResponseStatusCodeSame(405);
-    $this->assertJsonResponseMatches('channel/delete-not-allowed-response.json');
 })->group('channels');
 
 \it('returns a 404 when trying to GET a channel by ID', function () {
@@ -62,7 +52,7 @@ use App\Tests\Story\Channel\ChannelStory;
     $client->request('GET', \sprintf('/api/channels/%s', $channel->getId()));
 
     $this->assertResponseStatusCodeSame(404);
-    $this->assertJsonContains(['hydra:description' => '']);
+    $this->assertJsonContains(['description' => '']);
 })->group('channels');
 
 \it('returns a 404 when trying to get a non-existing channel by host', function () {

@@ -1,31 +1,41 @@
 monolog:
-    channels: [ 'api', 'upplerApi']
-    handlers:
-        main:
-            type: stream
-            path: "%kernel.logs_dir%/%kernel.environment%.log"
-            level: debug
-        # uncomment to get logging in your browser
-        # you may have to allow bigger header sizes in your Web server configuration
-        #firephp:
-        #    type: firephp
-        #    level: info
-        #chromephp:
-        #    type: chromephp
-        #    level: info
-        console:
-            type: console
-            process_psr_3_messages: false
-            level: error
-            channels: ["!event", "!doctrine", "!console"]
-        #Channel et fichier réservés aux logs des erreurs liés aux appels api
-        api:
-            type: stream
-            path: "%kernel.logs_dir%/api.log"
-            level: debug
-            channels: [ "api"]
-        upplerApi:
-            type: stream
-            path: php://stdout
-            level: debug
-            channels: [ "upplerApi"]
+  channels: ['api', 'upplerApi', 'storyblok', 'djust']
+  handlers:
+    main:
+      type: stream
+      path: '%kernel.logs_dir%/%kernel.environment%.log'
+      level: debug
+    # uncomment to get logging in your browser
+    # you may have to allow bigger header sizes in your Web server configuration
+    #firephp:
+    #    type: firephp
+    #    level: info
+    #chromephp:
+    #    type: chromephp
+    #    level: info
+    console:
+      type: console
+      process_psr_3_messages: false
+      level: error
+      channels: ['!event', '!doctrine', '!console']
+    #Channel et fichier réservés aux logs des erreurs liés aux appels api
+    api:
+      type: stream
+      path: '%kernel.logs_dir%/api.log'
+      level: debug
+      channels: ['api']
+    upplerApi:
+      type: stream
+      path: php://stdout
+      level: debug
+      channels: ['upplerApi']
+    storyblok:
+      type: stream
+      path: '%kernel.logs_dir%/storyblok.log'
+      level: debug
+      channels: ['storyblok']
+    djust:
+      type: stream
+      path: '%kernel.logs_dir%/djust.log'
+      level: debug
+      channels: ['djust']

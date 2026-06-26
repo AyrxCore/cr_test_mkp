@@ -16,6 +16,7 @@ class Setting
     public const CHATBOT = 'chatbot';
     public const EXTERNAL_SCRIPTS_TAGS = 'external_scripts_tags';
     public const MAINTENANCE_MODE = 'maintenance_mode';
+    public const MAINTENANCE_WHITELIST_IPS = 'maintenance_whitelist_ips';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]

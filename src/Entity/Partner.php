@@ -28,6 +28,7 @@ use Symfony\Component\Uid\Uuid;
     paginationEnabled: false
 )]
 #[ApiFilter(SearchFilter::class, properties: ['upplerId' => 'exact'])]
+#[ORM\Index(columns: ['uppler_id'], name: 'idx_partner_uppler_id')]
 class Partner
 {
     #[ORM\Id]
@@ -206,4 +207,5 @@ class Partner
 
         return $this;
     }
+
 }

@@ -31,33 +31,41 @@ use App\State\Provider\OrderProvider;
 )]
 final class Order
 {
-    public const string ORDER_NEW = 'NEW';
-    public const string ORDER_PENDING = 'PENDING';
-    public const string ORDER_CONFIRMED = 'CONFIRMED';
-    public const string ORDER_EDITED = 'EDITED';
-    public const string ORDER_REFUSED = 'REFUSED';
-    public const string ORDER_EXPIRED = 'EXPIRED';
-    public const string ORDER_CANCELED = 'CANCELED';
+
+    /**
+     * Shipping statuses
+     */
+    public const string SHIPPING_PENDING = 'pending';
+    public const string SHIPPING_PREPARATION = 'preparation';
+    public const string SHIPPING_READY = 'ready';
+    public const string SHIPPING_PARTIALLY_SHIPPED = 'partially_shipped';
+    public const string SHIPPING_SHIPPED = 'shipped';
+    public const string SHIPPING_DELIVERED = 'delivered';
+    public const string SHIPPING_RETURNED = 'returned';
+    public const string SHIPPING_CANCELLED = 'cancelled';
 
     #[ApiProperty(identifier: true)]
     private ?int $id = null;
     private string $orderNumber;
     private array $items = [];
+    private int $productCount = 0;
     private float $shipmentAmount = 0;
     private float $total = 0;
     private float $totalExcludingTaxes = 0;
-    private ?string $state = null;
     private ?string $billingAddress = null;
     private ?string $shippingAddress = null;
     private ?string $shippingState = null;
-    private ?int $paymentId = null;
+    private ?string $shippingTrackingUrl = null;
+    private ?string $invoiceUrl = null;
+    private array $orderInvoiceLinks = [];
+    private array $orderPartners = [];
     private ?\DateTimeInterface $createdAt = null;
     private ?\DateTimeInterface $updatedAt = null;
     private ?\DateTimeInterface $confirmedAt = null;
+    /** Affiché dans OrderComponent (badge "Expédiée") mais pas l'information dans l'API */
     private ?\DateTimeInterface $shippedAt = null;
+    /** Affiché dans OrderComponent (badge "Livrée") mais pas l'information dans l'API */
     private ?\DateTimeInterface $deliveredAt = null;
-    private ?\DateTimeInterface $canceledAt = null;
-    private ?\DateTimeInterface $refusedAt = null;
 
     public function getId(): ?int
     {
@@ -101,16 +109,6 @@ final class Order
         $this->totalExcludingTaxes = $totalExcludingTaxes;
     }
 
-    public function getState(): ?string
-    {
-        return $this->state;
-    }
-
-    public function setState(?string $state): void
-    {
-        $this->state = $state;
-    }
-
     public function getShippingAddress(): ?string
     {
         return $this->shippingAddress;
@@ -129,6 +127,16 @@ final class Order
     public function setShippingState(?string $shippingState): void
     {
         $this->shippingState = $shippingState;
+    }
+
+    public function getShippingTrackingUrl(): ?string
+    {
+        return $this->shippingTrackingUrl;
+    }
+
+    public function setShippingTrackingUrl(?string $shippingTrackingUrl): void
+    {
+        $this->shippingTrackingUrl = $shippingTrackingUrl;
     }
 
     public function getCreatedAt(): ?\DateTimeInterface
@@ -181,26 +189,6 @@ final class Order
         $this->deliveredAt = $deliveredAt;
     }
 
-    public function getCanceledAt(): ?\DateTimeInterface
-    {
-        return $this->canceledAt;
-    }
-
-    public function setCanceledAt(?\DateTimeInterface $canceledAt): void
-    {
-        $this->canceledAt = $canceledAt;
-    }
-
-    public function getRefusedAt(): ?\DateTimeInterface
-    {
-        return $this->refusedAt;
-    }
-
-    public function setRefusedAt(?\DateTimeInterface $refusedAt): void
-    {
-        $this->refusedAt = $refusedAt;
-    }
-
     public function getBillingAddress(): ?string
     {
         return $this->billingAddress;
@@ -221,6 +209,16 @@ final class Order
         $this->items = $items;
     }
 
+    public function getProductCount(): int
+    {
+        return $this->productCount;
+    }
+
+    public function setProductCount(int $productCount): void
+    {
+        $this->productCount = $productCount;
+    }
+
     public function getShipmentAmount(): float
     {
         return $this->shipmentAmount;
@@ -231,13 +229,33 @@ final class Order
         $this->shipmentAmount = $shipmentAmount;
     }
 
-    public function getPaymentId(): ?int
+    public function getInvoiceUrl(): ?string
     {
-        return $this->paymentId;
+        return $this->invoiceUrl;
     }
 
-    public function setPaymentId(?int $paymentId): void
+    public function setInvoiceUrl(?string $invoiceUrl): void
     {
-        $this->paymentId = $paymentId;
+        $this->invoiceUrl = $invoiceUrl;
+    }
+
+    public function getOrderInvoiceLinks(): array
+    {
+        return $this->orderInvoiceLinks;
+    }
+
+    public function setOrderInvoiceLinks(array $orderInvoiceLinks): void
+    {
+        $this->orderInvoiceLinks = $orderInvoiceLinks;
+    }
+
+    public function getOrderPartners(): array
+    {
+        return $this->orderPartners;
+    }
+
+    public function setOrderPartners(array $orderPartners): void
+    {
+        $this->orderPartners = $orderPartners;
     }
 }

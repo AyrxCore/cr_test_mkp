@@ -69,7 +69,8 @@ import { AccountPageList } from '@/vuejs/router/pages-list'
 import { useUserStore } from '@/vuejs/stores/user'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { sendGtmEvent } from '@/vuejs/services/gtm'
-import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
+// TODO (MKP-1411): Import à décommenter quand les fonctionnalités Favoris/Paniers seront disponibles via DJUST
+// import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
 
 import CloseIcon from '@/vuejs/modules/shared/icon/CloseIconComponent.vue'
 import UserIcon from '@/vuejs/modules/shared/icon/UserIconComponent.vue'
@@ -100,15 +101,21 @@ const listAccountGlobal = ref<any[]>([
     routeName: AccountPageList.ACCOUNT,
   },
   {
-    label: 'Mes favoris',
-    routeName: AccountPageList.FAVORITES_LIST,
-    condition: OPTIONAL_FRONT_BLOCKS.FAVORITES,
+    label: 'Mes adresses',
+    routeName: AccountPageList.ADDRESSES,
   },
-  {
-    label: 'Mes paniers sauvegardés',
-    routeName: AccountPageList.SAVED_CARTS,
-    condition: OPTIONAL_FRONT_BLOCKS.SAVED_CARTS,
-  },
+  // TODO (MKP-1411): Mes favoris temporairement masqué - à rétablir quand la fonctionnalité sera disponible via DJUST
+  // {
+  //   label: 'Mes favoris',
+  //   routeName: AccountPageList.FAVORITES_LIST,
+  //   condition: OPTIONAL_FRONT_BLOCKS.FAVORITES,
+  // },
+  // TODO (MKP-1411): Mes paniers sauvegardés temporairement masqué - à rétablir quand la fonctionnalité sera disponible via DJUST
+  // {
+  //   label: 'Mes paniers sauvegardés',
+  //   routeName: AccountPageList.SAVED_CARTS,
+  //   condition: OPTIONAL_FRONT_BLOCKS.SAVED_CARTS,
+  // },
 ])
 
 const listAccount = computed((): any[] => {

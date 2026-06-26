@@ -32,6 +32,10 @@ final class AccountFactory extends PersistentObjectFactory
             'upplerSubAccountId' => self::faker()->randomNumber(3),
             'upplerUserId' => self::faker()->randomNumber(4),
             'upplerUsername' => self::faker()->userName(),
+            'djustUsername' => self::faker()->userName(),
+            'djustPassword' => self::faker()->word(),
+            'djustCustomerAccountId' => self::faker()->word(),
+            'user' => UserFactory::createOne(),
         ];
     }
 

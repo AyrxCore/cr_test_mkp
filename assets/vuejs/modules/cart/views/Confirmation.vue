@@ -17,38 +17,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useRoute } from 'vue-router'
 
 import { PageList } from '@/vuejs/router'
-import { useCartStore } from '@/vuejs/stores/cart'
 import { useUserStore } from '@/vuejs/stores/user'
-import { formatCartItemsGtmEvent, sendGtmEvent } from '@/vuejs/services/gtm'
 
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 
-const route = useRoute()
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
-const cartStore = useCartStore()
-
-const cartResume = ref()
-
-watch(
-  () => route.params.id as string,
-  async (id: string) => {
-    if (id) {
-      cartResume.value = await cartStore.findCartById(parseInt(id))
-      sendGtmEvent('purchase', {
-        ecommerce: {
-          currency: 'EUR',
-          items: formatCartItemsGtmEvent(cartResume.value),
-        },
-      })
-    }
-  },
-
-  { immediate: true },
-)
 </script>

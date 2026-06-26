@@ -1,8 +1,8 @@
 {
   "@context": "\/api\/contexts\/Product",
   "@id": "\/api\/products",
-  "@type": "hydra:Collection",
-  "hydra:member": [
+  "@type": "Collection",
+  "member": [
     {
       "results": [
         {
@@ -28,13 +28,21 @@
           "defaultVariantOptions": [],
           "priceReference": 548,
           "price": 274,
-          "isAccordCadre": false,
           "seller": {
             "id": 26,
             "name": "KRÖMM",
-            "avatar": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/d4\/0f\/e751ba2240d6697e744a20f21d08.jpg"
+            "avatar": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/d4\/0f\/e751ba2240d6697e744a20f21d08.jpg",
+            "corporateName": null,
+            "description": null,
+            "tos": [],
+            "productCount": null,
+            "checked": null
           },
-          "favorites": []
+          "favorites": [],
+          "percent": 50,
+          "productType": "SELLABLE",
+          "notSellableFormWithMessage": false,
+          "newTarifNotification": false
         },
         {
           "id": 16797,
@@ -90,13 +98,21 @@
           "defaultVariantOptions": [],
           "priceReference": 500,
           "price": 216,
-          "isAccordCadre": false,
           "seller": {
             "id": 29,
             "name": "SIGNO DECO",
-            "avatar": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/81\/9a\/50e314a50d57f442d6f23d83d5f5.jpg"
+            "avatar": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/81\/9a\/50e314a50d57f442d6f23d83d5f5.jpg",
+            "corporateName": null,
+            "description": null,
+            "tos": [],
+            "productCount": null,
+            "checked": null
           },
-          "favorites": []
+          "favorites": [],
+          "percent": 57,
+          "productType": "SELLABLE",
+          "notSellableFormWithMessage": false,
+          "newTarifNotification": false
         },
         {
           "id": 18018,
@@ -107,10 +123,10 @@
             "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/34\/84\/fcc026320411e3c235431d92ea68.jpeg"
           ],
           "properties": {
-            "Conditionnement":"L\u0027unité",
-            "Origine (Pays\/Région)":"CN",
-            "Marque":"OWA"
-          } ,
+            "Conditionnement": "L\u0027unité",
+            "Origine (Pays\/Région)": "CN",
+            "Marque": "OWA"
+          },
           "variants": [
             {
               "id": 40665,
@@ -125,13 +141,21 @@
           "defaultVariantOptions": [],
           "priceReference": 136.32,
           "price": 103.66,
-          "isAccordCadre": false,
           "seller": {
             "id": 27,
             "name": "ALDA MAJUSCULE",
-            "avatar": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/ab\/b9\/2d7801781d79e920be51e43421e2.jpg"
+            "avatar": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/ab\/b9\/2d7801781d79e920be51e43421e2.jpg",
+            "corporateName": null,
+            "description": null,
+            "tos": [],
+            "productCount": null,
+            "checked": null
           },
-          "favorites": []
+          "favorites": [],
+          "percent": 24,
+          "productType": "SELLABLE",
+          "notSellableFormWithMessage": false,
+          "newTarifNotification": false
         },
         {
           "id": 24501,
@@ -141,8 +165,8 @@
           "images": [
             "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/3c\/0c\/3b79483329df4139851a49100edf.jpeg"
           ],
-          "properties":{
-            "Document à télécharger":"https:\/\/mediaserver.berner.eu\/datasheets\/DATASHEET_30464117[P]_FR15_frFR.pdf"
+          "properties": {
+            "Document à télécharger": "https:\/\/mediaserver.berner.eu\/datasheets\/DATASHEET_30464117[P]_FR15_frFR.pdf"
           },
           "variants": [
             {
@@ -158,13 +182,21 @@
           "defaultVariantOptions": [],
           "priceReference": 469,
           "price": 328.3,
-          "isAccordCadre": false,
           "seller": {
             "id": 22,
             "name": "BERNER",
-            "avatar": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/1c\/f6\/905138fcfe98f4f0cc450b09bd02.png"
+            "avatar": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/1c\/f6\/905138fcfe98f4f0cc450b09bd02.png",
+            "corporateName": null,
+            "description": null,
+            "tos": [],
+            "productCount": null,
+            "checked": null
           },
-          "favorites": []
+          "favorites": [],
+          "percent": 30,
+          "productType": "SELLABLE",
+          "notSellableFormWithMessage": false,
+          "newTarifNotification": false
         },
         {
           "id": 12260,
@@ -174,10 +206,10 @@
           "images": [
             "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/07\/22\/a21df9f7744b54d473103bfe59ea.jpeg"
           ],
-          "properties":{
-            "Format":"E92 - AAA",
-            "Blister de":"4 piles",
-            "Marque":"Energizer"
+          "properties": {
+            "Format": "E92 - AAA",
+            "Blister de": "4 piles",
+            "Marque": "Energizer"
           },
           "variants": [
             {
@@ -193,20 +225,28 @@
           "defaultVariantOptions": [],
           "priceReference": 13,
           "price": 6.5,
-          "isAccordCadre": false,
           "seller": {
             "id": 25,
             "name": "AEA - AIN ENERGIE AUTONOME",
-            "avatar": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/e3\/31\/a5a46ca53be781498b44085ca9ce.jpg"
+            "avatar": "https:\/\/uppler-platform-quantis.s3.eu-west-3.amazonaws.com\/image\/e3\/31\/a5a46ca53be781498b44085ca9ce.jpg",
+            "corporateName": null,
+            "description": null,
+            "tos": [],
+            "productCount": null,
+            "checked": null
           },
-          "favorites": []
+          "favorites": [],
+          "percent": 50,
+          "productType": "SELLABLE",
+          "notSellableFormWithMessage": false,
+          "newTarifNotification": false
         }
       ]
     }
   ],
-  "hydra:totalItems":1,
-  "hydra:view":{
-    "@id":"\/api\/products?perPage=5",
-    "@type":"hydra:PartialCollectionView"
+  "totalItems": 1,
+  "view": {
+    "@id": "\/api\/products?perPage=5",
+    "@type": "PartialCollectionView"
   }
 }

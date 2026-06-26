@@ -7,6 +7,8 @@ use App\Service\AccordCadreSubscriptionService;
 use App\Service\MailerProvider;
 use Symfony\Component\HttpFoundation\Response;
 
+uses()->group('ApiNewsletterRattachementController');
+
 \beforeEach(function () {
     $this->client = $this->createClientWithCredentials();
     $this->cache = $this->client->getContainer()->get('cache.app');
@@ -27,7 +29,7 @@ use Symfony\Component\HttpFoundation\Response;
 
     \expect($response->getStatusCode())->toBe(Response::HTTP_OK);
     \expect($response->getContent())->toContain('Traitement en cours');
-})->group('ApiNewsletterRattachementController');
+});
 
 \it('shows error if email is invalid', function () {
     $email = 'email-invalide';
@@ -39,7 +41,7 @@ use Symfony\Component\HttpFoundation\Response;
 
     \expect($response->getStatusCode())->toBe(Response::HTTP_OK);
     \expect($response->getContent())->toContain('L&#039;adresse email '.$email.'est invalide');
-})->group('ApiNewsletterRattachementController');
+});
 
 \it('shows error if partner does not exist', function () {
     $response = $this->client->request('POST', '/rattachement-newsletter/process', [
@@ -50,7 +52,7 @@ use Symfony\Component\HttpFoundation\Response;
 
     \expect($response->getStatusCode())->toBe(Response::HTTP_OK);
     \expect($response->getContent())->toContain('Fournisseur non identifié');
-})->group('ApiNewsletterRattachementController');
+});
 
 \it('shows error if no account found for email', function () {
     $email = 'unknown@email.com';
@@ -63,7 +65,7 @@ use Symfony\Component\HttpFoundation\Response;
 
     \expect($response->getStatusCode())->toBe(Response::HTTP_OK);
     \expect($response->getContent())->toContain('Aucun compte n&#039;a été trouvé pour le mail '.$email);
-})->group('ApiNewsletterRattachementController');
+});
 
 \it('catch cache data and skip sending partner email', function () {
     $partnerId = (string) $this->partner->getId();
@@ -84,7 +86,7 @@ use Symfony\Component\HttpFoundation\Response;
         ]]);
 
     \expect($response->getStatusCode())->toBe(Response::HTTP_FOUND);
-})->group('ApiNewsletterRattachementController');
+});
 
 \it('not sending email if rattachement recipients for partner is null', function () {
     $partnerId = (string) $this->partner->getId();
@@ -108,7 +110,7 @@ use Symfony\Component\HttpFoundation\Response;
 
     $email = $this->getMailerMessage();
     \expect($email)->toBeNull();
-})->group('ApiNewsletterRattachementController');
+});
 
 \it('successfully processes subscription when account and partner exist', function () {
     $this->cache->clear();
@@ -126,4 +128,4 @@ use Symfony\Component\HttpFoundation\Response;
     $email = $this->getMailerMessage();
     \expect($email)->not->toBeNull();
     \expect($email->getSubject())->toContain('Demande de rattachement');
-})->group('ApiNewsletterRattachementController');
+});

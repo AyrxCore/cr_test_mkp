@@ -23,8 +23,7 @@ const props = defineProps({
 })
 
 const formData = computed(() => ({
-  accordId: props.product.properties['accord-id'],
-  accordName: props.product.properties['accord-name'],
+  accordId: props.product.accordId,
   productName: props.product.name,
   partnerName: props.product.seller?.name || '',
 }))

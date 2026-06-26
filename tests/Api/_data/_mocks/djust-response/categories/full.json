@@ -1,0 +1,178 @@
+[
+  {
+    "id": "0000001001",
+    "name": "Électronique",
+    "externalId": "electronique",
+    "active": true,
+    "childrenCategories": [
+      {
+        "id": "0000001002",
+        "name": "Ordinateurs",
+        "externalId": "ordinateurs",
+        "active": true,
+        "childrenCategories": [
+          {
+            "id": "0000001003",
+            "name": "Portables",
+            "externalId": "portables",
+            "active": true,
+            "childrenCategories": [],
+            "customFieldValues": []
+          },
+          {
+            "id": "0000001004",
+            "name": "Bureautique",
+            "externalId": "bureautique",
+            "active": true,
+            "childrenCategories": [],
+            "customFieldValues": []
+          }
+        ],
+        "customFieldValues": []
+      },
+      {
+        "id": "0000001005",
+        "name": "Smartphones",
+        "externalId": "smartphones",
+        "active": true,
+        "childrenCategories": [],
+        "customFieldValues": []
+      }
+    ],
+    "customFieldValues": []
+  },
+  {
+    "id": "0000002001",
+    "name": "Mobilier",
+    "externalId": "mobilier",
+    "active": true,
+    "childrenCategories": [
+      {
+        "id": "0000002002",
+        "name": "Bureau",
+        "externalId": "bureau",
+        "active": true,
+        "childrenCategories": [
+          {
+            "id": "0000002003",
+            "name": "Chaises",
+            "externalId": "chaises",
+            "active": true,
+            "childrenCategories": [],
+            "customFieldValues": []
+          },
+          {
+            "id": "0000002004",
+            "name": "Tables",
+            "externalId": "tables",
+            "active": true,
+            "childrenCategories": [],
+            "customFieldValues": []
+          }
+        ],
+        "customFieldValues": []
+      },
+      {
+        "id": "0000002005",
+        "name": "Rangement",
+        "externalId": "rangement",
+        "active": true,
+        "childrenCategories": [],
+        "customFieldValues": []
+      }
+    ],
+    "customFieldValues": []
+  },
+  {
+    "id": "0000003001",
+    "name": "Services",
+    "externalId": "services",
+    "active": true,
+    "childrenCategories": [
+      {
+        "id": "0000003002",
+        "name": "Maintenance",
+        "externalId": "maintenance",
+        "active": true,
+        "childrenCategories": [],
+        "customFieldValues": []
+      },
+      {
+        "id": "0000003003",
+        "name": "Formation",
+        "externalId": "formation",
+        "active": true,
+        "childrenCategories": [],
+        "customFieldValues": []
+      }
+    ],
+    "customFieldValues": []
+  },
+  {
+    "id": "0000004001",
+    "name": "Consommables",
+    "externalId": "consommables",
+    "active": true,
+    "childrenCategories": [
+      {
+        "id": "0000004002",
+        "name": "Papeterie",
+        "externalId": "papeterie",
+        "active": true,
+        "childrenCategories": [
+          {
+            "id": "0000004003",
+            "name": "Cahiers",
+            "externalId": "cahiers",
+            "active": true,
+            "childrenCategories": [],
+            "customFieldValues": []
+          },
+          {
+            "id": "0000004004",
+            "name": "Stylos",
+            "externalId": "stylos",
+            "active": true,
+            "childrenCategories": [],
+            "customFieldValues": []
+          }
+        ],
+        "customFieldValues": []
+      }
+    ],
+    "customFieldValues": []
+  },
+  {
+    "id": "0000005001",
+    "name": "Équipement de protection",
+    "externalId": "equipement_protection",
+    "active": true,
+    "childrenCategories": [
+      {
+        "id": "0000005002",
+        "name": "Vêtements",
+        "externalId": "vetements",
+        "active": true,
+        "childrenCategories": [],
+        "customFieldValues": []
+      },
+      {
+        "id": "0000005003",
+        "name": "Accessoires",
+        "externalId": "accessoires",
+        "active": false,
+        "childrenCategories": [],
+        "customFieldValues": []
+      }
+    ],
+    "customFieldValues": []
+  },
+  {
+    "id": "0000006001",
+    "name": "Télécommunications",
+    "externalId": "telecommunications",
+    "active": true,
+    "childrenCategories": [],
+    "customFieldValues": []
+  }
+]

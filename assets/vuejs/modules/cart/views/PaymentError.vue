@@ -4,7 +4,7 @@
   </h3>
   <div class="mb-10 flex w-1/2 bg-orange-100 p-3">
     <p class="text-sm text-orange-500 md:text-lg">
-      Une erreur est survenue lors de la validation de votre commande, Aucun
+      Une erreur est survenue lors de la validation de votre commande. Aucun
       prélèvement n'a été effectué sur votre compte, veuillez contacter le
       service adhérents.
     </p>

@@ -13,12 +13,12 @@
           />
         </div>
         <div class="my-4">
-          <router-link
+          <RouterLink
             :to="{ name: ProductPageList.SELLERS }"
             class="text-2xl font-bold tracking-wide hover:bg-gray-200"
           >
             Tous les partenaires
-          </router-link>
+          </RouterLink>
         </div>
         <div
           v-for="category in categories"
@@ -40,7 +40,14 @@
           <ChevronLeftIconComponent class="mr-4 hover:text-secondary" />
           <span class="cursor-pointer text-lg">Retour</span>
         </div>
-        <div class="my-4 text-2xl font-bold tracking-wide">
+        <div
+          class="my-4 text-2xl font-bold tracking-wide"
+          :class="{ 'inline-flex items-center text-green-qantis': isSustainableCategorySelected }"
+        >
+          <LeafIconComponent
+            v-if="isSustainableCategorySelected"
+            class="mr-2 h-6 w-6 shrink-0"
+          />
           {{ selectedCategory.name }}
         </div>
         <h3>
@@ -76,14 +83,16 @@ import { computed, ref } from 'vue'
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import { useCategoryStore } from '@/vuejs/stores/category'
 import { Category } from '@/vuejs/types/Product/Category'
+import { SUSTAINABLE_PURCHASES_CATEGORY_ID } from '@/vuejs/constants/categoryConfigs'
 
 import MenuCategoryChildComponent from '@/vuejs/modules/shared/header-component/MenuCategoryChildComponent.vue'
 import ChevronLeftIconComponent from '@/vuejs/modules/shared/icon/ChevronLeftIconComponent.vue'
 import CloseIcon from '@/vuejs/modules/shared/icon/CloseIconComponent.vue'
+import LeafIconComponent from '@/vuejs/modules/shared/icon/LeafIconComponent.vue'
 
 const emit = defineEmits(['update:modelValue'])
 
-const props = defineProps({
+defineProps({
   modelValue: {
     required: true,
     type: Boolean,
@@ -98,6 +107,14 @@ const categoryStore = useCategoryStore()
 const categories = computed((): Category[] => {
   return categoryStore.categoriesSortedAlphabetically
 })
+
+const isSustainableCategorySelected = computed((): boolean => {
+  return (
+    selectedCategory.value?.id === SUSTAINABLE_PURCHASES_CATEGORY_ID ||
+    selectedCategory.value?.name === 'Achats durables'
+  )
+})
+
 const closeMenu = (): void => {
   emit('update:modelValue', false)
   backMenuCategories()

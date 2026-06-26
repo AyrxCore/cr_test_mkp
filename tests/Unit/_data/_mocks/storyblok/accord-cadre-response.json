@@ -1,0 +1,296 @@
+{
+  "name": "tarif classique",
+  "content": {
+    "body": [
+      {
+        "logoUrl": "https://ged-wp-files.s3.amazonaws.com/marketplace/Accords-cadres/PEUGEOT/PEUGEOT-Logo-Marketplace.jpg",
+        "component": "bannerBlock",
+        "badgeTextTop": "Jusqu'à",
+        "imgBannerUrlDesktop": "https://ged-wp-files.s3.amazonaws.com/marketplace/Accords-cadres/PEUGEOT/Banniere-Peugeot-new.jpg",
+        "imgBannerUrlMobile": "https://ged-wp-files.s3.amazonaws.com/marketplace/Accords-cadres/PEUGEOT/Banniere-Peugeot-new-mobile.jpg",
+        "badgeTextBottom": "-70%"
+      },
+      {
+        "title": "Constructeur automobile français et filiale du groupe Stellantis depuis 2021, Peugeot vous propose des véhicules à l'achat.",
+        "rseScore": "8,4",
+        "component": "presentationBlock",
+        "description": "Peugeot, référence française de l’automobile, offre aux adhérents de la centrale des conditions exclusives sur une large gamme de véhicules. Performance, fiabilité et accompagnement dédié à chaque étape. Peugeot, référence française de l’automobile, offre aux adhérents de la centrale des conditions exclusives sur une large gamme de véhicules. Performance, fiabilité et accompagnement dédié à chaque étape.",
+        "bulletpoints": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "bullet_list",
+              "content": [
+                {
+                  "type": "list_item",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "attrs": {},
+                      "content": [
+                        {
+                          "text": "Offres exclusives",
+                          "type": "text",
+                          "marks": [
+                            {
+                              "type": "textStyle",
+                              "attrs": {
+                                "color": ""
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "list_item",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "attrs": {},
+                      "content": [
+                        {
+                          "text": "Conditions transparentes",
+                          "type": "text",
+                          "marks": [
+                            {
+                              "type": "textStyle",
+                              "attrs": {
+                                "color": ""
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "list_item",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "attrs": {},
+                      "content": [
+                        {
+                          "text": "Réseau national d’entretien",
+                          "type": "text",
+                          "marks": [
+                            {
+                              "type": "textStyle",
+                              "attrs": {
+                                "color": ""
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "list_item",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "attrs": {},
+                      "content": [
+                        {
+                          "text": "Financement sur mesure",
+                          "type": "text",
+                          "marks": [
+                            {
+                              "type": "textStyle",
+                              "attrs": {
+                                "color": ""
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "layerMoreInformations": [
+          {
+            "phone": "0635463546",
+            "description": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "attrs": {},
+                  "content": [
+                    {
+                      "text": "Test de description du layer \"en savoir plus\"",
+                      "type": "text"
+                    }
+                  ]
+                }
+              ]
+            },
+            "phoneDescription": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "attrs": {},
+                  "content": [
+                    {
+                      "text": "Test de description du téléphone",
+                      "type": "text"
+                    }
+                  ]
+                }
+              ]
+            },
+            "assetButtons": [
+              {
+                "assetLink": "www.test.fr",
+                "component": "assetButton",
+                "buttonLabel": "test label button"
+              },
+              {
+                "assetLink": "www.2test.com",
+                "component": "assetButton",
+                "buttonLabel": "test 2 label button"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Conditions négociées",
+        "component": "negociatedTermsBlock",
+        "assetButtons": [
+          {
+            "assetLink": "www.test.fr",
+            "component": "assetButton",
+            "buttonLabel": "test label button"
+          },
+          {
+            "assetLink": "www.2test.com",
+            "component": "assetButton",
+            "buttonLabel": "test 2 label button"
+          }
+        ],
+        "description": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "attrs": {},
+              "content": [
+                {
+                  "text": "Test de description des conditions négociées",
+                  "type": "text"
+                }
+              ]
+            }
+          ]
+        },
+        "detailsTitle": "Détails et engagements",
+        "detailsContent": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "attrs": {},
+              "content": [
+                {
+                  "text": "Test du contenu \"Détails et engagements\"",
+                  "type": "text"
+                }
+              ]
+            }
+          ]
+        },
+        "negociatedTermsButton": [
+          {
+            "label": "Consulter les conditions négociées",
+            "negociatedTermsLayerItems": [
+              {
+                "title": "Tableau de conditions négociées",
+                "imgLink": "www.test.fr"
+              },
+              {
+                "title": "Tableau de conditions négociées 2",
+                "imgLink": "www.test2.fr"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Comment en bénéficier",
+        "component": "stepsBlock",
+        "stepItems": [
+          {
+            "title_qantis": "Prenez contact",
+            "component": "stepItem",
+            "description_qantis": "Contactez le partenaire en cliquant sur le bouton “Se rattacher à ce partenaire”."
+          },
+          {
+            "title_qantis": "Le partenaire reçoit votre demande",
+            "component": "stepItem",
+            "description_qantis": "Votre demande est envoyée au partenaire qui vous répondra dans les 48h."
+          },
+          {
+            "title_qantis": "Le partenaire vous répond",
+            "component": "stepItem",
+            "description_qantis": "Notre partenaire revient vers vous avec sa meilleure proposition."
+          }
+        ]
+      }
+    ],
+    "tarifId": "67a1dc3f-564c-2485-515c-54b7f3ee9bf5",
+    "component": "accordCadrePage",
+    "accordCadreName": "PEUGEOT",
+    "accordCadreType": "STANDARD",
+    "urlCtaRattachement": "",
+    "statutsRattachement": [
+      {
+        "labelPending": "En cours d’activation",
+        "labelActivated": "Activé",
+        "labelNotActivated": "A activer"
+      }
+    ],
+    "labelCtaRattachement": "Activer mes avantages",
+    "successLayerDescription": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {},
+          "content": [
+            {
+              "text": "Félicitations ! Vous êtes rattaché  à cet accord-cadre",
+              "type": "text"
+            }
+          ]
+        }
+      ]
+    },
+    "confirmationLayerDescription": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {},
+          "content": [
+            {
+              "text": "Êtes-vous sûr de vouloir être rattaché à cet accord-cadre ?",
+              "type": "text"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

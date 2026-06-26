@@ -177,7 +177,6 @@
             class="mt-2 rounded-lg border border-primary"
           >
             <label
-              v-if="account.externalApiData"
               :for="`account-radio-${id}`"
               class="flex cursor-pointer items-center rounded-md bg-white px-4 py-2"
             >
@@ -191,13 +190,13 @@
               />
               <div>
                 <div class="font-bold uppercase text-primary">
-                  {{ account.externalApiData.name }}
+                  {{ account.adherent.name }}
                 </div>
                 <div
-                  v-if="account.externalApiData.number"
+                  v-if="account.adherent.siret"
                   class="font-bold text-gray-700"
                 >
-                  SIRET : {{ account.externalApiData.number }}
+                  SIRET : {{ account.adherent.siret }}
                 </div>
               </div>
             </label>

@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1-labs
+# syntax=docker/dockerfile:1
 #
 # Intermediate image to build public directory
 #
@@ -83,9 +83,13 @@ USER root
 FROM nginx:alpine AS nginx
 
 COPY docker/nginx/conf.d/default.conf /default.conf.template
+COPY docker/nginx/conf.d/https.conf /https.conf.template
+COPY docker/nginx/conf.d/fastcgi_php.conf /etc/nginx/conf.d/fastcgi_php.conf
+COPY docker/nginx/docker-entrypoint-nginx.sh /docker-entrypoint-nginx.sh
+RUN chmod +x /docker-entrypoint-nginx.sh
 
 WORKDIR /var/www
 
 COPY --from=php /var/www/public public/
 
-CMD ["/bin/sh" , "-c" , "envsubst '$PHP_URL' < /default.conf.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"]
+CMD ["/docker-entrypoint-nginx.sh"]

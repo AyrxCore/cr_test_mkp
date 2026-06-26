@@ -1,13 +1,24 @@
-version: '3.8'
-
 services:
-  php:
-    env_file:
-      - .env
-      - .env.dev
-      - .env.local
-      - .env.test
-
-  nginx:
+  postgres_test_mkp:
+    image: postgres:17.5
+    container_name: postgres_test_mkp
     ports:
-      - 80:80
+      - "5449:5432"
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_DB: template_db_test
+      PGDATA: /var/lib/postgresql/data
+    tmpfs:
+      - /var/lib/postgresql/data:rw
+    networks:
+      - dev-qantis
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+networks:
+  dev-qantis:
+    external: true

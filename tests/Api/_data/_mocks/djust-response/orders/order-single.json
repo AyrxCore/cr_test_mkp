@@ -1,0 +1,81 @@
+{
+  "id": "0000012345",
+  "reference": "REF-2024-001",
+  "createdAt": "2024-01-15T10:00:00+00:00",
+  "updatedAt": "2024-01-16T12:00:00+00:00",
+  "validatedAt": "2024-01-16T11:00:00+00:00",
+  "orderLogisticPrices": {
+    "totalPriceWithTax": 150.50,
+    "totalPriceWithoutTax": 125.00,
+    "totalShippingFeesWithoutTax": 15.00
+  },
+  "orderLogistics": [
+    {
+      "id": "log-001",
+      "status": "CONFIRMED",
+      "shippingAddressSnapshot": {
+        "fullName": "Jean Dupont",
+        "address": "123 Rue de la Paix",
+        "additionalAddress": "Bâtiment A",
+        "zipcode": "75001",
+        "city": "Paris",
+        "country": "France"
+      },
+      "billingAddressSnapshot": {
+        "fullName": "Jean Dupont",
+        "address": "123 Rue de la Paix",
+        "zipcode": "75001",
+        "city": "Paris",
+        "country": "France"
+      },
+      "shippingTrackingUrl": "https://tracking.example.com/123",
+      "supplierSnapshot": {
+        "name": "Test Seller"
+      },
+      "lines": [
+        {
+          "quantity": 2,
+          "orderLogisticLineProductDto": {
+            "djustProductUuid": "prod-123",
+            "externalId": "ext-123",
+            "name": "Cahier A4",
+            "mainImageUrl": "https://example.com/image.jpg"
+          },
+          "orderLogisticLineProductVariantDto": {
+            "sku": "SKU-123",
+            "externalReference": "REF-123"
+          },
+          "orderLogisticLinePriceDto": {
+            "itemPriceWithoutTaxes": 50.00,
+            "totalPriceWithoutTaxes": 100.00
+          }
+        },
+        {
+          "quantity": 1,
+          "orderLogisticLineProductDto": {
+            "djustProductUuid": "prod-789",
+            "externalId": "ext-789",
+            "name": "Classeur",
+            "mainImageUrl": "https://example.com/binder.jpg"
+          },
+          "orderLogisticLineProductVariantDto": {
+            "sku": "SKU-789",
+            "externalReference": "REF-789"
+          },
+          "orderLogisticLinePriceDto": {
+            "itemPriceWithoutTaxes": 25.00,
+            "totalPriceWithoutTaxes": 25.00
+          }
+        }
+      ],
+      "customFieldValues": [
+        {
+          "customField": {
+            "externalId": "COMMERCIAL_ORDER_PARTNER_INVOICE"
+          },
+          "value": "https://example.com/invoice-001.pdf"
+        }
+      ]
+    }
+  ]
+}

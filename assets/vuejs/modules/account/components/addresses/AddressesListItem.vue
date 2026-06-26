@@ -1,19 +1,14 @@
 <template>
-  <td class="hidden p-3 pl-6 md:table-cell">{{ props.address.name }}</td>
-  <td
-    :class="{ 'italic text-gray-300': !props.address.company }"
-    class="hidden p-3 md:table-cell"
-  >
-    {{ props.address.company ? props.address.company : 'Non renseignée' }}
-  </td>
+  <td class="hidden p-3 pl-6 md:table-cell">{{ props.address.fullName }}</td>
   <td class="max-w-xs p-3 pt-6">
-    <span class="flex">{{ props.address.street }}</span>
+    <span class="flex">{{ props.address.address }}</span>
     <span class="flex"
-      >{{ props.address.postcode }} {{ props.address.city }}</span
+      >{{ props.address.zipcode }} {{ props.address.city }}</span
     >
   </td>
   <td>
     <div class="flex items-center justify-end">
+      <!-- TODO: Réactiver après le go-live quand la fonctionnalité adresse par défaut (favori) sera disponible côté Djust
       <div v-if="isItemLoading">
         <LoaderSharedComponent class="text-secondary" />
       </div>
@@ -32,6 +27,7 @@
       <label v-else class="mr-2 rounded px-2" title="Adresse par défaut">
         <StarIconComponent class="fill-primary stroke-primary" />
       </label>
+      -->
       <button :disabled="isNeoAutoLogin" @click="onEditAddressClick">
         <EditIconComponent :stroke="channelPrimaryColor" class="mr-6" />
       </button>
@@ -40,7 +36,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, PropType, ref } from 'vue'
+import { PropType } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import router from '@/vuejs/router'
@@ -48,16 +44,16 @@ import { AccountPageList } from '@/vuejs/router/pages-list'
 import { useUserStore } from '@/vuejs/stores/user'
 import { useAddressStore } from '@/vuejs/stores/address'
 import { useChannelStore } from '@/vuejs/stores/channel'
-import { ADDRESS_BILLING, ADDRESS_SHIPPING } from '@/vuejs/services/const'
 import { Address } from '@/vuejs/types/Address'
 
-import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
 import EditIconComponent from '@/vuejs/modules/shared/icon/EditIconComponent.vue'
-import StarIconComponent from '@/vuejs/modules/shared/icon/StarIconComponent.vue'
+// TODO: Réactiver après le go-live (adresse par défaut / favori)
+// import { computed, ref } from 'vue'
+// import { ADDRESS_BILLING, ADDRESS_SHIPPING } from '@/vuejs/services/const'
+// import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
+// import StarIconComponent from '@/vuejs/modules/shared/icon/StarIconComponent.vue'
 
-const userStore = useUserStore()
 const addressStore = useAddressStore()
-const isItemLoading = ref<boolean>(false)
 
 const props = defineProps({
   address: {
@@ -70,18 +66,28 @@ const props = defineProps({
   },
 })
 
-const { isNeoAutoLogin } = storeToRefs(userStore)
+const { isNeoAutoLogin } = storeToRefs(useUserStore())
 const { channelPrimaryColor } = storeToRefs(useChannelStore())
 
-const selectedAddress = computed((): number => {
-  return props.type === ADDRESS_BILLING
-    ? userStore.user.externalApiData.subaccount.billing_address
-    : userStore.user.externalApiData.subaccount.shipping_address
-})
-
-const emit = defineEmits<{
-  (eventName: 'click', value: number): void
-}>()
+// TODO: Réactiver après le go-live (adresse par défaut / favori)
+// const isItemLoading = ref<boolean>(false)
+//
+// const selectedAddress = computed((): string => {
+//   return props.type === ADDRESS_BILLING
+//     ? userStore.user.externalApiData?.subaccount?.billing_address
+//     : userStore.user.externalApiData?.subaccount?.shipping_address
+// })
+//
+// const onDefaultAdressSelect = async (e: Event) => {
+//   e.preventDefault()
+//   isItemLoading.value = true
+//   if (props.type === ADDRESS_BILLING) {
+//     await userStore.updateUserDefaultBillingAddress(props.address.id)
+//   } else if (props.type === ADDRESS_SHIPPING) {
+//     await userStore.updateUserDefaultShippingAddress(props.address.id)
+//   }
+//   isItemLoading.value = false
+// }
 
 const onEditAddressClick = async () => {
   await addressStore.setCurrentAddress(props.address)
@@ -89,16 +95,5 @@ const onEditAddressClick = async () => {
     name: AccountPageList.ADDRESS_EDIT,
     params: { id: props.address.id },
   })
-}
-
-const onDefaultAdressSelect = async (e: Event) => {
-  e.preventDefault()
-  isItemLoading.value = true
-  if (props.type === ADDRESS_BILLING) {
-    await userStore.updateUserDefaultBillingAddress(props.address.id)
-  } else if (props.type === ADDRESS_SHIPPING) {
-    await userStore.updateUserDefaultShippingAddress(props.address.id)
-  }
-  isItemLoading.value = false
 }
 </script>

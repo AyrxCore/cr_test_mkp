@@ -4,118 +4,102 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use App\Dto\Banner;
-use App\Dto\ExpertContent;
 use App\Tests\Api\Helper\JsonHelper;
+use App\Tests\MockClient\DjustMockClientCallback;
+use App\Tests\MockClient\UpplerMockClientCallback;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpClient\Response\MockResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class MockClientCallback
 {
+    private static bool $simulateStoryblokError = false;
+    private static bool $simulateEmptyNews = false;
+    private static bool $simulateEmptyAccordCadre = false;
+
+    private DjustMockClientCallback $djustMock;
+    private UpplerMockClientCallback $upplerMock;
+
+    public function __construct(
+        #[Autowire(env: 'DJUST_API_BASE_URL')]
+        private readonly string $djustBaseUrl,
+        #[Autowire(env: 'UPPLER_API_URL')]
+        private readonly string $upplerBaseUrl,
+    ) {
+        $this->djustMock = new DjustMockClientCallback();
+        $this->upplerMock = new UpplerMockClientCallback();
+    }
+
     public function __invoke(string $method, string $url, array $options = []): ResponseInterface
     {
-        ['path' => $path, 'query' => $query] = \parse_url($url);
+        $parsedUrl = \parse_url($url);
+        $path = $parsedUrl['path'] ?? '';
+        $query = $parsedUrl['query'] ?? null;
 
-        if ($path === '/oauth/v2/token') {
-            return new MockResponse(JsonHelper::parseJsonDataFile('_mocks/uppler-response/v2/token/gsm-response.json'));
-        }
-
-        // Home products
-        if ($path === '/v1/buyer/search/product') {
-            return $this->getProductsResponse($options);
-        }
-
-        // Companies
-        if ($path === '/v1/buyer/search/company') {
-            return $this->getSellersResponse();
-        }
-
-        // Dynamic entity
-        if ($path === '/v1/administrator/dynamic-entity') {
-            return $this->getDynamicEntityResponse($url);
-        }
-
-        if ($method === 'POST' && \preg_match('/^\/v1\/buyer\/cart\/\d+\/items/', $path, $matches)) {
-            return new MockResponse(info: ['http_code' => Response::HTTP_NO_CONTENT]);
-        }
-
-        if ($method === 'PATCH') {
-            return new MockResponse(info: ['http_code' => Response::HTTP_NO_CONTENT]);
-        }
-
-        // match request for an item resource (ex: /v1/buyer/profile/123)
-        // match request for an item's sub-resource (ex: /v1/buyer/cart/123/shipping-method)
-        if ($method === 'GET' && \preg_match('/^\/v1\/(?<filePath>[\w_\/-]+\/\d+(?:\/[\w_\/-]+)?)/', $path, $matches)) {
-            return new MockResponse(JsonHelper::parseJsonDataFile(
-                \sprintf('_mocks/uppler-response/v1/%s.json', $matches['filePath'])
-            ));
-        }
-
-        // match request for any v1 endpoint with query parameters
-        if ($method === 'GET' && !empty($query) && \preg_match('/^\/v1\/(?<filePath>[\w_\/-]+)(?:\?([^#]*))?/', $path, $matches)) {
-            \parse_str($query, $queryParams);
-
-            if (!empty($queryParams['criteria'])) {
-                $criteriaString = \implode('_', \array_map(
-                    fn ($key, $value) => \sprintf('%s_%s', $key, $value),
-                    \array_keys($queryParams['criteria']),
-                    $queryParams['criteria']
-                ));
-
-                return new MockResponse(JsonHelper::parseJsonDataFile(
-                    \sprintf('_mocks/uppler-response/v1/%s/%s.json',
-                        $matches['filePath'],
-                        $criteriaString
-                    )
-                ));
+        // Storyblok API requests - détecté par le path /stories
+        if (\str_contains($path, '/stories') || \str_ends_with($path, '/stories')) {
+            if (self::$simulateStoryblokError) {
+                return new MockResponse(
+                    '{"message": "Internal Server Error"}',
+                    ['http_code' => 500]
+                );
             }
 
-            return new MockResponse(JsonHelper::parseJsonDataFile(
-                \sprintf('_mocks/uppler-response/v1/%s.json', $matches['filePath'])
-            ));
+            return $this->getStoryblokResponse($path, $query);
         }
 
-        // match request for a collection resource (ex: /v1/buyer/cart)
-        if ($method === 'GET' && \preg_match('/^\/v1\/(?<fileBasePath>[\w_\/-]+)/', $path, $matches)) {
-            return new MockResponse(JsonHelper::parseJsonDataFile(
-                \sprintf('_mocks/uppler-response/v1/%s/collection.json', $matches['fileBasePath'])
-            ));
+        // Déléguer aux autres mocks selon l'URL
+        if (\str_starts_with($url, $this->djustBaseUrl)) {
+            return $this->djustMock->__invoke($method, $url, $options);
         }
 
-        return new MockResponse();
+        if (\str_starts_with($url, $this->upplerBaseUrl)) {
+            return $this->upplerMock->__invoke($method, $url, $options);
+        }
+
+        // Réponse par défaut
+        return new MockResponse('{}', ['http_code' => 200]);
     }
 
-    private function getProductsResponse(array $options): MockResponse
+    public static function setSimulateEmptyNews(bool $simulate): void
     {
-        return new MockResponse(JsonHelper::parseJsonDataFile('_mocks/uppler-response/v1/buyer/search/products-list.json'));
+        self::$simulateEmptyNews = $simulate;
     }
 
-    private function getDynamicEntityResponse(string $url): MockResponse
+    public static function setSimulateEmptyAccordCadre(bool $simulate): void
     {
-        $parseUrl = \parse_url($url);
-        \parse_str($parseUrl['query'], $queryParams);
-        $basePath = '_mocks/uppler-response/v1/administrator/dynamic-entity/';
-
-        if (isset($queryParams['criteria']['slug'])) {
-            return new MockResponse(JsonHelper::parseJsonDataFile(\sprintf('%s%s.json', $basePath, $queryParams['criteria']['slug'])));
-        }
-
-        $dynamicConfigId = (int) $queryParams['criteria']['dynamic_entity_configuration_id'] ?? null;
-
-        if ($dynamicConfigId === ExpertContent::DYNAMIC_CONFIG_ID) {
-            return new MockResponse(JsonHelper::parseJsonDataFile($basePath.'entities.json'));
-        }
-
-        if ($dynamicConfigId === Banner::DYNAMIC_CONFIG_ID) {
-            return new MockResponse(JsonHelper::parseJsonDataFile(\sprintf('%sbanner.json', $basePath)));
-        }
-
-        return new MockResponse();
+        self::$simulateEmptyAccordCadre = $simulate;
     }
 
-    private function getSellersResponse(): MockResponse
+    public static function reset(): void
     {
-        return new MockResponse(JsonHelper::parseJsonDataFile('_mocks/uppler-response/v1/buyer/search/sellers-list.json'));
+        self::$simulateStoryblokError = false;
+        self::$simulateEmptyNews = false;
+        self::$simulateEmptyAccordCadre = false;
+        DjustMockClientCallback::reset();
+    }
+
+    public static function setSimulateStoryblokError(bool $simulate): void
+    {
+        self::$simulateStoryblokError = $simulate;
+    }
+
+    private function getStoryblokResponse(string $path, ?string $query): MockResponse
+    {
+        \parse_str($query ?? '', $queryParams);
+
+        if (self::$simulateEmptyNews || self::$simulateEmptyAccordCadre) {
+            return new MockResponse(JsonHelper::parseJsonDataFile('_mocks/storyblok-response/empty-stories.json'));
+        }
+
+        if (isset($queryParams['starts_with']) && $queryParams['starts_with'] === 'news/') {
+            return new MockResponse(JsonHelper::parseJsonDataFile('_mocks/storyblok-response/news-list.json'));
+        }
+
+        if (isset($queryParams['starts_with']) && $queryParams['starts_with'] === 'accord-cadre/') {
+            return new MockResponse(JsonHelper::parseJsonDataFile('_mocks/storyblok-response/accord-cadre-list.json'));
+        }
+
+        return new MockResponse(JsonHelper::parseJsonDataFile('_mocks/storyblok-response/empty-stories.json'));
     }
 }

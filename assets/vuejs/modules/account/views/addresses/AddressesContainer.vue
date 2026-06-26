@@ -6,12 +6,14 @@
           <h3 class="text-title-primary mb-6 mt-2 xl:mt-0">Adresses</h3>
         </div>
       </div>
+      <!-- TODO: Réactiver après le go-live quand la fonctionnalité adresse par défaut sera disponible côté Djust
       <AddressesDefault :address="addressStore.defaultShippingAddressFormatted">
         <template #title> Votre adresse de livraison par défaut</template>
       </AddressesDefault>
       <AddressesDefault :address="addressStore.defaultBillingAddressFormatted">
         <template #title> Votre adresse de facturation par défaut</template>
       </AddressesDefault>
+      -->
       <div class="mb-4 flex items-center justify-between">
         <div>
           <h3 class="ml-4 text-2xl font-bold text-primary">
@@ -98,7 +100,8 @@ import { ADDRESS_BILLING, ADDRESS_SHIPPING } from '@/vuejs/services/const'
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import AddressesList from '@/vuejs/modules/account/components/addresses/AddressesList.vue'
-import AddressesDefault from '@/vuejs/modules/account/components/addresses/AddressesDefault.vue'
+// TODO: Réactiver après le go-live (adresse par défaut)
+// import AddressesDefault from '@/vuejs/modules/account/components/addresses/AddressesDefault.vue'
 import AddIconComponent from '@/vuejs/modules/shared/icon/AddIconComponent.vue'
 
 const addressStore = useAddressStore()

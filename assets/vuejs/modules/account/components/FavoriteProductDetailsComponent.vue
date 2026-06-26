@@ -6,7 +6,7 @@
       <div class="mr-2">
         <div v-if="product" class="w-4">
           <input
-            v-if="product.sellable && !product.isAccordCadre"
+            v-if="productStore.isSellable(product)"
             v-model="selectedProduct"
             :disabled="isNeoAutoLogin"
             class="checkbox-secondary"
@@ -30,28 +30,28 @@
       </div>
       <div class="flex w-6/12 flex-col md:ml-5 md:w-7/12">
         <RouterLink
-          v-if="product && !product.isAccordCadre"
+          v-if="product && !productStore.isAccordCadre(product)"
           :to="{ name: PageList.PRODUCT, params: { slug: productSlug } }"
           class="mt-4 text-lg font-bold text-primary lg:text-2xl"
         >
           {{ productName }}
         </RouterLink>
         <RouterLink
-          v-else
+          v-else-if="product && productStore.isAccordCadre(product)"
           :to="{ name: PageList.ACCORD_CADRE, params: { slug: productSlug } }"
           class="mt-4 text-lg font-bold text-primary lg:text-2xl"
         >
           {{ productName }}
         </RouterLink>
         <div
-          v-if="product && !product.sellable && !product.isAccordCadre"
+            v-if="product && productStore.isNotSellable(product)"
           class="mt-2 w-fit rounded-sm bg-secondary px-2 py-1 text-white"
         >
           -{{ product?.percent }}% sur le tarif public
         </div>
         <span class="mt-4 flex flex-col text-sm lg:text-lg">
           <span>Vendu par : {{ productSeller }}</span>
-          <span v-if="product && !product.isAccordCadre"
+          <span v-if="product && !productStore.isAccordCadre(product)"
             >Référence: {{ productReference }}</span
           >
         </span>
@@ -64,7 +64,7 @@
         >
           <div class="flex items-center">
             <span
-              v-if="product?.sellable && !product.isAccordCadre"
+              v-if="product && productStore.isSellable(product)"
               class="mt-4 text-sm font-bold text-primary md:text-base lg:text-xl"
             >
               {{ productPrice }}€ HT
@@ -198,7 +198,7 @@ onMounted(async (): Promise<void> => {
 })
 
 const productImage = computed((): string => {
-  if (product.value?.isAccordCadre) {
+  if (product.value && productStore.isAccordCadre(product.value)) {
     return product.value.properties['logo_partenaire']
   }
   return product.value?.images[0]
@@ -227,6 +227,7 @@ const productPrice = computed((): number | string => {
 const productSeller = computed((): string => {
   return product.value ? product.value.seller.name : ''
 })
+
 </script>
 <style scoped>
 .input-qte {

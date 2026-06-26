@@ -5,13 +5,13 @@ import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
 import { getErrorMessage } from '@/vuejs/services/login'
 import AddressHttpClient from '@/vuejs/services/httpclient/AddressHttpClient'
 import { Address, AddressStoreState } from '@/vuejs/types/Address'
-import { useUserStore } from '@/vuejs/stores/user'
 import router, { PageList } from '@/vuejs/router'
 import {
-  formatAddress,
   notifyError,
   notifySuccess,
 } from '@/vuejs/services/utils'
+// TODO: Réactiver après le go-live (adresse par défaut)
+// import { formatAddress } from '@/vuejs/services/utils'
 import { ADDRESS_BILLING, ADDRESS_SHIPPING } from '@/vuejs/services/const'
 import { v4 as uuidv4 } from 'uuid'
 import {
@@ -43,20 +43,17 @@ export const useAddressStore = defineStore('address', {
       this.currentAddress = address
     },
     initNewAddress(type: string): void {
-      const userStore = useUserStore()
       this.currentAddress = {
         id: uuidv4(),
-        name: '',
-        companyId: userStore.user.externalApiData?.buyer.id,
-        company: '',
-        type,
-        street: '',
-        postcode: '',
+        externalId: null,
+        fullName: '',
+        address: '',
+        zipcode: '',
         city: '',
-        country: 83,
-        lastName: '',
-        firstName: '',
+        country: '',
         phone: '',
+        shipping: type === ADDRESS_SHIPPING,
+        billing: type === ADDRESS_BILLING,
       }
     },
     async createAddress(): Promise<void> {
@@ -74,9 +71,7 @@ export const useAddressStore = defineStore('address', {
       }
     },
     async updateAddress(): Promise<void> {
-      const userStore = useUserStore()
       try {
-        this.currentAddress.companyId = userStore.user.externalApiData?.buyer.id
         await AddressHttpClient.get().updateAddressesAsAdmin(
           setAddressForUpdate(this.currentAddress),
         )
@@ -89,7 +84,7 @@ export const useAddressStore = defineStore('address', {
         )
       }
     },
-    async getAddress(id: number): Promise<void> {
+    async getAddress(id: string): Promise<void> {
       const alertStore = useAlertStore()
       try {
         this.currentAddress = await AddressHttpClient.get().getAdressAsAdmin(id)
@@ -104,44 +99,24 @@ export const useAddressStore = defineStore('address', {
   },
 
   getters: {
-    defaultAddress(): Address {
-      return this.addresses.find((a: Address) => !a.type)
-    },
     shippingAddresses(): Address[] {
-      return this.addresses.filter((a: Address) => a.type === ADDRESS_SHIPPING)
-    },
-    defaultShippingAddress(): Address {
-      const userStore = useUserStore()
-      if (!userStore.user?.externalApiData?.subaccount) {
-        return null
-      }
-
-      return this.addresses.find(
-        (address: Address) =>
-          address.id ===
-          userStore.user.externalApiData.subaccount.shipping_address,
-      )
-    },
-    defaultShippingAddressFormatted(): string {
-      return formatAddress(this.defaultShippingAddress)
+      return this.addresses.filter((a: Address) => a.shipping)
     },
     billingAddresses(): Address[] {
-      return this.addresses.filter((a: Address) => a.type === ADDRESS_BILLING)
+      return this.addresses.filter((a: Address) => a.billing)
     },
-    defaultBillingAddress(): Address {
-      const userStore = useUserStore()
-      if (!userStore.user?.externalApiData?.subaccount) {
-        return null
-      }
-
-      return this.addresses.find(
-        (address: Address) =>
-          address.id ===
-          userStore.user.externalApiData.subaccount.billing_address,
-      )
-    },
-    defaultBillingAddressFormatted(): string {
-      return formatAddress(this.defaultBillingAddress)
-    },
+    // TODO: Réactiver après le go-live quand la fonctionnalité adresse par défaut sera disponible côté Djust
+    // defaultShippingAddress(): Address {
+    //   return this.addresses.find((a: Address) => a.shipping) ?? null
+    // },
+    // defaultShippingAddressFormatted(): string {
+    //   return formatAddress(this.defaultShippingAddress)
+    // },
+    // defaultBillingAddress(): Address {
+    //   return this.addresses.find((a: Address) => a.billing) ?? null
+    // },
+    // defaultBillingAddressFormatted(): string {
+    //   return formatAddress(this.defaultBillingAddress)
+    // },
   },
 })

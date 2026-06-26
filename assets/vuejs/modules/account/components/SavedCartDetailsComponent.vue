@@ -83,6 +83,7 @@ onMounted(async (): Promise<void> => {
     productNotFound.value = true
   } else {
     if (Object.entries(product.value?.variants).length > 1) {
+      // TODO: Migrer vers Djust - les variants sont maintenant inclus dans les données du produit
       variantData.value = await productStore.findVariantById(
         props.savedCartProduct.upplerVariantId,
       )

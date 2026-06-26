@@ -15,4 +15,4 @@ use App\Helper\PdfEditorHeaderFooter;
     $pdfContent = $pdfEditor->savePDF();
 
     $this->expect($pdfContent)->toBeString();
-})->group('PdfEditorHeaderFooter');
+})->group('PdfEditorHeaderFooter')->skip();

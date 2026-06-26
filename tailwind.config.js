@@ -30,6 +30,7 @@ module.exports = {
         92: '92%',
         94: '94%',
         98: '98%',
+        xs: '400px',
       },
       boxShadow: {
         'inner-lighter': 'inset 0 0 100px 100px rgba(255, 255, 255, 0.15)',

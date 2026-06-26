@@ -16,7 +16,8 @@ import { notifyError, notifySuccess } from '@/vuejs/services/utils'
 import { getCookie } from '@/vuejs/services/utils'
 import UserHttpClient from '@/vuejs/services/httpclient/UserHttpClient'
 import { getErrorMessage } from '@/vuejs/services/login'
-import { useCartStore } from './cart'
+// TODO: Réactiver après le go-live (adresse par défaut)
+// import { useCartStore } from './cart'
 import { computed } from 'vue'
 
 export const useUserStore = defineStore('user', {
@@ -81,52 +82,53 @@ export const useUserStore = defineStore('user', {
         username: this.user.username,
         firstName: this.user.firstName,
         lastName: this.user.lastName,
-        phone: this.user.account.phone,
+        phone: this.user.account.phone || '',
       }
     },
-    async updateUserDefaultBillingAddress(id: number): Promise<void> {
-      try {
-        await UserHttpClient.get(true).updateUserAddress({
-          id: this.user.externalApiData.subaccount.id,
-          accountId: this.user.account.id,
-          billingAddressId: id,
-        })
-        this.user.externalApiData.subaccount.billing_address = id
-        notifySuccess(
-          "L'adresse de facturation par défaut a été modifiée avec succès",
-        )
-      } catch (error) {
-        notifyError(
-          'Une erreur est survenue, veuillez contacter le service technique',
-        )
-      }
-    },
-    async updateUserDefaultShippingAddress(id: number): Promise<void> {
-      try {
-        await UserHttpClient.get(true).updateUserAddress({
-          id: this.user.externalApiData.subaccount.id,
-          accountId: this.user.account.id,
-          shippingAddressId: id,
-        })
-        this.user.externalApiData.subaccount.shipping_address = id
-        notifySuccess(
-          "L'adresse de livraison par défaut a été modifiée avec succès",
-        )
-      } catch (error) {
-        notifyError(
-          'Une erreur est survenue, veuillez contacter le service technique',
-        )
-      }
-    },
-    updateCartAddressesWithDefault(): void {
-      const cartStore = useCartStore()
-      cartStore.updateCartAddress({
-        cartId: cartStore.cart.id,
-        billingAddressId: this.user.externalApiData.subaccount.billing_address,
-        shippingAddressId:
-          this.user.externalApiData.subaccount.shipping_address,
-      })
-    },
+    // TODO: Réactiver après le go-live quand la fonctionnalité adresse par défaut sera disponible côté Djust
+    // async updateUserDefaultBillingAddress(id: string): Promise<void> {
+    //   try {
+    //     await UserHttpClient.get(true).updateUserAddress({
+    //       id: this.user.externalApiData.subaccount.id,
+    //       accountId: this.user.account.id,
+    //       billingAddressId: id,
+    //     })
+    //     this.user.externalApiData.subaccount.billing_address = id
+    //     notifySuccess(
+    //       "L'adresse de facturation par défaut a été modifiée avec succès",
+    //     )
+    //   } catch (error) {
+    //     notifyError(
+    //       'Une erreur est survenue, veuillez contacter le service technique',
+    //     )
+    //   }
+    // },
+    // async updateUserDefaultShippingAddress(id: string): Promise<void> {
+    //   try {
+    //     await UserHttpClient.get(true).updateUserAddress({
+    //       id: this.user.externalApiData.subaccount.id,
+    //       accountId: this.user.account.id,
+    //       shippingAddressId: id,
+    //     })
+    //     this.user.externalApiData.subaccount.shipping_address = id
+    //     notifySuccess(
+    //       "L'adresse de livraison par défaut a été modifiée avec succès",
+    //     )
+    //   } catch (error) {
+    //     notifyError(
+    //       'Une erreur est survenue, veuillez contacter le service technique',
+    //     )
+    //   }
+    // },
+    // updateCartAddressesWithDefault(): void {
+    //   const cartStore = useCartStore()
+    //   cartStore.updateCartAddress({
+    //     cartId: cartStore.cart.id,
+    //     billingAddressId: this.user.externalApiData.subaccount.billing_address,
+    //     shippingAddressId:
+    //       this.user.externalApiData.subaccount.shipping_address,
+    //   })
+    // },
     async updateUserAccountEmail(): Promise<void> {
       try {
         await UserHttpClient.get(true).updateUserAccountEmail({
@@ -146,16 +148,17 @@ export const useUserStore = defineStore('user', {
     },
     async updateUserAccountDetails(): Promise<void> {
       try {
-        await UserHttpClient.get(true).updateUserAccountDetails({
+        const updatedSubAccount = await UserHttpClient.get(true).updateUserAccountDetails({
           lastName: this.editingInfo.lastName,
           firstName: this.editingInfo.firstName,
           phone: this.editingInfo.phone,
           id: this.user.externalApiData.subaccount.id,
           accountId: this.user.account.id,
         })
-        this.user.lastName = this.editingInfo.lastName
-        this.user.firstName = this.editingInfo.firstName
-        this.user.account.phone = this.editingInfo.phone
+
+        this.user.lastName = updatedSubAccount.lastName
+        this.user.firstName = updatedSubAccount.firstName
+        this.user.account.phone = updatedSubAccount.phone
 
         notifySuccess('Les détails du profil ont été modifiés avec succès')
 

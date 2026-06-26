@@ -1,7 +1,10 @@
 <template>
-  <div
-    class="flex cursor-pointer flex-col items-center rounded-lg border-4 border-solid border-secondary px-4 py-2 md:p-4"
-    @click="goToProductResult"
+  <RouterLink
+    :to="{
+      name: ProductPageList.PRODUCTS,
+      query: { seller: props.seller?.externalId },
+    }"
+    class="flex cursor-pointer flex-col items-center rounded-lg border-2 border-solid border-secondary px-4 py-2 md:p-4"
   >
     <div class="my-1 flex h-full w-full flex-col items-center">
       <div class="seller-card">
@@ -17,28 +20,20 @@
         </div>
       </div>
     </div>
-  </div>
+  </RouterLink>
 </template>
 
 <script lang="ts" setup>
-import { computed, PropType } from 'vue'
+import { PropType } from 'vue'
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import { getUpplerImage } from '@/vuejs/services/utils'
 import { Seller } from '@/vuejs/types/Seller'
-import router from '@/vuejs/router'
 
 const props = defineProps({
   seller: {
     required: true,
     type: Object as PropType<Seller>,
   },
-})
-
-const goToProductResult = computed(() => {
-  router.push({
-    name: ProductPageList.PRODUCTS,
-    query: { company: props.seller?.id },
-  })
 })
 </script>
 <style scoped lang="postcss">

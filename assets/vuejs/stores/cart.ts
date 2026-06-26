@@ -3,24 +3,20 @@ import { defineStore } from 'pinia'
 import CartHttpClient from '@/vuejs/services/httpclient/CartHttpClient'
 import CompanyHttpClient from '@/vuejs/services/httpclient/CompanyHttpClient'
 import { notifyError, notifySuccess } from '@/vuejs/services/utils'
-import { useChannelStore } from '@/vuejs/stores/channel'
-
-// IDs des méthodes de paiements Uppler
-export const CART_PAYMENT_CB_ID: number = 8
-export const CART_PAYMENT_SEPA_IDs: number[] = [9, 10]
-export const CART_PAYMENT_MANDAT_ADMIN: number = 11
 
 import {
-  Cart,
+  AdyenInitiatePaymentPayload,
+  AdyenInitiatePaymentResponse,
+  AdyenPaymentMethod,
+  AdyenPaymentMethodType,
+  AdyenSubmitDetailsPayload,
   CartAddressesUpdate,
   CartPaymentMethodUpdated,
   CartPaymentSepaUpdated,
   CartStoreState,
-  OrderItemQuantityUpdate,
-  OrderShippingUpdate,
-  PaymentMethod,
   SepaData,
 } from '@/vuejs/types/Cart'
+import { CART_LINE_ACTIONS, PRODUCT_FDP_PREFIX } from '@/vuejs/services/const.ts'
 
 export const useCartStore = defineStore('cart', {
   state: (): CartStoreState => ({
@@ -28,121 +24,148 @@ export const useCartStore = defineStore('cart', {
     termsOfSales: [],
     newlyAddedProducts: [],
     modifyingCart: false,
-    shippingMethods: [],
-    selectedShippingMethods: {},
     companyMandates: [],
     selectedSepa: null,
+    adyenPaymentMethods: [],
+    storedPaymentMethods: [],
+    enableCreditCardStorage: false,
+    bankTransferInfo: null,
   }),
 
   actions: {
     async getCart(): Promise<void> {
       try {
-        this.cart = await CartHttpClient.get().getCartAsBuyer()
+        this.cart = await CartHttpClient.get().getCart()
         this.newlyAddedProducts = []
-      } catch (error) {
+      } catch (_error) {
         this.cart = {}
         notifyError(
           'Une erreur est survenue lors du chargement du panier, merci de contacter un administrateur.',
         )
       }
     },
-    async addProductToCart(variantId: number, quantity: number): Promise<void> {
+    async addProductsToCart(
+      data: { offerPriceId: string; quantity: number }[],
+    ): Promise<void> {
       try {
+        if (!this.cart?.id) {
+          await this.getCart()
+        }
+
         if (!this.cart?.id) {
           throw new Error()
         }
 
-        const products = []
-        products.push({ variantId, quantity })
+        const payload = data.map((line) => ({
+          offerPriceId: line.offerPriceId,
+          quantity: line.quantity,
+          action: CART_LINE_ACTIONS.ADD_QUANTITY,
+        }))
 
-        await CartHttpClient.get().addProductsToCartAsBuyer({
-          cartId: this.cart.id,
-          products,
-        })
+        try {
+          await CartHttpClient.get().updateProductsToCart(this.cart.id, payload)
+        } catch {
+          this.cart = null
+          await this.getCart()
 
-        this.productVariantsInCart.indexOf(variantId) === -1 &&
-          this.newlyAddedProducts.push(variantId)
+          if (!this.cart?.id) {
+            throw new Error()
+          }
+
+          await CartHttpClient.get().updateProductsToCart(this.cart.id, payload)
+        }
 
         notifySuccess('La référence du produit a été ajoutée au panier')
-      } catch (error) {
+      } catch (_error) {
         notifyError(
           "L'ajout au panier est impossible, merci de contacter un administrateur.",
         )
         throw new Error()
       }
     },
-    async addProductsToCart(products): Promise<void> {
+    async updateProductsToCart(
+      data: { offerPriceId: string; quantity: number }[],
+    ): Promise<void> {
       try {
         if (!this.cart?.id) {
           throw new Error()
         }
-        await CartHttpClient.get().addProductsToCartAsBuyer({
-          cartId: this.cart.id,
-          products,
-        })
-        await products.forEach((product) => {
-          this.productVariantsInCart.indexOf(product.variantId) === -1 &&
-            this.newlyAddedProducts.push(product.variantId)
-        })
-        notifySuccess(
-          `Vos ${products.length} référence(s) ont été ajoutée(s) au panier avec succès`,
-        )
-      } catch (error) {
+
+        const payload = data.map((line) => ({
+          offerPriceId: line.offerPriceId,
+          quantity: line.quantity,
+          action: CART_LINE_ACTIONS.REPLACE_QUANTITY,
+        }))
+
+        await CartHttpClient.get().updateProductsToCart(this.cart.id, payload)
+
+        notifySuccess('La quantité de produit a été modifiée dans le panier')
+      } catch (_error) {
         notifyError(
-          "L'ajout au panier est impossible, merci de contacter un administrateur.",
+          "L'édition du panier est impossible, merci de contacter un administrateur.",
         )
         throw new Error()
       }
     },
-    async updateProductQuantity(data: OrderItemQuantityUpdate): Promise<void> {
+    async removeProductsToCart(
+      data: { offerPriceId: string }[],
+    ): Promise<void> {
       try {
-        await CartHttpClient.get(true).updateCartAsBuyer(data)
-      } catch (error) {
+        if (!this.cart?.id) {
+          throw new Error()
+        }
+
+        const offerPriceIds = data.map((line) => line.offerPriceId)
+        await CartHttpClient.get().deleteCartLines(this.cart.id, offerPriceIds)
+        notifySuccess('Le produit a été retiré du panier')
+      } catch (_error) {
         notifyError(
-          'Une erreur est survenue lors de la modification du panier, merci de contacter un administrateur.',
+          "L'édition du panier est impossible, merci de contacter un administrateur.",
         )
         throw new Error()
       }
     },
-    async deleteProduct(id: number): Promise<void> {
+    async syncProductsFdp(): Promise<void> {
+      if (!this.cart?.id) return
       try {
-        await CartHttpClient.get().deleteProductFromCartAsBuyer(id)
-      } catch (error) {
+        await CartHttpClient.get().syncProductsFdp(String(this.cart.id))
+        await this.getCart()
+      } catch (_error) {
         notifyError(
-          'Une erreur est survenue lors de la modification du panier, merci de contacter un administrateur.',
+          'Une erreur est survenue lors de la synchronisation des frais de port.',
         )
-        throw new Error()
+      }
+    },
+
+    async syncCart(): Promise<string[]> {
+      if (!this.cart?.id) return []
+      try {
+        const result = await CartHttpClient.get().syncCart(String(this.cart.id))
+        return result.removedOfferPriceIds ?? []
+      } catch (_error) {
+        return []
       }
     },
     async updateCartAddress(data: CartAddressesUpdate): Promise<void> {
       try {
-        await CartHttpClient.get(true).updateCartAdresses(data)
-        this.cart.shipping_address = { id: data.shippingAddressId }
-        this.cart.billing_address = { id: data.billingAddressId }
-      } catch (error) {
+        await CartHttpClient.get(true).updateCartAddresses(data)
+        this.cart.shippingAddressExternalId = data.shippingAddressExternalId
+        this.cart.billingAddressExternalId = data.billingAddressExternalId
+      } catch (_error) {
         notifyError(
           "Une erreur est survenue lors du choix de l'adresse, merci de contacter un administrateur.",
         )
       }
     },
-    async updateOrderShipping(data: OrderShippingUpdate): Promise<void> {
-      try {
-        await CartHttpClient.get(true).updateOrderShipping(data)
-      } catch (error) {
-        notifyError(
-          'Une erreur est survenue lors du choix de la méthode de livraison, merci de contacter un administrateur.',
-        )
-      }
-    },
     async updateCartPaymentMethod(
-      paymentMethodId: number,
+      paymentMethodType: AdyenPaymentMethodType,
     ): Promise<CartPaymentMethodUpdated> {
       try {
         return await CartHttpClient.get(true).updateCartPaymentMethod({
           cartId: this.cart.id,
-          paymentMethodId: paymentMethodId,
+          paymentMethodType,
         })
-      } catch (error) {
+      } catch (_error) {
         notifyError(
           'Une erreur est survenue lors du choix de la méthode de paiement, merci de contacter un administrateur.',
         )
@@ -158,11 +181,11 @@ export const useCartStore = defineStore('cart', {
       try {
         return await CartHttpClient.get(true).updateCartPaymentSepaInfos({
           cartId: this.cart.id,
-          iban: iban,
-          bic: bic,
-          ownerName: ownerName,
-          phone: phone,
-          mandateId: mandateId,
+          iban,
+          bic,
+          ownerName,
+          phone,
+          mandateId,
         })
       } catch (error) {
         notifyError(
@@ -171,84 +194,157 @@ export const useCartStore = defineStore('cart', {
         throw error?.response?.data?.errors
       }
     },
-    async findCartById(id: number): Promise<Cart> {
-      try {
-        return await CartHttpClient.get().findCartById(id)
-      } catch (error) {
-        notifyError(
-          'Une erreur est survenue, merci de contacter un administrateur.',
-        )
-      }
-    },
-    async getCartShippingMethods(cartId: number): Promise<void> {
-      try {
-        this.shippingMethods =
-          await CartHttpClient.get().getCartShippingMethods(cartId)
-      } catch (error) {
-        notifyError(
-          'Une erreur est survenue lors du chargement des méthodes de livraison, merci de contacter un administrateur.',
-        )
-      }
-    },
     async getCompanyMandates(): Promise<void> {
       try {
         this.companyMandates =
           await CompanyHttpClient.get().getExistingMandates()
-      } catch (error) {
+      } catch (_error) {
         notifyError(
           'Une erreur est survenue lors du chargement des mandats, merci de contacter un administrateur.',
         )
       }
     },
+    async fetchAdyenPaymentMethods(): Promise<void> {
+      try {
+        if (!this.cart?.id) return
+        const result = await CartHttpClient.get().getPaymentMethods(String(this.cart.id))
+        this.adyenPaymentMethods = result.paymentMethods
+        this.storedPaymentMethods = result.storedPaymentMethods ?? []
+        this.enableCreditCardStorage = result.enableCreditCardStorage
+      } catch (_error) {
+        notifyError(
+          'Une erreur est survenue lors de la récupération des moyens de paiement, merci de contacter un administrateur.',
+        )
+      }
+    },
+    async initiateAdyenPayment(payload: AdyenInitiatePaymentPayload): Promise<AdyenInitiatePaymentResponse | null> {
+      try {
+        const result = await CartHttpClient.get().initiatePayment(payload)
+
+        if (result.action?.type === 'bankTransfer') {
+          this.bankTransferInfo = {
+            beneficiary: result.action.beneficiary as string,
+            iban: result.action.iban as string,
+            bic: result.action.bic as string,
+            reference: payload.reference,
+            totalAmount: result.action.totalAmountValue as string,
+          }
+        }
+
+        return result
+      } catch (_error) {
+        notifyError(
+          "Une erreur est survenue lors de l'initialisation du paiement, merci de contacter un administrateur.",
+        )
+        return null
+      }
+    },
+    async submitAdyenPaymentDetails(payload: AdyenSubmitDetailsPayload): Promise<AdyenInitiatePaymentResponse | null> {
+      try {
+        const result = await CartHttpClient.get().submitPaymentDetails(payload)
+        return result
+      } catch (_error) {
+        notifyError(
+          'Une erreur est survenue lors de la validation du paiement, merci de contacter un administrateur.',
+        )
+        return null
+      }
+    },
+    resetDropinState(): void {
+      this.bankTransferInfo = null
+    },
+    resetPaymentMethods(): void {
+      this.adyenPaymentMethods = []
+      this.storedPaymentMethods = []
+      this.enableCreditCardStorage = false
+    },
+    async updateCustomerInfoInLogisticOrders(): Promise<void> {
+      if (!this.cart?.id) return
+      await CartHttpClient.get().updateCustomerInfoInLogisticOrders(String(this.cart.id))
+    },
+    async updateEcoTaxInLogisticOrders(): Promise<void> {
+      if (!this.cart?.id) return
+      try {
+        await CartHttpClient.get().updateEcoTaxInLogisticOrders(String(this.cart.id))
+      } catch (error) {
+        notifyError('Une erreur est survenue lors de la mise à jour de l\'éco-participation.')
+      }
+    },
+    forceEmptyCart(): void {
+      if (this.cart) {
+        this.cart.id = null
+        this.cart.productCount = 0
+        this.cart.cartOrders = []
+      }
+    },
   },
 
   getters: {
-    productVariantsInCart: (state): number[] => {
-      let variants: number[] = []
-      const orders = state.cart?.orders
-      if (!orders) return state.newlyAddedProducts
-      orders.forEach((o) => {
-        o.items.forEach((i) => {
-          variants.push(i.variant.id)
-        })
-      })
-      return [...variants, ...state.newlyAddedProducts]
-    },
     nbProducts(): number {
-      return this.productVariantsInCart.length
+      return (this.cart?.cartOrders ?? []).reduce(
+        (sum, order) =>
+          sum +
+          order.products.reduce(
+            (orderSum, p) =>
+              p.externalId?.startsWith(PRODUCT_FDP_PREFIX)
+                ? orderSum
+                : orderSum + (p.quantity ?? 0),
+            0,
+          ),
+        0,
+      )
+    },
+    needsProductFdpSync(): boolean {
+      return (this.cart?.cartOrders ?? []).some((order) => {
+        const shippingCost = order.shippingCostResult?.shippingCost ?? 0
+        const hasProductFdp = order.products.some((p) =>
+          p.externalId?.startsWith(PRODUCT_FDP_PREFIX),
+        )
+        // FDP = 0 mais un Product FDP existe encore → à supprimer
+        if (shippingCost === 0 && hasProductFdp) return true
+        // FDP > 0 mais pas de Product FDP → à créer
+        if (shippingCost > 0 && !hasProductFdp) return true
+        return false
+      })
     },
     hasAllTermsChecked(): boolean {
-      const orders = this.cart?.orders
-      if (!orders || orders.length === 0) return false
-      for (const order of orders) {
-        if (!this.termsOfSales.some((e) => e === order.seller.id)) {
+      const cartOrders = this.cart?.cartOrders
+      if (!cartOrders || cartOrders.length === 0) return false
+      for (const cartOrder of cartOrders) {
+        if (!this.termsOfSales.some((e) => e === cartOrder.seller.id)) {
           return false
         }
       }
       return true
     },
-    CBPaymentMethod(): PaymentMethod {
-      return this.cart?.paymentMethods?.find((e) => e.id === CART_PAYMENT_CB_ID)
-    },
-    SEPAPaymentMethods(): PaymentMethod[] {
-      return this.cart?.paymentMethods?.filter((e) =>
-        CART_PAYMENT_SEPA_IDs.includes(e.id),
+    CBPaymentMethod(): AdyenPaymentMethod | undefined {
+      return this.adyenPaymentMethods.find(
+        (m) => m.type === AdyenPaymentMethodType.SCHEME,
       )
     },
-    mandatAdminPaymentMethod(): PaymentMethod {
-      return this.cart?.paymentMethods?.find(
-        (e) => e.id === CART_PAYMENT_MANDAT_ADMIN,
+    SEPAPaymentMethods(): AdyenPaymentMethod[] {
+      return this.adyenPaymentMethods.filter(
+        (m) => m.type === AdyenPaymentMethodType.BANK_TRANSFER_IBAN,
       )
     },
-    showMandatAdminPayment(): boolean {
-      const channelStore = useChannelStore()
-      return (
-        !!this.mandatAdminPaymentMethod &&
-        channelStore.isAllowedToShow('HAS_MANDAT_ADMIN_PAYMENT')
-      )
+    hasStoredPaymentMethods(): boolean {
+      return this.storedPaymentMethods?.length > 0
     },
     hasCompanyMandates(): boolean {
       return this.companyMandates?.length > 0
+    },
+    shippingCostTotal(): number {
+      return (this.cart?.cartOrders ?? []).reduce(
+        (sum: number, order) => sum + (order.shippingCostResult?.shippingCost ?? 0),
+        0,
+      )
+    },
+    shippingCostTotalWithTax(): number {
+      return (this.cart?.cartOrders ?? []).reduce((sum: number, order) => {
+        const fdpHT = order.shippingCostResult?.shippingCost ?? 0
+        const taxRate = order.shippingCostResult?.maxTaxRate ?? 0
+        return sum + fdpHT * (1 + taxRate / 100)
+      }, 0)
     },
   },
 })

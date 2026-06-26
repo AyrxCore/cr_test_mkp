@@ -6,7 +6,7 @@ namespace App\Factory;
 
 use Psr\Cache\CacheItemPoolInterface as AdapterInterface;
 
-abstract class AbstractFactory implements FactoryInterface
+abstract class AbstractFactory
 {
     public function __construct(protected AdapterInterface $cache)
     {

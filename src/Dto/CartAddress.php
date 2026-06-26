@@ -18,58 +18,60 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(),
         new Patch(
+            uriTemplate: '/cart_addresses/{cartId}',
+            requirements: ['id' => '.*'],
             openapi: new Operation(
-                summary: 'Update cart adresses'
+                summary: 'Update cart addresses'
             ),
-            validate: true
+            output: false,
         ),
-        new Post(),
     ],
     provider: CartAddressProvider::class,
     processor: CartAddressPersistProcessor::class
 )]
-final class CartAddress
+class CartAddress
 {
     #[ApiProperty(identifier: true)]
-    private ?int $id = null;
+    private ?string $cartId = null;
 
-    #[Assert\Type('integer', message: '(billingAddressId) Integer required')]
-    private ?int $billingAddressId = null;
-    #[Assert\Type('integer', message: '(shippingAddressId) Integer required')]
-    private ?int $shippingAddressId = null;
+    #[Assert\Type('string', message: '(billingAddressExternalId) String required')]
+    private ?string $billingAddressExternalId = null;
 
-    public function getId(): ?int
+    #[Assert\Type('string', message: '(shippingAddressExternalId) String required')]
+    private ?string $shippingAddressExternalId = null;
+
+    public function getCartId(): ?string
     {
-        return $this->id;
+        return $this->cartId;
     }
 
-    public function setId(int $id): self
+    public function setCartId(?string $cartId): self
     {
-        $this->id = $id;
+        $this->cartId = $cartId;
 
         return $this;
     }
 
-    public function getShippingAddressId(): ?int
+    public function getShippingAddressExternalId(): ?string
     {
-        return $this->shippingAddressId;
+        return $this->shippingAddressExternalId;
     }
 
-    public function setShippingAddressId(int $shippingAddressId): ?self
+    public function setShippingAddressExternalId(string $shippingAddressExternalId): ?self
     {
-        $this->shippingAddressId = $shippingAddressId;
+        $this->shippingAddressExternalId = $shippingAddressExternalId;
 
         return $this;
     }
 
-    public function getBillingAddressId(): ?int
+    public function getBillingAddressExternalId(): ?string
     {
-        return $this->billingAddressId;
+        return $this->billingAddressExternalId;
     }
 
-    public function setBillingAddressId(int $billingAddressId): ?self
+    public function setBillingAddressExternalId(string $billingAddressExternalId): ?self
     {
-        $this->billingAddressId = $billingAddressId;
+        $this->billingAddressExternalId = $billingAddressExternalId;
 
         return $this;
     }

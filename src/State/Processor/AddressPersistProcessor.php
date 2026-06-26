@@ -9,12 +9,13 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\State\ProcessorInterface;
 use App\Factory\AddressFactory;
-use App\Service\UpplerAddressService;
+use App\Service\Djust\DjustAddressService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 readonly class AddressPersistProcessor implements ProcessorInterface
 {
-    public function __construct(private UpplerAddressService $upplerAddressService, private AddressFactory $addressFactory)
+    public function __construct(private DjustAddressService $djustAddressService, private AddressFactory $addressFactory)
     {
     }
 
@@ -22,14 +23,16 @@ readonly class AddressPersistProcessor implements ProcessorInterface
     {
         try {
             if ($operation instanceof Put) {
-                $this->upplerAddressService->updateAddress($data);
+                $this->djustAddressService->updateAddress($data);
             } elseif ($operation instanceof Post) {
-                return $this->addressFactory->create($this->upplerAddressService->createAddress($data));
+                return $this->addressFactory->create($this->djustAddressService->createAddress($data));
             } else {
                 throw new BadRequestHttpException();
             }
 
             return $data;
+        } catch (HttpException $e) {
+            throw $e;
         } catch (\Throwable $e) {
             throw new BadRequestHttpException();
         }

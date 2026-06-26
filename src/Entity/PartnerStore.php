@@ -18,6 +18,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: PartnerStoreRepository::class)]
+#[ORM\Index(columns: ['partner_id'], name: 'idx_partner_store_partner_id')]
 #[ApiResource(
     operations: [
         new Get(),

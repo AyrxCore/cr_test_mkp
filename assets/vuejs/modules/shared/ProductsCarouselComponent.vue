@@ -1,5 +1,6 @@
 <template>
-  <div v-if="products?.length > 0" class="relative mt-1 md:mt-5">
+  <ProductsLoadingCarouselComponent v-if="loading" />
+  <div v-else-if="products?.length > 0" class="relative mt-1 md:mt-5">
     <CarouselListSharedComponent
       :breakpoints="{
         1600: {
@@ -33,7 +34,6 @@
       </SwiperSlide>
     </CarouselListSharedComponent>
   </div>
-  <ProductsLoadingCarouselComponent v-else-if="loading" />
 </template>
 <script lang="ts" setup>
 import { SwiperSlide } from 'swiper/vue'

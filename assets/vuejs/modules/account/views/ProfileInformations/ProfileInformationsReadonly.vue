@@ -58,7 +58,7 @@
           <p class="mb-2.5 text-lg">Nom&nbsp;: {{ user.lastName }}</p>
           <p class="mb-2.5 text-lg">Prénom&nbsp;: {{ user.firstName }}</p>
           <p class="mb-2.5 text-lg">
-            Téléphone fixe&nbsp;: {{ user.account.phone }}
+            Téléphone&nbsp;: {{ user.account.phone }}
           </p>
         </div>
         <div>

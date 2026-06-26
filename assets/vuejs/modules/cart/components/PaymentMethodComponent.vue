@@ -9,27 +9,31 @@
       class="button-primary mt-4 !whitespace-normal"
       @click="emit('select-method')"
     >
-      Choisir le paiement par {{ method.name.default }}
+      Choisir le paiement par {{ methodLabel }}
     </ButtonComponent>
   </div>
 </template>
 <script lang="ts" setup>
-import { PropType } from 'vue'
+import { PropType, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
-import { PaymentMethod } from '@/vuejs/types/Cart'
+import { AdyenPaymentMethod, AdyenPaymentMethodType, ADYEN_PAYMENT_TYPE_LABELS } from '@/vuejs/types/Cart'
 import { useUserStore } from '@/vuejs/stores/user'
 
 const props = defineProps({
   method: {
     required: true,
-    type: Object as PropType<PaymentMethod>,
+    type: Object as PropType<AdyenPaymentMethod>,
   },
   isLoading: {
     type: Boolean,
     default: false,
   },
 })
+
+const methodLabel = computed(
+  () => ADYEN_PAYMENT_TYPE_LABELS[props.method.type as AdyenPaymentMethodType] ?? props.method.name,
+)
 
 const { isNeoAutoLogin } = storeToRefs(useUserStore())
 

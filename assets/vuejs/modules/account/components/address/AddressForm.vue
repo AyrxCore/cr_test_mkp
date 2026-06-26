@@ -3,34 +3,20 @@
     <div class="md:grid-rows flex flex-col md:grid md:grid-flow-col md:gap-6">
       <div class="mb-6">
         <LabelField title="Nom de l'adresse *" />
-        <InputField v-model="currentAddress.name" required />
-      </div>
-      <div class="mb-6">
-        <LabelField title="Entreprise *" />
-        <InputField v-model="currentAddress.company" required />
-      </div>
-    </div>
-    <div class="md:grid-rows flex flex-col md:grid md:grid-flow-col md:gap-6">
-      <div class="mb-6">
-        <LabelField title="Nom interlocuteur" />
-        <InputField v-model="currentAddress.lastName" />
-      </div>
-      <div class="mb-6">
-        <LabelField title="Prénom interlocuteur" />
-        <InputField v-model="currentAddress.firstName" />
+        <InputField v-model="currentAddress.fullName" required />
       </div>
     </div>
     <div class="md:grid-rows flex flex-col md:grid md:grid-flow-col md:gap-12">
       <div class="mb-6">
         <LabelField title="Adresse *" />
-        <InputField v-model="currentAddress.street" required />
+        <InputField v-model="currentAddress.address" required />
       </div>
     </div>
     <div class="md:grid-rows flex flex-col md:grid md:grid-flow-col md:gap-6">
       <div class="mb-6">
         <LabelField title="Code postal *" />
         <InputField
-          v-model="currentAddress.postcode"
+          v-model="currentAddress.zipcode"
           required
           pattern="(?:0[1-9]|[1-8]\d|9[0-8])\d{3}$"
           title="Ex: 69760"
@@ -46,12 +32,7 @@
     >
       <div class="mb-6 w-full">
         <LabelField title="Pays *" />
-        <SelectField
-          v-model="currentAddress.country"
-          :options="countryStore.getCountriesForSelect()"
-          placeholder="Sélectionner un pays"
-          required
-        />
+        <InputField v-model="currentAddress.country" required />
       </div>
       <div class="mb-6">
         <LabelField title="Téléphone" />
@@ -84,26 +65,23 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { onMounted, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import InputField from '@/vuejs/modules/shared/formfields/InputField.vue'
 import LabelField from '@/vuejs/modules/shared/formfields/LabelField.vue'
 import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.vue'
-import SelectField from '@/vuejs/modules/shared/formfields/SelectField.vue'
 
 import router, { PageList } from '@/vuejs/router'
 import { useAddressStore } from '@/vuejs/stores/address'
 import { useRoute } from 'vue-router'
-import { useCountryStore } from '@/vuejs/stores/country'
 
 const route = useRoute()
 const addressStore = useAddressStore()
 const { currentAddress, isLoading } = storeToRefs(addressStore)
 const isEditing = ref<boolean>(false)
 const isEditedLoaded = ref<boolean>(false)
-const countryStore = useCountryStore()
 
 const props = defineProps({
   type: {
@@ -114,14 +92,10 @@ const props = defineProps({
 
 const emit = defineEmits(['submitAddress', 'cancelCreateAddress'])
 
-onMounted(async () => {
-  if (countryStore.countries.length > 0) return
-  await countryStore.getCountries()
-})
 
 watch(
-  () => route.params.id as number,
-  async (id: number) => {
+  () => route.params.id as string,
+  async (id: string) => {
     if (!id) {
       addressStore.initNewAddress(props.type)
       isEditedLoaded.value = true

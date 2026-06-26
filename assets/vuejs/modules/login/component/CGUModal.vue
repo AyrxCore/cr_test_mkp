@@ -1,9 +1,9 @@
 <template>
   <div class="modal-overlay">
     <div
-      class="z-9999 fixed top-[5%] left-[30%] ml-[-150px] flex h-[90%] w-full flex-col items-center justify-start overflow-auto rounded-xl bg-white px-10 py-3 text-white !opacity-100 lg:w-[50%]"
+      class="z-9999 fixed left-[30%] top-[5%] ml-[-150px] flex h-[90%] w-full flex-col items-center justify-start overflow-auto rounded-xl bg-white px-10 py-3 text-white !opacity-100 lg:w-[50%]"
     >
-      <CmsPageComponent :page-id="CGU_PAGE_ID" />
+      <CmsPageComponent field="cgu" />
       <div class="mt-5 flex flex-col items-center space-x-3 md:flex-row">
         <label
           :class="{
@@ -25,9 +25,9 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { CGU_PAGE_ID } from '@/vuejs/services/const'
-import CmsPageComponent from '../../shared/CmsPageComponent.vue'
+
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
+import CmsPageComponent from '@/vuejs/modules/shared/CmsPageComponent.vue'
 
 const showAlertModal = ref<boolean>(false)
 const acceptCGU = ref(false)

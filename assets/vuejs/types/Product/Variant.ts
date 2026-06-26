@@ -1,4 +1,5 @@
 export interface Variant {
   id: number
-  sku: string
+  externalId: string
+  offerPriceId: string
 }

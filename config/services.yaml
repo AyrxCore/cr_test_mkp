@@ -9,10 +9,13 @@ parameters:
   uppler_admin_client_id: '%env(UPPLER_ADMIN_CLIENT_ID)%'
   uppler_admin_client_secret: '%env(UPPLER_ADMIN_CLIENT_SECRET)%'
   uppler_webhook_secret: '%env(UPPLER_WEBHOOK_SECRET)%'
+  storyblok_token: '%env(STORYBLOK_API_TOKEN)%'
+  storyblok_api_base_uri: '%env(STORYBLOK_API_BASE_URI)%'
   http_cache_path: '%kernel.project_dir%/var/cache/%env(APP_ENV)%'
   #fichier qui stocke le token admin en cours
   uppler_admin_token_file: '%kernel.project_dir%/var/'
   #ttl entre 2 essais de reinit de password en minutes
+  app.credential_encryption_key: '%env(CREDENTIAL_ENCRYPTION_KEY)%'
   retry_ttl: 120
   ACCOUNTS_SUGAR_LINK: '%env(SUGAR_LINK)%'
   SUBSCRIPTION_MAIL_FROM: '%env(MAIL_FROM)%'
@@ -81,6 +84,8 @@ services:
       - { name: kernel.event_listener, event: kernel.request }
 
   _instanceof:
+    App\Service\Shipping\Calculator\ShippingRuleCalculatorInterface:
+      tags: ['app.shipping_rule_calculator']
     \App\Controller\ChannelRepositoryAwareControllerInterface:
       calls:
         - setChannelRepository: ['@App\Repository\ChannelRepository']
@@ -123,6 +128,10 @@ services:
     arguments:
       $sugarLink: '%env(SUGAR_LINK)%'
       $emailFrom: '%env(MAIL_FROM)%'
+
+  App\Service\Shipping\ShippingCostService:
+    arguments:
+      $calculators: !tagged_iterator app.shipping_rule_calculator
 
   Symfony\Component\DependencyInjection\ContainerInterface: '@service_container'
 

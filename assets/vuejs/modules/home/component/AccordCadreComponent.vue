@@ -1,13 +1,13 @@
 <template>
   <div
     :class="[
-      'relative mb-4 flex flex-col items-center rounded-lg border-4 border-solid p-4',
+      'relative mb-4 flex w-full flex-col items-center rounded-lg border-2 border-solid p-4',
       isInShowcase ? 'border-gray-400' : 'border-secondary',
     ]"
   >
     <div
       :class="{ 'justify-between': accord.newTarifNotification }"
-      class="flex h-[50px] w-full items-center justify-end"
+      class="flex h-[50px] w-full items-start justify-end"
     >
       <div
         v-if="accord.newTarifNotification"
@@ -21,13 +21,19 @@
         :stroke="channelSecondaryColor"
         class="mr-2"
       />
-      <AddFavoriteComponent
+      <!-- <AddFavoriteComponent
         v-else
         :favorites-product="accord.favorites"
         :product-id="accord.id"
-        :product-name="accord.name"
+        :product-name="accordName"
         class="ml-4"
-      />
+      /> -->
+      <span
+        v-else-if="accordBadgeLabel"
+        class="rounded-md bg-secondary px-3 py-1 text-sm font-semibold text-white"
+      >
+        {{ accordBadgeLabel }}
+      </span>
     </div>
     <Component
       :is="!isInShowcase ? 'RouterLink' : 'div'"
@@ -51,66 +57,57 @@
       @click="
         !isInShowcase
           ? sendGtmEvent('fat_click', {
-                link_url: router.resolve({
-                  name: ProductPageList.ACCORD_CADRE,
-                  params: { slug: accord.slug },
-                }).fullPath,
-                origin_url: router.currentRoute.value.fullPath,
-              })
+              link_url: router.resolve({
+                name: ProductPageList.ACCORD_CADRE,
+                params: { slug: accord.slug },
+              }).fullPath,
+              origin_url: router.currentRoute.value.fullPath,
+            })
           : $emit('show-showcase-modal', accord)
       "
     >
-      <div class="flex h-[410px] flex-col items-center">
+      <div class="flex h-[250px] flex-col items-center">
         <div class="my-1 flex w-full items-center">
           <div
-            class="mx-auto flex h-[180px] max-w-[200px] items-center justify-center rounded-lg"
-        >
-          <component
-            :is="isInShowcase ? 'div' : 'RouterLink'"
-            :to="isInShowcase ? null : productLink"
-            class="block"
+            class="mx-auto flex h-[110px] max-w-[200px] items-center justify-center rounded-lg"
+          >
+            <component
+              :is="isInShowcase ? 'div' : 'RouterLink'"
+              :to="isInShowcase ? null : productLink"
+              class="block"
             >
               <img
-                :alt="`Image ${accord.name}`"
+                :alt="`Image ${accordName}`"
                 :class="{ 'pointer-events-none': contactRequested }"
-                :src="properties.logo_partenaire"
-                class="max-h-[150px] cursor-pointer items-center sm:flex md:max-h-[139px] lg:max-h-[191px] lg:w-full lg:max-w-max"
+                :src="partnerLogo"
+                class="max-h-[90px] max-w-full w-auto object-contain cursor-pointer"
                 @click="handleShowcaseModal"
               />
             </component>
           </div>
         </div>
 
-        <div class="flex h-3/5 w-full flex-col justify-between">
-          <div class="h-[30%]">
-            <h3
-              :class="{ 'pointer-events-none': contactRequested }"
-              class="truncate-custom truncate-custom-2 text-title-default-size my-2 cursor-pointer text-center font-bold text-primary md:text-xl lg:text-lg"
+        <div class="flex flex-1 w-full flex-col">
+          <h3
+            :class="{ 'pointer-events-none': contactRequested }"
+            class="truncate-custom truncate-custom-2 text-title-default-size my-2 cursor-pointer text-center font-bold text-primary md:text-xl lg:text-lg"
+          >
+            <RouterLink
+              v-if="!isInShowcase"
+              :to="{
+                name: ProductPageList.ACCORD_CADRE,
+                params: { slug: accord.slug },
+              }"
+              class="block"
             >
-              <RouterLink
-                v-if="!isInShowcase"
-                :to="{
-                  name: ProductPageList.ACCORD_CADRE,
-                  params: { slug: accord.slug },
-                }"
-                class="block"
-              >
-                {{ accord.name }}
-              </RouterLink>
-              <span v-else @click="$emit('show-showcase-modal', accord)">{{
-                accord.name
-              }}</span>
-            </h3>
-          </div>
+              {{ accordName }}
+            </RouterLink>
+            <span v-else @click="$emit('show-showcase-modal', accord)">{{
+              accordName
+            }}</span>
+          </h3>
 
-          <div>
-            <p
-              class="description truncate-custom truncate-custom-3 mb-4 px-2 text-center"
-              v-html="accord.description"
-            />
-          </div>
-
-          <div class="mt-1 flex w-full justify-center">
+          <div class="mt-auto flex w-full justify-center">
             <ButtonComponent
               v-if="isInShowcase"
               :class="[
@@ -128,10 +125,12 @@
             </ButtonComponent>
             <div
               v-else
-              :style="{ color: betterTextColor('primary') }"
-              class="button button-primary flex items-center justify-center"
+              :class="[
+                'button flex items-center justify-center',
+                accordButtonClass,
+              ]"
             >
-              Consulter l'accord&#8209;cadre
+              {{ accordButtonText }}
             </div>
           </div>
         </div>
@@ -149,12 +148,12 @@ import router from '@/vuejs/router'
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import { useUserStore } from '@/vuejs/stores/user'
 import { useChannelStore } from '@/vuejs/stores/channel'
-import { betterTextColor } from '@/vuejs/services/utils'
 import { sendGtmEvent } from '@/vuejs/services/gtm'
 import { Product } from '@/vuejs/types/Product'
 import { AdherentTarifShowcase } from '@/vuejs/types/AdherentTarifShowcase'
+import { AccountAccordCadreStatus } from '@/vuejs/types/AccountAccordCadre'
+import { ACCORD_CADRE_TYPE } from '@/vuejs/services/const'
 
-import AddFavoriteComponent from '@/vuejs/modules/products/components/AddFavoriteComponent.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import LockIconComponent from '@/vuejs/modules/shared/icon/LockIconComponent.vue'
 import CheckIconComponent from '@/vuejs/modules/shared/icon/CheckIconComponent.vue'
@@ -173,17 +172,21 @@ const props = defineProps({
 
 const emit = defineEmits(['click-accord-cadre-card', 'show-showcase-modal'])
 
-const properties = computed<any[]>(() => props.accord.properties)
+const partnerLogo = computed<string>(
+  () => props.accord.accordCadreContent?.listBlocks?.bannerBlock?.logoUrl,
+)
+
+const accordName = computed<string>(() => props.accord.accordCadreContent?.name)
 
 const isInShowcase = computed<boolean>(() =>
   adherentTarifShowcases.value.some(
-    (showcase) => showcase.accordId === properties.value['accord-id'],
+    (showcase) => showcase.accordId === props.accord.accordId,
   ),
 )
 
 const showcase = computed<AdherentTarifShowcase | undefined>(() =>
   adherentTarifShowcases.value.find(
-    (showcase) => showcase.accordId === properties.value['accord-id'],
+    (showcase) => showcase.accordId === props.accord.accordId,
   ),
 )
 
@@ -207,6 +210,40 @@ const productLink = computed<RouteLocationRaw>(() => ({
 const contactButtonClass = computed<string>(() =>
   contactRequested.value ? 'button-primary-outline' : 'button-primary',
 )
+
+const accordBadgeLabel = computed<string | undefined>(
+  () =>
+    props.accord.accordCadreContent?.listBlocks?.bannerBlock?.badgeTextBottom,
+)
+
+const effectiveStatus = computed<AccountAccordCadreStatus>(() => {
+  if (props.accord.accordCadreContent?.type === ACCORD_CADRE_TYPE.DIRECT) {
+    return AccountAccordCadreStatus.ACTIVATED
+  }
+  return props.accord.accountAccordCadre?.status ?? AccountAccordCadreStatus.NOT_ACTIVATED
+})
+
+const accordButtonText = computed<string>(() => {
+  switch (effectiveStatus.value) {
+    case AccountAccordCadreStatus.PENDING:
+    case AccountAccordCadreStatus.ACTIVATED:
+      return 'Consulter'
+    case AccountAccordCadreStatus.NOT_ACTIVATED:
+    default:
+      return 'A activer'
+  }
+})
+
+const accordButtonClass = computed<string>(() => {
+  switch (effectiveStatus.value) {
+    case AccountAccordCadreStatus.PENDING:
+    case AccountAccordCadreStatus.ACTIVATED:
+      return 'button-primary-outline'
+    case AccountAccordCadreStatus.NOT_ACTIVATED:
+    default:
+      return 'button-primary'
+  }
+})
 
 const handleShowcaseModal = () => {
   if (isInShowcase.value) {

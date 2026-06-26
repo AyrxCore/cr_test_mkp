@@ -1,38 +1,7 @@
 export const CGU_PAGE_ID = 108
 
-export const ADDRESS_BILLING = 'billing'
-export const ADDRESS_SHIPPING = 'shipping'
-
-export const ORDER_STATUS = {
-  new: {
-    name: 'En attente',
-    color: 'bg-primary',
-  },
-  pending: {
-    name: 'En attente',
-    color: 'bg-primary',
-  },
-  confirmed: {
-    name: 'Confirmée',
-    color: 'bg-green-500',
-  },
-  edited: {
-    name: 'Modification transmise',
-    color: 'bg-primary',
-  },
-  refused: {
-    name: 'Refusée',
-    color: 'bg-red-600',
-  },
-  expired: {
-    name: 'Expirée',
-    color: 'bg-red-600',
-  },
-  canceled: {
-    name: 'Annulée',
-    color: 'bg-red-600',
-  },
-}
+export const ADDRESS_BILLING = 'BILLING'
+export const ADDRESS_SHIPPING = 'SHIPPING'
 
 export const SHIPPING_STATUS = {
   pending: {
@@ -69,22 +38,6 @@ export const SHIPPING_STATUS = {
   },
 }
 
-export const HOME_PRODUCTS_SELECTION_PROPERTY = {
-  perPage: 50,
-  properties: {
-    property_id: 217,
-    value: 5368,
-  },
-}
-
-export const HOME_ACCORD_CADRE_PROPERTY = {
-  perPage: 50,
-  properties: {
-    property_id: 217,
-    value: 5367,
-  },
-}
-
 export const OPTIONAL_FRONT_BLOCKS = {
   BANNER_FLASH_HOMEPAGE: 'BANNER_FLASH_HOMEPAGE',
   BANNER_SLIDER_HOMEPAGE: 'BANNER_SLIDER_HOMEPAGE',
@@ -96,6 +49,17 @@ export const OPTIONAL_FRONT_BLOCKS = {
   SAVED_CARTS: 'SAVED_CARTS',
 }
 
-/**
- * End
- */
+export const CART_LINE_ACTIONS = {
+  ADD_QUANTITY: 'ADD_QUANTITY',
+  REPLACE_QUANTITY: 'REPLACE_QUANTITY',
+}
+
+export const PRODUCT_FDP_PREFIX = 'PRODUCT_FDP_'
+
+export const MAP_BLOCK_ID = 'mapBlock'
+
+export const ACCORD_CADRE_TYPE = {
+  STANDARD: 'STANDARD',
+  BONUUS: 'BONUUS',
+  DIRECT: 'DIRECT',
+}

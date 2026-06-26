@@ -1,13 +1,16 @@
 <template>
   <div
-    class="rounded-xs my-12 w-fit bg-secondary p-3 text-center text-xl font-bold text-white"
+    class="rounded-xs mt-12 w-fit bg-secondary p-3 text-center text-xl font-bold text-white"
   >
-    <template v-if="product.percent">
-      -{{ product.percent }}% sur le tarif public
+    <template v-if="product.productTopLabel">
+      {{ product.productTopLabel }}
     </template>
     <template v-else>Offre sur-mesure</template>
   </div>
-  <div class="mb-6">
+  <div v-if="product.productPricingPhrase" class="my-6 text-xl text-gray-700">
+    {{ product.productPricingPhrase }}
+  </div>
+  <div class="mb-6 mt-6">
     <h4 class="text-xl font-bold">Comment bénéficier de l'offre ?</h4>
     <span class="text-lg">
       Veuillez cliquer sur le bouton "Je suis intéressé" ci-dessous et nous vous
@@ -35,7 +38,7 @@ import { Product } from '@/vuejs/types/Product'
 
 const showInterestModal = ref<boolean>(false)
 
-const props = defineProps({
+defineProps({
   product: {
     required: true,
     type: Object as PropType<Product>,

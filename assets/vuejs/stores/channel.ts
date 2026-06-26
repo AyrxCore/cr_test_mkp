@@ -8,10 +8,6 @@ import { notifyError } from '@/vuejs/services/utils'
 import ChannelHttpClient from '@/vuejs/services/httpclient/ChannelHttpClient'
 import { useCommonStore } from '@/vuejs/stores/common'
 import { parsePhoneNumber } from 'libphonenumber-js'
-import {
-  HOME_ACCORD_CADRE_PROPERTY,
-  HOME_PRODUCTS_SELECTION_PROPERTY,
-} from '@/vuejs/services/const'
 
 export const useChannelStore = defineStore('channel', {
   state: (): ChannelStoreState => ({
@@ -106,43 +102,11 @@ export const useChannelStore = defineStore('channel', {
         ? this.channelDocuments?.privacyPolicy
         : '/politique-de-confidentialite'
     },
-    channelSliderAccordsCadresProperty(): Object {
-      let accordCadreProperty = HOME_ACCORD_CADRE_PROPERTY
-      if (
-        this.channel.options['HOMEPAGE_ACCORD_CADRE_CHANNEL_PROPERTY_VALUE_ID']
-      ) {
-        let copyAccordCadreProperty = Object.assign(
-          {},
-          HOME_ACCORD_CADRE_PROPERTY,
-        )
-        copyAccordCadreProperty.properties.value = parseInt(
-          this.channel.options[
-            'HOMEPAGE_ACCORD_CADRE_CHANNEL_PROPERTY_VALUE_ID'
-          ],
-        )
-        accordCadreProperty = copyAccordCadreProperty
-      }
-      return accordCadreProperty
+    channelSliderAccordsCadresProperty(): string | null {
+      return `HOMEPAGE_ACCORD_SELECTION_${this.channel?.code}`
     },
-    channelSliderProductsSelectionProperty(): Object {
-      let productSelectionProperty = HOME_PRODUCTS_SELECTION_PROPERTY
-      if (
-        this.channel.options[
-          'HOMEPAGE_PRODUCTS_SELECTION_CHANNEL_PROPERTY_VALUE_ID'
-        ]
-      ) {
-        let copySelectionProperty = Object.assign(
-          {},
-          HOME_PRODUCTS_SELECTION_PROPERTY,
-        )
-        copySelectionProperty.properties.value = parseInt(
-          this.channel.options[
-            'HOMEPAGE_PRODUCTS_SELECTION_CHANNEL_PROPERTY_VALUE_ID'
-          ],
-        )
-        productSelectionProperty = copySelectionProperty
-      }
-      return productSelectionProperty
+    channelSliderProductsSelectionProperty(): string | null {
+      return `HOMEPAGE_PRODUCT_SELECTION_${this.channel?.code}`
     },
   },
 })

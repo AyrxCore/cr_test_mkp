@@ -54,6 +54,7 @@ security:
     - { path: ^/api/docs, roles: PUBLIC_ACCESS }
     - { path: ^/api/contact, roles: PUBLIC_ACCESS }
     - { path: ^/api/cms, roles: PUBLIC_ACCESS }
+    - { path: ^/api/legal-content, roles: PUBLIC_ACCESS }
     - { path: ^/api/channels/by-host/, roles: PUBLIC_ACCESS }
     - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
     - { path: ^/app, roles: PUBLIC_ACCESS }

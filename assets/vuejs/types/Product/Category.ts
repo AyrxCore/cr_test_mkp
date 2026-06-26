@@ -1,9 +1,7 @@
 export interface Category {
-  id: number
+  id: string
+  externalId: string
   name: string
-  parentId: number
-  image: string
-  productCount: number
-  checked: boolean
+  parentId: string | undefined
   children: Array<Category>
 }

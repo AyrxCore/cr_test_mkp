@@ -13,16 +13,49 @@ use App\Tests\Constraint\MatchesJson;
 use App\Tests\Story\Account\UserStory;
 use App\Tests\Story\Channel\ChannelParameterStory;
 use App\Tests\Story\Channel\ChannelStory;
+use Doctrine\ORM\EntityManagerInterface;
 use Zenstruck\Foundry\Test\Factories;
-use Zenstruck\Foundry\Test\ResetDatabase;
 
 class ApiTestCase extends ApiPlatformTestCase
 {
     use Factories;
-    use ResetDatabase;
+    use TestDatabaseCloneTrait;
 
     public const string DEFAULT_USER_LOGIN = 'gsm@qantis.co';
     protected const string DEFAULT_USER_PASSWORD = '23AP4DF8';
+
+    protected ?EntityManagerInterface $entityManager = null;
+
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->createIsolatedDatabase();
+        // load dev fixtures
+        UserStory::load();
+        ChannelStory::load();
+        ChannelParameterStory::load();
+
+        $kernel = self::bootKernel();
+
+        $this->entityManager = $kernel->getContainer()
+            ->get('doctrine')
+            ->getManager();
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        $this->entityManager->clear();
+        $this->entityManager->close();
+        $this->entityManager = null;
+        $this->dropIsolatedDatabase();
+    }
 
     public function assertJsonResponseMatches($jsonFilePath, string $message = ''): void
     {
@@ -34,11 +67,6 @@ class ApiTestCase extends ApiPlatformTestCase
         string $password = UserStory::DEFAULT_PASSWORD,
         string $channel = 'QANTIS_TEST',
     ): Client {
-        // load dev fixtures
-        UserStory::load();
-        ChannelStory::load();
-        ChannelParameterStory::load();
-
         $client = self::createClient(defaultOptions: [
             'headers' => [
                 'X-Channel' => $channel,
@@ -53,6 +81,7 @@ class ApiTestCase extends ApiPlatformTestCase
         ]);
 
         $user = UserFactory::find(['username' => $username]);
+
         if (\in_array('ROLE_API', $user->getRoles(), true)) {
             return $client;
         }
@@ -71,6 +100,7 @@ class ApiTestCase extends ApiPlatformTestCase
     }
 
     // get the user's account matching current channel
+
     protected static function getUserFirstAccount(User $user, string $channel = 'QANTIS_TEST'): ?Account
     {
         // get the account matching the channel

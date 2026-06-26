@@ -4,7 +4,7 @@
       <div>
         <input
           :id="`categoryRadio-${category.id}`"
-          :checked="category.checked"
+          :checked="route.query.category === category.id"
           :value="category.id"
           class="mr-3 cursor-pointer"
           type="radio"
@@ -45,12 +45,15 @@
 
 <script lang="ts" setup>
 import { PropType, onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 
 import router from '@/vuejs/router'
 import { sendGtmEvent } from '@/vuejs/services/gtm'
 import { Category } from '@/vuejs/types/Product/Category'
 
 import Chevron2RightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
+
+const route = useRoute()
 
 const props = defineProps({
   category: {
@@ -67,7 +70,7 @@ const toggleChildren = (): void => {
   showChildren.value = !showChildren.value
 }
 
-const handleCategorySelection = (categoryId: number): void => {
+const handleCategorySelection = (categoryId: string): void => {
   emit('change-category', categoryId)
 }
 
@@ -77,7 +80,7 @@ const openHierarchy = (): void => {
 }
 
 onMounted((): void => {
-  if (props.category.checked) {
+  if (route.query.category === props.category.id) {
     emit('open-hierarchy')
   }
 })

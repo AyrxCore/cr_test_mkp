@@ -38,7 +38,7 @@
                         v-if="props.accord?.seller?.id"
                         :to="{
                           name: ProductPageList.PRODUCTS,
-                          query: { company: props.accord.seller.id },
+                          query: { seller: props.accord.seller.externalId },
                         }"
                         target="_blank"
                         :class="[
@@ -76,6 +76,8 @@ import { ProductPageList } from '@/vuejs/router/pages-list'
 import MapComponent from '@/vuejs/modules/shared/map/MapComponent.vue'
 import StorePopupContent from '@/vuejs/modules/products/components/map/StorePopupContent.vue'
 
+const emit = defineEmits<{ (e: 'loaded', hasStores: boolean): void }>()
+
 const props = defineProps({
   accord: {
     type: Object as PropType<Product>,
@@ -98,7 +100,7 @@ onMounted(async () => {
     return
   }
 
-  const accordId = props.accord.properties?.['accord-id']
+  const accordId = props.accord.accordId
   if (!accordId) {
     console.warn('Aucun accord ID trouvé')
     return
@@ -118,6 +120,8 @@ onMounted(async () => {
   } catch (err) {
     console.error("Erreur lors du chargement des magasins de l'accord:", err)
     stores.value = []
+  } finally {
+    emit('loaded', stores.value.length > 0)
   }
 })
 </script>

@@ -18,17 +18,17 @@ class PartnerRepository extends ServiceEntityRepository
         parent::__construct($registry, Partner::class);
     }
 
-    public function findAuthorizedPartnersWithStores(array $upplerIds): array
+    public function findByDjustIds(array $djustIds): array
     {
-        if (empty($upplerIds)) {
+        if (empty($djustIds)) {
             return [];
         }
 
         return $this->createQueryBuilder('p')
             ->innerJoin('p.partnerStores', 's')
             ->addSelect('s')
-            ->where('p.upplerId IN (:upplerIds)')
-            ->setParameter('upplerIds', $upplerIds)
+            ->where('p.id IN (:djustIds)')
+            ->setParameter('djustIds', $djustIds)
             ->getQuery()
             ->getResult();
     }

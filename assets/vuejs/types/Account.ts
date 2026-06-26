@@ -40,6 +40,7 @@ export interface Adherent {
   shouldHideStellantisModal?: boolean
   usedAccords?: number
   availableAccords?: number
+  siret?: string
 }
 
 export interface Account extends ExternalApiDataEntity {
@@ -56,15 +57,15 @@ export interface Account extends ExternalApiDataEntity {
 }
 
 export interface DefaultBillingAddressToUpdate {
-  id: number
+  id: string | number
   accountId: string
-  billingAddressId: number
+  billingAddressId: string
 }
 
 export interface DefaultShippingAddressToUpdate {
-  id: number
+  id: string | number
   accountId: string
-  shippingAddressId: number
+  shippingAddressId: string
 }
 
 interface AccountToUpdate {
@@ -82,3 +83,11 @@ export type AccountEmail = Omit<
 >
 
 export type AccountDetails = Omit<AccountToUpdate, 'email'>
+
+export interface SubAccountData {
+  id: number
+  lastName: string
+  firstName: string
+  phone: string
+  accountId?: string
+}

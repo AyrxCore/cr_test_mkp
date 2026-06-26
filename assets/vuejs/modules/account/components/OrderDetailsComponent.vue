@@ -10,7 +10,7 @@
           class="h-full w-full object-contain"
         />
       </div>
-      <div class="flex w-6/12 flex-col pr-3 md:ml-3 md:w-8/12">
+      <div class="flex w-6/12 flex-col pr-3 md:ml-10 md:w-8/12">
         <RouterLink
           :to="{ name: PageList.PRODUCT, params: { slug: productSlug } }"
           class="text-lg font-bold text-primary lg:text-lg"
@@ -27,7 +27,7 @@
     <div class="mt-4 md:mt-0 md:w-4/12 lg:w-3/12">
       <div class="flex md:justify-between">
         <div
-          class="flex w-full flex-row flex-wrap items-center justify-between md:w-auto"
+          class="flex w-full flex-col flex-wrap items-center justify-between md:w-auto"
         >
           <span
             class="flex items-start text-sm font-bold text-primary md:text-base lg:text-lg"
@@ -37,7 +37,7 @@
           </span>
         </div>
         <div
-          class="flex w-full flex-row flex-wrap items-center justify-between md:w-auto"
+          class="flex w-full flex-col flex-wrap items-end justify-between md:w-auto"
         >
           <span
             class="flex items-start text-sm font-bold md:text-base lg:text-lg"
@@ -45,25 +45,26 @@
             <span class="mr-3 md:hidden">Sous total :</span>
             {{ productTotalPrice }}€ HT
           </span>
+          <span
+            v-if="ecoTaxLine"
+            class="mt-0.5 w-full rounded py-0.5 text-xs text-gray-700 md:w-auto"
+          >
+            dont {{ ecoTaxLine }}€ d'éco-part
+          </span>
         </div>
       </div>
     </div>
   </div>
 </template>
-<script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue'
-import { formatPrice, getImage } from '@/vuejs/services/utils'
-import sampleImg from '@/vuejs/assets/img/sample_product_img.png'
-import { Product } from '@/vuejs/types/Product'
-import { useProductStore } from '@/vuejs/stores/product'
-import { PageList } from '@/vuejs/router'
 
-const productStore = useProductStore()
-const product = ref<Product>()
-const productNotFound = ref(false)
-const priceReference = ref()
-const price = ref()
-const percent = ref()
+<script lang="ts" setup>
+import { computed } from 'vue'
+
+import { PageList } from '@/vuejs/router'
+import { formatPrice, getImage } from '@/vuejs/services/utils'
+
+import sampleImg from '@/vuejs/assets/img/sample_product_img.png'
+
 const props = defineProps({
   item: {
     required: true,
@@ -71,38 +72,27 @@ const props = defineProps({
   },
 })
 
-onMounted(async (): Promise<void> => {
-  product.value = await productStore.initProduct(props.item.variant.product.id)
-  if (!product.value) {
-    productNotFound.value = true
-  } else {
-    priceReference.value = product.value.priceReference
-    price.value = product.value.price
-    percent.value = product.value.percent
-  }
-})
-
 const productImage = computed((): string => {
-  if (product.value) return product.value.images[0]
+  if (props.item.variant?.mainImageUrl) return props.item.variant.mainImageUrl
+  if (props.item.variant?.product?.images?.[0])
+    return props.item.variant.product.images[0]
   return getImage(sampleImg)
 })
 
 const productSlug = computed((): string => {
-  return product.value ? product.value.slug : props.item.variant.product.id
+  return props.item.variant.product.externalId ?? ''
 })
 
 const productName = computed((): string => {
-  return product.value
-    ? product.value.name
-    : props.item.variant.product.name.defauult
+  return props.item.variant?.product?.name?.default || ''
 })
 
 const productReference = computed((): string => {
-  return product.value ? product.value.reference : ''
+  return props.item.variant?.product?.reference || props.item.variant?.sku || ''
 })
 
 const productPrice = computed((): number | string => {
-  return product.value ? formatPrice(product.value.price) : ''
+  return props.item.unit_price ? formatPrice(props.item.unit_price) : ''
 })
 
 const productTotalPrice = computed((): number | string => {
@@ -110,9 +100,17 @@ const productTotalPrice = computed((): number | string => {
 })
 
 const productSeller = computed((): string => {
-  return product.value ? product.value.seller.name : ''
+  return props.item.variant?.product?.seller?.name || ''
+})
+
+const ecoTaxLine = computed((): string | null => {
+  const unitEcoTax = props.item.eco_tax
+  if (!unitEcoTax) return null
+  const total = unitEcoTax * (props.item.quantity ?? 1)
+  return formatPrice(total)
 })
 </script>
+
 <style scoped>
 .input-qte {
   @apply rounded-lg border border-gray-300 px-0 text-center text-sm md:text-base lg:text-lg;

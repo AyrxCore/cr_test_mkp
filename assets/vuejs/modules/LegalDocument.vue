@@ -3,7 +3,7 @@
     <div class="xs:w-[100%] m-auto my-4 max-w-screen-2xl flex-1 px-5 sm:px-8">
       <BreadcrumbSharedComponent :current-page="title" />
       <div class="m-auto my-2 w-[100%] max-w-screen-2xl text-primary">
-        <CmsPageComponent :page-id="pageId" class="text-primary" />
+        <CmsPageComponent :field="field" class="text-primary" />
       </div>
     </div>
   </BaseTemplate>
@@ -17,11 +17,7 @@ import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import BreadcrumbSharedComponent from '@/vuejs/modules/shared/BreadcrumbSharedComponent.vue'
 import CmsPageComponent from '@/vuejs/modules/shared/CmsPageComponent.vue'
 
-import { useChannelStore } from '@/vuejs/stores/channel'
-
-const channelStore = useChannelStore()
-
-defineProps({
+const props = defineProps({
   title: {
     type: String,
     required: true,
@@ -32,20 +28,16 @@ defineProps({
   },
 })
 
-const channelDocuments = channelStore.currentChannel.documents
-
-const pageId = computed(() => {
+const field = computed((): 'cgu' | 'legalTerms' | 'privacyPolicy' => {
   switch (props.page) {
     case PageList.MENTIONS_LEGALES_PAGE:
-      return channelDocuments.legalTerms
+      return 'legalTerms'
     case PageList.CGU_PAGE:
-      return channelDocuments.generalTermsOfUse
+      return 'cgu'
     case PageList.POLITIQUE_DE_CONFIDENTIALITE:
-      return channelDocuments.privacyPolicy
+      return 'privacyPolicy'
     default:
-      break
+      return 'cgu'
   }
 })
 </script>
-
-<style scoped></style>

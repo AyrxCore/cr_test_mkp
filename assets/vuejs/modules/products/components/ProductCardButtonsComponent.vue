@@ -22,7 +22,7 @@
   <!-- Bloc quantité -->
   <div class="mb-1 flex h-[20%] justify-end">
     <div class="mt-1 flex w-full justify-between">
-      <div v-if="product.variants?.length > 2" class="mx-auto items-center">
+      <div v-if="hasOptions" class="mx-auto items-center">
         <RouterLink
           :to="{
             name: ProductPageList.PRODUCT,
@@ -39,13 +39,14 @@
         <div class="flex items-center justify-start">
           <ProductQuantityComponent
             :quantity="quantity"
+            :min-quantity="product.minOrderQuantity ?? 1"
+            :max-quantity="product.maxOrderQuantity ?? 999"
             @update-quantity="updateQuantity"
           />
         </div>
         <ButtonAddToCartComponent
           :product="product"
           :quantity="quantity"
-          :variant-id="variantId"
           @click="
             sendGtmEvent('add_to_cart', {
               ecommerce: {
@@ -69,17 +70,12 @@ import { ProductPageList } from '@/vuejs/router/pages-list'
 import { formatPrice } from '@/vuejs/services/utils'
 import { formatProductGtmEvent, sendGtmEvent } from '@/vuejs/services/gtm'
 import { Product } from '@/vuejs/types/Product'
-import { Variant } from '@/vuejs/types/Product/Variant'
+
+import { OPTION_PROPERTY_NAMES } from '@/vuejs/constants/productOptionProperties'
 
 import ButtonAddToCartComponent from '@/vuejs/modules/shared/ButtonAddToCartComponent.vue'
 import ProductQuantityComponent from '@/vuejs/modules/shared/ProductQuantityComponent.vue'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
-
-const emit = defineEmits([
-  'click-add-cart',
-  'click-moins-qty',
-  'click-plus-qty',
-])
 
 const props = defineProps({
   product: {
@@ -88,7 +84,14 @@ const props = defineProps({
   },
 })
 
-const quantity = ref<number>(1)
+const quantity = ref<number>(props.product.minOrderQuantity ?? 1)
+
+const hasOptions = computed((): boolean => {
+  const keys = Object.keys(props.product.properties ?? {}).map((k) => k.toLowerCase())
+  return OPTION_PROPERTY_NAMES.some((name) => keys.includes(name))
+})
+
+const productSlug = computed((): string => props.product.slug)
 
 const showLineThroughPrice = computed((): boolean => {
   return (
@@ -97,24 +100,7 @@ const showLineThroughPrice = computed((): boolean => {
   )
 })
 
-const variantId = computed((): string | null => {
-  if (2 === props.product.variants?.length) {
-    const variant = props.product.variants.filter(function (el: Variant) {
-      return el.sku != null
-    })
-    return variant[0].id
-  }
-  return null
-})
-
-const productSlug = computed((): string => {
-  return props.product.slug
-})
-
 const updateQuantity = (event) => {
-  const eventName =
-    quantity.value > event.quantity ? 'click-moins-qty' : 'click-plus-qty'
-  emit(eventName)
   quantity.value = event.quantity
 }
 </script>

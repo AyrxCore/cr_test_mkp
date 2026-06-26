@@ -23,7 +23,7 @@ readonly class AccountProvider implements ProviderInterface
         $this->currentUserAccountExtension->applyToCollection($queryBuilder, new QueryNameGenerator(), 'App\Entity\Account');
 
         foreach ($queryBuilder->getQuery()->execute() as $object) {
-            if (!$object->isEnabled() || !$object->getAdherent()->isActive()) {
+            if (!$object->isEnabled() || !$object->getAdherent()?->isActive()) {
                 continue;
             }
             yield $object;

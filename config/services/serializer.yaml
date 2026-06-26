@@ -19,20 +19,6 @@ services:
     tags:
       - { name: serializer.normalizer, priority: 100 }
 
-  app.serializer.normalizer.account.jsonld:
-    class: App\Serializer\AccountNormalizer
-    arguments:
-      $normalizer: '@api_platform.jsonld.normalizer.item'
-    tags:
-      - { name: serializer.normalizer, priority: 100 }
-
-  app.serializer.normalizer.account.json:
-    class: App\Serializer\AccountNormalizer
-    arguments:
-      $normalizer: '@api_platform.serializer.normalizer.item'
-    tags:
-      - { name: serializer.normalizer, priority: 100 }
-
   app.serializer.normalizer.adherent.jsonld:
     class: App\Serializer\AdherentNormalizer
     arguments:

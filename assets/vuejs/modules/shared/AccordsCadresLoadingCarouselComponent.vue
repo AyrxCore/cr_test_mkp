@@ -3,6 +3,7 @@
     <CarouselListSharedComponent
       :slides-per-view="1"
       :space-between="20"
+      :overflow-visible="true"
       :breakpoints="{
         1600: {
           slidesPerView: 5,
@@ -44,3 +45,4 @@ const props = defineProps({
   },
 })
 </script>
+

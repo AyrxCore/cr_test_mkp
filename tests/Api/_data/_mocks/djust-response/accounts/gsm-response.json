@@ -1,0 +1,38 @@
+{
+  "id": "0000001652",
+  "externalId": "TEST_ACCOUNT3",
+  "name": "[DJUST] GROUPE QANTIS",
+  "accountManager": "Michel",
+  "website": "",
+  "companyRegistrationName": "Seat",
+  "businessRegistrationNumber": "58446667249006",
+  "vatNumber": "",
+  "status": "ACTIVE",
+  "paymentType": "ON_ACCEPTANCE",
+  "mainContacts": [],
+  "addresses": [
+    {
+      "id": "0000000683",
+      "externalId": "adresse-peugeot",
+      "label": null,
+      "fullName": "Peugeot France",
+      "country": "France",
+      "state": "France",
+      "city": "Rillieux-la-Pape",
+      "zipcode": "69140",
+      "address": "38 avenue Maurice Ravel",
+      "additionalAddress": null,
+      "phone": null,
+      "shipping": true,
+      "billing": true,
+      "company": "Peugeot"
+    }
+  ],
+  "customFieldValues": [],
+  "customerTags": [
+    {
+      "id": "TARIF_ID",
+      "name": "tag1"
+    }
+  ]
+}

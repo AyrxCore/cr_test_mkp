@@ -1,5 +1,5 @@
 import BaseClientService from '@/vuejs/services/BaseClientService'
-import { Invoice } from '@/vuejs/types/Order'
+import { Order } from '@/vuejs/types/Order'
 
 export default class OrderHttpClient extends BaseClientService {
   public getOrders<T extends []>(): Promise<T> {
@@ -8,17 +8,9 @@ export default class OrderHttpClient extends BaseClientService {
       .then((response) => response.data)
   }
 
-  public getOrderById<T extends []>(orderId: number): Promise<T> {
+  public getOrderById(orderId: number): Promise<Order> {
     return this.apiClient
-      .get<T>(`orders/${orderId}`)
-      .then((response) => response.data)
-  }
-
-  public getOrderInvoiceById<T extends []>(
-    orderInvoiceId: number,
-  ): Promise<T | Invoice> {
-    return this.apiClient
-      .get<T>(`invoices/${orderInvoiceId}/download`)
+      .get<Order>(`orders/${orderId}`)
       .then((response) => response.data)
   }
 }

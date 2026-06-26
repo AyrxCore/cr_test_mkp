@@ -45,6 +45,8 @@
       <directory>./src/Helper</directory>
       <directory>./src/Security</directory>
       <directory>./src/Utils</directory>
+      <directory>./src/Factory</directory>
+      <directory>./src/Mapper</directory>
     </include>
   </source>
 

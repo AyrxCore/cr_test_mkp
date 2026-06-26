@@ -2,13 +2,17 @@ import BaseClientService from '@/vuejs/services/BaseClientService'
 import { Product, ProductCollection } from '@/vuejs/types/Product'
 
 export default class ProductHttpClient extends BaseClientService {
-  public fetchProductsByParams<T extends []>(
-    params,
-  ): Promise<ProductCollection> {
+  public fetchProductsByParams(params): Promise<ProductCollection> {
     const queryString = Object.keys(params)
       .map((key) => {
-        if (typeof params[key] === 'object') {
-          // Si la valeur est un objet, la sérialiser en JSON
+        if (Array.isArray(params[key])) {
+          return params[key]
+            .map(
+              (value) =>
+                `${encodeURIComponent(key)}[]=${encodeURIComponent(value)}`,
+            )
+            .join('&')
+        } else if (typeof params[key] === 'object') {
           return `${encodeURIComponent(key)}=${encodeURIComponent(
             JSON.stringify(params[key]),
           )}`
@@ -19,54 +23,47 @@ export default class ProductHttpClient extends BaseClientService {
       })
       .join('&')
     return this.apiClient
-      .get<T>(`products?${queryString}`)
-      .then((response) => response.data[0])
+      .get<ProductCollection>(`products?${queryString}`)
+      .then((response) => response.data)
   }
 
-  public findProductById<T extends []>(id: number): Promise<Product> {
+  public findProductById(id: number | string): Promise<Product> {
     return this.apiClient
       .get(`products/${id}`)
       .then((response) => response.data)
   }
 
-  public findVariantById<T extends []>(id: number): Promise<Product> {
-    return this.apiClient.get(`variant/${id}`).then((response) => response.data)
-  }
-
-  public findAccordCadreById<T extends []>(id: number): Promise<Product> {
+  public findAccordCadreById(id: number | string): Promise<Product> {
     return this.apiClient
       .get(`products/${id}`)
       .then((response) => response.data)
   }
 
-  public updateAccountAccordsCadresByParams<T extends []>(params): Promise<T> {
+  public updateAccountAccordsCadresByParams<T>(params): Promise<T> {
     return this.apiClient
       .post<T>('accord-cadre-subscription', params)
       .then((response) => response.data)
   }
 
-  public sendContactRequestFromNotSellableProduct<T extends []>(
-    data: Object,
-  ): Promise<T> {
-    this.apiClient.defaults.headers['Content-Type'] = 'multipart/form-data'
+  public sendContactRequestFromNotSellableProduct<T>(data: object): Promise<T> {
     return this.apiClient
       .post<T>('not-sellable-contact-request', data)
       .then((response) => response.data)
   }
 
-  public updateStellantisSubscription<T extends []>(): Promise<T> {
+  public updateStellantisSubscription<T>(): Promise<T> {
     return this.apiClient
       .post<T>('stellantis-subscription')
       .then((response) => response.data)
   }
 
-  public cancelStellantisSubscription<T extends []>(): Promise<T> {
+  public cancelStellantisSubscription<T>(): Promise<T> {
     return this.apiClient
       .post<T>('cancel-stellantis-subscription')
       .then((response) => response.data)
   }
 
-  public downloadPdfFile<T extends []>(url: string): Promise<T> {
+  public downloadPdfFile<T>(url: string): Promise<T> {
     return this.apiClient
       .get(`edit-download-pdf-file?url=${url}`)
       .then((response) => response.data)

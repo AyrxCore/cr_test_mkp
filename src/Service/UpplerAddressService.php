@@ -11,32 +11,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UpplerAddressService extends AbstractUpplerService
 {
-    public function getAdresses(): array
-    {
-        $res = $this->request('GET', 'v1/buyer/company-address');
-
-        if ($res->getStatusCode() !== Response::HTTP_OK && $res->getStatusCode() !== Response::HTTP_PARTIAL_CONTENT) {
-            throw new NotFoundHttpException();
-        }
-
-        return \json_decode($res->getContent(), true);
-    }
-
-    public function getAddress(?int $addressId = null, ?string $url = null): array
-    {
-        $res = $this->request(
-            'GET',
-            $url !== null ? $url : 'v1/administrator/company-address/'.$addressId,
-            isAdmin: true
-        );
-
-        if ($res->getStatusCode() !== Response::HTTP_OK) {
-            throw new NotFoundHttpException();
-        }
-
-        return \json_decode($res->getContent(), true);
-    }
-
     public function createAddress(Address $address): array
     {
         $res = $this->request(
@@ -53,6 +27,21 @@ class UpplerAddressService extends AbstractUpplerService
         $headers = $res->getHeaders();
 
         return $this->getAddress(null, $headers['location'][0]);
+    }
+
+    public function getAddress(?int $addressId = null, ?string $url = null): array
+    {
+        $res = $this->request(
+            'GET',
+            $url !== null ? $url : 'v1/administrator/company-address/'.$addressId,
+            isAdmin: true
+        );
+
+        if ($res->getStatusCode() !== Response::HTTP_OK) {
+            throw new NotFoundHttpException();
+        }
+
+        return \json_decode($res->getContent(), true);
     }
 
     public function updateAddress(Address $address): void
@@ -73,11 +62,11 @@ class UpplerAddressService extends AbstractUpplerService
     {
         $json = [
             'json' => [
-                'name' => $address->getName(),
+                'name' => $address->getFullName(),
                 'type' => $address->getType(),
                 'first_name' => $address->getFirstName(),
                 'last_name' => $address->getLastName(),
-                'street' => $address->getStreet(),
+                'street' => $address->getAddress(),
                 'postcode' => $address->getPostCode(),
                 'city' => $address->getCity(),
                 'country' => $address->getCountry(),

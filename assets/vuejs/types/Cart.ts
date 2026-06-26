@@ -1,8 +1,5 @@
-import { Address } from '@/vuejs/types/Address'
-
-interface EntityId {
-  id: number
-}
+import { Seller } from '@/vuejs/types/Seller.ts'
+import { Product } from '@/vuejs/types/Product.ts'
 
 interface Currency {
   id: number
@@ -18,15 +15,15 @@ export interface CompanyMandate {
 
 export interface CartStoreState {
   cart?: Cart
-  termsOfSales: number[]
+  termsOfSales: string[]
   newlyAddedProducts: number[]
   modifyingCart: boolean
-  shippingMethods: ShippingMethod[]
-  selectedShippingMethods: {
-    [key: number]: number
-  }
   companyMandates: Array<CompanyMandate>
-  selectedSepa: PaymentMethod
+  selectedSepa: AdyenPaymentMethod | null
+  adyenPaymentMethods: AdyenPaymentMethod[]
+  storedPaymentMethods: AdyenStoredPaymentMethod[]
+  enableCreditCardStorage: boolean
+  bankTransferInfo: AdyenBankTransferInfo | null
 }
 
 export interface SepaData {
@@ -37,59 +34,15 @@ export interface SepaData {
   mandateId?: number
 }
 
-interface LanguageVariation {
-  default: string
-  fr?: string
-}
-
-export interface OrderProduct {
-  id: number
-  description: LanguageVariation
-  name: LanguageVariation
-  reference: number | string
-  price_reference: number
-}
-
-export interface OrderItemVariant {
-  id: number
-  product: OrderProduct
-}
-
-export interface OrderItem {
-  id: number
-  quantity: number
-  total: number
-  total_excluding_taxes: number
-  variant: OrderItemVariant
-  canceled_at: null
-}
-
-export interface AddOrderItem {
-  cartId: number
-  variantId: number
-  quantity: number
-}
-
-export interface OrderItemQuantityUpdate {
-  id: number
-  quantity: number
-}
-
-export interface OrderShippingUpdate {
-  cartId: number
-  orderId: number
-  shippingId: number
-}
-
 export interface CartAddressesUpdate {
-  cartId: number
-  shippingAddressId: number
-  billingAddressId: number
+  cartId: string
+  shippingAddressExternalId: string
+  billingAddressExternalId: string
 }
 
 export interface CartPaymentMethodUpdate {
   cartId: number
-  paymentMethodId: number
+  paymentMethodType: AdyenPaymentMethodType
 }
 
 export interface CartPaymentMethodUpdated {
@@ -110,64 +63,154 @@ export interface CartPaymentSepaUpdated {
   signing_url: string
 }
 
-export interface ShippingMethod {
-  amount: number
-  selected: boolean
-  shipping_method: {
-    id: number
-    name: {
-      fr: string
-      default: string
-    }
-  }
-  order: {
-    id: number
-  }
-}
-
-export interface PaymentMethod {
-  id: number
-  name: {
-    fr: string
-    default: string
-  }
-}
-
-export interface Order {
-  id: number | null
-  type: string
-  state: string
-  buyer: EntityId
-  buyer_user: EntityId
-  seller: EntityId
-  seller_user: EntityId
-  items: OrderItem[]
-  promotion: null
-  taxes: []
-  items_total_excluding_taxes: number
-  items_total: number
-  total_excluding_taxes: number
-  total: number
-  currency: Currency
-  note: string | null
-  shipments: EntityId[]
-}
 
 export interface Cart {
   id: number | null
-  type: string
-  state: string
-  buyer: EntityId
-  user: EntityId
-  total: number
-  total_excluding_taxes: number
-  orders: Order[]
-  shipping_address: Address | null
-  billing_address: Address | null
+  totalPrice: number
+  totalPriceWithTax: number
   currency: Currency
-  paymentMethods: PaymentMethod[]
-  payment_method: null
-  created_at: string
-  updated_at: string
-  origin_cart_id: null
+  productCount: number
+  cartOrders: CartOrder[]
+  shippingAddressExternalId: string | null
+  billingAddressExternalId: string | null
 }
+
+export type ShippingRuleType = 'STANDARD' | 'STEPS' | 'FREE' | 'FIXED' | 'WEIGHT' | 'CATEGORY'
+
+export interface ShippingCostResult {
+  shippingCost: number
+  remainingForFranco: number
+  type: ShippingRuleType
+  maxTaxRate: number
+}
+
+export interface CartOrder {
+  id: number | null
+  seller: Seller
+  totalPrice: number
+  totalPriceWithTax: number
+  products: Product[]
+  shippingCostResult: ShippingCostResult | null
+}
+
+export interface CartItem {
+  unitPublicPrice: number
+  unitPrice: number
+  unitPriceWithTax: number
+  quantity: number
+  name: string
+  sku: string
+  packingType: string
+  img: string
+  offerPriceId: string
+  options: CartItemOption[]
+  variantId: string
+  eco_tax?: number | null
+}
+
+export interface CartItemOption {
+  id: string
+  attributeName: string
+  attributeValue: string
+}
+
+export enum AdyenPaymentMethodType {
+  SCHEME = 'scheme',
+  BANK_TRANSFER_IBAN = 'bankTransfer_IBAN',
+}
+
+export const ADYEN_PAYMENT_TYPE_LABELS: Record<AdyenPaymentMethodType, string> = {
+  [AdyenPaymentMethodType.SCHEME]: 'carte bancaire',
+  [AdyenPaymentMethodType.BANK_TRANSFER_IBAN]: 'virement bancaire international',
+}
+
+export interface AdyenPaymentMethod {
+  name: string
+  type: AdyenPaymentMethodType
+  brands: string[] | null
+}
+
+export interface AdyenStoredPaymentMethod {
+  id: string
+  name: string
+  type: AdyenPaymentMethodType | string
+  brand?: string
+  lastFour?: string
+  expiryMonth?: string
+  expiryYear?: string
+  holderName?: string
+}
+
+export interface AdyenPaymentMethodsResponse {
+  paymentMethods: AdyenPaymentMethod[]
+  storedPaymentMethods: AdyenStoredPaymentMethod[]
+  enableCreditCardStorage: boolean
+}
+
+export enum AdyenResultCode {
+  AUTHORISED = 'Authorised',
+  PENDING = 'Pending',
+  REFUSED = 'Refused',
+  CANCELLED = 'Cancelled',
+  ERROR = 'Error',
+  RECEIVED = 'Received',
+}
+
+export interface AdyenBankTransferInfo {
+  beneficiary: string
+  iban: string
+  bic: string
+  reference: string
+  totalAmount: string
+}
+
+export interface AdyenInitiatePaymentPayload {
+  browserInfo: {
+    acceptHeader: string
+    colorDepth: number
+    javaEnabled: boolean
+    javaScriptEnabled: boolean
+    language: string
+    screenHeight: number
+    screenWidth: number
+    timeZoneOffset: number
+    userAgent: string
+  }
+  customerUserIP: string
+  paymentMethodData: Record<string, unknown>
+  reference: string
+  storePaymentMethod: boolean
+  returnPath: string
+  countryCode: string
+  amount: {
+    value: number
+    currency: string
+  }
+}
+
+export interface AdyenInitiatePaymentResponse {
+  resultCode: AdyenResultCode | string
+  pspReference?: string
+  action?: {
+    type: string
+    url?: string
+    method?: string
+    token?: string
+    beneficiary?: string
+    iban?: string
+    bic?: string
+    totalAmountValue?: string
+    [key: string]: unknown
+  }
+}
+
+export interface AdyenSubmitDetailsPayload {
+  /** Données de détails retournées par le SDK Adyen (threeDSResult, redirectResult, MD/PaRes…) */
+  details: Record<string, unknown>
+  /** Requis par l'API Adyen pour les challenges 3DS2 natifs (absent pour les redirections 3DS1) */
+  paymentData?: string
+}
+
+/** Détails additionnels retournés par le SDK Adyen (3DS, redirect…) */
+export type AdyenAdditionalDetails = Record<string, unknown>
+

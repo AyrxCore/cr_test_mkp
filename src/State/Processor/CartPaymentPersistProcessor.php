@@ -23,9 +23,9 @@ readonly class CartPaymentPersistProcessor implements ProcessorInterface
         if ($operation instanceof Patch) {
             $result = $this->upplerCartService->setPaymentMethod(
                 $data->getId(),
-                $data->getPaymentMethodId(),
+                $data->getPaymentMethodType(),
             );
-            if (!$result || ($data->getPaymentMethodId() === CartPayment::CART_PAYMENT_CB && $result['payment_url'] === null)) {
+            if (!$result || ($data->getPaymentMethodType() === CartPayment::PAYMENT_TYPE_CB && $result['payment_url'] === null)) {
                 \Sentry\captureMessage('URL de paiement non présente');
                 throw new BadRequestException('Update cart payment error');
             }

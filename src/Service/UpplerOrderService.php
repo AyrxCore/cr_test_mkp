@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+/**
+ * @deprecated This service is being replaced by DjustOrderService for order operations.
+ * Only kept for invoice, webhook and command functionalities not yet migrated to Djust.
+ */
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

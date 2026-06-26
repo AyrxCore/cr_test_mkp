@@ -1,3 +1,5 @@
+import { Category } from '@/vuejs/types/Product/Category'
+
 export interface AccordLogo {
   logo: string
   name: string
@@ -11,10 +13,10 @@ export interface StoreData {
   phone: string
   latitude: string
   longitude: string
-  upplerId?: number
   logo?: string
   partnerName?: string
   accordLogos?: AccordLogo[]
+  djustId?: string
 }
 
 export interface StoreLightData {
@@ -30,7 +32,8 @@ export interface Partner {
 }
 
 export interface Seller {
-  id: number
+  id: string
+  externalId: string
   name: string
   corporateName?: string
   description?: string
@@ -44,6 +47,15 @@ export interface Seller {
     created_at: string
     updated_at: string
   }
+  supplierDeliveryInfo?: string
+  address?: string
+}
+
+export interface SellerFranco {
+  [key: string]: number
+}
+export interface SellerShippingCost {
+  [key: string]: number
 }
 
 export interface SellerPromotion {
@@ -77,17 +89,12 @@ export interface SellerStoreState {
   }
 }
 
-export interface MapCategoryData {
-  id: string
-  name: string
-}
-
 export interface MapApiResponse {
   stores: StoreData[]
-  categories: MapCategoryData[]
+  categories: Category[]
 }
 
 export interface MapApiLightResponse {
   stores: StoreLightData[]
-  categories: MapCategoryData[]
+  categories: Category[]
 }

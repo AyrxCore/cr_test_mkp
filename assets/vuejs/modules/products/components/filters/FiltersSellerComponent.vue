@@ -43,10 +43,10 @@ import CloseIcon from '@/vuejs/modules/shared/icon/CloseIconComponent.vue'
 import FilterCategoryComponent from '@/vuejs/modules/products/components/filters/FilterCategoryComponent.vue'
 
 import router from '@/vuejs/router'
-import { sortCategories } from '@/vuejs/services/categories'
+import { sortAscName } from '@/vuejs/services/categories'
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import { useSellerStore } from '@/vuejs/stores/seller'
-import { ProductCategory } from '@/vuejs/types/Product'
+import { Category } from '@/vuejs/types/Product/Category'
 
 const sellerStore = useSellerStore()
 
@@ -56,7 +56,7 @@ const emit = defineEmits(['filter-product', 'close-filters'])
 const props = defineProps({
   categories: {
     required: true,
-    type: Object as PropType<ProductCategory[]>,
+    type: Object as PropType<Category[]>,
   },
 })
 
@@ -73,8 +73,8 @@ const changeFilterCategory = (categoryId: number): void => {
   })
 }
 
-const sortedCategories = computed((): ProductCategory[] => {
-  return sortCategories(props.categories)
+const sortedCategories = computed((): Category[] => {
+  return sortAscName(props.categories)
 })
 
 const clearFilters = (): void => {

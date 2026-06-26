@@ -20,6 +20,13 @@ APP_DEBUG ?= 1
 dump-config: ## Dumps the docker compose config
 	$(dc) config
 
+generate-certs: ## Generate local SSL certificates via mkcert (requires: brew install mkcert)
+	@which mkcert > /dev/null || (echo "❌ mkcert not found. Run: brew install mkcert" && exit 1)
+	@mkdir -p docker/nginx/certs
+	mkcert -install
+	mkcert -key-file docker/nginx/certs/localhost-key.pem -cert-file docker/nginx/certs/localhost.pem localhost marketplace.qantis.local 127.0.0.1 ::1
+	@echo "✅ Certificats générés dans docker/nginx/certs/"
+
 init: ## Initialize docker development environment
 	make up
 	make database-create
@@ -29,11 +36,6 @@ init: ## Initialize docker development environment
 	make generate-keypair
 	make build-front
 
-init-tests: ## Initialize test environment
-	$(dc_exec) php bin/console doctrine:database:create --if-not-exists -e test
-	$(dc_exec) php bin/console doctrine:schema:drop --force -e test
-	$(dc_exec) php bin/console doctrine:schema:update --force -e test
-
 build: .env.local ## Build container: make build SERVICE
 	$(dc) build --pull --no-cache $(args)
 
@@ -41,7 +43,7 @@ pull: .env.local ## Pull new images of docker containers
 	$(dc) pull $(args)
 
 up: .env.local ## Creates and starts all containers
-	APP_ENV=$(APP_ENV) APP_DEBUG=$(APP_DEBUG) $(dc) up -d $(args)
+	APP_ENV=$(APP_ENV) APP_DEBUG=$(APP_DEBUG) MKP_GIT_TAG=$(shell git rev-parse --abbrev-ref HEAD) $(dc) up -d $(args)
 
 stop: ## Stop containers: make stop [SERVICE]
 	APP_ENV=$(APP_ENV) APP_DEBUG=$(APP_DEBUG) $(dc) stop $(args)
@@ -136,9 +138,29 @@ build-front: ## Build front environment
 ##
 ## Tests
 
+dc_exec_php_test = docker exec marketplace-php-1 php
+dc_run_php_test = $(dc_exec_php_test) vendor/bin/pest
+dc_test = docker compose -f docker-compose.test.yml
+
+init-tests: ## Initialize test environment
+	$(dc_test) up -d
+	until docker exec postgres_test_mkp pg_isready -U postgres > /dev/null 2>&1; do sleep 1; done
+	$(dc_exec_php_test) bin/console doctrine:database:create --if-not-exists -e test
+	$(dc_exec_php_test) bin/console doctrine:schema:drop --force -e test
+	$(dc_exec_php_test) bin/console doctrine:schema:update --force -e test
+	$(dc_exec_php_test) bin/console -e test dbal:run-sql "ALTER DATABASE template_db_test IS_TEMPLATE true;"
+
 .PHONY: test
 all-tests:
-	$(dc_exec) php vendor/bin/pest
+	make init-tests
+	make cache-clear-test
+	$(dc_run_php_test)
+
+#Run all tests parallel
+all-tests-parallel:
+	make init-tests
+	make cache-clear-test
+	$(dc_run_php_test)  --parallel --verbose
 
 test-file: ## Run tests on a single file (ex: make test-file tests/Feature/AuthenticationTest.php)
 	$(dc_exec) php vendor/bin/pest $(args) || true
@@ -159,11 +181,7 @@ api-tests: ## Run unit tests
 	$(dc_exec) php vendor/bin/pest --testsuite api
 
 coverage-report:
-	$(dc_exec) php vendor/bin/pest --coverage-html=var/coverage/ && xdg-open var/coverage/index.html
-
-#Run cache clear
-cache-clear:
-	$(dc_exec) php bin/console cache:clear
+	$(dc_exec) php vendor/bin/pest --parallel --coverage-html=var/coverage/ && open var/coverage/index.html
 
 #Run cache clear test
 cache-clear-test:

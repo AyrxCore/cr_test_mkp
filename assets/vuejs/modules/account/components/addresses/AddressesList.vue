@@ -40,8 +40,8 @@ const props = defineProps({
 })
 
 const listAdresses = computed(() => {
-  return addresses.value.filter(
-    (address: Address) => address.type === props.type,
+  return addresses.value.filter((address: Address) =>
+    props.type === 'shipping' ? address.shipping : address.billing,
   )
 })
 </script>

@@ -3,7 +3,7 @@ import CategoryHttpClient from '@/vuejs/services/httpclient/CategoryHttpClient'
 import { Category } from '@/vuejs/types/Product/Category'
 
 export interface CategoryStoreState {
-  categories: []
+  categories: Category[]
   isLoaded: boolean
 }
 

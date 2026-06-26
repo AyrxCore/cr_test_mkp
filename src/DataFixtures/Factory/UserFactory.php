@@ -23,12 +23,19 @@ final class UserFactory extends PersistentObjectFactory
         return User::class;
     }
 
+    protected function createEmail(): string
+    {
+        return self::faker()->unique()->safeEmail();
+    }
+
     protected function defaults(): array
     {
+        $email = $this->createEmail();
+
         return [
-            'email' => self::faker()->unique()->safeEmail(),
+            'email' => $email,
             'password' => self::faker()->password(10),
-            'username' => self::faker()->userName(),
+            'username' => $email,
             'firstName' => self::faker()->firstName(),
             'lastName' => self::faker()->lastName(),
             'enabled' => false,

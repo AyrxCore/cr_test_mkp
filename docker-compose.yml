@@ -2,10 +2,6 @@ services:
   php:
     hostname: php-mkp
     image: 211737105908.dkr.ecr.eu-west-3.amazonaws.com/marketplace-php:local
-    env_file:
-      - .env
-      - .env.dev
-      - .env.local
     build:
       context: .
       target: php
@@ -16,6 +12,9 @@ services:
       - ./:/var/www/
       - ./docker/php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
       - ./docker/php-fpm/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
+    environment:
+      MKP_GIT_TAG: ${MKP_GIT_TAG:-local}
+      APP_MODE: dev
     extra_hosts:
       - 'host.docker.internal:host-gateway'
     networks:
@@ -27,10 +26,6 @@ services:
   php-cron:
     image: 211737105908.dkr.ecr.eu-west-3.amazonaws.com/marketplace-php:local
     hostname: php-cron-mkp
-    env_file:
-      - .env
-      - .env.dev
-      - .env.local
     command: sh -c "bin/console cron:start --blocking -n"
     # Run as root to avoid permission issues locally
     # In prod www-data is used to run container
@@ -75,6 +70,7 @@ services:
       target: nginx
     environment:
       - PHP_URL=php-mkp
+      - NGINX_ENABLE_HTTPS=1
     depends_on:
       php:
         condition: service_started
@@ -83,8 +79,9 @@ services:
     volumes:
       - ./:/var/www
       - ./var:/var/log/nginx
+      - ./docker/nginx/certs:/etc/nginx/certs:ro
     ports:
-      - '8087:80'
+      - '8087:443'
     networks:
       - dev-qantis
 

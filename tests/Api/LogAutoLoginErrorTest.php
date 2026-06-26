@@ -44,9 +44,9 @@ use App\Tests\Story\LogAutoLoginError\LogAutoLoginErrorStory;
 
     $response = $this->client->request('GET', '/api/log-auto-login-errors?page='.$page.'&itemsPerPage='.$perPage);
 
-    \expect($response->toArray())->toHaveKey('hydra:totalItems');
-    \expect($response->toArray())->toHaveKey('hydra:member');
-    \expect($response->toArray()['hydra:member'])->toHaveCount($perPage);
+    \expect($response->toArray())->toHaveKey('totalItems');
+    \expect($response->toArray())->toHaveKey('member');
+    \expect($response->toArray()['member'])->toHaveCount($perPage);
 })->group('LogAutoLoginErrorService');
 
 \it('gets results without per page defined', function () {
@@ -56,5 +56,5 @@ use App\Tests\Story\LogAutoLoginError\LogAutoLoginErrorStory;
 
     $response = $this->client->request('GET', '/api/log-auto-login-errors?page='.$page);
 
-    \expect($response->toArray()['hydra:member'])->toHaveCount(LogAutoLoginError::DEFAULT_ITEMS_PER_PAGE);
+    \expect($response->toArray()['member'])->toHaveCount(LogAutoLoginError::DEFAULT_ITEMS_PER_PAGE);
 })->group('LogAutoLoginErrorService');

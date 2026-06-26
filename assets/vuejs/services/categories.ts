@@ -1,16 +1,14 @@
-import { ProductCategory } from '@/vuejs/types/Product'
+import { Category } from '@/vuejs/types/Product/Category'
 
-export function sortCategories(
-  categories: ProductCategory[],
-): ProductCategory[] {
+export function sortAscName(categories: Category[]): Category[] {
   return [...categories]
-    .sort((catA: ProductCategory, catB: ProductCategory) =>
+    .sort((catA: Category, catB: Category) =>
       catA.name.localeCompare(catB.name),
     )
     .map((category) => ({
       ...category,
       ...(category.children?.length && {
-        children: sortCategories(category.children),
+        children: sortAscName(category.children),
       }),
     }))
 }

@@ -23,6 +23,12 @@
   {% endif %}
   {# Keep javascripts block at the end of the head to avoid css order problems #}
   {% block javascripts %}
+    <script>
+      window.__ADYEN_CLIENT_KEY__ = {{ adyen_client_key() | json_encode | raw }};
+      window.__ADYEN_ENVIRONMENT__ = {{ adyen_environment() | json_encode | raw }};
+      window.APP_MODE = {{ app.request.server.get('APP_MODE')|default(null)|json_encode|raw }};
+      window.MKP_GIT_TAG = {{ app.request.server.get('MKP_GIT_TAG')|default(null)|json_encode|raw }};
+    </script>
     {{ vite_asset('main.ts', ['vuejs']) }}
   {% endblock %}
 </head>
@@ -30,7 +36,11 @@
 {% if settings.useExternalScriptsTags and isNeoAutoLogin == false %}
   {% include '_partials/_gtm-body.html.twig' %}
 {% endif %}
-
+{% if app.request.attributes.get('_maintenance_banner') %}
+  <div class="w-full bg-orange-500 text-white text-center text-sm font-semibold py-2 px-4 z-50 sticky top-0">
+    ⚠️ Mode maintenance actif — Vous visualisez le site en accès restreint.
+  </div>
+{% endif %}
 {% block body %}{% endblock %}
 {% if settings.getChatbot %}
   <script>
