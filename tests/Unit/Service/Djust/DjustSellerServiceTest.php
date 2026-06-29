@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Context\ChannelContext;
 use App\Enum\Djust\DjustApiEndpoint;
 use App\Service\Djust\DjustHttpClientService;
 use App\Service\Djust\DjustSellerService;
@@ -14,18 +15,25 @@ use App\Service\AccordCadre\AccordCadreService;
 
 \beforeEach(function () {
     $this->accountId = 'ACC123';
-    $this->cacheKey = DjustSellerService::SELLERS_CACHE_KEY.'_'.$this->accountId;
+    $this->channelCode = 'TEST_CHANNEL';
+    $this->cacheKey = DjustSellerService::SELLERS_CACHE_KEY.'_'.$this->channelCode;
 
     $this->cache = Mockery::mock(CacheInterface::class);
     $this->djustSearchService = Mockery::mock(DjustSearchService::class);
     $this->httpClient = Mockery::mock(DjustHttpClientService::class);
     $this->accordCadreService = Mockery::mock(AccordCadreService::class);
+    
+    $this->channelContext = Mockery::mock(ChannelContext::class);
+    $channel = Mockery::mock();
+    $channel->shouldReceive('getCode')->andReturn($this->channelCode);
+    $this->channelContext->shouldReceive('getChannel')->andReturn($channel);
 
     $this->service = new DjustSellerService(
         $this->cache,
         $this->djustSearchService,
         $this->httpClient,
         $this->accordCadreService,
+        $this->channelContext,
     );
 });
 
@@ -280,32 +288,23 @@ use App\Service\AccordCadre\AccordCadreService;
         ->and($result[4]['id'])->toBe('SELLER-5');
 });
 
-\it('uses separate cache key per account', function () {
-    $sellersAccountA = [['id' => 'SELLER-A', 'externalId' => 'EXT-A', 'name' => 'Seller A']];
-    $sellersAccountB = [['id' => 'SELLER-B', 'externalId' => 'EXT-B', 'name' => 'Seller B']];
-
+\it('uses cache key based on channel', function () {
+    $sellersChannelA = [['id' => 'SELLER-A', 'externalId' => 'EXT-A', 'name' => 'Seller A']];
+    
     $this->cache->shouldReceive('get')
         ->once()
-        ->with(DjustSellerService::SELLERS_CACHE_KEY.'_ACCOUNT-A', Mockery::type('callable'))
-        ->andReturn($sellersAccountA);
+        ->with(DjustSellerService::SELLERS_CACHE_KEY.'_'.$this->channelCode, Mockery::type('callable'))
+        ->andReturn($sellersChannelA);
 
-    $this->cache->shouldReceive('get')
-        ->once()
-        ->with(DjustSellerService::SELLERS_CACHE_KEY.'_ACCOUNT-B', Mockery::type('callable'))
-        ->andReturn($sellersAccountB);
+    $result = $this->service->getAllSellers();
 
-    $resultA = $this->service->getAllSellers('ACCOUNT-A');
-    $resultB = $this->service->getAllSellers('ACCOUNT-B');
-
-    \expect($resultA[0]['id'])->toBe('SELLER-A')
-        ->and($resultB[0]['id'])->toBe('SELLER-B')
-        ->and($resultA)->not->toBe($resultB);
+    \expect($result[0]['id'])->toBe('SELLER-A');
 });
 
-\it('uses default cache key when no account provided', function () {
+\it('uses channel-based cache key when no account provided', function () {
     $this->cache->shouldReceive('get')
         ->once()
-        ->with(DjustSellerService::SELLERS_CACHE_KEY.'_default', Mockery::type('callable'))
+        ->with(DjustSellerService::SELLERS_CACHE_KEY.'_'.$this->channelCode, Mockery::type('callable'))
         ->andReturn([]);
 
     $result = $this->service->getAllSellers();
@@ -580,12 +579,12 @@ use App\Service\AccordCadre\AccordCadreService;
 
     $this->cache->shouldReceive('get')
         ->once()
-        ->with('djust_sellers_ACC123', Mockery::any())
+        ->with(DjustSellerService::SELLERS_CACHE_KEY.'_'.$this->channelCode, Mockery::any())
         ->andReturn($allSellers);
 
     $this->cache->shouldReceive('get')
         ->once()
-        ->with(Mockery::pattern('/^djust_seller_tarif_map_/'), Mockery::any())
+        ->with(Mockery::pattern('/^djust_seller_tarif_map_'.$this->channelCode.'_/'), Mockery::any())
         ->andReturnUsing(function ($key, $callback) use ($fatSearchResult) {
             $item = Mockery::mock(ItemInterface::class);
             $item->shouldReceive('expiresAfter')->once()->with(300);

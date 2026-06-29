@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service\Djust;
 
+use App\Context\ChannelContext;
 use App\Dto\Djust\DjustSearchParams;
 use App\Enum\Djust\DjustApiEndpoint;
 use App\Enum\Djust\DjustCustomField;
@@ -31,6 +32,7 @@ class DjustSellerService
         private readonly DjustSearchService $djustSearchService,
         private readonly DjustHttpClientService $djustHttpClient,
         private readonly AccordCadreService $accordCadreService,
+        private readonly ChannelContext $channelContext,
     ) {
     }
 
@@ -68,7 +70,8 @@ class DjustSellerService
 
     public function getAllSellers(?string $customerAccountId = null): ?array
     {
-        $cacheKey = self::SELLERS_CACHE_KEY.'_'.($customerAccountId ?? 'default');
+        $channelCode = $this->channelContext->getChannel()->getCode();
+        $cacheKey = self::SELLERS_CACHE_KEY.'_'.$channelCode;
 
         return $this->cache->get($cacheKey, function (ItemInterface $item): ?array {
             $item->expiresAfter(self::SELLERS_CACHE_TTL_SECONDS);
@@ -100,7 +103,8 @@ class DjustSellerService
     public function getAdherentSellerTarifIdMap(?DjustSearchParams $params = null): array
     {
         $base = $params ?? new DjustSearchParams();
-        $cacheKey = self::TARIF_MAP_CACHE_KEY.'_'.md5(\serialize([
+        $channelCode = $this->channelContext->getChannel()->getCode();
+        $cacheKey = self::TARIF_MAP_CACHE_KEY.'_'.$channelCode.'_'.md5(\serialize([
             $base->query,
             $base->categoryIds,
             $base->suppliers,
