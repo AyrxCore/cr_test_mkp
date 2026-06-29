@@ -30,7 +30,6 @@ RUN apt-get update && \
 
 # INSTALL COMPOSER
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
 COPY docker/php-fpm/php.ini /usr/local/etc/php/php.ini
 COPY docker/php-fpm/mkp.conf /usr/local/etc/php-fpm.d/www.conf
 
@@ -68,7 +67,7 @@ COPY --chown=www-data:www-data . ./
 # causing crash on container start as PHP user www-data cannot write to /var/www/var/cache
 # RUN --mount=type=cache,uid=33,gid=33,target=/var/www/.composer/cache \
 #   --mount=type=cache,uid=33,gid=33,target=/var/www/var/cache \
-RUN composer i -o
+RUN composer i -o --prefer-source
 
 # Copy node build
 COPY --from=node --chown=www-data:www-data /var/www/public public/
