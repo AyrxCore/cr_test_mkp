@@ -37,7 +37,9 @@ init: ## Initialize docker development environment
 	make build-front
 
 build: .env.local ## Build container: make build SERVICE
-	$(dc) build --pull --no-cache $(args)
+	$(dc) build --pull --no-cache \
+		$(if $(COMPOSER_AUTH),--build-arg COMPOSER_AUTH='$(COMPOSER_AUTH)',) \
+		$(args)
 
 pull: .env.local ## Pull new images of docker containers
 	$(dc) pull $(args)

@@ -42,8 +42,13 @@ pipeline {
             steps {
                 script{
                     sh 'env'
-                    sh 'docker build -t ${QANTIS_REGISTRY_URL}/marketplace-nginx:${BRANCH} --target nginx .'
-                    sh 'docker build -t ${QANTIS_REGISTRY_URL}/marketplace-php:${BRANCH} --target php .'
+                    withCredentials([string(credentialsId: 'GITHUB_TOKEN', variable: 'GITHUB_TOKEN')]) {
+                        sh '''
+                            export COMPOSER_AUTH="{\\"github-oauth\\":{\\"github.com\\":\\"${GITHUB_TOKEN}\\"}}"
+                            docker build -t ${QANTIS_REGISTRY_URL}/marketplace-nginx:${BRANCH} --build-arg COMPOSER_AUTH="${COMPOSER_AUTH}" --target nginx .
+                            docker build -t ${QANTIS_REGISTRY_URL}/marketplace-php:${BRANCH} --build-arg COMPOSER_AUTH="${COMPOSER_AUTH}" --target php .
+                        '''
+                    }
 
                     sh 'cat aws-docker-creds | docker login --username AWS --password-stdin ${QANTIS_REGISTRY_URL}'
                     sh 'docker push ${QANTIS_REGISTRY_URL}/marketplace-php:${BRANCH}'

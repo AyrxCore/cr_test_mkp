@@ -61,13 +61,21 @@ USER www-data
 
 COPY --chown=www-data:www-data . ./
 
+# GitHub token to avoid HTTP 400 from codeload.github.com on anonymous zip downloads
+# Pass at build time: docker build --build-arg COMPOSER_AUTH='{"github-oauth":{"github.com":"<token>"}}'
+# Or set COMPOSER_AUTH env variable before running make build
+# NOTE: declared as ARG only (no ENV) so the token is available to the RUN below
+# but is NOT persisted into the final pushed image. With BuildKit enabled, build
+# args are not stored in image metadata either.
+ARG COMPOSER_AUTH=""
+
 # Composer dependencies and public files must be owned by www-data
 # Disable cache for now as current Docker install on Jenkins server is old and
 # cause a directory /var/www/var/cache owned by root to remain after build
 # causing crash on container start as PHP user www-data cannot write to /var/www/var/cache
 # RUN --mount=type=cache,uid=33,gid=33,target=/var/www/.composer/cache \
 #   --mount=type=cache,uid=33,gid=33,target=/var/www/var/cache \
-RUN composer i -o --prefer-source
+RUN composer i -o
 
 # Copy node build
 COPY --from=node --chown=www-data:www-data /var/www/public public/
