@@ -41,7 +41,7 @@ readonly class SellerProvider implements ProviderInterface
             $params = $this->djustSearchParamsMapper->fromContext($context);
             $sellers = $this->djustSellerService->getValidSellers($customerAccountId, $params);
 
-            return $this->sellerFactory->createAndAddToCollection($sellers, $customerAccountId);
+            return $this->sellerFactory->createAndAddToCollection($sellers);
         } catch (\Exception $e) {
             throw new BadRequestHttpException('An error occurred while retrieving the sellers: '.$e->getMessage());
         }
@@ -53,7 +53,13 @@ readonly class SellerProvider implements ProviderInterface
             $customerAccountId = $this->currentAccountProvider->getAccount()?->getDjustCustomerAccountId();
             $seller = $this->djustSellerService->getSeller($sellerId, $customerAccountId);
 
-            return $this->sellerFactory->create($seller, $customerAccountId);
+            if ($seller === null) {
+                throw new NotFoundHttpException('Seller not found.');
+            }
+
+            return $this->sellerFactory->create($seller);
+        } catch (NotFoundHttpException $e) {
+            throw $e;
         } catch (\Exception $e) {
             throw new NotFoundHttpException('Seller not found.');
         }

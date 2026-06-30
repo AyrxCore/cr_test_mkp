@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Factory;
 
 use App\Dto\Seller;
-use App\Service\Djust\DjustSellerService;
 use Psr\Cache\CacheItemPoolInterface as AdapterInterface;
 
 class SellerFactory extends AbstractFactory
@@ -13,35 +12,21 @@ class SellerFactory extends AbstractFactory
     public const string CUSTOM_FIELD_TOS = 'SUPPLIER_CGV';
     public const string CUSTOM_FIELD_SUPPLIER_DELIVERY_INFO = 'SUPPLIER_DELIVERY_INFO';
 
-    public function __construct(
-        protected AdapterInterface $cache,
-        private readonly DjustSellerService $djustSellerService,
-    ) {
+    public function __construct(protected AdapterInterface $cache)
+    {
         parent::__construct($this->cache);
     }
 
-    public function createAndAddToCollection(array $data, ?string $customerAccountId = null): array
+    public function create(array $data): Seller
     {
-        $result = [];
-        foreach ($data as $item) {
-            $result[] = $this->create($item, $customerAccountId);
-        }
-
-        return $result;
-    }
-
-    public function create(array $data, ?string $customerAccountId = null): Seller
-    {
-        $sellerData = $this->djustSellerService->getSeller($data['id'], $customerAccountId);
-
         $seller = new Seller();
-        $seller->setId($sellerData['id'] ?? null)
-        ->setExternalId($sellerData['externalId'] ?? null)
-        ->setName($sellerData['name'] ?? '')
-        ->setTos($this->extractSupplierFieldByExternalId($sellerData['customFieldValues'], self::CUSTOM_FIELD_TOS))
-        ->setDescription($sellerData['returnPolicy'] ?? '')
-        ->setAvatar($sellerData['logo'] ?? null)
-        ->setSupplierDeliveryInfo($this->extractSupplierFieldByExternalId($sellerData['customFieldValues'], self::CUSTOM_FIELD_SUPPLIER_DELIVERY_INFO));
+        $seller->setId($data['id'] ?? null)
+            ->setExternalId($data['externalId'] ?? null)
+            ->setName($data['name'] ?? '')
+            ->setTos($this->extractSupplierFieldByExternalId($data['customFieldValues'] ?? null, self::CUSTOM_FIELD_TOS))
+            ->setDescription($data['returnPolicy'] ?? '')
+            ->setAvatar($data['logo'] ?? null)
+            ->setSupplierDeliveryInfo($this->extractSupplierFieldByExternalId($data['customFieldValues'] ?? null, self::CUSTOM_FIELD_SUPPLIER_DELIVERY_INFO));
 
         return $seller;
     }

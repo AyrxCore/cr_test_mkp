@@ -9,7 +9,9 @@ use App\Dto\Djust\DjustSearchParams;
 use App\Enum\Djust\DjustApiEndpoint;
 use App\Enum\Djust\DjustCustomField;
 use App\Enum\Djust\DjustDefaults;
+use App\Exception\UserAccountException;
 use App\Service\AccordCadre\AccordCadreService;
+use App\Service\Account\CurrentAccountProvider;
 use App\Service\Djust\Search\DjustSearchService;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
@@ -18,8 +20,8 @@ class DjustSellerService
 {
     public const string SELLERS_CACHE_KEY = 'djust_sellers';
     private const string TARIF_MAP_CACHE_KEY = 'djust_seller_tarif_map';
-    private const int SELLERS_CACHE_TTL_SECONDS = 300;
-    private const int TARIF_MAP_CACHE_TTL_SECONDS = 300;
+    private const string ADHERENT_SELLERS_CACHE_KEY = 'djust_adherent_sellers';
+    private const int CACHE_TTL_SECONDS = 300;
 
     private const array SELLER_DEFAULT_ATTRIBUTES = [
         'PRODUCT_TYPE|ACCORD_CADRE',
@@ -33,6 +35,7 @@ class DjustSellerService
         private readonly DjustHttpClientService $djustHttpClient,
         private readonly AccordCadreService $accordCadreService,
         private readonly ChannelContext $channelContext,
+        private readonly CurrentAccountProvider $currentAccountProvider,
     ) {
     }
 
@@ -70,11 +73,10 @@ class DjustSellerService
 
     public function getAllSellers(?string $customerAccountId = null): ?array
     {
-        $channelCode = $this->channelContext->getChannel()->getCode();
-        $cacheKey = self::SELLERS_CACHE_KEY.'_'.$channelCode;
+        $cacheKey = $this->buildCachePrefix(self::SELLERS_CACHE_KEY, $customerAccountId);
 
         return $this->cache->get($cacheKey, function (ItemInterface $item): ?array {
-            $item->expiresAfter(self::SELLERS_CACHE_TTL_SECONDS);
+            $item->expiresAfter(self::CACHE_TTL_SECONDS);
             $sellers = [];
 
             $page = 0;
@@ -94,17 +96,25 @@ class DjustSellerService
 
     public function getAllAdherentSellers(?DjustSearchParams $params = null): array
     {
-        $params = ($params ?? new DjustSearchParams())->withAttributes(self::SELLER_DEFAULT_ATTRIBUTES);
-        $search = $this->djustSearchService->search($params);
+        $base = $params ?? new DjustSearchParams();
+        $cacheKey = $this->buildCachePrefix(self::ADHERENT_SELLERS_CACHE_KEY).'_'.md5(\serialize([
+            $base->query,
+            $base->categoryIds,
+            $base->suppliers,
+        ]));
 
-        return $search['facets']['suppliers'] ?? [];
+        return $this->cache->get($cacheKey, function (ItemInterface $item) use ($base): array {
+            $item->expiresAfter(self::CACHE_TTL_SECONDS);
+            $search = $this->djustSearchService->search($base->withAttributes(self::SELLER_DEFAULT_ATTRIBUTES));
+
+            return $search['facets']['suppliers'] ?? [];
+        });
     }
 
     public function getAdherentSellerTarifIdMap(?DjustSearchParams $params = null): array
     {
         $base = $params ?? new DjustSearchParams();
-        $channelCode = $this->channelContext->getChannel()->getCode();
-        $cacheKey = self::TARIF_MAP_CACHE_KEY.'_'.$channelCode.'_'.md5(\serialize([
+        $cacheKey = $this->buildCachePrefix(self::TARIF_MAP_CACHE_KEY).'_'.md5(\serialize([
             $base->query,
             $base->categoryIds,
             $base->suppliers,
@@ -112,7 +122,7 @@ class DjustSellerService
         ]));
 
         return $this->cache->get($cacheKey, function (ItemInterface $item) use ($base): array {
-            $item->expiresAfter(self::TARIF_MAP_CACHE_TTL_SECONDS);
+            $item->expiresAfter(self::CACHE_TTL_SECONDS);
 
             $fatParams = new DjustSearchParams(
                 query: $base->query,
@@ -158,6 +168,18 @@ class DjustSellerService
         $seller = $this->getSeller($sellerId, $customerAccountId);
 
         return $seller['logo'] ?? null;
+    }
+
+    private function buildCachePrefix(string $key, ?string $customerAccountId = null): string
+    {
+        $channelCode = $this->channelContext->getChannel()->getCode();
+        $accountId = $customerAccountId ?? $this->currentAccountProvider->getAccount()?->getDjustCustomerAccountId();
+
+        if ($accountId === null) {
+            throw new UserAccountException('No Djust customer account ID available.');
+        }
+
+        return $key.'_'.$channelCode.'_'.$accountId;
     }
 
     private function extractTarifIdFromRawSearchItem(array $item): ?string

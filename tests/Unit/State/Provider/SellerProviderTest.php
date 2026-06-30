@@ -75,7 +75,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
     $this->sellerFactory
         ->shouldReceive('createAndAddToCollection')
         ->once()
-        ->with($validSellers, null)
+        ->with($validSellers)
         ->andReturn($sellerDtos);
 
     $result = $this->provider->provide($operation, [], $context);
@@ -123,7 +123,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
     $this->sellerFactory
         ->shouldReceive('createAndAddToCollection')
         ->once()
-        ->with($validSellers, 'ACC-123')
+        ->with($validSellers)
         ->andReturn([$seller]);
 
     $result = $this->provider->provide($operation, [], $context);
@@ -157,7 +157,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
     $this->sellerFactory
         ->shouldReceive('createAndAddToCollection')
         ->once()
-        ->with([], null)
+        ->with([])
         ->andReturn([]);
 
     $result = $this->provider->provide($operation, [], $context);
@@ -225,7 +225,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
     $this->sellerFactory
         ->shouldReceive('createAndAddToCollection')
         ->once()
-        ->with($validSellers, null)
+        ->with($validSellers)
         ->andReturn([$seller1, $seller2]);
 
     $result = $this->provider->provide($operation, [], $context);

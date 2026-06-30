@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Context\ChannelContext;
 use App\Enum\Djust\DjustApiEndpoint;
+use App\Service\Account\CurrentAccountProvider;
 use App\Service\Djust\DjustHttpClientService;
 use App\Service\Djust\DjustSellerService;
 use App\Service\Djust\Search\DjustSearchService;
@@ -16,17 +17,23 @@ use App\Service\AccordCadre\AccordCadreService;
 \beforeEach(function () {
     $this->accountId = 'ACC123';
     $this->channelCode = 'TEST_CHANNEL';
-    $this->cacheKey = DjustSellerService::SELLERS_CACHE_KEY.'_'.$this->channelCode;
+    $this->cacheKey = DjustSellerService::SELLERS_CACHE_KEY.'_'.$this->channelCode.'_'.$this->accountId;
 
     $this->cache = Mockery::mock(CacheInterface::class);
     $this->djustSearchService = Mockery::mock(DjustSearchService::class);
     $this->httpClient = Mockery::mock(DjustHttpClientService::class);
     $this->accordCadreService = Mockery::mock(AccordCadreService::class);
-    
+
     $this->channelContext = Mockery::mock(ChannelContext::class);
-    $channel = Mockery::mock();
+    $channel = Mockery::mock(\App\Entity\Channel::class);
     $channel->shouldReceive('getCode')->andReturn($this->channelCode);
     $this->channelContext->shouldReceive('getChannel')->andReturn($channel);
+
+    $this->account = Mockery::mock(\App\Entity\Account::class);
+    $this->account->shouldReceive('getDjustCustomerAccountId')->andReturn($this->accountId);
+
+    $this->currentAccountProvider = Mockery::mock(CurrentAccountProvider::class);
+    $this->currentAccountProvider->shouldReceive('getAccount')->andReturn($this->account)->byDefault();
 
     $this->service = new DjustSellerService(
         $this->cache,
@@ -34,6 +41,7 @@ use App\Service\AccordCadre\AccordCadreService;
         $this->httpClient,
         $this->accordCadreService,
         $this->channelContext,
+        $this->currentAccountProvider,
     );
 });
 
@@ -288,12 +296,12 @@ use App\Service\AccordCadre\AccordCadreService;
         ->and($result[4]['id'])->toBe('SELLER-5');
 });
 
-\it('uses cache key based on channel', function () {
+\it('uses cache key based on channel and account', function () {
     $sellersChannelA = [['id' => 'SELLER-A', 'externalId' => 'EXT-A', 'name' => 'Seller A']];
-    
+
     $this->cache->shouldReceive('get')
         ->once()
-        ->with(DjustSellerService::SELLERS_CACHE_KEY.'_'.$this->channelCode, Mockery::type('callable'))
+        ->with(DjustSellerService::SELLERS_CACHE_KEY.'_'.$this->channelCode.'_'.$this->accountId, Mockery::type('callable'))
         ->andReturn($sellersChannelA);
 
     $result = $this->service->getAllSellers();
@@ -301,16 +309,11 @@ use App\Service\AccordCadre\AccordCadreService;
     \expect($result[0]['id'])->toBe('SELLER-A');
 });
 
-\it('uses channel-based cache key when no account provided', function () {
-    $this->cache->shouldReceive('get')
-        ->once()
-        ->with(DjustSellerService::SELLERS_CACHE_KEY.'_'.$this->channelCode, Mockery::type('callable'))
-        ->andReturn([]);
+\it('throws when no account ID is available', function () {
+    $this->currentAccountProvider->shouldReceive('getAccount')->andReturn(null);
 
-    $result = $this->service->getAllSellers();
-
-    \expect($result)->toBeArray()->and($result)->toBeEmpty();
-});
+    $this->service->getAllSellers();
+})->throws(\App\Exception\UserAccountException::class, 'No Djust customer account ID available.');
 
 // ─── getAdherentSellerTarifIdMap() ───────────────────────────────────────────
 
@@ -579,12 +582,12 @@ use App\Service\AccordCadre\AccordCadreService;
 
     $this->cache->shouldReceive('get')
         ->once()
-        ->with(DjustSellerService::SELLERS_CACHE_KEY.'_'.$this->channelCode, Mockery::any())
+        ->with(DjustSellerService::SELLERS_CACHE_KEY.'_'.$this->channelCode.'_'.$this->accountId, Mockery::any())
         ->andReturn($allSellers);
 
     $this->cache->shouldReceive('get')
         ->once()
-        ->with(Mockery::pattern('/^djust_seller_tarif_map_'.$this->channelCode.'_/'), Mockery::any())
+        ->with(Mockery::pattern('/^djust_seller_tarif_map_'.$this->channelCode.'_'.$this->accountId.'_/'), Mockery::any())
         ->andReturnUsing(function ($key, $callback) use ($fatSearchResult) {
             $item = Mockery::mock(ItemInterface::class);
             $item->shouldReceive('expiresAfter')->once()->with(300);
@@ -605,5 +608,80 @@ use App\Service\AccordCadre\AccordCadreService;
 
     \expect($result)->toHaveCount(1)
         ->and($result[0]['id'])->toBe('SELLER-1');
+})->group('UnitDjustSellerService');
+
+// ─── getAllAdherentSellers() ──────────────────────────────────────────────────
+
+\it('returns adherent sellers from cache', function () {
+    $suppliers = [
+        ['id' => 'SELLER-1', 'name' => 'Seller One'],
+        ['id' => 'SELLER-2', 'name' => 'Seller Two'],
+    ];
+
+    $this->cache->shouldReceive('get')
+        ->once()
+        ->with(Mockery::pattern('/^djust_adherent_sellers_'.$this->channelCode.'_'.$this->accountId.'_/'), Mockery::type('callable'))
+        ->andReturn($suppliers);
+
+    $result = $this->service->getAllAdherentSellers();
+
+    \expect($result)->toBe($suppliers);
+})->group('UnitDjustSellerService');
+
+\it('fetches adherent sellers from API when cache miss', function () {
+    $searchResult = [
+        'facets' => [
+            'suppliers' => [
+                ['id' => 'SELLER-1', 'name' => 'Seller One'],
+            ],
+        ],
+    ];
+
+    $this->cache->shouldReceive('get')
+        ->once()
+        ->andReturnUsing(function ($key, $callback) use ($searchResult) {
+            $item = Mockery::mock(\Symfony\Contracts\Cache\ItemInterface::class);
+            $item->shouldReceive('expiresAfter')->once()->with(300);
+
+            $this->djustSearchService
+                ->shouldReceive('search')
+                ->once()
+                ->andReturn($searchResult);
+
+            return $callback($item);
+        });
+
+    $result = $this->service->getAllAdherentSellers();
+
+    \expect($result)->toBe([['id' => 'SELLER-1', 'name' => 'Seller One']]);
+})->group('UnitDjustSellerService');
+
+\it('returns empty array when no facets suppliers in getAllAdherentSellers', function () {
+    $this->cache->shouldReceive('get')
+        ->once()
+        ->andReturnUsing(function ($key, $callback) {
+            $item = Mockery::mock(\Symfony\Contracts\Cache\ItemInterface::class);
+            $item->shouldReceive('expiresAfter')->once()->with(300);
+
+            $this->djustSearchService
+                ->shouldReceive('search')
+                ->once()
+                ->andReturn([]);
+
+            return $callback($item);
+        });
+
+    $result = $this->service->getAllAdherentSellers();
+
+    \expect($result)->toBeArray()->toBeEmpty();
+})->group('UnitDjustSellerService');
+
+\it('uses channel and account in cache key for getAllAdherentSellers', function () {
+    $this->cache->shouldReceive('get')
+        ->once()
+        ->with(Mockery::pattern('/^djust_adherent_sellers_'.$this->channelCode.'_'.$this->accountId.'_/'), Mockery::type('callable'))
+        ->andReturn([]);
+
+    $this->service->getAllAdherentSellers();
 })->group('UnitDjustSellerService');
 
