@@ -75,7 +75,21 @@ ARG COMPOSER_AUTH=""
 # causing crash on container start as PHP user www-data cannot write to /var/www/var/cache
 # RUN --mount=type=cache,uid=33,gid=33,target=/var/www/.composer/cache \
 #   --mount=type=cache,uid=33,gid=33,target=/var/www/var/cache \
-RUN composer i -o
+#
+# codeload.github.com intermittently returns HTTP 400/429 errors when
+# Composer downloads too many archives in parallel (up to 12 by default).
+# We limit parallelism and retry multiple times to make the build more reliable.
+RUN set -eux; \
+  export COMPOSER_MAX_PARALLEL_HTTP=6; \
+  for attempt in 1 2 3; do \
+    composer install -o --no-interaction --prefer-dist && exit 0; \
+    if [ "$attempt" -lt 3 ]; then \
+      echo "composer install failed (attempt $attempt/3), retrying in 10s..."; \
+      sleep 10; \
+    fi; \
+  done; \
+  echo "composer install failed after 3 attempts" >&2; \
+  exit 1
 
 # Copy node build
 COPY --from=node --chown=www-data:www-data /var/www/public public/
