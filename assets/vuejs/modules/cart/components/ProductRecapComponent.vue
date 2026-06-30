@@ -249,6 +249,7 @@ const deleteProduct = async (): Promise<void> => {
     await cartStore.getCart()
     if (cartStore.needsProductFdpSync) {
       await cartStore.syncProductsFdp()
+      await cartStore.getCart()
     }
     notifySuccess('La référence du produit a été retirée au panier')
   } finally {

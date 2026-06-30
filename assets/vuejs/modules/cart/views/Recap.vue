@@ -28,7 +28,10 @@
 
   <LoadingComponent v-if="isSyncing" />
 
-  <div v-else class="flex flex-col-reverse lg:grid lg:grid-cols-4 lg:gap-4 lg:px-0">
+  <div
+    v-else
+    class="flex flex-col-reverse lg:grid lg:grid-cols-4 lg:gap-4 lg:px-0"
+  >
     <div
       v-if="cartOrders && cartOrders.length > 0"
       class="col-span-3 mt-5 rounded-lg lg:mt-0"
@@ -73,7 +76,10 @@ import { useUserStore } from '@/vuejs/stores/user'
 import { useSavedCartStore } from '@/vuejs/stores/savedCart'
 import { useChannelStore } from '@/vuejs/stores/channel'
 import { formatCartItemsGtmEvent, sendGtmEvent } from '@/vuejs/services/gtm'
-import { OPTIONAL_FRONT_BLOCKS } from '@/vuejs/services/const'
+import {
+  OPTIONAL_FRONT_BLOCKS,
+  PRODUCT_FDP_PREFIX,
+} from '@/vuejs/services/const'
 import { CartOrder } from '@/vuejs/types/Cart.ts'
 
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
@@ -148,10 +154,16 @@ const cartOrders = computed((): CartOrder[] => {
     return []
   }
 
-  return [...cart.value.cartOrders].sort((a, b) => {
-    const nameA = a.seller.name?.toLowerCase() || ''
-    const nameB = b.seller.name?.toLowerCase() || ''
-    return nameA.localeCompare(nameB)
-  })
+  return [...cart.value.cartOrders]
+    .filter((order) => {
+      return order.products.some(
+        (p) => !p.externalId?.startsWith(PRODUCT_FDP_PREFIX),
+      )
+    })
+    .sort((a, b) => {
+      const nameA = a.seller.name?.toLowerCase() || ''
+      const nameB = b.seller.name?.toLowerCase() || ''
+      return nameA.localeCompare(nameB)
+    })
 })
 </script>
