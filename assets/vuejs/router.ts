@@ -111,6 +111,10 @@ router.beforeEach(async (to, from, next) => {
   const cartStore = useCartStore()
   const channelStore = useChannelStore()
 
+  const isAdyenRedirectReturn = ['redirectResult', 'MD', 'cres'].some(
+    (param) => param in to.query,
+  )
+
   if (!userStore.isLogged) {
     await userStore.getCurrentUserData()
     if (!userStore.isLogged) {
@@ -121,6 +125,7 @@ router.beforeEach(async (to, from, next) => {
     }
 
     if (
+      !isAdyenRedirectReturn &&
       [
         CartPageList.CART_ADDRESSES,
         CartPageList.CART_SHIPMENTS,

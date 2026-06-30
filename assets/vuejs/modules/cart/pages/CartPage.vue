@@ -38,7 +38,15 @@
           </CartBreadcrumbItemComponent>
         </div>
         <template
-          v-if="
+          v-if="isProcessingPaymentReturn"
+        >
+          <div class="flex flex-col items-center justify-center py-12">
+            <div class="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+            <p class="text-lg">Traitement du paiement en cours…</p>
+          </div>
+        </template>
+        <template
+          v-else-if="
             !loadingCart || CartPageList.CART_CONFIRMED === currentRouteName
           "
         >
@@ -57,6 +65,10 @@ import { RouteRecordName, useRouter } from 'vue-router'
 import { CartPageList } from '@/vuejs/router/pages-list'
 import { useCartStore } from '@/vuejs/stores/cart'
 import { useAddressStore } from '@/vuejs/stores/address'
+import {
+  hasAdyenRedirectParams,
+  useAdyenRedirectReturn,
+} from '@/vuejs/adyen/composables/useAdyenRedirectReturn'
 
 import BaseTemplate from '@/vuejs/BaseTemplate.vue'
 import CartBreadcrumbItemComponent from '@/vuejs/modules/cart/components/CartBreadcrumbItemComponent.vue'
@@ -66,26 +78,20 @@ import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 const router = useRouter()
 const cartStore = useCartStore()
 const addressStore = useAddressStore()
+const { handle: handleAdyenRedirectReturn } = useAdyenRedirectReturn()
 
 const loadingCart = ref<boolean>(true)
+const isProcessingPaymentReturn = ref<boolean>(false)
 
 const currentRouteName = computed(
   (): RouteRecordName => router.currentRoute.value.name,
 )
 
 onMounted(async () => {
-  const isRedirectReturn3DS = [
-    'redirectResult',
-    'MD',
-    'cres',
-  ].some((param) => new URLSearchParams(window.location.search).has(param))
-
-  const isPaymentPage =
-    router.currentRoute.value.name === CartPageList.CART_PAYMENT ||
-    router.currentRoute.value.name === CartPageList.CART_PAYMENT_SEPA
-
-  if (isPaymentPage && isRedirectReturn3DS) {
+  if (hasAdyenRedirectParams()) {
+    isProcessingPaymentReturn.value = true
     loadingCart.value = false
+    await handleAdyenRedirectReturn()
     return
   }
 
