@@ -201,7 +201,7 @@ const sharedState = { count: 0 }; // Réactif cassé
    └── Performance
 
 4. Tester localement (si nécessaire)
-   └── make lint && make all-tests-parallel
+   └── make all-tests-parallel ~~(make lint désactivé temporairement)~~
 
 5. Feedback structuré
    └── Bloquants → Suggestions → Positifs

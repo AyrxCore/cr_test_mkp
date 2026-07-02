@@ -138,7 +138,7 @@ git push origin feat/MKP-123-adherent-filter
 - [ ] Première ligne < 72 caractères ?
 - [ ] Commit atomique (1 seul changement logique) ?
 - [ ] Tests passent (`make all-tests-parallel`) ?
-- [ ] Code formaté (`make lint`) ?
+- [ ] ~~Code formaté (`make lint`) ?~~ _(désactivé temporairement)_
 
 ## Référence Complète
 

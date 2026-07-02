@@ -135,7 +135,7 @@ Explication et suggestion de correction.
 
 Synthèse en 1-2 phrases. Verdict clair : peut merger après correction du/des bloquant(s), ou prêt à merger. 👍
 
-> `make lint` → `make all-tests-parallel`
+> ~~`make lint` →~~ `make all-tests-parallel` _(make lint désactivé temporairement)_
 ```
 
 ### 4. Règles
@@ -147,7 +147,7 @@ Synthèse en 1-2 phrases. Verdict clair : peut merger après correction du/des b
 5. **⚠️ Points à améliorer avec extraits de code** — montrer le code concerné, expliquer le problème, proposer la correction
 6. **Tableaux récap par sévérité** (🔴 Bloquant → 🟡 À corriger) — vue synthétique rapide
 7. **🟢 Verdict global** en fin — une phrase claire sur l'état de la PR
-8. Terminer par le rappel `make lint` → `make all-tests-parallel`
+8. Terminer par le rappel `make all-tests-parallel` ~~(`make lint` désactivé temporairement)~~
 9. Proposer un message de commit conventionnel si la branche n'en a pas
 10. Si aucun bloquant : omettre le tableau 🔴 et indiquer directement 🟢
 

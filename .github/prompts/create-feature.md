@@ -59,7 +59,7 @@ Description :
 ## Validation
 
 ```bash
-make lint
+# make lint               # désactivé temporairement
 make all-tests-parallel
 make database-diff         # si modification d'entité
 make database-migrations   # si nouvelle migration

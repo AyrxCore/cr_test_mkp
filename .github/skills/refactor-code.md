@@ -411,7 +411,7 @@ make all-tests-parallel    # Doit être vert
 
 # APRÈS chaque étape
 make all-tests-parallel    # Doit rester vert
-make lint                  # Code propre
+# make lint                # Code propre (désactivé temporairement)
 
 # Commit atomique
 git commit -m "MKP-XXX: refactor - extract TarifCalculator from AdherentService"

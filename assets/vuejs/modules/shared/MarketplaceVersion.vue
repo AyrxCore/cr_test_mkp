@@ -10,5 +10,5 @@
 <script lang="ts" setup>
 const APP_MODE: string = window.APP_MODE ?? ''
 const MKP_GIT_TAG: string = window.MKP_GIT_TAG ?? ''
-const isAvailable: boolean = !!MKP_GIT_TAG && APP_MODE !== 'prod'
+const isAvailable: boolean = !!MKP_GIT_TAG && (APP_MODE === 'dev' || APP_MODE === 'preprod')
 </script>

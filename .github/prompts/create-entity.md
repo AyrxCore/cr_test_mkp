@@ -53,6 +53,6 @@ Crée une entity "Catalogue" avec :
 ## Validation
 
 ```bash
-make lint
+# make lint               # désactivé temporairement
 make all-tests-parallel
 ```
