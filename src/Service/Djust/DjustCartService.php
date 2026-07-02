@@ -212,6 +212,25 @@ class DjustCartService
         }
     }
 
+    public function isSuccessfulPaymentResult(array $result): bool
+    {
+        $resultCode = \strtolower((string) ($result['resultCode'] ?? ''));
+
+        return !empty($resultCode) && !\in_array($resultCode, ['refused', 'cancelled', 'error', ''], true);
+    }
+
+    public function isPaymentImmediatelyAuthorised(array $result): bool
+    {
+        if (!$this->isSuccessfulPaymentResult($result)) {
+            return false;
+        }
+
+        $actionType = \strtolower((string) ($result['action']['type'] ?? ''));
+
+        // Pas d'action = paiement direct. bankTransfer = paiement virement direct.
+        return $actionType === '' || $actionType === 'banktransfer';
+    }
+
     public function updateAllLogisticOrdersCustomFields(
         array $djustCart,
         ?string $siret,

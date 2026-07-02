@@ -57,7 +57,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
         $this->logger,
         $this->baseUrl,
         $this->username,
-        $this->password
+        $this->decryptedPassword
     );
 });
 

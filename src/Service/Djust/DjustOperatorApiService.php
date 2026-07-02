@@ -6,6 +6,7 @@ namespace App\Service\Djust;
 
 use App\Enum\Djust\DjustApiEndpoint;
 use App\Enum\Djust\DjustClient;
+use App\Enum\Djust\DjustDefaults;
 use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -24,7 +25,6 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  */
 class DjustOperatorApiService
 {
-    private const string DJ_STORE = 'default_store';
     private const string CACHE_KEY = 'djust_operator_api_token';
     private const int TOKEN_EXPIRATION_TIME = 240;
 
@@ -116,7 +116,7 @@ class DjustOperatorApiService
                     'password' => $this->password,
                 ],
                 'headers' => [
-                    'dj-store' => self::DJ_STORE,
+                    'dj-store' => DjustDefaults::STORE->value,
                     'dj-client' => DjustClient::OPERATOR->value,
                 ],
             ]);
@@ -208,7 +208,7 @@ class DjustOperatorApiService
         $response = $this->httpClient->request('GET', $this->baseUrl.$endpoint, [
             'query' => $queryParams,
             'headers' => [
-                'dj-store' => self::DJ_STORE,
+                'dj-store' => DjustDefaults::STORE->value,
                 'dj-client' => DjustClient::OPERATOR->value,
                 'Authorization' => 'Bearer '.$this->getOperatorToken(),
             ],

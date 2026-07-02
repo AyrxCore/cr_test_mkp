@@ -52,6 +52,7 @@ RUN chmod +x /usr/local/bin/run-php-fpm.sh
 COPY docker/php-fpm/supervisor/run-messenger-consume.sh /usr/local/bin/run-messenger-consume.sh
 RUN chmod +x /usr/local/bin/run-messenger-consume.sh
 
+
 # Prepare /var/www directory with expected structure and permissions
 WORKDIR /var/www
 RUN mkdir -p /var/www/var/log && \

@@ -13,7 +13,6 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class DjustAccountApiService
 {
-    private const string DJ_STORE = 'default_store';
 
     public function __construct(
         private readonly HttpClientInterface $httpClient,
@@ -31,7 +30,7 @@ class DjustAccountApiService
                 'password' => $plaintextPassword,
             ],
             'headers' => [
-                'dj-store' => self::DJ_STORE,
+                'dj-store' => DjustDefaults::STORE->value,
                 'dj-client' => DjustClient::ACCOUNT->value,
             ],
         ]);
@@ -70,6 +69,50 @@ class DjustAccountApiService
         return $response['content'] ?? [];
     }
 
+    /**
+     * Retrieves a validated commercial order by its numeric ID using buyer credentials.
+     * Used by the cron to sync order states when operator access is unavailable.
+     */
+    public function getValidatedOrderById(
+        string $orderId,
+        string $customerAccountId,
+        string $accessToken,
+        string $storeViewCode,
+    ): ?array {
+        $formattedId = \str_pad($orderId, 10, '0', \STR_PAD_LEFT);
+
+        try {
+            $response = $this->request(
+                'GET',
+                DjustApiEndpoint::SHOP_COMMERCIAL_ORDERS->value,
+                ['query' => [
+                    'id' => $formattedId,
+                    'locale' => DjustDefaults::LOCALE->value,
+                    'sort' => 'createdAt:desc',
+                    'size' => 10,
+                ]],
+                $customerAccountId,
+                $accessToken,
+                $storeViewCode,
+            );
+
+            foreach ($response['content'] ?? [] as $order) {
+                if (($order['id'] ?? null) === $formattedId && !empty($order['orderLogistics'])) {
+                    return $order;
+                }
+            }
+
+            return null;
+        } catch (\Throwable $e) {
+            $this->logger->warning('Djust buyer order fetch failed in getValidatedOrderById.', [
+                'orderId' => $orderId,
+                'error' => $e->getMessage(),
+            ]);
+
+            return null;
+        }
+    }
+
     public function deleteCart(string $cartReference, string $customerAccountId, string $accessToken, string $storeViewCode): void
     {
         $endpoint = \sprintf(DjustApiEndpoint::SHOP_COMMERCIAL_ORDER_DELETE->value, $cartReference);
@@ -79,7 +122,7 @@ class DjustAccountApiService
     private function request(string $method, string $endpoint, array $options, string $customerAccountId, string $accessToken, string $storeViewCode): array
     {
         $options['headers'] = [
-            'dj-store' => self::DJ_STORE,
+            'dj-store' => DjustDefaults::STORE->value,
             'dj-store-view' => $storeViewCode,
             'dj-client' => DjustClient::ACCOUNT->value,
             'Authorization' => 'Bearer '.$accessToken,

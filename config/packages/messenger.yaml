@@ -9,8 +9,11 @@ framework:
         dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
         options:
           queue_name: default
+      scheduler_default:
+        dsn: 'schedule://default'
 
     routing:
       # Route your messages to the transports
       'App\Message\CartSubscription': default
       'App\Message\UpplerOrderUpdateNotificationMessage': default
+      'App\Message\Djust\SyncDjustOrdersStateMessage': default

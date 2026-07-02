@@ -12,6 +12,10 @@ class DjustStoreViewHeadersBuilder
 
     public function __construct(private ChannelContext $channelContext) {}
 
+    /**
+     * Builds store-view headers from the current HTTP request channel context.
+     * Requires an active web request (not available in console commands / crons).
+     */
     public function build(): array
     {
         return [self::STORE_VIEW_HEADER => $this->channelContext->getChannel()->getCode()];

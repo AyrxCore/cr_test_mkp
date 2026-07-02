@@ -6,6 +6,7 @@ namespace App\Enum\Djust;
 
 enum DjustDefaults: string
 {
+    case STORE = 'default_store';
     case CURRENCY = 'EUR';
     case LOCALE = 'fr-FR';
     case COUNTRY_CODE = 'FR';

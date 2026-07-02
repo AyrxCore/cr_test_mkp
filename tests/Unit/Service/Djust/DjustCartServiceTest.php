@@ -671,3 +671,53 @@ uses()->group('UnitDjustCartService', 'cart');
     $this->service->updateAllLogisticOrdersCustomFields([], 'siret', 'email@test.com', '0600000000');
 })->group('UnitDjustCartService', 'cart');
 
+// --- isSuccessfulPaymentResult ---
+
+\it('isSuccessfulPaymentResult returns true for authorised resultCode', function () {
+    \expect($this->service->isSuccessfulPaymentResult(['resultCode' => 'Authorised']))->toBeTrue();
+});
+
+\it('isSuccessfulPaymentResult returns true for pending resultCode', function () {
+    \expect($this->service->isSuccessfulPaymentResult(['resultCode' => 'Pending']))->toBeTrue();
+});
+
+\it('isSuccessfulPaymentResult returns false for refused resultCode', function () {
+    \expect($this->service->isSuccessfulPaymentResult(['resultCode' => 'Refused']))->toBeFalse();
+});
+
+\it('isSuccessfulPaymentResult returns false for cancelled resultCode', function () {
+    \expect($this->service->isSuccessfulPaymentResult(['resultCode' => 'Cancelled']))->toBeFalse();
+});
+
+\it('isSuccessfulPaymentResult returns false for error resultCode', function () {
+    \expect($this->service->isSuccessfulPaymentResult(['resultCode' => 'Error']))->toBeFalse();
+});
+
+\it('isSuccessfulPaymentResult returns false when resultCode is missing', function () {
+    \expect($this->service->isSuccessfulPaymentResult([]))->toBeFalse();
+});
+
+// --- isPaymentImmediatelyAuthorised ---
+
+\it('isPaymentImmediatelyAuthorised returns true when no action (direct payment)', function () {
+    \expect($this->service->isPaymentImmediatelyAuthorised(['resultCode' => 'Authorised']))->toBeTrue();
+});
+
+\it('isPaymentImmediatelyAuthorised returns true for bankTransfer action', function () {
+    \expect($this->service->isPaymentImmediatelyAuthorised([
+        'resultCode' => 'Authorised',
+        'action' => ['type' => 'bankTransfer'],
+    ]))->toBeTrue();
+});
+
+\it('isPaymentImmediatelyAuthorised returns false for redirect action (3DS)', function () {
+    \expect($this->service->isPaymentImmediatelyAuthorised([
+        'resultCode' => 'RedirectShopper',
+        'action' => ['type' => 'redirect'],
+    ]))->toBeFalse();
+});
+
+\it('isPaymentImmediatelyAuthorised returns false when payment failed', function () {
+    \expect($this->service->isPaymentImmediatelyAuthorised(['resultCode' => 'Refused']))->toBeFalse();
+});
+

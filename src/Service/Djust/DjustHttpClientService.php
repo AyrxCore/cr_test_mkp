@@ -6,6 +6,7 @@ namespace App\Service\Djust;
 
 use App\Enum\Djust\DjustApiEndpoint;
 use App\Enum\Djust\DjustClient;
+use App\Enum\Djust\DjustDefaults;
 use App\Exception\UserAccountException;
 use App\Service\Account\CurrentAccountProvider;
 use App\Service\CredentialEncryptionService;
@@ -21,7 +22,6 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class DjustHttpClientService
 {
     private const string DJUST_ACCOUNT_ACCESS_TOKEN = 'djust_account_access_token';
-    private const string DJ_STORE = 'default_store';
     private const string CACHE_KEY = 'djust_operator_token';
     private const string DJUST_ACCOUNT_REFRESH_TOKEN = 'djust_account_refresh_token';
     private const string DJUST_ACCOUNT_EXPIRES_AT = 'djust_account_expires_at';
@@ -158,6 +158,15 @@ class DjustHttpClientService
 
     private function buildHeaders(array $headers = [], bool $isOperator = false): array
     {
+        $baseHeaders = ['dj-store' => DjustDefaults::STORE->value];
+
+        if ($isOperator) {
+            return \array_merge($baseHeaders, $headers, [
+                'dj-client' => DjustClient::OPERATOR->value,
+                'Authorization' => 'Bearer '.$this->getValidOperatorToken(),
+            ]);
+        }
+
         $session = $this->requestStack->getSession();
 
         $account = $session->get(CurrentAccountProvider::SESSION_KEY_ACCOUNT);
@@ -166,24 +175,15 @@ class DjustHttpClientService
             throw new SessionUnavailableException('[API DJUST] - No account found in session');
         }
 
-        $baseHeaders = ['dj-store' => self::DJ_STORE];
-
-        if (!$isOperator) {
-            $customerAccountId = $account->getDjustCustomerAccountId();
-            if (!$customerAccountId) {
-                throw new UserAccountException('[API DJUST] - No customer account ID found for the current account');
-            }
-
-            return \array_merge($baseHeaders, $headers, [
-                'dj-client' => DjustClient::ACCOUNT->value,
-                'Authorization' => 'Bearer '.$this->getValidAccountToken(),
-                'customer-account-id' => $customerAccountId
-            ]);
+        $customerAccountId = $account->getDjustCustomerAccountId();
+        if (!$customerAccountId) {
+            throw new UserAccountException('[API DJUST] - No customer account ID found for the current account');
         }
 
         return \array_merge($baseHeaders, $headers, [
-            'dj-client' => DjustClient::OPERATOR->value,
-            'Authorization' => 'Bearer '.$this->getValidOperatorToken()
+            'dj-client' => DjustClient::ACCOUNT->value,
+            'Authorization' => 'Bearer '.$this->getValidAccountToken(),
+            'customer-account-id' => $customerAccountId,
         ]);
     }
 
@@ -195,7 +195,7 @@ class DjustHttpClientService
                     'refreshToken' => $refreshToken,
                 ],
                 'headers' => [
-                    'dj-store' => self::DJ_STORE,
+                    'dj-store' => DjustDefaults::STORE->value,
                     'dj-client' => DjustClient::ACCOUNT->value,
                     'Content-Type' => 'application/json',
                 ],
@@ -222,7 +222,7 @@ class DjustHttpClientService
                     'username' => $username,
                 ],
                 'headers' => [
-                    'dj-store' => self::DJ_STORE,
+                    'dj-store' => DjustDefaults::STORE->value,
                     'dj-client' => $djClient,
                     'Content-Type' => 'application/json',
                 ],
@@ -237,8 +237,7 @@ class DjustHttpClientService
     private function getValidOperatorToken(): string
     {
         return $this->cache->get(self::CACHE_KEY, function (ItemInterface $item): string {
-            $decryptedPassword = $this->credentialsService->decrypt($this->password);
-            $tokenData = $this->getNewAccessToken(DjustClient::OPERATOR->value, $this->username, $decryptedPassword);
+            $tokenData = $this->getNewAccessToken(DjustClient::OPERATOR->value, $this->username, $this->password);
             $item->expiresAfter(self::TOKEN_EXPIRATION_TIME);
             $item->set($tokenData['accessToken']);
 

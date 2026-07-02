@@ -18,6 +18,12 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CartSavingsRepository extends ServiceEntityRepository
 {
+    /**
+     * Longueur minimale d'un orderId Djust (paddé à 10 caractères, ex: "0000625247").
+     * Permet d'exclure les anciens orderId Uppler numériques courts non synchronisables via l'API Djust.
+     */
+    private const int DJUST_ORDER_ID_MIN_LENGTH = 4;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CartSavings::class);
@@ -39,5 +45,22 @@ class CartSavingsRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * @return iterable<CartSavings>
+     */
+    public function iterateWithOrderId(): iterable
+    {
+        return $this->createQueryBuilder('cartSavings')
+            ->addSelect('account')
+            ->innerJoin('cartSavings.account', 'account')
+            ->andWhere('cartSavings.orderId IS NOT NULL')
+            ->andWhere('LENGTH(cartSavings.orderId) > :minOrderIdLength')
+            ->setParameter('minOrderIdLength', self::DJUST_ORDER_ID_MIN_LENGTH)
+            ->orderBy('cartSavings.updatedAt', 'ASC')
+            ->addOrderBy('cartSavings.createdAt', 'ASC')
+            ->getQuery()
+            ->toIterable();
     }
 }

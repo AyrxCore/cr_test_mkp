@@ -7,21 +7,27 @@ namespace App\Controller\Api;
 use App\Dto\CartItem;
 use App\Factory\DjustCartFactory;
 use App\Service\Account\CurrentAccountProvider;
+use App\Service\CartSavingsService;
 use App\Service\Djust\DjustCartService;
 use App\Service\Djust\ProductFdpSyncService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 class CartController extends AbstractController
 {
+    private const string SESSION_KEY_CART_REFERENCE = 'djust_cart_reference_for_savings';
+
     public function __construct(
         private readonly DjustCartService $djustCartService,
         private readonly DjustCartFactory $djustCartFactory,
         private readonly ProductFdpSyncService $productFdpSyncService,
         private readonly CurrentAccountProvider $currentAccountProvider,
+        private readonly CartSavingsService $cartSavingsService,
+        private readonly RequestStack $requestStack,
     ) {
     }
 
@@ -94,8 +100,21 @@ class CartController extends AbstractController
             throw new BadRequestHttpException('Corps de la requête invalide : '.$e->getMessage());
         }
 
+        // Stocker la référence du panier en session pour pouvoir créer CartSavings
+        // même dans le cas d'un 3DS où la confirmation arrive via submitPaymentDetails.
+        $cartReference = (string) ($payload['reference'] ?? '');
+        if ($cartReference !== '') {
+            $this->requestStack->getSession()->set(self::SESSION_KEY_CART_REFERENCE, $cartReference);
+        }
+
         $clientIp = $request->getClientIp() ?? '';
         $result = $this->djustCartService->initiatePayment($payload, $clientIp);
+
+        // Créer CartSavings directement si paiement immédiatement autorisé (pas de 3DS redirect).
+        // Pour les paiements 3DS, la création se fait dans submitPaymentDetails.
+        if ($cartReference !== '' && $this->djustCartService->isPaymentImmediatelyAuthorised($result)) {
+            $this->cartSavingsService->createAfterPayment($cartReference, $this->currentAccountProvider->getAccount());
+        }
 
         return new JsonResponse($result);
     }
@@ -110,6 +129,15 @@ class CartController extends AbstractController
         }
 
         $result = $this->djustCartService->submitPaymentDetails($payload);
+
+        if ($this->djustCartService->isSuccessfulPaymentResult($result)) {
+            $cartReference = (string) ($this->requestStack->getSession()->get(self::SESSION_KEY_CART_REFERENCE, '') ?? '');
+
+            if ($cartReference !== '') {
+                $this->requestStack->getSession()->remove(self::SESSION_KEY_CART_REFERENCE);
+                $this->cartSavingsService->createAfterPayment($cartReference, $this->currentAccountProvider->getAccount());
+            }
+        }
 
         return new JsonResponse($result);
     }

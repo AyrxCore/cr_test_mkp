@@ -33,9 +33,9 @@ class CartService
 
         foreach ($cart['orders'] as $order) {
             $cartSaving = new CartSavings();
-            $cartSaving->setCartId($cart['id']);
+            $cartSaving->setCartId((string) $cart['id']);
             $cartSaving->setAccount($account);
-            $cartSaving->setOrderId($order['id']);
+            $cartSaving->setOrderId((string) $order['id']);
             $cartSaving->setSellerId($order['seller']['id']);
             $priceReferenceByOrder = 0;
             foreach ($order['items'] as $item) {

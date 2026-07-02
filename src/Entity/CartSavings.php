@@ -23,11 +23,11 @@ class CartSavings
     #[ORM\JoinColumn(nullable: false)]
     private ?Account $account = null;
 
-    #[ORM\Column]
-    private ?int $cartId = null;
+    #[ORM\Column(length: 255)]
+    private ?string $cartId = null;
 
-    #[ORM\Column]
-    private ?int $orderId = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $orderId = null;
 
     #[ORM\Column]
     private ?int $sellerId = null;
@@ -83,24 +83,24 @@ class CartSavings
         return $this;
     }
 
-    public function getCartId(): ?int
+    public function getCartId(): ?string
     {
         return $this->cartId;
     }
 
-    public function setCartId(int $cartId): self
+    public function setCartId(string $cartId): self
     {
         $this->cartId = $cartId;
 
         return $this;
     }
 
-    public function getOrderId(): ?int
+    public function getOrderId(): ?string
     {
         return $this->orderId;
     }
 
-    public function setOrderId(int $orderId): self
+    public function setOrderId(string $orderId): self
     {
         $this->orderId = $orderId;
 

@@ -6,7 +6,6 @@ namespace App\Controller\Api\Buyer;
 
 use App\Controller\ChannelAwareControllerInterface;
 use App\Controller\ChannelAwareControllerTrait;
-use App\Dto\CartPayment;
 use App\Message\CartSubscription;
 use App\Service\CartService;
 use App\Service\UpplerCartService;

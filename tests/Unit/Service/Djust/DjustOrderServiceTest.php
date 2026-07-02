@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 use App\Enum\Djust\DjustApiEndpoint;
 use App\Enum\Djust\DjustDefaults;
+use App\Service\CredentialEncryptionService;
+use App\Service\Djust\DjustAccountApiService;
 use App\Service\Djust\DjustHttpClientService;
 use App\Service\Djust\DjustOrderService;
 use App\Service\Djust\DjustStoreViewHeadersBuilder;
+use Psr\Log\LoggerInterface;
 
 \uses()->group('UnitDjustOrderService', 'UnitOrder');
 
@@ -15,7 +18,16 @@ use App\Service\Djust\DjustStoreViewHeadersBuilder;
     $this->storeViewHeaders = ['dj-store-view' => 'default'];
     $this->storeViewHeadersBuilder = Mockery::mock(DjustStoreViewHeadersBuilder::class);
     $this->storeViewHeadersBuilder->shouldReceive('build')->andReturn($this->storeViewHeaders);
-    $this->service = new DjustOrderService($this->httpClient, $this->storeViewHeadersBuilder);
+    $this->accountApiService = Mockery::mock(DjustAccountApiService::class);
+    $this->credentialEncryptionService = Mockery::mock(CredentialEncryptionService::class);
+    $this->logger = Mockery::mock(LoggerInterface::class)->shouldIgnoreMissing();
+    $this->service = new DjustOrderService(
+        $this->httpClient,
+        $this->storeViewHeadersBuilder,
+        $this->accountApiService,
+        $this->credentialEncryptionService,
+        $this->logger,
+    );
 });
 
 \afterEach(function () {

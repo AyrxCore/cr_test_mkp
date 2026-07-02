@@ -32,7 +32,7 @@ class RetrieveOrdersStateCommand extends Command
 
         foreach ($savings as $saving) {
             try {
-                $order = $this->upplerOrderService->getOrderByIdAsAdmin($saving->getOrderId());
+                $order = $this->upplerOrderService->getOrderByIdAsAdmin((int) $saving->getOrderId());
                 $saving->setOrderState($order['state']);
                 $this->cartSavingsRepository->save($saving);
             } catch (\Exception $e) {
