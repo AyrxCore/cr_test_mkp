@@ -88,10 +88,10 @@
       </span>
 
       <RouterLink
-        :to="{ name: NewsPageList.NEWS }"
+        :to="{ name: MainPageList.HOME_PAGE }"
         class="mt-5 flex items-center"
       >
-        Retour à la liste
+        Retour à la page d'accueil
       </RouterLink>
     </div>
   </BaseTemplate>
@@ -103,7 +103,7 @@ import { useRoute } from 'vue-router'
 import { format } from 'date-fns'
 
 import router from '@/vuejs/router'
-import { NewsPageList } from '@/vuejs/router/pages-list'
+import { MainPageList } from '@/vuejs/router/pages-list'
 import { sendGtmEvent } from '@/vuejs/services/gtm'
 import { useNewsStore } from '@/vuejs/stores/news'
 import type { News } from '@/vuejs/types/News'
@@ -124,12 +124,7 @@ const newsData = computed((): News | null => {
   return newsStore.getNewsBySlug(slug) ?? null
 })
 
-const listUrl = ref([
-  {
-    name: 'Actualités',
-    url: { name: NewsPageList.NEWS },
-  },
-])
+const listUrl = ref([])
 
 const formattedDate = computed((): string => {
   if (newsData.value?.firstPublishedAt) {
