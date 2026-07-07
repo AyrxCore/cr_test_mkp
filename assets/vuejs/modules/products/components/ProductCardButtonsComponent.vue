@@ -20,8 +20,8 @@
   <!-- Fin bloc prix -->
 
   <!-- Bloc quantité -->
-  <div class="mb-1 flex h-[20%] justify-end">
-    <div class="mt-1 flex w-full justify-between">
+  <div class="mb-1 flex h-[20%] w-full">
+    <div class="mt-1 flex w-full justify-between items-center">
       <div v-if="hasOptions" class="mx-auto items-center">
         <RouterLink
           :to="{

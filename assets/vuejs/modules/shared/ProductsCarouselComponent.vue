@@ -28,7 +28,7 @@
       <SwiperSlide
         v-for="product in props.products"
         :key="product.id"
-        class="!flex !h-auto items-stretch justify-center overflow-hidden rounded-lg bg-white"
+        class="!flex !h-auto items-stretch overflow-hidden rounded-lg bg-white"
       >
         <ProductComponent :product="product" />
       </SwiperSlide>

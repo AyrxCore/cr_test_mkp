@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-1 mt-6 flex h-[30%] items-end justify-center">
+  <div class="mt-6 flex h-[30%] items-end justify-center">
     <div class="mx-auto items-center">
       <RouterLink
         :to="{

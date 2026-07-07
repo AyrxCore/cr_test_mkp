@@ -1,6 +1,6 @@
 <template>
   <div
-    class="mb-2 flex min-h-[490px] flex-col items-center rounded-md bg-white p-4 md:mb-0"
+    class="mb-2 flex min-h-[490px] w-full flex-col items-center rounded-md bg-white p-4 md:mb-0"
   >
     <!-- Bloc header -->
     <div class="flex h-[50px] w-full items-center justify-between">
@@ -48,7 +48,7 @@
     </div>
     <!-- Fin bloc header -->
 
-    <div class="flex h-full w-full flex-col items-center">
+    <div class="flex h-full w-full flex-col items-stretch">
       <RouterLink
         :to="{
           name: ProductPageList.PRODUCT,
@@ -84,7 +84,7 @@
       <!-- Fin bloc image -->
 
       <!-- Bloc texte -->
-      <div class="flex h-3/5 w-full flex-col justify-between">
+      <div class="flex h-3/5 w-full flex-col justify-between items-stretch">
         <RouterLink
           :to="{
             name: ProductPageList.PRODUCT,
