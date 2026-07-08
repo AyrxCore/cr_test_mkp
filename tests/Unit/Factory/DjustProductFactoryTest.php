@@ -23,6 +23,7 @@ use App\Service\Account\CurrentAccountProvider;
 use App\Service\Djust\DjustDataExtractor;
 use App\Service\Djust\Product\DjustProductTypeExtractor;
 use App\Service\Djust\Product\DjustPropertyFilter;
+use App\Service\Djust\DjustSellerService;
 use App\Service\Product\ProductDescriptionFormatter;
 use App\Service\Shipping\ShippingCostResolver;
 use Psr\Log\LoggerInterface;
@@ -75,10 +76,15 @@ uses()->group('UnitDjustProductFactory');
     $this->accordCadreService->shouldReceive('getAccordCadreContentByTarifId')->andReturn(null);
 
     $this->currentAccountProvider = Mockery::mock(CurrentAccountProvider::class);
-    $this->currentAccountProvider->shouldReceive('getRequiredAccount')->andReturn(Mockery::mock(Account::class));
+    $mockAccount = Mockery::mock(Account::class);
+    $mockAccount->shouldReceive('getDjustCustomerAccountId')->andReturn('customer-account-id');
+    $this->currentAccountProvider->shouldReceive('getRequiredAccount')->andReturn($mockAccount);
 
     $this->shippingCostResolver = Mockery::mock(ShippingCostResolver::class);
     $this->shippingCostResolver->shouldReceive('resolveByCategory')->andReturn(null);
+
+    $this->djustSellerService = Mockery::mock(DjustSellerService::class);
+    $this->djustSellerService->shouldReceive('getSeller')->andReturn(null);
 
     $this->sellerFactory = Mockery::mock(SellerFactory::class);
     $this->sellerFactory->shouldReceive('create')
@@ -126,6 +132,7 @@ uses()->group('UnitDjustProductFactory');
         $this->shippingCostResolver,
         $this->logger,
         new ProductDescriptionFormatter(),
+        $this->djustSellerService,
     );
 
     $this->product = \json_decode(\file_get_contents(__DIR__.'/../../Api/_data/_mocks/djust-response/products/product.json'), true);
@@ -359,6 +366,7 @@ uses()->group('UnitDjustProductFactory');
         $this->shippingCostResolver,
         $this->logger,
         new ProductDescriptionFormatter(),
+        $this->djustSellerService,
     );
 
     // Créer un produit de type ACCORD_CADRE
@@ -459,6 +467,7 @@ uses()->group('UnitDjustProductFactory');
         $shippingCostResolver,
         $this->logger,
         new ProductDescriptionFormatter(),
+        $this->djustSellerService,
     );
 
     $product = $this->product;
@@ -502,6 +511,7 @@ uses()->group('UnitDjustProductFactory');
         $this->shippingCostResolver,
         $this->logger,
         new ProductDescriptionFormatter(),
+        $this->djustSellerService,
     );
 
     $product = $this->product;
@@ -541,6 +551,7 @@ uses()->group('UnitDjustProductFactory');
         $this->shippingCostResolver,
         $this->logger,
         new ProductDescriptionFormatter(),
+        $this->djustSellerService,
     );
 
     $product = $this->product;
@@ -596,5 +607,93 @@ uses()->group('UnitDjustProductFactory');
 
     \expect($products)->toHaveCount(1)
         ->and($products[0]->getName())->not()->toBeEmpty();
+});
+
+\it('uses enriched seller data from getSeller when available', function () {
+    $supplierIdFromOffer = $this->offers[0]['supplier']['id'] ?? 'supplier-123';
+
+    $enrichedSellerData = [
+        'id' => $supplierIdFromOffer,
+        'name' => 'Enriched Seller Name',
+        'description' => 'Full description from API',
+    ];
+
+    $djustSellerService = Mockery::mock(DjustSellerService::class);
+    $djustSellerService->shouldReceive('getSeller')
+        ->with($supplierIdFromOffer, 'customer-account-id')
+        ->once()
+        ->andReturn($enrichedSellerData);
+
+    $capturedData = null;
+    $sellerFactory = Mockery::mock(SellerFactory::class);
+    $sellerFactory->shouldReceive('create')
+        ->once()
+        ->andReturnUsing(function (array $data) use (&$capturedData) {
+            $capturedData = $data;
+            $seller = new Seller();
+            $seller->setName($data['name'] ?? '');
+
+            return $seller;
+        });
+
+    $factory = new DjustProductFactory(
+        $this->accordCadreService,
+        $this->extractor,
+        $this->productTypeExtractor,
+        $this->variantMapper,
+        $this->categoryMapper,
+        $this->propertyFilter,
+        $this->accordCadreMapper,
+        $this->offerMapper,
+        $this->currentAccountProvider,
+        $sellerFactory,
+        $this->shippingCostResolver,
+        $this->logger,
+        new ProductDescriptionFormatter(),
+        $djustSellerService,
+    );
+
+    $factory->create(['product' => $this->product, 'offers' => $this->offers]);
+
+    \expect($capturedData)->toBe($enrichedSellerData);
+});
+
+\it('falls back to offer supplier data when getSeller returns null', function () {
+    $supplierFromOffer = $this->offers[0]['supplier'] ?? [];
+
+    $djustSellerService = Mockery::mock(DjustSellerService::class);
+    $djustSellerService->shouldReceive('getSeller')->andReturn(null);
+
+    $capturedData = null;
+    $sellerFactory = Mockery::mock(SellerFactory::class);
+    $sellerFactory->shouldReceive('create')
+        ->once()
+        ->andReturnUsing(function (array $data) use (&$capturedData) {
+            $capturedData = $data;
+            $seller = new Seller();
+
+            return $seller;
+        });
+
+    $factory = new DjustProductFactory(
+        $this->accordCadreService,
+        $this->extractor,
+        $this->productTypeExtractor,
+        $this->variantMapper,
+        $this->categoryMapper,
+        $this->propertyFilter,
+        $this->accordCadreMapper,
+        $this->offerMapper,
+        $this->currentAccountProvider,
+        $sellerFactory,
+        $this->shippingCostResolver,
+        $this->logger,
+        new ProductDescriptionFormatter(),
+        $djustSellerService,
+    );
+
+    $factory->create(['product' => $this->product, 'offers' => $this->offers]);
+
+    \expect($capturedData)->toBe($supplierFromOffer);
 });
 

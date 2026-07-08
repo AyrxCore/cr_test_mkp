@@ -21,6 +21,7 @@ use App\Service\Djust\Product\DjustPropertyFilter;
 use App\Service\Account\CurrentAccountProvider;
 use App\Service\Product\ProductDescriptionFormatter;
 use App\Service\Shipping\ShippingCostResolver;
+use App\Service\Djust\DjustSellerService;
 use Psr\Log\LoggerInterface;
 
 class DjustProductFactory extends AbstractFactory
@@ -39,6 +40,7 @@ class DjustProductFactory extends AbstractFactory
         private readonly ShippingCostResolver $shippingCostResolver,
         private readonly LoggerInterface $djustLogger,
         private readonly ProductDescriptionFormatter $descriptionFormatter,
+        private readonly DjustSellerService $djustSellerService,
     ) {
     }
 
@@ -68,8 +70,9 @@ class DjustProductFactory extends AbstractFactory
         );
 
         $product->setQuantity($masterProduct['quantity'] ?? 1);
-        $product->setSeller($this->sellerFactory->create($offers[0]['supplier']));
-
+        $supplierData = $offers[0]['supplier'] ?? [];
+        $fullSellerData = $this->djustSellerService->getSeller($supplierData['id'] ?? '', $account->getDjustCustomerAccountId()) ?? $supplierData;
+        $product->setSeller($this->sellerFactory->create($fullSellerData));
         $productType = $this->productTypeExtractor->extract($masterProduct);
         $product->setProductType($productType->value);
 
