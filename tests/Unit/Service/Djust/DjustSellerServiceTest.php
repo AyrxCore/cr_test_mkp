@@ -347,20 +347,20 @@ use App\Service\AccordCadre\AccordCadreService;
         ->andReturnUsing(function ($key, $callback) use ($searchResult) {
             $item = Mockery::mock(ItemInterface::class);
             $item->shouldReceive('expiresAfter')->once()->with(300);
-            
+
             $this->djustSearchService
                 ->shouldReceive('search')
                 ->once()
                 ->andReturn($searchResult);
-                
+
             return $callback($item);
         });
 
     $result = $this->service->getAdherentSellerTarifIdMap();
 
     \expect($result)->toBe([
-        'SELLER-1' => 'tarif-uuid-1',
-        'SELLER-2' => 'tarif-uuid-2',
+        'SELLER-1' => ['tarif-uuid-1'],
+        'SELLER-2' => ['tarif-uuid-2'],
     ]);
 })->group('UnitDjustSellerService');
 
@@ -393,20 +393,20 @@ use App\Service\AccordCadre\AccordCadreService;
         ->andReturnUsing(function ($key, $callback) use ($page0, $page1) {
             $item = Mockery::mock(ItemInterface::class);
             $item->shouldReceive('expiresAfter')->once()->with(300);
-            
+
             $this->djustSearchService
                 ->shouldReceive('search')
                 ->twice()
                 ->andReturn($page0, $page1);
-                
+
             return $callback($item);
         });
 
     $result = $this->service->getAdherentSellerTarifIdMap();
 
     \expect($result)->toBe([
-        'SELLER-1' => 'tarif-1',
-        'SELLER-2' => 'tarif-2',
+        'SELLER-1' => ['tarif-1'],
+        'SELLER-2' => ['tarif-2'],
     ]);
 })->group('UnitDjustSellerService');
 
@@ -432,18 +432,18 @@ use App\Service\AccordCadre\AccordCadreService;
         ->andReturnUsing(function ($key, $callback) use ($searchResult) {
             $item = Mockery::mock(ItemInterface::class);
             $item->shouldReceive('expiresAfter')->once()->with(300);
-            
+
             $this->djustSearchService
                 ->shouldReceive('search')
                 ->once()
                 ->andReturn($searchResult);
-                
+
             return $callback($item);
         });
 
     $result = $this->service->getAdherentSellerTarifIdMap();
 
-    \expect($result)->toBe(['SELLER-2' => 'tarif-2']);
+    \expect($result)->toBe(['SELLER-2' => ['tarif-2']]);
 })->group('UnitDjustSellerService');
 
 \it('skips FAT items with no OFFER_TARIF_ID custom field in getAdherentSellerTarifIdMap', function () {
@@ -468,18 +468,18 @@ use App\Service\AccordCadre\AccordCadreService;
         ->andReturnUsing(function ($key, $callback) use ($searchResult) {
             $item = Mockery::mock(ItemInterface::class);
             $item->shouldReceive('expiresAfter')->once()->with(300);
-            
+
             $this->djustSearchService
                 ->shouldReceive('search')
                 ->once()
                 ->andReturn($searchResult);
-                
+
             return $callback($item);
         });
 
     $result = $this->service->getAdherentSellerTarifIdMap();
 
-    \expect($result)->toBe(['SELLER-2' => 'tarif-2']);
+    \expect($result)->toBe(['SELLER-2' => ['tarif-2']]);
 })->group('UnitDjustSellerService');
 
 \it('returns empty map when no FAT products found in getAdherentSellerTarifIdMap', function () {
@@ -495,12 +495,12 @@ use App\Service\AccordCadre\AccordCadreService;
         ->andReturnUsing(function ($key, $callback) use ($searchResult) {
             $item = Mockery::mock(ItemInterface::class);
             $item->shouldReceive('expiresAfter')->once()->with(300);
-            
+
             $this->djustSearchService
                 ->shouldReceive('search')
                 ->once()
                 ->andReturn($searchResult);
-                
+
             return $callback($item);
         });
 
@@ -534,18 +534,61 @@ use App\Service\AccordCadre\AccordCadreService;
         ->andReturnUsing(function ($key, $callback) use ($searchResult) {
             $item = Mockery::mock(ItemInterface::class);
             $item->shouldReceive('expiresAfter')->once()->with(300);
-            
+
             $this->djustSearchService
                 ->shouldReceive('search')
                 ->once()
                 ->andReturn($searchResult);
-                
+
             return $callback($item);
         });
 
     $result = $this->service->getAdherentSellerTarifIdMap();
 
-    \expect($result)->toBe(['SELLER-1' => 'tarif-wrapped']);
+    \expect($result)->toBe(['SELLER-1' => ['tarif-wrapped']]);
+})->group('UnitDjustSellerService');
+
+\it('handles multiple FAT products from same seller in getAdherentSellerTarifIdMap', function () {
+    $searchResult = [
+        'products' => [
+            'content' => [
+                [
+                    'supplier' => ['id' => 'SELLER-ANCV'],
+                    'offer' => ['customFields' => [['externalId' => 'OFFER_TARIF_ID', 'value' => 'tarif-ancv-1']]],
+                ],
+                [
+                    'supplier' => ['id' => 'SELLER-OTHER'],
+                    'offer' => ['customFields' => [['externalId' => 'OFFER_TARIF_ID', 'value' => 'tarif-other']]],
+                ],
+                [
+                    'supplier' => ['id' => 'SELLER-ANCV'],
+                    'offer' => ['customFields' => [['externalId' => 'OFFER_TARIF_ID', 'value' => 'tarif-ancv-2']]],
+                ],
+            ],
+            'totalPages' => 1,
+        ],
+    ];
+
+    $this->cache->shouldReceive('get')
+        ->once()
+        ->andReturnUsing(function ($key, $callback) use ($searchResult) {
+            $item = Mockery::mock(ItemInterface::class);
+            $item->shouldReceive('expiresAfter')->once()->with(300);
+
+            $this->djustSearchService
+                ->shouldReceive('search')
+                ->once()
+                ->andReturn($searchResult);
+
+            return $callback($item);
+        });
+
+    $result = $this->service->getAdherentSellerTarifIdMap();
+
+    \expect($result)->toBe([
+        'SELLER-ANCV' => ['tarif-ancv-1', 'tarif-ancv-2'],
+        'SELLER-OTHER' => ['tarif-other'],
+    ]);
 })->group('UnitDjustSellerService');
 
 // ─── getValidSellers() ──────────────────────────────────────────────────────
@@ -591,12 +634,12 @@ use App\Service\AccordCadre\AccordCadreService;
         ->andReturnUsing(function ($key, $callback) use ($fatSearchResult) {
             $item = Mockery::mock(ItemInterface::class);
             $item->shouldReceive('expiresAfter')->once()->with(300);
-            
+
             $this->djustSearchService
                 ->shouldReceive('search')
                 ->once()
                 ->andReturn($fatSearchResult);
-                
+
             return $callback($item);
         });
 

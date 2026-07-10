@@ -46,9 +46,12 @@ class DjustSellerService
         $storyblokTarifIds = $this->accordCadreService->getTarifIds();
 
         $validSellerIds = [];
-        foreach ($sellerTarifIdMap as $sellerId => $tarifId) {
-            if (isset($storyblokTarifIds[$tarifId])) {
-                $validSellerIds[$sellerId] = true;
+        foreach ($sellerTarifIdMap as $sellerId => $tarifIds) {
+            foreach ($tarifIds as $tarifId) {
+                if (isset($storyblokTarifIds[$tarifId])) {
+                    $validSellerIds[$sellerId] = true;
+                    break;
+                }
             }
         }
 
@@ -151,7 +154,10 @@ class DjustSellerService
 
                     $tarifId = $this->extractTarifIdFromRawSearchItem($product);
                     if ($tarifId !== null) {
-                        $map[$supplierId] = $tarifId;
+                        if (!isset($map[$supplierId])) {
+                            $map[$supplierId] = [];
+                        }
+                        $map[$supplierId][] = $tarifId;
                     }
                 }
 
