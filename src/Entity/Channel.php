@@ -106,6 +106,9 @@ class Channel
     #[Groups(['channel:get'])]
     private Collection $channelOptions;
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null;
+
     public function __construct()
     {
         $this->adherents = new ArrayCollection();
@@ -233,5 +236,16 @@ class Channel
         }
 
         return null;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtOnUpdate(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable();
     }
 }
