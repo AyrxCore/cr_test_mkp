@@ -9,7 +9,6 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\OpenApi\Model\Operation;
-use App\Controller\Api\SellerPromotions;
 use App\State\Provider\SellerProvider;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -18,14 +17,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Get(
             uriTemplate: '/sellers/{id}',
             requirements: ['id' => '\\d+'],
-        ),
-        new Get(
-            uriTemplate: '/sellers/{id}/promotions',
-            requirements: ['id' => '\\d+'],
-            controller: SellerPromotions::class,
-            openapi: new Operation(
-                summary: 'Get seller promotions"'
-            )
         ),
         new GetCollection(
             openapi: new Operation(

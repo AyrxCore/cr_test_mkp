@@ -28,11 +28,6 @@ use Symfony\Component\Uid\Uuid;
         'djustCustomerUserId' => $this->faker->word,
         'djustUsername' => null,
         'djustPassword' => $this->faker->word,
-        'upplerSubAccountId' => $this->faker->numberBetween(1, 1000),
-        'upplerUserId' => $this->faker->numberBetween(1, 1000),
-        'upplerCompanyId' => $this->faker->numberBetween(1, 1000),
-        'upplerSubAccountClientId' => $this->faker->word,
-        'upplerSubAccountClientSecret' => $this->faker->word,
     ];
 });
 
@@ -126,26 +121,6 @@ use Symfony\Component\Uid\Uuid;
     ],
     'wrong djustPassword type' => [
         'djustPassword',
-        1234,
-    ],
-    'wrong upplerSubAccountId type' => [
-        'upplerSubAccountId',
-        'test',
-    ],
-    'wrong upplerUserId type' => [
-        'upplerUserId',
-        'test',
-    ],
-    'wrong upplerCompanyId type' => [
-        'upplerCompanyId',
-        'test',
-    ],
-    'wrong upplerSubAccountClientId type' => [
-        'upplerSubAccountClientId',
-        1234,
-    ],
-    'wrong upplerSubAccountClientSecret type' => [
-        'upplerSubAccountClientSecret',
         1234,
     ],
 ])->group('ApiUserAccountProcessorTest');

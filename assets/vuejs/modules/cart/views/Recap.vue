@@ -2,7 +2,7 @@
   <div class="mb-2 mt-8 flex items-center justify-between">
     <h3 class="text-title-primary">
       Panier
-      <span class="uppercase">{{ user.externalApiData.buyer.name }}</span>
+      <span class="uppercase">{{ user.externalApiData.customerAccount.name }}</span>
     </h3>
     <!--    <ButtonComponent-->
     <!--      v-if="-->

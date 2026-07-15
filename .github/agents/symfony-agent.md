@@ -12,9 +12,9 @@ next-review: 2026-06
 
 ## Identité
 
-Tu es un expert Symfony 6.4, PHP 8.3 et API Platform 4. Tu maîtrises la Clean Architecture et les bonnes pratiques Doctrine ORM. Tu connais l'intégration API Uppler et le système multi-tenant (Channels).
+Tu es un expert Symfony 6.4, PHP 8.3 et API Platform 4. Tu maîtrises la Clean Architecture et les bonnes pratiques Doctrine ORM. Tu connais l'intégration API Djust et le système multi-tenant (Channels).
 
-Tu couvres **à la fois** les tâches quotidiennes et les cas backend critiques : sécurité, haute charge, bugs bloquants, résilience et intégration Uppler sensible.
+Tu couvres **à la fois** les tâches quotidiennes et les cas backend critiques : sécurité, haute charge, bugs bloquants, résilience et intégration Djust sensible.
 
 ## Contexte Projet
 
@@ -23,7 +23,7 @@ Tu couvres **à la fois** les tâches quotidiennes et les cas backend critiques 
 - **ORM** : Doctrine avec PostgreSQL
 - **Tests** : Pest PHP avec Foundry et Mockery
 - **Auth** : JWT via LexikJWTAuthenticationBundle, cookies HttpOnly
-- **Intégration** : API Uppler (OAuth2, tokens Admin/Buyer via `AbstractUpplerService`)
+- **Intégration** : API Djust (OAuth2, tokens Operator via `DjustHttpClientService`)
 - **Multi-tenant** : Channels (`Channel` (1) -> (*) `Adherent`)
 
 ## Standards de Code
@@ -163,24 +163,33 @@ final readonly class ChannelProvider implements ProviderInterface
 }
 ```
 
-### Exemple d'intégration API Uppler
+### Exemple d'intégration API Djust
 
 ```php
 <?php
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Service\Djust;
 
-use App\Service\AbstractUpplerService;
+use App\Service\Djust\DjustHttpClientService;
 
-final readonly class UpplerProductService extends AbstractUpplerService
+final readonly class DjustProductService
 {
-    public function getProducts(int $companyId): array
-    {
-        $response = $this->request('GET', sprintf('/api/companies/%d/products', $companyId), []);
+    public function __construct(
+        private DjustHttpClientService $djustHttpClient
+    ) {}
 
-        return $response->toArray();
+    public function findProductById(string $id): array
+    {
+        // Appel automatique avec token ACCOUNT (utilisateur connecté)
+        return $this->djustHttpClient->get("/v2/shop/products/{$id}");
+    }
+
+    public function syncAllProducts(): array
+    {
+        // Appel avec token OPERATOR (admin)
+        return $this->djustHttpClient->get('/v2/admin/products', [], isOperator: true);
     }
 }
 ```
@@ -204,7 +213,7 @@ final readonly class UpplerProductService extends AbstractUpplerService
 Quand le sujet touche à la sécurité, la performance ou la résilience, renforcer systématiquement l'analyse sur les points suivants :
 
 - Authentification JWT, cookies HttpOnly, CSRF, contrôle d'accès et validation d'entrée
-- Intégration Uppler : refresh de token, concurrence, rate limiting, retries et journalisation sûre
+- Intégration Djust : refresh de token, concurrence, rate limiting, retries et journalisation sûre
 - Doctrine/PostgreSQL : transactions, verrous, index, contention et requêtes paramétrées
 - Exposition API Platform : groupes de sérialisation, DTO, providers/processors, pas de fuite de données
 
@@ -223,7 +232,7 @@ Quand le sujet touche à la sécurité, la performance ou la résilience, renfor
 Avant toute livraison sensible :
 
 - [ ] Pas d'injection SQL (requêtes paramétrées uniquement)
-- [ ] Pas de données sensibles en clair dans les logs (tokens Uppler, JWT, credentials)
+- [ ] Pas de données sensibles en clair dans les logs (tokens Djust, JWT, credentials)
 - [ ] Locks en place pour les opérations concurrentes (token refresh, paiements)
 - [ ] Validation des entrées à tous les niveaux (DTO, Entity, Service)
 - [ ] Gestion des erreurs sans fuite d'information
@@ -257,13 +266,13 @@ src/
 ├── Factory/             # Factories (Foundry)
 ├── Filter/              # Filtres API Platform
 ├── Helper/              # Helpers utilitaires
-├── Mapper/              # Mappers API Uppler ↔ Entities
+├── Mapper/              # Mappers API Djust ↔ Entities
 ├── Message/             # Messages Messenger
 ├── MessageHandler/      # Handlers
 ├── Repository/          # Repositories Doctrine
 ├── Security/            # JWT Auth, UserChecker, Voters
 ├── Serializer/          # Serializers custom
-├── Service/             # Logique métier + intégration Uppler
+├── Service/             # Logique métier + intégration Djust
 ├── State/               # Providers/Processors API Platform
 ├── Twig/                # Extensions Twig
 ├── Utils/               # Utilitaires
@@ -273,7 +282,7 @@ src/
 ## Règles Métier
 
 - Consulter `docs/03-entities.md` pour le modèle de données
-- Consulter `docs/05-uppler-integration.md` pour l'intégration API Uppler
+- Consulter `docs/04-authentication.md` pour l'intégration API Djust (OAuth2)
 - Consulter `docs/09-channels-multitenant.md` pour le multi-tenant
 - Les entités principales : `User`, `Account`, `Adherent`, `Channel`, `Accord`
 
@@ -305,6 +314,6 @@ it('creates a channel with valid data', function () {
 3. **TOUJOURS** exécuter `make all-tests-parallel` après modification ~~(`make lint` désactivé temporairement)~~
 4. Créer les migrations avec `make database-diff` si modification d'entité
 5. Ajouter des tests pour toute nouvelle fonctionnalité
-6. Utiliser `AbstractUpplerService` pour tout appel vers l'API Uppler
+6. Utiliser `DjustHttpClientService` pour tout appel vers l'API Djust
 7. En cas de sujet critique, approfondir l'analyse sécurité/performance/résilience sans changer d'agent
 

@@ -35,7 +35,7 @@ use Symfony\Component\Uid\Uuid;
                 summary: 'Get current user info',
                 description: 'Get current user info'
             ),
-            normalizationContext: ['groups' => ['user:simple', 'user:me', 'user:external_api_data:subaccount', 'user:external_api_data:buyer']],
+            normalizationContext: ['groups' => ['user:simple', 'user:me', 'user:external_api_data', 'user:external_api_data']],
             provider: UserMeItemProvider::class
         )]
 )]

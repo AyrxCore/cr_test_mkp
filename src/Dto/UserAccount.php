@@ -22,20 +22,20 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Get(
             openapi: new Operation(
                 summary: 'Editer un account',
-                description: 'Permet d\'enregistrer des modifications dans un account uppler'
+                description: 'Permet d\'enregistrer des modifications dans un account Djust'
             )
         ),
         new Patch(
             openapi: new Operation(
                 summary: 'Modifier un account',
-                description: 'Permet d\'enregistrer des modifications dans un account uppler'
+                description: 'Permet d\'enregistrer des modifications dans un account Djust'
             ),
             validate: true,
         ),
         new Post(
             openapi: new Operation(
-                summary: 'Déclarer un account Uppler',
-                description: 'Permet de créer un account Uppler sur la marketplace\n            en passant toutes les infos de ce compte. Un compte utilisateur est automatiquement créé si nécessaire'
+                summary: 'Déclarer un account Djust',
+                description: 'Permet de créer un account Djust sur la marketplace en passant toutes les infos de ce compte. Un compte utilisateur est automatiquement créé si nécessaire'
             ),
             validate: true,
         ),
@@ -111,36 +111,6 @@ final class UserAccount
     private ?string $phone = '';
 
     private ?string $serviceFonction = '';
-
-    #[Assert\AtLeastOneOf([
-        new Assert\IsNull(),
-        new Assert\Type('integer', message: '(upplerSubAccountId) integer required'),
-    ])]
-    private ?int $upplerSubAccountId = null;
-
-    #[Assert\AtLeastOneOf([
-        new Assert\IsNull(),
-        new Assert\Type('integer', message: '(upplerUserId) integer required'),
-    ])]
-    private ?int $upplerUserId = null;
-
-    #[Assert\AtLeastOneOf([
-        new Assert\IsNull(),
-        new Assert\Type('integer', message: '(upplerCompanyId) integer required'),
-    ])]
-    private ?int $upplerCompanyId = null;
-
-    #[Assert\AtLeastOneOf([
-        new Assert\IsNull(),
-        new Assert\Type('string', message: '(upplerSubAccountClientId) string required'),
-    ])]
-    private ?string $upplerSubAccountClientId = null;
-
-    #[Assert\AtLeastOneOf([
-        new Assert\IsNull(),
-        new Assert\Type('string', message: '(upplerSubAccountClientSecret) string required'),
-    ])]
-    private ?string $upplerSubAccountClientSecret = null;
 
     public function getAccountId(): ?Uuid
     {
@@ -342,66 +312,6 @@ final class UserAccount
     public function setChannelCode(?string $channelCode): self
     {
         $this->channelCode = $channelCode;
-
-        return $this;
-    }
-
-    public function getUpplerSubAccountId(): ?int
-    {
-        return $this->upplerSubAccountId;
-    }
-
-    public function setUpplerSubAccountId(?int $upplerSubAccountId): self
-    {
-        $this->upplerSubAccountId = $upplerSubAccountId;
-
-        return $this;
-    }
-
-    public function getUpplerUserId(): ?int
-    {
-        return $this->upplerUserId;
-    }
-
-    public function setUpplerUserId(?int $upplerUserId): self
-    {
-        $this->upplerUserId = $upplerUserId;
-
-        return $this;
-    }
-
-    public function getUpplerCompanyId(): ?int
-    {
-        return $this->upplerCompanyId;
-    }
-
-    public function setUpplerCompanyId(?int $upplerCompanyId): self
-    {
-        $this->upplerCompanyId = $upplerCompanyId;
-
-        return $this;
-    }
-
-    public function getUpplerSubAccountClientId(): ?string
-    {
-        return $this->upplerSubAccountClientId;
-    }
-
-    public function setUpplerSubAccountClientId(?string $upplerSubAccountClientId): self
-    {
-        $this->upplerSubAccountClientId = $upplerSubAccountClientId;
-
-        return $this;
-    }
-
-    public function getUpplerSubAccountClientSecret(): ?string
-    {
-        return $this->upplerSubAccountClientSecret;
-    }
-
-    public function setUpplerSubAccountClientSecret(?string $upplerSubAccountClientSecret): self
-    {
-        $this->upplerSubAccountClientSecret = $upplerSubAccountClientSecret;
 
         return $this;
     }

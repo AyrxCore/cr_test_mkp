@@ -10,7 +10,7 @@ export function getImage(urlImage: string): string {
   return new URL(urlImage, import.meta.url).href
 }
 
-export function getUpplerImage(path: string | null) {
+export function getMediaUrl(path: string | null) {
   return path !== null ? path : getImage(imgDefault)
 }
 

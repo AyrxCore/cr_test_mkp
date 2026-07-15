@@ -87,7 +87,7 @@ L'approche est hybride et s'adapte à la complexité de la tâche via 3 niveaux 
 
 | Agent | Fichier | Rôle |
 |-------|---------|------|
-| **Symfony** | `.github/agents/symfony-agent.md` | CRUD, endpoints, logique métier, intégration Uppler, sécurité et cas critiques backend |
+| **Symfony** | `.github/agents/symfony-agent.md` | CRUD, endpoints, logique métier, intégration Djust, sécurité et cas critiques backend |
 | **Vue.js** | `.github/agents/vuejs-agent.md` | Composants, formulaires, stores, style, performance et cas critiques frontend |
 | **Architecte** | `.github/agents/architect-agent.md` | Validation de patterns, arbitrages, ADR, migrations et décisions structurantes |
 
@@ -162,7 +162,7 @@ Pour créer une revue : GitHub → New Issue → "🔄 Revue IA Trimestrielle"
 | # | Règle | Explication |
 |---|-------|-------------|
 | 1 | **Ne jamais commiter sans relire** | L'IA peut halluciner, proposer du code obsolète ou introduire des failles logiques. La relecture est obligatoire. |
-| 2 | **Protection des données sensibles** | Ne jamais soumettre de mots de passe, clés API Uppler, tokens JWT ou données clients dans les prompts. |
+| 2 | **Protection des données sensibles** | Ne jamais soumettre de mots de passe, clés API Djust, tokens JWT ou données clients dans les prompts. |
 | 3 | **Primauté du contexte** | Une erreur de l'IA provient souvent d'un contexte insuffisant. Fournir les bons fichiers et règles métier en amont. |
 | 4 | **Refactoring immédiat** | Si l'IA génère du code dupliqué ou complexe, demander immédiatement une simplification. |
 | 5 | **Esprit critique** | Toujours challenger la solution proposée. Si elle semble trop complexe, demander une approche plus simple. |
@@ -175,5 +175,4 @@ Pour créer une revue : GitHub → New Issue → "🔄 Revue IA Trimestrielle"
 
 - **Guide pratique** : [`docs/11-ai-driven-development.md`](./11-ai-driven-development.md) — Exemples concrets d'utilisation des agents et prompts.
 - **Architecture** : [`docs/02-architecture.md`](./02-architecture.md) — Architecture technique du projet.
-- **Intégration Uppler** : [`docs/05-uppler-integration.md`](./05-uppler-integration.md) — API Uppler et OAuth2.
 

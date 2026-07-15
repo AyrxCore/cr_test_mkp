@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\Api\Buyer;
+namespace App\Controller\Api;
 
 use App\Context\ChannelContext;
 use App\Dto\AccountAccordCadre;
@@ -10,7 +10,6 @@ use App\Repository\AccordRepository;
 use App\Repository\AccountRepository;
 use App\Service\AccordCadreSubscriptionService;
 use App\Service\RequestContactMailerService;
-use App\Service\UpplerProductService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,7 +23,6 @@ class ProductApiController extends AbstractController
 {
     public function __construct(
         private RequestStack $requestStack,
-        private UpplerProductService $upplerProductService,
         private AccordCadreSubscriptionService $accordCadreSubscriptionService,
         private RequestContactMailerService $requestContactMailerService,
         private readonly AccountRepository $accountRepository,

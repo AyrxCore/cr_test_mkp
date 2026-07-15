@@ -1,8 +1,5 @@
 export interface SavedCartProduct {
   id?: string
-  upplerProductId?: number
-  upplerVariantId?: number
-  upplerProductName?: string
   quantity?: number
 }
 

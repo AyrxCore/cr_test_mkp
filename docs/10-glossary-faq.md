@@ -9,12 +9,12 @@
 | **Adherent** | Entreprise adhérente à un channel, provient du système Neo/Sugar |
 | **Accord** | Accord commercial entre un adhérent et un partenaire fournisseur |
 | **AccordStatut** | État de souscription d'un adhérent à un accord |
-| **Account** | Compte utilisateur lié à Uppler (credentials OAuth) |
+| **Account** | Compte utilisateur lié à Djust (credentials OAuth) |
 | **Buyer** | Acheteur sur la marketplace (utilisateur final) |
 | **Channel** | Canal/tenant de l'application (multi-marque) |
 | **Partner** | Partenaire fournisseur référencé sur la marketplace |
 | **PartnerStore** | Magasin physique d'un partenaire |
-| **Seller** | Vendeur sur Uppler |
+| **Seller** | Vendeur sur Djust |
 | **WhiteLabel** | Mode marque blanche (sans logo Qantis) |
 
 ### Termes techniques
@@ -28,17 +28,16 @@
 | **Pinia** | State management pour Vue.js 3 |
 | **State Provider** | API Platform : fournit les données pour une opération |
 | **State Processor** | API Platform : traite les données en entrée |
-| **Uppler** | Plateforme SaaS de marketplace B2B |
+| **Djust** | Plateforme SaaS de marketplace B2B |
 | **Voter** | Symfony : contrôle d'accès fin sur les ressources |
 
-### Identifiants Uppler
+### Identifiants Djust
 
 | ID | Description |
 |----|-------------|
-| `upplerUserId` | ID de l'utilisateur dans Uppler |
-| `upplerSubAccountId` | ID du sous-compte (sub-account) dans Uppler |
-| `upplerCompanyId` | ID de l'entreprise (company) dans Uppler |
-| `upplerSellerId` | ID du vendeur (seller) dans Uppler |
+| `djustCustomerAccountId` | ID du customer account dans Djust |
+| `djustCustomerUserId` | ID du customer user dans Djust |
+| `djustSellerId` | ID du vendeur (seller) dans Djust |
 
 ---
 
@@ -79,16 +78,20 @@ export const useMyStore = defineStore('myStore', {
 
 ---
 
-**Q: Comment appeler l'API Uppler ?**
+**Q: Comment appeler l'API Djust ?**
 
-R: Toujours passer par un service qui étend `AbstractUpplerService` :
+R: Toujours utiliser `DjustHttpClientService` :
 
 ```php
-class MyUpplerService extends AbstractUpplerService
+class MyDjustService
 {
+    public function __construct(
+        private readonly DjustHttpClientService $djustHttpClient
+    ) {}
+
     public function myMethod(): array
     {
-        return $this->request('GET', 'v1/buyer/endpoint');
+        return $this->djustHttpClient->get('v2/shop/endpoint');
     }
 }
 ```
@@ -123,11 +126,11 @@ R: Dans un cookie HttpOnly nommé `BEARER`. Il n'est pas accessible en JavaScrip
 
 ---
 
-**Q: Où est stocké le token Uppler ?**
+**Q: Où est stocké le token Djust ?**
 
 R: 
-- **Token User** : En session PHP (clé `access_token`)
-- **Token Admin** : Dans un fichier `var/token.txt`
+- **Token Buyer** : En session PHP (clés `djust_account_access_token`, `djust_account_refresh_token`, `djust_account_expires_at`)
+- **Token Operator** : Dans le cache Symfony (clé `djust_operator_token`)
 
 ---
 

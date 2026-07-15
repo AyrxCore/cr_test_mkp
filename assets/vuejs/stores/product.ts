@@ -136,18 +136,6 @@ export const useProductStore = defineStore('product', {
 
       return product
     },
-    /**
-     * @deprecated Les variants sont inclus dans les données du produit
-     * Utilisé uniquement pour les anciennes commandes Uppler
-     */
-    async findVariantById(id) {
-      console.warn(
-        'findVariantById is deprecated - variants are now included in product data',
-      )
-      // Méthode conservée temporairement pour compatibilité avec anciennes commandes Uppler
-      // TODO: Migrer les composants qui utilisent cette méthode
-      return null
-    },
     async findAccordCadreById(id) {
       const alertStore = useAlertStore()
       try {

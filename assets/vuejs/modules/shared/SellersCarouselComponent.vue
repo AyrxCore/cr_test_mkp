@@ -31,7 +31,7 @@
         >
           <img
             :alt="seller?.name"
-            :src="getUpplerImage(seller?.avatar)"
+            :src="getMediaUrl(seller?.avatar)"
             class="pointer h-[107px] w-full cursor-pointer object-contain"
             @click="emit('click-partner-slider', seller?.name)"
           />
@@ -46,7 +46,7 @@ import { SwiperSlide } from 'swiper/vue'
 import { storeToRefs } from 'pinia'
 
 import { ProductPageList } from '@/vuejs/router/pages-list'
-import { getUpplerImage } from '@/vuejs/services/utils'
+import { getMediaUrl } from '@/vuejs/services/utils'
 import { useSellerStore } from '@/vuejs/stores/seller'
 import { Seller } from '@/vuejs/types/Seller'
 

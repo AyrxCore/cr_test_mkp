@@ -73,36 +73,35 @@ const productStore = useProductStore()
 const product = ref<Product>()
 const variantData = ref()
 const productNotFound = ref(false)
-const quantity = ref<number>(parseInt(props.savedCartProduct.quantity))
+const quantity = ref<number>(props.savedCartProduct.quantity)
 
 onMounted(async (): Promise<void> => {
-  product.value = await productStore.initProduct(
-    props.savedCartProduct.upplerProductId,
-  )
-  if (!product.value) {
-    productNotFound.value = true
-  } else {
-    if (Object.entries(product.value?.variants).length > 1) {
-      // TODO: Migrer vers Djust - les variants sont maintenant inclus dans les données du produit
-      variantData.value = await productStore.findVariantById(
-        props.savedCartProduct.upplerVariantId,
-      )
-    }
-    await emit('changeQuantity', {
-      variantId: props.savedCartProduct.upplerVariantId,
-      quantity: quantity.value,
-      price: product.value.price * quantity.value,
-    })
-  }
+  // product.value = await productStore.initProduct(
+  //   props.savedCartProduct.upplerProductId,
+  // )
+  // if (!product.value) {
+  //   productNotFound.value = true
+  // } else {
+  //   if (Object.entries(product.value?.variants).length > 1) {
+  //     variantData.value = await productStore.findVariantById(
+  //       props.savedCartProduct.upplerVariantId,
+  //     )
+  //   }
+  //   await emit('changeQuantity', {
+  //     variantId: props.savedCartProduct.upplerVariantId,
+  //     quantity: quantity.value,
+  //     price: product.value.price * quantity.value,
+  //   })
+  // }
 })
 
 const changeQuantity = async (event) => {
-  quantity.value = event.quantity
-  await emit('changeQuantity', {
-    variantId: props.savedCartProduct.upplerVariantId,
-    quantity: quantity.value,
-    price: product.value.price * quantity.value,
-  })
+  // quantity.value = event.quantity
+  // await emit('changeQuantity', {
+  //   variantId: props.savedCartProduct.upplerVariantId,
+  //   quantity: quantity.value,
+  //   price: product.value.price * quantity.value,
+  // })
 }
 
 const productImage = computed((): string => {
@@ -110,15 +109,15 @@ const productImage = computed((): string => {
 })
 
 const productSlug = computed(() => {
-  return product.value
-    ? product.value.slug
-    : props.savedCartProduct.upplerProductId
+  // return product.value
+  //   ? product.value.slug
+  //   : props.savedCartProduct.upplerProductId
 })
 
-const productName = computed((): string => {
-  return product.value
-    ? product.value.name
-    : props.savedCartProduct.upplerProductName
+const productName = computed(() => {
+  // return product.value
+  //   ? product.value.name
+  //   : props.savedCartProduct.upplerProductName
 })
 
 const productReference = computed((): string => {

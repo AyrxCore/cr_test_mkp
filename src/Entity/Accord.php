@@ -29,7 +29,7 @@ class Accord
     #[ORM\Column(type: 'uuid', unique: true)]
     private ?Uuid $id = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'accords')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Partner $partner = null;
 

@@ -16,7 +16,7 @@ class DjustAuthenticationService
         private readonly DjustHttpClientService $djustHttpClientService,
         private readonly RequestStack $requestStack,
         private readonly LoggerInterface $djustLogger,
-        private readonly LogAccountConnectionService $logAccountConnectionService,
+        private readonly LogAccountConnectionService $logAccountConnectionService
     ) {
     }
 
@@ -33,10 +33,13 @@ class DjustAuthenticationService
         $session = $this->requestStack->getSession();
 
         try {
-            $this->djustHttpClientService->getValidAccountToken();
+            $accessToken = $this->djustHttpClientService->getValidAccountToken();
+
+            $tokenObject = (object) ['access_token' => $accessToken];
+            $session->set('access_token', $tokenObject);
 
             if ($isConnectionLogged) {
-                $this->logAccountConnectionService->createLog($account);
+                 $this->logAccountConnectionService->createLog($account);
             }
 
             $this->djustLogger->info('Authentification Djust réussie', [
@@ -53,6 +56,7 @@ class DjustAuthenticationService
             ]);
 
             $session->remove(CurrentAccountProvider::SESSION_KEY_ACCOUNT);
+            $session->remove('access_token');
 
             return false;
         }

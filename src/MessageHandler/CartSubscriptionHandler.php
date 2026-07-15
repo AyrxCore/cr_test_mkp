@@ -7,13 +7,12 @@ namespace App\MessageHandler;
 use App\Dto\Product;
 use App\Message\CartSubscription;
 use App\Service\AccordCadreSubscriptionService;
-use App\Service\UpplerProductService;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
 readonly class CartSubscriptionHandler
 {
-    public function __construct(private AccordCadreSubscriptionService $accordCadreSubscriptionService, private UpplerProductService $upplerProductService)
+    public function __construct(private AccordCadreSubscriptionService $accordCadreSubscriptionService)
     {
     }
 
@@ -22,9 +21,11 @@ readonly class CartSubscriptionHandler
         $productsIds = $message->getProductsIds();
 
         foreach ($productsIds as $productId) {
+//            TODO: Décommenter et adapter le rattachement automatique (récup des produits du panier et de l'accountId) pour créer un message CartSubscription)
             /** @var Product $product */
-            $product = $this->upplerProductService->findProductByIdForAdmin($productId);
-            $accordId = $this->getAccordId($product['properties']);
+//            $product = $this->upplerProductService->findProductByIdForAdmin($productId);
+//            $accordId = $this->getAccordId($product['properties']);
+            $accordId = null;
             if ($accordId) {
                 $params = [
                     'accordId' => $accordId,

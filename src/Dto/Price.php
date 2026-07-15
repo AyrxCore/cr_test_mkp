@@ -29,6 +29,9 @@ final class Price implements \JsonSerializable
         return $this->displayPrice;
     }
 
+    /**
+     * @param float|null $displayPrice
+     */
     public function setDisplayPrice(?float $displayPrice): void
     {
         $this->displayPrice = $displayPrice;

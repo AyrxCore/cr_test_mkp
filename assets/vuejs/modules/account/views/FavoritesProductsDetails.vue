@@ -192,16 +192,16 @@ const onMoveProduct = async (event) => {
 
 const addProductSelectedToList = async (event) => {
   try {
-    listItemToAddCart.value.push({
-      id: event.selectedProduct.id,
-      variantId: event.selectedProduct.upplerVariantId,
-      product: event.product,
-    })
-
-    cartProducts.value.push({
-      variantId: event.selectedProduct.upplerVariantId,
-      quantity: 1,
-    })
+    // listItemToAddCart.value.push({
+    //   id: event.selectedProduct.id,
+    //   variantId: event.selectedProduct.upplerVariantId,
+    //   product: event.product,
+    // })
+    //
+    // cartProducts.value.push({
+    //   variantId: event.selectedProduct.upplerVariantId,
+    //   quantity: 1,
+    // })
   } catch (error) {}
 }
 
@@ -210,10 +210,10 @@ const removeProductSelectedToList = async (event) => {
     listItemToAddCart.value = listItemToAddCart.value.filter(
       (product) => product.id !== event.selectedProduct.id,
     )
-    cartProducts.value = cartProducts.value.filter(
-      (cartProduct) =>
-        cartProduct.variantId !== event.selectedProduct.upplerVariantId,
-    )
+    // cartProducts.value = cartProducts.value.filter(
+    //   (cartProduct) =>
+    //     cartProduct.variantId !== event.selectedProduct.upplerVariantId,
+    // )
   } catch (error) {}
 }
 const addToCart = async () => {

@@ -10,6 +10,7 @@ use App\Dto\Product;
 use App\Enum\Djust\DjustCartItemAction;
 use Psr\Log\LoggerInterface;
 use Sentry\State\Scope;
+
 use function Sentry\captureMessage;
 use function Sentry\withScope;
 
@@ -147,6 +148,3 @@ class ProductFdpSyncService
         return $item;
     }
 }
-
-
-

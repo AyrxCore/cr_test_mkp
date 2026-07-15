@@ -22,7 +22,7 @@ tests/
 ├── ApiTestCase.php         # Classe de base pour tests API
 ├── IntegrationTestCase.php # Classe de base pour tests d'intégration
 ├── UnitTestCase.php        # Classe de base pour tests unitaires
-├── MockClientCallback.php  # Mock du client HTTP Uppler
+├── MockClientCallback.php  # Mock du client HTTP Djust
 ├── Pest.php                # Configuration Pest
 └── bootstrap.php           # Bootstrap des tests
 ```
@@ -145,7 +145,7 @@ use App\Entity\CartSavings;
 it('should calculate savings correctly', function () {
     // Arrange
     $cartService = new CartService(
-        upplerCartService: $this->mock(UpplerCartService::class),
+        djustCartService: $this->mock(DjustCartService::class),
         em: $this->mock(EntityManagerInterface::class),
     );
     
@@ -246,38 +246,38 @@ it('should return 401 when not authenticated', function () {
 });
 ```
 
-## 🎭 Mocks API Uppler
+## 🎭 Mocks API Djust
 
-### MockClientCallback
+### DjustMockClientCallback
 
 ```php
-// tests/MockClientCallback.php
-class MockClientCallback
+// tests/MockClient/DjustMockClientCallback.php
+class DjustMockClientCallback
 {
     public function __invoke(string $method, string $url, array $options): ResponseInterface
     {
         return match(true) {
             str_contains($url, 'oauth/token') => $this->mockOAuthToken(),
-            str_contains($url, '/buyer/cart') => $this->mockCart(),
-            str_contains($url, '/buyer/product') => $this->mockProduct($url),
-            str_contains($url, '/buyer/order') => $this->mockOrders(),
+            str_contains($url, '/shop/cart') => $this->mockCart(),
+            str_contains($url, '/shop/products') => $this->mockProduct($url),
+            str_contains($url, '/shop/orders') => $this->mockOrders(),
             default => throw new \Exception("URL non mockée: $url"),
         };
     }
     
     private function mockCart(): MockResponse
     {
-        $json = file_get_contents(__DIR__ . '/Resources/cart.json');
+        $json = file_get_contents(__DIR__ . '/../MockData/cart.json');
         return new MockResponse($json, ['http_code' => 200]);
     }
     
     private function mockProduct(string $url): MockResponse
     {
         // Extrait l'ID du produit de l'URL
-        preg_match('/product\/(\d+)/', $url, $matches);
+        preg_match('/products\/([^\/]+)/', $url, $matches);
         $productId = $matches[1] ?? '1';
         
-        $json = file_get_contents(__DIR__ . "/Resources/product_{$productId}.json");
+        $json = file_get_contents(__DIR__ . "/../MockData/product_{$productId}.json");
         return new MockResponse($json, ['http_code' => 200]);
     }
 }
@@ -351,7 +351,7 @@ docker exec -it marketplace-php-1 ./vendor/bin/pest --coverage
 1. **Nommage** : Toujours utiliser `it('should ...')` pour décrire le comportement attendu
 2. **AAA Pattern** : Arrange, Act, Assert
 3. **Isolation** : Chaque test doit être indépendant
-4. **Mocks** : Mocker les services externes (Uppler, Mailer...)
+4. **Mocks** : Mocker les services externes (Djust, Mailer...)
 5. **Fixtures** : Utiliser des factories pour créer les entités de test
 6. **Coverage** : Viser une couverture de code significative sur le code métier
 

@@ -10,4 +10,3 @@ enum DjustProductType: string
     case NOT_SELLABLE = 'NOT_SELLABLE';
     case ACCORD_CADRE = 'ACCORD_CADRE';
 }
-

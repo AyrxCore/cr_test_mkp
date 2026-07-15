@@ -17,24 +17,26 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     operations: [
-        new Get(),
+        new Get(
+            provider: SubAccountProvider::class
+        ),
         new Patch(
             openapi: new Operation(
                 summary: 'Editer un account',
-                description: 'Permet d\'enregistrer des modifications dans un account uppler'
+                description: 'Permet d\'enregistrer des modifications dans un account'
             ),
             normalizationContext: ['groups' => ['update']],
-            validate: true
+            validate: true,
+            provider: SubAccountProvider::class
         ),
     ],
-    provider: SubAccountProvider::class,
     processor: SubAccountPersistProcessor::class
 )]
 final class SubAccount
 {
     #[ApiProperty(identifier: true)]
     #[Groups(['read', 'update'])]
-    private ?int $id = null;
+    private ?string $id = null;
 
     #[Assert\Type('string', message: '(email) string required')]
     #[Groups(['read', 'update'])]
@@ -61,12 +63,12 @@ final class SubAccount
 
     private ?Uuid $accountId = null;
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
 
-    public function setId(?int $id): self
+    public function setId(?string $id): self
     {
         $this->id = $id;
 

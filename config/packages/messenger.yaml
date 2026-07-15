@@ -15,5 +15,4 @@ framework:
     routing:
       # Route your messages to the transports
       'App\Message\CartSubscription': default
-      'App\Message\UpplerOrderUpdateNotificationMessage': default
       'App\Message\Djust\SyncDjustOrdersStateMessage': default

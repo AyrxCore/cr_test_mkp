@@ -101,10 +101,10 @@ class DjustSellerService
     {
         $base = $params ?? new DjustSearchParams();
         $cacheKey = $this->buildCachePrefix(self::ADHERENT_SELLERS_CACHE_KEY).'_'.md5(\serialize([
-            $base->query,
-            $base->categoryIds,
-            $base->suppliers,
-        ]));
+                $base->query,
+                $base->categoryIds,
+                $base->suppliers,
+            ]));
 
         return $this->cache->get($cacheKey, function (ItemInterface $item) use ($base): array {
             $item->expiresAfter(self::CACHE_TTL_SECONDS);
@@ -118,11 +118,11 @@ class DjustSellerService
     {
         $base = $params ?? new DjustSearchParams();
         $cacheKey = $this->buildCachePrefix(self::TARIF_MAP_CACHE_KEY).'_'.md5(\serialize([
-            $base->query,
-            $base->categoryIds,
-            $base->suppliers,
-            $base->attributes,
-        ]));
+                $base->query,
+                $base->categoryIds,
+                $base->suppliers,
+                $base->attributes,
+            ]));
 
         return $this->cache->get($cacheKey, function (ItemInterface $item) use ($base): array {
             $item->expiresAfter(self::CACHE_TTL_SECONDS);

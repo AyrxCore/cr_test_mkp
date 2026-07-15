@@ -11,8 +11,6 @@ use ApiPlatform\OpenApi\Model\Operation;
 use App\Enum\ServiceFonction;
 use App\Repository\AccountRepository;
 use App\State\Provider\AccountProvider;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
@@ -28,12 +26,12 @@ use Symfony\Component\Uid\Uuid;
         new Get(
             openapi: new Operation(
                 summary: 'Select an Account',
-                description: 'Select an Account to use when communicating with Uppler'
+                description: 'Select an Account to use when communicating with Djust'
             ),
             name: 'account_select',
         ),
         new GetCollection(
-            normalizationContext: ['groups' => ['user:simple', 'account:get', 'account:external_api_data:buyer']],
+            normalizationContext: ['groups' => ['user:simple', 'account:get', 'account:external_api_data']],
             name: 'api_accounts_get_collection',
             provider: AccountProvider::class
         )]
@@ -49,37 +47,12 @@ class Account
     #[Groups(['user:simple', 'account:list', 'account:get'])]
     private ?Uuid $id = null;
 
-    #[ORM\Column(nullable: true)]
-    #[Groups(['user:simple', 'account:list', 'account:get'])]
-    private ?int $upplerUserId = null;
-
-    #[ORM\Column(nullable: true)]
-    #[Groups(['account:list', 'account:get'])]
-    private ?int $upplerSubAccountId = null;
-
-    #[ORM\Column(nullable: true)]
-    #[Groups(['account:list', 'account:get'])]
-    private ?int $upplerCompanyId = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['account:list', 'account:get'])]
-    private ?string $upplerUsername = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $upplerPassword = null;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups('user:simple')]
     private ?\DateTimeInterface $lastConnexion = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $firstConnectionAt = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $upplerClientId = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $upplerClientSecret = null;
 
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $createdAt = null;
@@ -101,9 +74,6 @@ class Account
     #[Groups(['user:simple', 'account:get'])]
     private ?Adherent $adherent = null;
 
-    #[ORM\OneToMany(mappedBy: 'account', targetEntity: CartSavings::class)]
-    private Collection $cartSavings;
-
     #[ORM\Column(nullable: true)]
     #[Groups('user:simple')]
     private ?bool $acceptCGU = false;
@@ -111,12 +81,6 @@ class Account
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups('user:simple')]
     private ?string $phone = null;
-
-    #[ORM\OneToMany(mappedBy: 'account', targetEntity: Favorite::class)]
-    private Collection $favorites;
-
-    #[ORM\OneToMany(mappedBy: 'account', targetEntity: SavedCart::class, orphanRemoval: true)]
-    private Collection $savedCarts;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $serviceFonction = null;
@@ -138,18 +102,6 @@ class Account
 
     private string $serviceFonctionLabel = '';
 
-    public function __construct()
-    {
-        $this->cartSavings = new ArrayCollection();
-        $this->favorites = new ArrayCollection();
-        $this->savedCarts = new ArrayCollection();
-    }
-
-    public function __toString(): string
-    {
-        return $this->upplerClientId;
-    }
-
     #[ORM\PrePersist]
     public function onPrePersist(): void
     {
@@ -166,66 +118,6 @@ class Account
     public function getId(): ?Uuid
     {
         return $this->id;
-    }
-
-    public function getUpplerUserId(): ?int
-    {
-        return $this->upplerUserId;
-    }
-
-    public function setUpplerUserId(?int $upplerUserId): self
-    {
-        $this->upplerUserId = $upplerUserId;
-
-        return $this;
-    }
-
-    public function getUpplerSubAccountId(): ?int
-    {
-        return $this->upplerSubAccountId;
-    }
-
-    public function setUpplerSubAccountId(?int $upplerSubAccountId): self
-    {
-        $this->upplerSubAccountId = $upplerSubAccountId;
-
-        return $this;
-    }
-
-    public function getUpplerCompanyId(): ?int
-    {
-        return $this->upplerCompanyId;
-    }
-
-    public function setUpplerCompanyId(?int $upplerCompanyId): self
-    {
-        $this->upplerCompanyId = $upplerCompanyId;
-
-        return $this;
-    }
-
-    public function getUpplerUsername(): ?string
-    {
-        return $this->upplerUsername;
-    }
-
-    public function setUpplerUsername(string $upplerUsername): self
-    {
-        $this->upplerUsername = $upplerUsername;
-
-        return $this;
-    }
-
-    public function getUpplerPassword(): ?string
-    {
-        return $this->upplerPassword;
-    }
-
-    public function setUpplerPassword(string $upplerPassword): self
-    {
-        $this->upplerPassword = $upplerPassword;
-
-        return $this;
     }
 
     public function getLastConnexion(): ?\DateTimeInterface
@@ -248,30 +140,6 @@ class Account
     public function setFirstConnectionAt(?\DateTimeImmutable $firstConnectionAt): self
     {
         $this->firstConnectionAt = $firstConnectionAt;
-
-        return $this;
-    }
-
-    public function getUpplerClientId(): ?string
-    {
-        return $this->upplerClientId;
-    }
-
-    public function setUpplerClientId(?string $upplerClientId): self
-    {
-        $this->upplerClientId = $upplerClientId;
-
-        return $this;
-    }
-
-    public function getUpplerClientSecret(): ?string
-    {
-        return $this->upplerClientSecret;
-    }
-
-    public function setUpplerClientSecret(?string $upplerClientSecret): self
-    {
-        $this->upplerClientSecret = $upplerClientSecret;
 
         return $this;
     }
@@ -336,36 +204,6 @@ class Account
         return $this;
     }
 
-    /**
-     * @return Collection<int, CartSavings>
-     */
-    public function getCartSavings(): Collection
-    {
-        return $this->cartSavings;
-    }
-
-    public function addCartSaving(CartSavings $cartSaving): self
-    {
-        if (!$this->cartSavings->contains($cartSaving)) {
-            $this->cartSavings->add($cartSaving);
-            $cartSaving->setAccount($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCartSaving(CartSavings $cartSaving): self
-    {
-        if ($this->cartSavings->removeElement($cartSaving)) {
-            // set the owning side to null (unless already changed)
-            if ($cartSaving->getAccount() === $this) {
-                $cartSaving->setAccount(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function isAcceptCGU(): ?bool
     {
         return $this->acceptCGU;
@@ -374,66 +212,6 @@ class Account
     public function setAcceptCGU(?bool $acceptCGU): self
     {
         $this->acceptCGU = $acceptCGU;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Favorite>
-     */
-    public function getFavorites(): Collection
-    {
-        return $this->favorites;
-    }
-
-    public function addFavorite(Favorite $favorite): self
-    {
-        if (!$this->favorites->contains($favorite)) {
-            $this->favorites->add($favorite);
-            $favorite->setAccount($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFavorite(Favorite $favorite): self
-    {
-        if ($this->favorites->removeElement($favorite)) {
-            // set the owning side to null (unless already changed)
-            if ($favorite->getAccount() === $this) {
-                $favorite->setAccount(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, SavedCart>
-     */
-    public function getSavedCarts(): Collection
-    {
-        return $this->savedCarts;
-    }
-
-    public function addSavedCart(SavedCart $savedCart): self
-    {
-        if (!$this->savedCarts->contains($savedCart)) {
-            $this->savedCarts->add($savedCart);
-            $savedCart->setAccount($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSavedCart(SavedCart $savedCart): self
-    {
-        if ($this->savedCarts->removeElement($savedCart)) {
-            // set the owning side to null (unless already changed)
-            if ($savedCart->getAccount() === $this) {
-                $savedCart->setAccount(null);
-            }
-        }
 
         return $this;
     }

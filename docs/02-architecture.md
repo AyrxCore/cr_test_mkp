@@ -21,12 +21,12 @@ MarketPlace est une application **B2B** construite sur une architecture **API-Fi
 │                 Symfony 6.4 + API Platform                   │
 │                                                              │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
-│  │ Controllers │  │  Services   │  │   Uppler Services   │  │
+│  │ Controllers │  │  Services   │  │   Djust Services    │  │
 │  └─────────────┘  └─────────────┘  └─────────────────────┘  │
 │                              │                   │           │
 │                              ▼                   ▼           │
 │                     ┌─────────────┐     ┌─────────────────┐  │
-│                     │  Doctrine   │     │   API Uppler    │  │
+│                     │  Doctrine   │     │   API Djust     │  │
 │                     │    ORM      │     │   (Externe)     │  │
 │                     └─────────────┘     └─────────────────┘  │
 └─────────────────────────────────────────────────────────────┘
@@ -69,7 +69,7 @@ src/
 │   ├── Authentication/   # Handlers d'authentification
 │   └── Voter/            # Voters pour les autorisations
 ├── Serializer/           # Normaliseurs/Dénormaliseurs custom
-├── Service/              # Services métier (Uppler, etc.)
+├── Service/              # Services métier (Djust, etc.)
 ├── State/                # State Providers/Processors API Platform
 ├── Twig/                 # Extensions Twig
 └── Utils/                # Utilitaires divers
@@ -138,10 +138,10 @@ config/
 4. [API Platform] State Provider
       │
       ▼
-5. [Service] UpplerProductService.findProductById()
+5. [Service] DjustProductService.findProductById()
       │
-      ▼ HTTP vers API Uppler
-6. [Uppler API] Données produit
+      ▼ HTTP vers API Djust
+6. [Djust API] Données produit
       │
       ▼ Réponse JSON
 7. [Vue.js] Affichage du produit

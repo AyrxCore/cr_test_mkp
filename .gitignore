@@ -46,3 +46,4 @@ aws-docker-creds
 ###< squizlabs/php_codesniffer ###
 
 /tests/ExampleTest.php
+/.DS_Store

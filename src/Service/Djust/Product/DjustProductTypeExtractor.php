@@ -38,4 +38,3 @@ class DjustProductTypeExtractor
         return DjustProductType::SELLABLE;
     }
 }
-

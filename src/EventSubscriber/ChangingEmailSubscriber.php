@@ -8,7 +8,6 @@ use App\Entity\UserInfoUpdateRequest;
 use App\Events\ChangingEmailEvent;
 use App\Service\MailerProvider;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;

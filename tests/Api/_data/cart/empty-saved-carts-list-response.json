@@ -1,7 +1,0 @@
-{
-  "@context": "\/api\/contexts\/SavedCart",
-  "@id": "\/api\/saved-carts",
-  "@type": "Collection",
-  "member": [],
-  "totalItems": 0
-}

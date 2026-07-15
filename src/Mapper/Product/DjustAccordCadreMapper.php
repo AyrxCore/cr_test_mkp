@@ -57,4 +57,3 @@ class DjustAccordCadreMapper
         $product->setAccountAccordCadre($accountAccordCadre);
     }
 }
-

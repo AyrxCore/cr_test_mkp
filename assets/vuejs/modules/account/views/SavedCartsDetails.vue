@@ -158,18 +158,18 @@ watch(
   async (id: string) => {
     isLoading.value = true
 
-    if (id) {
-      savedCart.value = await savedCartStore.findSavedCartById(id)
-
-      for (const [, value] of Object.entries(
-        savedCart.value.savedCartProducts,
-      )) {
-        cartProducts.value.push({
-          variantId: value.upplerVariantId,
-          quantity: value.quantity,
-        })
-      }
-    }
+    // if (id) {
+    //   savedCart.value = await savedCartStore.findSavedCartById(id)
+    //
+    //   for (const [, value] of Object.entries(
+    //     savedCart.value.savedCartProducts,
+    //   )) {
+    //     cartProducts.value.push({
+    //       variantId: value.upplerVariantId,
+    //       quantity: value.quantity,
+    //     })
+    //   }
+    // }
 
     isLoading.value = false
   },

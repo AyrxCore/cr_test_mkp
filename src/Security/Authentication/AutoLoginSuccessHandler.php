@@ -11,7 +11,6 @@ use App\Events\UserAcceptCGUEvent;
 use App\Repository\AccountRepository;
 use App\Service\Account\CurrentAccountProvider;
 use App\Service\Djust\DjustAuthenticationService;
-use App\Service\UpplerAuthenticationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -34,7 +33,6 @@ class AutoLoginSuccessHandler implements AuthenticationSuccessHandlerInterface, 
         private readonly EntityManagerInterface $entityManager,
         private readonly JWTTokenManagerInterface $JWTManager,
         private readonly RequestStack $requestStack,
-        private readonly UpplerAuthenticationService $upplerAuthenticationService,
         private readonly UrlGeneratorInterface $router,
         private readonly DjustAuthenticationService $djustAuthenticationService,
         protected readonly LoggerInterface $djustLogger,
@@ -43,17 +41,14 @@ class AutoLoginSuccessHandler implements AuthenticationSuccessHandlerInterface, 
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token): RedirectResponse
     {
-        $session = $this->requestStack->getSession();
         /** @var User $user */
         $user = $token->getUser();
-        $token = $this->JWTManager->create($user);
+        $jwtToken = $this->JWTManager->create($user);
         $isNeoAutoLogin = \filter_var($request->query->get('neoAutoLogin'), \FILTER_VALIDATE_BOOLEAN);
 
         try {
-            $response = new RedirectResponse($this->router->generate('prehome'));
-
             if (!$channel = $this->getChannel($request)) {
-                throw new \Exception();
+                throw new \Exception('Channel not found');
             }
 
             if ($isNeoAutoLogin) {
@@ -73,35 +68,41 @@ class AutoLoginSuccessHandler implements AuthenticationSuccessHandlerInterface, 
             $session = $this->requestStack->getSession();
             $session->set(CurrentAccountProvider::SESSION_KEY_ACCOUNT, $account);
 
-            $authUpplerSuccess = $this->upplerAuthenticationService->authenticateUser(
-                $account,
-                !$isNeoAutoLogin
-            );
+            $authDjustSuccess = $this->djustAuthenticationService->authenticateUser($account, !$isNeoAutoLogin);
 
-            try {
-                //                TODO: Adaptation DJUST - authentification
-                $authDjustSuccess = $this->djustAuthenticationService->authenticateUser($account, !$isNeoAutoLogin);
-            } catch (\Throwable $e) {
-                $this->djustLogger->warning("Erreur lors de l'authentification Djust pour cet account :  ".$account->getId());
+            if (!$authDjustSuccess || !$session->has('access_token') || empty($session->get('access_token'))) {
+                $this->djustLogger->error('Djust authentication failed for account: '.$account->getId());
+                throw new \Exception('Djust authentication failed');
             }
 
-            if ($authUpplerSuccess && $session->has('access_token') && !empty($session->get('access_token'))) {
-                if (empty($account->isAcceptCGU()) && !$isNeoAutoLogin) {
-                    $event = new UserAcceptCGUEvent($account);
-                    $this->eventDispatcher->dispatch($event);
-                }
-                $user->setEnabled(true);
-                $this->entityManager->persist($user);
-                $this->entityManager->flush();
+            if (empty($account->isAcceptCGU()) && !$isNeoAutoLogin) {
+                $event = new UserAcceptCGUEvent($account);
+                $this->eventDispatcher->dispatch($event);
+            }
 
-                $response->headers->setCookie(new Cookie('BEARER', $token));
-                if ($isNeoAutoLogin) {
-                    $response->headers->setCookie(new Cookie('neoAutoLogin', 'true', httpOnly: false));
-                }
+            $user->setEnabled(true);
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
+
+            $response = new RedirectResponse($this->router->generate('prehome'));
+            $response->headers->setCookie(new Cookie('BEARER', $jwtToken));
+
+            if ($isNeoAutoLogin) {
+                $response->headers->setCookie(new Cookie('neoAutoLogin', 'true', httpOnly: false));
             }
 
             return $response;
-        } catch (\Exception) {
+        } catch (\Throwable $e) {
+            // Log l'erreur avec détails
+            $this->djustLogger->error('Login failed: '.$e->getMessage(), [
+                'user_id' => $user->getId(),
+                'exception' => $e,
+            ]);
+
+            // Redirection vers login avec message d'erreur
+            $response = new RedirectResponse($this->router->generate('app_login'));
+            $request->getSession()->getFlashBag()->add('error', 'Authentication failed. Please try again.');
+
             return $response;
         }
     }

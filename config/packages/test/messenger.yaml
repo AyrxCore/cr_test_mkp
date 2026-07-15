@@ -10,7 +10,6 @@ framework:
       # Route your messages to the transports
       'App\Message\*': default
       'App\Message\Marketplace\*': mkp_sync
-      'App\Message\Uppler\*': mkp_sync
 
   profiler:
     enabled: true

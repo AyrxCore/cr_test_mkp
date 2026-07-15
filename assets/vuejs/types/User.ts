@@ -1,8 +1,6 @@
 import { Account } from '@/vuejs/types/Account'
 import { ExternalApiDataEntity } from '@/vuejs/types/ExternalApiDataEntity'
 
-// Décrit l'objet user
-
 export interface User extends ExternalApiDataEntity {
   id: string
   email: string
@@ -22,7 +20,6 @@ export interface UserLocation {
   error: string | null
 }
 
-// Décrit le state général du store user
 export interface UserStoreState {
   user: User
   editingInfo: string[]
@@ -30,13 +27,11 @@ export interface UserStoreState {
   userLocation: UserLocation | null
 }
 
-// Décrit le bloc de données nécessaire à l'obtention du token
 export interface AuthenticateUserData {
   username: string
   password: string
 }
 
-// décrit le bloc retourné par le back avec le token
 export interface AuthenticateResponse {
   token: string
 }

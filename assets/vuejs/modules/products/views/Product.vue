@@ -39,7 +39,7 @@
             >
               <img
                 :alt="`${product.name} image ${key}`"
-                :src="getUpplerImage(img)"
+                :src="getMediaUrl(img)"
                 class="bg-white p-1"
               />
             </SwiperSlide>
@@ -74,13 +74,13 @@
               >
                 <img
                   :alt="`${product.name} main image ${key}`"
-                  :src="getUpplerImage(img)"
+                  :src="getMediaUrl(img)"
                   class="h-full w-full object-contain"
                 />
               </SwiperSlide>
               <SwiperSlide v-if="!product.images?.length">
                 <img
-                  :src="getUpplerImage(fallbackImage)"
+                  :src="getMediaUrl(fallbackImage)"
                   alt="Produit sans image"
                   class="h-full w-full object-contain"
                 />
@@ -231,7 +231,7 @@ import { PageList } from '@/vuejs/router'
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import { useProductStore } from '@/vuejs/stores/product'
 import { useUserStore } from '@/vuejs/stores/user'
-import { getUpplerImage, isUrl } from '@/vuejs/services/utils'
+import { getMediaUrl, isUrl } from '@/vuejs/services/utils'
 import { formatProductGtmEvent, sendGtmEvent } from '@/vuejs/services/gtm'
 import { Product, ProductProperties } from '@/vuejs/types/Product'
 

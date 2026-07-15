@@ -19,6 +19,7 @@ use Symfony\Component\Uid\Uuid;
     $this->requestStack = new RequestStack();
     $this->logger = new NullLogger();
     $this->logAccountConnectionService = Mockery::mock(LogAccountConnectionService::class);
+    $this->logAccountConnectionService->shouldReceive('createLog')->byDefault();
     $this->session = new Session(new MockArraySessionStorage());
 
     $request = new Request();
@@ -29,7 +30,7 @@ use Symfony\Component\Uid\Uuid;
         $this->httpClient,
         $this->requestStack,
         $this->logger,
-        $this->logAccountConnectionService,
+        $this->logAccountConnectionService
     );
 
     $this->account = Mockery::mock(Account::class);

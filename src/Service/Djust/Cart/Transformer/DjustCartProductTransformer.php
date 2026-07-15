@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace App\Service\Djust\Cart\Transformer;
+
 use App\Service\Djust\Search\Transformer\DjustSearchNavigationTransformer;
 
 class DjustCartProductTransformer

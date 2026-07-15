@@ -2,20 +2,22 @@
 
 ## 📚 Documentation
 
-| Document | Description |
-|----------|-------------|
-| [01 - Getting Started](docs/01-getting-started.md) | Installation et démarrage rapide |
-| [02 - Architecture](docs/02-architecture.md) | Architecture technique du projet |
-| [03 - Entités](docs/03-entities.md) | Modèle de données (User, Account, Channel...) |
-| [04 - Authentification](docs/04-authentication.md) | JWT, cookies HttpOnly, UserChecker |
-| [05 - Intégration Uppler](docs/05-uppler-integration.md) | API Uppler, OAuth2, tokens Admin/Buyer |
-| [06 - Frontend Vue.js](docs/06-frontend-vuejs.md) | Composition API, Pinia, TailwindCSS |
-| [07 - Backend Symfony](docs/07-backend-symfony.md) | API Platform 4, Services, Providers |
-| [08 - Tests](docs/08-tests.md) | Pest PHP, Foundry, stratégie de tests |
-| [09 - Channels Multi-tenant](docs/09-channels-multitenant.md) | Système multi-tenant par Channel |
-| [10 - Glossaire & FAQ](docs/10-glossary-faq.md) | Termes métier et questions fréquentes |
-| [11 - AI-Driven Development](docs/11-ai-driven-development.md) | 🤖 Guide pratique IA (agents, skills, prompts) |
+| Document                                                           | Description |
+|--------------------------------------------------------------------|-------------|
+| [01 - Getting Started](docs/01-getting-started.md)                 | Installation et démarrage rapide |
+| [02 - Architecture](docs/02-architecture.md)                       | Architecture technique du projet |
+| [03 - Entités](docs/03-entities.md)                                | Modèle de données (User, Account, Channel...) |
+| [04 - Authentification](docs/04-authentication.md)                 | JWT, OAuth Djust, Auto-login, sécurité |
+| [05 - Intégration API Djust](docs/05-djust-integration.md)         | Services Djust, endpoints, authentification |
+| [06 - Frontend Vue.js](docs/06-frontend-vuejs.md)                  | Composition API, Pinia, TailwindCSS |
+| [07 - Backend Symfony](docs/07-backend-symfony.md)                 | API Platform 4, Services, Providers |
+| [08 - Tests](docs/08-tests.md)                                     | Pest PHP, Foundry, stratégie de tests |
+| [09 - Channels Multi-tenant](docs/09-channels-multitenant.md)      | Système multi-tenant par Channel |
+| [10 - Glossaire & FAQ](docs/10-glossary-faq.md)                    | Termes métier et questions fréquentes |
+| [11 - AI-Driven Development](docs/11-ai-driven-development.md)     | 🤖 Guide pratique IA (agents, skills, prompts) |
 | [12 - AI Vision & Méthodologie](docs/12-ai-vision-methodologie.md) | 🤖 Vision et méthodologie AI-Driven |
+| [13 - Djust Cart Savings Sync](docs/13-djust-cart-savings-sync.md) | Synchronisation des économies panier |
+| [14 - Scheduler Pattern](docs/14-scheduler-pattern.md)             | Pattern de planification des tâches |
 
 ## 🤖 Agents & Copilot
 
@@ -62,13 +64,14 @@ Access to https://localhost:8087
 
 # Configuration
 
-Le fichier .env contient tous les paramètres de connexion vers l'api Uppler de prod sauf les secrets
-Le fichier .env.dev contient tous les paramètres de connexion vers l'api Uppler de preprod sauf les secrets
-Ajouter dans un nouveau fichier .env.local les paramètres de connexion Uppler de preprod (à récuperer sur VAULT)
+Le fichier .env contient tous les paramètres de connexion vers l'API Djust de preprod sauf les secrets.
+Ajouter dans un nouveau fichier .env.local les paramètres de connexion Djust (à récupérer sur VAULT) :
 
 ```sh
-UPPLER_ADMIN_CLIENT_ID=
-UPPLER_ADMIN_CLIENT_SECRET=
+DJUST_API_BASE_URL=https://djust-api.pre-prod.djust-app.com/qantis
+DJUST_API_USERNAME=
+DJUST_API_PASSWORD=
+DJUST_TEST_ACCOUNTS_PASSWORD=
 ```
 
 ## Add a new user
@@ -93,19 +96,19 @@ $ make exec php bin/console user:demote {email} {role}
 
 La documentation sur les tests unitaires et fonctionnels se trouve ici : https://qantis.atlassian.net/wiki/spaces/M2/pages/413859841/Test+Unitaires+et+fonctionnels
 
-# Authentification / Login /
+# Authentification / Login
 
 ## Entités / Base de données
 
-La gestion des utilisateurs et des logins est totalement couplée au fonctionnement de l'api Uppler.
+La gestion des utilisateurs et des logins est totalement couplée au fonctionnement de l'API Djust.
 
-Il existe dans le projet 2 entités User et Account qui stockent les informations de login.
+Il existe dans le projet 2 entités `User` et `Account` qui stockent les informations de login.
 
-Un User possède autant d'account que de liaison à des company Uppler (Adhérents neo).
+Un `User` possède autant d'`Account` que de liaisons à des customer accounts Djust (Adhérents Neo).
 
-Un Account ne stocke pas d'information Uppler si ce n'est des ID de ressources (subAccount, User, Company, ...)
+Un `Account` stocke les identifiants Djust (`djustUsername`, `djustPassword`, `djustCustomerAccountId`, `djustCustomerUserId`).
 
-À chaque connexion l'api Uppler est requêtée à l'aide de ces ID pour récupérer les informations à jour.
+À chaque connexion, l'API Djust est requêtée pour récupérer les informations à jour et obtenir un access token.
 
 Ces informations ne sont pas stockées en base, uniquement dans le store VueJS en front.
 
@@ -124,108 +127,111 @@ https://symfony.com/bundles/DoctrineFixturesBundle/current/index.html
 
 ## Authentification Front/Back
 
-L'authentification entre le front et la back repose sur l'obtention d'un Token passé dans un cookie HttpOnly.
-La particularité de ce cookie est qu'il ne peut pas être lu par javascript, uniquement par le back donc PHP.
-Une fois le cookie obtenu il doit être joint à toutes les requêtes vers l'api afin de s'authentifier.
+L'authentification entre le front et le back repose sur l'obtention d'un **JWT token** passé dans un **cookie HttpOnly**.
+La particularité de ce cookie est qu'il ne peut pas être lu par JavaScript, uniquement par le back (PHP).
+Une fois le cookie obtenu, il doit être joint à toutes les requêtes vers l'API afin de s'authentifier.
 
-**Toutes les requêtes d'authentification sont interceptées et analysées par un userChecker, App/Security/UserChecker.php**
+**Toutes les requêtes d'authentification sont interceptées par `App\Security\UserChecker`**
 
-https://symfony.com/doc/5.4/security/user_checkers.html
+Documentation : https://symfony.com/doc/current/security/user_checkers.html
 
-Les règles implémentées dans ce userChecker sont les suivantes :
+Les règles implémentées dans ce UserChecker sont :
 
-- Pour pouvoir se connecter un user doit être actif (isEnabled) sinon userChecker refuse la connexion
-- Pour pouvoir se connecter un user doit avoir au moins un account lié sinon userChecker refuse la connexion
+- Pour se connecter, un `User` doit être actif (`isEnabled = true`), sinon la connexion est refusée
+- Pour se connecter, un `User` doit avoir au moins un `Account` lié, sinon la connexion est refusée
 
-- Si un user vient de se connecter et qu'il ne possède qu'un seul account, on hydrate sa session avec son access_token et son account car à réception de cette information le front va l'envoyer directement dans l'app
-- Si un user vient de se connecter et qu'il ne possède aucun account (une exception existe cf : ci-dessous), la connexion est refusée.
-- Une exception est toutefois consentie à la règle ci-dessus afin que des plateformes externes (neo par exemple) puisse dialoguer avec l'api sans avoir d'account. Il est pour cela nécessaire de posséder le rôle 'ROLE_API'
+- Si un user possède un seul account, sa session est hydratée automatiquement avec son `access_token` et son `Account`
+- Si un user ne possède aucun account, la connexion est refusée
+- **Exception** : Les plateformes externes (Neo) peuvent dialoguer avec l'API sans `Account` si elles possèdent le rôle `ROLE_API`
 
-**Attention !!! En cas redémarrage du container Docker il faut penser à détruire l'ancien cookie du navigateur car il ne sera plus reconnu par la nouvelle session.**
+**⚠️ Attention** : En cas de redémarrage du container Docker, il faut détruire l'ancien cookie du navigateur (il ne sera plus reconnu par la nouvelle session).
 
-## Authentification Back / Uppler
+## Authentification Back / Djust
 
 ### Mécanisme / Architecture
 
-L'authentification entre le back et l'api Uppler repose sur Oauth2 et donc dans ce cas
-l'obtention d'un accessToken en envoyant un couple client_id/client_secret.
-Une fois le token obtenu il doit être passé dans chaque requête dans une en-tête Authorization BEARER.
-Ce mécanisme est géré de manière totalement transparente dans la classe de connexion abstraite HttpClientProvider.
+L'authentification entre le back et l'API Djust repose sur **OAuth2** : obtention d'un `access_token` en envoyant `username` / `password`.
+Une fois le token obtenu, il doit être passé dans chaque requête dans le header `Authorization: Bearer {token}`.
+Ce mécanisme est géré de manière transparente dans `DjustHttpClientService`.
 
-### implémentation dans les services Symfony
+### Implémentation dans les services Symfony
 
-Tous les services devant communiquer avec Uppler devraient étendre cette classe afin de s'affranchir de la gestion du token.
+Tous les services devant communiquer avec Djust utilisent `DjustHttpClientService` qui gère automatiquement :
+- La récupération et le renouvellement du token
+- La gestion du cache (tokens opérateur)
+- La gestion de session (tokens)
+- Le retry automatique en cas de 401
 
-2 types de token peuvent être générés.
+**2 types de token sont gérés :**
 
-#### Token Admin
+#### Token Operator (Opérateur)
 
-Un token admin permet d'effectuer sur l'api UPPLER des requêtes en mode Admin 'Operator'.
-Ce token est obtenu grace à un couple client_id/client_secret issue du back office et stockés en dur
-dans le fichier conf/services.yaml qui s'hydrate grace aux memes valeurs situées dans les fichiers .env.
+Un token **opérateur** permet d'effectuer des requêtes en mode admin sur l'API Djust.
+Ce token est obtenu avec les credentials configurés dans `.env.local` :
 
-```
-parameters:
-  uppler_env: '%env(UPPLER_ENV)%'
-  uppler_api_url: '%env(UPPLER_API_URL)%'
-  uppler_admin_client_id: '%env(UPPLER_ADMIN_CLIENT_ID)%'
-  uppler_admin_client_secret: '%env(UPPLER_ADMIN_CLIENT_SECRET)%'
-```
-
-Si un token Admin est récupéré il est stocké sur le serveur dans le fichier /var/token.txt ainsi il est disponbile et partagé entre toues les sessions.
-Ce token a une durée de vie de 3600 secondes, au dela de laquelle il doit être remplacé.
-La classe HttpClientProvider gére cela de manière transparente, toutes les requêtes sont centralisées et les code retour sont analysés
-Si un code 401 est retourné alors le token est renégocié, remplacé dans le fichier token.txt et la requete envoyée à nouveau.
-
-#### Token Utilisateur (buyer)
-
-Un token utilisateur permet d'effectuer des appels sur l'api UPPLER en mode utilisateur (Buyer)
-Le back Office est ainsi scopé aux seules permissions du user authentifié.
-Ce token est obtenu grace à un couple client_id/client_secret stocké en base dans l'entité Account à connecter.
-Il a une durée de vie de 3600 secondes, au dela de laquelle il doit être remplacé.
-Il est stockée en session (sous le nom access_token) ainsi que l'account de manière a être naturellement attaché à l'utilisateur connecté.
-L'entité Account a elle même été créé et hydratée par la synchronization issue de neo.
-La classe HttpClientProvider gére cela de manière transparente, toutes les requêtes sont centralisées et les code retour sont analysés
-Si un code 401 est retourné alors le token est renégocié, remplacé dans la session (access_token) et la requete envoyée à nouveau.
-
-### Logs api
-
-Tous les appels vers l'api Uppler, essentiellement les erreurs, sont stockées dans un fichier /var/log/api.log
-Pour exploiter ce fichier un canal monolog spécifique a ét créé le canal 'api'.
-
-```
-    api:
-        type: stream
-        path: "%kernel.logs_dir%/api.log"
-        level: error
-        channels: [ "api" ]
+```bash
+DJUST_API_USERNAME=   # Username opérateur
+DJUST_API_PASSWORD=   # Password opérateur
 ```
 
-https://symfony.com/doc/5.4/logging/channels_handlers.html
+Le token est **mis en cache** (Symfony Cache) et partagé entre toutes les sessions.
+- Durée de vie : **240 secondes** (4 minutes)
+- Cache key : `djust_operator_token`
+- Renouvellement automatique en cas d'expiration
 
-#### Auto Login
+#### Token ACCOUNT (Utilisateur)
 
-Permet l'authentification d'un utilisateur sans passer par le formulaire.
-Une requête GET doit être envoyée à /login/auto-login avec les paramètres suivants :
+Un token **account** permet d'effectuer des requêtes scopées aux permissions de l'`Account` connecté.
+Ce token est obtenu avec les credentials stockés dans l'entité `Account` (`djustUsername` / `djustPassword`).
 
+- Durée de vie : **240 secondes** (4 minutes)
+- Stockage : **session PHP** (`djust_account_access_token`, `djust_account_refresh_token`, `djust_account_expires_at`)
+- L'`Account` est synchronisé depuis Neo
+- Renouvellement automatique en cas d'expiration
+
+### Logs API
+
+Tous les appels vers l'API Djust sont loggés dans un fichier dédié : `/var/log/djust.log`
+Un canal Monolog spécifique a été créé : `djust`.
+
+```yaml
+# config/packages/monolog.yaml
+djust:
+    type: stream
+    path: "%kernel.logs_dir%/djust.log"
+    level: info
+    channels: ["djust"]
 ```
-  "email": EMAIL DE L'UTILISATEUR,
-  "timestamp": TIMESTAMP EN SECONDES,
-  "hash": HASH
-```
 
-Le hash est généré de la manière suivante :
+Documentation : https://symfony.com/doc/current/logging/channels_handlers.html
 
-1. Concatener email, timestamp et la _clé_
-2. Hasher le résultat avec SHA256
-3. Convertir le hash en base-64
+## Auto Login
 
-La clé est un Uuid associé à l'adhérent lors de la synchro depuis Neo
+Permet l'authentification d'un utilisateur **sans passer par le formulaire** (utilisé par Neo).
+Une requête `GET` doit être envoyée à `/login/auto-login` avec les paramètres suivants :
 
-En retour est envoyée une url permettant l'authentification automatique de l'utilisateur et la redirection vers la page d'accueil :
-
-```
+```json
 {
-    "url": "URL"
+  "email": "user@example.com",
+  "timestamp": 1234567890,
+  "hash": "BASE64_HASH"
 }
 ```
+
+**Génération du hash :**
+
+1. Concaténer : `email` + `timestamp` + `clé secrète`
+2. Hasher le résultat avec **SHA256**
+3. Convertir le hash en **base64**
+
+La clé secrète est un UUID associé à l'adhérent lors de la synchronisation depuis Neo.
+
+**Réponse** : URL permettant l'authentification automatique et la redirection vers l'app :
+
+```json
+{
+  "url": "https://marketplace.qantis.co/auto-login?token=..."
+}
+```
+
+> 📖 Voir [`docs/04-authentication.md`](docs/04-authentication.md) pour plus de détails sur l'authentification.

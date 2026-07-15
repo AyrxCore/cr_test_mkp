@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Put(
             openapi: new Operation(
                 summary: 'Editer une adresse',
-                description: 'Permet d\'éditer adresse pour une company'
+                description: 'Permet d\'éditer adresse'
             ),
             normalizationContext: ['groups' => ['address:update']],
             validate: true
@@ -30,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(
             openapi: new Operation(
                 summary: 'Créer une nouvelle adresse',
-                description: 'Permet de créer une nouvelle adresse pour une company'
+                description: 'Permet de créer une nouvelle adresse'
             ),
             normalizationContext: ['groups' => ['address:create']],
             validate: true
@@ -48,10 +48,6 @@ final class Address
 
     #[Groups(['address:update'])]
     private ?string $externalId = null;
-
-    #[Assert\Type('integer', message: '(upplerSubAccountId) Integer required', groups: ['create'])]
-    #[Groups(['address:update'])]
-    private int $companyId;
 
     #[Assert\Type('string', message: '(name) string required')]
     #[Groups(['address:create', 'address:update'])]

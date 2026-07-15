@@ -37,7 +37,7 @@ readonly class PartnerStoreMapProvider implements ProviderInterface
                 return $this->createEmptyResponse();
             }
 
-            $partnersDjustIds = \array_map(fn ($p) => (string) $p->getId(), $partners);
+            $partnersDjustIds = \array_map(static fn ($p) => (string) $p->getId(), $partners);
 
             $categories = $this->getCategories($partnersDjustIds);
 

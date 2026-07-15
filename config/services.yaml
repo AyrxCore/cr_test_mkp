@@ -4,17 +4,9 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-  uppler_env: '%env(UPPLER_ENV)%'
-  uppler_api_url: '%env(UPPLER_API_URL)%'
-  uppler_admin_client_id: '%env(UPPLER_ADMIN_CLIENT_ID)%'
-  uppler_admin_client_secret: '%env(UPPLER_ADMIN_CLIENT_SECRET)%'
-  uppler_webhook_secret: '%env(UPPLER_WEBHOOK_SECRET)%'
   storyblok_token: '%env(STORYBLOK_API_TOKEN)%'
   storyblok_api_base_uri: '%env(STORYBLOK_API_BASE_URI)%'
   http_cache_path: '%kernel.project_dir%/var/cache/%env(APP_ENV)%'
-  #fichier qui stocke le token admin en cours
-  uppler_admin_token_file: '%kernel.project_dir%/var/'
-  #ttl entre 2 essais de reinit de password en minutes
   app.credential_encryption_key: '%env(CREDENTIAL_ENCRYPTION_KEY)%'
   retry_ttl: 120
   ACCOUNTS_SUGAR_LINK: '%env(SUGAR_LINK)%'
@@ -89,22 +81,6 @@ services:
     \App\Controller\ChannelRepositoryAwareControllerInterface:
       calls:
         - setChannelRepository: ['@App\Repository\ChannelRepository']
-
-    # SERVICES UPPLER
-    App\Service\AbstractUpplerService:
-      bind:
-        $upplerEnv: '%uppler_env%'
-        $adminClientId: '%uppler_admin_client_id%'
-        $adminClientSecret: '%uppler_admin_client_secret%'
-        $adminTokenFile: '%uppler_admin_token_file%'
-        $httpCachePath: '%http_cache_path%'
-
-  # Voter
-  App\Security\Voter\FavoriteVoter:
-    tags: [{ name: security.voter }]
-
-  App\Security\Voter\SavedCartVoter:
-    tags: [{ name: security.voter }]
 
   App\DataFixtures\Story\ChannelStory:
     arguments:

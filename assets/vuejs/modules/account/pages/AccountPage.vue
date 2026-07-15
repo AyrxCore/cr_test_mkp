@@ -19,7 +19,7 @@
                       <span class="uppercase">{{ user.lastName }}</span>
                     </h3>
                     <p class="mb-2 text-lg">
-                      {{ user.externalApiData.buyer.name }}
+                      {{ user.externalApiData.customerAccount.name }}
                     </p>
                   </div>
                   <div class="sticky bottom-0 flex">

@@ -89,19 +89,19 @@ const onDelete = async (event) => {
 const onAddToCart = async (event) => {
   isLoading.value = true
   try {
-    const cartProducts = []
-    const cart = await savedCartStore.findSavedCartById(event.savedCartId)
-    for (const [, value] of Object.entries(cart.savedCartProducts)) {
-      cartProducts.push({
-        variantId: value.upplerVariantId,
-        quantity: value.quantity,
-      })
-    }
-    // TODO: adapter à la nouvelle méthode addProductsToCart
-    // await cartStore.addProductsToCart(cartProducts)
-
-    await savedCartStore.fetchSavedCarts()
-    deleteSavedCart.value = false
+    // const cartProducts = []
+    // const cart = await savedCartStore.findSavedCartById(event.savedCartId)
+    // for (const [, value] of Object.entries(cart.savedCartProducts)) {
+    //   cartProducts.push({
+    //     variantId: value.upplerVariantId,
+    //     quantity: value.quantity,
+    //   })
+    // }
+    // // TODO: adapter à la nouvelle méthode addProductsToCart
+    // // await cartStore.addProductsToCart(cartProducts)
+    //
+    // await savedCartStore.fetchSavedCarts()
+    // deleteSavedCart.value = false
   } catch (error) {}
 
   isLoading.value = false
@@ -111,5 +111,3 @@ const savedCarts = computed(() => {
   return savedCartStore.savedCarts
 })
 </script>
-
-<style scoped></style>

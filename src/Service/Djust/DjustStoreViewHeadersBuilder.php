@@ -10,7 +10,9 @@ class DjustStoreViewHeadersBuilder
 {
     private const string STORE_VIEW_HEADER = 'dj-store-view';
 
-    public function __construct(private ChannelContext $channelContext) {}
+    public function __construct(private ChannelContext $channelContext)
+    {
+    }
 
     /**
      * Builds store-view headers from the current HTTP request channel context.

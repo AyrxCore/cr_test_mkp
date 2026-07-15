@@ -6,7 +6,7 @@
         <div v-if="favoriteProduct">
           <h4 class="text-sm text-white md:text-base lg:text-lg">
             Voulez-vous vraiment déplacer ce produit:
-            <strong>{{ favoriteProduct.upplerProductName }}</strong>
+<!--            <strong>{{ favoriteProduct.upplerProductName }}</strong>-->
           </h4>
         </div>
 

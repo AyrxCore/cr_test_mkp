@@ -27,8 +27,6 @@ use Symfony\Component\Uid\Uuid;
     order: ['name' => 'ASC'],
     paginationEnabled: false
 )]
-#[ApiFilter(SearchFilter::class, properties: ['upplerId' => 'exact'])]
-#[ORM\Index(columns: ['uppler_id'], name: 'idx_partner_uppler_id')]
 class Partner
 {
     #[ORM\Id]
@@ -55,10 +53,6 @@ class Partner
     #[ORM\OneToMany(mappedBy: 'partner', targetEntity: PartnerStore::class, orphanRemoval: true)]
     #[Groups(['partner:read'])]
     private Collection $partnerStores;
-
-    #[ORM\Column(type: 'integer', nullable: true)]
-    #[Groups(['partner:read'])]
-    private ?int $upplerId = null;
 
     #[ORM\OneToMany(mappedBy: 'partner', targetEntity: Accord::class)]
     private Collection $accords;
@@ -155,18 +149,6 @@ class Partner
         return $this;
     }
 
-    public function getUpplerId(): ?int
-    {
-        return $this->upplerId;
-    }
-
-    public function setUpplerId(int $upplerId): static
-    {
-        $this->upplerId = $upplerId;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Accord>
      */
@@ -207,5 +189,4 @@ class Partner
 
         return $this;
     }
-
 }

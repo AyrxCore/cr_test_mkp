@@ -10,8 +10,8 @@ use App\Entity\PartnerStore;
 
 readonly class MapStoreBuilderService
 {
-    public function __construct(
-    ) {
+    public function __construct()
+    {
     }
 
     public function buildStores(array $partners): array

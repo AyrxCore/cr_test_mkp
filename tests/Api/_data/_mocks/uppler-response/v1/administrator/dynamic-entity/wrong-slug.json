@@ -1,7 +1,0 @@
-{
-  "@context": "/api/contexts/Error",
-  "@type": "Error",
-  "title": "An error occurred",
-  "description": "@string@.contains('News with slug: wrong-slug does not exist')",
-  "trace": "@array@"
-}

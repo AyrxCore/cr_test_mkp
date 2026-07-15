@@ -10,6 +10,7 @@ use App\Enum\Djust\DjustCustomField;
 use App\Service\Djust\DjustDataExtractor;
 use Psr\Log\LoggerInterface;
 use Sentry\State\Scope;
+
 use function Sentry\captureMessage;
 use function Sentry\withScope;
 

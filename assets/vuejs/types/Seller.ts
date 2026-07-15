@@ -28,7 +28,6 @@ export interface Partner {
   id: number
   name: string
   partnerStores: StoreData[]
-  upplerId?: number
 }
 
 export interface Seller {
@@ -49,13 +48,6 @@ export interface Seller {
   }
   supplierDeliveryInfo?: string
   address?: string
-}
-
-export interface SellerFranco {
-  [key: string]: number
-}
-export interface SellerShippingCost {
-  [key: string]: number
 }
 
 export interface SellerPromotion {

@@ -1,8 +1,5 @@
 export interface FavoriteProduct {
   id?: string
-  upplerProductId?: number
-  upplerVariantId?: number
-  upplerProductName?: string
 }
 
 export interface Favorite {

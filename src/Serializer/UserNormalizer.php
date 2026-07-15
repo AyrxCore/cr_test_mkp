@@ -8,8 +8,6 @@ use App\Entity\User;
 use App\Repository\AccountRepository;
 use App\Service\Account\CurrentAccountProvider;
 use App\Service\Djust\DjustCustomerAccountService;
-use App\Service\UpplerAccountService;
-use App\Service\UpplerBuyerCompanyService;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface as SfNormalizerInterface;
@@ -18,8 +16,6 @@ class UserNormalizer extends AbstractNormalizer
 {
     public function __construct(
         SfNormalizerInterface $normalizer,
-        private readonly UpplerAccountService $upplerAccountService,
-        private readonly UpplerBuyerCompanyService $upplerBuyerCompanyService,
         private readonly RequestStack $requestStack,
         private readonly AccountRepository $accountRepository,
         private readonly DjustCustomerAccountService $djustCustomerAccountService,
@@ -72,22 +68,13 @@ class UserNormalizer extends AbstractNormalizer
     {
         $serializationGroups = $this->getSerializationGroups($context);
 
-        if (
-            !\in_array('user:external_api_data:subaccount', $serializationGroups, true)
-            && !\in_array('user:external_api_data:buyer', $serializationGroups, true)
-        ) {
+        if (!\in_array('user:external_api_data', $serializationGroups, true)) {
             return null;
         }
 
         $data = [];
 
-        if (\in_array('user:external_api_data:subaccount', $serializationGroups, true)) {
-            $data['subaccount'] = $this->upplerAccountService->getUserSubAccountData();
-        }
-
-        if (\in_array('user:external_api_data:buyer', $serializationGroups, true)) {
-            $data['buyer'] = $this->upplerBuyerCompanyService->getUserBuyerData();
-
+        if (\in_array('user:external_api_data', $serializationGroups, true)) {
             $customerAccount = $this->djustCustomerAccountService->getCustomerAccount();
             if ($customerAccount !== null) {
                 $data['customerAccount'] = $customerAccount;

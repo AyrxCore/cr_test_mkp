@@ -185,16 +185,16 @@ const onMoveProduct = (event) => {
 }
 
 onMounted(async (): Promise<void> => {
-  product.value = await productStore.initProduct(
-    props.favoriteProduct.upplerProductId,
-  )
-  if (!product.value) {
-    productNotFound.value = true
-  } else {
-    priceReference.value = product.value.priceReference
-    price.value = product.value.price
-    percent.value = product.value.percent
-  }
+  // product.value = await productStore.initProduct(
+  //   props.favoriteProduct.upplerProductId,
+  // )
+  // if (!product.value) {
+  //   productNotFound.value = true
+  // } else {
+  //   priceReference.value = product.value.priceReference
+  //   price.value = product.value.price
+  //   percent.value = product.value.percent
+  // }
 })
 
 const productImage = computed((): string => {
@@ -204,16 +204,16 @@ const productImage = computed((): string => {
   return product.value?.images[0]
 })
 
-const productSlug = computed((): string => {
-  return product.value
-    ? product.value.slug
-    : props.favoriteProduct.upplerProductId
+const productSlug = computed(() => {
+  // return product.value
+  //   ? product.value.slug
+  //   : props.favoriteProduct.upplerProductId
 })
 
-const productName = computed((): string => {
-  return product.value
-    ? product.value.name
-    : props.favoriteProduct.upplerProductName
+const productName = computed(() => {
+  // return product.value
+  //   ? product.value.name
+  //   : props.favoriteProduct.upplerProductName
 })
 
 const productReference = computed((): string => {
@@ -229,6 +229,7 @@ const productSeller = computed((): string => {
 })
 
 </script>
+
 <style scoped>
 .input-qte {
   @apply rounded-lg border border-gray-300 px-0 text-center text-sm md:text-base lg:text-lg;

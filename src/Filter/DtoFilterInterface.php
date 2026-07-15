@@ -9,7 +9,6 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 #[AutoconfigureTag('app.dto_filter')]
 interface DtoFilterInterface
 {
-
     public function shouldInclude(FilterableInterface $object): bool;
 
     public function getName(): string;

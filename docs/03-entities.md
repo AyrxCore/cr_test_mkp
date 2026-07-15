@@ -19,13 +19,13 @@
          ▼ *
 ┌─────────────────┐       ┌─────────────────┐
 │     Account     │──────▶│      User       │
-│ (Compte Uppler) │ *   1 │ (Utilisateur)   │
+│ (Compte Djust)  │ *   1 │ (Utilisateur)   │
 └────────┬────────┘       └─────────────────┘
          │
          │
          ▼
 ┌─────────────────┐
-│  API Uppler     │
+│  API Djust      │
 │  (CompanyID,    │
 │   UserID...)    │
 └─────────────────┘
@@ -63,29 +63,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 ### Account
 
-Liaison entre un User local et un compte sur l'API Uppler.
+Liaison entre un User local et un compte sur l'API Djust.
 
 ```php
 // src/Entity/Account.php
 class Account
 {
     private ?Uuid $id;
-    private ?int $upplerUserId;       // ID User côté Uppler
-    private ?int $upplerSubAccountId; // ID SubAccount côté Uppler
-    private ?int $upplerCompanyId;    // ID Company côté Uppler
-    private ?string $upplerUsername;
-    private ?string $upplerPassword;
-    private ?string $upplerClientId;     // OAuth credentials Uppler
-    private ?string $upplerClientSecret;
-    private ?User $user;              // Relation ManyToOne
-    private ?Adherent $adherent;      // Relation ManyToOne
+    private ?string $djustCustomerAccountId; // ID CustomerAccount côté Djust
+    private ?string $djustCustomerUserId;    // ID CustomerUser côté Djust
+    private ?string $djustUsername;
+    private ?string $djustPassword;          // Encrypté
+    private ?User $user;                     // Relation ManyToOne
+    private ?Adherent $adherent;             // Relation ManyToOne
     private ?bool $enabled;
     private ?\DateTimeInterface $lastConnexion;
 }
 ```
 
 **Points clés :**
-- Stocke les credentials OAuth pour l'API Uppler
+- Stocke les credentials OAuth pour l'API Djust
 - Lié à un **Adherent** (entreprise)
 - Permet le multi-compte par User
 
@@ -191,7 +188,7 @@ class Partner
 {
     private ?Uuid $id;
     private ?string $name;
-    private ?int $upplerSellerId;  // ID vendeur Uppler
+    private ?string $djustSellerId;  // ID vendeur Djust
 }
 
 // src/Entity/PartnerStore.php

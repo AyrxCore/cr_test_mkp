@@ -6,7 +6,6 @@ namespace App\Tests;
 
 use App\Tests\Api\Helper\JsonHelper;
 use App\Tests\MockClient\DjustMockClientCallback;
-use App\Tests\MockClient\UpplerMockClientCallback;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -18,16 +17,12 @@ class MockClientCallback
     private static bool $simulateEmptyAccordCadre = false;
 
     private DjustMockClientCallback $djustMock;
-    private UpplerMockClientCallback $upplerMock;
 
     public function __construct(
         #[Autowire(env: 'DJUST_API_BASE_URL')]
         private readonly string $djustBaseUrl,
-        #[Autowire(env: 'UPPLER_API_URL')]
-        private readonly string $upplerBaseUrl,
     ) {
         $this->djustMock = new DjustMockClientCallback();
-        $this->upplerMock = new UpplerMockClientCallback();
     }
 
     public function __invoke(string $method, string $url, array $options = []): ResponseInterface
@@ -51,10 +46,6 @@ class MockClientCallback
         // Déléguer aux autres mocks selon l'URL
         if (\str_starts_with($url, $this->djustBaseUrl)) {
             return $this->djustMock->__invoke($method, $url, $options);
-        }
-
-        if (\str_starts_with($url, $this->upplerBaseUrl)) {
-            return $this->upplerMock->__invoke($method, $url, $options);
         }
 
         // Réponse par défaut

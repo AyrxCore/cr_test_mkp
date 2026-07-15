@@ -36,4 +36,3 @@ class AdyenExtension extends AbstractExtension
         return $this->environment;
     }
 }
-

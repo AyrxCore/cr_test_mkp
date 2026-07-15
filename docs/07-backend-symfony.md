@@ -94,11 +94,11 @@ private ?string $username = null;
 
 #[ORM\Column]
 #[Groups(['account:get'])]  // Uniquement dans account:get
-private ?int $upplerUserId = null;
+private ?string $djustCustomerAccountId = null;
 
 #[ORM\Column]
 // Pas de Groups = jamais exposé en API
-private ?string $upplerPassword = null;
+private ?string $djustPassword = null;
 ```
 
 ## 🎮 Controllers
@@ -171,7 +171,7 @@ trait ChannelAwareControllerTrait
 class CartService
 {
     public function __construct(
-        private UpplerCartService $upplerCartService,
+        private DjustCartService $djustCartService,
         private EntityManagerInterface $em,
         private Security $security,
     ) {}
@@ -183,24 +183,28 @@ class CartService
 }
 ```
 
-### Service Uppler typique
+### Service Djust typique
 
 ```php
-// src/Service/UpplerOrderService.php
-class UpplerOrderService extends AbstractUpplerService
+// src/Service/Djust/DjustOrderService.php
+class DjustOrderService
 {
+    public function __construct(
+        private readonly DjustHttpClientService $djustHttpClient
+    ) {}
+
     public function getOrders(int $page = 1, int $perPage = 10): array
     {
-        $response = $this->request(
-            'GET',
-            sprintf('v1/buyer/order?page=%d&perPage=%d', $page, $perPage)
+        $response = $this->djustHttpClient->get(
+            "/v2/shop/orders",
+            ['page' => $page, 'perPage' => $perPage]
         );
 
-        if (!$response || $response->getStatusCode() !== Response::HTTP_OK) {
+        if (empty($response)) {
             throw new BadRequestHttpException('Failed to fetch orders');
         }
 
-        return json_decode($response->getContent(), true);
+        return $response;
     }
 }
 ```
@@ -339,12 +343,11 @@ services:
     exclude: '../src/{DependencyInjection,Entity,Kernel.php}'
 
   # Service avec arguments spécifiques
-  App\Service\AbstractUpplerService:
+  App\Service\Djust\DjustHttpClientService:
     arguments:
-      $upplerEnv: '%uppler_env%'
-      $adminClientId: '%uppler_admin_client_id%'
-      $adminClientSecret: '%uppler_admin_client_secret%'
-      $adminTokenFile: '%uppler_admin_token_file%'
+      $baseUrl: '%env(DJUST_API_BASE_URL)%'
+      $username: '%env(DJUST_API_USERNAME)%'
+      $password: '%env(DJUST_API_PASSWORD)%'
 ```
 
 ## 🔒 Conventions de code

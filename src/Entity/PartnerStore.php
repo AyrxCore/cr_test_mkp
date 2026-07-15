@@ -18,21 +18,22 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: PartnerStoreRepository::class)]
-#[ORM\Index(columns: ['partner_id'], name: 'idx_partner_store_partner_id')]
+#[ORM\Index(name: 'idx_partner_store_partner_id', columns: ['partner_id'])]
 #[ApiResource(
     operations: [
         new Get(),
         new GetCollection(),
         new GetCollection(
             uriTemplate: '/partner-stores/map-data',
+            normalizationContext: ['groups' => ['map:read']],
             output: MapStoreDataDto::class,
             provider: PartnerStoreMapProvider::class,
-            normalizationContext: ['groups' => ['map:read']],
         ),
         new Get(
             uriTemplate: '/partner-stores/{id}/detail',
             output: StoreDetailDto::class,
-            provider: PartnerStoreDetailProvider::class, ),
+            provider: PartnerStoreDetailProvider::class,
+        ),
     ],
     order: ['name' => 'ASC'],
     paginationEnabled: false

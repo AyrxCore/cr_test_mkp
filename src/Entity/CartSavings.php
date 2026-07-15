@@ -19,7 +19,7 @@ class CartSavings
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private ?Uuid $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'cartSavings')]
+    #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Account $account = null;
 

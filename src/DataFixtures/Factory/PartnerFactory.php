@@ -22,7 +22,6 @@ final class PartnerFactory extends PersistentObjectFactory
         return [
             'name' => self::faker()->company(),
             'created_at' => new \DateTimeImmutable(),
-            'uppler_id' => self::faker()->randomNumber(),
         ];
     }
 

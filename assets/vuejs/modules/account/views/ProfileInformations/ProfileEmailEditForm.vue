@@ -66,7 +66,7 @@ const showResultModal = ref<boolean>(false)
 const formEmailAccount = ref(null)
 
 onBeforeMount(() => {
-  userStore.setEditingSubAccount()
+  userStore.setEditingAccount()
 })
 
 const onEmailFormSubmit = async () => {

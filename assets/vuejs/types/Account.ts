@@ -46,7 +46,6 @@ export interface Adherent {
 export interface Account extends ExternalApiDataEntity {
   id: string
   lastConnexion: Date
-  upplerUserId: number
   buyer: AccountBuyer
   adherent: Adherent
   subaccount: SubAccount

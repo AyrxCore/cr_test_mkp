@@ -67,7 +67,7 @@ const isLoading = ref<boolean>(false)
 const userStore = useUserStore()
 
 onBeforeMount(() => {
-  userStore.setEditingSubAccount()
+  userStore.setEditingAccount()
 })
 
 const onDetailsFormSubmit = async () => {

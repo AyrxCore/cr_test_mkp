@@ -105,7 +105,8 @@ class NewsletterRattachementController extends AbstractController implements Cha
             $adherent = $account->getAdherent();
             $service = $adherent->getChannel()->getCode() === 'QANTIS_ACHAT' ? 'QANTIS' : $adherent->getRootParent()->getName();
 
-            if (!$cacheValues
+            if (
+                !$cacheValues
                 || !(($cacheValues['partnerId'] ?? null) === $partnerId)
                 || !(($cacheValues['email'] ?? null) === $email)
                 || !(($cacheValues['host'] ?? null) === $host)

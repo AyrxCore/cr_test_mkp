@@ -88,11 +88,11 @@ onBeforeMount(async () => {
     promises.push(categoryStore.getAllCategories())
     promises.push(newsStore.initialize())
     promises.push(sellerStore.getAllSellers())
-    if (
-      channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.BANNER_FLASH_HOMEPAGE)
-    ) {
-      promises.push(bannerStore.init())
-    }
+    // if (
+    //   channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.BANNER_FLASH_HOMEPAGE)
+    // ) {
+    //   promises.push(bannerStore.init())
+    // }
     // TODO (MKP-1411): Appel temporairement désactivé - à rétablir quand les Favoris seront disponibles via DJUST
     // if (channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.FAVORITES)) {
     //   promises.push(favoriteStore.fetchFavorites())

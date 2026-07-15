@@ -57,16 +57,16 @@ next-review: 2026-06
 
 ## Projet
 
-Application marketplace B2B : catalogue produits, commandes et gestion multi-tenant (Channels) via API Uppler.
+Application marketplace B2B : catalogue produits, commandes et gestion multi-tenant (Channels) via API Djust.
 
 - **Backend** : PHP 8.3, Symfony 6.4, API Platform 4, Doctrine ORM, PostgreSQL
 - **Frontend** : Vue.js 3, TypeScript, Pinia, TailwindCSS, Vite
 - **Tests** : Pest PHP, Foundry, Mockery
 - **Auth** : JWT (LexikJWTAuthenticationBundle), cookies HttpOnly
-- **Intégration** : API Uppler (OAuth2, tokens Admin/Buyer)
+- **Intégration** : API Djust (OAuth2, tokens Operator)
 - **Multi-tenant** : Channels (chaque `Channel` possède son design et ses paramètres propres, et regroupe plusieurs `Adherent`; un `Adherent` appartient à un seul `Channel`)
 
-> Détails : `docs/02-architecture.md` · `docs/05-uppler-integration.md` · `.github/agents/` · `.github/skills/`
+> Détails : `docs/02-architecture.md` · `.github/agents/` · `.github/skills/`
 
 ---
 
@@ -109,7 +109,7 @@ make build-front           # Build du frontend (yarn install + yarn build)
 | Secrets                    | Variables d'env + `.env.local`                 | Hardcoder ou logger des secrets     |
 | Erreurs front              | `catch` + notification utilisateur             | `catch` silencieux                  |
 | Stockage tokens            | Cookies HttpOnly pour JWT                      | Tokens en localStorage              |
-| API Uppler                 | `AbstractUpplerService` (gestion token auto)   | Appels directs sans gestion token   |
+| API Djust                  | `DjustHttpClientService` (gestion token auto)  | Appels directs sans gestion token   |
 
 ### Nommage
 
@@ -150,7 +150,7 @@ Sinon, ne jamais demander à l'utilisateur.
 
 | La demande concerne...                                                 | Domaine                                  |
 | ---------------------------------------------------------------------- | ---------------------------------------- |
-| Entity, Repository, Service, API, Doctrine, Controller, Migration, PHP, Uppler | **Symfony**                      |
+| Entity, Repository, Service, API, Doctrine, Controller, Migration, PHP, Djust | **Symfony**                      |
 | Composant, Store, Vue, Pinia, TailwindCSS, TypeScript front            | **Vue.js**                               |
 | Architecture, patterns, choix techniques, ADR                          | **Architecture**                         |
 | Backend + Frontend                                                     | **Full Stack** → architecte puis délègue |
@@ -160,7 +160,7 @@ Sinon, ne jamais demander à l'utilisateur.
 | Situation | Attendu |
 | --------- | ------- |
 | CRUD, endpoint, composant, bug, logique métier, optimisation, workflow | Analyse standard et ciblée |
-| Sécurité paiement, haute charge, bug critique prod, refonte archi, intégration Uppler critique | Analyse approfondie, checklist renforcée, validation des risques |
+| Sécurité paiement, haute charge, bug critique prod, refonte archi, intégration Djust critique | Analyse approfondie, checklist renforcée, validation des risques |
 
 ### 3. Agent (`.github/agents/`)
 

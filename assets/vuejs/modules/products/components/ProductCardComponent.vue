@@ -71,7 +71,7 @@
             <img
               v-if="product.images[0]"
               :alt="product.name"
-              :src="getUpplerImage(product.images[0])"
+              :src="getMediaUrl(product.images[0])"
               class="flex h-full w-full cursor-pointer items-center object-contain lg:max-w-max"
             />
             <div
@@ -135,7 +135,7 @@ import { storeToRefs } from 'pinia'
 
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import { useProductStore } from '@/vuejs/stores/product'
-import { getUpplerImage, betterTextColor } from '@/vuejs/services/utils'
+import { getMediaUrl, betterTextColor } from '@/vuejs/services/utils'
 import { formatProductGtmEvent, sendGtmEvent } from '@/vuejs/services/gtm'
 import { Product } from '@/vuejs/types/Product'
 // import { Variant } from '@/vuejs/types/Product/Variant'

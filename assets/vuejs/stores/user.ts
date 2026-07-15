@@ -77,7 +77,7 @@ export const useUserStore = defineStore('user', {
           alertStore.setShow('Erreur technique', AlertType.danger)
       }
     },
-    setEditingSubAccount(): void {
+    setEditingAccount(): void {
       this.editingInfo = {
         username: this.user.username,
         firstName: this.user.firstName,
@@ -133,7 +133,7 @@ export const useUserStore = defineStore('user', {
       try {
         await UserHttpClient.get(true).updateUserAccountEmail({
           email: this.editingInfo.username.toLowerCase(),
-          id: this.user.externalApiData.subaccount.id,
+          id: this.user.externalApiData.customerAccount?.id,
           accountId: this.user.account.id,
         })
         notifySuccess(
@@ -152,7 +152,7 @@ export const useUserStore = defineStore('user', {
           lastName: this.editingInfo.lastName,
           firstName: this.editingInfo.firstName,
           phone: this.editingInfo.phone,
-          id: this.user.externalApiData.subaccount.id,
+          id: this.user.externalApiData.customerAccount?.id,
           accountId: this.user.account.id,
         })
 

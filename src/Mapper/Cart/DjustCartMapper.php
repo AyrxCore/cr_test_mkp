@@ -21,7 +21,8 @@ class DjustCartMapper
         private readonly DjustProductFactory $djustProductFactory,
         private readonly DjustCartItemTransformer $djustCartItemTransformer,
         private readonly ShippingCostService $shippingCostService,
-    ) {}
+    ) {
+    }
 
     public function mapCommercialOrderToCart(array $djustCart): Cart
     {

@@ -76,12 +76,11 @@ APP_SECRET=votre_secret_unique
 # Base de données PostgreSQL
 DATABASE_URL="postgresql://user:password@database:5432/marketplace?serverVersion=15"
 
-# API Uppler (connexion à la marketplace)
-UPPLER_ENV=dev
-UPPLER_API_URL=https://api.uppler.com/
-UPPLER_ADMIN_CLIENT_ID=votre_client_id
-UPPLER_ADMIN_CLIENT_SECRET=votre_client_secret
-UPPLER_WEBHOOK_SECRET=votre_webhook_secret
+# API Djust (connexion à la marketplace)
+DJUST_API_BASE_URL=https://djust-api.pre-prod.djust-app.com/qantis
+DJUST_API_USERNAME=votre_username
+DJUST_API_PASSWORD=votre_password
+DJUST_TEST_ACCOUNTS_PASSWORD=votre_test_password
 
 # JWT Authentication
 JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem

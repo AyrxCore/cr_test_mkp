@@ -7,10 +7,6 @@
       "@id": "/api/accounts/@uuid@",
       "@type": "Account",
       "id": "@uuid@",
-      "upplerUserId": 113,
-      "upplerSubAccountId": 23,
-      "upplerCompanyId": 72,
-      "upplerUsername": "@string@",
       "lastConnexion": "@datetime@",
       "user": {
         "@id": "/api/users/@uuid@",

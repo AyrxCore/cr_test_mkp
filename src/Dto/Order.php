@@ -31,7 +31,6 @@ use App\State\Provider\OrderProvider;
 )]
 final class Order
 {
-
     /**
      * Shipping statuses
      */

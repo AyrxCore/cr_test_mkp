@@ -6,6 +6,7 @@ namespace App\Controller\Api;
 
 use App\Dto\CartItem;
 use App\Factory\DjustCartFactory;
+use App\Message\CartSubscription;
 use App\Service\Account\CurrentAccountProvider;
 use App\Service\CartSavingsService;
 use App\Service\Djust\DjustCartService;
@@ -131,6 +132,8 @@ class CartController extends AbstractController
         $result = $this->djustCartService->submitPaymentDetails($payload);
 
         if ($this->djustCartService->isSuccessfulPaymentResult($result)) {
+//            TODO: Décommenter et adapter le rattachement automatique (récup des produits du panier et de l'accountId) pour créer un message CartSubscription)
+//            $this->messageBus->dispatch(new CartSubscription($productsIds, $accountId, $this->getChannel($this->requestStack->getCurrentRequest())));
             $cartReference = (string) ($this->requestStack->getSession()->get(self::SESSION_KEY_CART_REFERENCE, '') ?? '');
 
             if ($cartReference !== '') {

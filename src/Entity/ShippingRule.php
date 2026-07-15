@@ -19,7 +19,7 @@ class ShippingRule
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private ?Uuid $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'shippingRules')]
+    #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Partner $partner = null;
 

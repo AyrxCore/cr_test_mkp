@@ -13,7 +13,6 @@
     "@id": "/api/accounts/@uuid@",
     "@type": "Account",
     "id": "@uuid@",
-    "upplerUserId": 113,
     "lastConnexion": "@datetime@",
     "adherent": {
       "@id": "/api/adherents/@uuid@",
@@ -30,108 +29,21 @@
   },
   "userInfoUpdateRequests": [],
   "externalApiData": {
-    "subaccount": {
-      "id": 23,
-      "email": "test@qantis.co",
-      "lastname": "DE SAINTE MARIE",
-      "firstname": "Ga\u00ebtan",
-      "shipping_address": 622,
-      "billing_address": 622
-    },
-    "buyer": {
-      "id": 72,
-      "name": "GROUPE QANTIS",
-      "description": [],
-      "avatar": null,
-      "avatar_url": "https://uppler-platform-quantis.s3.eu-west-3.amazonaws.com/image/",
-      "vat": null,
-      "phone": null,
-      "default_address": {
-        "id": 622,
-        "province": null,
-        "country": {
-          "id": 83,
-          "name": {
-            "fr": "France",
-            "default": "France"
-          }
-        },
-        "street": "185 ALLEE DES CYPRES",
-        "city": "LIMONEST",
-        "postcode": "69760"
-      },
-      "shipping_address": {
-        "id": 846,
-        "province": null,
-        "country": {
-          "id": 83,
-          "name": {
-            "fr": "France",
-            "default": "France"
-          }
-        },
-        "street": "185 all\u00e9e des cypr\u00e8s",
-        "city": "Limonest",
-        "postcode": "69480"
-      },
-      "billing_address": {
-        "id": 855,
-        "province": null,
-        "country": {
-          "id": 83,
-          "name": {
-            "fr": "France",
-            "default": "France"
-          }
-        },
-        "street": "185 all\u00e9e de cypr\u00e8s",
-        "city": "Lismonest",
-        "postcode": "69480"
-      },
-      "number": "53849238000026",
-      "email": null,
-      "website": null,
-      "external_id": null,
-      "parent_company": null,
-      "company_subordinations": []
-    },
     "customerAccount": {
-      "id": "0000001652",
-      "externalId": "TEST_ACCOUNT3",
-      "name": "[DJUST] GROUPE QANTIS",
-      "accountManager": "Michel",
-      "website": "",
-      "companyRegistrationName": "Seat",
-      "businessRegistrationNumber": "58446667249006",
-      "vatNumber": "",
-      "status": "ACTIVE",
-      "paymentType": "ON_ACCEPTANCE",
-      "mainContacts": [],
-      "addresses": [
-        {
-          "id": "0000000683",
-          "externalId": "adresse-peugeot",
-          "label": null,
-          "fullName": "Peugeot France",
-          "country": "France",
-          "state": "France",
-          "city": "Rillieux-la-Pape",
-          "zipcode": "69140",
-          "address": "38 avenue Maurice Ravel",
-          "additionalAddress": null,
-          "phone": null,
-          "shipping": true,
-          "billing": true,
-          "company": "Peugeot"
-        }
-      ],
-      "customFieldValues": [],
-      "customerTags": [
-        {
-          "id": "TARIF_ID",
-          "name": "tag1"
-        }
-      ]
+      "id": "@string@",
+      "externalId": "@string@",
+      "name": "@string@",
+      "accountManager": "@string@",
+      "website": "@string@",
+      "companyRegistrationName": "@string@",
+      "businessRegistrationNumber": "@string@",
+      "vatNumber": "@string@",
+      "status": "@string@",
+      "paymentType": "@string@",
+      "mainContacts": "@array@",
+      "addresses": "@array@",
+      "customFieldValues": "@array@",
+      "customerTags": "@array@"
     }
   }
 }

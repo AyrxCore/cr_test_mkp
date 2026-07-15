@@ -10,7 +10,6 @@ use App\Entity\User;
 use App\Events\UserAcceptCGUEvent;
 use App\Service\Account\CurrentAccountProvider;
 use App\Service\Djust\DjustAuthenticationService;
-use App\Service\UpplerAuthenticationService;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,7 +28,6 @@ class Select extends AbstractController
         private EventDispatcherInterface $eventDispatcher,
         private RequestStack $requestStack,
         private Security $security,
-        private UpplerAuthenticationService $upplerAuthenticationService,
         private readonly DjustAuthenticationService $djustAuthenticationService,
         protected readonly LoggerInterface $djustLogger,
     ) {
@@ -64,12 +62,6 @@ class Select extends AbstractController
             }
             $session = $this->requestStack->getSession();
             $session->set(CurrentAccountProvider::SESSION_KEY_ACCOUNT, $account);
-
-            $isUpplerAuthenticated = $this->upplerAuthenticationService->authenticateUser($account);
-
-            if ($isUpplerAuthenticated && !$this->requestStack->getSession()->get('access_token')) {
-                throw new AccessDeniedHttpException("Vous n'avez pas accès à ce compte Uppler");
-            }
 
             $isDjustAuthenticated = $this->djustAuthenticationService->authenticateUser($account);
             if (!$isDjustAuthenticated) {

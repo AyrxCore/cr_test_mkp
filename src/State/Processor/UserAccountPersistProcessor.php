@@ -139,12 +139,7 @@ readonly class UserAccountPersistProcessor implements ProcessorInterface
             ->setDjustCustomerAccountId($data->getDjustCustomerAccountId())
             ->setDjustCustomerUserId($data->getDjustCustomerUserId())
             ->setDjustUsername($data->getDjustUsername())
-            ->setDjustPassword($data->getDjustPassword())
-            ->setUpplerSubAccountId($data->getUpplerSubAccountId())
-            ->setUpplerClientId($data->getUpplerSubAccountClientId())
-            ->setUpplerClientSecret($data->getUpplerSubAccountClientSecret())
-            ->setUpplerUserId($data->getUpplerUserId())
-            ->setUpplerCompanyId($data->getUpplerCompanyId());
+            ->setDjustPassword($data->getDjustPassword());
 
         if (!$logPhone || ($logPhone->getValue() === $data->getPhone())) {
             $account->setPhone($data->getPhone());

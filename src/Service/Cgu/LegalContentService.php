@@ -12,7 +12,9 @@ use App\Service\Storyblok\StoryblokHttpClient;
 final class LegalContentService
 {
     public function __construct(
-        private readonly StoryblokHttpClient $httpClient, private readonly StoryblokToLegalContentMapper $mapper, private readonly ChannelContext $channelContext,
+        private readonly StoryblokHttpClient $httpClient,
+        private readonly StoryblokToLegalContentMapper $mapper,
+        private readonly ChannelContext $channelContext,
     ) {
     }
 
@@ -22,6 +24,7 @@ final class LegalContentService
         $rawData = $this->httpClient->getStories([
             'starts_with' => StoryblokEndpoint::LEGAL_CONTENT->value,
         ]);
+
         return $this->mapper->mapByChannelCode($rawData, $channelCode);
     }
 }

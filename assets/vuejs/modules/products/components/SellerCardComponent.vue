@@ -10,7 +10,7 @@
       <div class="seller-card">
         <img
           :alt="seller?.name"
-          :src="getUpplerImage(seller?.avatar)"
+          :src="getMediaUrl(seller?.avatar)"
           class="pointer h-[107px] w-1/3 object-contain md:w-full"
         />
         <div
@@ -26,7 +26,7 @@
 <script lang="ts" setup>
 import { PropType } from 'vue'
 import { ProductPageList } from '@/vuejs/router/pages-list'
-import { getUpplerImage } from '@/vuejs/services/utils'
+import { getMediaUrl } from '@/vuejs/services/utils'
 import { Seller } from '@/vuejs/types/Seller'
 
 const props = defineProps({
@@ -36,6 +36,7 @@ const props = defineProps({
   },
 })
 </script>
+
 <style scoped lang="postcss">
 .seller-card {
   @apply mx-auto flex w-full cursor-pointer flex-row items-center justify-start rounded-lg md:mb-2 md:max-w-[200px] md:flex-col md:justify-center md:space-x-0;

@@ -47,11 +47,6 @@ final class UserStory extends Story
 
         AccountFactory::createOne([
             'user' => $user,
-            'upplerClientId' => '101_3l3ueqlt27eog4co400wo0g0kcswg80sk4wocwsgoww4c80ko4',
-            'upplerClientSecret' => '67nfvkl6q84kck8g4oksww4gsokowgo4s8cw8ow0skk0okw48g',
-            'upplerUserId' => '113',
-            'upplerSubAccountId' => '23',
-            'upplerCompanyId' => '72',
             'adherent' => self::adherentQantisTest(),
             'enabled' => true,
             'phone' => '04 05 06 07 08',

@@ -5,7 +5,7 @@
 L'application utilise un système d'authentification **multi-couches** :
 
 1. **JWT (JSON Web Tokens)** pour l'authentification de l'API interne
-2. **OAuth2** pour communiquer avec l'API Uppler
+2. **OAuth2** pour communiquer avec l'API Djust
 3. **Auto-Login** pour les connexions depuis le système Neo
 
 ```
@@ -14,7 +14,7 @@ L'application utilise un système d'authentification **multi-couches** :
 ├────────────────────────────────────────────────────────────┤
 │                                                             │
 │  ┌─────────────┐     ┌─────────────┐     ┌──────────────┐  │
-│  │  JWT Auth   │     │ Uppler OAuth│     │  Auto-Login  │  │
+│  │  JWT Auth   │     │ Djust OAuth │     │  Auto-Login  │  │
 │  │  (Interne)  │     │  (Externe)  │     │    (Neo)     │  │
 │  └──────┬──────┘     └──────┬──────┘     └──────┬───────┘  │
 │         │                   │                   │          │
@@ -103,63 +103,73 @@ access_control:
   - { path: ^/, roles: PUBLIC_ACCESS }
 ```
 
-## 🔄 OAuth2 avec Uppler
+## 🔄 OAuth2 avec Djust
 
 ### Types de tokens
 
 | Token | Usage | Stockage |
 |-------|-------|----------|
-| **Token Admin** | Actions en mode Operator (création comptes...) | Fichier `var/token.txt` |
-| **Token User** | Actions scopées au buyer connecté | Session PHP |
+| **Token Operator** | Actions en mode admin (sync, gestion globale) | Cache Symfony |
+| **Token Buyer** | Actions scopées au buyer connecté | Session PHP |
 
-### AbstractUpplerService
+### DjustHttpClientService
 
-Classe de base pour tous les appels à l'API Uppler :
+Service central pour tous les appels à l'API Djust :
 
 ```php
-// src/Service/AbstractUpplerService.php
-abstract class AbstractUpplerService
+// src/Service/Djust/DjustHttpClientService.php
+class DjustHttpClientService
 {
-    // Effectue une requête vers l'API Uppler
-    public function request(
-        string $method,
-        string $path,
-        array $options = [],
-        bool $isAdmin = false,      // Utiliser le token Admin
-        bool $withoutToken = false, // Sans token (endpoint public)
-        bool $withCache = false,    // Activer le cache HTTP
-    ): bool|ResponseInterface;
+    public function __construct(
+        private readonly HttpClientInterface $httpClient,
+        private readonly CacheInterface $cache,
+        #[Autowire(env: 'DJUST_API_BASE_URL')]
+        private readonly string $baseUrl,
+        #[Autowire(env: 'DJUST_API_USERNAME')]
+        private readonly string $username,
+        #[Autowire(env: 'DJUST_API_PASSWORD')]
+        private readonly string $password,
+    ) {}
     
-    // Obtient un token User et le stocke en session
-    public function getUserToken(Account $account): void;
+    // Effectue une requête vers l'API Djust
+    public function get(string $endpoint, array $params = [], bool $isOperator = false): array;
+    public function post(string $endpoint, array $data = [], bool $isOperator = false): array;
+    public function put(string $endpoint, array $data = [], bool $isOperator = false): array;
+    public function delete(string $endpoint, bool $isOperator = false): array;
     
-    // Obtient le token Admin (depuis fichier ou nouveau)
-    private function getAdminToken(): string;
+    // Obtient un token ACCOUNT valide (depuis session ou nouveau)
+    public function getValidAccountToken(): string;
+    
+    // Obtient le token OPERATOR (depuis cache ou nouveau)
+    private function getOperatorToken(): string;
 }
 ```
 
-### Authentification d'un User vers Uppler
+### Authentification d'un User vers Djust
 
 ```php
-// src/Service/UpplerAuthenticationService.php
-class UpplerAuthenticationService extends AbstractUpplerService
+// src/Service/Djust/DjustAuthenticationService.php
+class DjustAuthenticationService
 {
-    public function authenticateUser(Account $account): bool
+    public function authenticateUser(Account $account, bool $isConnectionLogged = true): bool
     {
-        // 1. Vider la session
-        $session->clear();
-        
-        // 2. Obtenir un token OAuth pour ce compte
-        $this->getUserToken($account);
-        
-        // 3. Vérifier que le token est en session
-        if ($session->has('access_token')) {
-            // Log de connexion
-            $account->setLastConnexion(new DateTime('now'));
-            return true;
+        // 1. Vérifier les credentials
+        if (empty($account->getDjustUsername()) || empty($account->getDjustPassword())) {
+            return false;
         }
         
-        return false;
+        // 2. Obtenir un token OAuth pour ce compte
+        $accessToken = $this->djustHttpClientService->getValidAccountToken();
+        
+        // 3. Stocker le token en session
+        $session->set('access_token', (object) ['access_token' => $accessToken]);
+        
+        // 4. Logger la connexion
+        if ($isConnectionLogged) {
+            $this->logAccountConnectionService->createLog($account);
+        }
+        
+        return true;
     }
 }
 ```
@@ -201,7 +211,7 @@ class AutoLoginSuccessHandler implements AuthenticationSuccessHandlerInterface
     {
         // 1. Récupérer l'utilisateur
         // 2. Sélectionner le bon Account
-        // 3. Authentifier vers Uppler
+        // 3. Authentifier vers Djust
         // 4. Générer le JWT
         // 5. Stocker en cookie et rediriger vers /app
     }
@@ -259,8 +269,8 @@ class AccountVoter extends Voter
 
 ## 🔒 Bonnes pratiques
 
-1. **Toujours utiliser les services Uppler** pour les appels API externes
-2. **Ne jamais exposer les credentials Uppler** côté frontend
+1. **Toujours utiliser `DjustHttpClientService`** pour les appels API externes
+2. **Ne jamais exposer les credentials Djust** côté frontend
 3. **Vérifier les permissions** avec les Voters pour les ressources sensibles
 4. **Logger les connexions** pour l'audit (LogAccountConnection)
 5. **Utiliser `IS_AUTHENTICATED_FULLY`** pour les routes sensibles

@@ -6,8 +6,8 @@ namespace App\Controller\Api;
 
 use App\Service\Cgu\LegalContentService;
 use Psr\Log\LoggerInterface;
-
 use Symfony\Component\HttpFoundation\JsonResponse;
+
 use function Sentry\captureException;
 
 use Sentry\State\Scope;

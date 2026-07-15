@@ -16,13 +16,10 @@ class DjustCategoryMapper
 
     public function mapCategories(Product $product, array $masterProduct): void
     {
-        $categories = [];
-
         $navigationCategories = $masterProduct['navigationCategories'] ?? [];
 
-        $categories = $this->categoryFactory->createAndAddToCollection($navigationCategories);
+        $categories = $this->categoryFactory->createAndAddToCollection($navigationCategories) ?? [];
 
         $product->setCategories($categories);
     }
 }
-

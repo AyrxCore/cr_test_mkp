@@ -7,9 +7,6 @@ namespace App\Controller\Api;
 use App\Entity\User;
 use App\Entity\UserInfoUpdateRequest;
 use App\Events\UserInfoUpdateEvent;
-use App\Service\UpplerAccountService;
-use App\Service\UpplerAuthenticationService;
-use App\Service\UpplerBuyerCompanyService;
 use App\Validator\PasswordStrength;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
@@ -30,9 +27,6 @@ class UserApiController extends AbstractController
 {
     public function __construct(
         public RequestStack $requestStack,
-        public UpplerAuthenticationService $upplerAuthenticationService,
-        public UpplerBuyerCompanyService $upplerBuyerCompanyService,
-        public UpplerAccountService $upplerAccountService,
         private EntityManagerInterface $em,
         public EventDispatcherInterface $eventDispatcher,
         public JWTTokenManagerInterface $JWTTokenManager,
