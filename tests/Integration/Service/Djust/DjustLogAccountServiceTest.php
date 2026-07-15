@@ -16,4 +16,16 @@ use App\Service\LogAccountConnectionService;
     $logAccountConnectionRepository = $this->entityManager->getRepository(LogAccountConnection::class);
 
     \expect($logAccountConnectionRepository->findOneBy(['account' => $account]))->not->toBeNull();
+    \expect($account->getFirstConnectionAt())->not->toBeNull();
+})->group('IntegrationDjustLogAccountServiceTest');
+
+\it('does not overwrite first_connection_at if already set', function () {
+    $existingDate = new \DateTimeImmutable('2020-01-01');
+    $account = AccountFactory::createOne(['firstConnectionAt' => $existingDate]);
+
+    $djustLogAccountService = new LogAccountConnectionService($this->entityManager);
+
+    $djustLogAccountService->createLog($account);
+
+    \expect($account->getFirstConnectionAt())->toEqual($existingDate);
 })->group('IntegrationDjustLogAccountServiceTest');

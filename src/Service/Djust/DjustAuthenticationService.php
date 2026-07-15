@@ -6,6 +6,7 @@ namespace App\Service\Djust;
 
 use App\Entity\Account;
 use App\Service\Account\CurrentAccountProvider;
+use App\Service\LogAccountConnectionService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -15,6 +16,7 @@ class DjustAuthenticationService
         private readonly DjustHttpClientService $djustHttpClientService,
         private readonly RequestStack $requestStack,
         private readonly LoggerInterface $djustLogger,
+        private readonly LogAccountConnectionService $logAccountConnectionService,
     ) {
     }
 
@@ -34,8 +36,7 @@ class DjustAuthenticationService
             $this->djustHttpClientService->getValidAccountToken();
 
             if ($isConnectionLogged) {
-                // TODO: Décommenter quand le service de log sera adapté pour Djust
-                // $this->logAccountConnectionService->logAccount($account);
+                $this->logAccountConnectionService->createLog($account);
             }
 
             $this->djustLogger->info('Authentification Djust réussie', [

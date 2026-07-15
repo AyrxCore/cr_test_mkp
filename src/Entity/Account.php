@@ -72,6 +72,9 @@ class Account
     #[Groups('user:simple')]
     private ?\DateTimeInterface $lastConnexion = null;
 
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $firstConnectionAt = null;
+
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $upplerClientId = null;
 
@@ -233,6 +236,18 @@ class Account
     public function setLastConnexion(?\DateTimeInterface $lastConnexion): self
     {
         $this->lastConnexion = $lastConnexion;
+
+        return $this;
+    }
+
+    public function getFirstConnectionAt(): ?\DateTimeImmutable
+    {
+        return $this->firstConnectionAt;
+    }
+
+    public function setFirstConnectionAt(?\DateTimeImmutable $firstConnectionAt): self
+    {
+        $this->firstConnectionAt = $firstConnectionAt;
 
         return $this;
     }

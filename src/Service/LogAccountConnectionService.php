@@ -16,12 +16,16 @@ class LogAccountConnectionService
 
     public function createLog(Account $account): void
     {
-        $account->setLastConnexion(new \DateTime('now'));
+        $now = new \DateTimeImmutable('now');
+        $account->setLastConnexion(\DateTime::createFromImmutable($now));
+        if ($account->getFirstConnectionAt() === null) {
+            $account->setFirstConnectionAt($now);
+        }
         $this->em->persist($account);
 
         $log = new LogAccountConnection();
         $log->setAccount($account);
-        $log->setConnectedAt(new \DateTimeImmutable('now'));
+        $log->setConnectedAt($now);
         $this->em->persist($log);
 
         $this->em->flush();

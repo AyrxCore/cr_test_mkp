@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Entity\Account;
 use App\Service\Djust\DjustAuthenticationService;
 use App\Service\Djust\DjustHttpClientService;
+use App\Service\LogAccountConnectionService;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,6 +18,7 @@ use Symfony\Component\Uid\Uuid;
     $this->httpClient = Mockery::mock(DjustHttpClientService::class);
     $this->requestStack = new RequestStack();
     $this->logger = new NullLogger();
+    $this->logAccountConnectionService = Mockery::mock(LogAccountConnectionService::class);
     $this->session = new Session(new MockArraySessionStorage());
 
     $request = new Request();
@@ -26,7 +28,8 @@ use Symfony\Component\Uid\Uuid;
     $this->service = new DjustAuthenticationService(
         $this->httpClient,
         $this->requestStack,
-        $this->logger
+        $this->logger,
+        $this->logAccountConnectionService,
     );
 
     $this->account = Mockery::mock(Account::class);
@@ -77,6 +80,10 @@ use Symfony\Component\Uid\Uuid;
         ->once()
         ->andReturn('valid_token');
 
+    $this->logAccountConnectionService->shouldReceive('createLog')
+        ->once()
+        ->with($this->account);
+
     $result = $this->service->authenticateUser($this->account);
 
     \expect($result)->toBeTrue();
@@ -107,6 +114,10 @@ use Symfony\Component\Uid\Uuid;
         ->once()
         ->andReturn('valid_token');
 
+    $this->logAccountConnectionService->shouldReceive('createLog')
+        ->once()
+        ->with($this->account);
+
     $result = $this->service->authenticateUser($this->account);
 
     \expect($result)->toBeTrue();
@@ -121,6 +132,10 @@ use Symfony\Component\Uid\Uuid;
     $this->httpClient->shouldReceive('getValidAccountToken')
         ->once()
         ->andReturn('valid_token');
+
+    $this->logAccountConnectionService->shouldReceive('createLog')
+        ->once()
+        ->with($this->account);
 
     $result = $this->service->authenticateUser($this->account);
 
@@ -154,6 +169,10 @@ use Symfony\Component\Uid\Uuid;
             return 'valid_token';
         });
 
+    $this->logAccountConnectionService->shouldReceive('createLog')
+        ->once()
+        ->with($this->account);
+
     $result = $this->service->authenticateUser($this->account);
 
     \expect($result)->toBeTrue();
@@ -168,6 +187,8 @@ use Symfony\Component\Uid\Uuid;
     $this->httpClient->shouldReceive('getValidAccountToken')
         ->once()
         ->andReturn('valid_token');
+
+    $this->logAccountConnectionService->shouldNotReceive('createLog');
 
     $result = $this->service->authenticateUser($this->account, false);
 
