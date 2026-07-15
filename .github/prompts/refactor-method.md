@@ -52,6 +52,6 @@ Problème : La méthode process() fait 120 lignes avec de la validation, de la l
 ## Validation
 
 ```bash
-# make lint               # désactivé temporairement
+make lint
 make all-tests-parallel
 ```

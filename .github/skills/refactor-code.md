@@ -410,11 +410,11 @@ const {
 make all-tests-parallel    # Doit être vert
 
 # APRÈS chaque étape
+make lint                  # Code propre
 make all-tests-parallel    # Doit rester vert
-# make lint                # Code propre (désactivé temporairement)
 
-# Commit atomique
-git commit -m "MKP-XXX: refactor - extract TarifCalculator from AdherentService"
+# Proposer ce message de commit (ne jamais exécuter git commit automatiquement) :
+# MKP-XXX: refactor(<scope>): extract TarifCalculator from AdherentService
 ```
 
 ## Instructions
@@ -423,5 +423,5 @@ git commit -m "MKP-XXX: refactor - extract TarifCalculator from AdherentService"
 2. **TOUJOURS** vérifier les tests après chaque modification
 3. **JAMAIS** changer le comportement pendant un refactoring
 4. **UN** refactoring à la fois, **UN** commit par refactoring
-5. Nommer les commits clairement en anglais : `refactor: extract X from Y`
+5. Nommer les commits clairement en anglais : `MKP-XXX: refactor(<scope>): extract X from Y`
 6. Si les tests échouent → rollback immédiat

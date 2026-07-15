@@ -48,6 +48,6 @@ Message d'erreur : aucun, valeur incorrecte
 ## Validation
 
 ```bash
-# make lint               # désactivé temporairement
+make lint
 make all-tests-parallel
 ```

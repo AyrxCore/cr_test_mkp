@@ -30,7 +30,7 @@ next-review: 2026-06
 | 6     | **Annoncer** agent et skills (format ci-dessous)                                | ✅ Toujours  |
 | 7     | Coder selon les conventions                                                     | ✅ Toujours  |
 | 8     | **Rappeler** à l'utilisateur : `make lint` → `make all-tests-parallel`          | ✅ Toujours  |
-| 9     | Proposer commit conventionnel                                                   | ✅ Toujours  |
+| 9     | Proposer commit conventionnel (**jamais exécuter** `git commit` automatiquement) | ✅ Toujours  |
 
 > **🔑 Étapes 4 & 5 — Résolution agent & skills :**
 > - **L'utilisateur précise** un agent ou des skills dans son prompt → **les utiliser directement**, passer aux étapes 6+.

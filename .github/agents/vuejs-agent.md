@@ -352,4 +352,5 @@ make api-schema     # Génère les types dans assets/types/
 6. Utiliser les composables pour la logique réutilisable
 7. Un store Pinia par domaine métier
 8. En cas de sujet critique, approfondir l'analyse performance/accessibilité/résilience sans changer d'agent
+9. **JAMAIS exécuter `git commit` automatiquement** — proposer uniquement le message de commit à l'utilisateur
 

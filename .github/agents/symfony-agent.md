@@ -245,7 +245,7 @@ Avant toute livraison sensible :
 Après chaque modification :
 
 ```bash
-# make lint                # PHP-CS-Fixer + PHPStan + PHPCS + PHPCBF (désactivé temporairement)
+make lint                  # PHP-CS-Fixer + PHPStan + PHPCS + PHPCBF
 make unit-tests            # Lance les tests unitaires
 make all-tests-parallel    # Tous les tests
 ```
@@ -311,9 +311,10 @@ it('creates a channel with valid data', function () {
 
 1. **TOUJOURS** ajouter `declare(strict_types=1);`
 2. **TOUJOURS** utiliser les attributs PHP 8 (pas d'annotations DocBlock)
-3. **TOUJOURS** exécuter `make all-tests-parallel` après modification ~~(`make lint` désactivé temporairement)~~
+3. **TOUJOURS** exécuter `make lint` puis `make all-tests-parallel` après modification
 4. Créer les migrations avec `make database-diff` si modification d'entité
 5. Ajouter des tests pour toute nouvelle fonctionnalité
 6. Utiliser `DjustHttpClientService` pour tout appel vers l'API Djust
 7. En cas de sujet critique, approfondir l'analyse sécurité/performance/résilience sans changer d'agent
+8. **JAMAIS exécuter `git commit` automatiquement** — proposer uniquement le message de commit à l'utilisateur
 

@@ -49,5 +49,5 @@ Crée un composant "AdherentStatusBadge" qui :
 ## Validation
 
 ```bash
-# make lint               # désactivé temporairement
+make lint
 ```

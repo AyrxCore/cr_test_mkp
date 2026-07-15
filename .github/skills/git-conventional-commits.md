@@ -265,3 +265,4 @@ Avant chaque push :
 8. **JAMAIS** de commits sans numéro de ticket
 9. **JAMAIS** mélanger plusieurs types de changements dans un commit
 10. Signaler les breaking changes avec `!` et footer `BREAKING CHANGE:`
+11. **JAMAIS exécuter `git commit` automatiquement** — proposer uniquement le message de commit à l'utilisateur
