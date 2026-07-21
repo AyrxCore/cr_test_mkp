@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service\Shipping\Calculator;
 
 use App\Dto\ShippingCostResult;
+use App\Exception\InvalidShippingConfigurationException;
 
 class WeightShippingCalculator implements ShippingRuleCalculatorInterface
 {
@@ -17,6 +18,10 @@ class WeightShippingCalculator implements ShippingRuleCalculatorInterface
 
     public function calculate(array $rule, array $products): ?ShippingCostResult
     {
+        if (empty($rule['weights'])) {
+            throw InvalidShippingConfigurationException::emptyWeights();
+        }
+
         $productsWithWeight = array_filter($products, static fn (array $p) => isset($p['weight']) && $p['weight'] !== null);
 
         if (empty($productsWithWeight)) {
@@ -34,7 +39,6 @@ class WeightShippingCalculator implements ShippingRuleCalculatorInterface
         }
 
         if ($matchedSlot === null) {
-            // Au-delà du dernier slot : on prend le dernier
             $matchedSlot = $rule['weights'][array_key_last($rule['weights'])];
         }
 

@@ -34,6 +34,7 @@ export function getShippingMessages(result: ShippingCostResult): ShippingMessage
     case 'WEIGHT':
       return [{ text: `Frais de port : ${shippingCost}€ HT`, success: true }]
 
+    case 'PERCENTAGE':
     case 'FIXED':
     case 'STEPS':
       return []

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service\Shipping\Calculator;
 
 use App\Dto\ShippingCostResult;
+use App\Exception\InvalidShippingConfigurationException;
 
 class StandardShippingCalculator implements ShippingRuleCalculatorInterface
 {
@@ -17,6 +18,10 @@ class StandardShippingCalculator implements ShippingRuleCalculatorInterface
 
     public function calculate(array $rule, array $products): ShippingCostResult
     {
+        if (empty($rule['levels'])) {
+            throw InvalidShippingConfigurationException::emptyLevels('STANDARD');
+        }
+
         $level = $rule['levels'][0];
         $totalHt = $this->computeTotalHt($products);
         $francoMax = (float) $level['franco_max_ht'];

@@ -160,6 +160,41 @@ class ShippingRuleFixtures extends Fixture implements FixtureGroupInterface
                     ],
                 ],
             ],
+            [
+                'partnerId' => '4a3817d4-405a-11f0-8fd5-87f4e4bc9ecb',
+                'type' => 'QUANTITY_STEPS',
+                'rule' => [
+                    'levels' => [
+                        [
+                            'quantity_min' => 1,
+                            'quantity_max' => 1,
+                            'fdp_ht' => 83.33,
+                        ],
+                        [
+                            'quantity_min' => 2,
+                            'quantity_max' => 2,
+                            'fdp_ht' => 166.66,
+                        ],
+                        [
+                            'quantity_min' => 3,
+                            'quantity_max' => 3,
+                            'fdp_ht' => 249.99,
+                        ],
+                        [
+                            'quantity_min' => 4,
+                            'quantity_max' => 999999,
+                            'fdp_ht' => 0,
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'partnerId' => '6b5b00f8-f44b-11ef-94fb-069c14af451a',
+                'type' => 'PERCENTAGE',
+                'rule' => [
+                    'percentage' => 10,
+                ],
+            ],
         ];
 
         $partnerRepository = $manager->getRepository(Partner::class);

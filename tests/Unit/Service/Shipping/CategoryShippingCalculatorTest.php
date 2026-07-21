@@ -2,16 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Service\Shipping;
-
 use App\Service\Shipping\Calculator\CategoryShippingCalculator;
-use PHPUnit\Framework\TestCase;
 
-class CategoryShippingCalculatorTest extends TestCase
-{
-    private CategoryShippingCalculator $calculator;
-
-    private array $rule = [
+beforeEach(function () {
+    $this->calculator = new CategoryShippingCalculator();
+    $this->rule = [
         'levels' => [
             [
                 'category' => 'test',
@@ -27,108 +22,90 @@ class CategoryShippingCalculatorTest extends TestCase
             ],
         ],
     ];
+});
 
-    protected function setUp(): void
-    {
-        $this->calculator = new CategoryShippingCalculator();
-    }
+it('supports CATEGORY type', function () {
+    expect($this->calculator->supports('CATEGORY'))->toBeTrue()
+        ->and($this->calculator->supports('STANDARD'))->toBeFalse();
+});
 
-    public function testSupports(): void
-    {
-        self::assertTrue($this->calculator->supports('CATEGORY'));
-        self::assertFalse($this->calculator->supports('STANDARD'));
-    }
+it('calculates shipping for single category below franco', function () {
+    $products = [
+        ['unitPrice' => 10.0, 'quantity' => 2, 'shippingCategory' => 'test'],
+    ];
 
-    public function testSingleCategoryBelowFranco(): void
-    {
-        $products = [
-            ['unitPrice' => 10.0, 'quantity' => 2, 'shippingCategory' => 'test'],
-        ];
+    $result = $this->calculator->calculate($this->rule, $products);
 
-        $result = $this->calculator->calculate($this->rule, $products);
+    expect($result->shippingCost)->toBe(7.0)
+        ->and($result->remainingForFranco)->toBe(80.0)
+        ->and($result->type)->toBe('CATEGORY');
+});
 
-        self::assertSame(7.0, $result->shippingCost);
-        self::assertSame(80.0, $result->remainingForFranco);
-        self::assertSame('CATEGORY', $result->type);
-    }
+it('calculates shipping for single category franco reached', function () {
+    $products = [
+        ['unitPrice' => 50.0, 'quantity' => 2, 'shippingCategory' => 'test'],
+    ];
 
-    public function testSingleCategoryFrancoReached(): void
-    {
-        $products = [
-            ['unitPrice' => 50.0, 'quantity' => 2, 'shippingCategory' => 'test'],
-        ];
+    $result = $this->calculator->calculate($this->rule, $products);
 
-        $result = $this->calculator->calculate($this->rule, $products);
+    expect($result->shippingCost)->toBe(0.0)
+        ->and($result->remainingForFranco)->toBe(0.0);
+});
 
-        self::assertSame(0.0, $result->shippingCost);
-        self::assertSame(0.0, $result->remainingForFranco);
-    }
+it('calculates shipping for multiple categories both below franco', function () {
+    $products = [
+        ['unitPrice' => 10.0, 'quantity' => 2, 'shippingCategory' => 'test'],
+        ['unitPrice' => 20.0, 'quantity' => 1, 'shippingCategory' => 'test2'],
+    ];
 
-    public function testMultipleCategoriesBothBelowFranco(): void
-    {
-        $products = [
-            ['unitPrice' => 10.0, 'quantity' => 2, 'shippingCategory' => 'test'],
-            ['unitPrice' => 20.0, 'quantity' => 1, 'shippingCategory' => 'test2'],
-        ];
+    $result = $this->calculator->calculate($this->rule, $products);
 
-        $result = $this->calculator->calculate($this->rule, $products);
+    expect($result->shippingCost)->toBe(8.0)
+        ->and($result->remainingForFranco)->toBe(60.0);
+});
 
-        // total global = 20 + 20 = 40 < 100
-        // niveau dominant = test2 (fdp=8, franco=100)
-        // fdp = 8, remaining = 100 - 40 = 60
-        self::assertSame(8.0, $result->shippingCost);
-        self::assertSame(60.0, $result->remainingForFranco);
-    }
+it('calculates shipping for multiple categories global franco reached', function () {
+    $products = [
+        ['unitPrice' => 50.0, 'quantity' => 1, 'shippingCategory' => 'test'],
+        ['unitPrice' => 50.0, 'quantity' => 1, 'shippingCategory' => 'test2'],
+    ];
 
-    public function testMultipleCategoriesGlobalFrancoReached(): void
-    {
-        $products = [
-            ['unitPrice' => 50.0, 'quantity' => 1, 'shippingCategory' => 'test'],
-            ['unitPrice' => 50.0, 'quantity' => 1, 'shippingCategory' => 'test2'],
-        ];
+    $result = $this->calculator->calculate($this->rule, $products);
 
-        $result = $this->calculator->calculate($this->rule, $products);
+    expect($result->shippingCost)->toBe(0.0)
+        ->and($result->remainingForFranco)->toBe(0.0);
+});
 
-        // total global = 50 + 50 = 100 >= 100 → franco atteint
-        self::assertSame(0.0, $result->shippingCost);
-        self::assertSame(0.0, $result->remainingForFranco);
-    }
+it('calculates shipping for multiple categories one franco reached', function () {
+    $products = [
+        ['unitPrice' => 50.0, 'quantity' => 2, 'shippingCategory' => 'test'],
+        ['unitPrice' => 20.0, 'quantity' => 1, 'shippingCategory' => 'test2'],
+    ];
 
-    public function testMultipleCategoriesOneFrancoReached(): void
-    {
-        $products = [
-            ['unitPrice' => 50.0, 'quantity' => 2, 'shippingCategory' => 'test'],
-            ['unitPrice' => 20.0, 'quantity' => 1, 'shippingCategory' => 'test2'],
-        ];
+    $result = $this->calculator->calculate($this->rule, $products);
 
-        $result = $this->calculator->calculate($this->rule, $products);
+    expect($result->shippingCost)->toBe(0.0)
+        ->and($result->remainingForFranco)->toBe(0.0);
+});
 
-        // total global = 100 + 20 = 120 >= 100 → franco atteint
-        self::assertSame(0.0, $result->shippingCost);
-        self::assertSame(0.0, $result->remainingForFranco);
-    }
+it('ignores product with unknown category', function () {
+    $products = [
+        ['unitPrice' => 10.0, 'quantity' => 1, 'shippingCategory' => 'unknown'],
+    ];
 
-    public function testProductWithUnknownCategoryIsIgnored(): void
-    {
-        $products = [
-            ['unitPrice' => 10.0, 'quantity' => 1, 'shippingCategory' => 'unknown'],
-        ];
+    $result = $this->calculator->calculate($this->rule, $products);
 
-        $result = $this->calculator->calculate($this->rule, $products);
+    expect($result->shippingCost)->toBe(0.0)
+        ->and($result->remainingForFranco)->toBe(0.0);
+});
 
-        self::assertSame(0.0, $result->shippingCost);
-        self::assertSame(0.0, $result->remainingForFranco);
-    }
+it('ignores product with null category', function () {
+    $products = [
+        ['unitPrice' => 10.0, 'quantity' => 1, 'shippingCategory' => null],
+    ];
 
-    public function testProductWithNullCategoryIsIgnored(): void
-    {
-        $products = [
-            ['unitPrice' => 10.0, 'quantity' => 1, 'shippingCategory' => null],
-        ];
+    $result = $this->calculator->calculate($this->rule, $products);
 
-        $result = $this->calculator->calculate($this->rule, $products);
-
-        self::assertSame(0.0, $result->shippingCost);
-        self::assertSame(0.0, $result->remainingForFranco);
-    }
-}
+    expect($result->shippingCost)->toBe(0.0)
+        ->and($result->remainingForFranco)->toBe(0.0);
+});

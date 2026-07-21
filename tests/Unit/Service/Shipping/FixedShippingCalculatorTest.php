@@ -2,57 +2,45 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Service\Shipping;
-
 use App\Service\Shipping\Calculator\FixedShippingCalculator;
-use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
-class FixedShippingCalculatorTest extends TestCase
-{
-    private FixedShippingCalculator $calculator;
-
-    private array $rule = [
+beforeEach(function () {
+    $this->logger = mock(LoggerInterface::class);
+    $this->calculator = new FixedShippingCalculator($this->logger);
+    $this->rule = [
         'levels' => [
             ['franco_min_ht' => 0, 'franco_max_ht' => 20, 'fdp_ht' => 5],
             ['franco_min_ht' => 20, 'franco_max_ht' => null, 'fdp_ht' => 3],
         ],
     ];
+});
 
-    protected function setUp(): void
-    {
-        $this->calculator = new FixedShippingCalculator();
-    }
+it('supports FIXED type', function () {
+    expect($this->calculator->supports('FIXED'))->toBeTrue()
+        ->and($this->calculator->supports('FREE'))->toBeFalse();
+});
 
-    public function testSupports(): void
-    {
-        $this->assertTrue($this->calculator->supports('FIXED'));
-        $this->assertFalse($this->calculator->supports('FREE'));
-    }
+it('calculates shipping in first level', function () {
+    $products = [['unitPrice' => 10.0, 'quantity' => 1]];
+    $result = $this->calculator->calculate($this->rule, $products);
 
-    public function testInFirstLevel(): void
-    {
-        $products = [['unitPrice' => 10.0, 'quantity' => 1]];
-        $result = $this->calculator->calculate($this->rule, $products);
+    expect($result->shippingCost)->toBe(5.0)
+        ->and($result->remainingForFranco)->toBe(10.0);
+});
 
-        $this->assertSame(5.0, $result->shippingCost);
-        $this->assertSame(10.0, $result->remainingForFranco);
-    }
+it('calculates shipping in last level with null franco_max', function () {
+    $products = [['unitPrice' => 25.0, 'quantity' => 1]];
+    $result = $this->calculator->calculate($this->rule, $products);
 
-    public function testInLastLevelWithNullFrancoMax(): void
-    {
-        $products = [['unitPrice' => 25.0, 'quantity' => 1]];
-        $result = $this->calculator->calculate($this->rule, $products);
+    expect($result->shippingCost)->toBe(3.0)
+        ->and($result->remainingForFranco)->toBe(0.0);
+});
 
-        $this->assertSame(3.0, $result->shippingCost);
-        $this->assertSame(0.0, $result->remainingForFranco);
-    }
+it('calculates shipping at boundary of last level', function () {
+    $products = [['unitPrice' => 20.0, 'quantity' => 1]];
+    $result = $this->calculator->calculate($this->rule, $products);
 
-    public function testAtBoundaryOfLastLevel(): void
-    {
-        $products = [['unitPrice' => 20.0, 'quantity' => 1]];
-        $result = $this->calculator->calculate($this->rule, $products);
-
-        $this->assertSame(3.0, $result->shippingCost);
-        $this->assertSame(0.0, $result->remainingForFranco);
-    }
-}
+    expect($result->shippingCost)->toBe(3.0)
+        ->and($result->remainingForFranco)->toBe(0.0);
+});

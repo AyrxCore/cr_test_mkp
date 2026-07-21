@@ -42,10 +42,16 @@ const isMissingProductFdp = computed<boolean>(() => {
 })
 
 const shippingMessages = computed<ShippingMessage[]>(() => {
+  const result = props.cartOrder.shippingCostResult
+
+  if (result?.type === 'PERCENTAGE') {
+    return []
+  }
+
   if (isMissingProductFdp.value) {
     return [{ text: 'Vous bénéficiez de la livraison gratuite', success: true }]
   }
-  const result = props.cartOrder.shippingCostResult
+
   if (!result) return []
   return getShippingMessages(result)
 })

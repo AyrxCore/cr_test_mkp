@@ -2,66 +2,53 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Service\Shipping;
-
 use App\Service\Shipping\Calculator\StepsShippingCalculator;
-use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
-class StepsShippingCalculatorTest extends TestCase
-{
-    private StepsShippingCalculator $calculator;
-
-    private array $rule = [
+beforeEach(function () {
+    $this->logger = mock(LoggerInterface::class);
+    $this->calculator = new StepsShippingCalculator($this->logger);
+    $this->rule = [
         'levels' => [
             ['franco_min_ht' => 0, 'franco_max_ht' => 50.45, 'fdp_ht' => 7],
             ['franco_min_ht' => 50.45, 'franco_max_ht' => 100.2, 'fdp_ht' => 3],
         ],
     ];
+});
 
-    protected function setUp(): void
-    {
-        $this->calculator = new StepsShippingCalculator();
-    }
+it('supports STEPS type', function () {
+    expect($this->calculator->supports('STEPS'))->toBeTrue()
+        ->and($this->calculator->supports('STANDARD'))->toBeFalse();
+});
 
-    public function testSupports(): void
-    {
-        $this->assertTrue($this->calculator->supports('STEPS'));
-        $this->assertFalse($this->calculator->supports('STANDARD'));
-    }
+it('calculates shipping in first step', function () {
+    $products = [['unitPrice' => 20.0, 'quantity' => 1]];
+    $result = $this->calculator->calculate($this->rule, $products);
 
-    public function testInFirstStep(): void
-    {
-        $products = [['unitPrice' => 20.0, 'quantity' => 1]];
-        $result = $this->calculator->calculate($this->rule, $products);
+    expect($result->shippingCost)->toBe(7.0)
+        ->and($result->remainingForFranco)->toBe(30.45);
+});
 
-        $this->assertSame(7.0, $result->shippingCost);
-        $this->assertSame(30.45, $result->remainingForFranco);
-    }
+it('calculates shipping in second step', function () {
+    $products = [['unitPrice' => 60.0, 'quantity' => 1]];
+    $result = $this->calculator->calculate($this->rule, $products);
 
-    public function testInSecondStep(): void
-    {
-        $products = [['unitPrice' => 60.0, 'quantity' => 1]];
-        $result = $this->calculator->calculate($this->rule, $products);
+    expect($result->shippingCost)->toBe(3.0)
+        ->and($result->remainingForFranco)->toBe(40.2);
+});
 
-        $this->assertSame(3.0, $result->shippingCost);
-        $this->assertSame(40.2, $result->remainingForFranco);
-    }
+it('calculates shipping above all steps', function () {
+    $products = [['unitPrice' => 150.0, 'quantity' => 1]];
+    $result = $this->calculator->calculate($this->rule, $products);
 
-    public function testAboveAllSteps(): void
-    {
-        $products = [['unitPrice' => 150.0, 'quantity' => 1]];
-        $result = $this->calculator->calculate($this->rule, $products);
+    expect($result->shippingCost)->toBe(0.0)
+        ->and($result->remainingForFranco)->toBe(0.0);
+});
 
-        $this->assertSame(0.0, $result->shippingCost);
-        $this->assertSame(0.0, $result->remainingForFranco);
-    }
+it('calculates shipping at last step franco', function () {
+    $products = [['unitPrice' => 100.2, 'quantity' => 1]];
+    $result = $this->calculator->calculate($this->rule, $products);
 
-    public function testAtLastStepFranco(): void
-    {
-        $products = [['unitPrice' => 100.2, 'quantity' => 1]];
-        $result = $this->calculator->calculate($this->rule, $products);
-
-        $this->assertSame(0.0, $result->shippingCost);
-        $this->assertSame(0.0, $result->remainingForFranco);
-    }
-}
+    expect($result->shippingCost)->toBe(0.0)
+        ->and($result->remainingForFranco)->toBe(0.0);
+});
