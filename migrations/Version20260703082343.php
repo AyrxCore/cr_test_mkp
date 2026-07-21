@@ -27,7 +27,7 @@ final class Version20260703082343 extends AbstractMigration
         $this->addSql('DROP TABLE favorite_product');
         $this->addSql('DROP TABLE saved_cart');
         $this->addSql('DROP TABLE saved_cart_product');
-        $this->addSql('DROP INDEX uniq_7d3656a4e7a1254a');
+        $this->addSql('DROP INDEX IF EXISTS uniq_7d3656a4e7a1254a');
         $this->addSql('ALTER TABLE account DROP uppler_user_id');
         $this->addSql('ALTER TABLE account DROP uppler_sub_account_id');
         $this->addSql('ALTER TABLE account DROP uppler_company_id');
@@ -35,7 +35,7 @@ final class Version20260703082343 extends AbstractMigration
         $this->addSql('ALTER TABLE account DROP uppler_password');
         $this->addSql('ALTER TABLE account DROP uppler_client_id');
         $this->addSql('ALTER TABLE account DROP uppler_client_secret');
-        $this->addSql('DROP INDEX idx_partner_uppler_id');
+        $this->addSql('DROP INDEX IF EXISTS idx_partner_uppler_id');
         $this->addSql('ALTER TABLE partner DROP uppler_id');
     }
 

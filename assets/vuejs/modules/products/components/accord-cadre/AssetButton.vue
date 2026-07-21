@@ -33,6 +33,7 @@
 <script lang="ts" setup>
 import { PropType, computed, ref } from 'vue'
 
+import { useProductStore } from '@/vuejs/stores/product'
 import { isAbsoluteUrl, isFilePath } from '@/vuejs/services/urlChecker'
 import { openInNewTab } from '@/vuejs/services/utils'
 import { AssetButton } from '@/vuejs/types/AccordCadre'
@@ -42,7 +43,6 @@ import PdfIconComponent from '@/vuejs/modules/shared/icon/PdfIconComponent.vue'
 import ExcelIconComponent from '@/vuejs/modules/shared/icon/ExcelIconComponent.vue'
 import MailIconComponent from '@/vuejs/modules/shared/icon/MailIconComponent.vue'
 import RedirectionIconComponent from '@/vuejs/modules/shared/icon/RedirectionIconComponent.vue'
-import { useProductStore } from '@/vuejs/stores/product'
 
 defineOptions({ inheritAttrs: false })
 
@@ -117,7 +117,6 @@ const clickOnCta = async (url: string) => {
 
 const handleAssetButtonClick = (assetButton: AssetButton) => {
   const link = assetButton.assetLink
-  const label = assetButton.buttonLabel
 
   if (assetType.value === AssetLinkType.PDF) {
     clickOnCta(link)

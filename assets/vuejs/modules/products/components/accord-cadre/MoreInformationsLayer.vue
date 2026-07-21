@@ -25,6 +25,7 @@
             :href="urlCtaRattachement"
             rel="noopener noreferrer"
             target="_blank"
+            @click="sendGtmEvent('fat_cta_rattachement_click', { link_url: urlCtaRattachement, origin_url: router.currentRoute.value.fullPath })"
           >
             <ButtonComponent
               :disabled="isNeoAutoLogin"
@@ -86,6 +87,7 @@
               :key="key"
               :asset-button="assetButton"
               class="button-primary-outline w-fit !whitespace-normal !text-base"
+              @click="sendGtmEvent('fat_cta_generic_click', { link_text: assetButton.buttonLabel, link_url: assetButton.assetLink, origin_url: router.currentRoute.value.fullPath })"
             />
           </div>
         </template>
@@ -98,12 +100,14 @@
 import { computed, inject } from 'vue'
 import { storeToRefs } from 'pinia'
 
-import { AssetButton } from '@/vuejs/types/AccordCadre'
+import router from '@/vuejs/router'
 import { useAccordCadreStore } from '@/vuejs/stores/accordCadre.ts'
 import { useUserStore } from '@/vuejs/stores/user.ts'
-
+import { sendGtmEvent } from '@/vuejs/services/gtm'
+import { AssetButton } from '@/vuejs/types/AccordCadre'
 import type { AccordCadreLayersComposable } from '@/vuejs/modules/products/composables/useAccordCadreLayers'
 import { useAccordCadreButton } from '@/vuejs/modules/products/composables/useAccordCadreButton'
+
 import AssetButtonComponent from '@/vuejs/modules/products/components/accord-cadre/AssetButton.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import RichTextRenderer from '@/vuejs/modules/shared/RichTextRenderer.vue'

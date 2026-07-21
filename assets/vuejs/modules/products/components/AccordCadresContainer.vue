@@ -93,6 +93,8 @@
 import { ref, computed } from 'vue'
 import { SwiperSlide } from 'swiper/vue'
 
+import router from '@/vuejs/router'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
 import { Product } from '@/vuejs/types/Product'
 
 import AccordCadreComponent from '@/vuejs/modules/home/component/AccordCadreComponent.vue'
@@ -134,6 +136,10 @@ const toggleFat = () => {
     fatExpanded.value = false
     fatVisibleCount.value = FAT_DEFAULT_VISIBLE
   } else {
+    sendGtmEvent('see_all_search_cta_click', {
+      link_text: 'Voir tout',
+      origin_url: router.currentRoute.value.fullPath,
+    })
     fatExpanded.value = true
     fatVisibleCount.value = Math.min(FAT_PAGE_SIZE, props.accordCadres.length)
   }

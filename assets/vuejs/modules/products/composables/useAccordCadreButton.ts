@@ -1,9 +1,12 @@
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
+
+import router from '@/vuejs/router'
 import { useAccordCadreStore } from '@/vuejs/stores/accordCadre'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
+import { ACCORD_CADRE_TYPE } from '@/vuejs/services/const.ts'
 import { AccountAccordCadreStatus } from '@/vuejs/types/AccountAccordCadre'
 import type { AccordCadreLayersComposable } from '@/vuejs/modules/products/composables/useAccordCadreLayers'
-import { ACCORD_CADRE_TYPE } from '@/vuejs/services/const.ts'
 
 export function useAccordCadreButton(layers: AccordCadreLayersComposable) {
   const accordCadreStore = useAccordCadreStore()
@@ -77,6 +80,11 @@ export function useAccordCadreButton(layers: AccordCadreLayersComposable) {
 
   const handleButtonClick = () => {
     const status = accountStatus.value
+
+    sendGtmEvent('fat_cta_rattachement_click', {
+      link_url: urlCtaRattachement.value,
+      origin_url: router.currentRoute.value.fullPath,
+    })
 
     if (
       status === AccountAccordCadreStatus.ACTIVATED &&

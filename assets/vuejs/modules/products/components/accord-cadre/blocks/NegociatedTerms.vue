@@ -65,6 +65,7 @@
         :key="key"
         :asset-button="assetButton"
         class="button-primary-outline text:sm w-fit !whitespace-normal !leading-tight xs:!text-base"
+        @click="sendGtmEvent('fat_cta_generic_click', { link_text: assetButton.buttonLabel, link_url: assetButton.assetLink, origin_url: router.currentRoute.value.fullPath })"
       />
       <ButtonComponent
         v-if="shouldShowButton"
@@ -89,16 +90,18 @@
 import { computed, inject, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
+import router from '@/vuejs/router'
 import { useAccordCadreStore } from '@/vuejs/stores/accordCadre.ts'
 import { useUserStore } from '@/vuejs/stores/user.ts'
+import { sendGtmEvent } from '@/vuejs/services/gtm'
+import type { AccordCadreLayersComposable } from '@/vuejs/modules/products/composables/useAccordCadreLayers'
+import { useAccordCadreButton } from '@/vuejs/modules/products/composables/useAccordCadreButton'
 
 import AssetButton from '@/vuejs/modules/products/components/accord-cadre/AssetButton.vue'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import RichTextRenderer from '@/vuejs/modules/shared/RichTextRenderer.vue'
 import EyeIconComponent from '@/vuejs/modules/shared/icon/EyeIconComponent.vue'
 import AddIconComponent from '@/vuejs/modules/shared/icon/AddIconComponent.vue'
-import type { AccordCadreLayersComposable } from '@/vuejs/modules/products/composables/useAccordCadreLayers'
-import { useAccordCadreButton } from '@/vuejs/modules/products/composables/useAccordCadreButton'
 
 const accordCadreStore = useAccordCadreStore()
 
