@@ -116,15 +116,13 @@ const clickOnCta = async (url: string) => {
 }
 
 const handleAssetButtonClick = (assetButton: AssetButton) => {
-  const link = assetButton.assetLink
-
   if (assetType.value === AssetLinkType.PDF) {
-    clickOnCta(link)
+    clickOnCta(assetButton.assetLink)
   } else if (assetType.value === AssetLinkType.EXCEL) {
     // Téléchargement
     const anchor = document.createElement('a')
-    anchor.href = link
-    anchor.download = label || 'document'
+    anchor.href = assetButton.assetLink
+    anchor.download = assetButton.buttonLabel || 'document'
     anchor.target = '_blank'
     anchor.rel = 'noopener noreferrer'
     document.body.appendChild(anchor)
@@ -132,7 +130,9 @@ const handleAssetButtonClick = (assetButton: AssetButton) => {
     document.body.removeChild(anchor)
   } else {
     // Redirection
-    const urlToOpen = link.match(/^https?:\/\//) ? link : `https://${link}`
+    const urlToOpen = assetButton.assetLink.match(/^https?:\/\//)
+      ? assetButton.assetLink
+      : `https://${assetButton.assetLink}`
     window.open(urlToOpen, '_blank')
   }
 }
