@@ -36,6 +36,7 @@ imports:
   - { resource: services/ }
   - { resource: channels.yaml }
   - { resource: channel_option_keys.yaml }
+  - { resource: uppler_category_redirects.yaml }
 
 services:
   # default configuration for services in *this* file
@@ -72,6 +73,12 @@ services:
       - { name: doctrine.event_listener, event: postLoad }
 
   App\EventListener\AuthenticationListener:
+    tags:
+      - { name: kernel.event_listener, event: kernel.request }
+
+  App\EventListener\CategoryRedirectListener:
+    arguments:
+      $categoryRedirects: '%uppler_category_redirects%'
     tags:
       - { name: kernel.event_listener, event: kernel.request }
 
