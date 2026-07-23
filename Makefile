@@ -29,8 +29,7 @@ generate-certs: ## Generate local SSL certificates via mkcert (requires: brew in
 
 init: ## Initialize docker development environment
 	make up
-	make database-create
-	make database-update
+	make database-drop-create
 	make database-migrations
 	make init-tests
 	make generate-keypair
@@ -94,11 +93,16 @@ composer-install: composer.lock ## Install composer dependencies
 cache-clear: ## Clear symfony cache
 	$(dc_exec) php bin/console cache:clear
 
-database-reset: database-create database-fixtures ## Reset database and load fixtures
+database-reset: database-drop-create database-migrations database-fixtures ## Reset database and load fixtures
+
+database-drop-create: ## Drop and recreate the database (idempotent, terminates active connections first)
+	$(dc_exec) db psql -U postgres -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'mkp_db' AND pid <> pg_backend_pid();" || true
+	$(dc_exec) php bin/console doctrine:database:drop --force --if-exists
+	$(dc_exec) php bin/console doctrine:database:create
 
 database-create:
 	$(dc_exec) php bin/console doctrine:database:create --if-not-exists
-	$(dc_exec) php bin/console doctrine:schema:drop --force
+	$(dc_exec) php bin/console doctrine:schema:drop --full-database --force
 	$(dc_exec) php bin/console doctrine:schema:create
 
 database-update:
