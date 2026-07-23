@@ -13,6 +13,7 @@ use App\Repository\ChannelRepository;
 use App\State\Provider\ChannelProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -244,8 +245,9 @@ class Channel
     }
 
     #[ORM\PreUpdate]
-    public function setUpdatedAtOnUpdate(): void
+    public function onPreUpdate(PreUpdateEventArgs $eventArgs): void
     {
         $this->updatedAt = new \DateTimeImmutable();
+        $eventArgs->setNewValue('updatedAt', $this->updatedAt);
     }
 }

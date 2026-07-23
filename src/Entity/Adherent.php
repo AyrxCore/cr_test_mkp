@@ -15,6 +15,7 @@ use App\State\Processor\AdherentPersistProcessor;
 use App\State\Provider\AdherentProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
@@ -39,6 +40,7 @@ use Symfony\Component\Uid\Uuid;
     processor: AdherentPersistProcessor::class
 )]
 #[ORM\Entity(repositoryClass: AdherentRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Adherent
 {
     // DO NOT AUTO GENERATE IDs AS THEY'RE FROM NEO/SUGAR
@@ -129,6 +131,9 @@ class Adherent
     #[ORM\Column(nullable: true)]
     #[Groups(['user:simple'])]
     private ?int $usedAccords = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     public function __construct()
     {
@@ -513,5 +518,17 @@ class Adherent
         $this->usedAccords = $usedAccords;
 
         return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    #[ORM\PreUpdate]
+    public function onPreUpdate(PreUpdateEventArgs $eventArgs): void
+    {
+        $this->updatedAt = new \DateTimeImmutable();
+        $eventArgs->setNewValue('updatedAt', $this->updatedAt);
     }
 }
