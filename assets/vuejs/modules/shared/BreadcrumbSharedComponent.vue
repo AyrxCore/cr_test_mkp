@@ -1,5 +1,6 @@
 <template>
-  <nav class="w-full text-sm text-black">
+<!--  TODO: retirer hidden quand on aura repris le fil d'Ariane-->
+  <nav class="hidden w-full text-sm text-black">
     <ol class="list-reset hidden text-xs lg:flex">
       <li class="inline-flex items-center">
         <RouterLink
