@@ -15,7 +15,6 @@ use App\State\Processor\AdherentPersistProcessor;
 use App\State\Provider\AdherentProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
@@ -526,9 +525,8 @@ class Adherent
     }
 
     #[ORM\PreUpdate]
-    public function onPreUpdate(PreUpdateEventArgs $eventArgs): void
+    public function onPreUpdate(): void
     {
         $this->updatedAt = new \DateTimeImmutable();
-        $eventArgs->setNewValue('updatedAt', $this->updatedAt);
     }
 }

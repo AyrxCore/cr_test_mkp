@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\LogAccountConnectionRepository;
-use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LogAccountConnectionRepository::class)]
@@ -62,9 +61,8 @@ class LogAccountConnection
     }
 
     #[ORM\PreUpdate]
-    public function onPreUpdate(PreUpdateEventArgs $eventArgs): void
+    public function onPreUpdate(): void
     {
         $this->updatedAt = new \DateTimeImmutable();
-        $eventArgs->setNewValue('updatedAt', $this->updatedAt);
     }
 }
