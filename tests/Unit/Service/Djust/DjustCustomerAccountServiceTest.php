@@ -6,6 +6,7 @@ use App\Service\Account\CurrentAccountProvider;
 use App\Service\Djust\DjustCustomerAccountService;
 use App\Service\Djust\DjustHttpClientService;
 use Psr\Log\NullLogger;
+use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -24,7 +25,8 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
     $this->service = new DjustCustomerAccountService(
         $this->httpClient,
         $this->requestStack,
-        $this->logger
+        $this->logger,
+        retryDelayMicroseconds: 0
     );
 });
 
@@ -127,8 +129,49 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
     ]);
 
     $this->httpClient->shouldReceive('get')
+        ->times(3)
+        ->andThrow(new TransportException('Network error'));
+
+    $result = $this->service->getCustomerAccount();
+
+    \expect($result)->toBeNull();
+})->group('DjustCustomerAccountService', 'djust');
+
+\it('retries the API call and succeeds on a later attempt', function () {
+    $this->session->set(CurrentAccountProvider::SESSION_KEY_ACCOUNT, [
+        'id' => 'account-uuid',
+        'username' => 'user@example.com',
+        'password' => 'encrypted_password',
+        'customerAccountId' => 'customer_123',
+    ]);
+
+    $apiAccount = ['id' => '456', 'name' => 'API Account'];
+
+    $this->httpClient->shouldReceive('get')
+        ->twice()
+        ->andThrow(new TransportException('Network error'))
+        ->ordered();
+    $this->httpClient->shouldReceive('get')
         ->once()
-        ->andThrow(new \RuntimeException('API Error'));
+        ->andReturn($apiAccount)
+        ->ordered();
+
+    $result = $this->service->getCustomerAccount();
+
+    \expect($result)->toBe($apiAccount);
+})->group('DjustCustomerAccountService', 'djust');
+
+\it('does not retry non-HTTP exceptions (e.g. session/config errors)', function () {
+    $this->session->set(CurrentAccountProvider::SESSION_KEY_ACCOUNT, [
+        'id' => 'account-uuid',
+        'username' => 'user@example.com',
+        'password' => 'encrypted_password',
+        'customerAccountId' => 'customer_123',
+    ]);
+
+    $this->httpClient->shouldReceive('get')
+        ->once()
+        ->andThrow(new \RuntimeException('Session/config error, not an HTTP error'));
 
     $result = $this->service->getCustomerAccount();
 
