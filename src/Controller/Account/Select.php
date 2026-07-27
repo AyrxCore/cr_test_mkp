@@ -10,6 +10,7 @@ use App\Entity\User;
 use App\Events\UserAcceptCGUEvent;
 use App\Service\Account\CurrentAccountProvider;
 use App\Service\Djust\DjustAuthenticationService;
+use App\Service\Djust\DjustCustomerAccountService;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,6 +30,7 @@ class Select extends AbstractController
         private RequestStack $requestStack,
         private Security $security,
         private readonly DjustAuthenticationService $djustAuthenticationService,
+        private readonly DjustCustomerAccountService $djustCustomerAccountService,
         protected readonly LoggerInterface $djustLogger,
     ) {
     }
@@ -61,6 +63,7 @@ class Select extends AbstractController
                 throw new AccessDeniedHttpException('Account is not linked to current channel');
             }
             $session = $this->requestStack->getSession();
+            $this->djustCustomerAccountService->clearCache();
             $session->set(CurrentAccountProvider::SESSION_KEY_ACCOUNT, $account);
 
             $isDjustAuthenticated = $this->djustAuthenticationService->authenticateUser($account);

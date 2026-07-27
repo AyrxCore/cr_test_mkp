@@ -285,6 +285,42 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
     \expect($result)->toBeArray()->toBeEmpty();
 })->group('DjustCustomerAccountService', 'djust');
 
+\it('clears cached customer account and cached_at from session', function () {
+    $this->session->set(DjustCustomerAccountService::SESSION_KEY_CUSTOMER_ACCOUNT, ['id' => '123']);
+    $this->session->set(DjustCustomerAccountService::SESSION_KEY_CACHED_AT, \time());
+
+    $this->service->clearCache();
+
+    \expect($this->session->get(DjustCustomerAccountService::SESSION_KEY_CUSTOMER_ACCOUNT))->toBeNull()
+        ->and($this->session->get(DjustCustomerAccountService::SESSION_KEY_CACHED_AT))->toBeNull();
+})->group('DjustCustomerAccountService', 'djust');
+
+\it('fetches fresh customer account after clearCache even within TTL window', function () {
+    $this->session->set(CurrentAccountProvider::SESSION_KEY_ACCOUNT, [
+        'id' => 'account-uuid',
+        'username' => 'user@example.com',
+        'password' => 'encrypted_password',
+        'customerAccountId' => 'customer_123',
+    ]);
+
+    $previousUserAccount = ['id' => '123', 'customerTags' => [['id' => 'kiloutou-tag']]];
+    $newUserAccount = ['id' => '456', 'customerTags' => []];
+
+    $this->session->set(DjustCustomerAccountService::SESSION_KEY_CUSTOMER_ACCOUNT, $previousUserAccount);
+    $this->session->set(DjustCustomerAccountService::SESSION_KEY_CACHED_AT, \time());
+
+    $this->service->clearCache();
+
+    $this->httpClient->shouldReceive('get')
+        ->once()
+        ->with('/v1/shop/customer-accounts')
+        ->andReturn($newUserAccount);
+
+    $result = $this->service->getCustomerAccount();
+
+    \expect($result)->toBe($newUserAccount);
+})->group('DjustCustomerAccountService', 'djust');
+
 \it('filters out tags with empty ids', function () {
     // Configurer les données de session Djust (nécessaire pour la vérification)
     $this->session->set(CurrentAccountProvider::SESSION_KEY_ACCOUNT, [

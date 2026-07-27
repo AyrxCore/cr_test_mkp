@@ -11,6 +11,7 @@ use App\Events\UserAcceptCGUEvent;
 use App\Repository\AccountRepository;
 use App\Service\Account\CurrentAccountProvider;
 use App\Service\Djust\DjustAuthenticationService;
+use App\Service\Djust\DjustCustomerAccountService;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -35,6 +36,7 @@ class AutoLoginSuccessHandler implements AuthenticationSuccessHandlerInterface, 
         private readonly RequestStack $requestStack,
         private readonly UrlGeneratorInterface $router,
         private readonly DjustAuthenticationService $djustAuthenticationService,
+        private readonly DjustCustomerAccountService $djustCustomerAccountService,
         protected readonly LoggerInterface $djustLogger,
     ) {
     }
@@ -66,6 +68,7 @@ class AutoLoginSuccessHandler implements AuthenticationSuccessHandlerInterface, 
             }
 
             $session = $this->requestStack->getSession();
+            $this->djustCustomerAccountService->clearCache();
             $session->set(CurrentAccountProvider::SESSION_KEY_ACCOUNT, $account);
 
             $authDjustSuccess = $this->djustAuthenticationService->authenticateUser($account, !$isNeoAutoLogin);

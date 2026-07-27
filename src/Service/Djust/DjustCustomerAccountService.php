@@ -22,6 +22,13 @@ class DjustCustomerAccountService
     ) {
     }
 
+    public function clearCache(): void
+    {
+        $session = $this->requestStack->getSession();
+        $session->remove(self::SESSION_KEY_CUSTOMER_ACCOUNT);
+        $session->remove(self::SESSION_KEY_CACHED_AT);
+    }
+
     public function getCustomerAccount(bool $forceRefresh = false): ?array
     {
         try {
