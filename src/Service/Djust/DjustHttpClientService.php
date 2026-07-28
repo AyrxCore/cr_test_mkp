@@ -21,10 +21,10 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class DjustHttpClientService
 {
-    private const string DJUST_ACCOUNT_ACCESS_TOKEN = 'djust_account_access_token';
+    public const string DJUST_ACCOUNT_ACCESS_TOKEN = 'djust_account_access_token';
+    public const string DJUST_ACCOUNT_REFRESH_TOKEN = 'djust_account_refresh_token';
+    public const string DJUST_ACCOUNT_EXPIRES_AT = 'djust_account_expires_at';
     private const string CACHE_KEY = 'djust_operator_token';
-    private const string DJUST_ACCOUNT_REFRESH_TOKEN = 'djust_account_refresh_token';
-    private const string DJUST_ACCOUNT_EXPIRES_AT = 'djust_account_expires_at';
     private const int TOKEN_EXPIRATION_TIME = 240;
 
     public function __construct(
@@ -40,6 +40,14 @@ class DjustHttpClientService
         #[Autowire(env: 'DJUST_API_PASSWORD')]
         private readonly string $password,
     ) {
+    }
+
+    public function clearAccountToken(): void
+    {
+        $session = $this->requestStack->getSession();
+        $session->remove(self::DJUST_ACCOUNT_ACCESS_TOKEN);
+        $session->remove(self::DJUST_ACCOUNT_REFRESH_TOKEN);
+        $session->remove(self::DJUST_ACCOUNT_EXPIRES_AT);
     }
 
     public function post(string $endpoint, array $data = [], array $headers = [], bool $isOperator = false): array

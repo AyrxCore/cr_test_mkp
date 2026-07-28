@@ -8,7 +8,6 @@ use App\Repository\LogAccountConnectionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LogAccountConnectionRepository::class)]
-#[ORM\HasLifecycleCallbacks]
 class LogAccountConnection
 {
     #[ORM\Id]
@@ -22,9 +21,6 @@ class LogAccountConnection
 
     #[ORM\Column]
     private ?\DateTimeImmutable $connectedAt = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $updatedAt = null;
 
     public function getId(): ?int
     {
@@ -55,14 +51,4 @@ class LogAccountConnection
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->updatedAt;
-    }
-
-    #[ORM\PreUpdate]
-    public function onPreUpdate(): void
-    {
-        $this->updatedAt = new \DateTimeImmutable();
-    }
 }

@@ -27,11 +27,16 @@ class DjustCustomerAccountService
     ) {
     }
 
+    /**
+     * Purge le contexte Djust de l'ancien compte (customer account en cache + token d'accès) :
+     * un token encore valide mais lié à un autre compte fait échouer l'appel customer-account-id.
+     */
     public function clearCache(): void
     {
         $session = $this->requestStack->getSession();
         $session->remove(self::SESSION_KEY_CUSTOMER_ACCOUNT);
         $session->remove(self::SESSION_KEY_CACHED_AT);
+        $this->djustHttpClientService->clearAccountToken();
     }
 
     public function getCustomerAccount(bool $forceRefresh = false): ?array

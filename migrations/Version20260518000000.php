@@ -72,4 +72,3 @@ final class Version20260518000000 extends AbstractMigration
         $this->addSql('DROP TABLE IF EXISTS shipping_rule');
     }
 }
-

@@ -171,7 +171,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
     $this->httpClient->shouldReceive('get')
         ->once()
-        ->andThrow(new \RuntimeException('Session/config error, not an HTTP error'));
+        ->andThrow(new RuntimeException('Session/config error, not an HTTP error'));
 
     $result = $this->service->getCustomerAccount();
 
@@ -328,9 +328,11 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
     \expect($result)->toBeArray()->toBeEmpty();
 })->group('DjustCustomerAccountService', 'djust');
 
-\it('clears cached customer account and cached_at from session', function () {
+\it('clears cached customer account, cached_at and the Djust access token from session', function () {
     $this->session->set(DjustCustomerAccountService::SESSION_KEY_CUSTOMER_ACCOUNT, ['id' => '123']);
     $this->session->set(DjustCustomerAccountService::SESSION_KEY_CACHED_AT, \time());
+
+    $this->httpClient->shouldReceive('clearAccountToken')->once();
 
     $this->service->clearCache();
 
@@ -352,6 +354,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
     $this->session->set(DjustCustomerAccountService::SESSION_KEY_CUSTOMER_ACCOUNT, $previousUserAccount);
     $this->session->set(DjustCustomerAccountService::SESSION_KEY_CACHED_AT, \time());
 
+    $this->httpClient->shouldReceive('clearAccountToken')->once();
     $this->service->clearCache();
 
     $this->httpClient->shouldReceive('get')

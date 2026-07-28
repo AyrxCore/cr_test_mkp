@@ -128,7 +128,7 @@ function httpClientRequestToken($httpClient, $baseUrl, $password, $username, $dj
     if ($isOperator) {
         \expect($this->cache->getItem('djust_operator_token')->get())->toBe($this->tokenData['token']['accessToken']);
     } else {
-        \expect($this->session->get('djust_account_access_token'))->toBe($this->tokenData['token']['accessToken']);
+        \expect($this->session->get(DjustHttpClientService::DJUST_ACCOUNT_ACCESS_TOKEN))->toBe($this->tokenData['token']['accessToken']);
     }
 
     \expect($testResponse)->toBeArray();
@@ -194,7 +194,7 @@ function httpClientRequestToken($httpClient, $baseUrl, $password, $username, $dj
     if ($isOperator) {
         \expect($this->cache->getItem('djust_operator_token')->get())->toBe($this->tokenData['token']['accessToken']);
     } else {
-        \expect($this->session->get('djust_account_access_token'))->toBe($this->tokenData['token']['accessToken']);
+        \expect($this->session->get(DjustHttpClientService::DJUST_ACCOUNT_ACCESS_TOKEN))->toBe($this->tokenData['token']['accessToken']);
     }
 
     \expect($testResponse)->toBeArray();
@@ -335,7 +335,7 @@ function httpClientRequestToken($httpClient, $baseUrl, $password, $username, $dj
     if ($isOperator) {
         \expect($this->cache->getItem('djust_operator_token')->get())->toBe($this->tokenData['token']['accessToken']);
     } else {
-        \expect($this->session->get('djust_account_access_token'))->toBe($this->tokenData['token']['accessToken']);
+        \expect($this->session->get(DjustHttpClientService::DJUST_ACCOUNT_ACCESS_TOKEN))->toBe($this->tokenData['token']['accessToken']);
     }
 
     \expect($testResponse)->toBeArray();
@@ -404,3 +404,37 @@ function httpClientRequestToken($httpClient, $baseUrl, $password, $username, $dj
 
     $this->djustHttpClientService->delete($finalEndpoint);
 })->group('DjustHttpClientService')->throws(SessionUnavailableException::class);
+
+\it('clears the cached account token from session', function () {
+    $this->session->set(DjustHttpClientService::DJUST_ACCOUNT_ACCESS_TOKEN, 'stale_token');
+    $this->session->set(DjustHttpClientService::DJUST_ACCOUNT_REFRESH_TOKEN, 'stale_refresh_token');
+    $this->session->set(DjustHttpClientService::DJUST_ACCOUNT_EXPIRES_AT, \time() + 3600);
+
+    $this->djustHttpClientService->clearAccountToken();
+
+    \expect($this->session->get(DjustHttpClientService::DJUST_ACCOUNT_ACCESS_TOKEN))->toBeNull()
+        ->and($this->session->get(DjustHttpClientService::DJUST_ACCOUNT_REFRESH_TOKEN))->toBeNull()
+        ->and($this->session->get(DjustHttpClientService::DJUST_ACCOUNT_EXPIRES_AT))->toBeNull();
+})->group('DjustHttpClientService');
+
+\it('fetches a new token instead of reusing a stale one from a different account after clearAccountToken', function () {
+    $this->session->set(DjustHttpClientService::DJUST_ACCOUNT_ACCESS_TOKEN, 'stale_token_from_other_account');
+    $this->session->set(DjustHttpClientService::DJUST_ACCOUNT_EXPIRES_AT, \time() + 3600);
+
+    $this->djustHttpClientService->clearAccountToken();
+
+    \httpClientRequestToken(
+        $this->httpClient,
+        $this->baseUrl,
+        $this->credentialEncryptionService->decrypt($this->account->getDjustPassword()),
+        $this->account->getDjustUsername(),
+        'ACCOUNT',
+        $this->response1,
+        $this->tokenData
+    );
+
+    $token = $this->djustHttpClientService->getValidAccountToken();
+
+    \expect($token)->toBe($this->tokenData['token']['accessToken'])
+        ->and($token)->not->toBe('stale_token_from_other_account');
+})->group('DjustHttpClientService');

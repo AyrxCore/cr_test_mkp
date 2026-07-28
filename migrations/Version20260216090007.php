@@ -14,7 +14,7 @@ final class Version20260216090007 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return "Création de la table shipping_rule";
+        return 'Création de la table shipping_rule';
     }
 
     public function up(Schema $schema): void
@@ -23,7 +23,6 @@ final class Version20260216090007 extends AbstractMigration
         $this->addSql('CREATE TABLE shipping_rule (id UUID NOT NULL, type VARCHAR(255) NOT NULL, rule JSONB NOT NULL, partner_id UUID NOT NULL, PRIMARY KEY (id))');
         $this->addSql('CREATE INDEX IDX_D7643ACE9393F8FE ON shipping_rule (partner_id)');
         $this->addSql('ALTER TABLE shipping_rule ADD CONSTRAINT FK_D7643ACE9393F8FE FOREIGN KEY (partner_id) REFERENCES partner (id) NOT DEFERRABLE');
-
     }
 
     public function down(Schema $schema): void
