@@ -118,8 +118,9 @@ class CartSavingsService
         $updatedCount = 0;
 
         foreach ($orderLogistics as $orderLogistic) {
-            $sellerId = $this->extractSellerId($orderLogistic);
+            $sellerId = $this->djustDataExtractor->extractSellerId($orderLogistic);
             $metrics = $this->calculateMetrics($orderLogistic);
+            $sellerOrderId = (string) ($orderLogistic['id'] ?? '');
 
             $cartSaving = $this->cartSavingsRepository->findOneBy([
                 'account' => $account,
@@ -130,6 +131,7 @@ class CartSavingsService
             $cartSaving->setAccount($account);
             $cartSaving->setCartId($cartId);
             $cartSaving->setOrderId($orderId);
+            $cartSaving->setSellerOrderId($sellerOrderId !== '' ? $sellerOrderId : null);
             $cartSaving->setSellerId($sellerId);
             $cartSaving->setAmount($metrics['amount']);
             $cartSaving->setOrderTotal($metrics['orderTotal']);
@@ -146,25 +148,6 @@ class CartSavingsService
         }
 
         return $updatedCount;
-    }
-
-    private function extractSellerId(array $orderLogistic): int
-    {
-        $rawSellerId = $orderLogistic['supplierSnapshot']['id'] ?? null;
-
-        if ($rawSellerId === null) {
-            return 0;
-        }
-
-        if (\is_int($rawSellerId)) {
-            return $rawSellerId;
-        }
-
-        if (\is_string($rawSellerId) && \preg_match('/\d+/', $rawSellerId, $matches) === 1) {
-            return (int) $matches[0];
-        }
-
-        return 0;
     }
 
     /**

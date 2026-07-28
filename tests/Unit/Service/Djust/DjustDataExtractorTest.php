@@ -154,3 +154,21 @@ use App\Service\Djust\DjustDataExtractor;
     \expect($result)->toBeArray();
 });
 
+\it('extracts sellerId as int from supplierSnapshot.id', function () {
+    $result = $this->extractor->extractSellerId(['supplierSnapshot' => ['id' => 69792]]);
+
+    \expect($result)->toBe(69792);
+});
+
+\it('extracts sellerId digits from a string supplierSnapshot.id', function () {
+    $result = $this->extractor->extractSellerId(['supplierSnapshot' => ['id' => 'supplier-12103']]);
+
+    \expect($result)->toBe(12103);
+});
+
+\it('returns 0 when supplierSnapshot.id is missing', function () {
+    $result = $this->extractor->extractSellerId([]);
+
+    \expect($result)->toBe(0);
+});
+

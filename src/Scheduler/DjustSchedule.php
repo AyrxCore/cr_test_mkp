@@ -20,8 +20,9 @@ final class DjustSchedule implements ScheduleProviderInterface
         // Only sync in production (analytics are not consumed in real-time)
         // APP_MODE is a Docker server variable
         if ('prod' === ($_SERVER['APP_MODE'] ?? null)) {
+            // Deux exécutions par jour, aux heures creuses (6h et 22h)
             $schedule->add(
-                RecurringMessage::cron('0 0 * * *', new SyncDjustOrdersStateMessage()),
+                RecurringMessage::cron('0 6,22 * * *', new SyncDjustOrdersStateMessage()),
             );
         }
 

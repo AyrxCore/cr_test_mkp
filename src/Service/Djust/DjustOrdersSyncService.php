@@ -17,6 +17,7 @@ class DjustOrdersSyncService
     public function __construct(
         private readonly CartSavingsRepository $cartSavingsRepository,
         private readonly DjustOrderService $djustOrderService,
+        private readonly DjustDataExtractor $djustDataExtractor,
         private readonly EntityManagerInterface $entityManager,
         private readonly LoggerInterface $logger,
     ) {
@@ -54,14 +55,22 @@ class DjustOrdersSyncService
                     continue;
                 }
 
-                $orderStatus = $order['orderLogistics'][0]['status'] ?? $order['status'] ?? null;
+                $matchingOrderLogistic = $this->findOrderLogisticForSeller($order, $saving->getSellerId());
+                $orderStatus = $matchingOrderLogistic['status'] ?? $order['status'] ?? null;
+                $sellerOrderId = $matchingOrderLogistic !== null ? (string) ($matchingOrderLogistic['id'] ?? '') : '';
 
-                if ($saving->getOrderState() === $orderStatus) {
+                $stateChanged = $saving->getOrderState() !== $orderStatus;
+                $sellerOrderIdChanged = $sellerOrderId !== '' && $saving->getSellerOrderId() !== $sellerOrderId;
+
+                if (!$stateChanged && !$sellerOrderIdChanged) {
                     ++$skipped;
                     continue;
                 }
 
                 $saving->setOrderState($orderStatus);
+                if ($sellerOrderIdChanged) {
+                    $saving->setSellerOrderId($sellerOrderId);
+                }
                 $this->cartSavingsRepository->save($saving);
                 ++$updated;
 
@@ -102,5 +111,16 @@ class DjustOrdersSyncService
             'skipped' => $skipped,
             'failed' => $failed,
         ];
+    }
+
+    private function findOrderLogisticForSeller(array $order, ?int $sellerId): ?array
+    {
+        foreach ($order['orderLogistics'] ?? [] as $orderLogistic) {
+            if ($this->djustDataExtractor->extractSellerId($orderLogistic) === $sellerId) {
+                return $orderLogistic;
+            }
+        }
+
+        return $order['orderLogistics'][0] ?? null;
     }
 }

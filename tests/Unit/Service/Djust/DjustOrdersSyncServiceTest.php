@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Entity\CartSavings;
 use App\Repository\CartSavingsRepository;
+use App\Service\Djust\DjustDataExtractor;
 use App\Service\Djust\DjustOrderService;
 use App\Service\Djust\DjustOrdersSyncService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,6 +23,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
     $this->service = new DjustOrdersSyncService(
         $this->cartSavingsRepository,
         $this->djustOrderService,
+        new DjustDataExtractor(),
         $this->entityManager,
         $this->logger,
     );
@@ -134,6 +136,35 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
     $result = $this->service->sync();
 
     \expect($result)->toBe(['processed' => 1, 'updated' => 0, 'skipped' => 0, 'failed' => 1]);
+});
+
+\it('matches the orderLogistic by sellerId instead of always using the first one (MKP-1557)', function () {
+    // Une commande a un orderLogistic par vendeur : il ne faut pas se fier au premier de la liste
+    // pour une ligne CartSavings qui appartient à un autre vendeur.
+    $saving = (new CartSavings())
+        ->setOrderId('0000625780')
+        ->setSellerId(69792)
+        ->setOrderState('WAITING_SHIPMENT');
+
+    $order = [
+        'status' => 'WAITING_SHIPMENT',
+        'orderLogistics' => [
+            ['id' => '0004078562', 'status' => 'WAITING_SHIPMENT', 'supplierSnapshot' => ['id' => 69770]],
+            ['id' => '0004078566', 'status' => 'WAITING_SUPPLIER_APPROVAL', 'supplierSnapshot' => ['id' => 69792]],
+        ],
+    ];
+
+    $this->cartSavingsRepository->shouldReceive('iterateWithOrderId')->once()->andReturn([$saving]);
+    $this->djustOrderService->shouldReceive('getOrderByIdForAccount')->once()->andReturn($order);
+    $this->cartSavingsRepository->shouldReceive('save')->once();
+    $this->entityManager->shouldReceive('flush')->once();
+
+    $result = $this->service->sync();
+
+    \expect($result)->toBe(['processed' => 1, 'updated' => 1, 'skipped' => 0, 'failed' => 0]);
+    // Doit prendre le statut du orderLogistic du vendeur 69792, pas celui du premier (69770)
+    \expect($saving->getOrderState())->toBe('WAITING_SUPPLIER_APPROVAL');
+    \expect($saving->getSellerOrderId())->toBe('0004078566');
 });
 
 \it('returns empty stats when no CartSavings with orderId', function () {

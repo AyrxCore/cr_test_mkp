@@ -24,6 +24,12 @@ class CartSavingsRepository extends ServiceEntityRepository
      */
     private const int DJUST_ORDER_ID_MIN_LENGTH = 4;
 
+    private const array TERMINAL_ORDER_STATES = [
+        'COMPLETED', 'DELIVERED', 'RETURNED',
+        'DECLINED_BY_CUSTOMER', 'DECLINED_BY_SUPPLIER', 'DECLINED', 'EXPIRED',
+        'CANCELED', 'CANCELLED', 'PARTIALLY_CANCELED', 'REFUSED',
+    ];
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CartSavings::class);
@@ -57,7 +63,9 @@ class CartSavingsRepository extends ServiceEntityRepository
             ->innerJoin('cartSavings.account', 'account')
             ->andWhere('cartSavings.orderId IS NOT NULL')
             ->andWhere('LENGTH(cartSavings.orderId) > :minOrderIdLength')
+            ->andWhere('cartSavings.orderState IS NULL OR cartSavings.orderState NOT IN (:terminalStates)')
             ->setParameter('minOrderIdLength', self::DJUST_ORDER_ID_MIN_LENGTH)
+            ->setParameter('terminalStates', self::TERMINAL_ORDER_STATES)
             ->orderBy('cartSavings.updatedAt', 'ASC')
             ->addOrderBy('cartSavings.createdAt', 'ASC')
             ->getQuery()

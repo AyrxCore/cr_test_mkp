@@ -233,4 +233,23 @@ class DjustDataExtractor
 
         return \round((($priceReference - $price) * 100) / $priceReference);
     }
+
+    public function extractSellerId(array $orderLogistic): int
+    {
+        $rawSellerId = $orderLogistic['supplierSnapshot']['id'] ?? null;
+
+        if ($rawSellerId === null) {
+            return 0;
+        }
+
+        if (\is_int($rawSellerId)) {
+            return $rawSellerId;
+        }
+
+        if (\is_string($rawSellerId) && \preg_match('/\d+/', $rawSellerId, $matches) === 1) {
+            return (int) $matches[0];
+        }
+
+        return 0;
+    }
 }

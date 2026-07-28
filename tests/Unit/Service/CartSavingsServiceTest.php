@@ -30,6 +30,25 @@ use Symfony\Component\Uid\Uuid;
         ->andThrow(new \RuntimeException('No session in unit test context'))
         ->byDefault();
 
+    // Par défaut : réplique le vrai comportement d'extraction du sellerId depuis supplierSnapshot.id
+    $this->djustDataExtractor->shouldReceive('extractSellerId')
+        ->andReturnUsing(static function (array $orderLogistic) {
+            $rawSellerId = $orderLogistic['supplierSnapshot']['id'] ?? null;
+
+            if ($rawSellerId === null) {
+                return 0;
+            }
+            if (\is_int($rawSellerId)) {
+                return $rawSellerId;
+            }
+            if (\is_string($rawSellerId) && \preg_match('/\d+/', $rawSellerId, $matches) === 1) {
+                return (int) $matches[0];
+            }
+
+            return 0;
+        })
+        ->byDefault();
+
     $this->service = new CartSavingsService(
         $this->repository,
         $this->accountRepository,
@@ -255,6 +274,35 @@ use Symfony\Component\Uid\Uuid;
 
     \expect($saved->getOrderId())->toBe('0000012345');
     \expect($saved->getCartId())->toBe('CART-REF');
+});
+
+\it('uses the orderLogistic id as sellerOrderId, distinct from the parent orderId (MKP-1557)', function () {
+    // Sur Djust, chaque orderLogistic (commande par vendeur) a son propre id,
+    // différent de l'id de la commande parente affiché par ailleurs dans le BO Djust.
+    $order = ($this->makeOrder)('0000625780', 'CART-MULTI-SELLER', [
+        [...($this->makeOrderLogistic)('supplier-1'), 'id' => '0004078562'],
+        [...($this->makeOrderLogistic)('supplier-2'), 'id' => '0004078566'],
+    ]);
+
+    $saved = [];
+
+    $this->repository->shouldReceive('findOneBy')->andReturn(null);
+    $this->repository->shouldReceive('save')->twice()->with(Mockery::on(static function (CartSavings $s) use (&$saved) {
+        $saved[] = $s;
+
+        return true;
+    }));
+    $this->entityManager->shouldReceive('flush')->once();
+
+    $this->service->createFromDjustOrder($order, $this->account);
+
+    \expect($saved)->toHaveCount(2);
+    foreach ($saved as $cartSaving) {
+        // orderId reste celui de la commande parente (nécessaire pour le sync par la suite)
+        \expect($cartSaving->getOrderId())->toBe('0000625780');
+    }
+    \expect($saved[0]->getSellerOrderId())->toBe('0004078562');
+    \expect($saved[1]->getSellerOrderId())->toBe('0004078566');
 });
 
 \it('uses OFFER_PUBLIC_PRICE from offerCustomFieldSnapshotDtos as reference price for savings', function () {

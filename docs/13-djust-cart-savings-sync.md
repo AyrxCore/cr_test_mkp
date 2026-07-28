@@ -4,7 +4,7 @@
 
 ## Objectif
 
-Créer `CartSavings` après paiement Djust et synchroniser les statuts de commande vers PowerBI chaque nuit.
+Créer `CartSavings` après paiement Djust et synchroniser les statuts de commande vers PowerBI deux fois par jour.
 
 ---
 
@@ -28,9 +28,9 @@ php bin/console app:sync-djust-orders-state -v
 
 ## Behavior en Production
 
-**La sync s'exécute automatiquement chaque nuit à minuit (00:00)** via Symfony Scheduler.
+**La sync s'exécute automatiquement deux fois par jour, aux heures creuses (6h et 22h)** via Symfony Scheduler.
 
-- Seulement en `APP_ENV=prod`
+- Seulement si `APP_MODE=prod` (variable Docker)
 - Exécutée par les workers Messenger (supervisord)
 - Si une commande est active : changement de statut → logs `[INFO]`
 - Si une commande n'est plus disponible : logs `[WARNING]`
@@ -47,13 +47,13 @@ L'API Djust opérateur (`/v1/shop/commercial-orders/{id}`) ne supporte pas les o
 **Format des IDs**
 - `cartId` = référence panier Djust (ex: `260-211-8089583`)
 - `orderId` = ID Djust paddé (ex: `0000625247`) 
-- `orderState` = statut du premier `orderLogistics` (ex: `WAITING_SUPPLIER_APPROVAL`)
+- `orderState` = statut de l'`orderLogistics` correspondant au vendeur de la ligne (ex: `WAITING_SUPPLIER_APPROVAL`)
 
 **Sous le capot**
 
 1. `supervisord` lance les workers `messenger:consume default scheduler_default`
 2. Le transport `scheduler_default` vérifie si `DjustSchedule` doit déclencher
-3. Chaque nuit à minuit → `SyncDjustOrdersStateMessage` dispatched sur transport `default`
+3. Deux fois par jour (6h et 22h) → `SyncDjustOrdersStateMessage` dispatched sur transport `default`
 4. Un worker la consomme → `SyncDjustOrdersStateMessageHandler` → `DjustOrdersSyncService::sync()`
 
 

@@ -95,9 +95,8 @@ cache-clear: ## Clear symfony cache
 
 database-reset: database-drop-create database-migrations database-fixtures ## Reset database and load fixtures
 
-database-drop-create: ## Drop and recreate the database (idempotent, terminates active connections first)
-	$(dc_exec) db psql -U postgres -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'mkp_db' AND pid <> pg_backend_pid();" || true
-	$(dc_exec) php bin/console doctrine:database:drop --force --if-exists
+database-drop-create: ## Drop and recreate the database (terminates active connections via FORCE)
+	$(dc_exec) db psql -U postgres -P pager=off -c "DROP DATABASE IF EXISTS mkp_db WITH (FORCE);"
 	$(dc_exec) php bin/console doctrine:database:create
 
 database-create:
