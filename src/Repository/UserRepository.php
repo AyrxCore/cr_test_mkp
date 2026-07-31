@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\Channel;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -44,18 +45,48 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         }
     }
 
-    public function findUserByUsernameOrEmail($value)
+    /**
+     * The `email` column has no unique constraint in database, so several users can share the
+     * same email address (only `username` is guaranteed unique). We therefore always limit the
+     * query to a single row to avoid NonUniqueResultException.
+     *
+     * When a Channel is provided, we first try to return a user having an enabled account on
+     * this channel, matching the business rule already applied by the callers. If none is
+     * found (or no channel was given), we fall back to a single, deterministic match.
+     */
+    public function findUserByUsernameOrEmail(?string $value, ?Channel $channel = null): ?User
     {
-        $value = \trim($value);
+        $value = \trim((string) $value);
 
-        if (empty($value)) {
+        if ($value === '') {
             return null;
+        }
+
+        if ($channel !== null) {
+            $user = $this->createQueryBuilder('u')
+                ->join('u.accounts', 'a')
+                ->join('a.adherent', 'ad')
+                ->where('u.email = :value OR u.username = :value')
+                ->andWhere('a.enabled = true')
+                ->andWhere('ad.channel = :channel')
+                ->setParameter('value', $value)
+                ->setParameter('channel', $channel)
+                ->orderBy('u.id', 'ASC')
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+
+            if ($user !== null) {
+                return $user;
+            }
         }
 
         return $this->createQueryBuilder('u')
             ->where('u.email = :value')
             ->orWhere('u.username = :value')
-            ->setParameter(':value', $value)
+            ->setParameter('value', $value)
+            ->orderBy('u.id', 'ASC')
+            ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
     }
