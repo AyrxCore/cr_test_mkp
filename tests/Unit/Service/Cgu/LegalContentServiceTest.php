@@ -20,12 +20,12 @@ uses()->group('LegalContentService', 'legal_content');
     $this->service = new LegalContentService($this->httpClient, $this->mapper, $this->channelContext);
 });
 
-\it('returns the CGU for the current channel', function () {
+\it('returns the CGU for a channel with a dedicated Storyblok entry', function (string $channelCode) {
     $channel = Mockery::mock(Channel::class);
-    $channel->shouldReceive('getCode')->once()->andReturn('my-channel');
+    $channel->shouldReceive('getCode')->once()->andReturn($channelCode);
     $this->channelContext->shouldReceive('getChannel')->once()->andReturn($channel);
 
-    $rawData = ['stories' => [['name' => 'my-channel', 'content' => []]]];
+    $rawData = ['stories' => [['name' => $channelCode, 'content' => []]]];
     $this->httpClient
         ->shouldReceive('getStories')
         ->once()
@@ -36,7 +36,31 @@ uses()->group('LegalContentService', 'legal_content');
     $this->mapper
         ->shouldReceive('mapByChannelCode')
         ->once()
-        ->with($rawData, 'my-channel')
+        ->with($rawData, $channelCode)
+        ->andReturn($expectedLegalContent);
+
+    $result = $this->service->getForCurrentChannel();
+
+    \expect($result)->toBe($expectedLegalContent);
+})->with(['OPTEAM', 'CAPER']);
+
+\it('falls back to QANTIS_ACHAT CGU for channels without a dedicated Storyblok entry', function () {
+    $channel = Mockery::mock(Channel::class);
+    $channel->shouldReceive('getCode')->once()->andReturn('UNEP');
+    $this->channelContext->shouldReceive('getChannel')->once()->andReturn($channel);
+
+    $rawData = ['stories' => [['name' => Channel::QANTIS_ACHAT, 'content' => []]]];
+    $this->httpClient
+        ->shouldReceive('getStories')
+        ->once()
+        ->with(['starts_with' => StoryblokEndpoint::LEGAL_CONTENT->value])
+        ->andReturn($rawData);
+
+    $expectedLegalContent = new LegalContent();
+    $this->mapper
+        ->shouldReceive('mapByChannelCode')
+        ->once()
+        ->with($rawData, Channel::QANTIS_ACHAT)
         ->andReturn($expectedLegalContent);
 
     $result = $this->service->getForCurrentChannel();
@@ -46,7 +70,7 @@ uses()->group('LegalContentService', 'legal_content');
 
 \it('returns null when no legal content story matches the channel', function () {
     $channel = Mockery::mock(Channel::class);
-    $channel->shouldReceive('getCode')->once()->andReturn('unknown-channel');
+    $channel->shouldReceive('getCode')->once()->andReturn(Channel::QANTIS_ACHAT);
     $this->channelContext->shouldReceive('getChannel')->once()->andReturn($channel);
 
     $rawData = ['stories' => []];

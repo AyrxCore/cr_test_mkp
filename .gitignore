@@ -47,3 +47,4 @@ aws-docker-creds
 
 /tests/ExampleTest.php
 /.DS_Store
+/config/reference.php
