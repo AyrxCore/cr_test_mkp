@@ -224,6 +224,11 @@ jobs:
   app-plan:
     name: "[App] Terraform plan (${{ inputs.environment }})"
     needs: build-and-push
+    # Explicit condition required: build-and-push uses always() to bypass the
+    # skipped infra-apply, but that skipped ancestor still propagates through the
+    # implicit success() of downstream jobs — so app-plan/app-apply must gate on
+    # their direct dependency's result instead of the default success().
+    if: ${{ always() && needs.build-and-push.result == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -284,6 +289,7 @@ jobs:
   app-apply:
     name: "[App] Terraform apply (${{ inputs.environment }})"
     needs: app-plan
+    if: ${{ always() && needs.app-plan.result == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     # Gated by the target GitHub Environment. Only "prod" has required
