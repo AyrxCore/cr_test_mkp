@@ -95,6 +95,7 @@ function httpClientRequestToken($httpClient, $baseUrl, $password, $username, $dj
             ],
         ])->andReturn($this->response2);
 
+        $this->response2->shouldReceive('getStatusCode')->andReturn(200);
         $this->response2->shouldReceive('getContent')->andReturn(\json_encode(['response' => 'test']));
 
         $this->response2->shouldReceive('toArray')->andReturn(['response' => 'test']);
@@ -118,6 +119,7 @@ function httpClientRequestToken($httpClient, $baseUrl, $password, $username, $dj
             ],
         ])->andReturn($this->response2);
 
+        $this->response2->shouldReceive('getStatusCode')->andReturn(200);
         $this->response2->shouldReceive('getContent')->andReturn(\json_encode(['response' => 'test']));
 
         $this->response2->shouldReceive('toArray')->andReturn(['response' => 'test']);
@@ -161,6 +163,7 @@ function httpClientRequestToken($httpClient, $baseUrl, $password, $username, $dj
             }))
             ->andReturn($this->response2);
 
+        $this->response2->shouldReceive('getStatusCode')->andReturn(200);
         $this->response2->shouldReceive('getContent')->andReturn(\json_encode(['response' => 'test']));
 
         $this->response2->shouldReceive('toArray')->andReturn(['response' => 'test']);
@@ -184,6 +187,7 @@ function httpClientRequestToken($httpClient, $baseUrl, $password, $username, $dj
             }))
             ->andReturn($this->response2);
 
+        $this->response2->shouldReceive('getStatusCode')->andReturn(200);
         $this->response2->shouldReceive('getContent')->andReturn(\json_encode(['response' => 'test']));
 
         $this->response2->shouldReceive('toArray')->andReturn(['response' => 'test']);
@@ -219,6 +223,7 @@ function httpClientRequestToken($httpClient, $baseUrl, $password, $username, $dj
             }))
             ->andReturn($this->response2);
 
+        $this->response2->shouldReceive('getStatusCode')->andReturn(200);
         $this->response2->shouldReceive('getContent')->andReturn(\json_encode(['response' => 'test']));
 
         $this->response2->shouldReceive('toArray')->andReturn(['response' => 'test']);
@@ -234,6 +239,7 @@ function httpClientRequestToken($httpClient, $baseUrl, $password, $username, $dj
             }))
             ->andReturn($this->response2);
 
+        $this->response2->shouldReceive('getStatusCode')->andReturn(200);
         $this->response2->shouldReceive('getContent')->andReturn(\json_encode(['response' => 'test']));
 
         $this->response2->shouldReceive('toArray')->andReturn(['response' => 'test']);
@@ -263,6 +269,7 @@ function httpClientRequestToken($httpClient, $baseUrl, $password, $username, $dj
             }))
             ->andReturn($this->response2);
 
+        $this->response2->shouldReceive('getStatusCode')->andReturn(200);
         $this->response2->shouldReceive('getContent')->andReturn(\json_encode(['response' => 'test']));
 
         $this->response2->shouldReceive('toArray')->andReturn(['response' => 'test']);
@@ -278,6 +285,7 @@ function httpClientRequestToken($httpClient, $baseUrl, $password, $username, $dj
             }))
             ->andReturn($this->response2);
 
+        $this->response2->shouldReceive('getStatusCode')->andReturn(200);
         $this->response2->shouldReceive('getContent')->andReturn(\json_encode(['response' => 'test']));
 
         $this->response2->shouldReceive('toArray')->andReturn(['response' => 'test']);
@@ -310,6 +318,7 @@ function httpClientRequestToken($httpClient, $baseUrl, $password, $username, $dj
             ])
             ->andReturn($this->response2);
 
+        $this->response2->shouldReceive('getStatusCode')->andReturn(200);
         $this->response2->shouldReceive('getContent')->andReturn(\json_encode(['response' => 'test']));
         $this->response2->shouldReceive('toArray')->andReturn(['response' => 'test']);
     } else {
@@ -326,6 +335,7 @@ function httpClientRequestToken($httpClient, $baseUrl, $password, $username, $dj
             ])
             ->andReturn($this->response2);
 
+        $this->response2->shouldReceive('getStatusCode')->andReturn(200);
         $this->response2->shouldReceive('getContent')->andReturn(\json_encode(['response' => 'test']));
         $this->response2->shouldReceive('toArray')->andReturn(['response' => 'test']);
     }

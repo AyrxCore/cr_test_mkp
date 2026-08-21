@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Exception\SessionUnavailableException;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
+use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class DjustHttpClientService
@@ -153,15 +154,76 @@ class DjustHttpClientService
     {
         $options['headers'] = $this->buildHeaders($options['headers'] ?? [], $isOperator);
 
-        $response = $this->httpClient->request($method, $this->baseUrl.$endpoint, $options);
+        $url = $this->baseUrl.$endpoint;
 
-        $responseContent = $response->getContent();
+        $this->djustLogger->info('[API DJUST] Requête sortante', [
+            'method' => $method,
+            'url' => $url,
+            'query' => $options['query'] ?? null,
+            'body' => $this->summarizePayloadForLog($options['json'] ?? null),
+            'headers' => $this->sanitizeHeadersForLog($options['headers']),
+        ]);
 
-        if ($responseContent === '') {
-            return [];
+        $statusCode = null;
+        $responseContent = null;
+
+        try {
+            $response = $this->httpClient->request($method, $url, $options);
+            $statusCode = $response->getStatusCode();
+            $responseContent = $response->getContent();
+
+            $this->djustLogger->info('[API DJUST] Réponse reçue', [
+                'method' => $method,
+                'url' => $url,
+                'statusCode' => $statusCode,
+            ]);
+
+            if ($responseContent === '') {
+                return [];
+            }
+
+            return $response->toArray();
+        } catch (\Throwable $e) {
+            $this->djustLogger->error('[API DJUST] Échec de la requête', [
+                'method' => $method,
+                'url' => $url,
+                'query' => $options['query'] ?? null,
+                'body' => $this->summarizePayloadForLog($options['json'] ?? null),
+                'headers' => $this->sanitizeHeadersForLog($options['headers']),
+                'statusCode' => $e instanceof HttpExceptionInterface ? $e->getResponse()->getStatusCode() : $statusCode,
+                'responseBody' => $e instanceof HttpExceptionInterface ? $e->getResponse()->getContent(false) : $responseContent,
+                'exception' => $e->getMessage(),
+            ]);
+
+            throw $e;
+        }
+    }
+
+    private function sanitizeHeadersForLog(array $headers): array
+    {
+        if (isset($headers['Authorization'])) {
+            $headers['Authorization'] = 'Bearer ***';
         }
 
-        return $response->toArray();
+        return $headers;
+    }
+
+    /**
+     * Ne logue que la structure (clés) du body afin d'éviter d'exposer des données sensibles/PII.
+     * Les query params sont loggués en clair (peu sensibles : pagination, locale, filtres...) pour
+     * faciliter la comparaison avec un appel Postman lors du debug.
+     */
+    private function summarizePayloadForLog(mixed $payload): array|string|null
+    {
+        if ($payload === null) {
+            return null;
+        }
+
+        if (\is_array($payload)) {
+            return \array_keys($payload);
+        }
+
+        return \get_debug_type($payload);
     }
 
     private function buildHeaders(array $headers = [], bool $isOperator = false): array
