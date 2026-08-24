@@ -2,13 +2,18 @@ name: Deploy
 
 # Manual deployment pipeline (replaces the Jenkins `Docker build and push`,
 # `deploy-app` and `deploy-infra` jobs). One trigger, one input for the tag,
-# and an optional toggle to also (re)provision infra (VPC/ECS cluster/RDS)
-# before deploying the app — only needed when infra changed.
+# and an optional toggle to force (re)provisioning the infra (VPC/ECS
+# cluster/RDS) before deploying the app.
 #
 # Flow:
-#   1. infra-plan / infra-apply     (only if deploy_infra = true)
+#   0. detect-infra                 (decides if infra must be provisioned)
+#   1. infra-plan / infra-apply     (if deploy_infra=true OR infra is missing)
 #   2. build-and-push               (Docker images -> ECR)
 #   3. app-plan / app-apply         (Terraform for the app/ECS service)
+#
+# Infra is provisioned when the user asks for it (deploy_infra=true) OR when the
+# environment's Terraform state is empty (self-healing, e.g. after a destroy),
+# so the app's `data` lookups (VPC/ECS/ALB) never run against a missing infra.
 #
 # Both "apply" jobs run against a GitHub Environment named after the target
 # environment (staging / preprod / prod). Only "prod" has required reviewers
@@ -30,7 +35,7 @@ on:
         required: true
         default: main
       deploy_infra:
-        description: "Also (re)provision infra (VPC/ECS cluster/RDS) before deploying the app — only needed when infra changed"
+        description: "Force (re)provision infra (VPC/ECS/RDS) before the app. Auto-enabled anyway if the env infra is missing (e.g. after a destroy)."
         required: true
         type: boolean
         default: false
@@ -48,30 +53,97 @@ env:
   DEVOPS_INFRA_DIR: devops/marketplace/infra
 
 jobs:
-  # ────────────────────────────── Infra (optional) ──────────────────────────────
-  infra-plan:
-    name: "[Infra] Terraform plan (${{ inputs.environment }})"
-    if: ${{ inputs.deploy_infra == true }}
+  # ────────────────────────────── Detect infra ──────────────────────────────
+  # Self-healing gate: provision infra when the user explicitly asks for it
+  # (deploy_infra=true) OR when the environment's infra is missing (empty
+  # Terraform state, e.g. right after a destroy). This prevents app-plan from
+  # failing on its `data` lookups (VPC/ECS/ALB) when the env doesn't exist yet.
+  detect-infra:
+    name: Detect infra state (${{ inputs.environment }})
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
+    outputs:
+      needs_infra: ${{ steps.check.outputs.needs_infra }}
 
     steps:
       - name: Checkout devops
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: GroupeQantis/devops
           token: ${{ secrets.DEVOPS_REPO_TOKEN }}
           path: devops
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "1.9.8"
+          terraform_wrapper: false
+
+      - name: Terraform init
+        working-directory: ${{ env.DEVOPS_INFRA_DIR }}
+        run: terraform init --upgrade -input=false
+
+      - name: Decide whether infra is needed
+        id: check
+        working-directory: ${{ env.DEVOPS_INFRA_DIR }}
+        run: |
+          if [ "${{ inputs.deploy_infra }}" = "true" ]; then
+            echo "Infra requested explicitly (deploy_infra=true)."
+            echo "needs_infra=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if terraform workspace select ${{ inputs.environment }} 2>/dev/null; then
+            count=$(terraform state list | wc -l | tr -d ' ')
+          else
+            count=0
+          fi
+
+          if [ "$count" = "0" ]; then
+            echo "Infra state is empty for '${{ inputs.environment }}' — provisioning it."
+            echo "needs_infra=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Infra already present ($count resources) — skipping infra provisioning."
+            echo "needs_infra=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  # ────────────────────────────── Infra (conditional) ──────────────────────────────
+  infra-plan:
+    name: "[Infra] Terraform plan (${{ inputs.environment }})"
+    needs: detect-infra
+    if: ${{ needs.detect-infra.outputs.needs_infra == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # Required so the env-scoped DB_PASSWORD secret is readable here. The plan is
+    # saved as an artifact and applied verbatim, so the password must be baked in
+    # at plan time; without this, TF_VAR_db_password is empty and the RDS cluster
+    # keeps the restored snapshot (prod) password.
+    environment: ${{ inputs.environment }}
+
+    steps:
+      - name: Checkout devops
+        uses: actions/checkout@v7
+        with:
+          repository: GroupeQantis/devops
+          token: ${{ secrets.DEVOPS_REPO_TOKEN }}
+          path: devops
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: "1.9.8"
           terraform_wrapper: false
@@ -104,7 +176,7 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload plan artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: tfplan-infra-${{ inputs.environment }}
           path: ${{ env.DEVOPS_INFRA_DIR }}/tfplan
@@ -112,8 +184,8 @@ jobs:
 
   infra-apply:
     name: "[Infra] Terraform apply (${{ inputs.environment }})"
-    if: ${{ inputs.deploy_infra == true }}
-    needs: infra-plan
+    needs: [detect-infra, infra-plan]
+    if: ${{ needs.detect-infra.outputs.needs_infra == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     # Gated by the target GitHub Environment. Only "prod" has required
@@ -122,21 +194,21 @@ jobs:
 
     steps:
       - name: Checkout devops
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: GroupeQantis/devops
           token: ${{ secrets.DEVOPS_REPO_TOKEN }}
           path: devops
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: "1.9.8"
           terraform_wrapper: false
@@ -150,7 +222,7 @@ jobs:
         run: terraform workspace select ${{ inputs.environment }}
 
       - name: Download plan artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: tfplan-infra-${{ inputs.environment }}
           path: ${{ env.DEVOPS_INFRA_DIR }}
@@ -162,9 +234,10 @@ jobs:
   # ────────────────────────────── App (always) ──────────────────────────────
   build-and-push:
     name: Build & push Docker images
-    needs: infra-apply
-    # Runs whether infra was (re)provisioned or skipped entirely.
-    if: ${{ always() && (inputs.deploy_infra != true || needs.infra-apply.result == 'success') }}
+    needs: [detect-infra, infra-apply]
+    # Runs whether infra was (re)provisioned or skipped entirely. When infra was
+    # not needed, infra-apply is skipped, so gate on detect-infra's decision.
+    if: ${{ always() && (needs.detect-infra.outputs.needs_infra != 'true' || needs.infra-apply.result == 'success') }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     outputs:
@@ -175,7 +248,7 @@ jobs:
 
     steps:
       - name: Checkout marketplace
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ inputs.git_ref }}
 
@@ -184,7 +257,7 @@ jobs:
         run: echo "value=$(echo '${{ inputs.git_ref }}' | tr '/:@' '-')" >> "$GITHUB_OUTPUT"
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -195,10 +268,10 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Build & push nginx image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           target: nginx
@@ -210,7 +283,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Build & push php image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           target: php
@@ -234,21 +307,21 @@ jobs:
 
     steps:
       - name: Checkout devops
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: GroupeQantis/devops
           token: ${{ secrets.DEVOPS_REPO_TOKEN }}
           path: devops
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: "1.9.8"
           terraform_wrapper: false
@@ -280,7 +353,7 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload plan artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: tfplan-app-${{ inputs.environment }}
           path: ${{ env.DEVOPS_APP_DIR }}/tfplan
@@ -288,7 +361,7 @@ jobs:
 
   app-apply:
     name: "[App] Terraform apply (${{ inputs.environment }})"
-    needs: app-plan
+    needs: [detect-infra, app-plan]
     if: ${{ always() && needs.app-plan.result == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -299,21 +372,21 @@ jobs:
 
     steps:
       - name: Checkout devops
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: GroupeQantis/devops
           token: ${{ secrets.DEVOPS_REPO_TOKEN }}
           path: devops
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: "1.9.8"
           terraform_wrapper: false
@@ -327,7 +400,7 @@ jobs:
         run: terraform workspace select ${{ inputs.environment }}
 
       - name: Download plan artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: tfplan-app-${{ inputs.environment }}
           path: ${{ env.DEVOPS_APP_DIR }}
@@ -338,4 +411,4 @@ jobs:
 
       - name: Deployment summary
         run: |
-          echo "✅ Deployed \`${{ inputs.git_ref }}\` to **${{ inputs.environment }}**${{ inputs.deploy_infra == true && ' (infra also re-provisioned)' || '' }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "✅ Deployed \`${{ inputs.git_ref }}\` to **${{ inputs.environment }}**${{ needs.detect-infra.outputs.needs_infra == 'true' && ' (infra also provisioned)' || '' }}" >> "$GITHUB_STEP_SUMMARY"

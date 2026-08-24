@@ -85,21 +85,21 @@ jobs:
 
     steps:
       - name: Checkout devops
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: GroupeQantis/devops
           token: ${{ secrets.DEVOPS_REPO_TOKEN }}
           path: devops
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: "1.9.8"
           terraform_wrapper: false
@@ -132,26 +132,30 @@ jobs:
     needs: [resolve-context, destroy-app]
     if: ${{ needs.resolve-context.outputs.confirmed == 'true' && needs.resolve-context.outputs.destroy_infra == 'true' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    # 20 min was too short: the ALB security-group deletion waits on the ELB's
+    # managed ENI to detach (several minutes of AWS eventual consistency), then
+    # the RDS cluster deletion follows. The combination regularly exceeded 20 min
+    # and left the teardown half-done. 35 min gives comfortable headroom.
+    timeout-minutes: 35
     environment: ${{ needs.resolve-context.outputs.environment }}
 
     steps:
       - name: Checkout devops
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: GroupeQantis/devops
           token: ${{ secrets.DEVOPS_REPO_TOKEN }}
           path: devops
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: "1.9.8"
           terraform_wrapper: false

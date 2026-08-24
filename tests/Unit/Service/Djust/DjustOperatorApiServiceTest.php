@@ -31,34 +31,34 @@ function createService(
 }
 
 \it('reports configured when all env vars are set', function () {
-    $service = createService($this->httpClient, $this->cache, $this->logger);
+    $service = \createService($this->httpClient, $this->cache, $this->logger);
 
     \expect($service->isConfigured())->toBeTrue();
 })->group('DjustOperatorApiService', 'djust');
 
 \it('reports not configured when base URL is empty', function () {
-    $service = createService($this->httpClient, $this->cache, $this->logger, baseUrl: '');
+    $service = \createService($this->httpClient, $this->cache, $this->logger, baseUrl: '');
 
     \expect($service->isConfigured())->toBeFalse();
 })->group('DjustOperatorApiService', 'djust');
 
 \it('reports not configured when username is empty', function () {
-    $service = createService($this->httpClient, $this->cache, $this->logger, username: '');
+    $service = \createService($this->httpClient, $this->cache, $this->logger, username: '');
 
     \expect($service->isConfigured())->toBeFalse();
 })->group('DjustOperatorApiService', 'djust');
 
 \it('reports not configured when password is empty', function () {
-    $service = createService($this->httpClient, $this->cache, $this->logger, password: '');
+    $service = \createService($this->httpClient, $this->cache, $this->logger, password: '');
 
     \expect($service->isConfigured())->toBeFalse();
 })->group('DjustOperatorApiService', 'djust');
 
 \it('finds customer user by email from Djust API', function () {
-    $service = createService($this->httpClient, $this->cache, $this->logger);
+    $service = \createService($this->httpClient, $this->cache, $this->logger);
 
     $this->cache->shouldReceive('get')
-        ->andReturnUsing(fn ($key, $callback) => $callback(Mockery::mock(ItemInterface::class)->shouldIgnoreMissing()));
+        ->andReturnUsing(static fn ($key, $callback) => $callback(Mockery::mock(ItemInterface::class)->shouldIgnoreMissing()));
 
     // Token request
     $tokenResponse = Mockery::mock(ResponseInterface::class);
@@ -97,10 +97,10 @@ function createService(
 })->group('DjustOperatorApiService', 'djust');
 
 \it('returns null when customer user not found', function () {
-    $service = createService($this->httpClient, $this->cache, $this->logger);
+    $service = \createService($this->httpClient, $this->cache, $this->logger);
 
     $this->cache->shouldReceive('get')
-        ->andReturnUsing(fn ($key, $callback) => $callback(Mockery::mock(ItemInterface::class)->shouldIgnoreMissing()));
+        ->andReturnUsing(static fn ($key, $callback) => $callback(Mockery::mock(ItemInterface::class)->shouldIgnoreMissing()));
 
     $tokenResponse = Mockery::mock(ResponseInterface::class);
     $tokenResponse->shouldReceive('getStatusCode')->andReturn(200);
@@ -128,10 +128,10 @@ function createService(
 })->group('DjustOperatorApiService', 'djust');
 
 \it('returns null when customer user has no id', function () {
-    $service = createService($this->httpClient, $this->cache, $this->logger);
+    $service = \createService($this->httpClient, $this->cache, $this->logger);
 
     $this->cache->shouldReceive('get')
-        ->andReturnUsing(fn ($key, $callback) => $callback(Mockery::mock(ItemInterface::class)->shouldIgnoreMissing()));
+        ->andReturnUsing(static fn ($key, $callback) => $callback(Mockery::mock(ItemInterface::class)->shouldIgnoreMissing()));
 
     $tokenResponse = Mockery::mock(ResponseInterface::class);
     $tokenResponse->shouldReceive('getStatusCode')->andReturn(200);
@@ -163,10 +163,10 @@ function createService(
 })->group('DjustOperatorApiService', 'djust');
 
 \it('returns customer user with null customerAccountId when no accounts', function () {
-    $service = createService($this->httpClient, $this->cache, $this->logger);
+    $service = \createService($this->httpClient, $this->cache, $this->logger);
 
     $this->cache->shouldReceive('get')
-        ->andReturnUsing(fn ($key, $callback) => $callback(Mockery::mock(ItemInterface::class)->shouldIgnoreMissing()));
+        ->andReturnUsing(static fn ($key, $callback) => $callback(Mockery::mock(ItemInterface::class)->shouldIgnoreMissing()));
 
     $tokenResponse = Mockery::mock(ResponseInterface::class);
     $tokenResponse->shouldReceive('getStatusCode')->andReturn(200);
@@ -200,10 +200,10 @@ function createService(
 })->group('DjustOperatorApiService', 'djust');
 
 \it('throws RuntimeException when Djust API returns error', function () {
-    $service = createService($this->httpClient, $this->cache, $this->logger);
+    $service = \createService($this->httpClient, $this->cache, $this->logger);
 
     $this->cache->shouldReceive('get')
-        ->andReturnUsing(fn ($key, $callback) => $callback(Mockery::mock(ItemInterface::class)->shouldIgnoreMissing()));
+        ->andReturnUsing(static fn ($key, $callback) => $callback(Mockery::mock(ItemInterface::class)->shouldIgnoreMissing()));
 
     $tokenResponse = Mockery::mock(ResponseInterface::class);
     $tokenResponse->shouldReceive('getStatusCode')->andReturn(200);
@@ -225,5 +225,54 @@ function createService(
         ->andReturn($errorResponse);
 
     $service->findCustomerUserByEmail('user@test.com');
-})->throws(\RuntimeException::class)->group('DjustOperatorApiService', 'djust');
+})->throws(RuntimeException::class)->group('DjustOperatorApiService', 'djust');
 
+\it('fetches customer users by search term and paginates using pagesCount', function () {
+    $service = \createService($this->httpClient, $this->cache, $this->logger);
+
+    $this->cache->shouldReceive('get')
+        ->andReturnUsing(static fn ($key, $callback) => $callback(Mockery::mock(ItemInterface::class)->shouldIgnoreMissing()));
+
+    $tokenResponse = Mockery::mock(ResponseInterface::class);
+    $tokenResponse->shouldReceive('getStatusCode')->andReturn(200);
+    $tokenResponse->shouldReceive('getContent')->andReturn('{"token":{"accessToken":"tok123"}}');
+    $tokenResponse->shouldReceive('toArray')->andReturn(['token' => ['accessToken' => 'tok123']]);
+
+    $page0 = Mockery::mock(ResponseInterface::class);
+    $page0->shouldReceive('getStatusCode')->andReturn(200);
+    $page0->shouldReceive('getContent')->andReturn('{"content":[...]}');
+    $page0->shouldReceive('toArray')->andReturn([
+        'pagesCount' => 2,
+        'content' => [
+            ['customerUser' => ['id' => '1', 'email' => 'a+test@test.com'], 'customerAccount' => [['id' => '11']]],
+        ],
+    ]);
+
+    $page1 = Mockery::mock(ResponseInterface::class);
+    $page1->shouldReceive('getStatusCode')->andReturn(200);
+    $page1->shouldReceive('getContent')->andReturn('{"content":[...]}');
+    $page1->shouldReceive('toArray')->andReturn([
+        'pagesCount' => 2,
+        'content' => [
+            ['customerUser' => ['id' => '2', 'email' => 'b+test@test.com'], 'customerAccount' => [['id' => '22']]],
+        ],
+    ]);
+
+    $this->httpClient->shouldReceive('request')
+        ->with('POST', Mockery::type('string'), Mockery::type('array'))
+        ->twice()
+        ->andReturn($tokenResponse);
+
+    $this->httpClient->shouldReceive('request')
+        ->with('GET', Mockery::type('string'), Mockery::on(static function (array $options): bool {
+            return ($options['query']['search'] ?? null) === '+test';
+        }))
+        ->twice()
+        ->andReturn($page0, $page1);
+
+    $result = $service->fetchCustomerUsersBySearch('+test');
+
+    \expect($result)->toHaveCount(2)
+        ->and($result[0]['email'])->toBe('a+test@test.com')
+        ->and($result[1]['email'])->toBe('b+test@test.com');
+})->group('DjustOperatorApiService', 'djust');

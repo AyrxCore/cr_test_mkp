@@ -20,6 +20,12 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
  */
 readonly class DjustCredentialResyncService
 {
+    /**
+     * Djust email tag identifying accounts eligible for preprod resync.
+     * Used as a server-side search term to fetch only +test accounts.
+     */
+    private const string DJUST_TEST_TAG = '+test';
+
     public function __construct(
         private Connection $connection,
         private DjustOperatorApiService $operatorApi,
@@ -37,7 +43,7 @@ readonly class DjustCredentialResyncService
      */
     public function fetchDjustPreprodUsers(): array
     {
-        return $this->operatorApi->fetchAllCustomerUsers();
+        return $this->operatorApi->fetchCustomerUsersBySearch(self::DJUST_TEST_TAG);
     }
 
     /**

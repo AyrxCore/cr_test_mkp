@@ -77,8 +77,9 @@ use Psr\Log\NullLogger;
         ['email' => 'user@test.com', 'id' => '0000000123', 'customerAccountId' => '0000000456'],
     ];
 
-    $this->operatorApi->shouldReceive('fetchAllCustomerUsers')
+    $this->operatorApi->shouldReceive('fetchCustomerUsersBySearch')
         ->once()
+        ->with('+test')
         ->andReturn($expected);
 
     $result = $this->service->fetchDjustPreprodUsers();

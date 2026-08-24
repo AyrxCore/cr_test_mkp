@@ -55,19 +55,23 @@ class DjustOperatorApiService
      */
     public function findCustomerUserByEmail(string $email): ?array
     {
-        $response = $this->get(DjustApiEndpoint::OPERATOR_CUSTOMER_USERS->value, ['email' => $email]);
+        $response = $this->get(DjustApiEndpoint::OPERATOR_CUSTOMER_USERS->value, ['search' => $email]);
 
         return $this->parseCustomerUserResponse($response, $email);
     }
 
     /**
+     * Fetches customer-users matching a server-side search term (e.g. "+test").
+     * The Djust API filters on the "search" query parameter and paginates the
+     * result set; pagination metadata is exposed via "pagesCount".
+     *
      * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws DecodingExceptionInterface
      * @throws ClientExceptionInterface|InvalidArgumentException
      */
-    public function fetchAllCustomerUsers(): array
+    public function fetchCustomerUsersBySearch(string $search): array
     {
         $page = 0;
         $size = 200;
@@ -76,12 +80,13 @@ class DjustOperatorApiService
 
         do {
             $response = $this->get(DjustApiEndpoint::OPERATOR_CUSTOMER_USERS->value, [
+                'search' => $search,
                 'page' => $page,
                 'size' => $size,
             ]);
 
             if ($totalPages === null) {
-                $totalPages = $response['totalPages'] ?? 1;
+                $totalPages = $response['pagesCount'] ?? $response['totalPages'] ?? 1;
             }
 
             $entries = $response['content'] ?? [];
@@ -194,7 +199,6 @@ class DjustOperatorApiService
             'customerAccountId' => $customerAccountId,
         ];
     }
-
 
     /**
      * @throws RedirectionExceptionInterface
