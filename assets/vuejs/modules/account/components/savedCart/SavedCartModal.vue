@@ -4,7 +4,10 @@
     <template #content>
       <form v-if="savedCart" class="w-full" @submit.prevent="onSubmit">
         <div class="px-3 md:px-8">
-          <SavedCartForm :saved-cart="savedCart" />
+          <SavedCartForm
+            :saved-cart="savedCart"
+            @update-saved-cart-name="updateSavedCartName"
+          />
           <div class="flex justify-between md:justify-end">
             <ButtonComponent
               class="button-primary-outline mr-2"
@@ -77,6 +80,12 @@ const onSubmit = async () => {
     isEditing: props.isEditing,
   })
   sendGtmEvent('save_the_cart_click')
+}
+
+const updateSavedCartName = (value: string | null) => {
+  if (savedCart.value) {
+    savedCart.value.name = value
+  }
 }
 </script>
 

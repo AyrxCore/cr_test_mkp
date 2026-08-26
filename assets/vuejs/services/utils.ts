@@ -61,7 +61,7 @@ export function arrayEqual(arr1, arr2): boolean {
 export function isUrl(str) {
   try {
     return new URL(str)
-  } catch (e) {
+  } catch (_error) {
     return false
   }
 }

@@ -135,7 +135,9 @@ const onDeleteFavorite = async (event) => {
 
     await favoriteStore.fetchFavorites()
     deleteFavorite.value = false
-  } catch (error) {}
+  } catch (_error) {
+    // Ignored: error intentionally ignored
+  }
 
   isLoading.value = false
 }

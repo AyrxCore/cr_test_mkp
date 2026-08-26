@@ -25,7 +25,7 @@
       <SwiperSlide
         v-for="number in props.productsNumber"
         :key="number"
-        class="!flex h-full items-center justify-center overflow-hidden rounded-lg bg-white"
+        class="flex! h-full items-center justify-center overflow-hidden rounded-lg bg-white"
       >
         <ProductLoadingComponent />
       </SwiperSlide>

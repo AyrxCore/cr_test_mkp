@@ -21,12 +21,12 @@ class QuantityStepsShippingCalculator implements ShippingRuleCalculatorInterface
 
     public function calculate(array $rule, array $products): ShippingCostResult
     {
-        $totalQuantity = array_reduce($products, static fn (int $carry, array $p) => $carry + $p['quantity'], 0);
+        $totalQuantity = \array_reduce($products, static fn (int $carry, array $p) => $carry + $p['quantity'], 0);
 
         $levels = $rule['levels'] ?? [];
 
         foreach ($levels as $level) {
-            if ($totalQuantity >= ($level['quantity_min'] ?? 0) && $totalQuantity <= ($level['quantity_max'] ?? PHP_INT_MAX)) {
+            if ($totalQuantity >= ($level['quantity_min'] ?? 0) && $totalQuantity <= ($level['quantity_max'] ?? \PHP_INT_MAX)) {
                 $fdpHt = (float) ($level['fdp_ht'] ?? 0);
 
                 return new ShippingCostResult(

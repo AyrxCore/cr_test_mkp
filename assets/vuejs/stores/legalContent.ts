@@ -19,7 +19,7 @@ export const useLegalContentStore = defineStore('legalContent', {
       try {
         const response = await LegalContentHttpClient.get().getLegalContent()
         this.legalContent = response.data
-      } catch {
+      } catch (_error) {
         this.legalContent = null
       } finally {
         this.isLoading = false

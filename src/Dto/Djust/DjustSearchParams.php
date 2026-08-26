@@ -34,30 +34,30 @@ final class DjustSearchParams
     public function toArray(): array
     {
         $data = [
-            'query'       => $this->query,
-            'locale'      => $this->locale,
-            'page'        => $this->page,
-            'size'        => $this->size,
+            'query' => $this->query,
+            'locale' => $this->locale,
+            'page' => $this->page,
+            'size' => $this->size,
             'categoryIds' => $this->categoryIds,
-            'suppliers'   => $this->suppliers,
-            'attributes'  => $this->attributes,
+            'suppliers' => $this->suppliers,
+            'attributes' => $this->attributes,
             'productTags' => $this->productTags,
             'aggregation' => $this->aggregation,
         ];
 
-        return \array_filter($data, fn ($value) => $value !== null);
+        return \array_filter($data, static fn ($value) => $value !== null && $value !== '' && $value !== []);
     }
 
     private function with(array $overrides): self
     {
         return new self(
-            query:       $overrides['query']       ?? $this->query,
-            locale:      $overrides['locale']      ?? $this->locale,
-            page:        $overrides['page']        ?? $this->page,
-            size:        $overrides['size']        ?? $this->size,
+            query: $overrides['query'] ?? $this->query,
+            locale: $overrides['locale'] ?? $this->locale,
+            page: $overrides['page'] ?? $this->page,
+            size: $overrides['size'] ?? $this->size,
             categoryIds: $overrides['categoryIds'] ?? $this->categoryIds,
-            suppliers:   $overrides['suppliers']   ?? $this->suppliers,
-            attributes:  $overrides['attributes']  ?? $this->attributes,
+            suppliers: $overrides['suppliers'] ?? $this->suppliers,
+            attributes: $overrides['attributes'] ?? $this->attributes,
             productTags: $overrides['productTags'] ?? $this->productTags,
             aggregation: $overrides['aggregation'] ?? $this->aggregation,
         );

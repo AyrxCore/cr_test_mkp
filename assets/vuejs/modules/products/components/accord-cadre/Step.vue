@@ -17,7 +17,7 @@ import { PropType } from 'vue'
 
 import { StepItem } from '@/vuejs/types/AccordCadre.ts'
 
-const props = defineProps({
+defineProps({
   stepItem: {
     required: true,
     type: Object as PropType<StepItem>,

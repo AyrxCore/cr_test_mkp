@@ -1,7 +1,7 @@
 <template>
   <div class="modal-overlay">
     <div
-      class="z-9999 fixed top-[45%] left-[45%] ml-[-150px] flex w-[500px] flex-col items-center justify-center rounded-xl bg-secondary px-2 py-3 text-center text-white !opacity-100"
+      class="z-9999 fixed top-[45%] left-[45%] ml-[-150px] flex w-[500px] flex-col items-center justify-center rounded-xl bg-secondary px-2 py-3 text-center text-white opacity-100!"
     >
       <div class="relative mb-3 flex w-full justify-end">
         <button class="right-2 text-lg text-white" @click="emit('cancel')">

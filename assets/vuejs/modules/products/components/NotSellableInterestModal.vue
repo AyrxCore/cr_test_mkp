@@ -3,7 +3,7 @@
     <div class="modal mx-4 my-4 rounded bg-white p-10 md:w-[900px]">
       <div class="flex justify-end">
         <ButtonComponent
-          class="!h-5 !px-3 text-xl font-bold !text-primary"
+          class="h-5! px-3! text-xl font-bold text-primary!"
           type="button"
           @click="closeInterestModal"
         >
@@ -27,7 +27,7 @@ import FormNotSellableInterest from '@/vuejs/modules/products/components/FormNot
 
 import { Product } from '@/vuejs/types/Product'
 
-const props = defineProps({
+defineProps({
   modelValue: {
     required: true,
     type: Boolean,

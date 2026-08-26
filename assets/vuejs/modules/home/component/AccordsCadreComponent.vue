@@ -33,7 +33,7 @@
       <SwiperSlide
         v-for="accord in accordsCadres"
         :key="accord.id"
-        class="relative !flex !h-auto items-stretch justify-center overflow-hidden bg-white"
+        class="relative flex! h-auto! items-stretch justify-center overflow-hidden bg-white"
       >
         <AccordCadreComponent
           :accord="accord"

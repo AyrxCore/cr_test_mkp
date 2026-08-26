@@ -37,7 +37,7 @@
         v-for="product in products"
         :key="`p-${product.id}`"
         :product="product"
-        class="mt-3 !h-full !w-full rounded-lg border border-gray-300 bg-white shadow-sm md:mt-0 md:max-w-[350px]"
+        class="mt-3 h-full! w-full! rounded-lg border border-gray-300 bg-white shadow-sm md:mt-0 md:max-w-[350px]"
       />
     </div>
 
@@ -47,7 +47,7 @@
         @click="$emit('load-more')"
       >
         <LoaderSharedComponent v-if="loadMoreLoading" />
-        <span v-else class="!text-lg">Charger plus de produits</span>
+        <span v-else class="text-lg!">Charger plus de produits</span>
       </ButtonComponent>
     </div>
   </div>

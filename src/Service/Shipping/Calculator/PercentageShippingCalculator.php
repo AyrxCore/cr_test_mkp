@@ -25,7 +25,7 @@ class PercentageShippingCalculator implements ShippingRuleCalculatorInterface
         $totalHt = $this->computeTotalHt($products);
         $percentage = (float) $rule['percentage'];
 
-        $shippingCost = round($totalHt * ($percentage / 100), 2);
+        $shippingCost = \round($totalHt * ($percentage / 100), 2);
 
         return new ShippingCostResult(
             $shippingCost,

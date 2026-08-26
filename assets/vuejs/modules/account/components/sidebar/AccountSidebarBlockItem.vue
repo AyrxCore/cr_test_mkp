@@ -21,7 +21,6 @@ import { onMounted, ref } from 'vue'
 import router from '@/vuejs/router'
 import { storeToRefs } from 'pinia'
 import { useChannelStore } from '@/vuejs/stores/channel'
-import { click } from 'dom7'
 
 const isActive = ref<boolean>(false)
 const props = defineProps({

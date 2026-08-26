@@ -258,7 +258,8 @@ watch(
       if (id) {
         order.value = await orderStore.getOrderById(parseInt(id))
       }
-    } catch (error) {
+    } catch (_error) {
+      // Ignored: error intentionally ignored
     } finally {
       isLoading.value = false
     }

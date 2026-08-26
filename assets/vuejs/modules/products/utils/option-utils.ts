@@ -209,7 +209,7 @@ export const parseOptionValue = (value: string): OptionValue => {
   if (firstChar === '{' || firstChar === '[') {
     try {
       return JSON.parse(value)
-    } catch {
+    } catch (_error) {
       // Retourner la valeur originale si parsing échoue
     }
   }
@@ -233,7 +233,7 @@ export const areValuesEqual = <T>(value1: T, value2: T): boolean => {
   if (typeof value1 === 'object' && typeof value2 === 'object') {
     try {
       return JSON.stringify(value1) === JSON.stringify(value2)
-    } catch {
+    } catch (_error) {
       // En cas d'erreur (références circulaires), retourner false
       return false
     }

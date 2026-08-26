@@ -48,6 +48,9 @@ class ChannelOptionSynchronizer
         foreach ($optionsArray as $key => $value) {
             if (!\array_key_exists($key, $channelOptions)) {
                 $channelOption = $this->entityManager->getRepository(ChannelOption::class)->findOneBy(['name' => $key, 'channel' => $channel]);
+                if ($channelOption === null) {
+                    continue;
+                }
                 $this->entityManager->remove($channelOption);
             }
         }

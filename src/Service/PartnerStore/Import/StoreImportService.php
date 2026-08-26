@@ -23,7 +23,7 @@ class StoreImportService
         private readonly EntityManagerInterface $entityManager,
         private readonly PhoneFormatter $phoneFormatter,
         private readonly AccordRepository $accordRepository,
-        private readonly PartnerStoreRepository $partnerStoreRepository
+        private readonly PartnerStoreRepository $partnerStoreRepository,
     ) {
     }
 
@@ -31,7 +31,7 @@ class StoreImportService
         array $stores,
         Partner $partner,
         ?Accord $validatedAccord,
-        SymfonyStyle $io
+        SymfonyStyle $io,
     ): int {
         $connection = $this->entityManager->getConnection();
         if (!$connection->isTransactionActive()) {

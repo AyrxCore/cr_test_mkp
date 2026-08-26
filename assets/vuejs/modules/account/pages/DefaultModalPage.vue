@@ -7,14 +7,14 @@
       <div class="w-full">
         <div class="flex justify-end">
           <ButtonComponent
-            class="!h-5 !px-3 text-xl font-bold !text-primary"
+            class="h-5! px-3! text-xl font-bold text-primary!"
             type="button"
             @click="onCancelClick"
           >
             <CloseIconComponent />
           </ButtonComponent>
         </div>
-        <h3 class="text-title-primary mb-3 flex flex-col px-5 !text-white">
+        <h3 class="text-title-primary mb-3 flex flex-col px-5 text-white!">
           <slot name="title" />
         </h3>
         <slot name="content" />

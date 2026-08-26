@@ -26,7 +26,7 @@
       <SwiperSlide
         v-for="number in props.accordsCadresNumber"
         :key="number"
-        class="!flex h-full items-center justify-center overflow-hidden rounded-lg border-4 border-solid border-secondary bg-primary bg-white"
+        class="flex! h-full items-center justify-center overflow-hidden rounded-lg border-4 border-solid border-secondary bg-primary bg-white"
       >
         <AccordCadreLoadingComponent />
       </SwiperSlide>

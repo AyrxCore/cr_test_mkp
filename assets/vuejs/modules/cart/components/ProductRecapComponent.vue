@@ -75,7 +75,7 @@
                 class="ml-3 text-sm lg:text-base"
               >
                 <span class="font-bold"> {{ key }} : </span>
-                <span class="italic">{{ option.values[0] }}</span>
+                <span class="italic">{{ getOptionLabel(option.values[0]) }}</span>
               </li>
             </ul>
           </div>
@@ -87,7 +87,7 @@
         <div class="flex items-center justify-center lg:w-2/12">
           <ProductQuantityComponent
             v-if="!cartStore.modifyingCart"
-            :quantity="product.quantity"
+            :quantity="localQuantity"
             @update-quantity="modifyQuantity"
           />
           <LoaderSharedComponent v-else class="text-primary" />
@@ -127,7 +127,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { computed, onMounted, PropType, ref } from 'vue'
+import { computed, onMounted, PropType, ref, watch } from 'vue'
 
 import { formatPrice, notifyError, notifySuccess } from '@/vuejs/services/utils'
 
@@ -138,7 +138,8 @@ import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.
 import WarningIconComponent from '@/vuejs/modules/shared/icon/WarningIconComponent.vue'
 import { PageList } from '@/vuejs/router'
 import ProductQuantityComponent from '../../shared/ProductQuantityComponent.vue'
-import { Product } from '@/vuejs/types/Product.ts'
+import { Product, ProductOptionData } from '@/vuejs/types/Product.ts'
+import { getOptionLabel } from '@/vuejs/modules/products/utils/option-utils'
 import { Variant } from '@/vuejs/types/Variant.ts'
 import SkeletonLoading from '@/vuejs/modules/shared/SkeletonLoading.vue'
 
@@ -156,6 +157,7 @@ const isOpen = ref(false)
 const productNotFound = ref(false)
 const isLoadingOptions = ref<boolean>(false)
 const isLoadingPrices = ref<boolean>(false)
+const localQuantity = ref<number>(props.product.quantity ?? 0)
 
 onMounted(async (): Promise<void> => {
   if (!props.product) {
@@ -171,16 +173,16 @@ const productImage = computed((): string => {
   return props.product ? props.product.images[0] : null
 })
 
-const options = computed((): Record<string, any> => {
+const options = computed((): Record<string, ProductOptionData> | null => {
   return props.product.options ?? null
 })
 
 const referencePrice = computed((): number => {
-  return props.product.priceReference * props.product.quantity
+  return props.product.priceReference * localQuantity.value
 })
 
 const totalPrice = computed((): number => {
-  return props.product.price * props.product.quantity
+  return props.product.price * localQuantity.value
 })
 
 const productId = computed(() => {
@@ -196,9 +198,17 @@ const totalPriceDisplayed = computed((): string => {
 const ecoTaxTotal = computed((): string | null => {
   const unitEcoTax = props.product?.ecoTax
   if (!unitEcoTax) return null
-  const total = unitEcoTax * (props.product.quantity ?? 1)
+  const total = unitEcoTax * (localQuantity.value || 1)
   return formatPrice(total)
 })
+
+watch(
+  () => props.product.quantity,
+  (quantity) => {
+    localQuantity.value = quantity ?? 0
+  },
+  { immediate: true },
+)
 
 const referencePriceDisplayed = computed((): string => {
   const price =
@@ -221,7 +231,7 @@ const modifyQuantity = async (event): Promise<void> => {
       return
     }
 
-    props.product.quantity = event.quantity
+    localQuantity.value = event.quantity
     await cartStore.updateProductsToCart([
       {
         offerPriceId: currentOfferPriceId,

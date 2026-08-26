@@ -15,6 +15,7 @@ use App\Repository\AccountRepository;
 use App\Repository\UserRepository;
 use App\Service\LogAutoLoginErrorService;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -39,7 +40,8 @@ class LoginController extends AbstractController implements ChannelAwareControll
         private UserPasswordHasherInterface $passwordHasher,
         private UserRepository $userRepository,
         private AccountRepository $accountRepository,
-        private readonly LogAutoLoginErrorService $logAutoLoginErrorService
+        private readonly LogAutoLoginErrorService $logAutoLoginErrorService,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -61,7 +63,15 @@ class LoginController extends AbstractController implements ChannelAwareControll
         ];
 
         if ($request->getMethod() == 'POST') {
-            $username = $request->getPayload()->all()['_username'];
+            $username = $request->getPayload()->all()['_username'] ?? null;
+            if (!\is_string($username) || \trim($username) === '') {
+                $this->logger->warning('Login request received without _username in payload.', [
+                    'route' => $request->attributes->get('_route'),
+                    'ip' => $request->getClientIp(),
+                ]);
+
+                return $this->redirectToRoute($request->attributes->get('_route'), $routeParams);
+            }
             $user = $em->getRepository(User::class)->findUserByUsernameOrEmail($username, $channel);
             if (!empty($user) && $user instanceof User && (bool) $user->getFirstEnabledAccount($channel)) {
                 /**
@@ -123,14 +133,13 @@ class LoginController extends AbstractController implements ChannelAwareControll
                 }
 
                 return $this->redirectToRoute($request->attributes->get('_route'), $routeParams);
-            } else {
-                $session->getFlashBag()->add(
-                    'warning',
-                    $translator->trans('resetting.request.failed', [], 'prehome')
-                );
-
-                return $this->redirectToRoute($request->attributes->get('_route'), $routeParams);
             }
+            $session->getFlashBag()->add(
+                'warning',
+                $translator->trans('resetting.request.failed', [], 'prehome')
+            );
+
+            return $this->redirectToRoute($request->attributes->get('_route'), $routeParams);
         }
 
         return $this->render(\sprintf('login/%s.html.twig', $tpl), [
@@ -144,7 +153,7 @@ class LoginController extends AbstractController implements ChannelAwareControll
         Request $request,
         EntityManagerInterface $em,
         TranslatorInterface $translator,
-        string $token
+        string $token,
     ) {
         $session = new Session();
         $user = $em->getRepository(User::class)->findOneBy(['confirmation_token' => $token]);
@@ -159,9 +168,9 @@ class LoginController extends AbstractController implements ChannelAwareControll
 
             if ($request->attributes->get('_route') === 'reset_password_action') {
                 return $this->redirectToRoute('reset_password');
-            } else {
-                return $this->redirectToRoute('first_signin');
             }
+
+            return $this->redirectToRoute('first_signin');
         }
 
         $form = $this->createForm(ResettingType::class, null);
@@ -218,7 +227,7 @@ class LoginController extends AbstractController implements ChannelAwareControll
             $email = $request->query->get('email');
 
             if (!$email || !$hash || !$timestamp) {
-                throw new BadRequestException('Missing parameters (Email or timestamp or hash');
+                throw new AutoLoginException('Missing parameters (Email or timestamp or hash)');
             }
 
             $user = $this->userRepository->findOneBy(['email' => $email]);
@@ -230,22 +239,22 @@ class LoginController extends AbstractController implements ChannelAwareControll
 
             if (!$channel = $this->getChannel($request)) {
                 $this->logAutoLoginError($this->getChannel($request), $email, 'Aucun channel trouvé pour cette requête');
-                throw new BadRequestException();
+                throw new AutoLoginException('channel not found');
             }
 
             if (!$account = $user->getFirstEnabledAccount($channel)) {
                 $this->logAutoLoginError($this->getChannel($request), $email, 'Aucun compte valide trouvé');
-                throw new BadRequestException('No account available');
+                throw new AutoLoginException('No account available');
             }
 
             if (!$this->isTimestampValid($timestamp)) {
                 $this->logAutoLoginError($this->getChannel($request), $email, 'Le temps de validité du lien de connexion a expiré');
-                throw new BadRequestException('Link expired');
+                throw new AutoLoginException('Link expired');
             }
 
             if (!$this->isHashValid($account, $hash, $email, $timestamp)) {
                 $this->logAutoLoginError($this->getChannel($request), $email, 'Hash invalide');
-                throw new BadRequestException('Invalid hash');
+                throw new AutoLoginException('Invalid hash');
             }
 
             $loginLinkDetails = $loginLinkHandler->createLoginLink($user);
@@ -263,7 +272,7 @@ class LoginController extends AbstractController implements ChannelAwareControll
     #[Route('/login/neo-auto-login', name: 'generate_neo_auto_login_link')]
     public function generateNeoAutoLoginLink(
         Request $request,
-        LoginLinkHandlerInterface $loginLinkHandler
+        LoginLinkHandlerInterface $loginLinkHandler,
     ): JsonResponse {
         if ($request->isMethod('GET')) {
             $contactId = $request->query->get('contactId');

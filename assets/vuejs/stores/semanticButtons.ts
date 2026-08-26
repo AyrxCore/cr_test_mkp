@@ -17,7 +17,9 @@ export const useSemanticButtonsStore = defineStore('semanticButtons', {
         try {
           this.semanticButtonsConfig =
             await SemanticButtonsHttpClient.get().getSemanticButtons()
-        } catch (error) {}
+        } catch (_error) {
+          // Ignored: semantic buttons are optional
+        }
       }
     },
   },

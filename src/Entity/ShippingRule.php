@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
@@ -26,7 +28,7 @@ class ShippingRule
     #[ORM\Column(length: 255)]
     private ?string $type = null;
 
-    #[ORM\Column(type: TYPES::JSONB)]
+    #[ORM\Column(type: Types::JSONB)]
     private array $rule = [];
 
     public function getId(): ?Uuid

@@ -6,23 +6,18 @@ when@prod:
         - 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException'
         - 'Symfony\Component\Security\Core\Exception\AuthenticationException'
         - 'App\Exception\AutoLoginException'
+        - 'Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException'
+        - 'Doctrine\DBAL\Exception\ConnectionException'
+        - 'Doctrine\DBAL\Exception\ConnectionLost'
+        - 'Symfony\Component\Console\Exception\CommandNotFoundException'
+        - 'Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException'
+        - 'App\Exception\MissingChannelHeaderException'
       send_default_pii: true
+      enable_logs: true
     tracing:
       enabled: false
-#        If you are using Monolog, you also need this additional configuration to log the errors correctly:
-#        https://docs.sentry.io/platforms/php/guides/symfony/#monolog-integration
-#        register_error_listener: false
-#        register_error_handler: false
 
-#    monolog:
-#        handlers:
-#            sentry:
-#                type: sentry
-#                level: !php/const Monolog\Logger::ERROR
-#                hub_id: Sentry\State\HubInterface
-
-#    Uncomment these lines to register a log message processor that resolves PSR-3 placeholders
-#    https://docs.sentry.io/platforms/php/guides/symfony/#monolog-integration
-#    services:
-#        Monolog\Processor\PsrLogMessageProcessor:
-#            tags: { name: monolog.processor, handler: sentry }
+  services:
+    Sentry\SentryBundle\Monolog\LogsHandler:
+      arguments:
+        - !php/const Monolog\Logger::INFO

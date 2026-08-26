@@ -6,7 +6,6 @@ namespace App\EventSubscriber;
 
 use App\Events\FirstConnexionEvent;
 use App\Service\MailerProvider;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;

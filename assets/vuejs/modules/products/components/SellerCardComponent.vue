@@ -37,7 +37,9 @@ const props = defineProps({
 })
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
+@reference '@/style/main.css';
+
 .seller-card {
   @apply mx-auto flex w-full cursor-pointer flex-row items-center justify-start rounded-lg md:mb-2 md:max-w-[200px] md:flex-col md:justify-center md:space-x-0;
 }

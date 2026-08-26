@@ -23,10 +23,10 @@
         <div>
           <ButtonComponent
             :disabled="isNeoAutoLogin"
-            class="button-primary !hidden md:!inline-flex"
+            class="button-primary hidden! md:inline-flex!"
             @click="onCreateAddressClick(ADDRESS_SHIPPING)"
           >
-            <AddIconComponent class="!mr-0 flex w-[20px] md:hidden" />
+            <AddIconComponent class="mr-0! flex w-[20px] md:hidden" />
             <span class="hidden md:flex">Ajouter une adresse de livraison</span>
           </ButtonComponent>
           <div
@@ -39,7 +39,7 @@
             <AddIconComponent
               :fill="channelPrimaryColor"
               :stroke="channelPrimaryColor"
-              class="!mr-0 flex w-[20px]"
+              class="mr-0! flex w-[20px]"
             />
           </div>
         </div>
@@ -56,10 +56,10 @@
         <div>
           <ButtonComponent
             :disabled="isNeoAutoLogin"
-            class="button-primary !hidden md:!inline-flex"
+            class="button-primary hidden! md:inline-flex!"
             @click="onCreateAddressClick(ADDRESS_BILLING)"
           >
-            <AddIconComponent class="!mr-0 flex w-[20px] md:hidden" />
+            <AddIconComponent class="mr-0! flex w-[20px] md:hidden" />
             <span class="hidden md:flex"
               >Ajouter une adresse de facturation</span
             >
@@ -74,7 +74,7 @@
             <AddIconComponent
               :fill="channelPrimaryColor"
               :stroke="channelPrimaryColor"
-              class="!mr-0 flex w-[20px]"
+              class="mr-0! flex w-[20px]"
             />
           </div>
         </div>

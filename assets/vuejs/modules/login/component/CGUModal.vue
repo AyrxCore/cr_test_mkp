@@ -1,7 +1,7 @@
 <template>
   <div class="modal-overlay">
     <div
-      class="z-9999 fixed left-[30%] top-[5%] ml-[-150px] flex h-[90%] w-full flex-col items-center justify-start overflow-auto rounded-xl bg-white px-10 py-3 text-white !opacity-100 lg:w-[50%]"
+      class="z-9999 fixed left-[30%] top-[5%] ml-[-150px] flex h-[90%] w-full flex-col items-center justify-start overflow-auto rounded-xl bg-white px-10 py-3 text-white opacity-100! lg:w-[50%]"
     >
       <CmsPageComponent field="cgu" />
       <div class="mt-5 flex flex-col items-center space-x-3 md:flex-row">

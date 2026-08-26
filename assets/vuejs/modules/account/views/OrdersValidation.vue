@@ -53,13 +53,8 @@
 <script lang="ts" setup>
 import AccountPage from '@/vuejs/modules/account/pages/AccountPage.vue'
 import { computed } from 'vue'
-import { AccountPageList } from '@/vuejs/router/pages-list'
 import InputButtonComponent from '@/vuejs/modules/shared/InputButtonComponent.vue'
 import CalendarCheckIconComponent from '@/vuejs/modules/shared/icon/CalendarCheckIconComponent.vue'
-
-const tab = computed(() => {
-  return AccountPageList.ORDERS_VALIDATION
-})
 
 const listOrders = computed(() => {
   const orders = []

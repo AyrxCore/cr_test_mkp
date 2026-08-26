@@ -23,7 +23,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class ChannelOptionUpdateCommand extends Command
 {
-    public function __construct(private EntityManagerInterface $entityManager, private ChannelOptionSynchronizer $channelOptionsRetriever, string $name = null)
+    public function __construct(private EntityManagerInterface $entityManager, private ChannelOptionSynchronizer $channelOptionsRetriever, ?string $name = null)
     {
         parent::__construct($name);
     }
@@ -45,7 +45,7 @@ class ChannelOptionUpdateCommand extends Command
                 throw new \Exception('Channel not found');
             }
 
-            $optionNames = \array_map(function ($option) {
+            $optionNames = \array_map(static function ($option) {
                 return $option->getName().' => '.$option->getValue() ?? ')';
             }, $channel->getChannelOptions()->toArray());
 

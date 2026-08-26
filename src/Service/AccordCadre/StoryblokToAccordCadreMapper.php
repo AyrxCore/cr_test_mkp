@@ -254,7 +254,7 @@ class StoryblokToAccordCadreMapper
         array $stepsItem,
         bool $isWhiteLabel,
         string $whiteLabelKey,
-        string $qantisKey
+        string $qantisKey,
     ): string {
         if ($isWhiteLabel && isset($stepsItem[$whiteLabelKey])) {
             return $stepsItem[$whiteLabelKey];

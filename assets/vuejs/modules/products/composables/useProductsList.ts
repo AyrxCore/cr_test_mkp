@@ -166,13 +166,23 @@ export function useProductsList() {
     () => {
       const queryValue = { ...route.query }
 
-      searchTerms.value ? (queryValue.q = searchTerms.value) : delete queryValue.q
-      selectedCategoryId.value
-        ? (queryValue.category = selectedCategoryId.value)
-        : delete queryValue.category
-      selectedSellerId.value
-        ? (queryValue.seller = selectedSellerId.value)
-        : delete queryValue.seller
+      if (searchTerms.value) {
+        queryValue.q = searchTerms.value
+      } else {
+        delete queryValue.q
+      }
+
+      if (selectedCategoryId.value) {
+        queryValue.category = selectedCategoryId.value
+      } else {
+        delete queryValue.category
+      }
+
+      if (selectedSellerId.value) {
+        queryValue.seller = selectedSellerId.value
+      } else {
+        delete queryValue.seller
+      }
 
       if (selectedProperties.value) {
         const props = selectedProperties.value as Record<string, string>
@@ -239,7 +249,7 @@ export function useProductsList() {
 
         await loadProducts(paramsProducts.value)
         currentCount.value = internalProducts.value.length
-      } catch {
+      } catch (_error) {
         resultNotFound.value = true
       } finally {
         isLoading.value = false

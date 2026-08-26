@@ -1,6 +1,6 @@
 <template>
   <ButtonComponent
-    class="mb-2 w-full !rounded-none border border-gray-300 !bg-white !text-primary lg:!hidden"
+    class="mb-2 w-full rounded-none! border border-gray-300 bg-white! text-primary! lg:hidden!"
     @click.stop="showFilters = true"
   >
     <FilterIconComponent />
@@ -11,7 +11,7 @@
       v-if="categories"
       v-click-outside="() => (showFilters = false)"
       :categories="categories"
-      class="fixed bottom-0 left-0 z-50 h-[66%] w-screen overflow-scroll rounded-b-none"
+      class="fixed bottom-0 left-0 z-50 min-h-[30%] w-screen overflow-scroll rounded-b-none"
       @filter-product="emit('filter-products')"
       @close-filters="showFilters = false"
     />

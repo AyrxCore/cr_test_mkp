@@ -1,6 +1,6 @@
 <template>
   <ButtonComponent
-    class="my-2 w-full !rounded-none border border-gray-300 !bg-white !text-primary lg:!hidden"
+    class="my-2 w-full rounded-none! border border-gray-300 bg-white! text-primary! lg:hidden!"
     @click.stop="showFilters = true"
   >
     <FilterIconComponent />

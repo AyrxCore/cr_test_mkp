@@ -65,3 +65,6 @@ when@prod:
       deprecation:
         type: stream
         channels: [deprecation]
+      sentry_logs:
+        type: service
+        id: Sentry\SentryBundle\Monolog\LogsHandler

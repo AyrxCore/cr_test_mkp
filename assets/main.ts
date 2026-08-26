@@ -1,4 +1,4 @@
-import '@/style/main.scss'
+import '@/style/main.css'
 import 'vue-universal-modal/dist/index.css'
 import 'floating-vue/dist/style.css'
 import 'vue-data-ui/style.css'

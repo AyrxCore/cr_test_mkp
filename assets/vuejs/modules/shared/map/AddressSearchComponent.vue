@@ -9,7 +9,7 @@
       <input
         v-model="searchQuery"
         type="text"
-        class="input w-full rounded-md !pl-6 !pr-0 text-sm !ring-transparent"
+        class="input w-full rounded-md pl-6! pr-0! text-sm ring-transparent!"
         placeholder="Rechercher une adresse"
         @focus="results.length > 0 && (displayResults = true)"
         @input="handleSearch"
@@ -106,8 +106,7 @@ const handleSearch = async () => {
           ].includes(result.addresstype),
       )
       displayResults.value = true
-    } catch (error) {
-      console.error("Erreur lors de la recherche d'adresse:", error)
+    } catch (_error) {
       results.value = []
     } finally {
       isLoading.value = false
@@ -117,7 +116,6 @@ const handleSearch = async () => {
 
 const handleResultClick = (result: AddressSearchResult): void => {
   if (!isMapReady.value || !leafletMap.value) {
-    console.warn('Carte non disponible pour la navigation')
     return
   }
 

@@ -6,9 +6,14 @@ namespace App\Mapper;
 
 use App\Dto\Djust\DjustSearchParams;
 use App\Enum\Djust\DjustDefaults;
+use Psr\Log\LoggerInterface;
 
 class DjustSearchParamsMapper
 {
+    public function __construct(private readonly ?LoggerInterface $logger = null)
+    {
+    }
+
     public function fromContext(array $context): DjustSearchParams
     {
         $aggregation = $context['aggregation'] ?? 'PRODUCT';
@@ -27,7 +32,7 @@ class DjustSearchParamsMapper
         );
     }
 
-    private function formatAttributes(null|string|array $attributes): ?array
+    private function formatAttributes(string|array|null $attributes): ?array
     {
         if ($attributes === null) {
             return null;
@@ -35,12 +40,15 @@ class DjustSearchParamsMapper
 
         $items = \is_array($attributes) ? $attributes : [\json_decode($attributes, true)];
 
-        return \array_map(function (mixed $item) use ($attributes): string {
+        $formatted = [];
+        foreach ($items as $item) {
             if (!\is_array($item) || !isset($item['property_id'], $item['value'])) {
-                throw new \InvalidArgumentException('Invalid attributes format: '.\json_encode($attributes));
+                $this->logger?->debug('Rejected malformed Djust attribute item', ['item' => $item]);
+                continue;
             }
+            $formatted[] = $item['property_id'].'|'.$item['value'];
+        }
 
-            return $item['property_id'].'|'.$item['value'];
-        }, $items);
+        return $formatted !== [] ? $formatted : null;
     }
 }

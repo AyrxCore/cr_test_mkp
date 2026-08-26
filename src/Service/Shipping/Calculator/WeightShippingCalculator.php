@@ -22,13 +22,13 @@ class WeightShippingCalculator implements ShippingRuleCalculatorInterface
             throw InvalidShippingConfigurationException::emptyWeights();
         }
 
-        $productsWithWeight = array_filter($products, static fn (array $p) => isset($p['weight']) && $p['weight'] !== null);
+        $productsWithWeight = \array_filter($products, static fn (array $p) => isset($p['weight']) && $p['weight'] !== null);
 
         if (empty($productsWithWeight)) {
             return null;
         }
 
-        $totalWeight = array_reduce($productsWithWeight, static fn (float $carry, array $p) => $carry + ((float) $p['weight'] * $p['quantity']), 0.0);
+        $totalWeight = \array_reduce($productsWithWeight, static fn (float $carry, array $p) => $carry + ((float) $p['weight'] * $p['quantity']), 0.0);
 
         $matchedSlot = null;
         foreach ($rule['weights'] as $slot) {
@@ -39,7 +39,7 @@ class WeightShippingCalculator implements ShippingRuleCalculatorInterface
         }
 
         if ($matchedSlot === null) {
-            $matchedSlot = $rule['weights'][array_key_last($rule['weights'])];
+            $matchedSlot = $rule['weights'][\array_key_last($rule['weights'])];
         }
 
         $fdpHt = (float) $matchedSlot['fdp_ht'];
@@ -57,6 +57,6 @@ class WeightShippingCalculator implements ShippingRuleCalculatorInterface
             return new ShippingCostResult(0.0, 0.0, 'WEIGHT');
         }
 
-        return new ShippingCostResult($fdpHt, round($francoMax - $totalHt, 2), 'WEIGHT');
+        return new ShippingCostResult($fdpHt, \round($francoMax - $totalHt, 2), 'WEIGHT');
     }
 }

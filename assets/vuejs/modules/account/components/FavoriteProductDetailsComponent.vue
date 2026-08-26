@@ -128,11 +128,7 @@ const { isNeoAutoLogin } = storeToRefs(useUserStore())
 const { channelPrimaryColor } = storeToRefs(useChannelStore())
 
 const product = ref<Product>()
-const productNotFound = ref(false)
 const selectedProduct = ref(null)
-const priceReference = ref()
-const price = ref()
-const percent = ref()
 const removeProduct = ref<boolean>(false)
 const moveProduct = ref<boolean>(false)
 
@@ -205,15 +201,15 @@ const productImage = computed((): string => {
 })
 
 const productSlug = computed(() => {
-  // return product.value
-  //   ? product.value.slug
-  //   : props.favoriteProduct.upplerProductId
+  return product.value
+    ? product.value.slug
+    : props.favoriteProduct.upplerProductId
 })
 
 const productName = computed(() => {
-  // return product.value
-  //   ? product.value.name
-  //   : props.favoriteProduct.upplerProductName
+  return product.value
+    ? product.value.name
+    : props.favoriteProduct.upplerProductName
 })
 
 const productReference = computed((): string => {
@@ -231,6 +227,8 @@ const productSeller = computed((): string => {
 </script>
 
 <style scoped>
+@reference '@/style/main.css';
+
 .input-qte {
   @apply rounded-lg border border-gray-300 px-0 text-center text-sm md:text-base lg:text-lg;
 }

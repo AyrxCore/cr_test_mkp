@@ -47,7 +47,7 @@ class DjustSearchFiltersBuilder
             $requested = $requestedFilters['sellers'];
             $restricted = \array_values(\array_filter(
                 $filters['sellers'],
-                fn (Seller $seller) => \in_array($seller->getExternalId(), $requested, true)
+                static fn (Seller $seller) => \in_array($seller->getExternalId(), $requested, true)
                     || \in_array($seller->getId(), $requested, true),
             ));
 

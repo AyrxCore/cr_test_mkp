@@ -10,7 +10,7 @@
         <label
           class="flex w-full justify-start text-white md:block md:w-2/5"
           :class="{
-            '!w-full text-primary': formCol,
+            'w-full! text-primary': formCol,
           }"
         >
           Nom de la liste <span class="text-red-600">*</span>
@@ -21,7 +21,7 @@
           placeholder="Le libellé de votre liste de favori *"
           class="border-1 relative h-[55px] w-full rounded-lg border-gray-200 bg-white px-3 text-gray-600 text-primary placeholder-gray-400"
           required
-          @input="$emit('changeValue', selectedFavoriteName)"
+          @input="emit('changeValue', selectedFavoriteName)"
         />
         <div
           v-if="errorSubmit"
@@ -40,12 +40,13 @@
             >Visible par tous les membres:</span
           >
           <input
-            v-model.number="favorite.public"
+            v-model="selectedFavoritePublic"
             type="checkbox"
             class="mr-2 mt-1 cursor-pointer border border-white lg:mt-0"
             :class="{
               'border-primary': formCol,
             }"
+            @change="emit('updateFavoritePublic', selectedFavoritePublic)"
           />
         </label>
       </div>
@@ -81,10 +82,12 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['changeValue'])
+const emit = defineEmits(['changeValue', 'updateFavoritePublic'])
 const selectedFavoriteName = ref<string>(null)
+const selectedFavoritePublic = ref<boolean>(false)
 
 onMounted(() => {
   selectedFavoriteName.value = props.favorite.name
+  selectedFavoritePublic.value = props.favorite.public
 })
 </script>

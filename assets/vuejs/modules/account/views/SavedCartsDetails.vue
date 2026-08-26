@@ -69,7 +69,6 @@ import { useRoute } from 'vue-router'
 
 import { useUserStore } from '@/vuejs/stores/user'
 import { useAlertStore } from '@/vuejs/stores/alert'
-import { useCartStore } from '@/vuejs/stores/cart'
 import { useSavedCartStore } from '@/vuejs/stores/savedCart'
 import { sendGtmEvent } from '@/vuejs/services/gtm'
 import { SavedCart } from '@/vuejs/types/SavedCart'
@@ -84,7 +83,6 @@ import ShoppingCartIconComponent from '@/vuejs/modules/shared/icon/ShoppingCartI
 import EditIconComponent from '@/vuejs/modules/shared/icon/EditIconComponent.vue'
 
 const { isNeoAutoLogin } = storeToRefs(useUserStore())
-const cartStore = useCartStore()
 const route = useRoute()
 const savedCart = ref<SavedCart>()
 const savedCartStore = useSavedCartStore()
@@ -118,7 +116,9 @@ const onSubmitSavedCart = async (event) => {
     savedCart.value.name = event.savedCart.name
     isEditLoading.value = false
     showForm.value = false
-  } catch (error) {}
+  } catch (_error) {
+    // Ignored: error intentionally ignored
+  }
 }
 
 const onChangeQuantity = async (event) => {
@@ -128,7 +128,9 @@ const onChangeQuantity = async (event) => {
     )
 
     cartProducts.value[index].quantity = event.quantity
-  } catch (error) {}
+  } catch (_error) {
+    // Ignored: cart integration is temporarily disabled
+  }
 }
 
 const addToCart = async () => {
@@ -155,7 +157,7 @@ const addToCart = async () => {
 
 watch(
   () => route.params.id as string,
-  async (id: string) => {
+  async (_id: string) => {
     isLoading.value = true
 
     // if (id) {

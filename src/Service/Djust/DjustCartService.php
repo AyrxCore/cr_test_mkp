@@ -18,7 +18,7 @@ class DjustCartService
     public function __construct(
         private DjustHttpClientService $djustHttpClient,
         private DjustStoreViewHeadersBuilder $storeViewHeadersBuilder,
-        private LoggerInterface $logger,
+        private LoggerInterface $djustLogger,
     ) {
     }
 
@@ -82,14 +82,14 @@ class DjustCartService
 
         try {
             $response = $this->djustHttpClient->put($endpoint, []);
-            $this->logger->info('[DjustCart] Sync OK.', [
+            $this->djustLogger->info('[DjustCart] Sync OK.', [
                 'cartId' => $cartId,
                 'response' => $response,
             ]);
 
             return $response;
         } catch (\Exception $e) {
-            $this->logger->warning('[DjustCart] Sync call failed — non-blocking.', [
+            $this->djustLogger->warning('[DjustCart] Sync call failed — non-blocking.', [
                 'cartId' => $cartId,
                 'error' => $e->getMessage(),
             ]);
@@ -113,12 +113,12 @@ class DjustCartService
 
         try {
             $this->djustHttpClient->deleteWithBody($endpoint, $body);
-            $this->logger->info('[DjustCart] deleteCartLines OK.', [
+            $this->djustLogger->info('[DjustCart] deleteCartLines OK.', [
                 'cartId' => $cartId,
                 'deletedIds' => $lineIds,
             ]);
         } catch (\Exception $e) {
-            $this->logger->warning('[DjustCart] deleteCartLines failed — line(s) may already be gone.', [
+            $this->djustLogger->warning('[DjustCart] deleteCartLines failed — line(s) may already be gone.', [
                 'cartId' => $cartId,
                 'ids' => $lineIds,
                 'error' => $e->getMessage(),
@@ -295,7 +295,7 @@ class DjustCartService
         try {
             $this->djustHttpClient->patch($endpoint, ['customFieldValues' => $customFieldValues], $this->storeViewHeadersBuilder->build());
         } catch (\Exception $e) {
-            $this->logger->warning('[DjustCart] Mise à jour des custom fields du logistic order échouée — non bloquant.', [
+            $this->djustLogger->warning('[DjustCart] Mise à jour des custom fields du logistic order échouée — non bloquant.', [
                 'logisticOrderId' => $logisticOrderId,
                 'error' => $e->getMessage(),
             ]);
@@ -309,7 +309,7 @@ class DjustCartService
         foreach ($syncResponse as $item) {
             if (\is_array($item) && ($item['blocked'] ?? false) === true && isset($item['id'])) {
                 $ids[] = $item['id'];
-                $this->logger->info('[DjustCart] Blocking line detected.', [
+                $this->djustLogger->info('[DjustCart] Blocking line detected.', [
                     'id' => $item['id'],
                     'code' => $item['code'] ?? null,
                     'detail' => $item['detail'] ?? null,
@@ -382,12 +382,12 @@ class DjustCartService
 
         try {
             $this->djustHttpClient->patch($endpoint, $linesPayload, $this->storeViewHeadersBuilder->build());
-            $this->logger->info('[DjustCart] Mise à jour éco-participation des lignes OK.', [
+            $this->djustLogger->info('[DjustCart] Mise à jour éco-participation des lignes OK.', [
                 'logisticOrderId' => $logisticOrderId,
                 'linesCount' => \count($linesPayload),
             ]);
         } catch (\Exception $e) {
-            $this->logger->error('[DjustCart] Mise à jour éco-participation des lignes échouée — bloquant.', [
+            $this->djustLogger->error('[DjustCart] Mise à jour éco-participation des lignes échouée — bloquant.', [
                 'logisticOrderId' => $logisticOrderId,
                 'error' => $e->getMessage(),
             ]);

@@ -12,7 +12,7 @@
       class="dropdown-menu"
       :class="{
         hidden: !toggle,
-        '!flex': toggle,
+        'flex!': toggle,
       }"
     >
       <slot name="content" />
@@ -26,7 +26,9 @@ import { ref } from 'vue'
 const toggle = ref<boolean>(false)
 </script>
 
-<style lang="postcss">
+<style>
+@reference '@/style/main.css';
+
 .button-dropdown {
   @apply flex w-full flex-row items-center justify-between rounded-lg bg-white p-2.5 text-primary lg:w-1/2 xl:hidden;
 }

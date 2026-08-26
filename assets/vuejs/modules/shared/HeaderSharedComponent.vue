@@ -61,7 +61,7 @@ const search = (event) => {
 }
 </script>
 
-<style lang="scss">
+<style>
 .overlay {
   display: none;
   height: 100vh;

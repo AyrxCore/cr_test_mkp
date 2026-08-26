@@ -64,12 +64,12 @@ export const useCartStore = defineStore('cart', {
 
         try {
           await CartHttpClient.get().updateProductsToCart(this.cart.id, payload)
-        } catch {
+        } catch (_error) {
           this.cart = null
           await this.getCart()
 
           if (!this.cart?.id) {
-            throw new Error()
+            throw new Error(undefined, { cause: _error })
           }
 
           await CartHttpClient.get().updateProductsToCart(this.cart.id, payload)
@@ -80,7 +80,7 @@ export const useCartStore = defineStore('cart', {
         notifyError(
           "L'ajout au panier est impossible, merci de contacter un administrateur.",
         )
-        throw new Error()
+        throw new Error(undefined, { cause: _error })
       }
     },
     async updateProductsToCart(
@@ -104,7 +104,7 @@ export const useCartStore = defineStore('cart', {
         notifyError(
           "L'édition du panier est impossible, merci de contacter un administrateur.",
         )
-        throw new Error()
+        throw new Error(undefined, { cause: _error })
       }
     },
     async removeProductsToCart(
@@ -122,7 +122,7 @@ export const useCartStore = defineStore('cart', {
         notifyError(
           "L'édition du panier est impossible, merci de contacter un administrateur.",
         )
-        throw new Error()
+        throw new Error(undefined, { cause: _error })
       }
     },
     async syncProductsFdp(): Promise<void> {
@@ -266,7 +266,7 @@ export const useCartStore = defineStore('cart', {
       if (!this.cart?.id) return
       try {
         await CartHttpClient.get().updateEcoTaxInLogisticOrders(String(this.cart.id))
-      } catch (error) {
+      } catch (_error) {
         notifyError('Une erreur est survenue lors de la mise à jour de l\'éco-participation.')
       }
     },

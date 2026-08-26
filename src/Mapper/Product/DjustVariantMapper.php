@@ -9,9 +9,11 @@ use App\Dto\Variant;
 use App\Enum\Djust\DjustCustomField;
 use App\Service\Djust\DjustDataExtractor;
 use Psr\Log\LoggerInterface;
-use Sentry\State\Scope;
 
 use function Sentry\captureMessage;
+
+use Sentry\State\Scope;
+
 use function Sentry\withScope;
 
 class DjustVariantMapper
@@ -58,11 +60,10 @@ class DjustVariantMapper
         }
     }
 
-
     private function validateVariantsOptionsConsistency(
         Product $product,
         array $variants,
-        array $options
+        array $options,
     ): void {
         if (empty($options) || empty($variants)) {
             return;
@@ -77,6 +78,7 @@ class DjustVariantMapper
                 'variants_count' => \count($variants),
                 'options_count' => \count($options),
             ]);
+
             return;
         }
 
@@ -118,7 +120,7 @@ class DjustVariantMapper
             return;
         }
 
-        withScope(function (Scope $scope) use ($product, $expectedOptions, $incompleteVariants): void {
+        withScope(static function (Scope $scope) use ($product, $expectedOptions, $incompleteVariants): void {
             $scope->setTag('product_id', (string) $product->getId());
             $scope->setTag('issue_type', 'incomplete_variants');
             $scope->setContext('product', [
@@ -152,7 +154,7 @@ class DjustVariantMapper
 
             $variantId = (string) $variant['id'];
 
-            if (in_array($variantId, $seenVariantIds, true)) {
+            if (\in_array($variantId, $seenVariantIds, true)) {
                 $this->djustLogger->info('Multiple offers found for the same variant, keeping first offer only', [
                     'variantId' => $variantId,
                     'offerId' => $offer['id'] ?? 'unknown',
@@ -240,7 +242,7 @@ class DjustVariantMapper
         $this->djustLogger->info('Variants and options extracted', [
             'variantsCount' => \count($variants),
             'optionsCount' => \count($options),
-            'variantIds' => \array_map(fn(Variant $v) => $v->getId(), $variants),
+            'variantIds' => \array_map(static fn (Variant $v) => $v->getId(), $variants),
         ]);
 
         return [$variants, $options];

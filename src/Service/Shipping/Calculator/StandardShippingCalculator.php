@@ -29,9 +29,10 @@ class StandardShippingCalculator implements ShippingRuleCalculatorInterface
         if ($totalHt >= $francoMax) {
             return new ShippingCostResult(0.0, 0.0, 'STANDARD');
         }
+
         return new ShippingCostResult(
             (float) $level['fdp_ht'],
-            round($francoMax - $totalHt, 2),
+            \round($francoMax - $totalHt, 2),
             'STANDARD',
         );
     }

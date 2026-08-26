@@ -94,7 +94,7 @@ class ChannelExtension extends AbstractExtension
 
     public function getChannelOptionByKey(Channel $channel, string $key): string
     {
-        $channelOption = $channel->getChannelOptions()->filter(fn ($channelOption) => $channelOption->getName() === $key)->first();
+        $channelOption = $channel->getChannelOptions()->filter(static fn ($channelOption) => $channelOption->getName() === $key)->first();
         if (!$channelOption || !$channelOption->getValue()) {
             return '';
         }
@@ -104,7 +104,7 @@ class ChannelExtension extends AbstractExtension
 
     public function convertOptionToArrayByKey(Channel $channel, string $key, string $separator = ';'): array
     {
-        $channelOption = $channel->getChannelOptions()->filter(fn ($channelOption) => $channelOption->getName() === $key)->first();
+        $channelOption = $channel->getChannelOptions()->filter(static fn ($channelOption) => $channelOption->getName() === $key)->first();
         if (!$channelOption || !$channelOption->getValue()) {
             return [];
         }

@@ -9,8 +9,8 @@ use App\Dto\CartOrder;
 use App\Dto\Product;
 use App\Enum\Djust\DjustCustomField;
 use App\Factory\DjustProductFactory;
-use App\Service\Djust\Cart\Transformer\DjustCartItemTransformer;
 use App\Factory\SellerFactory;
+use App\Service\Djust\Cart\Transformer\DjustCartItemTransformer;
 use App\Service\Djust\ProductFdpSyncService;
 use App\Service\Shipping\ShippingCostService;
 
@@ -34,15 +34,15 @@ class DjustCartMapper
             $cart->addCartOrder($this->mapOrderLogistic($order));
         }
 
-        $correctedHT = array_sum(array_map(static fn(CartOrder $o) => $o->getTotalPrice() ?? 0.0, $cart->getCartOrders()));
-        $correctedTTC = array_sum(array_map(static fn(CartOrder $o) => $o->getTotalPriceWithTax() ?? 0.0, $cart->getCartOrders()));
+        $correctedHT = \array_sum(\array_map(static fn (CartOrder $o) => $o->getTotalPrice() ?? 0.0, $cart->getCartOrders()));
+        $correctedTTC = \array_sum(\array_map(static fn (CartOrder $o) => $o->getTotalPriceWithTax() ?? 0.0, $cart->getCartOrders()));
         $cart->setTotalPrice($correctedHT);
         $cart->setTotalPriceWithTax($correctedTTC);
 
         $realProductCount = 0;
         foreach ($cart->getCartOrders() as $cartOrder) {
             foreach ($cartOrder->getProducts() as $product) {
-                if (!str_starts_with($product->getExternalId() ?? '', ProductFdpSyncService::EXTERNAL_ID_PREFIX)) {
+                if (!\str_starts_with($product->getExternalId() ?? '', ProductFdpSyncService::EXTERNAL_ID_PREFIX)) {
                     $realProductCount += $product->getQuantity() ?? 0;
                 }
             }
@@ -76,11 +76,11 @@ class DjustCartMapper
 
         $partnerId = $supplierSnapshot['externalId'] ?? null;
         if ($partnerId !== null) {
-            $realProducts = array_values(array_filter(
+            $realProducts = \array_values(\array_filter(
                 $cartOrder->getProducts(),
-                static fn(Product $p) => !str_starts_with($p->getExternalId() ?? '', ProductFdpSyncService::EXTERNAL_ID_PREFIX),
+                static fn (Product $p) => !\str_starts_with($p->getExternalId() ?? '', ProductFdpSyncService::EXTERNAL_ID_PREFIX),
             ));
-            $productsForShipping = array_map(
+            $productsForShipping = \array_map(
                 static fn (Product $p) => [
                     'unitPrice' => $p->getPrice() ?? 0.0,
                     'quantity' => $p->getQuantity() ?? 1,
@@ -107,7 +107,7 @@ class DjustCartMapper
 
         foreach ($rawItems as $item) {
             $productExternalId = $item['orderLogisticLineProductDto']['externalId'] ?? null;
-            if (!str_starts_with($productExternalId ?? '', ProductFdpSyncService::EXTERNAL_ID_PREFIX)) {
+            if (!\str_starts_with($productExternalId ?? '', ProductFdpSyncService::EXTERNAL_ID_PREFIX)) {
                 continue;
             }
 
@@ -117,8 +117,8 @@ class DjustCartMapper
             $fdpTotalTTC += ($priceSnapshot['productPriceWithTaxes'] ?? 0.0) * $qty;
         }
 
-        $cartOrder->setTotalPrice(max(0.0, ($cartOrder->getTotalPrice() ?? 0.0) - $fdpTotalHT));
-        $cartOrder->setTotalPriceWithTax(max(0.0, ($cartOrder->getTotalPriceWithTax() ?? 0.0) - $fdpTotalTTC));
+        $cartOrder->setTotalPrice(\max(0.0, ($cartOrder->getTotalPrice() ?? 0.0) - $fdpTotalHT));
+        $cartOrder->setTotalPriceWithTax(\max(0.0, ($cartOrder->getTotalPriceWithTax() ?? 0.0) - $fdpTotalTTC));
     }
 
     private function extractMaxTaxRate(array $items): float
@@ -127,7 +127,7 @@ class DjustCartMapper
 
         foreach ($items as $item) {
             $productExternalId = $item['orderLogisticLineProductDto']['externalId'] ?? null;
-            if (str_starts_with($productExternalId ?? '', ProductFdpSyncService::EXTERNAL_ID_PREFIX)) {
+            if (\str_starts_with($productExternalId ?? '', ProductFdpSyncService::EXTERNAL_ID_PREFIX)) {
                 continue;
             }
 
@@ -136,8 +136,8 @@ class DjustCartMapper
                 $externalId = $cf['customFieldSnapshotDto']['externalId'] ?? null;
                 if ($externalId === 'Offer_Tax_Rate') {
                     $typedValue = $cf['typedValue'] ?? [];
-                    $rate = is_array($typedValue) ? ($typedValue[0] ?? 0.0) : (float) $typedValue;
-                    $maxRate = max($maxRate, (float) $rate);
+                    $rate = \is_array($typedValue) ? ($typedValue[0] ?? 0.0) : (float) $typedValue;
+                    $maxRate = \max($maxRate, (float) $rate);
                     break;
                 }
             }
@@ -151,9 +151,9 @@ class DjustCartMapper
         $customFields = $item['offerInventorySnapshotDto']['customFieldValueSnapshots'] ?? [];
         foreach ($customFields as $cf) {
             $externalId = $cf['customFieldSnapshotDto']['externalId'] ?? null;
-            if (strtolower((string) $externalId) === strtolower(DjustCustomField::PRODUCT_WEIGHT->value)) {
+            if (\strtolower((string) $externalId) === \strtolower(DjustCustomField::PRODUCT_WEIGHT->value)) {
                 $typedValue = $cf['typedValue'] ?? $cf['value'] ?? null;
-                $value = is_array($typedValue) ? ($typedValue[0] ?? null) : $typedValue;
+                $value = \is_array($typedValue) ? ($typedValue[0] ?? null) : $typedValue;
 
                 return $value !== null ? (float) $value : null;
             }
@@ -173,7 +173,7 @@ class DjustCartMapper
                 $discountPrice = $range['discountPrice']['itemPrice'] ?? null;
                 $unitPrice = $range['price']['unitPrice'] ?? null;
 
-                if (intval($discountPrice) === intval($itemPrice)) {
+                if ((int) $discountPrice === (int) $itemPrice) {
                     $data['offers'][0]['offerPrices'][0]['priceRanges'][0]['price']['itemPrice'] = $unitPrice;
                     $data['offers'][0]['offerPrices'][0]['priceRanges'][0]['price']['unitPrice'] = $unitPrice;
                     $data['offers'][0]['offerPrices'][0]['priceRanges'][0]['discountPrice']['itemPrice'] = $itemPrice;

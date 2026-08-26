@@ -16,7 +16,7 @@
                   color: betterTextColor('primary'),
                 }"
                 :to="{ name: MainPageList.PARTNERS_MAP }"
-                class="button button-primary !px-4"
+                class="button button-primary px-4!"
               >
                 <MarkerIconComponent size="30" />
                 Carte des partenaires
@@ -55,7 +55,7 @@
                     color: betterTextColor('primary'),
                   }"
                   :to="{ name: MainPageList.PARTNERS_MAP }"
-                  class="my-2 flex w-full items-center justify-center gap-2 !rounded-none border border-gray-300 !bg-white px-4 py-2 !text-primary"
+                  class="my-2 flex w-full items-center justify-center gap-2 rounded-none! border border-gray-300 bg-white! px-4 py-2 text-primary!"
                 >
                   <MarkerIconComponent size="30" />
                   <span class="text-lg">Carte des partenaires</span>
@@ -64,7 +64,7 @@
               <MobileFiltersSellersComponent v-if="categories" />
               <AlphabetNavigatorComponent
                 :items="sellersSortedAlphabetically"
-                @update:floatingStatus="handleFloatingStatus"
+                @update:floating-status="handleFloatingStatus"
               />
               <div
                 v-if="isRefreshing"
@@ -83,8 +83,8 @@
                   <SellerCardComponent
                     :seller="seller"
                     :id="`letter-${seller.name.charAt(0).toUpperCase()}`"
-                    class="mt-5 !h-full bg-white md:mt-0 md:!w-full md:max-w-[350px]"
-                    :class="{ '!w-10/12': isFloatingActive }"
+                    class="mt-5 h-full! bg-white md:mt-0 md:w-full! md:max-w-[350px]"
+                    :class="{ 'w-10/12!': isFloatingActive }"
                     data-letter-section
                   />
                 </template>
@@ -133,7 +133,7 @@ const isFloatingActive = ref<boolean>(false)
 
 const sellersSortedAlphabetically = computed((): Array<Seller> => {
   if (!sellers.value) return []
-  return sellers.value.sort((a: Seller, b: Seller) => {
+  return [...sellers.value].sort((a: Seller, b: Seller) => {
     return a.name.localeCompare(b.name)
   })
 })
@@ -159,7 +159,7 @@ watch(
       }
 
       sellers.value = await sellerStore.getSellersByParams(paramsSellers.value)
-    } catch (e) {
+    } catch (_error) {
       resultNotFound.value = true
     } finally {
       isFirstLoad.value = false

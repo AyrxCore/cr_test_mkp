@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Dto\Djust\DjustSearchParams;
 use App\Enum\Djust\DjustDefaults;
 use App\Mapper\DjustSearchParamsMapper;
+use Psr\Log\LoggerInterface;
 
 \uses()->group('DjustSearchParamsMapperUnit');
 
@@ -379,25 +380,29 @@ use App\Mapper\DjustSearchParamsMapper;
     \expect($result->attributes)->toBe(['PRODUCT_TYPE|SELLABLE', 'PRODUCT_TYPE|NOT_SELLABLE']);
 });
 
-\it('throws InvalidArgumentException on invalid attributes JSON', function () {
+\it('returns null on invalid attributes JSON', function () {
     $context = [
         'filters' => [
             'properties' => 'not-valid-json',
         ],
     ];
 
-    $this->mapper->fromContext($context);
-})->throws(\InvalidArgumentException::class);
+    $result = $this->mapper->fromContext($context);
 
-\it('throws InvalidArgumentException when attributes JSON is missing required keys', function () {
+    \expect($result->attributes)->toBeNull();
+});
+
+\it('returns null when attributes JSON is missing required keys', function () {
     $context = [
         'filters' => [
             'properties' => \json_encode(['foo' => 'bar']),
         ],
     ];
 
-    $this->mapper->fromContext($context);
-})->throws(\InvalidArgumentException::class);
+    $result = $this->mapper->fromContext($context);
+
+    \expect($result->attributes)->toBeNull();
+});
 
 \it('handles null properties gracefully', function () {
     $context = [
@@ -515,4 +520,21 @@ use App\Mapper\DjustSearchParamsMapper;
         ->and($result->size)->toBe('50')
         ->and($result->categoryIds)->toBe('123,456')
         ->and($result->productTags)->toBe('HOMEPAGE_ACCORD_SELECTION_QANTIS_ACHAT');
+});
+
+\it('logs a debug message when a malformed attribute item is rejected', function () {
+    $logger = Mockery::mock(LoggerInterface::class);
+    $logger->shouldReceive('debug')
+        ->once()
+        ->with('Rejected malformed Djust attribute item', Mockery::on(fn (array $ctx) => isset($ctx['item'])));
+
+    $mapper = new DjustSearchParamsMapper($logger);
+
+    $result = $mapper->fromContext([
+        'filters' => [
+            'properties' => \json_encode(['foo' => 'bar']),
+        ],
+    ]);
+
+    \expect($result->attributes)->toBeNull();
 });

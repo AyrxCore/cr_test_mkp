@@ -124,7 +124,7 @@ const toTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
-const handleBeforeUnload = (event) => {
+const handleBeforeUnload = () => {
   navigator.sendBeacon('/api/user/logout')
   broadcastChannel.postMessage('logout')
 }

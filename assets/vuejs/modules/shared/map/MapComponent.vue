@@ -182,11 +182,7 @@ const onMapReady = (mapInstance: LeafletMap) => {
             mapInstance.setView(savedLocation, zoom.value)
             center.value = savedLocation
           }
-        } catch (error) {
-          console.warn(
-            'Erreur lors du chargement de la position sauvegardée:',
-            error,
-          )
+        } catch (_error) {
           // Fallback: mettre à jour seulement les valeurs réactives
           center.value = savedLocation
         }
@@ -198,8 +194,8 @@ const onMapReady = (mapInstance: LeafletMap) => {
     mapInstance.options.bounceAtZoomLimits = false
 
     emit('map-ready', mapInstance)
-  } catch (error) {
-    console.error("Erreur lors de l'initialisation de la carte:", error)
+  } catch (_error) {
+    // Ignored: map initialization can fail before the container is ready
   }
 }
 
@@ -232,8 +228,7 @@ watch(
         leafletMap.value.setView([lat, lng], newZoom)
         zoom.value = newZoom
         center.value = [lat, lng]
-      } catch (error) {
-        console.warn('Erreur lors de la mise à jour de la carte:', error)
+      } catch (_error) {
         const newZoom = isMobile.value ? MOBILE_ZOOM : DEFAULT_ZOOM
         zoom.value = newZoom
         center.value = [lat, lng]

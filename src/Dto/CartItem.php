@@ -171,9 +171,10 @@ class CartItem
         return $this->franco;
     }
 
-    public function setFranco(?int $franco): CartItem
+    public function setFranco(?int $franco): self
     {
         $this->franco = $franco;
+
         return $this;
     }
 
@@ -182,9 +183,10 @@ class CartItem
         return $this->shippingCost;
     }
 
-    public function setShippingCost(?int $shippingCost): CartItem
+    public function setShippingCost(?int $shippingCost): self
     {
         $this->shippingCost = $shippingCost;
+
         return $this;
     }
 }

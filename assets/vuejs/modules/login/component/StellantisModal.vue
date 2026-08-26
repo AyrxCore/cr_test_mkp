@@ -6,7 +6,7 @@
     >
       <div class="flex justify-end">
         <ButtonComponent
-          class="!h-5 !px-3 text-xl font-bold !text-primary"
+          class="h-5! px-3! text-xl font-bold text-primary!"
           type="button"
           @click="closeModalStellantis"
         >
@@ -83,7 +83,7 @@ import { sendGtmEvent } from '@/vuejs/services/gtm'
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import CloseIconComponent from '@/vuejs/modules/shared/icon/CloseIconComponent.vue'
 
-const props = defineProps({
+defineProps({
   isLoading: {
     type: Boolean,
     default: false,

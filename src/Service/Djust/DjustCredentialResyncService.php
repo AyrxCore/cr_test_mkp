@@ -29,7 +29,7 @@ readonly class DjustCredentialResyncService
     public function __construct(
         private Connection $connection,
         private DjustOperatorApiService $operatorApi,
-        private LoggerInterface $logger,
+        private LoggerInterface $djustLogger,
     ) {
     }
 
@@ -94,18 +94,18 @@ readonly class DjustCredentialResyncService
                         djust_password            = :djust_password
                     WHERE id = :id::uuid',
                     [
-                        'djust_customer_user_id'    => $update['djustCustomerUserId'],
+                        'djust_customer_user_id' => $update['djustCustomerUserId'],
                         'djust_customer_account_id' => $update['djustCustomerAccountId'],
-                        'djust_username'            => $update['djustUsername'],
-                        'djust_password'            => $update['djustPassword'],
-                        'id'                        => $update['accountId'],
+                        'djust_username' => $update['djustUsername'],
+                        'djust_password' => $update['djustPassword'],
+                        'id' => $update['accountId'],
                     ],
                 );
             }
 
             $this->connection->commit();
 
-            $this->logger->info('[DjustCredentialResync] Batch updated accounts', [
+            $this->djustLogger->info('[DjustCredentialResync] Batch updated accounts', [
                 'count' => \count($updates),
             ]);
         } catch (\Throwable $e) {

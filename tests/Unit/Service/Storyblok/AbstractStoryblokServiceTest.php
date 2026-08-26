@@ -14,7 +14,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
     $this->response = Mockery::mock(ResponseInterface::class);
 
     $this->service = new class($this->httpClient, 'test-token', 'https://api.storyblok.com/v2/cdn', 'published', new NullLogger()) extends AbstractStoryblokService {
-        public function testGetStoriesRaw(array $filters = [], int $maxPages = null): array
+        public function testGetStoriesRaw(array $filters = [], ?int $maxPages = null): array
         {
             return $this->getStoriesRaw($filters, $maxPages);
         }

@@ -9,9 +9,11 @@ use App\Dto\CartItem;
 use App\Dto\Product;
 use App\Enum\Djust\DjustCartItemAction;
 use Psr\Log\LoggerInterface;
-use Sentry\State\Scope;
 
 use function Sentry\captureMessage;
+
+use Sentry\State\Scope;
+
 use function Sentry\withScope;
 
 class ProductFdpSyncService
@@ -46,8 +48,8 @@ class ProductFdpSyncService
 
         foreach ($cart->getCartOrders() as $cartOrder) {
             $products = $cartOrder->getProducts();
-            $productsFdp = array_values(array_filter($products, $this->isProductFdp(...)));
-            $realProducts = array_values(array_filter($products, fn(Product $p) => !$this->isProductFdp($p)));
+            $productsFdp = \array_values(\array_filter($products, $this->isProductFdp(...)));
+            $realProducts = \array_values(\array_filter($products, fn (Product $p) => !$this->isProductFdp($p)));
 
             foreach ($realProducts as $product) {
                 $offerPriceId = $product->getVariants()[0]?->getOfferPriceExternalId();
@@ -78,7 +80,7 @@ class ProductFdpSyncService
                     continue;
                 }
 
-                $quantity = (int) round($fdp / self::UNIT_PRICE);
+                $quantity = (int) \round($fdp / self::UNIT_PRICE);
                 $lines[] = $this->buildCartItem($offerPriceId, $quantity);
             } elseif ($existingProductFdp !== null) {
                 $offerPriceId = $existingProductFdp->getVariants()[0]?->getOfferPriceExternalId();
@@ -93,12 +95,12 @@ class ProductFdpSyncService
 
     private function isProductFdp(Product $product): bool
     {
-        return str_starts_with($product->getExternalId() ?? '', self::EXTERNAL_ID_PREFIX);
+        return \str_starts_with($product->getExternalId() ?? '', self::EXTERNAL_ID_PREFIX);
     }
 
     private function fetchOfferPriceId(string $supplierId): ?string
     {
-        $externalId = self::EXTERNAL_ID_PREFIX . $supplierId;
+        $externalId = self::EXTERNAL_ID_PREFIX.$supplierId;
 
         try {
             $offers = $this->djustProductService->getProductOffers($externalId);
@@ -118,7 +120,7 @@ class ProductFdpSyncService
                 'external_id' => $externalId,
             ]);
 
-            withScope(function (Scope $scope) use ($supplierId, $externalId): void {
+            withScope(static function (Scope $scope) use ($supplierId, $externalId): void {
                 $scope->setTag('supplier_id', $supplierId);
                 $scope->setTag('issue_type', 'missing_product_fdp');
                 $scope->setContext('product_fdp', [

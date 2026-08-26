@@ -30,7 +30,7 @@
       /> -->
       <span
         v-else-if="accordBadgeLabel"
-        class="rounded-md bg-secondary px-3 py-1 text-sm font-semibold text-white"
+        class="rounded-md bg-secondary px-2 py-1 text-sm text-white"
       >
         {{ accordBadgeLabel }}
       </span>
@@ -42,7 +42,7 @@
           ? 'block'
           : [
               { 'pointer-events-none': contactRequested },
-              '!text-wrap',
+              'text-wrap!',
               'cursor-pointer',
             ]
       "
@@ -113,7 +113,7 @@
               :class="[
                 contactButtonClass,
                 { 'pointer-events-none': contactRequested },
-                '!text-wrap',
+                'text-wrap!',
               ]"
             >
               {{ buttonText }}

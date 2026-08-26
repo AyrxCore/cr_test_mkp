@@ -35,7 +35,7 @@ final class StoryblokNewsService implements NewsSourceInterface
         // Filtre les stories sans contenu et retourne les DTO directement
         return \array_values(\array_filter(
             $newsList,
-            fn (News $news) => $news->getArticleContent() !== null
+            static fn (News $news) => $news->getArticleContent() !== null
         ));
     }
 }

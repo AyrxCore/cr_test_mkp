@@ -31,7 +31,7 @@ import { sendGtmEvent } from '@/vuejs/services/gtm'
 
 const route = useRoute()
 
-const props = defineProps({
+defineProps({
   seller: {
     required: true,
     type: Object,

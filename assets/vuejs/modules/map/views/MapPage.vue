@@ -169,8 +169,14 @@ const currentOpenedId = ref<string | null>(null)
 
 let currentAbortController: AbortController | null = null
 
-const popupRefs = new Map<string, any>()
-const setPopupRef = (id: string, el: any) => {
+type PopupRef = {
+  leafletObject?: {
+    update?: () => void
+  }
+}
+
+const popupRefs = new Map<string, PopupRef>()
+const setPopupRef = (id: string, el: PopupRef | null) => {
   if (el) popupRefs.set(id, el)
 }
 
@@ -208,11 +214,8 @@ const loadStoreDetail = async (storeId: string) => {
     const storeDetail = await SellerHttpClient.get().fetchStoreDetail(storeId)
     storeDetails.value.set(storeId, storeDetail)
     await forcePopupUpdate(storeId)
-  } catch (error) {
-    console.error(
-      `❌ Erreur lors du chargement des détails du store ${storeId}:`,
-      error,
-    )
+  } catch (_error) {
+    // Ignored: store details are optional until they can be fetched
   } finally {
     isLoadingStoreDetail.value = false
   }
@@ -260,7 +263,7 @@ const handleCategoryChange = async (categoryId: string | null) => {
   } catch (error) {
     // Ne pas traiter les erreurs d'annulation
     if (error.name !== 'AbortError') {
-      console.error('Erreur lors du changement de catégorie:', error)
+      // Ignored: non-abort map filtering errors keep the previous state
     }
   } finally {
     // Ne réinitialiser isFilterLoading que si cette requête n'a pas été annulée
@@ -285,10 +288,6 @@ const loadMapData = async (
   } catch (error) {
     // Ne pas traiter les erreurs d'annulation
     if (error.name !== 'AbortError') {
-      console.error(
-        '❌ Erreur lors du chargement des données de la map:',
-        error,
-      )
       lightStores.value = []
       categories.value = []
     }
@@ -305,7 +304,7 @@ onBeforeMount(async () => {
     await loadMapData(null, initialController.signal)
   } catch (error) {
     if (error.name !== 'AbortError') {
-      console.error('Erreur lors du chargement initial des données:', error)
+      // Ignored: non-abort initial load errors keep the fallback loading state
     }
   } finally {
     isLoading.value = false

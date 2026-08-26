@@ -13,7 +13,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class AccordValidationService
 {
     public function __construct(
-        private readonly AccordRepository $accordRepository
+        private readonly AccordRepository $accordRepository,
     ) {
     }
 
@@ -83,7 +83,7 @@ class AccordValidationService
         if (empty($partnerAccords)) {
             $io->warning("⚠️  Aucun accord trouvé pour le partner {$partner->getName()}");
         } else {
-            $accordNames = \array_map(function ($accord) {
+            $accordNames = \array_map(static function ($accord) {
                 return $accord->getName();
             }, $partnerAccords);
             $io->text('✓ '.\count($partnerAccords).' accord(s) du partner seront marqués hasStore=true : '.\implode(', ', $accordNames));

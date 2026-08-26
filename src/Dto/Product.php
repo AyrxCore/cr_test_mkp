@@ -180,9 +180,9 @@ class Product
         return $this->id;
     }
 
-    public function setId(int|string|null $id): self
+    public function setId(?string $id): self
     {
-        $this->id = $id !== null ? (string) $id : null;
+        $this->id = $id;
 
         return $this;
     }

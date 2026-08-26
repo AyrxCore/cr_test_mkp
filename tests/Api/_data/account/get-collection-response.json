@@ -14,7 +14,6 @@
         "id": "@uuid@",
         "email": "test@qantis.co",
         "roles": ["ROLE_USER"],
-        "username": "test@qantis.co",
         "firstName": "Gaëtan",
         "lastName": "DE SAINTE MARIE",
         "enabled": true,

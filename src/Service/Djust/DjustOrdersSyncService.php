@@ -19,7 +19,7 @@ class DjustOrdersSyncService
         private readonly DjustOrderService $djustOrderService,
         private readonly DjustDataExtractor $djustDataExtractor,
         private readonly EntityManagerInterface $entityManager,
-        private readonly LoggerInterface $logger,
+        private readonly LoggerInterface $djustLogger,
     ) {
     }
 
@@ -48,7 +48,7 @@ class DjustOrdersSyncService
 
                 if ($order === null) {
                     ++$skipped;
-                    $this->logger->warning('Djust order not found during analytics sync.', [
+                    $this->djustLogger->warning('Djust order not found during analytics sync.', [
                         'orderId' => $orderId,
                         'cartSavingsId' => $saving->getId()?->toRfc4122(),
                     ]);
@@ -80,7 +80,7 @@ class DjustOrdersSyncService
             } catch (ClientException $clientException) {
                 if ($clientException->getCode() === 404) {
                     ++$skipped;
-                    $this->logger->warning('Djust order not found via operator during analytics sync (404).', [
+                    $this->djustLogger->warning('Djust order not found via operator during analytics sync (404).', [
                         'orderId' => $orderId,
                         'cartSavingsId' => $saving->getId()?->toRfc4122(),
                     ]);
@@ -88,14 +88,14 @@ class DjustOrdersSyncService
                 }
 
                 ++$failed;
-                $this->logger->error('Unable to sync Djust order state.', [
+                $this->djustLogger->error('Unable to sync Djust order state.', [
                     'orderId' => $orderId,
                     'cartSavingsId' => $saving->getId()?->toRfc4122(),
                     'exception' => $clientException,
                 ]);
             } catch (\Throwable $throwable) {
                 ++$failed;
-                $this->logger->error('Unable to sync Djust order state.', [
+                $this->djustLogger->error('Unable to sync Djust order state.', [
                     'orderId' => $orderId,
                     'cartSavingsId' => $saving->getId()?->toRfc4122(),
                     'exception' => $throwable,

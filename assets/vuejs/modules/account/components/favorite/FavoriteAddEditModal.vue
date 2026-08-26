@@ -10,6 +10,7 @@
             :favorite="favorite"
             :error-submit="errorMessage"
             @change-value="changeValue($event)"
+            @update-favorite-public="updateFavoritePublic"
           />
           <div class="flex justify-between md:justify-end">
             <ButtonComponent
@@ -93,7 +94,16 @@ const onSubmitFavorite = async () => {
 
 const changeValue = async (event) => {
   favoriteName.value = event
+  if (favorite.value) {
+    favorite.value.name = event
+  }
   emit('changeValue', event)
+}
+
+const updateFavoritePublic = (value: boolean) => {
+  if (favorite.value) {
+    favorite.value.public = value
+  }
 }
 
 onUpdated(() => {

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Channel;
 use App\Service\SettingsService;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -18,6 +20,7 @@ class DefaultController extends AbstractController implements ChannelAwareContro
     public function __construct(
         private RequestStack $requestStack,
         private SettingsService $settingsService,
+        private LoggerInterface $logger,
     ) {
     }
 
@@ -71,19 +74,19 @@ class DefaultController extends AbstractController implements ChannelAwareContro
     #[Route('/mentions-legales', name: 'mentions_legales')]
     public function mentionsLegales(Request $request): Response
     {
-        return $this->render('mentions-legales.html.twig', ['channel' => $this->getChannel($request)]);
+        return $this->render('mentions-legales.html.twig', ['channel' => $this->requireChannel($request)]);
     }
 
     #[Route('/politique-de-confidentialite', name: 'politique_de_confidentialite')]
     public function politiqueConfidentialite(Request $request): Response
     {
-        return $this->render('politique-de-confidentialite.html.twig', ['channel' => $this->getChannel($request)]);
+        return $this->render('politique-de-confidentialite.html.twig', ['channel' => $this->requireChannel($request)]);
     }
 
     #[Route('/conditions-generales-d-utilisation', name: 'conditions_generales_d_utilisation')]
     public function conditionsGeneralesUtilisation(Request $request): Response
     {
-        return $this->render('conditions-generales-d-utilisation.html.twig', ['channel' => $this->getChannel($request)]);
+        return $this->render('conditions-generales-d-utilisation.html.twig', ['channel' => $this->requireChannel($request)]);
     }
 
     #[Route('/maintenance', name: 'maintenance')]
@@ -93,6 +96,20 @@ class DefaultController extends AbstractController implements ChannelAwareContro
             return $this->redirectToRoute('prehome');
         }
 
-        return $this->render('maintenance.html.twig', ['channel' => $this->getChannel($request)]);
+        return $this->render('maintenance.html.twig', ['channel' => $this->requireChannel($request)]);
+    }
+
+    private function requireChannel(Request $request): Channel
+    {
+        $channel = $this->getChannel($request);
+        if ($channel === null) {
+            $this->logger->warning('No channel found for hostname, returning 404', [
+                'host' => $request->headers->get('host'),
+                'uri' => $request->getRequestUri(),
+            ]);
+            throw $this->createNotFoundException();
+        }
+
+        return $channel;
     }
 }

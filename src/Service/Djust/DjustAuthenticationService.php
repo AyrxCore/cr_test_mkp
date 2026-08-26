@@ -16,7 +16,7 @@ class DjustAuthenticationService
         private readonly DjustHttpClientService $djustHttpClientService,
         private readonly RequestStack $requestStack,
         private readonly LoggerInterface $djustLogger,
-        private readonly LogAccountConnectionService $logAccountConnectionService
+        private readonly LogAccountConnectionService $logAccountConnectionService,
     ) {
     }
 
@@ -39,7 +39,7 @@ class DjustAuthenticationService
             $session->set('access_token', $tokenObject);
 
             if ($isConnectionLogged) {
-                 $this->logAccountConnectionService->createLog($account);
+                $this->logAccountConnectionService->createLog($account);
             }
 
             $this->djustLogger->info('Authentification Djust réussie', [

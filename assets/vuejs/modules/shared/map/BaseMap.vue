@@ -92,8 +92,8 @@ const onMapReady = (mapInstance: LeafletMap) => {
     emit('map-ready', mapInstance)
 
     isLoading.value = false
-  } catch (error) {
-    console.error("Erreur lors de l'initialisation de la carte:", error)
+  } catch (_error) {
+    // Ignored: map initialization errors already leave the loader hidden
     isLoading.value = false
   }
 }

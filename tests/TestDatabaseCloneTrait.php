@@ -10,16 +10,17 @@ trait TestDatabaseCloneTrait
 {
     private const string DB_USER = 'postgres';
     private const string DB_PASSWORD = 'password';
-    private const string DB_HOST = 'postgres_test_mkp';
     private string $clonedDbName;
+    private string $dbHost;
 
     /**
      * @throws Exception
      */
     private function createIsolatedDatabase(): void
     {
+        $this->dbHost = (string) \parse_url((string) ($_ENV['DATABASE_URL'] ?? ''), \PHP_URL_HOST);
         $this->clonedDbName = 'test_'.\uniqid();
-        $url = \sprintf('postgresql://%s:%s@%s:5432/%s?serverVersion=17&charset=utf8"', self::DB_USER, self::DB_PASSWORD, self::DB_HOST, $this->clonedDbName);
+        $url = \sprintf('postgresql://%s:%s@%s:5432/%s?serverVersion=17&charset=utf8"', self::DB_USER, self::DB_PASSWORD, $this->dbHost, $this->clonedDbName);
         $_ENV['DATABASE_URL'] = $url;
         $_SERVER['DATABASE_URL'] = $url;
 
@@ -46,7 +47,7 @@ trait TestDatabaseCloneTrait
 
     private function getPdo(): \PDO
     {
-        return new \PDO('pgsql:host='.self::DB_HOST.';port=5432', self::DB_USER, self::DB_PASSWORD, [
+        return new \PDO('pgsql:host='.$this->dbHost.';port=5432', self::DB_USER, self::DB_PASSWORD, [
             \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
         ]);
     }

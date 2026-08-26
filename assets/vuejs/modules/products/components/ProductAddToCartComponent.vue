@@ -1,7 +1,7 @@
 <template>
   <div
     :class="{
-      '!bottom-[400px] lg:bottom-1': tooltipFavoriteIsOpened,
+      'bottom-[400px]! lg:bottom-1': tooltipFavoriteIsOpened,
       'p-4': showPrice,
     }"
     class="sticky bottom-1 flex w-full items-center border bg-white lg:relative lg:bottom-0 lg:border-0 lg:bg-transparent"
@@ -68,9 +68,7 @@ import { formatProductGtmEvent, sendGtmEvent } from '@/vuejs/services/gtm'
 import { Product } from '@/vuejs/types/Product'
 
 import ButtonAddToCartComponent from '@/vuejs/modules/shared/ButtonAddToCartComponent.vue'
-import AddFavoriteComponent from '@/vuejs/modules/products/components/AddFavoriteComponent.vue'
-
-const props = defineProps({
+defineProps({
   product: {
     required: true,
     type: Object as PropType<Product>,
@@ -88,8 +86,4 @@ const props = defineProps({
 })
 
 const tooltipFavoriteIsOpened = ref<boolean>(false)
-
-const onToggleFavoriteTooltip = (event) => {
-  tooltipFavoriteIsOpened.value = event.showTooltip
-}
 </script>

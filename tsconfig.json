@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "target": "esnext",
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "strict": false,
     "jsx": "preserve",
     "sourceMap": false,

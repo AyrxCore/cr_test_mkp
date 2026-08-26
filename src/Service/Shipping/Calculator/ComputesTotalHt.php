@@ -11,6 +11,6 @@ trait ComputesTotalHt
      */
     private function computeTotalHt(array $products): float
     {
-        return array_reduce($products, static fn (float $carry, array $p) => $carry + ($p['unitPrice'] * $p['quantity']), 0.0);
+        return \array_reduce($products, static fn (float $carry, array $p) => $carry + ($p['unitPrice'] * $p['quantity']), 0.0);
     }
 }

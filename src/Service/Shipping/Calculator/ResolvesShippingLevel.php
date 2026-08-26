@@ -24,7 +24,7 @@ trait ResolvesShippingLevel
             } elseif ($totalHt >= $francoMin && $totalHt < $francoMax) {
                 return new ShippingCostResult(
                     (float) $level['fdp_ht'],
-                    round($francoMax - $totalHt, 2),
+                    \round($francoMax - $totalHt, 2),
                     $type,
                 );
             }

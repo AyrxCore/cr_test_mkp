@@ -28,7 +28,15 @@ import AccountSidebarBlock from '@/vuejs/modules/account/components/sidebar/Acco
 const channelStore = useChannelStore()
 const { hasNoAdherentData } = storeToRefs(useUserStore())
 
-const listProfilMenuGlobal = ref<any[]>([
+type SidebarItem = {
+  name: string
+  id: AccountPageList
+  url: AccountPageList
+  condition?: string
+  gaEventName?: string
+}
+
+const listProfilMenuGlobal = ref<SidebarItem[]>([
   {
     name: 'Mes coordonnées',
     id: AccountPageList.ACCOUNT,
@@ -53,14 +61,14 @@ const listProfilMenuGlobal = ref<any[]>([
   // },
 ])
 
-const listProfilMenu = computed((): any[] => {
+const listProfilMenu = computed((): SidebarItem[] => {
   return listProfilMenuGlobal.value.filter(
     (x) => !x.condition || channelStore.isAllowedToShow(x.condition),
   )
 })
 
-const listOrdersAndData = computed((): any[] => {
-  const data = []
+const listOrdersAndData = computed((): SidebarItem[] => {
+  const data: SidebarItem[] = []
   const orderMenu = {
     name: 'Mes commandes',
     id: AccountPageList.ORDERS,

@@ -6,13 +6,6 @@ namespace App\Controller\Api;
 
 use App\Service\News\NewsService;
 use Psr\Log\LoggerInterface;
-
-use function Sentry\captureException;
-
-use Sentry\State\Scope;
-
-use function Sentry\withScope;
-
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -42,11 +35,6 @@ class NewsController extends AbstractController
             $this->djustLogger->error('Error fetching news', [
                 'exception' => $e->getMessage(),
             ]);
-
-            withScope(function (Scope $scope) use ($e): void {
-                $scope->setTag('endpoint', 'api_news_list');
-                captureException($e);
-            });
 
             return $this->json(
                 ['error' => 'Failed to fetch news'],

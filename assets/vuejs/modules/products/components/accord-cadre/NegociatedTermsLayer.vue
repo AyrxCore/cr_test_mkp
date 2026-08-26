@@ -17,12 +17,11 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, inject } from 'vue'
+import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import { useAccordCadreStore } from '@/vuejs/stores/accordCadre.ts'
 
-import type { AccordCadreLayersComposable } from '@/vuejs/modules/products/composables/useAccordCadreLayers'
 import SidebarLayer from '@/vuejs/modules/shared/SidebarLayer.vue'
 import { ImageItem } from '@/vuejs/types/AccordCadre.ts'
 
@@ -39,12 +38,6 @@ defineEmits<{
 
 const accordCadreStore = useAccordCadreStore()
 const { negociatedTermsBlockContent } = storeToRefs(accordCadreStore)
-
-const layers = inject<AccordCadreLayersComposable>('accordCadreLayers')!
-
-const hideOverlay = computed<boolean>(
-  () => layers.showNegociatedTermsLayer.value,
-)
 
 const negociatedTermsItems = computed<ImageItem[]>(() => {
   return negociatedTermsBlockContent.value?.negociatedTermsLayerItems || []

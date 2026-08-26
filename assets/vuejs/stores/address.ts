@@ -32,11 +32,12 @@ export const useAddressStore = defineStore('address', {
       try {
         this.addresses = await AddressHttpClient.get().getAddressesAsBuyer()
       } catch (error) {
-        error.response.status === HttpStatusCodes.unauthorized &&
+        if (error.response.status === HttpStatusCodes.unauthorized) {
           alertStore.setShow(
             getErrorMessage(error.response.data.message),
             AlertType.danger,
           )
+        }
       }
     },
     setCurrentAddress(address: Address): void {
@@ -64,7 +65,7 @@ export const useAddressStore = defineStore('address', {
         notifySuccess("L'adresse a bien été enregistrée")
 
         router.push({ name: PageList.ADDRESSES })
-      } catch (error) {
+      } catch (_error) {
         notifyError(
           "Une erreur est survenue lors de l'enregistrement. Veuillez contacter le service adhérent",
         )
@@ -78,7 +79,7 @@ export const useAddressStore = defineStore('address', {
         notifySuccess('Les modifications ont été enregistrées avec succès')
 
         router.push({ name: PageList.ADDRESSES })
-      } catch (error) {
+      } catch (_error) {
         notifyError(
           "Une erreur est survenue lors de l'enregistrement. Veuillez contacter le service adhérent",
         )
@@ -89,11 +90,12 @@ export const useAddressStore = defineStore('address', {
       try {
         this.currentAddress = await AddressHttpClient.get().getAdressAsAdmin(id)
       } catch (error) {
-        error.response.status === HttpStatusCodes.unauthorized &&
+        if (error.response.status === HttpStatusCodes.unauthorized) {
           alertStore.setShow(
             getErrorMessage(error.response.data.message),
             AlertType.danger,
           )
+        }
       }
     },
   },

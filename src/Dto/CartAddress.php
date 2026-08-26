@@ -8,7 +8,6 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Patch;
-use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
 use App\State\Processor\CartAddressPersistProcessor;
 use App\State\Provider\CartAddressProvider;

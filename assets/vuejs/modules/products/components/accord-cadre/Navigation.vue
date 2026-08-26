@@ -1,6 +1,6 @@
 <template>
   <div
-    class="navigation-wrapper f sticky top-[168px] z-10 rounded-full bg-gray-100 font-cotext"
+    class="navigation-wrapper f sticky top-42 z-10 rounded-full bg-gray-100 font-cotext"
   >
     <nav class="flex justify-start pl-8">
       <a
@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, inject, onMounted, onUnmounted, ref, Ref } from 'vue'
+import { computed, inject, onMounted, onUnmounted, ref, Ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import { useAccordCadreStore } from '@/vuejs/stores/accordCadre.ts'
@@ -57,11 +57,18 @@ const allTabs = computed<Array<Tab>>(() => {
     tabs.push({ name: 'Où trouver le partenaire', anchor: 'mapBlock' })
   }
 
-  if (tabs.length > 0 && !activeTab.value) {
-    activeTab.value = tabs[0].anchor
-  }
   return tabs
 })
+
+watch(
+  allTabs,
+  (tabs) => {
+    if (tabs.length > 0 && !activeTab.value) {
+      activeTab.value = tabs[0].anchor
+    }
+  },
+  { immediate: true },
+)
 
 const NAV_OFFSET = 200
 let isNavigating = false

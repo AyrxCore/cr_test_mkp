@@ -5,7 +5,7 @@
   >
     <input
       v-model="searchTerm"
-      class="input truncate !rounded-l-[15px] !px-8 !py-4 !text-sm !ring-transparent focus:!rounded-r-[0px] md:text-clip md:!text-lg"
+      class="input truncate rounded-l-[15px]! px-8! py-4! text-sm! ring-transparent! focus:rounded-r-[0px]! md:text-clip md:text-lg!"
       name="search"
       placeholder="De quoi avez-vous besoin ?"
       type="search"

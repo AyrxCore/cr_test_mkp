@@ -16,7 +16,7 @@ const router = useRouter()
 const props = defineProps({
   routeName: {
     required: true,
-    type: [String, Array<String>],
+    type: [String, Array<string>],
   },
 })
 

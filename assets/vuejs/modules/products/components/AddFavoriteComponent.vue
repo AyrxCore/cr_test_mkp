@@ -85,9 +85,9 @@
                   />
                 </div>
 
-                <div class="!mt-5 flex justify-end">
+                <div class="mt-5! flex justify-end">
                   <ButtonComponent
-                    class="button-primary-outline flex !h-10 justify-end !py-2"
+                    class="button-primary-outline flex h-10! justify-end py-2!"
                     type="button"
                     @click="onOutsideBlock"
                     >Annuler
@@ -98,7 +98,7 @@
                       (newFavorite === null || newFavorite === '')
                     "
                     :is-loading="addProductToFavoriteLoading"
-                    class="button-primary ml-2 !h-10"
+                    class="button-primary ml-2 h-10!"
                   >
                     {{ addButtonName }}
                   </ButtonComponent>
@@ -268,7 +268,9 @@ const addProductToFavorite = async () => {
       await favoriteStore.fetchFavorites()
       await productStore.initSliderAccordsCadres()
       await productStore.initSliderProductsSelection()
-    } catch (error) {}
+    } catch (_error) {
+      // Ignored: error intentionally ignored
+    }
 
     addProductToFavoriteLoading.value = false
   } else {
@@ -279,6 +281,8 @@ const addProductToFavorite = async () => {
 </script>
 
 <style scoped>
+@reference '@/style/main.css';
+
 .tooltip {
   @apply flex max-w-[330px] flex-col items-center justify-center rounded-lg border border-2 bg-white p-7 shadow-[0_20px_250px_25px] shadow-gray-600 md:max-w-[600px];
 }

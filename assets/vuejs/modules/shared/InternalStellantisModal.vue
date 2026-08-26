@@ -34,7 +34,7 @@ const onAccept = async (): Promise<void> => {
   try {
     isLoading.value = true
     await ProductHttpClient.get().updateStellantisSubscription()
-  } catch {
+  } catch (_error) {
     notifyError('Veuillez contacter le support.')
   } finally {
     isLoading.value = false
@@ -45,7 +45,7 @@ const onAccept = async (): Promise<void> => {
 const onCancel = (): void => {
   try {
     ProductHttpClient.get().cancelStellantisSubscription()
-  } catch {
+  } catch (_error) {
     notifyError('Veuillez contacter le support.')
   } finally {
     hasAccepted.value = true

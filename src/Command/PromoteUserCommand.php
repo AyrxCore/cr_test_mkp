@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Command;
 
 use App\Service\UserService;
@@ -28,11 +30,10 @@ class PromoteUserCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDefinition(array(
+            ->setDefinition([
                 new InputArgument('username', InputArgument::REQUIRED, 'Email'),
-                new InputArgument('role', InputArgument::OPTIONAL, 'Le rôle')
-            ));
-        ;
+                new InputArgument('role', InputArgument::OPTIONAL, 'Le rôle'),
+            ]);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -42,7 +43,7 @@ class PromoteUserCommand extends Command
         $role = $input->getArgument('role');
 
         $this->userService->promoteUser($username, $role);
-        $io->success('L\'utilisateur ' . $username . ' a bien été promu ' . $role);
+        $io->success('L\'utilisateur '.$username.' a bien été promu '.$role);
 
         return Command::SUCCESS;
     }

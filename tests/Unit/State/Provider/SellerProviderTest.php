@@ -10,6 +10,7 @@ use App\Factory\SellerFactory;
 use App\Mapper\DjustSearchParamsMapper;
 use App\Service\Account\CurrentAccountProvider;
 use App\Service\Djust\DjustSellerService;
+use App\Exception\MissingChannelHeaderException;
 use App\State\Provider\SellerProvider;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -165,7 +166,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
     \expect($result)->toBeArray()->toBeEmpty();
 });
 
-\it('throws BadRequestHttpException when an error occurs', function () {
+\it('throws BadRequestHttpException when a generic error occurs', function () {
     $operation = new GetCollection();
     $context = ['filters' => []];
 
@@ -187,6 +188,29 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
     $this->provider->provide($operation, [], $context);
 })->throws(BadRequestHttpException::class, 'An error occurred while retrieving the sellers: Djust API error');
+
+\it('re-throws MissingChannelHeaderException as-is without wrapping', function () {
+    $operation = new GetCollection();
+    $context = ['filters' => []];
+
+    $this->currentAccountProvider
+        ->shouldReceive('getAccount')
+        ->once()
+        ->andReturn(null);
+
+    $this->djustSearchParamsMapper
+        ->shouldReceive('fromContext')
+        ->once()
+        ->with($context)
+        ->andReturn(new DjustSearchParams());
+
+    $this->djustSellerService
+        ->shouldReceive('getValidSellers')
+        ->once()
+        ->andThrow(new MissingChannelHeaderException('You must set the "X-Channel" header to a registered channel.'));
+
+    $this->provider->provide($operation, [], $context);
+})->throws(MissingChannelHeaderException::class, 'You must set the "X-Channel" header to a registered channel.');
 
 \it('returns only active sellers filtered by getValidSellers', function () {
     $operation = new GetCollection();

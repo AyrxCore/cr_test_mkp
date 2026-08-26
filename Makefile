@@ -202,7 +202,7 @@ phpcs: ## Run phpcs to correct violations of defined coding guidelines
 	$(dc_exec) php vendor/bin/phpcs -s --colors
 
 phpcbf: ## Run phpcbf to automatically fix as many sniff violations as possible
-	$(dc_exec) php vendor/bin/phpcbf
+	$(dc_exec) php vendor/bin/phpcbf --runtime-set ignore_non_auto_fixable_on_exit 1
 
 phpstan: ## Run phpstan static code analysis
 	$(dc_exec) php vendor/bin/phpstan analyse src --memory-limit="-1" --ansi

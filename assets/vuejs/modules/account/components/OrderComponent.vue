@@ -62,7 +62,7 @@ import { Order } from '@/vuejs/types/Order'
 
 import EyeIconComponent from '@/vuejs/modules/shared/icon/EyeIconComponent.vue'
 
-const props = defineProps({
+defineProps({
   order: {
     required: true,
     type: Object as PropType<Order>,

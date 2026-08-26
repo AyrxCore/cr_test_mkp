@@ -29,7 +29,7 @@
           >
             <ButtonComponent
               :disabled="isNeoAutoLogin"
-              class="button-primary w-fit !text-base"
+              class="button-primary w-fit text-base!"
             >
               {{ labelCtaRattachement }}
             </ButtonComponent>
@@ -37,7 +37,7 @@
           <ButtonComponent
             v-else
             :disabled="isNeoAutoLogin"
-            class="button-primary w-fit !text-base"
+            class="button-primary w-fit text-base!"
             @click="handleButtonClick"
           >
             {{ labelCtaRattachement }}
@@ -47,7 +47,7 @@
         <!-- Bouton Préciser mon besoin -->
         <div v-if="shouldShowContactFormButton" class="py-4">
           <ButtonComponent
-            class="button-primary w-fit !text-base"
+            class="button-primary w-fit text-base!"
             @click="layers.openFatInterestModal()"
           >
             Préciser mon besoin
@@ -86,7 +86,7 @@
               v-for="(assetButton, key) in assetButtons"
               :key="key"
               :asset-button="assetButton"
-              class="button-primary-outline w-fit !whitespace-normal !text-base"
+              class="button-primary-outline w-fit whitespace-normal! text-base!"
               @click="sendGtmEvent('fat_cta_generic_click', { link_text: assetButton.buttonLabel, link_url: assetButton.assetLink, origin_url: router.currentRoute.value.fullPath })"
             />
           </div>

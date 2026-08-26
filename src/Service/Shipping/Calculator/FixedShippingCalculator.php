@@ -39,6 +39,7 @@ class FixedShippingCalculator implements ShippingRuleCalculatorInterface
                 'totalHt' => $totalHt,
                 'levels' => $levels,
             ]);
+
             return new ShippingCostResult(0.0, 0.0, 'FIXED');
         }
 

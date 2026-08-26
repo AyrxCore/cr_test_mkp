@@ -7,19 +7,18 @@ namespace App\State\Provider;
 use ApiPlatform\Metadata\CollectionOperationInterface;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
-use App\Dto\Order;
 use App\Factory\OrderFactory;
 use App\Service\Djust\DjustOrderService;
 
 readonly class OrderProvider implements ProviderInterface
 {
+    private const HIDDEN_STATUSES = ['CREATING', 'DRAFT_ORDER', 'DRAFT_ORDER_ON_HOLD'];
+
     public function __construct(
         private DjustOrderService $djustOrderService,
-        private OrderFactory $orderFactory
+        private OrderFactory $orderFactory,
     ) {
     }
-
-    private const HIDDEN_STATUSES = ['CREATING', 'DRAFT_ORDER', 'DRAFT_ORDER_ON_HOLD'];
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {

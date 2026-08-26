@@ -21,10 +21,10 @@ readonly class CartSubscriptionHandler
         $productsIds = $message->getProductsIds();
 
         foreach ($productsIds as $productId) {
-//            TODO: Décommenter et adapter le rattachement automatique (récup des produits du panier et de l'accountId) pour créer un message CartSubscription)
+            //            TODO: Décommenter et adapter le rattachement automatique (récup des produits du panier et de l'accountId) pour créer un message CartSubscription)
             /** @var Product $product */
-//            $product = $this->upplerProductService->findProductByIdForAdmin($productId);
-//            $accordId = $this->getAccordId($product['properties']);
+            //            $product = $this->upplerProductService->findProductByIdForAdmin($productId);
+            //            $accordId = $this->getAccordId($product['properties']);
             $accordId = null;
             if ($accordId) {
                 $params = [

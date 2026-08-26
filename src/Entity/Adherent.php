@@ -344,9 +344,9 @@ class Adherent
 
         if ($parent == null) {
             return $adherent;
-        } else {
-            return $this->getRootParent($parent);
         }
+
+        return $this->getRootParent($parent);
     }
 
     public function getChannel(): ?Channel

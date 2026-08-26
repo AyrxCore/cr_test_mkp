@@ -78,7 +78,9 @@ export const useProductStore = defineStore('product', {
           await ProductHttpClient.get().fetchProductsByParams({
             productTags: channelSliderAccordsCadresProperty.value,
           })
-      } catch (error) {}
+      } catch (_error) {
+        // Ignored: product slider is optional
+      }
     },
     async initSliderProductsSelection() {
       try {
@@ -94,23 +96,26 @@ export const useProductStore = defineStore('product', {
           await ProductHttpClient.get().fetchProductsByParams({
             productTags: channelSliderProductsSelectionProperty.value,
           })
-      } catch (error) {}
+      } catch (_error) {
+        // Ignored: product slider is optional
+      }
     },
     async initProduct(id: number | string) {
       const alertStore = useAlertStore()
       try {
         return await ProductHttpClient.get().findProductById(id)
       } catch (error) {
-        error.response.status === HttpStatusCodes.unauthorized &&
+        if (error.response.status === HttpStatusCodes.unauthorized) {
           alertStore.setShow(
             getErrorMessage(error.response.data.message),
             AlertType.danger,
           )
+        }
       }
     },
     async changeVariant(product: Product, optionsSelected: Array<number>) {
       let variantSelected = null
-      Object.entries(product.variants).find(([key, value], index) => {
+      Object.entries(product.variants).find(([_key, value], _index) => {
         if (arrayEqual(value.options, optionsSelected)) {
           variantSelected = value.id
         }
@@ -141,11 +146,12 @@ export const useProductStore = defineStore('product', {
       try {
         return await ProductHttpClient.get().findProductById(id)
       } catch (error) {
-        error.response.status === HttpStatusCodes.unauthorized &&
+        if (error.response.status === HttpStatusCodes.unauthorized) {
           alertStore.setShow(
             getErrorMessage(error.response.data.message),
             AlertType.danger,
           )
+        }
       }
     },
     async findSimilarProducts(categoryId: number) {
@@ -156,11 +162,12 @@ export const useProductStore = defineStore('product', {
           categories: categoryId,
         })
       } catch (error) {
-        error.response.status === HttpStatusCodes.unauthorized &&
+        if (error.response.status === HttpStatusCodes.unauthorized) {
           alertStore.setShow(
             getErrorMessage(error.response.data.message),
             AlertType.danger,
           )
+        }
       }
     },
     async findPartnerProducts(partnerId: number | string) {
@@ -173,11 +180,12 @@ export const useProductStore = defineStore('product', {
 
         return partnerProducts.results.filter((sp) => !this.isAccordCadre(sp))
       } catch (error) {
-        error.response.status === HttpStatusCodes.unauthorized &&
+        if (error.response.status === HttpStatusCodes.unauthorized) {
           alertStore.setShow(
             getErrorMessage(error.response.data.message),
             AlertType.danger,
           )
+        }
       }
     },
     async findDefaultVariantProduct(product: Product) {
@@ -193,11 +201,12 @@ export const useProductStore = defineStore('product', {
           this.updateProductVariant(product, variant)
         }
       } catch (error) {
-        error.response.status === HttpStatusCodes.unauthorized &&
+        if (error.response.status === HttpStatusCodes.unauthorized) {
           alertStore.setShow(
             getErrorMessage(error.response.data.message),
             AlertType.danger,
           )
+        }
       }
     },
     clearFilters() {

@@ -46,12 +46,12 @@ import {
   Thumbs,
   Autoplay,
 } from 'swiper/modules'
-import 'swiper/scss'
-import 'swiper/scss/a11y'
-import 'swiper/scss/navigation'
-import 'swiper/scss/pagination'
-import 'swiper/scss/scrollbar'
-import 'swiper/scss/thumbs'
+import 'swiper/css'
+import 'swiper/css/a11y'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+import 'swiper/css/scrollbar'
+import 'swiper/css/thumbs'
 
 import ChevronLeftIconComponent from '@/vuejs/modules/shared/icon/ChevronLeftIconComponent.vue'
 
@@ -66,6 +66,7 @@ const props = defineProps({
   modules: {
     required: false,
     type: Array,
+    default: undefined,
   },
   pagination: {
     required: false,
@@ -112,7 +113,9 @@ const defaultModules = computed(
 )
 </script>
 
-<style lang="postcss">
+<style>
+@reference '@/style/main.css';
+
 .swiper-slide {
   img {
     @apply max-h-full;
@@ -122,60 +125,57 @@ const defaultModules = computed(
 .swiper-pagination-bullet {
   @apply h-[0.625rem] w-[0.625rem] cursor-pointer border border-secondary bg-white opacity-100;
 
-  &-active {
+  &.swiper-pagination-bullet-active {
     @apply bg-secondary;
   }
 }
 
-.swiper-button {
-  &-prev,
-  &-next {
-    &:after {
-      @apply text-2xl text-primary;
-    }
+.swiper-button-prev,
+.swiper-button-next {
+  &:after {
+    @apply text-2xl text-primary;
   }
 }
 
 .swiper {
   position: unset;
-  &-button-direction {
-    &-prev,
-    &-next {
-      @apply absolute bottom-0 top-0 z-10 flex cursor-pointer items-center text-primary;
+}
 
-      svg {
-        @apply h-8 w-8 rounded-full border-2 border-primary bg-white;
-      }
-    }
-    &-prev {
-      @apply left-[-16px];
-    }
+.swiper-button-direction-prev,
+.swiper-button-direction-next {
+  @apply absolute bottom-0 top-0 z-10 flex cursor-pointer items-center text-primary;
 
-    &-next {
-      @apply right-[-16px];
-
-      svg {
-        @apply rotate-180;
-      }
-    }
+  svg {
+    @apply h-8 w-8 rounded-full border-2 border-primary bg-white;
   }
-  &-button {
-    &-disabled {
-      opacity: 0.2;
-    }
-    &-lock {
-      display: none;
-    }
+}
+
+.swiper-button-direction-prev {
+  @apply left-[-16px];
+}
+
+.swiper-button-direction-next {
+  @apply right-[-16px];
+
+  svg {
+    @apply rotate-180;
   }
-  &-nav-outside {
-    .swiper-button-direction {
-      &-prev {
-        @apply md:left-[-48px];
-      }
-      &-next {
-        @apply md:right-[-48px];
-      }
-    }
+}
+
+.swiper-button-disabled {
+  opacity: 0.2;
+}
+
+.swiper-button-lock {
+  display: none;
+}
+
+.swiper-nav-outside {
+  .swiper-button-direction-prev {
+    @apply md:left-[-48px];
+  }
+  .swiper-button-direction-next {
+    @apply md:right-[-48px];
   }
 }
 

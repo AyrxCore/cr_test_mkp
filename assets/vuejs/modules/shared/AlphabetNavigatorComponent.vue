@@ -172,13 +172,15 @@ onBeforeUnmount(() => {
 })
 </script>
 
-<style lang="postcss" scoped>
+<style scoped>
+@reference '@/style/main.css';
+
 .letter-index {
   @apply hidden gap-[16px] rounded-md bg-white p-2 py-4 transition-all duration-[0.3s] ease-[ease] md:mb-4 md:flex md:flex-wrap md:gap-[5px];
 }
 
 .letter-index-floating {
-  @apply fixed z-[100] overflow-y-auto rounded-lg border border-solid border-secondary bg-white shadow-[0_0_20px_rgba(0,0,0,0.1)];
+  @apply fixed z-[29] overflow-y-auto rounded-lg border border-solid border-secondary bg-white shadow-[0_0_20px_rgba(0,0,0,0.1)];
   @apply right-2.5 top-[61%] flex max-h-[55vh] -translate-y-2/4 flex-col gap-1 p-1.5;
   @apply md:sticky md:left-0 md:right-auto md:top-[170px] md:max-h-none  md:w-full md:translate-y-0 md:flex-row md:gap-[5px] md:p-2 md:shadow-md;
 }

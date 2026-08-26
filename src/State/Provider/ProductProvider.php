@@ -87,9 +87,9 @@ readonly class ProductProvider implements ProviderInterface
         return [
             'results' => $productDtos,
             'resultsCount' => $search['products']['totalElements'] ?? \count($productDtos),
-            'page'         => $search['products']['pageable']['pageNumber'] ?? 0,
-            'totalPages'   => $search['products']['totalPages'] ?? 1,
-            'filters'      => $filters,
+            'page' => $search['products']['pageable']['pageNumber'] ?? 0,
+            'totalPages' => $search['products']['totalPages'] ?? 1,
+            'filters' => $filters,
         ];
     }
 
@@ -114,7 +114,7 @@ readonly class ProductProvider implements ProviderInterface
     }
 
     /**
-     * @param Product[]        $products
+     * @param Product[]               $products
      * @param callable(Product): bool $predicate
      *
      * @return Product[]

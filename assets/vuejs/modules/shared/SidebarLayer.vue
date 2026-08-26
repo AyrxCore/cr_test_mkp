@@ -38,7 +38,7 @@
             <!-- Footer avec bouton Fermer (inline si pas de scroll) -->
             <div v-if="showCloseButton && !hasScroll" class="px-10 py-6">
               <ButtonComponent
-                class="button-primary-outline w-fit !text-base"
+                class="button-primary-outline w-fit text-base!"
                 @click="close"
               >
                 Fermer
@@ -49,7 +49,7 @@
           <!-- Footer avec bouton Fermer (fixe si scroll) -->
           <div v-if="showCloseButton && hasScroll" class="px-10 py-6">
             <ButtonComponent
-              class="button-primary-outline w-fit !text-base"
+              class="button-primary-outline w-fit text-base!"
               @click="close"
             >
               Fermer

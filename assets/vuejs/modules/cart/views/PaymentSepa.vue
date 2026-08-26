@@ -55,7 +55,7 @@
             class="my-4 text-red-500"
           >
             <ul>
-              <li v-for="error in errors">
+              <li v-for="error in errors" :key="error">
                 {{ error }}
               </li>
             </ul>
@@ -89,7 +89,7 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import { isValidIBAN, isValidBIC } from 'ibantools/jsnext/ibantools'
+import { isValidIBAN, isValidBIC } from 'ibantools'
 
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import CartRightSideComponent from '@/vuejs/modules/cart/components/CartRightSideComponent.vue'

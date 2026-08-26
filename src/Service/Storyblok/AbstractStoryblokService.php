@@ -32,7 +32,7 @@ abstract class AbstractStoryblokService
     ) {
     }
 
-    protected function getStoriesRaw(array $filters = [], int $maxPages = null): array
+    protected function getStoriesRaw(array $filters = [], ?int $maxPages = null): array
     {
         $queryParams = [];
         foreach ($filters as $key => $value) {

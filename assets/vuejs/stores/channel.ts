@@ -7,6 +7,7 @@ import {
 import { notifyError } from '@/vuejs/services/utils'
 import ChannelHttpClient from '@/vuejs/services/httpclient/ChannelHttpClient'
 import { useCommonStore } from '@/vuejs/stores/common'
+import { resolveChannelReady } from '@/vuejs/services/channelReadyPromise'
 import { parsePhoneNumber } from 'libphonenumber-js'
 
 export const useChannelStore = defineStore('channel', {
@@ -45,12 +46,14 @@ export const useChannelStore = defineStore('channel', {
           },
           options: channel.options,
         }
-      } catch (error) {
+      } catch (_error) {
         this.currentChannel = null
 
         notifyError(
           'Une erreur est survenue, merci de contacter un administrateur.',
         )
+      } finally {
+        resolveChannelReady()
       }
     },
     isAllowedToShow(block: string | undefined) {

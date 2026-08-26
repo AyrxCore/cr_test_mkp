@@ -148,6 +148,8 @@ const onAddToCart = (event) => {
 }
 </script>
 <style scoped>
+@reference '@/style/main.css';
+
 .bloc-cart-saved {
   @apply mb-4 flex w-[48.5%] flex-col rounded-lg bg-white p-2.5 text-sm md:w-full md:flex-row md:text-base lg:text-lg;
 }

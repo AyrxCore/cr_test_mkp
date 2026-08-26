@@ -17,7 +17,7 @@ class DjustOrderService
         private DjustStoreViewHeadersBuilder $storeViewHeadersBuilder,
         private DjustAccountApiService $accountApiService,
         private CredentialEncryptionService $credentialEncryptionService,
-        private LoggerInterface $logger,
+        private LoggerInterface $djustLogger,
     ) {
     }
 
@@ -77,7 +77,7 @@ class DjustOrderService
                     $storeViewCode,
                 );
             } catch (\Throwable $e) {
-                $this->logger->warning('Djust buyer order fetch failed, falling back to operator.', [
+                $this->djustLogger->warning('Djust buyer order fetch failed, falling back to operator.', [
                     'orderId' => $orderId,
                     'error' => $e->getMessage(),
                 ]);

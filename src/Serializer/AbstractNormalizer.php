@@ -14,7 +14,7 @@ abstract class AbstractNormalizer implements NormalizerInterface
 {
     protected SfNormalizerInterface $normalizer;
 
-    public function normalize($object, $format = null, array $context = []): float|array|\ArrayObject|bool|int|string|null
+    public function normalize(mixed $object, ?string $format = null, array $context = []): float|array|\ArrayObject|bool|int|string|null
     {
         $data = $this->normalizer->normalize($object, $format, $context);
 
@@ -27,15 +27,20 @@ abstract class AbstractNormalizer implements NormalizerInterface
         return $data;
     }
 
-    public function supportsDenormalization($data, $type, $format = null, array $context = []): bool
+    public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
         // Par défaut, les normalizers custom ne gèrent pas la dénormalisation
         return false;
     }
 
-    public function denormalize($data, string $type, string $format = null, array $context = [])
+    public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
         throw new \LogicException('This normalizer does not support denormalization');
+    }
+
+    public function getSupportedTypes(?string $format): array
+    {
+        return ['*' => false];
     }
 
     public function setSerializer(SerializerInterface $serializer): void

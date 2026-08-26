@@ -14,12 +14,12 @@
         ou par mail
       </p>
       <ButtonComponent
-        class="button-primary-outline mx-auto mt-5 w-full items-center !px-6 !text-primary sm:flex sm:w-auto sm:px-8 lg:mt-10"
+        class="button-primary-outline mx-auto mt-5 w-full items-center px-6! text-primary! sm:flex sm:w-auto sm:px-8 lg:mt-10"
         type="button"
         @click="EmailContactGtmEvent()"
       >
         <MailIcon
-          class="h-[15px] w-[15px] fill-primary stroke-white text-secondary hover:!fill-secondary"
+          class="h-[15px] w-[15px] fill-primary stroke-white text-secondary hover:fill-secondary!"
         />
         <span>{{ contactAdherentsService }}</span>
       </ButtonComponent>

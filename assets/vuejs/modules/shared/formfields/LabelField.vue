@@ -3,11 +3,8 @@
     {{ props.title }}
   </label>
 </template>
+
 <script lang="ts" setup>
-import { ref } from 'vue'
-
-const internalValue = ref<string>('')
-
 const props = defineProps({
   title: {
     required: true,

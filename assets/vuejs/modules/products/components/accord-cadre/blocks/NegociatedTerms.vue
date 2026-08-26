@@ -50,7 +50,7 @@
     <div class="my-auto flex h-full flex-col justify-around gap-5">
       <ButtonComponent
         v-if="negociatedTermsLayerItems.length > 0"
-        class="button-primary-outline w-fit !whitespace-normal text-sm !leading-tight xs:!text-base"
+        class="button-primary-outline w-fit whitespace-normal! text-sm leading-tight! xs:text-base!"
         @click="layers.openNegociatedTermsLayer()"
       >
         <span class="flex items-center">
@@ -64,20 +64,20 @@
         v-for="(assetButton, key) in assetButtons"
         :key="key"
         :asset-button="assetButton"
-        class="button-primary-outline text:sm w-fit !whitespace-normal !leading-tight xs:!text-base"
+        class="button-primary-outline text-sm w-fit whitespace-normal! leading-tight! xs:text-base!"
         @click="sendGtmEvent('fat_cta_generic_click', { link_text: assetButton.buttonLabel, link_url: assetButton.assetLink, origin_url: router.currentRoute.value.fullPath })"
       />
       <ButtonComponent
         v-if="shouldShowButton"
         :disabled="isNeoAutoLogin"
-        class="button-primary w-fit !text-lg"
+        class="button-primary w-fit text-lg!"
         @click="handleButtonClick"
       >
         {{ labelCtaRattachement }}
       </ButtonComponent>
       <ButtonComponent
         v-if="shouldShowContactFormButton"
-        class="button-primary w-fit !text-lg"
+        class="button-primary w-fit text-lg!"
         @click="layers.openFatInterestModal()"
       >
         Préciser mon besoin

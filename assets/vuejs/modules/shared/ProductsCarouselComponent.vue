@@ -28,7 +28,7 @@
       <SwiperSlide
         v-for="product in props.products"
         :key="product.id"
-        class="!flex !h-auto items-stretch overflow-hidden rounded-lg bg-white"
+        class="flex! h-auto! items-stretch overflow-hidden rounded-lg bg-white"
       >
         <ProductComponent :product="product" />
       </SwiperSlide>
@@ -42,13 +42,13 @@ import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListShar
 import ProductComponent from '@/vuejs/modules/products/components/ProductCardComponent.vue'
 import ProductsLoadingCarouselComponent from '@/vuejs/modules/shared/ProductsLoadingCarouselComponent.vue'
 
-const emit = defineEmits(['click-left', 'click-right'])
+defineEmits(['click-left', 'click-right'])
 
 const props = defineProps({
   products: {
     required: true,
     type: Array,
-    default: [],
+    default: () => [],
   },
   loading: {
     required: true,

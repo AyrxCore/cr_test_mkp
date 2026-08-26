@@ -37,6 +37,11 @@ class UserApiController extends AbstractController
     public function emailChanging(string $token): RedirectResponse
     {
         $log = $this->em->getRepository(UserInfoUpdateRequest::class)->findOneBy(['emailChangingToken' => $token]);
+
+        if ($log === null) {
+            return $this->redirect('/');
+        }
+
         $user = $log->getUser();
         $event = new UserInfoUpdateEvent($user);
         $this->eventDispatcher->dispatch($event);

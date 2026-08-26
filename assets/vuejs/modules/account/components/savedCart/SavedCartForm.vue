@@ -8,11 +8,12 @@
         }"
       >
         <input
-          v-model="props.savedCart.name"
+          v-model="savedCartName"
           type="text"
           placeholder="Nom de votre panier sauvegardé *"
           class="border-1 relative h-[55px] w-full rounded-lg border-gray-200 bg-white px-3 text-gray-600 text-primary placeholder-gray-400"
           required
+          @input="emit('updateSavedCartName', savedCartName)"
         />
       </div>
     </div>
@@ -20,7 +21,7 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType } from 'vue'
+import { onMounted, PropType, ref } from 'vue'
 import { SavedCart } from '@/vuejs/types/SavedCart'
 
 const props = defineProps({
@@ -34,6 +35,13 @@ const props = defineProps({
     required: false,
     default: false,
   },
+})
+
+const emit = defineEmits(['updateSavedCartName'])
+const savedCartName = ref<string | null>(null)
+
+onMounted(() => {
+  savedCartName.value = props.savedCart.name
 })
 </script>
 

@@ -59,10 +59,6 @@ const emit = defineEmits<{
   (eventName: 'change', value: string): void
 }>()
 
-const updateModel = () => {
-  emit('update:modelValue', internalValue.value)
-}
-
 watch(
   () => props.modelValue as string,
   (value: string) => {

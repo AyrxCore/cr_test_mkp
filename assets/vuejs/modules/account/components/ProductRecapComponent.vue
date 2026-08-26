@@ -58,7 +58,7 @@ import { useChannelStore } from '@/vuejs/stores/channel'
 
 const { channelSecondaryColor } = storeToRefs(useChannelStore())
 
-const props = defineProps({
+defineProps({
   product: {
     required: true,
     type: Object,

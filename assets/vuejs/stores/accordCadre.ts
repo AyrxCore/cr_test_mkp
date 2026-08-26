@@ -16,7 +16,7 @@ export const useAccordCadreStore = defineStore('accordCadre', {
       this.errorLoading = null
       try {
         this.accordCadre = await ProductHttpClient.get().findProductById(id)
-      } catch (error) {
+      } catch (_error) {
         this.errorLoading = true
       }
     },
@@ -47,7 +47,7 @@ export const useAccordCadreStore = defineStore('accordCadre', {
           AccountAccordCadreStatus.PENDING
 
         return true
-      } catch (error) {
+      } catch (_error) {
         notifyError(
           'Une erreur est survenue lors du rattachement. Veuillez réessayer ou contacter le support.',
         )

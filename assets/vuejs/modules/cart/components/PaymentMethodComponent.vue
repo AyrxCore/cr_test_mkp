@@ -6,7 +6,7 @@
     <ButtonComponent
       :disabled="isNeoAutoLogin"
       :is-loading="isLoading"
-      class="button-primary mt-4 !whitespace-normal"
+      class="button-primary mt-4 whitespace-normal!"
       @click="emit('select-method')"
     >
       Choisir le paiement par {{ methodLabel }}

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Service\Djust\Cart\Transformer;
 
-use App\Service\Djust\Search\Transformer\DjustSearchVariantTransformer;
-
 class DjustCartOfferTransformer
 {
     public function __construct(

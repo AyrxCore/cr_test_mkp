@@ -6,7 +6,7 @@
           name: ProductPageList.PRODUCT,
           params: { slug: productSlug },
         }"
-        class="button border-2 border-primary !text-primary shadow-none hover:scale-105 hover:!border-primary hover:!bg-white hover:!shadow-inner-darker focus:!bg-white"
+        class="button border-2 border-primary text-primary! shadow-none hover:scale-105 hover:border-primary! hover:bg-white! hover:shadow-inner-darker! focus:bg-white!"
       >
         Profiter de l'offre
         <ArrowRightIconComponent class="ml-2 w-4 stroke-primary" />

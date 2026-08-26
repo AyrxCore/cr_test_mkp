@@ -31,7 +31,7 @@ class StepsShippingCalculator implements ShippingRuleCalculatorInterface
 
         $levels = $rule['levels'];
         $totalHt = $this->computeTotalHt($products);
-        $lastLevel = $levels[array_key_last($levels)];
+        $lastLevel = $levels[\array_key_last($levels)];
 
         if ($totalHt >= (float) $lastLevel['franco_max_ht']) {
             return new ShippingCostResult(0.0, 0.0, 'STEPS');
@@ -44,6 +44,7 @@ class StepsShippingCalculator implements ShippingRuleCalculatorInterface
                 'totalHt' => $totalHt,
                 'levels' => $levels,
             ]);
+
             return new ShippingCostResult(0.0, 0.0, 'STEPS');
         }
 

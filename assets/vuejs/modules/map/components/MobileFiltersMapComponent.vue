@@ -1,6 +1,6 @@
 <template>
   <ButtonComponent
-    class="relative my-2 w-full !rounded-none border border-gray-300 !bg-white !text-primary lg:!hidden"
+    class="relative my-2 w-full rounded-none! border border-gray-300 bg-white! text-primary! lg:hidden!"
     :disabled="isLoading"
     @click.stop="!isLoading && (showFilters = true)"
   >

@@ -10,7 +10,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class ErrorHandler
 {
     public function __construct(
-        private readonly FileDownloadService $fileDownloadService
+        private readonly FileDownloadService $fileDownloadService,
     ) {
     }
 
@@ -19,7 +19,7 @@ class ErrorHandler
         ?string $tempFilePath,
         bool $isTemporaryFile,
         ?Connection $connection,
-        SymfonyStyle $io
+        SymfonyStyle $io,
     ): void {
         if ($connection && $connection->isTransactionActive()) {
             $connection->rollBack();
@@ -38,7 +38,7 @@ class ErrorHandler
         ?string $tempFilePath,
         bool $isTemporaryFile,
         Connection $connection,
-        SymfonyStyle $io
+        SymfonyStyle $io,
     ): void {
         if ($connection->isTransactionActive()) {
             $connection->commit();

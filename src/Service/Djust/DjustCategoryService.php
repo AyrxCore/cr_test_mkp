@@ -56,6 +56,6 @@ class DjustCategoryService
     {
         $search = $this->djustSearchService->search($params);
 
-        return \array_map(fn ($item) => $item['id'], $search['facets']['navigations'] ?? []);
+        return \array_map(static fn ($item) => $item['id'], $search['facets']['navigations'] ?? []);
     }
 }

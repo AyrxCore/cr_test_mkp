@@ -20,8 +20,9 @@ export const useFavoriteStore = defineStore('favorite', {
       try {
         this.favorites = await FavoriteHttpClient.get().fetchList()
       } catch (error) {
-        error.response.status === HttpStatusCodes.unauthorized &&
+        if (error.response.status === HttpStatusCodes.unauthorized) {
           notifyError(error.response.data.message)
+        }
       }
     },
     async create(favorite: Favorite) {
@@ -40,7 +41,9 @@ export const useFavoriteStore = defineStore('favorite', {
     async findFavoriteById(id) {
       try {
         return await FavoriteHttpClient.get().findFavoriteById(id)
-      } catch (error) {}
+      } catch (_error) {
+        // Ignored: favorite details may no longer exist
+      }
     },
 
     async update(favorite: Favorite) {
@@ -68,7 +71,7 @@ export const useFavoriteStore = defineStore('favorite', {
     async addProduct(data) {
       try {
         await FavoriteHttpClient.get().addProduct(data)
-      } catch (error) {
+      } catch (_error) {
         notifyError(
           "Impossible d'ajouter ce produit à cette liste car elle n'existe plus",
         )
@@ -78,7 +81,7 @@ export const useFavoriteStore = defineStore('favorite', {
       try {
         await FavoriteHttpClient.get().removeProduct(favoriteProductId)
         notifySuccess('Ce produit a été rétiré de la liste')
-      } catch (error) {
+      } catch (_error) {
         notifyError("Une erreur est survenue lors de l'ajout")
       }
     },

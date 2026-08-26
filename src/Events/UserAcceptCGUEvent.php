@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Events;
 
 use App\Entity\Account;
@@ -14,17 +16,11 @@ class UserAcceptCGUEvent extends Event
         $this->account = $account;
     }
 
-    /**
-     * @return Account
-     */
     public function getAccount(): Account
     {
         return $this->account;
     }
 
-    /**
-     * @param Account $account
-     */
     public function setAccount(Account $account): void
     {
         $this->account = $account;

@@ -48,7 +48,7 @@ class ShippingRuleFixtures extends Fixture implements FixtureGroupInterface
                             'franco_min_ht' => 50.45,
                             'franco_max_ht' => 100.2,
                             'fdp_ht' => 3,
-                        ]
+                        ],
                     ],
                 ],
             ],
@@ -66,7 +66,7 @@ class ShippingRuleFixtures extends Fixture implements FixtureGroupInterface
                             'franco_min_ht' => 20,
                             'franco_max_ht' => null,
                             'fdp_ht' => 3,
-                        ]
+                        ],
                     ],
                 ],
             ],
@@ -202,7 +202,7 @@ class ShippingRuleFixtures extends Fixture implements FixtureGroupInterface
         foreach ($shippingRulesData as $data) {
             $partner = $partnerRepository->find(Uuid::fromString($data['partnerId']));
 
-            if (null === $partner) {
+            if ($partner === null) {
                 continue;
             }
 

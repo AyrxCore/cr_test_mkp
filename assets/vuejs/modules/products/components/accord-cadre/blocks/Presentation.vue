@@ -47,7 +47,7 @@
       class="space-y-4"
     >
       <ButtonComponent
-        class="button-primary-outline w-fit !text-base"
+        class="button-primary-outline w-fit text-base!"
         @click="layers.openMoreInformationsLayer()"
       >
         En savoir plus
@@ -61,7 +61,6 @@ import { computed, inject } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import { useAccordCadreStore } from '@/vuejs/stores/accordCadre.ts'
-import { useScrollToElement } from '@/vuejs/services/utils.ts'
 import { AssetButton } from '@/vuejs/types/AccordCadre'
 
 import type { AccordCadreLayersComposable } from '@/vuejs/modules/products/composables/useAccordCadreLayers'

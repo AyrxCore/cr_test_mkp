@@ -41,6 +41,7 @@ export interface AdyenCheckoutConfigOptions {
 }
 
 function toAdvancedFlowResponse(result: AdyenInitiatePaymentResponse): CheckoutAdvancedFlowResponse {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { pspReference: _psp, action, ...clientSafe } = result as AdyenInitiatePaymentResponse & {
     pspReference?: string
     action?: { type?: string; [key: string]: unknown }
@@ -113,10 +114,10 @@ export function useAdyenCheckoutConfig(options: AdyenCheckoutConfigOptions) {
         ? rawData
         : { details: rawData }
 
-      let result: AdyenInitiatePaymentResponse | null = null
+      let result: AdyenInitiatePaymentResponse | null
       try {
         result = await options.onSubmitDetails(stateData as AdyenAdditionalDetails)
-      } catch {
+      } catch (_error) {
         actions.reject()
         return
       }

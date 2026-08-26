@@ -30,7 +30,7 @@ class DjustPropertyFilter
             $attrName = $this->extractor->getLocalizedValue($attrValue['attribute']['name'] ?? []);
 
             // Exclure la TVA par son nom (ce n'est pas un customField, c'est un attribut standard)
-            if (strtolower(trim($attrName)) === 'tva') {
+            if (\strtolower(\trim($attrName)) === 'tva') {
                 continue;
             }
 

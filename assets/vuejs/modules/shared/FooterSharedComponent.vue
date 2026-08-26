@@ -269,7 +269,9 @@ const memberArea = computed((): string => {
 })
 </script>
 
-<style lang="scss">
+<style>
+@reference '@/style/main.css';
+
 .three-column-list {
   @apply m-0 columns-1 p-0 md:columns-2 lg:columns-3;
 }

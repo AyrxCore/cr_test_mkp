@@ -88,7 +88,7 @@ const { cart, CBPaymentMethod, shippingCostTotal, shippingCostTotalWithTax } =
 
 const cbPaymentImage = getImage(cbPaymentAsset)
 
-const props = defineProps({
+defineProps({
   hasPaymentMethods: {
     required: false,
     type: Boolean,

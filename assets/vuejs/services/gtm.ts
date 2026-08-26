@@ -26,12 +26,10 @@ export const formatCartItemsGtmEvent = (cart: Cart) => {
   if (!cart?.cartOrders) return []
 
   const itemsObject = []
-  let shippingValue = 0
-  Object.entries(cart.cartOrders).forEach(([key, value], index) => {
+  Object.entries(cart.cartOrders).forEach(([_key, value], _index) => {
     Object.entries(value.products).forEach(
-      ([childKey, childValue], childIIndex) => {
+      ([_childKey, childValue], _childIIndex) => {
         const price = childValue.unitPrice * childValue.quantity
-        shippingValue += price
         itemsObject.push({
           item_id: childValue.offerPriceId,
           item_name: childValue.name,

@@ -28,7 +28,7 @@ import { Seller } from '@/vuejs/types/Seller'
 
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 
-const props = defineProps({
+defineProps({
   seller: {
     required: true,
     type: Object as PropType<Seller>,

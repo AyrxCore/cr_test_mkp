@@ -34,7 +34,7 @@ readonly class AddressPersistProcessor implements ProcessorInterface
         } catch (HttpException $e) {
             throw $e;
         } catch (\Throwable $e) {
-            throw new BadRequestHttpException();
+            throw new BadRequestHttpException('Unable to persist address.', $e);
         }
     }
 }

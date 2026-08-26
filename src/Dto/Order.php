@@ -32,7 +32,7 @@ use App\State\Provider\OrderProvider;
 final class Order
 {
     /**
-     * Shipping statuses
+     * Shipping statuses.
      */
     public const string SHIPPING_PENDING = 'pending';
     public const string SHIPPING_PREPARATION = 'preparation';

@@ -19,7 +19,7 @@ class ProductDescriptionFormatter
         $text = \preg_replace('/\s+/u', ' ', $text);
 
         // Point + espace + majuscule (hors abréviations connues)
-        $text = \preg_replace('/\.(?!\s?(' . self::ABBREVIATIONS . '))\s+(?=[A-Z])/', '.<br><br>', $text);
+        $text = \preg_replace('/\.(?!\s?('.self::ABBREVIATIONS.'))\s+(?=[A-Z])/', '.<br><br>', $text);
 
         // Point + majuscule sans espace
         $text = \preg_replace('/\.([A-Z])/', '.<br><br>$1', $text);

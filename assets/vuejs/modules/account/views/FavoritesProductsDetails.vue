@@ -87,7 +87,7 @@
             class="button button-primary mt-10 w-auto md:w-auto"
           >
             <ArrowLeftIconComponent
-              class="mr-2 w-4 !stroke-white"
+              class="mr-2 w-4 stroke-white!"
               stroke="#FFFFFF"
             />
             Retour à la liste des favoris
@@ -105,7 +105,6 @@ import { useRoute } from 'vue-router'
 
 import { PageList } from '@/vuejs/router'
 import { useUserStore } from '@/vuejs/stores/user'
-import { useCartStore } from '@/vuejs/stores/cart'
 import { useAlertStore } from '@/vuejs/stores/alert'
 import { useFavoriteStore } from '@/vuejs/stores/favorite'
 import { formatProductGtmEvent, sendGtmEvent } from '@/vuejs/services/gtm'
@@ -121,7 +120,6 @@ import ArrowLeftIconComponent from '@/vuejs/modules/shared/icon/ArrowLeftIconCom
 
 const route = useRoute()
 
-const cartStore = useCartStore()
 const favoriteStore = useFavoriteStore()
 const alertStore = useAlertStore()
 const { isNeoAutoLogin } = storeToRefs(useUserStore())
@@ -133,7 +131,6 @@ const isEditLoading = ref<boolean>(false)
 const favorite = ref<Favorite>()
 const showFormFavorite = ref<boolean>(false)
 const listItemToAddCart = ref([])
-const cartProducts = ref([])
 
 const favoriteName = computed(() => {
   return favorite.value.name
@@ -159,7 +156,7 @@ const onSubmitFavorite = async (event) => {
   try {
     await favoriteStore.update(event.favorite)
     favorite.value.name = event.favorite.name
-  } catch (error) {
+  } catch (_error) {
     favorite.value.name = oldFavoriteName
   } finally {
     isEditLoading.value = false
@@ -173,7 +170,8 @@ const onRemoveProduct = async (event) => {
   try {
     await favoriteStore.removeProduct(event.favoriteProductId)
     await refreshFavoriteItems(favorite.value.id)
-  } catch (error) {
+  } catch (_error) {
+    // Ignored: error intentionally ignored
   } finally {
     isLoading.value = false
   }
@@ -184,13 +182,14 @@ const onMoveProduct = async (event) => {
   try {
     await favoriteStore.moveProduct(event.favoriteProductId, event.favoriteId)
     await refreshFavoriteItems(favorite.value.id)
-  } catch (error) {
+  } catch (_error) {
+    // Ignored: error intentionally ignored
   } finally {
     isLoading.value = false
   }
 }
 
-const addProductSelectedToList = async (event) => {
+const addProductSelectedToList = async (_event) => {
   try {
     // listItemToAddCart.value.push({
     //   id: event.selectedProduct.id,
@@ -202,7 +201,9 @@ const addProductSelectedToList = async (event) => {
     //   variantId: event.selectedProduct.upplerVariantId,
     //   quantity: 1,
     // })
-  } catch (error) {}
+  } catch (_error) {
+    // Ignored: selection is disabled while cart integration is unavailable
+  }
 }
 
 const removeProductSelectedToList = async (event) => {
@@ -214,7 +215,9 @@ const removeProductSelectedToList = async (event) => {
     //   (cartProduct) =>
     //     cartProduct.variantId !== event.selectedProduct.upplerVariantId,
     // )
-  } catch (error) {}
+  } catch (_error) {
+    // Ignored: selection is disabled while cart integration is unavailable
+  }
 }
 const addToCart = async () => {
   isAddToCartLoading.value = true
@@ -244,7 +247,6 @@ watch(
       await refreshFavoriteItems(id)
     }
   },
-
   { immediate: true },
 )
 </script>

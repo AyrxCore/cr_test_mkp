@@ -56,7 +56,8 @@ onMounted(async () => {
   isLoading.value = true
   try {
     await orderStore.getOrders()
-  } catch (error) {
+  } catch (_error) {
+    // Ignored: error intentionally ignored
   } finally {
     isLoading.value = false
   }

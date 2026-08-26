@@ -10,7 +10,7 @@ trait BeforeInstantiateTrait
 {
     protected function convertIdAttributes(): \Closure
     {
-        return function (array $attributes): array {
+        return static function (array $attributes): array {
             if (isset($attributes['id']) && \is_string($attributes['id'])) {
                 $attributes['id'] = Uuid::fromString($attributes['id']);
             }

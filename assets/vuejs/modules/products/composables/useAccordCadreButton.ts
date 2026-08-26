@@ -40,6 +40,8 @@ export function useAccordCadreButton(layers: AccordCadreLayersComposable) {
     if (status === AccountAccordCadreStatus.ACTIVATED) {
       return type === ACCORD_CADRE_TYPE.STANDARD ? '' : label
     }
+
+    return label
   })
 
   const shouldShowButton = computed<boolean>(() => {

@@ -81,10 +81,10 @@ readonly class PartnerStoreDetailProvider implements ProviderInterface
 
         $accords = \array_filter(
             $partner->getAccords()->toArray(),
-            fn ($accord) => $accord->getStores()->contains($store)
+            static fn ($accord) => $accord->getStores()->contains($store)
         );
 
-        return \array_values(\array_filter(\array_map(function ($accord) {
+        return \array_values(\array_filter(\array_map(static function ($accord) {
             $logo = $accord->getLogo();
             if (!empty($logo) && \filter_var($logo, \FILTER_VALIDATE_URL)) {
                 return [

@@ -24,7 +24,7 @@ class AuthenticationListener
     ) {
     }
 
-    public function onKernelRequest(RequestEvent $event)
+    public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
         $target = $request->attributes->get('_route');

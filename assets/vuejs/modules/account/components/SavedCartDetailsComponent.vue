@@ -54,14 +54,12 @@
 import { computed, onMounted, PropType, ref } from 'vue'
 
 import { PageList } from '@/vuejs/router'
-import { useProductStore } from '@/vuejs/stores/product'
 import { formatPrice } from '@/vuejs/services/utils'
 import { Product } from '@/vuejs/types/Product'
 import { SavedCartProduct } from '@/vuejs/types/SavedCart'
 
 import ProductQuantityComponent from '../../shared/ProductQuantityComponent.vue'
 
-const emit = defineEmits(['changeQuantity'])
 const props = defineProps({
   savedCartProduct: {
     required: true,
@@ -69,10 +67,8 @@ const props = defineProps({
   },
 })
 
-const productStore = useProductStore()
 const product = ref<Product>()
 const variantData = ref()
-const productNotFound = ref(false)
 const quantity = ref<number>(props.savedCartProduct.quantity)
 
 onMounted(async (): Promise<void> => {
@@ -95,7 +91,7 @@ onMounted(async (): Promise<void> => {
   // }
 })
 
-const changeQuantity = async (event) => {
+const changeQuantity = async (_event) => {
   // quantity.value = event.quantity
   // await emit('changeQuantity', {
   //   variantId: props.savedCartProduct.upplerVariantId,
@@ -109,15 +105,17 @@ const productImage = computed((): string => {
 })
 
 const productSlug = computed(() => {
-  // return product.value
-  //   ? product.value.slug
-  //   : props.savedCartProduct.upplerProductId
+  return product.value
+    ? product.value.slug
+    // : props.savedCartProduct.upplerProductId
+    : null
 })
 
 const productName = computed(() => {
-  // return product.value
-  //   ? product.value.name
-  //   : props.savedCartProduct.upplerProductName
+  return product.value
+    ? product.value.name
+    // : props.savedCartProduct.upplerProductName
+    : null
 })
 
 const productReference = computed((): string => {
@@ -145,6 +143,8 @@ const productSeller = computed((): string => {
 })
 </script>
 <style scoped>
+@reference '@/style/main.css';
+
 .input-qte {
   @apply rounded-lg border border-gray-300 px-0 text-center text-sm md:text-base lg:text-lg;
 }

@@ -103,6 +103,8 @@ const emailInformation = computed(() => {
 </script>
 
 <style scoped>
+@reference '@/style/main.css';
+
 .bloc-contact-information {
   @apply mb-3 flex justify-between rounded-lg bg-white p-3 md:p-6;
 }

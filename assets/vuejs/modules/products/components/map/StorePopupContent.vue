@@ -95,6 +95,6 @@ const sellerAction = computed(() => ({
   },
   text: "Voir l'offre",
   class:
-    'mx-auto max-h-7 w-full max-w-[90%] rounded-full bg-primary !px-1 !py-0.5 text-center !text-xs !text-white hover:!scale-100 hover:!transform-none md:mx-0 md:w-auto md:max-w-32 md:!px-3 md:!py-1 md:!text-sm',
+    'mx-auto max-h-7 w-full max-w-[90%] rounded-full bg-primary px-1! py-0.5! text-center text-xs! text-white! hover:scale-100! hover:transform-none! md:mx-0 md:w-auto md:max-w-32 md:px-3! md:py-1! md:text-sm!',
 }))
 </script>

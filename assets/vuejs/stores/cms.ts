@@ -14,11 +14,12 @@ export const useCmsStore = defineStore('cms', {
       try {
         return await CmsHttpClient.get().getPageById(pageId)
       } catch (error) {
-        error.response.status === HttpStatusCodes.unauthorized &&
+        if (error.response.status === HttpStatusCodes.unauthorized) {
           alertStore.setShow(
             getErrorMessage(error.response.data.message),
             AlertType.danger,
           )
+        }
       }
     },
   },

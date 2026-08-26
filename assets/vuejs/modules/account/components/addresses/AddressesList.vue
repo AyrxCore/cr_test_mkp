@@ -18,6 +18,7 @@
     </tbody>
   </table>
 </template>
+
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
@@ -46,7 +47,9 @@ const listAdresses = computed(() => {
 })
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
+@reference '@/style/main.css';
+
 .list-address {
   th,
   td {

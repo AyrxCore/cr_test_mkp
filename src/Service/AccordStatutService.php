@@ -28,7 +28,7 @@ class AccordStatutService
         // et on met à jour les status de ceux présents
         foreach ($currenAccordsStatuts as $accordStatut) {
             // On cherche si l'accord est présent dans le nouvel envoi
-            $filteredAttachments = \array_filter($attachments, fn ($attachment) => $attachment['accordId'] === (string) $accordStatut->getAccordId());
+            $filteredAttachments = \array_filter($attachments, static fn ($attachment) => $attachment['accordId'] === (string) $accordStatut->getAccordId());
             $incomingAttachment = \array_shift($filteredAttachments);
             // On le supprime s'il n'est pas présent
             if (!$incomingAttachment) {
@@ -38,7 +38,7 @@ class AccordStatutService
                 $accordStatut->setStatus($incomingAttachment['status']);
                 $this->em->persist($accordStatut);
                 // On supprime les rattachements traités de l'envoi initial
-                $attachments = \array_filter($attachments, fn ($attachment) => $attachment['accordId'] !== (string) $accordStatut->getAccordId());
+                $attachments = \array_filter($attachments, static fn ($attachment) => $attachment['accordId'] !== (string) $accordStatut->getAccordId());
             }
         }
 

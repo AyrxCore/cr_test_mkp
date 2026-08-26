@@ -16,7 +16,9 @@ export const useBannerStore = defineStore('banner', {
       if (!this.banner) {
         try {
           this.banner = await BannerHttpClient.get().getBanner()
-        } catch (error) {}
+        } catch (_error) {
+          // Ignored: banner data is optional
+        }
       }
     },
   },

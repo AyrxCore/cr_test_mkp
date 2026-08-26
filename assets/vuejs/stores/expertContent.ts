@@ -56,8 +56,7 @@ export const useExpertContentStore = defineStore('expertContent', {
               currentExpertContent.categoryColor = category.color
             }
           }
-        } catch (error) {
-          console.error('❌ Error loading expert content:', error)
+        } catch (_error) {
           return null
         }
       }
@@ -68,8 +67,7 @@ export const useExpertContentStore = defineStore('expertContent', {
     async findExpertsContentsCategories(): Promise<void> {
       try {
         this.categories = await ExpertContentHttpClient.get().findExpertsContentsCategories()
-      } catch (error) {
-        console.error('❌ Error loading categories:', error)
+      } catch (_error) {
         this.categories = []
       }
     },
@@ -77,8 +75,7 @@ export const useExpertContentStore = defineStore('expertContent', {
     async findExpertsContents(): Promise<void> {
       try {
         this.expertContents = await ExpertContentHttpClient.get().findExpertsContents()
-      } catch (error) {
-        console.error('❌ Error loading expert contents:', error)
+      } catch (_error) {
         this.expertContents = []
       }
     },

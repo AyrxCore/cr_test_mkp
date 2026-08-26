@@ -26,7 +26,7 @@
             :pagination="false"
             :show-nav="false"
             :space-between="10"
-            class="hide-swiper-to-xl !ml-0 !mr-4 xl:h-[450px]"
+            class="hide-swiper-to-xl ml-0! mr-4! xl:h-[450px]"
             direction="vertical"
             loop
             watch-slides-progress
@@ -47,12 +47,12 @@
           <!-- Fin slider all pictures -->
           <!-- Slider picture -->
           <div
-            class="relative flex w-[100%] items-center bg-white md:!ml-0 md:!mr-6 md:h-[450px] md:max-w-[50%] xl:max-w-[40%]"
+            class="relative flex w-[100%] items-center bg-white md:ml-0! md:mr-6! md:h-[450px] md:max-w-[50%] xl:max-w-[40%]"
           >
             <!-- Badge de réduction -->
             <div
               v-if="product.percent > 0 && productStore.isSellable(product)"
-              class="absolute right-5 top-5 z-10 rounded-md bg-secondary px-3 py-1 text-lg font-bold text-white"
+              class="absolute right-5 top-5 z-10 rounded-md bg-secondary px-3 py-1 text-lg text-white"
             >
               -{{ product.percent }}%
             </div>
@@ -70,7 +70,7 @@
               <SwiperSlide
                 v-for="(img, key) in product.images"
                 :key="key"
-                class="!flex h-full w-[100%] items-center justify-center"
+                class="flex! h-full w-[100%] items-center justify-center"
               >
                 <img
                   :alt="`${product.name} main image ${key}`"
@@ -348,7 +348,7 @@ const getAttachmentFileName = (url: string): string => {
     const pathname = parsed.pathname || ''
     const fileName = pathname.split('/').filter(Boolean).pop()
     return fileName ?? ''
-  } catch {
+  } catch (_error) {
     // URL invalide, on tente une extraction simple
     const parts = url.split('/').filter(Boolean)
     return parts.pop() ?? ''
@@ -419,7 +419,9 @@ watch(
 )
 </script>
 
-<style lang="postcss" scoped>
+<style scoped>
+@reference '@/style/main.css';
+
 @media (max-width: 1280px) {
   .hide-swiper-to-xl {
     @apply hidden;

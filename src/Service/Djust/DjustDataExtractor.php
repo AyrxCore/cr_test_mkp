@@ -91,24 +91,13 @@ class DjustDataExtractor
         return $attachments;
     }
 
-    private function extractValueFromCustomField(array $cfv): mixed
-    {
-        $value = $cfv['value'] ?? null;
-
-        if (\is_array($value) && isset($value['value'])) {
-            return $value['value'];
-        }
-
-        return $value;
-    }
-
     public function extractImages(array $productData): array
     {
         $images = [];
         $imagePaths = [];
 
         $productPictures = $productData['productPictures'] ?? [];
-        \usort($productPictures, fn (array $a, array $b) => ($b['isMain'] ?? false) <=> ($a['isMain'] ?? false));
+        \usort($productPictures, static fn (array $a, array $b) => ($b['isMain'] ?? false) <=> ($a['isMain'] ?? false));
 
         foreach ($productPictures as $picture) {
             $bestUrl = $this->getOptimalSizeImageUrl($picture['urls'] ?? []);
@@ -132,38 +121,6 @@ class DjustDataExtractor
         }
 
         return $images;
-    }
-
-    private function getImagePathWithoutParams(string $url): string
-    {
-        $parsed = \parse_url($url);
-        return ($parsed['host'] ?? '') . ($parsed['path'] ?? '');
-    }
-
-    private function getOptimalSizeImageUrl(array $urls): ?string
-    {
-        if (empty($urls)) {
-            return null;
-        }
-
-        \usort($urls, function ($a, $b) {
-            $formatA = \strtoupper($a['formatType'] ?? '');
-            $formatB = \strtoupper($b['formatType'] ?? '');
-
-            if ($formatA === 'WEBP' && $formatB !== 'WEBP') {
-                return -1;
-            }
-            if ($formatB === 'WEBP' && $formatA !== 'WEBP') {
-                return 1;
-            }
-
-            $sizeA = ($a['widthInPx'] ?? 0) * ($a['heightInPx'] ?? 0);
-            $sizeB = ($b['widthInPx'] ?? 0) * ($b['heightInPx'] ?? 0);
-
-            return $sizeB <=> $sizeA;
-        });
-
-        return $urls[0]['url'] ?? null;
     }
 
     public function extractSingleOfferPrice(array $offer): array
@@ -192,7 +149,7 @@ class DjustDataExtractor
             }
         }
 
-        \usort($priceRanges, fn($a, $b) => $a['quantity'] <=> $b['quantity']);
+        \usort($priceRanges, static fn ($a, $b) => $a['quantity'] <=> $b['quantity']);
 
         if (!empty($priceRanges)) {
             $defaultRange = $priceRanges[0];
@@ -251,5 +208,49 @@ class DjustDataExtractor
         }
 
         return 0;
+    }
+
+    private function extractValueFromCustomField(array $cfv): mixed
+    {
+        $value = $cfv['value'] ?? null;
+
+        if (\is_array($value) && isset($value['value'])) {
+            return $value['value'];
+        }
+
+        return $value;
+    }
+
+    private function getImagePathWithoutParams(string $url): string
+    {
+        $parsed = \parse_url($url);
+
+        return ($parsed['host'] ?? '').($parsed['path'] ?? '');
+    }
+
+    private function getOptimalSizeImageUrl(array $urls): ?string
+    {
+        if (empty($urls)) {
+            return null;
+        }
+
+        \usort($urls, static function ($a, $b) {
+            $formatA = \strtoupper($a['formatType'] ?? '');
+            $formatB = \strtoupper($b['formatType'] ?? '');
+
+            if ($formatA === 'WEBP' && $formatB !== 'WEBP') {
+                return -1;
+            }
+            if ($formatB === 'WEBP' && $formatA !== 'WEBP') {
+                return 1;
+            }
+
+            $sizeA = ($a['widthInPx'] ?? 0) * ($a['heightInPx'] ?? 0);
+            $sizeB = ($b['widthInPx'] ?? 0) * ($b['heightInPx'] ?? 0);
+
+            return $sizeB <=> $sizeA;
+        });
+
+        return $urls[0]['url'] ?? null;
     }
 }

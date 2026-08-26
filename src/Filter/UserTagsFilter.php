@@ -23,7 +23,7 @@ class UserTagsFilter implements DtoFilterInterface
         }
 
         $userTags = \array_map(
-            fn ($tag) => \strtolower(\trim($tag)),
+            static fn ($tag) => \strtolower(\trim($tag)),
             $this->djustCustomerAccountService->getUserTags()
         );
 

@@ -68,7 +68,10 @@ class Select extends AbstractController
 
             $isDjustAuthenticated = $this->djustAuthenticationService->authenticateUser($account);
             if (!$isDjustAuthenticated) {
-                throw new AccessDeniedHttpException();
+                $this->djustLogger->error('Djust authentication failed during account selection', [
+                    'account_id' => (string) $account->getId(),
+                ]);
+                throw new AccessDeniedHttpException('Djust authentication failed for this account');
             }
 
             if (empty($account->isAcceptCGU())) {

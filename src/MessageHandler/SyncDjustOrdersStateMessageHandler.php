@@ -14,7 +14,7 @@ final class SyncDjustOrdersStateMessageHandler
 {
     public function __construct(
         private readonly DjustOrdersSyncService $djustOrdersSyncService,
-        private readonly LoggerInterface $logger,
+        private readonly LoggerInterface $djustLogger,
     ) {
     }
 
@@ -22,6 +22,6 @@ final class SyncDjustOrdersStateMessageHandler
     {
         $result = $this->djustOrdersSyncService->sync();
 
-        $this->logger->info('Djust orders sync completed.', $result);
+        $this->djustLogger->info('Djust orders sync completed.', $result);
     }
 }

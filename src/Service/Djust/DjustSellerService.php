@@ -57,8 +57,7 @@ class DjustSellerService
 
         return \array_values(\array_filter(
             $allSellers,
-            static fn (array $seller): bool =>
-                \strtoupper((string) ($seller['supplierStatus'] ?? '')) === 'ACTIVE'
+            static fn (array $seller): bool => \strtoupper((string) ($seller['supplierStatus'] ?? '')) === 'ACTIVE'
                 && isset($validSellerIds[$seller['id'] ?? ''])
         ));
     }
@@ -71,7 +70,7 @@ class DjustSellerService
             return null;
         }
 
-        return \array_find($sellersData, fn ($seller) => $seller['id'] === $sellerId || $seller['externalId'] === $sellerId);
+        return \array_find($sellersData, static fn ($seller) => $seller['id'] === $sellerId || $seller['externalId'] === $sellerId);
     }
 
     public function getAllSellers(?string $customerAccountId = null): ?array
@@ -100,11 +99,11 @@ class DjustSellerService
     public function getAllAdherentSellers(?DjustSearchParams $params = null): array
     {
         $base = $params ?? new DjustSearchParams();
-        $cacheKey = $this->buildCachePrefix(self::ADHERENT_SELLERS_CACHE_KEY).'_'.md5(\serialize([
-                $base->query,
-                $base->categoryIds,
-                $base->suppliers,
-            ]));
+        $cacheKey = $this->buildCachePrefix(self::ADHERENT_SELLERS_CACHE_KEY).'_'.\md5(\serialize([
+            $base->query,
+            $base->categoryIds,
+            $base->suppliers,
+        ]));
 
         return $this->cache->get($cacheKey, function (ItemInterface $item) use ($base): array {
             $item->expiresAfter(self::CACHE_TTL_SECONDS);
@@ -117,12 +116,12 @@ class DjustSellerService
     public function getAdherentSellerTarifIdMap(?DjustSearchParams $params = null): array
     {
         $base = $params ?? new DjustSearchParams();
-        $cacheKey = $this->buildCachePrefix(self::TARIF_MAP_CACHE_KEY).'_'.md5(\serialize([
-                $base->query,
-                $base->categoryIds,
-                $base->suppliers,
-                $base->attributes,
-            ]));
+        $cacheKey = $this->buildCachePrefix(self::TARIF_MAP_CACHE_KEY).'_'.\md5(\serialize([
+            $base->query,
+            $base->categoryIds,
+            $base->suppliers,
+            $base->attributes,
+        ]));
 
         return $this->cache->get($cacheKey, function (ItemInterface $item) use ($base): array {
             $item->expiresAfter(self::CACHE_TTL_SECONDS);

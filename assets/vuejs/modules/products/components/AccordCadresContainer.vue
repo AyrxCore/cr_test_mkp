@@ -52,11 +52,11 @@
         <SwiperSlide
           v-for="accord in visibleAccordCadres"
           :key="`ac-${accord.id}`"
-          class="relative !flex !h-auto items-stretch justify-center bg-transparent"
+          class="relative flex! h-auto! items-stretch justify-center bg-transparent"
         >
           <AccordCadreComponent
             :accord="accord"
-            class="!h-full !w-full shadow-sm"
+            class="h-full! w-full! shadow-sm"
             @show-showcase-modal="$emit('show-showcase-modal', accord)"
           />
         </SwiperSlide>
@@ -73,7 +73,7 @@
         v-for="accord in visibleAccordCadres"
         :key="`ac-${accord.id}`"
         :accord="accord"
-        class="mt-3 !h-full !w-full shadow-sm md:mt-0"
+        class="mt-3 h-full! w-full! shadow-sm md:mt-0"
         @show-showcase-modal="$emit('show-showcase-modal', accord)"
       />
     </div>
@@ -83,7 +83,7 @@
         class="button button-primary-outline w-full md:w-1/2"
         @click="showMoreFat"
       >
-        <span class="!text-lg">Charger plus de partenaires</span>
+        <span class="text-lg!">Charger plus de partenaires</span>
       </ButtonComponent>
     </div>
   </div>
@@ -152,7 +152,9 @@ const showMoreFat = () => {
   )
 }
 </script>
-<style lang="postcss" scoped>
+<style scoped>
+@reference '@/style/main.css';
+
 .accord-cadres-slider :deep(.swiper-pagination) {
   @apply relative mt-3;
   transform: none;

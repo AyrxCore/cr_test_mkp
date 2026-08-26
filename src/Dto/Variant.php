@@ -165,7 +165,7 @@ final class Variant
     }
 
     /**
-     * Convertit le variant en tableau pour la sérialisation
+     * Convertit le variant en tableau pour la sérialisation.
      *
      * @return array<string, mixed>
      */

@@ -12,7 +12,7 @@ class PartnerStoreNormalizer extends AbstractNormalizer
 {
     public function __construct(
         protected SfNormalizerInterface $normalizer,
-        private readonly PhoneFormatter $phoneFormatter
+        private readonly PhoneFormatter $phoneFormatter,
     ) {
     }
 
@@ -21,7 +21,12 @@ class PartnerStoreNormalizer extends AbstractNormalizer
         return $data instanceof PartnerStore;
     }
 
-    public function normalize($object, $format = null, array $context = []): array
+    public function getSupportedTypes(?string $format): array
+    {
+        return [PartnerStore::class => true];
+    }
+
+    public function normalize(mixed $object, ?string $format = null, array $context = []): array
     {
         $data = parent::normalize($object, $format, $context);
 

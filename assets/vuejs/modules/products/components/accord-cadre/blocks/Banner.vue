@@ -69,14 +69,14 @@
           <ButtonComponent
             v-if="shouldShowButton"
             :disabled="isNeoAutoLogin"
-            class="button-primary !text-lg"
+            class="button-primary text-lg!"
             @click="handleButtonClick"
           >
             {{ labelCtaRattachement }}
           </ButtonComponent>
           <ButtonComponent
             v-if="shouldShowContactFormButton"
-            class="button-primary !text-lg"
+            class="button-primary text-lg!"
             @click="layers.openFatInterestModal()"
           >
             Préciser mon besoin

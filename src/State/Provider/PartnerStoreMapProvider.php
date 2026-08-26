@@ -60,7 +60,7 @@ readonly class PartnerStoreMapProvider implements ProviderInterface
         $search = $this->djustSearchService->search(
             $this->djustSearchParamsMapper->fromContext($context),
         );
-        $authorizedDjustIds = \array_map(fn ($seller) => $seller['externalId'], $search['facets']['suppliers'] ?? []);
+        $authorizedDjustIds = \array_map(static fn ($seller) => $seller['externalId'], $search['facets']['suppliers'] ?? []);
 
         return $this->partnerRepository->findByDjustIds($authorizedDjustIds);
     }

@@ -112,6 +112,8 @@ const ecoTaxLine = computed((): string | null => {
 </script>
 
 <style scoped>
+@reference '@/style/main.css';
+
 .input-qte {
   @apply rounded-lg border border-gray-300 px-0 text-center text-sm md:text-base lg:text-lg;
 }

@@ -65,7 +65,9 @@ onBeforeMount(async () => {
 })
 </script>
 
-<style lang="scss">
+<style>
+@reference '@/style/main.css';
+
 .list-semantic-buttons {
   @apply flex flex-col
   overflow-auto

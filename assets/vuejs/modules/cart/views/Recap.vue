@@ -73,37 +73,27 @@ import { useRouter } from 'vue-router'
 import { CartPageList } from '@/vuejs/router/pages-list'
 import { useCartStore } from '@/vuejs/stores/cart'
 import { useUserStore } from '@/vuejs/stores/user'
-import { useSavedCartStore } from '@/vuejs/stores/savedCart'
-import { useChannelStore } from '@/vuejs/stores/channel'
 import { formatCartItemsGtmEvent, sendGtmEvent } from '@/vuejs/services/gtm'
-import {
-  OPTIONAL_FRONT_BLOCKS,
-  PRODUCT_FDP_PREFIX,
-} from '@/vuejs/services/const'
+import { PRODUCT_FDP_PREFIX } from '@/vuejs/services/const'
 import { CartOrder } from '@/vuejs/types/Cart.ts'
 
 import ButtonComponent from '@/vuejs/modules/shared/ButtonComponent.vue'
 import CartOrderComponent from '@/vuejs/modules/cart/components/CartOrderComponent.vue'
 import CartRightSideComponent from '@/vuejs/modules/cart/components/CartRightSideComponent.vue'
-import SavedCartModal from '@/vuejs/modules/account/components/savedCart/SavedCartModal.vue'
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 
 const router = useRouter()
 const cartStore = useCartStore()
-const savedCartStore = useSavedCartStore()
-const channelStore = useChannelStore()
 
 const { cart } = storeToRefs(cartStore)
 
 const error = ref<string>(null)
-const showSaveCartForm = ref<boolean>(false)
 const isSyncing = ref<boolean>(true)
 cartStore.termsOfSales = []
 
 const userStore = useUserStore()
-const { user, isNeoAutoLogin } = storeToRefs(userStore)
-const isLoading = ref<boolean>(false)
+const { user } = storeToRefs(userStore)
 
 const goToAdress = async (): Promise<void> => {
   error.value = ''
@@ -113,7 +103,7 @@ const goToAdress = async (): Promise<void> => {
     try {
       await cartStore.updateEcoTaxInLogisticOrders()
       router.push({ name: CartPageList.CART_ADDRESSES })
-    } catch (error) {
+    } catch (_error) {
       // L'erreur est déjà notifiée dans le store — on bloque juste la navigation
     }
   }
@@ -133,21 +123,6 @@ onMounted(async () => {
     isSyncing.value = false
   }
 })
-
-const openSaveCartForm = () => {
-  showSaveCartForm.value = true
-}
-
-const onSubmitSavedCart = async (event) => {
-  isLoading.value = true
-  try {
-    await savedCartStore.create(event.savedCart)
-    await cartStore.getCart()
-    showSaveCartForm.value = false
-  } catch (error) {}
-
-  isLoading.value = false
-}
 
 const cartOrders = computed((): CartOrder[] => {
   if (!cart.value.cartOrders) {

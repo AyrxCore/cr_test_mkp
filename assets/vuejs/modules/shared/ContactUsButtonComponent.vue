@@ -4,7 +4,7 @@
       color: betterTextColor('primary'),
     }"
     :to="{ name: PageList.CONTACT_PAGE }"
-    class="button button-primary !px-4 !text-lg"
+    class="button button-primary px-4! text-lg!"
     @click="
       sendGtmEvent('contact_click', {
         position: 'header',

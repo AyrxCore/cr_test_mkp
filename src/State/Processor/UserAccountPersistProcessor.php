@@ -6,6 +6,7 @@ namespace App\State\Processor;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
+use App\Dto\UserAccount;
 use App\Entity\Account;
 use App\Entity\Adherent;
 use App\Entity\User;
@@ -14,6 +15,7 @@ use App\Repository\AdherentRepository;
 use App\Repository\ChannelRepository;
 use App\Repository\UserInfoUpdateRequestRepository;
 use App\Repository\UserRepository;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Uid\Uuid;
@@ -127,19 +129,16 @@ readonly class UserAccountPersistProcessor implements ProcessorInterface
             }
         }
 
+        if ($user->getId() === null) {
+            $existingByUsername = $this->userRepository->findOneBy(['username' => $data->getEmail()]);
+            if ($existingByUsername !== null) {
+                $user = $existingByUsername;
+            }
+        }
+
         $this->em->persist($user);
 
-        $account
-            ->setServiceFonction($data->getServiceFonction())
-            ->setPhone($data->getPhone())
-            ->setUser($user)
-            ->setEnabled($data->isEnabled())
-            ->setAdherent($adh)
-            ->setContactId(Uuid::fromString($data->getContactId()))
-            ->setDjustCustomerAccountId($data->getDjustCustomerAccountId())
-            ->setDjustCustomerUserId($data->getDjustCustomerUserId())
-            ->setDjustUsername($data->getDjustUsername())
-            ->setDjustPassword($data->getDjustPassword());
+        $this->applyAccountData($account, $user, $adh, $data);
 
         if (!$logPhone || ($logPhone->getValue() === $data->getPhone())) {
             $account->setPhone($data->getPhone());
@@ -151,11 +150,57 @@ readonly class UserAccountPersistProcessor implements ProcessorInterface
         }
 
         $this->em->persist($account);
-        $this->em->flush();
+        $accountId = $account->getId();
+
+        try {
+            $this->em->flush();
+        } catch (UniqueConstraintViolationException $e) {
+            // Race condition : deux appels bot simultanés avec le même username.
+            $this->em->clear();
+            $existingUser = $this->userRepository->findOneBy(['username' => $data->getEmail()]);
+            if ($existingUser === null) {
+                throw new \RuntimeException(
+                    \sprintf('UniqueConstraintViolation on email "%s" but no existing user found — unexpected constraint violation.', $data->getEmail()),
+                    0,
+                    $e,
+                );
+            }
+            $user = $existingUser;
+            $adhEntity = $this->adherentRepository->find($data->getAdherentId());
+            if ($adhEntity === null) {
+                // New Adherent rolled back with the failed flush; cannot safely retry without it
+                throw new \RuntimeException(
+                    \sprintf('Race condition recovery failed: Adherent "%s" not found after em->clear().', $data->getAdherentId()),
+                    0,
+                    $e,
+                );
+            }
+            $account = $accountId !== null
+                ? $this->accountRepository->find($accountId)
+                : ($this->accountRepository->findOneByContactId($data->getContactId()) ?? new Account());
+            $this->applyAccountData($account, $user, $adhEntity, $data);
+            $this->em->persist($account);
+            $this->em->flush();
+        }
 
         $data->setAccountId($account->getId());
         $data->setUserId($user->getId());
 
         return $data;
+    }
+
+    private function applyAccountData(Account $account, User $user, Adherent $adh, UserAccount $data): void
+    {
+        $account
+            ->setServiceFonction($data->getServiceFonction())
+            ->setPhone($data->getPhone())
+            ->setUser($user)
+            ->setEnabled($data->isEnabled())
+            ->setAdherent($adh)
+            ->setContactId(Uuid::fromString($data->getContactId()))
+            ->setDjustCustomerAccountId($data->getDjustCustomerAccountId())
+            ->setDjustCustomerUserId($data->getDjustCustomerUserId())
+            ->setDjustUsername($data->getDjustUsername())
+            ->setDjustPassword($data->getDjustPassword());
     }
 }

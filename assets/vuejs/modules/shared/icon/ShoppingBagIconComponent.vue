@@ -16,7 +16,9 @@
   </svg>
 </template>
 
-<style lang="postcss">
+<style>
+@reference '@/style/main.css';
+
 .loader {
   @apply h-5 w-5 animate-spin;
   &.loader-xl {

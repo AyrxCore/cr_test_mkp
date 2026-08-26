@@ -62,18 +62,20 @@
         <!-- Fin Bloc text actualité -->
 
         <!-- Bloc image -->
-        <div class="mt-[7rem] hidden h-[421px] rounded-lg bg-white md:flex">
+        <div
+          class="mt-[7rem] hidden h-[421px] overflow-hidden rounded-lg bg-white md:flex"
+        >
           <img
             :src="currentExpertContent.article_img_desktop"
             alt="Picture"
-            class="m-auto h-[inherit] items-center"
+            class="h-full w-full object-contain"
           />
         </div>
-        <div class="mt-5 h-[421px] rounded-lg bg-white md:hidden">
+        <div class="mt-5 h-[421px] overflow-hidden rounded-lg bg-white md:hidden">
           <img
             :src="currentExpertContent.article_img_mobile"
             alt="Picture"
-            class="m-auto h-[inherit] items-center"
+            class="h-full w-full object-contain"
           />
         </div>
         <!-- Fin Bloc image -->
@@ -161,8 +163,8 @@ watch(
       if (slug) {
         currentExpertContent.value = await expertContent.initExpertContent(slug)
       }
-    } catch (error) {
-      console.error('❌ Error loading expert content:', error)
+    } catch (_error) {
+      // Ignored: error intentionally ignored
     } finally {
       isLoading.value = false
     }

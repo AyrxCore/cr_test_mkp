@@ -133,7 +133,7 @@ class ExportStoryblokStoriesCommand extends Command
         $stories = $response['stories'] ?? [];
         $io->text(\sprintf('<info>%d</info> stories récupérées', \count($stories)));
 
-        \usort($stories, fn (array $a, array $b) => \strcasecmp(
+        \usort($stories, static fn (array $a, array $b) => \strcasecmp(
             $a['content']['accordCadreName'] ?? $a['name'] ?? '',
             $b['content']['accordCadreName'] ?? $b['name'] ?? ''
         ));
@@ -232,35 +232,35 @@ class ExportStoryblokStoriesCommand extends Command
         $publishedAt = $story['published_at'] ?? null;
 
         return [
-            'Statut publication'                                   => $publishedAt !== null ? 'Publié' : 'Non publié',
-            'Date de publication'                                   => $publishedAt !== null ? (new \DateTimeImmutable($publishedAt))->format('d/m/Y H:i') : '',
-            'Dernière modification'                                 => isset($story['updated_at']) ? (new \DateTimeImmutable($story['updated_at']))->format('d/m/Y H:i') : '',
-            "Nom de l'accord-cadre"                                => $content['accordCadreName'] ?? $story['name'] ?? '',
-            'Tarif ID'                                             => $content['tarifId'] ?? '',
-            "Type d'accord-cadre"                                  => $content['accordCadreType'] ?? '',
-            'Label bouton de rattachement'                         => $content['labelCtaRattachement'] ?? '',
-            'URL bouton de rattachement'                           => $content['urlCtaRattachement'] ?? '',
-            'Statuts de rattachement'                              => $this->formatStatut($statut),
+            'Statut publication' => $publishedAt !== null ? 'Publié' : 'Non publié',
+            'Date de publication' => $publishedAt !== null ? (new \DateTimeImmutable($publishedAt))->format('d/m/Y H:i') : '',
+            'Dernière modification' => isset($story['updated_at']) ? (new \DateTimeImmutable($story['updated_at']))->format('d/m/Y H:i') : '',
+            "Nom de l'accord-cadre" => $content['accordCadreName'] ?? $story['name'] ?? '',
+            'Tarif ID' => $content['tarifId'] ?? '',
+            "Type d'accord-cadre" => $content['accordCadreType'] ?? '',
+            'Label bouton de rattachement' => $content['labelCtaRattachement'] ?? '',
+            'URL bouton de rattachement' => $content['urlCtaRattachement'] ?? '',
+            'Statuts de rattachement' => $this->formatStatut($statut),
             'Description du layer de confirmation de rattachement' => $this->richTextToPlain($content['confirmationLayerDescription'] ?? null),
-            'Description du layer de réussite du rattachement'    => $this->richTextToPlain($content['successLayerDescription'] ?? null),
-            'URL de la bannière (Desktop)'                         => $banner['imgBannerUrlDesktop'] ?? '',
-            'URL de la bannière (Mobile)'                          => $banner['imgBannerUrlMobile'] ?? '',
-            'URL du logo'                                          => $banner['logoUrl'] ?? '',
-            'Texte badge haut'                                     => $banner['badgeTextTop'] ?? '',
-            'Texte badge bas'                                      => $banner['badgeTextBottom'] ?? '',
-            'Note RSE'                                             => $presentation['rseScore'] ?? '',
-            'Présentation du partenaire'                           => $presentation['description'] ?? '',
-            'Liste à puces partenaire'                             => $this->richTextToPlain($presentation['bulletpoints'] ?? null),
-            'Titre présentation partenaire'                        => $presentation['title'] ?? '',
-            'Layer "en savoir plus"'                               => $this->formatLayerMoreInformations($presentation['layerMoreInformations'][0] ?? null),
-            'Title (bloc conditions négociées)'                    => $negociated['title'] ?? '',
-            'Description (bloc conditions négociées)'              => $this->richTextToPlain($negociated['description'] ?? null),
-            'Détails et engagements (titre)'                       => $negociated['detailsTitle'] ?? '',
-            'Contenu "Détails et engagements"'                     => $this->richTextToPlain($negociated['detailsContent'] ?? null),
-            'Bouton "Consulter les conditions négociées"'          => $this->formatNegociatedTermsButton($negociated),
-            'Boutons fichiers / liens'                             => $this->formatAssetButtons($negociated['assetButtons'] ?? []),
-            'Titre (bloc comment en bénéficier)'                   => $steps['title'] ?? '',
-            'Étapes'                                               => $this->formatStepItems($steps['stepItems'] ?? []),
+            'Description du layer de réussite du rattachement' => $this->richTextToPlain($content['successLayerDescription'] ?? null),
+            'URL de la bannière (Desktop)' => $banner['imgBannerUrlDesktop'] ?? '',
+            'URL de la bannière (Mobile)' => $banner['imgBannerUrlMobile'] ?? '',
+            'URL du logo' => $banner['logoUrl'] ?? '',
+            'Texte badge haut' => $banner['badgeTextTop'] ?? '',
+            'Texte badge bas' => $banner['badgeTextBottom'] ?? '',
+            'Note RSE' => $presentation['rseScore'] ?? '',
+            'Présentation du partenaire' => $presentation['description'] ?? '',
+            'Liste à puces partenaire' => $this->richTextToPlain($presentation['bulletpoints'] ?? null),
+            'Titre présentation partenaire' => $presentation['title'] ?? '',
+            'Layer "en savoir plus"' => $this->formatLayerMoreInformations($presentation['layerMoreInformations'][0] ?? null),
+            'Title (bloc conditions négociées)' => $negociated['title'] ?? '',
+            'Description (bloc conditions négociées)' => $this->richTextToPlain($negociated['description'] ?? null),
+            'Détails et engagements (titre)' => $negociated['detailsTitle'] ?? '',
+            'Contenu "Détails et engagements"' => $this->richTextToPlain($negociated['detailsContent'] ?? null),
+            'Bouton "Consulter les conditions négociées"' => $this->formatNegociatedTermsButton($negociated),
+            'Boutons fichiers / liens' => $this->formatAssetButtons($negociated['assetButtons'] ?? []),
+            'Titre (bloc comment en bénéficier)' => $steps['title'] ?? '',
+            'Étapes' => $this->formatStepItems($steps['stepItems'] ?? []),
         ];
     }
 

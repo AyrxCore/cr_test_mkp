@@ -14,7 +14,7 @@ export default class SavedCartHttpClient extends BaseClientService {
       .then((response) => response.data)
   }
 
-  public findSavedCartById<T extends []>(id): Promise<SavedCart> {
+  public findSavedCartById(id): Promise<SavedCart> {
     return this.apiClient
       .get(`saved-carts/${id}/products`)
       .then((response) => response.data)

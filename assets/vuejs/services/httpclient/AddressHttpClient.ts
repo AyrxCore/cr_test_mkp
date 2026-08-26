@@ -11,7 +11,7 @@ export default class AddressHttpClient extends BaseClientService {
       .then((response) => response.data)
   }
 
-  public getAdressAsAdmin<T extends []>(id: string): Promise<Address> {
+  public getAdressAsAdmin(id: string): Promise<Address> {
     return this.apiClient
       .get(`addresses/${id}`)
       .then((response) => response.data)

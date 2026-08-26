@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-const props = defineProps({
+defineProps({
   fillColor: {
     type: String,
     default: 'none',

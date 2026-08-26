@@ -97,9 +97,10 @@ final class Address
         return $this->externalId;
     }
 
-    public function setExternalId(?string $externalId): Address
+    public function setExternalId(?string $externalId): self
     {
         $this->externalId = $externalId;
+
         return $this;
     }
 

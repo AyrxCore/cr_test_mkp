@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts" setup>
-const props = defineProps({
+defineProps({
   classes: {
     required: false,
     type: String,
@@ -32,7 +32,9 @@ const props = defineProps({
 
 </script>
 
-<style lang="postcss">
+<style>
+@reference '@/style/main.css';
+
 .loader {
   @apply h-5 w-5 animate-spin;
   &.loader-xl {

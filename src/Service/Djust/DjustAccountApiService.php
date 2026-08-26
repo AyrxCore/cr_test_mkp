@@ -15,7 +15,7 @@ class DjustAccountApiService
 {
     public function __construct(
         private readonly HttpClientInterface $httpClient,
-        private readonly LoggerInterface $logger,
+        private readonly LoggerInterface $djustLogger,
         #[Autowire(env: 'DJUST_API_BASE_URL')]
         private readonly string $baseUrl,
     ) {
@@ -103,7 +103,7 @@ class DjustAccountApiService
 
             return null;
         } catch (\Throwable $e) {
-            $this->logger->warning('Djust buyer order fetch failed in getValidatedOrderById.', [
+            $this->djustLogger->warning('Djust buyer order fetch failed in getValidatedOrderById.', [
                 'orderId' => $orderId,
                 'error' => $e->getMessage(),
             ]);
@@ -134,7 +134,7 @@ class DjustAccountApiService
 
         if ($statusCode >= 400) {
             $content = $response->getContent(false);
-            $this->logger->error('[DjustAccountApi] API error', [
+            $this->djustLogger->error('[DjustAccountApi] API error', [
                 'method' => $method,
                 'endpoint' => $endpoint,
                 'status' => $statusCode,

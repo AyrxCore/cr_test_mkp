@@ -45,7 +45,9 @@ const onClick = ($event: PointerEvent): void => {
 }
 </script>
 
-<style lang="postcss">
+<style>
+@reference '@/style/main.css';
+
 .element {
   box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.15);
 }
@@ -61,34 +63,6 @@ const onClick = ($event: PointerEvent): void => {
     @apply scale-105;
   }
 
-  &-primary {
-    @apply bg-primary;
-
-    &:hover:not(:disabled):not(:focus) {
-      @apply shadow-inner-lighter;
-    }
-  }
-
-  &-primary-outline {
-    @apply border-2 border-primary bg-white text-primary;
-
-    &:hover:not(:disabled):not(:focus) {
-      @apply shadow-inner-darker;
-    }
-  }
-
-  &-secondary {
-    @apply border-2 border-secondary bg-secondary text-white;
-
-    &:hover:not(:disabled):not(:focus) {
-      @apply shadow-inner-darker;
-    }
-  }
-
-  &-primary-outline-white {
-    @apply border-2 border-white bg-primary text-white;
-  }
-
   svg {
     &:last-of-type:not(.loader) {
       @apply mr-1.5;
@@ -98,5 +72,33 @@ const onClick = ($event: PointerEvent): void => {
       @apply mr-1;
     }
   }
+}
+
+.button-primary {
+  @apply bg-primary;
+
+  &:hover:not(:disabled):not(:focus) {
+    @apply shadow-inner-lighter;
+  }
+}
+
+.button-primary-outline {
+  @apply border-2 border-primary bg-white text-primary;
+
+  &:hover:not(:disabled):not(:focus) {
+    @apply shadow-inner-darker;
+  }
+}
+
+.button-secondary {
+  @apply border-2 border-secondary bg-secondary text-white;
+
+  &:hover:not(:disabled):not(:focus) {
+    @apply shadow-inner-darker;
+  }
+}
+
+.button-primary-outline-white {
+  @apply border-2 border-white bg-primary text-white;
 }
 </style>

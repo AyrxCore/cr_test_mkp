@@ -19,7 +19,7 @@ export const useCategoryStore = defineStore('category', {
         if (this.categories.length === 0) {
           this.categories = await CategoryHttpClient.get().getCategories()
         }
-      } catch {
+      } catch (_error) {
         return []
       } finally {
         this.isLoaded = true

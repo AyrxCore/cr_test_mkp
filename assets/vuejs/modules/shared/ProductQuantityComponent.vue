@@ -3,7 +3,7 @@
     <div class="num-in">
       <span
         :class="{
-          '!cursor-not-allowed': qte <= minQty,
+          'cursor-not-allowed!': qte <= minQty,
         }"
         :disabled="qte <= minQty"
         :style="{
@@ -22,7 +22,7 @@
       />
       <span
         :class="{
-          '!cursor-not-allowed': qte >= maxQty,
+          'cursor-not-allowed!': qte >= maxQty,
         }"
         :disabled="qte >= maxQty"
         :style="{
@@ -115,15 +115,16 @@ const increment = (): void => {
   }
 }
 </script>
+
 <style scoped>
-/* skin 7 */
+@reference '@/style/main.css';
 
 .skin-7 .num-in {
   @apply float-left w-[94px] rounded;
 }
 
 .skin-7 input.in-num {
-  @apply float-left h-[30px] w-[81px] !border !border-secondary !p-0 text-center;
+  @apply float-left h-[30px] w-[81px] border! border-secondary! p-0! text-center;
 }
 
 .skin-7 .num-in span {

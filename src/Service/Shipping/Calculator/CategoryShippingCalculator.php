@@ -16,7 +16,7 @@ class CategoryShippingCalculator implements ShippingRuleCalculatorInterface
     }
 
     /**
-     * @param array<int, array{unitPrice: float, quantity: int, shippingCategory?: string|null}> $products
+     * @param array<int, array{unitPrice: float, quantity: int, shippingCategory?: null|string}> $products
      */
     public function calculate(array $rule, array $products): ShippingCostResult
     {
@@ -55,10 +55,10 @@ class CategoryShippingCalculator implements ShippingRuleCalculatorInterface
             return new ShippingCostResult(0.0, 0.0, 'CATEGORY');
         }
 
-        $remainingForFranco = round($francoMax - $totalHt, 2);
+        $remainingForFranco = \round($francoMax - $totalHt, 2);
 
         return new ShippingCostResult(
-            round($fdp, 2),
+            \round($fdp, 2),
             $remainingForFranco,
             'CATEGORY',
         );

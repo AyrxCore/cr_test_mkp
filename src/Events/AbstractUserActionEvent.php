@@ -13,7 +13,6 @@ abstract class AbstractUserActionEvent extends Event implements UserActionEventI
     private User $user;
     private Channel $channel;
 
-
     public function __construct(User $user, Channel $channel)
     {
         $this->user = $user;

@@ -32,6 +32,7 @@ class DjustProductTypeExtractor
 
         if (!empty($typeValue)) {
             $normalized = \strtoupper((string) $typeValue);
+
             return DjustProductType::tryFrom($normalized) ?? DjustProductType::SELLABLE;
         }
 

@@ -10,7 +10,7 @@ import {
 } from '@/vuejs/types/User'
 import { AlertType } from '@/vuejs/types/Alert'
 import { HttpStatusCodes } from '@/vuejs/types/HttpClient'
-import { Account, Adherent } from '@/vuejs/types/Account'
+import { Account } from '@/vuejs/types/Account'
 import { AdherentTarifShowcase } from '@/vuejs/types/AdherentTarifShowcase'
 import { notifyError, notifySuccess } from '@/vuejs/services/utils'
 import { getCookie } from '@/vuejs/services/utils'
@@ -18,8 +18,6 @@ import UserHttpClient from '@/vuejs/services/httpclient/UserHttpClient'
 import { getErrorMessage } from '@/vuejs/services/login'
 // TODO: Réactiver après le go-live (adresse par défaut)
 // import { useCartStore } from './cart'
-import { computed } from 'vue'
-
 export const useUserStore = defineStore('user', {
   state: (): UserStoreState => ({
     user: null,
@@ -58,10 +56,12 @@ export const useUserStore = defineStore('user', {
       try {
         await UserHttpClient.get().selectUserAccount(id)
         return true
-      } catch (error) {
+      } catch (_error) {
         await UserHttpClient.get()
           .logout()
-          .catch(() => {})
+          .catch(() => {
+            // Ignored: logout cleanup failure should not block account reset
+          })
 
         this.user = null
         alertStore.setShow(getErrorMessage(''), AlertType.danger)
@@ -73,8 +73,9 @@ export const useUserStore = defineStore('user', {
       try {
         this.user = await UserHttpClient.get().getUserMe()
       } catch (error) {
-        error.response.status === HttpStatusCodes.unauthorized &&
+        if (error.response.status === HttpStatusCodes.unauthorized) {
           alertStore.setShow('Erreur technique', AlertType.danger)
+        }
       }
     },
     setEditingAccount(): void {
@@ -140,7 +141,7 @@ export const useUserStore = defineStore('user', {
           "La demande de modification d'email de contact a été enregistrée avec succès",
         )
         await this.getCurrentUserData()
-      } catch (error) {
+      } catch (_error) {
         notifyError(
           'Une erreur est survenue, veuillez contacter le service technique',
         )
@@ -163,7 +164,7 @@ export const useUserStore = defineStore('user', {
         notifySuccess('Les détails du profil ont été modifiés avec succès')
 
         await router.push({ name: PageList.ACCOUNT })
-      } catch (error) {
+      } catch (_error) {
         notifyError(
           'Une erreur est survenue, veuillez contacter le service technique',
         )
@@ -174,7 +175,7 @@ export const useUserStore = defineStore('user', {
       try {
         await UserHttpClient.get().logout()
         return true
-      } catch (error) {
+      } catch (_error) {
         alertStore.setShow('Déconnexion impossible', AlertType.danger)
       }
       return false
@@ -188,8 +189,11 @@ export const useUserStore = defineStore('user', {
         await router.push({ name: PageList.ACCOUNT })
 
         return null
-      } catch (error: any) {
-        const message = error?.response?.data?.[0]
+      } catch (error: unknown) {
+        const responseData = (
+          error as { response?: { data?: unknown[] } } | undefined
+        )?.response?.data
+        const message = Array.isArray(responseData) ? responseData[0] : null
         if (message === 'current password invalid') {
           return 'Mot de passe actuel invalide'
         }
@@ -246,11 +250,8 @@ export const useUserStore = defineStore('user', {
             localStorage.removeItem('userLocation')
           }
         }
-      } catch (error) {
-        console.warn(
-          'Erreur lors du chargement de la position sauvegardée',
-          error,
-        )
+      } catch (_error) {
+        // Ignored: invalid cached geolocation is simply discarded
       }
     },
     getGeolocationErrorMessage(): string {

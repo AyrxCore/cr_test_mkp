@@ -31,7 +31,7 @@ class DjustOperatorApiService
     public function __construct(
         private readonly HttpClientInterface $httpClient,
         private readonly CacheInterface $cache,
-        private readonly LoggerInterface $logger,
+        private readonly LoggerInterface $djustLogger,
         #[Autowire(env: 'DJUST_API_BASE_URL')]
         private readonly string $baseUrl,
         #[Autowire(env: 'DJUST_API_USERNAME')]
@@ -222,7 +222,7 @@ class DjustOperatorApiService
 
         if ($statusCode >= 400) {
             $content = $response->getContent(false);
-            $this->logger->error('[DjustOperatorApi] API error', ['status' => $statusCode, 'body' => $content]);
+            $this->djustLogger->error('[DjustOperatorApi] API error', ['status' => $statusCode, 'body' => $content]);
             throw new \RuntimeException(\sprintf('Djust API error (HTTP %d): %s', $statusCode, $content));
         }
 

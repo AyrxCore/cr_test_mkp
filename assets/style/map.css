@@ -65,7 +65,7 @@
   }
 }
 
-// Marker and map optimizations
+/* Marker and map optimizations */
 .leaflet-marker-icon {
   @apply z-[2000] cursor-pointer;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3)) !important;

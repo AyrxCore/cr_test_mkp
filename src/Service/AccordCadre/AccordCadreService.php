@@ -68,7 +68,7 @@ class AccordCadreService
 
         return \array_values(\array_filter(
             $accordCadreContentDtos,
-            fn (AccordCadreContent $story) => \count($story->getListBlocks()) > 0
+            static fn (AccordCadreContent $story) => \count($story->getListBlocks()) > 0
         ));
     }
 }

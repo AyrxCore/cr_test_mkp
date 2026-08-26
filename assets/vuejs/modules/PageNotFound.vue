@@ -1,6 +1,6 @@
 <template>
   <BaseTemplate>
-    <div class="m-auto flex-1 xl:!pt-5">
+    <div class="m-auto flex-1 xl:pt-5!">
       <div class="xs:w-[100%] m-auto my-10 max-w-screen-2xl px-5 sm:px-8">
         <div class="m-auto w-[100%] max-w-screen-2xl">
           <h3 class="mb-10 flex-col text-4xl font-bold text-primary">

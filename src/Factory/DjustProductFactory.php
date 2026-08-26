@@ -15,13 +15,13 @@ use App\Mapper\Product\DjustCategoryMapper;
 use App\Mapper\Product\DjustOfferMapper;
 use App\Mapper\Product\DjustVariantMapper;
 use App\Service\AccordCadre\AccordCadreService;
+use App\Service\Account\CurrentAccountProvider;
 use App\Service\Djust\DjustDataExtractor;
+use App\Service\Djust\DjustSellerService;
 use App\Service\Djust\Product\DjustProductTypeExtractor;
 use App\Service\Djust\Product\DjustPropertyFilter;
-use App\Service\Account\CurrentAccountProvider;
 use App\Service\Product\ProductDescriptionFormatter;
 use App\Service\Shipping\ShippingCostResolver;
-use App\Service\Djust\DjustSellerService;
 use Psr\Log\LoggerInterface;
 
 class DjustProductFactory extends AbstractFactory
@@ -120,6 +120,24 @@ class DjustProductFactory extends AbstractFactory
         return $product;
     }
 
+    public function createAndAddToCollection(array $data): array
+    {
+        $array = [];
+        foreach ($data as $remoteData) {
+            try {
+                $array[] = $this->create($remoteData);
+            } catch (\Throwable $e) {
+                $productId = $remoteData['product']['externalId'] ?? $remoteData['product']['id'] ?? 'unknown';
+                $this->djustLogger->error('Failed to create product from Djust data, skipping.', [
+                    'productId' => $productId,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
+
+        return $array;
+    }
+
     private function initBaseProduct(
         string $id,
         string $name,
@@ -156,12 +174,13 @@ class DjustProductFactory extends AbstractFactory
         }
 
         if (\is_string($raw)) {
-            $decoded = json_decode($raw, true);
+            $decoded = \json_decode($raw, true);
             $raw = \is_array($decoded) ? $decoded : $raw;
         }
 
         if (\is_array($raw)) {
             $value = !empty($raw) ? (string) ($raw[0] ?? '') : '';
+
             return $value !== '' ? $value : null;
         }
 
@@ -303,23 +322,5 @@ class DjustProductFactory extends AbstractFactory
         $product->setAccordId(null);
         $product->setTarifId(null);
         $product->setAccordCadreContent(null);
-    }
-
-    public function createAndAddToCollection(array $data): array
-    {
-        $array = [];
-        foreach ($data as $remoteData) {
-            try {
-                $array[] = $this->create($remoteData);
-            } catch (\Throwable $e) {
-                $productId = $remoteData['product']['externalId'] ?? $remoteData['product']['id'] ?? 'unknown';
-                $this->djustLogger->error('Failed to create product from Djust data, skipping.', [
-                    'productId' => $productId,
-                    'error' => $e->getMessage(),
-                ]);
-            }
-        }
-
-        return $array;
     }
 }

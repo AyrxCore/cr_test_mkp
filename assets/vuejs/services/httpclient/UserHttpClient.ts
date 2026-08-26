@@ -1,5 +1,3 @@
-import { AxiosResponse } from 'axios'
-
 import BaseClientService from '@/vuejs/services/BaseClientService'
 import {
   AuthenticateResponse,
@@ -27,13 +25,13 @@ export default class UserHttpClient extends BaseClientService {
       .then((response) => response.data)
   }
 
-  public async getUserAccounts<T>(): Promise<Account[]> {
-    const { data: accounts } = await this.apiClient.get<T>('accounts')
+  public async getUserAccounts(): Promise<Account[]> {
+    const { data: accounts } = await this.apiClient.get<Account[]>('accounts')
 
     return accounts
   }
 
-  public async selectUserAccount(id: string): Promise<any> {
+  public async selectUserAccount(id: string): Promise<unknown> {
     const response = await this.apiClient.get(`accounts/${id}/select`)
     return response.data
   }
@@ -50,11 +48,11 @@ export default class UserHttpClient extends BaseClientService {
       .then((response) => response.data)
   }
 
-  public updateUserAccountEmail<T extends User>(
+  public updateUserAccountEmail(
     accountEmail: AccountEmail,
-  ): Promise<AxiosResponse<any> | { err: any }> {
+  ): Promise<unknown | { err: unknown }> {
     return this.apiClient
-      .patch(`sub_accounts/${accountEmail.id}`, accountEmail)
+      .patch<unknown>(`sub_accounts/${accountEmail.id}`, accountEmail)
       .then((response) => {
         return response.data
       })

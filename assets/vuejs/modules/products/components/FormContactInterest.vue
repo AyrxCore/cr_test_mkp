@@ -229,7 +229,7 @@ const onFormSubmit = async () => {
         emit('success')
       }, props.closeDelay)
     }
-  } catch {
+  } catch (_error) {
     notifyError(
       'Une erreur est survenue lors de votre demande de contact, veuillez contacter le service technique',
     )

@@ -42,8 +42,8 @@
                         }"
                         target="_blank"
                         :class="[
-                          'mx-auto max-h-7 w-full max-w-[90%] rounded-full bg-primary !px-1 !py-0.5 text-center !text-xs !text-white',
-                          'hover:!scale-100 hover:!transform-none md:mx-0 md:w-auto md:max-w-32 md:!px-3 md:!py-1 md:!text-sm',
+                          'mx-auto max-h-7 w-full max-w-[90%] rounded-full bg-primary px-1! py-0.5! text-center text-xs! text-white!',
+                          'hover:scale-100! hover:transform-none! md:mx-0 md:w-auto md:max-w-32 md:px-3! md:py-1! md:text-sm!',
                         ]"
                         @click.stop
                       >
@@ -102,7 +102,6 @@ onMounted(async () => {
 
   const accordId = props.accord.accordId
   if (!accordId) {
-    console.warn('Aucun accord ID trouvé')
     return
   }
 
@@ -117,8 +116,7 @@ onMounted(async () => {
       stores.value = []
       accordLogo.value = ''
     }
-  } catch (err) {
-    console.error("Erreur lors du chargement des magasins de l'accord:", err)
+  } catch (_error) {
     stores.value = []
   } finally {
     emit('loaded', stores.value.length > 0)

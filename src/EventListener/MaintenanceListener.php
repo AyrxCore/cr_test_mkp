@@ -6,8 +6,8 @@ namespace App\EventListener;
 
 use App\Service\SettingsService;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Routing\RouterInterface;

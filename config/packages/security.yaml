@@ -51,6 +51,7 @@ security:
   access_control:
     - { path: ^/login/neo-auto-login, roles: ROLE_API }
     - { path: ^/api/authentication/token, roles: PUBLIC_ACCESS }
+    - { path: ^/api/user/logout, roles: PUBLIC_ACCESS }
     - { path: ^/api/docs, roles: PUBLIC_ACCESS }
     - { path: ^/api/contact, roles: PUBLIC_ACCESS }
     - { path: ^/api/cms, roles: PUBLIC_ACCESS }

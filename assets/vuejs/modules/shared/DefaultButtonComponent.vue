@@ -54,7 +54,7 @@ const onClick = ($event: PointerEvent): void => {
   emit('click', $event)
 }
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .default-button {
   height: 32px;
   font-family: CoText, sans-serif;

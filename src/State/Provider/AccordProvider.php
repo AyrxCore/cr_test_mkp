@@ -17,7 +17,7 @@ readonly class AccordProvider implements ProviderInterface
 {
     public function __construct(
         private AccordRepository $accordRepository,
-        private PhoneFormatter $phoneFormatter
+        private PhoneFormatter $phoneFormatter,
     ) {
     }
 

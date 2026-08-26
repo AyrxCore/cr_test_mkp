@@ -4,6 +4,7 @@ import { AccountAccordCadre } from '@/vuejs/types/AccountAccordCadre'
 import { Category } from '@/vuejs/types/Product/Category'
 import { AccordCadreContent } from '@/vuejs/types/AccordCadre.ts'
 import { Variant } from '@/vuejs/types/Variant'
+import { OptionValue } from '@/vuejs/modules/products/utils/option-utils'
 
 export enum DjustProductType {
   SELLABLE = 'SELLABLE',
@@ -19,8 +20,8 @@ export interface Product {
   name: string
   description?: string
   categories: Array<Category>
-  images: Array<any>
-  options: Record<string, any[]>
+  images: string[]
+  options: Record<string, ProductOptionData>
   properties: ProductProperties
   tags: string[]
   variants?: Variant[]
@@ -37,10 +38,10 @@ export interface Product {
   productTopLabel?: string
   productPricingPhrase?: string
   formWithMessageFat?: boolean
-  favorites?: Array<any>
-  optionVariant: Array<any>
-  similarProducts: Array<any>
-  selectedVariants: Array<any>
+  favorites?: Array<Record<string, unknown>>
+  optionVariant: Array<Record<string, unknown>>
+  similarProducts: Array<Record<string, unknown>>
+  selectedVariants: Array<Record<string, unknown>>
   quantity: number
   newTarifNotification?: boolean
   // Nouveaux champs pour Djust
@@ -61,14 +62,19 @@ export interface ProductAttachment {
   type?: string
 }
 
+export interface ProductOptionData {
+  type?: string
+  values: OptionValue[]
+}
+
 export interface ProductProperties {
   [key: string]: string
 }
 
 export interface ProductFilters {
   categories?: Category[]
-  sellers?: Array<any>
-  properties?: Array<any>
+  sellers?: Array<Record<string, unknown>>
+  properties?: Array<Record<string, unknown>>
 }
 
 export interface ProductParameters extends ProductFilters {

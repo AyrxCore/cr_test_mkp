@@ -1,11 +1,12 @@
 import axios, {
   AxiosError,
   AxiosInstance,
-  AxiosRequestConfig,
   AxiosResponse,
+  InternalAxiosRequestConfig,
 } from 'axios'
 
 import { useCommonStore } from '@/vuejs/stores/common'
+import { channelReadyPromise } from '@/vuejs/services/channelReadyPromise'
 
 // Initialisation différée pour éviter l'erreur "no active Pinia"
 let commonStore: ReturnType<typeof useCommonStore> | null = null
@@ -19,7 +20,7 @@ const getCommonStore = () => {
 
 class DefaultClientService {
   public client: AxiosInstance
-  public static self: InstanceType<any>
+  public static self: DefaultClientService
 
   public constructor() {
     const headers = {
@@ -34,9 +35,13 @@ class DefaultClientService {
     })
 
     this.client.interceptors.request.use(
-      (config: AxiosRequestConfig): AxiosRequestConfig => {
+      async (config: InternalAxiosRequestConfig): Promise<InternalAxiosRequestConfig> => {
         if (!config.url.includes('/channels/by-host/')) {
+          await channelReadyPromise
           const store = getCommonStore()
+          if (!store.channelCode) {
+            return Promise.reject(new Error('Channel failed to initialize — request aborted'))
+          }
           config.headers['X-channel'] = store.channelCode
         }
 

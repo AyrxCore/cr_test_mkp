@@ -20,7 +20,7 @@
       <SwiperSlide
         v-for="(seller, key) in sellers"
         :key="key"
-        class="!flex h-full items-center justify-center overflow-hidden rounded-lg bg-white p-1.5 border border-primary"
+        class="flex! h-full items-center justify-center overflow-hidden rounded-lg bg-white p-1.5 border border-primary"
       >
         <RouterLink
           :to="{
@@ -56,6 +56,7 @@ import LoaderSharedComponent from '@/vuejs/modules/shared/LoaderSharedComponent.
 const props = defineProps({
   params: {
     type: Object,
+    default: undefined,
   },
 })
 

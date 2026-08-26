@@ -22,18 +22,19 @@ export const useSavedCartStore = defineStore('savedCart', {
       try {
         this.savedCarts = await SavedCartHttpClient.get().fetchList()
       } catch (error) {
-        error.response.status === HttpStatusCodes.unauthorized &&
+        if (error.response.status === HttpStatusCodes.unauthorized) {
           alertStore.setShow(
             getErrorMessage(error.response.data.message),
             AlertType.danger,
           )
+        }
       }
     },
     async create(savedCart: SavedCart) {
       try {
         await SavedCartHttpClient.get().create(savedCart)
         notifySuccess('Votre panier a été sauvegardé')
-      } catch (error) {
+      } catch (_error) {
         notifyError(
           'Une erreur est survenue lors de la création de votre panier',
         )
@@ -51,7 +52,7 @@ export const useSavedCartStore = defineStore('savedCart', {
           `Le panier <strong>${savedCart.name}</strong> a été mis à jour`,
           AlertType.success,
         )
-      } catch (error) {
+      } catch (_error) {
         alertStore.setShow(
           `Le panier  <strong>${savedCart.name}</strong> n'a pas pu être mis à jour`,
           AlertType.danger,

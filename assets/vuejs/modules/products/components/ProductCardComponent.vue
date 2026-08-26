@@ -19,7 +19,7 @@
           :style="{
             color: betterTextColor('primary'),
           }"
-          class="text-md rounded-md bg-secondary px-2 py-1"
+          class="text-sm rounded-md bg-secondary px-2 py-1"
         >
           -{{ product.percent }}%
         </div>

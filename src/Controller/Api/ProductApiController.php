@@ -96,7 +96,7 @@ class ProductApiController extends AbstractController
         $created = $this->accordCadreSubscriptionService->subscription($params, $accountId, $channelContext->getChannel());
 
         if (!$created) {
-            throw new BadRequestHttpException();
+            throw new BadRequestHttpException('Accord-cadre subscription failed for account '.$accountId);
         }
 
         return new JsonResponse(AccountAccordCadre::PROCESS_STATUS_PENDING);

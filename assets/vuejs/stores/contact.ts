@@ -40,7 +40,7 @@ export const useContactStore = defineStore('contact', {
         this.contact.description = ''
         this.contact.phone = ''
         this.contact.accordCadreName = ''
-      } catch (error) {
+      } catch (_error) {
         return null
       }
     },

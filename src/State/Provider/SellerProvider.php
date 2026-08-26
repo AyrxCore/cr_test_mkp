@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\CollectionOperationInterface;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Dto\Seller;
+use App\Exception\MissingChannelHeaderException;
 use App\Factory\SellerFactory;
 use App\Mapper\DjustSearchParamsMapper;
 use App\Service\Account\CurrentAccountProvider;
@@ -42,8 +43,10 @@ readonly class SellerProvider implements ProviderInterface
             $sellers = $this->djustSellerService->getValidSellers($customerAccountId, $params);
 
             return $this->sellerFactory->createAndAddToCollection($sellers);
+        } catch (MissingChannelHeaderException $e) {
+            throw $e;
         } catch (\Exception $e) {
-            throw new BadRequestHttpException('An error occurred while retrieving the sellers: '.$e->getMessage());
+            throw new BadRequestHttpException('An error occurred while retrieving the sellers: '.$e->getMessage(), $e);
         }
     }
 

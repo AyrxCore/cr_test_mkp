@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Events;
 
 use App\Entity\User;
@@ -22,6 +24,7 @@ class UserInfoUpdateEvent extends Event
     public function setUser(User $user)
     {
         $this->user = $user;
+
         return $this;
     }
 }

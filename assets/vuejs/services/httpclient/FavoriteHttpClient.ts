@@ -14,7 +14,7 @@ export default class FavoriteHttpClient extends BaseClientService {
       .then((response) => response.data)
   }
 
-  public findFavoriteById<T extends []>(id): Promise<Favorite> {
+  public findFavoriteById(id): Promise<Favorite> {
     return this.apiClient
       .get(`favorites/${id}`)
       .then((response) => response.data)

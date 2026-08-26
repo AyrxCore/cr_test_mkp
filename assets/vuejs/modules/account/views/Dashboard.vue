@@ -20,6 +20,7 @@
               <div class="flex flex-col gap-2">
                 <div
                   v-for="datapoint in dataset"
+                  :key="datapoint.name"
                   class="flex flex-row items-center gap-2"
                 >
                   <div

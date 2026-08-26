@@ -32,7 +32,7 @@
 
           <div class="flex min-w-0 w-full grow flex-col overflow-x-hidden">
             <h3
-              class="md:text-title-default-size mb-2 hidden text-xl text-primary md:block"
+              class="mb-2 hidden text-xl text-primary md:block"
             >
               {{ resultsHeadlineLine }}
             </h3>

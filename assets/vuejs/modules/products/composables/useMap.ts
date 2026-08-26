@@ -74,7 +74,7 @@ export function useMap() {
         typeof map.setView === 'function' &&
         !map._destroyed
       )
-    } catch {
+    } catch (_error) {
       return false
     }
   }
@@ -102,8 +102,8 @@ export function useMap() {
         const newZoom = isMobile.value ? MOBILE_ZOOM : DEFAULT_ZOOM
         leafletMap.value!.setView(center.value, newZoom)
         zoom.value = newZoom
-      } catch (error) {
-        console.warn('Erreur lors du recentrage de la carte:', error)
+      } catch (_error) {
+        // Ignored: map recenter can fail before the map is ready
       }
     }
   }

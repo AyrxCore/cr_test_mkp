@@ -40,7 +40,7 @@
           <SwiperSlide
             v-for="(stepItem, key) in stepsBlockContent?.stepItems"
             :key="key"
-            class="relative !flex !h-auto items-stretch justify-center overflow-hidden"
+            class="relative flex! h-auto! items-stretch justify-center overflow-hidden"
           >
             <Step :step-item="stepItem" :step-key="key + 1" />
           </SwiperSlide>
@@ -60,4 +60,9 @@ import Step from '@/vuejs/modules/products/components/accord-cadre/Step.vue'
 import CarouselListSharedComponent from '@/vuejs/modules/shared/CarouselListSharedComponent.vue'
 
 const { stepsBlockContent } = storeToRefs(useAccordCadreStore())
+
+defineEmits<{
+  'click-left': []
+  'click-right': []
+}>()
 </script>

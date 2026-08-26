@@ -53,7 +53,6 @@ export function useGeolocation() {
         return { latitude, longitude }
       },
       (error) => {
-        console.error('Erreur de géolocalisation:', error)
         let errorMessage = "La géolocalisation n'a pas pu être effectuée"
 
         if (

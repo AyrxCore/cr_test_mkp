@@ -24,7 +24,7 @@ class ResyncDjustCredentialsCommand extends Command
     public function __construct(
         private readonly DjustCredentialResyncService $resyncService,
         private readonly DjustOperatorApiService $operatorApi,
-        private readonly LoggerInterface $logger,
+        private readonly LoggerInterface $djustLogger,
         #[Autowire(env: 'default::DJUST_TEST_ACCOUNTS_PASSWORD')]
         private readonly string $testAccountsPassword = '',
     ) {
@@ -166,7 +166,7 @@ class ResyncDjustCredentialsCommand extends Command
                 $updated = \count($pendingUpdates);
             } catch (\Throwable $e) {
                 $errors = \count($pendingUpdates);
-                $this->logger->error('[ResyncDjustCredentials] Batch DB update failed', [
+                $this->djustLogger->error('[ResyncDjustCredentials] Batch DB update failed', [
                     'error' => $e->getMessage(),
                 ]);
                 $io->error('Batch DB update failed: '.$e->getMessage());

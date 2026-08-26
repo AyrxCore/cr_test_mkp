@@ -1,7 +1,7 @@
 <template>
   <div class="modal-overlay">
     <div
-      class="z-9999 fixed top-[25%] left-[45%] ml-[-150px] flex w-[500px] flex-col items-center justify-center rounded-xl bg-secondary px-3 py-3 text-center text-white !opacity-100"
+      class="z-9999 fixed top-[25%] left-[45%] ml-[-150px] flex w-[500px] flex-col items-center justify-center rounded-xl bg-secondary px-3 py-3 text-center text-white opacity-100!"
     >
       <div class="relative mb-3 flex w-full justify-end">
         <button class="right-2 text-lg text-white" @click="emit('cancel')">
@@ -21,7 +21,7 @@
       >
         <ButtonComponent
           data-modal-hide="defaultModal"
-          class="button-primary-outline !hover:border mr-2 !border"
+          class="button-primary-outline hover:border! mr-2 border!"
           type="button"
           @click="emit('cancel')"
         >
@@ -29,7 +29,7 @@
         </ButtonComponent>
         <ButtonComponent
           data-modal-hide="defaultModal"
-          class="button-primary !hover:border mr-2 !border"
+          class="button-primary hover:border! mr-2 border!"
           type="button"
           @click="emit('validate')"
         >

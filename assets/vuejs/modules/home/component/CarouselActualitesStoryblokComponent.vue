@@ -30,7 +30,7 @@
           <SwiperSlide
             v-for="(item, index) in bannerItems"
             :key="index"
-            class="!flex h-[303px] items-center justify-center overflow-hidden rounded-lg bg-white xl:h-full"
+            class="flex! h-[303px] items-center justify-center overflow-hidden rounded-lg bg-white xl:h-full"
           >
             <RouterLink
               v-if="item.slug"
@@ -123,7 +123,7 @@ const bannerItems = computed<BannerItem[]>(() => {
 })
 </script>
 
-<style lang="postcss" scoped>
+<style scoped>
 .news-carousel :deep(.swiper-pagination) {
   transform: translateY(calc(100% + 14px));
 }

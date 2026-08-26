@@ -38,7 +38,7 @@ class BackfillFirstConnectionAtCommand extends Command
                AND a.first_connection_at IS NULL'
         );
 
-        $io->success(sprintf('%d compte(s) mis à jour avec first_connection_at.', $updated));
+        $io->success(\sprintf('%d compte(s) mis à jour avec first_connection_at.', $updated));
 
         return Command::SUCCESS;
     }

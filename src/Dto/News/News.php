@@ -82,7 +82,7 @@ final class News implements FilterableInterface
     public function getFilterCriteria(): array
     {
         return [
-            'tags' => \array_map(fn ($tag) => \strtolower(\trim($tag)), $this->tagsList),
+            'tags' => \array_map(static fn ($tag) => \strtolower(\trim($tag)), $this->tagsList),
         ];
     }
 

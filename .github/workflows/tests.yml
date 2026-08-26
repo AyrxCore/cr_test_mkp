@@ -1,0 +1,99 @@
+name: Tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - develop
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    name: All tests (parallel)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    services:
+      postgres:
+        image: postgres:17.5
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: template_db_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+
+    env:
+      APP_ENV: test
+      DATABASE_URL: "postgresql://postgres:password@127.0.0.1:5432/template_db_test?serverVersion=17&charset=utf8"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.5"
+          extensions: apcu, zip, intl, pdo_pgsql, pgsql, pcntl, gd, sodium, ctype, iconv
+          coverage: none
+          tools: composer:v2
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Composer packages
+        uses: actions/cache@v6
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: lts/*
+          cache: yarn
+
+      - name: Install JS dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build frontend assets
+        run: yarn build
+
+      - name: Configure test environment
+        run: echo "DATABASE_URL=${{ env.DATABASE_URL }}" > .env.test.local
+
+      - name: Wait for PostgreSQL
+        run: |
+          until pg_isready -h 127.0.0.1 -p 5432 -U postgres; do sleep 1; done
+
+      - name: Initialize test database
+        run: |
+          php bin/console doctrine:database:create --if-not-exists -e test
+          php bin/console doctrine:schema:drop --force -e test
+          php bin/console doctrine:schema:update --force -e test
+          php bin/console -e test dbal:run-sql "ALTER DATABASE template_db_test IS_TEMPLATE true;"
+
+      - name: Clear test cache
+        run: php bin/console cache:clear -e test
+
+      - name: Run tests
+        run: php vendor/bin/pest --parallel --verbose

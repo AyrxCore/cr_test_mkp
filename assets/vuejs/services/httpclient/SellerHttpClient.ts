@@ -1,10 +1,8 @@
 import BaseClientService from '@/vuejs/services/BaseClientService'
 import {
-  Partner,
   Seller,
   SellerPromotion,
   MapApiResponse,
-  MapApiLightResponse,
   StoreData,
 } from '@/vuejs/types/Seller'
 

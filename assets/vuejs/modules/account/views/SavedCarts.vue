@@ -44,10 +44,8 @@ import { useAlertStore } from '@/vuejs/stores/alert'
 import { storeToRefs } from 'pinia'
 import { useSavedCartStore } from '@/vuejs/stores/savedCart'
 import AlertSharedComponent from '@/vuejs/modules/shared/AlertSharedComponent.vue'
-import { useCartStore } from '@/vuejs/stores/cart'
 import LoadingComponent from '@/vuejs/modules/shared/LoadingComponent.vue'
 
-const cartStore = useCartStore()
 const alertStore = useAlertStore()
 const showFormSavedCart = ref<boolean>(false)
 const deleteSavedCart = ref<boolean>(false)
@@ -69,7 +67,9 @@ const onSubmit = async (event) => {
     }
     await savedCartStore.fetchSavedCarts()
     showFormSavedCart.value = false
-  } catch (error) {}
+  } catch (_error) {
+    // Ignored: error intentionally ignored
+  }
 
   isLoading.value = false
 }
@@ -81,12 +81,14 @@ const onDelete = async (event) => {
 
     await savedCartStore.fetchSavedCarts()
     deleteSavedCart.value = false
-  } catch (error) {}
+  } catch (_error) {
+    // Ignored: error intentionally ignored
+  }
 
   isLoading.value = false
 }
 
-const onAddToCart = async (event) => {
+const onAddToCart = async (_event) => {
   isLoading.value = true
   try {
     // const cartProducts = []
@@ -102,7 +104,9 @@ const onAddToCart = async (event) => {
     //
     // await savedCartStore.fetchSavedCarts()
     // deleteSavedCart.value = false
-  } catch (error) {}
+  } catch (_error) {
+    // Ignored: cart import is temporarily disabled
+  }
 
   isLoading.value = false
 }

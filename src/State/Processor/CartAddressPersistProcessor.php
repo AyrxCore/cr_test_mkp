@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 readonly class CartAddressPersistProcessor implements ProcessorInterface
 {
     public function __construct(
-        private DjustCartService $djustCartService
+        private DjustCartService $djustCartService,
     ) {
     }
 
@@ -53,7 +53,7 @@ readonly class CartAddressPersistProcessor implements ProcessorInterface
             return $data;
         } catch (\Throwable $e) {
             throw new BadRequestHttpException(
-                sprintf('Failed to update cart addresses: %s', $e->getMessage())
+                \sprintf('Failed to update cart addresses: %s', $e->getMessage())
             );
         }
     }

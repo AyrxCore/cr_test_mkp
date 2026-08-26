@@ -8,7 +8,7 @@
       <div class="w-full">
         <div class="flex justify-end">
           <ButtonComponent
-            class="!h-5 !px-3 text-xl font-bold !text-white"
+            class="h-5! px-3! text-xl font-bold text-white!"
             type="button"
             @click="onCancelClick"
           >
@@ -16,7 +16,7 @@
           </ButtonComponent>
         </div>
         <h3
-          class="text-title-primary mb-3 flex flex-col px-5 text-center !text-white"
+          class="text-title-primary mb-3 flex flex-col px-5 text-center text-white!"
         >
           {{
             !accordShowcaseIsRequested
@@ -127,7 +127,7 @@ async function handleContactRequest() {
       props.accord.name,
       props.accord.accordId,
     )
-  } catch {
+  } catch (_error) {
     onCancelClick()
     notifyError(
       `Erreur lors de la demande de contact pour l'accord ${props.accord.name}`,

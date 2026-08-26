@@ -32,7 +32,7 @@
               <template #button-label> Catégories</template>
               <template #title></template>
               <template #content>
-                <div class="list-categories !h-[225px] flex-col">
+                <div class="list-categories h-[225px]! flex-col">
                   <p
                     v-for="category in getExpertsContentsCategories"
                     :key="category.id"
@@ -72,8 +72,8 @@ const isLoading = ref<boolean>(true)
 onMounted(async () => {
   try {
     await expertContentStore.init()
-  } catch (error) {
-    console.error('❌ Error loading expert contents:', error)
+  } catch (_error) {
+    // Ignored: error intentionally ignored
   } finally {
     isLoading.value = false
   }

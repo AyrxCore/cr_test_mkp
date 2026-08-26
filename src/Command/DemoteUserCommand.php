@@ -61,7 +61,7 @@ class DemoteUserCommand extends Command
 
         if (!$input->getArgument('username')) {
             $question = new Question('Veuillez saisir l\'identifiant de l\'utilisateur à modifier : ');
-            $question->setValidator(function ($username) {
+            $question->setValidator(static function ($username) {
                 if (empty($username)) {
                     throw new \Exception('L\'identifiant ne peut être vide');
                 }
@@ -73,7 +73,7 @@ class DemoteUserCommand extends Command
 
         if (!$input->getArgument('role')) {
             $question = new Question('Veuillez saisir le rôle à révoquer : ');
-            $question->setValidator(function ($role) {
+            $question->setValidator(static function ($role) {
                 if (empty($role)) {
                     throw new \Exception('Le rôle ne peut être vide');
                 }

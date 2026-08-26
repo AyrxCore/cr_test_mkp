@@ -18,7 +18,7 @@
                 v-model.trim="username"
                 :disabled="isLoading"
                 autocomplete="username"
-                class="input !border-solid !border-black !py-1 !pr-16 !ring-black md:!py-2 xl:!py-4"
+                class="input border-solid! border-black! py-1! pr-16! ring-black! md:py-2! xl:py-4!"
                 placeholder="Saisir votre adresse email professionnelle"
                 required
                 type="email"
@@ -36,7 +36,7 @@
                 :disabled="isLoading"
                 :type="showPassword ? 'text' : 'password'"
                 autocomplete="current-password"
-                class="input !border-solid !border-black !py-1 !pr-16 !ring-black md:!py-2 xl:!py-4"
+                class="input border-solid! border-black! py-1! pr-16! ring-black! md:py-2! xl:py-4!"
                 placeholder="**********"
                 required
               />
@@ -81,7 +81,7 @@
               >
                 Activer mon compte
                 <ArrowRightIcon
-                  class="ml-2 h-[14px] w-[14px] !fill-primary !stroke-primary"
+                  class="ml-2 h-[14px] w-[14px] fill-primary! stroke-primary!"
                 />
               </a>
             </div>
@@ -231,7 +231,7 @@
                 @click="showContactForm = true"
               >
                 <MailIcon
-                  class="h-[15px] w-[15px] fill-primary stroke-white text-secondary hover:!fill-secondary"
+                  class="h-[15px] w-[15px] fill-primary stroke-white text-secondary hover:fill-secondary!"
                 />
                 <span> {{ contactAdherentsService }}</span>
               </ButtonComponent>
@@ -347,8 +347,7 @@ const loginSubmit = async () => {
       accountSelectedId.value = firstAccount.id
       await handleAccountSelection(firstAccount.id, firstAccount)
     }
-  } catch (error) {
-    console.error("Erreur lors de l'authentification:", error)
+  } catch (_error) {
     alertStore.setShow('Erreur de connexion', AlertType.danger)
     isLoading.value = false
   }
@@ -365,7 +364,7 @@ const proceedWithAccountSelection = async (accountId: string) => {
       sendGtmEvent('login')
       document.location.href = target ? `/${target}` : '/'
     }
-  } catch {
+  } catch (_error) {
     await UserHttpClient.get()
       .logout()
       .catch(() => {})

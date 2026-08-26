@@ -3,7 +3,7 @@
     <div
       v-if="modelValue"
       v-click-outside="closeMenu"
-      class="!lg:h-auto c-scrollbar absolute left-0 top-0 z-10 flex h-[80vh] w-4/5 flex-col overflow-auto bg-white px-5 py-2.5 text-sm shadow sm:left-24 sm:top-36 sm:w-[425px] sm:rounded"
+      class="c-scrollbar absolute left-0 top-0 z-10 flex max-h-[80vh] w-4/5 flex-col overflow-auto bg-white px-5 py-2.5 text-sm shadow sm:left-24 sm:top-36 sm:w-[425px] sm:rounded"
     >
       <div v-if="showAllCategories">
         <div class="mt-3">
@@ -23,7 +23,7 @@
         <div
           v-for="category in categories"
           :key="category.id"
-          class="w-[100%] items-center py-1 !text-base !leading-7"
+          class="w-[100%] items-center py-1 text-base! leading-7!"
         >
           <MenuCategoryChildComponent
             :category="category"
@@ -56,14 +56,14 @@
               name: ProductPageList.PRODUCTS,
               query: { category: selectedCategory.id },
             }"
-            class="w-[100%] py-1 !text-base !leading-9 underline"
+            class="w-[100%] py-1 text-base! leading-9! underline"
             replace
             @click="closeMenu"
           >
             Voir tout
           </RouterLink>
         </h3>
-        <div class="w-[100%] py-1 !text-base !leading-9">
+        <div class="w-[100%] py-1 text-base! leading-9!">
           <MenuCategoryChildComponent
             v-for="cat in selectedCategory.children"
             :key="cat.id"
@@ -138,6 +138,8 @@ const backMenuCategories = () => {
 </script>
 
 <style scoped>
+@reference '@/style/main.css';
+
 .c-scrollbar::-webkit-scrollbar {
   width: 12px;
 }

@@ -94,7 +94,7 @@ class DjustSearchService
     {
         return \array_values(\array_filter(
             \array_merge($params->attributes ?? [], ['PRODUCT_TYPE|SELLABLE', 'PRODUCT_TYPE|NOT_SELLABLE']),
-            fn (string $attr) => !\str_starts_with($attr, 'PRODUCT_TYPE|ACCORD_CADRE'),
+            static fn (string $attr) => !\str_starts_with($attr, 'PRODUCT_TYPE|ACCORD_CADRE'),
         ));
     }
 

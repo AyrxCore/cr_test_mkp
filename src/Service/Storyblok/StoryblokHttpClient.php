@@ -32,7 +32,7 @@ class StoryblokHttpClient
         private readonly string $storyblokVersion,
         #[Autowire('%env(STORYBLOK_API_TOKEN_PREVIEW)%')]
         private readonly string $storyblokPreviewToken,
-        private readonly LoggerInterface $logger,
+        private readonly LoggerInterface $storyblokLogger,
     ) {
     }
 
@@ -48,7 +48,7 @@ class StoryblokHttpClient
             }
         }
 
-        $this->logger->info('Fetching stories from Storyblok', [
+        $this->storyblokLogger->info('Fetching stories from Storyblok', [
             'filters' => $queryParams,
             'max_pages' => $maxPages,
         ]);
@@ -73,14 +73,14 @@ class StoryblokHttpClient
                 ++$page;
             } while ($hasMorePages && ($maxPages === null || $page <= $maxPages));
 
-            $this->logger->info('Stories fetched successfully from Storyblok', [
+            $this->storyblokLogger->info('Stories fetched successfully from Storyblok', [
                 'total' => \count($allStories),
                 'pages_fetched' => $page - 1,
             ]);
 
             return ['stories' => $allStories];
         } catch (\RuntimeException $e) {
-            $this->logger->error(\sprintf('Failed to fetch stories from Storyblok: %s', $e->getMessage()), [
+            $this->storyblokLogger->error(\sprintf('Failed to fetch stories from Storyblok: %s', $e->getMessage()), [
                 'filters' => $filters,
             ]);
             throw new \RuntimeException(\sprintf('Failed to fetch stories: %s', $e->getMessage()), 0, $e);
@@ -114,7 +114,7 @@ class StoryblokHttpClient
 
         $fullPath = \rtrim($this->storyblokApiBaseUri, '/').$path;
 
-        $this->logger->info(\sprintf('Storyblok request: %s %s (version: %s)', $method, $path, $version));
+        $this->storyblokLogger->info(\sprintf('Storyblok request: %s %s (version: %s)', $method, $path, $version));
 
         try {
             $response = $this->storyblokClient->request($method, $fullPath, $options);
@@ -122,7 +122,7 @@ class StoryblokHttpClient
 
             if (!\in_array($statusCode, self::HTTP_SUCCESS_RESPONSES, true)) {
                 $errorContent = $response->getContent(false);
-                $this->logger->critical(
+                $this->storyblokLogger->critical(
                     'Storyblok API error',
                     [
                         'status' => $statusCode,
@@ -133,11 +133,11 @@ class StoryblokHttpClient
                 throw new \RuntimeException(\sprintf('Storyblok API returned status %d', $statusCode));
             }
 
-            $this->logger->info(\sprintf('Storyblok success: %s', $path));
+            $this->storyblokLogger->info(\sprintf('Storyblok success: %s', $path));
 
             return [$response->toArray(), $response->getHeaders()];
         } catch (DecodingExceptionInterface $e) {
-            $this->logger->critical(
+            $this->storyblokLogger->critical(
                 'Storyblok decoding error',
                 [
                     'path' => $path,
@@ -147,7 +147,7 @@ class StoryblokHttpClient
             throw new \RuntimeException('Failed to decode Storyblok response', 0, $e);
         } catch (\Throwable $e) {
             if (!$e instanceof \RuntimeException) {
-                $this->logger->critical(
+                $this->storyblokLogger->critical(
                     'Storyblok request failed',
                     [
                         'path' => $path,

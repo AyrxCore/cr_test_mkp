@@ -129,10 +129,10 @@ class OrderFactory extends AbstractFactory
         $hasSubRefs = $this->hasSubReferences($orderLogistics, $baseReference);
         if ($hasSubRefs && \count($links) >= 2) {
             $order->setOrderInvoiceLinks($links);
-            $firstWithUrl = \array_values(\array_filter($links, fn($l) => !empty($l['invoiceUrl'])))[0] ?? null;
+            $firstWithUrl = \array_values(\array_filter($links, static fn ($l) => !empty($l['invoiceUrl'])))[0] ?? null;
             $order->setInvoiceUrl($firstWithUrl !== null ? $firstWithUrl['invoiceUrl'] : null);
         } else {
-            $withUrl = \array_values(\array_filter($links, fn($l) => !empty($l['invoiceUrl'])));
+            $withUrl = \array_values(\array_filter($links, static fn ($l) => !empty($l['invoiceUrl'])));
             if (\count($withUrl) === 1) {
                 $order->setInvoiceUrl($withUrl[0]['invoiceUrl']);
             } elseif (!empty($withUrl)) {
@@ -150,6 +150,7 @@ class OrderFactory extends AbstractFactory
                 return $customField['value'];
             }
         }
+
         return null;
     }
 
@@ -164,6 +165,7 @@ class OrderFactory extends AbstractFactory
                 return false;
             }
         }
+
         return true;
     }
 
@@ -193,11 +195,12 @@ class OrderFactory extends AbstractFactory
                 'items' => $this->mapItems($linesWithSupplier),
             ];
         }
-        \usort($partners, function ($a, $b) {
+        \usort($partners, static function ($a, $b) {
             \preg_match('/-(\d+)$/', $a['reference'], $matchA);
             \preg_match('/-(\d+)$/', $b['reference'], $matchB);
             $numA = isset($matchA[1]) ? (int) $matchA[1] : 0;
             $numB = isset($matchB[1]) ? (int) $matchB[1] : 0;
+
             return $numA <=> $numB;
         });
         $order->setOrderPartners($partners);
@@ -209,7 +212,7 @@ class OrderFactory extends AbstractFactory
             $address['fullName'] ?? '',
             $address['address'] ?? '',
             $address['additionalAddress'] ?? '',
-            ($address['zipcode'] ?? '') . ' ' . ($address['city'] ?? ''),
+            ($address['zipcode'] ?? '').' '.($address['city'] ?? ''),
             $address['country'] ?? '',
         ]);
 

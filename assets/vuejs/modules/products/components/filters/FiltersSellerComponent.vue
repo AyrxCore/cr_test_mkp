@@ -9,6 +9,10 @@
       >
         Réinitialiser les filtres
       </ButtonComponent>
+      <CloseIcon
+        class="cursor-pointer hover:text-secondary md:hidden"
+        @click="emit('close-filters')"
+      />
     </div>
     <template v-if="categories.length > 0">
       <h3 class="mt-4 text-base font-bold uppercase md:text-lg">Catégories</h3>
@@ -27,11 +31,6 @@
         Voir +
       </button>
     </template>
-
-    <CloseIcon
-      class="cursor-pointer hover:text-secondary md:hidden"
-      @click="emit('close-filters')"
-    />
   </div>
 </template>
 <script lang="ts" setup>

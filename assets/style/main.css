@@ -1,9 +1,63 @@
-@use 'tailwindcss/base';
-@use 'tailwindcss/components';
-@use 'tailwindcss/utilities';
-@use 'form';
-@use 'tabs';
-@use 'map';
+/* Font Awesome is loaded in its own low-priority CSS layer so that it can
+   never override Tailwind's utility classes (e.g. .sr-only), regardless of
+   selector specificity or source order. Unlayered CSS always wins over
+   layered CSS in the cascade, so without this, third-party unlayered
+   stylesheets like Font Awesome's would silently override Tailwind utilities
+   sharing the same class name (e.g. .sr-only is defined by both). */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css') layer(thirdparty);
+
+@import 'tailwindcss';
+@import './form.css';
+@import './tabs.css';
+@import './map.css';
+
+@plugin '@tailwindcss/typography';
+@plugin '@tailwindcss/forms';
+
+@source 'templates';
+@source 'src';
+
+@custom-variant firefox {
+  @-moz-document url-prefix() {
+    @slot;
+  }
+}
+
+@theme {
+  --font-cotext: 'Cotext';
+
+  --color-primary: var(--primary-color);
+  --color-secondary: var(--secondary-color);
+  --color-tertiary: #0bb0fa;
+  --color-green-qantis: #65AC5D;
+
+  --breakpoint-90: 90%;
+  --breakpoint-92: 92%;
+  --breakpoint-94: 94%;
+  --breakpoint-98: 98%;
+  --breakpoint-xs: 400px;
+
+  --shadow-inner-lighter: inset 0 0 100px 100px rgba(255, 255, 255, 0.15);
+  --shadow-inner-darker: inset 0 0 100px 100px rgba(0, 0, 0, 0.1);
+}
+
+@source inline('{hover:,even:,}bg-gray-100');
+
+/* Tailwind v4 preflight no longer resets border-color to gray-200 by default
+   (elements without an explicit border color now inherit currentColor).
+   Restore the v3 behavior to avoid unwanted black borders/hr everywhere. */
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--color-gray-200);
+  }
+
+  hr {
+    border-top-width: 1px;
+    border-color: var(--color-gray-200);
+  }
+}
 
 @font-face {
   font-family: 'CoText';
@@ -21,7 +75,7 @@
   display: initial;
 }
 
-.text-title-default-size {
+@utility text-title-default-size {
   @apply text-[1.6rem];
 }
 
@@ -109,7 +163,7 @@
   }
 }
 
-// Fix Adyen 3DS challenge iframe : pleine hauteur sans scrollbar
+/* Fix Adyen 3DS challenge iframe : pleine hauteur sans scrollbar */
 .adyen-checkout__threeds2__challenge--05 {
   height: 75vh !important;
   min-height: 400px !important;
@@ -119,4 +173,3 @@
     overflow: hidden !important;
   }
 }
-

@@ -42,7 +42,7 @@ import { PropType } from 'vue'
 
 import { sendGtmEvent } from '@/vuejs/services/gtm'
 
-const props = defineProps({
+defineProps({
   categories: {
     type: Array as PropType<Array<{ id: string; name: string }>>,
     required: true,

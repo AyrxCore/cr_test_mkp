@@ -28,7 +28,7 @@ class UserNormalizer extends AbstractNormalizer
      *
      * @throws ExceptionInterface
      */
-    public function normalize($object, $format = null, array $context = []): array|null
+    public function normalize(mixed $object, ?string $format = null, array $context = []): ?array
     {
         $serializationGroups = $this->getSerializationGroups($context);
 
@@ -56,9 +56,14 @@ class UserNormalizer extends AbstractNormalizer
         return parent::normalize($object, $format, $context);
     }
 
-    public function supportsNormalization($data, $format = null): bool
+    public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
         return $data instanceof User && $this->normalizer->supportsNormalization($data, $format);
+    }
+
+    public function getSupportedTypes(?string $format): array
+    {
+        return [User::class => false];
     }
 
     /**
@@ -81,7 +86,7 @@ class UserNormalizer extends AbstractNormalizer
             }
         }
 
-        $data = \array_filter($data, fn ($value) => $value !== null);
+        $data = \array_filter($data, static fn ($value) => $value !== null);
 
         return empty($data) ? null : \json_decode(\json_encode($data));
     }

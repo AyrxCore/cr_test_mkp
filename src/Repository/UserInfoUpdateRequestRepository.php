@@ -41,7 +41,7 @@ class UserInfoUpdateRequestRepository extends ServiceEntityRepository
         }
     }
 
-    public function get()
+    public function get(): void
     {
     }
 }

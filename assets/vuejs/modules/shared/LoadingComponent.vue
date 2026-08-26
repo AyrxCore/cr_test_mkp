@@ -16,6 +16,8 @@
 </template>
 <script lang="ts" setup></script>
 <style scoped>
+@reference '@/style/main.css';
+
 @keyframes pop {
   0% {
     transform: scale(0);

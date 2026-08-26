@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\EventSubscriber;
 
 use App\Events\UserAcceptCGUEvent;
@@ -16,14 +18,12 @@ class UserAcceptCGUSubscriber implements EventSubscriberInterface
     #[Required]
     public TranslatorInterface $translator;
 
-
     public static function getSubscribedEvents(): array
     {
         return [
             UserAcceptCGUEvent::class => 'onAcceptCGU',
         ];
     }
-
 
     public function onAcceptCGU(UserAcceptCGUEvent $event): void
     {

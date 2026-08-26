@@ -15,9 +15,14 @@ class AdherentNormalizer extends AbstractNormalizer
         $this->normalizer = $normalizer;
     }
 
-    public function supportsNormalization($data, $format = null): bool
+    public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
         return $data instanceof Adherent && $this->normalizer->supportsNormalization($data, $format);
+    }
+
+    public function getSupportedTypes(?string $format): array
+    {
+        return [Adherent::class => false];
     }
 
     /**

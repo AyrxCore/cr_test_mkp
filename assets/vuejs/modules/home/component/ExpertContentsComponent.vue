@@ -19,7 +19,7 @@
       <SwiperSlide
         v-for="contenu in props.contents"
         :key="contenu?.id"
-        class="!flex h-full items-center justify-center overflow-hidden rounded-lg"
+        class="flex! h-full items-center justify-center overflow-hidden rounded-lg"
       >
         <div
           class="mx-auto flex h-[500px] w-[392px] flex-col justify-start rounded-md bg-white px-6 py-4"
@@ -67,7 +67,7 @@
                 name: PageList.NEWS_ITEM,
                 params: { slug: contenu?.slug },
               }"
-              class="button border-2 border-primary text-sm font-medium !text-primary shadow-none hover:scale-105 hover:!border-primary hover:!bg-white hover:!shadow-inner-darker focus:!bg-white"
+              class="button border-2 border-primary text-sm font-medium text-primary! shadow-none hover:scale-105 hover:border-primary! hover:bg-white! hover:shadow-inner-darker! focus:bg-white!"
             >
               En savoir plus
             </RouterLink>

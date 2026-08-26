@@ -28,7 +28,7 @@ class ResettingType extends AbstractType
                     'constraints' => [new PasswordStrength()],
                     'options' => [
                         'attr' => [
-                            'class' => 'block mt-2 w-full rounded-lg border !border-black !ring-black p-2.5 text-sm text-gray-900 mb-5',
+                            'class' => 'block mt-2 w-full rounded-lg border border-black! ring-black! p-2.5 text-sm text-gray-900 mb-5',
                             'placeholder' => '********',
                         ],
                         'label_attr' => [

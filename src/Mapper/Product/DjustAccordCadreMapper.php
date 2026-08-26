@@ -8,8 +8,8 @@ use App\Dto\AccountAccordCadre;
 use App\Dto\Product;
 use App\Entity\Account;
 use App\Enum\Djust\DjustProductType;
-use App\Repository\AccountRepository;
 use App\Repository\AccordStatutRepository;
+use App\Repository\AccountRepository;
 use Symfony\Component\Uid\Uuid;
 
 class DjustAccordCadreMapper
@@ -24,7 +24,7 @@ class DjustAccordCadreMapper
         Product $product,
         array $masterProduct,
         DjustProductType $productType,
-        Account $account
+        Account $account,
     ): void {
         if ($productType !== DjustProductType::ACCORD_CADRE) {
             return;

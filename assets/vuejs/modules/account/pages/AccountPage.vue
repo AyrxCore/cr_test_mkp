@@ -102,7 +102,9 @@ const {
 
 const onLogout = async (e: Event): Promise<void> => {
   e.preventDefault()
-  ;(await userStore.logout()) && location.reload()
+  if (await userStore.logout()) {
+    location.reload()
+  }
 }
 
 const customerService = computed((): string => {
@@ -112,7 +114,9 @@ const customerService = computed((): string => {
 })
 </script>
 
-<style lang="postcss">
+<style>
+@reference '@/style/main.css';
+
 .text-title-34 {
   @apply text-[30px] lg:text-[34px];
 }

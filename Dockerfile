@@ -18,13 +18,13 @@ CMD ["yarn"]
 #
 # PHP FPM
 #
-FROM php:8.3-fpm AS php
+FROM php:8.5-fpm AS php
 
 RUN apt-get update && \
   apt-get install -y --no-install-recommends libssl-dev zlib1g-dev curl git unzip netcat-traditional libxml2-dev libpq-dev libzip-dev libpng-dev supervisor libicu-dev && \
   pecl install apcu xdebug && \
   docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql && \
-  docker-php-ext-install -j$(nproc) zip opcache intl pdo_pgsql pgsql pcntl gd && \
+  docker-php-ext-install -j$(nproc) zip intl pdo_pgsql pgsql pcntl gd && \
   docker-php-ext-enable apcu pdo_pgsql sodium xdebug && \
   apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 

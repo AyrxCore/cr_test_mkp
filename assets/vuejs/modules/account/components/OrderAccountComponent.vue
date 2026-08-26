@@ -31,7 +31,7 @@
 <script lang="ts" setup>
 import ArrowRightIconComponent from '@/vuejs/modules/shared/icon/ArrowRightIconComponent.vue'
 
-const props = defineProps({
+defineProps({
   order: {
     required: true,
     type: Object,

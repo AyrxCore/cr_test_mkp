@@ -1,7 +1,7 @@
 import { LoginResponse } from '@/vuejs/types/User'
 
 export function getErrorMessage(errorCode: string): string {
-  let message = ''
+  let message: string
   switch (errorCode) {
     case LoginResponse.UserDisabled:
       message =

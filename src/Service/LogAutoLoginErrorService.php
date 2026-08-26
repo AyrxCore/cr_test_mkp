@@ -6,11 +6,14 @@ namespace App\Service;
 
 use App\Entity\LogAutoLoginError;
 use App\Repository\LogAutoLoginErrorRepository;
+use Psr\Log\LoggerInterface;
 
 class LogAutoLoginErrorService
 {
-    public function __construct(private readonly LogAutoLoginErrorRepository $logAutoLoginExceptionRepository)
-    {
+    public function __construct(
+        private readonly LogAutoLoginErrorRepository $logAutoLoginExceptionRepository,
+        private readonly LoggerInterface $logger,
+    ) {
     }
 
     public function log(?string $channelName, string $email, string $reason): void
@@ -21,5 +24,7 @@ class LogAutoLoginErrorService
         $logAutoLoginException->setReason($reason);
 
         $this->logAutoLoginExceptionRepository->save($logAutoLoginException);
+
+        $this->logger->warning('AutoLogin failed', ['channel' => $channelName, 'email' => $email, 'reason' => $reason]);
     }
 }

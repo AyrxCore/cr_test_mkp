@@ -38,10 +38,10 @@ class AdherentTarifShowcaseContactRequestProcessor implements ProcessorInterface
         /** @var User $currentUser */
         $currentUser = $this->security->getUser();
         $userAdherentIds = $currentUser->getAccounts()
-            ->map(fn($account) => $account->getAdherent()?->getId())
-            ->filter(fn($id) => $id !== null)
+            ->map(static fn ($account) => $account->getAdherent()?->getId())
+            ->filter(static fn ($id) => $id !== null)
             ->toArray();
-        if (!in_array($data->getAdherent()->getId(), $userAdherentIds, true)) {
+        if (!\in_array($data->getAdherent()->getId(), $userAdherentIds, true)) {
             throw new AccessDeniedHttpException('You do not have access to this showcase');
         }
 

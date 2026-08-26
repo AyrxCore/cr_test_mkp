@@ -33,7 +33,7 @@ class ImportPartnerStoresCommand extends Command
         private readonly FileDownloadService $fileDownloadService,
         private readonly AccordValidationService $accordValidationService,
         private readonly StoreImportService $storeImportService,
-        private readonly ErrorHandler $errorHandler
+        private readonly ErrorHandler $errorHandler,
     ) {
         parent::__construct();
     }
@@ -162,9 +162,9 @@ class ImportPartnerStoresCommand extends Command
 
         if ($accordAnalysis['hasAccordIds']) {
             return $this->validateSpecificAccord($stores, $accordAnalysis, $partner, $io);
-        } else {
-            return $this->handleNoAccordIds($partner, $io);
         }
+
+        return $this->handleNoAccordIds($partner, $io);
     }
 
     private function validateSpecificAccord(array $stores, array $accordAnalysis, Partner $partner, SymfonyStyle $io): Accord

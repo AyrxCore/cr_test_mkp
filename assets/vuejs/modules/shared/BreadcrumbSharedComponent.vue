@@ -51,16 +51,22 @@
 
 <script lang="ts" setup>
 import { computed, PropType } from 'vue'
+import type { RouteLocationRaw } from 'vue-router'
 
 import router, { PageList } from '@/vuejs/router'
 import { sendGtmEvent } from '@/vuejs/services/gtm'
 
 import ChevronRightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
 
+type BreadcrumbItem = {
+  name: string
+  url?: RouteLocationRaw
+}
+
 const props = defineProps({
   listUrl: {
     required: false,
-    type: Object as PropType<any[]>,
+    type: Object as PropType<BreadcrumbItem[]>,
     default: null,
   },
   currentPage: {

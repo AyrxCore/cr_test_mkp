@@ -22,6 +22,7 @@
 | 12 | [AI Vision & Méthodologie](12-ai-vision-methodologie.md) | Vision et méthodologie AI-Driven                        |
 | 13 | [Djust Cart Savings Sync](13-djust-cart-savings-sync.md) | Synchronisation des économies panier                    |
 | 14 | [Scheduler Pattern](14-scheduler-pattern.md) | Pattern de planification des tâches                     |
+| 15 | [CI GitHub Actions](15-ci-github-actions.md) | Workflow de tests, isolation DB, build front, debug      |
 
 ---
 

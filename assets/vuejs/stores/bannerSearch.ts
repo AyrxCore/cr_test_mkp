@@ -16,7 +16,9 @@ export const useBannerSearchStore = defineStore('bannerSearch', {
       try {
         this.bannersSearch =
           await BannerSearchHttpClient.get().getBannersSearch()
-      } catch (error) {}
+      } catch (_error) {
+        // Ignored: banner search data is optional
+      }
     },
   },
 })

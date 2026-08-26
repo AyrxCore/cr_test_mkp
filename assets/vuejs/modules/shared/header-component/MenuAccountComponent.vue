@@ -3,7 +3,7 @@
     <div
       v-if="modelValue"
       v-click-outside="closeMenu"
-      class="!lg:h-auto !sm:w-4/5 absolute right-0 top-0 z-10 flex flex-col overflow-auto rounded bg-secondary bg-white p-3 px-5 py-2.5 text-sm text-black shadow sm:right-32 sm:top-24 sm:h-fit sm:rounded md:p-5 lg:mx-0"
+      class="lg:h-auto! absolute right-0 top-0 z-10 flex flex-col overflow-auto rounded bg-white p-3 px-5 py-2.5 text-sm text-black shadow sm:right-32 sm:top-24 sm:h-fit sm:rounded md:p-5 lg:mx-0"
     >
       <div class="flex items-center">
         <RouterLink
@@ -77,7 +77,7 @@ import UserIcon from '@/vuejs/modules/shared/icon/UserIconComponent.vue'
 import DisconnectIcon from '@/vuejs/modules/shared/icon/DisconnectIconComponent.vue'
 import ChevronRightIcon from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
 
-const props = defineProps({
+defineProps({
   modelValue: {
     required: true,
     type: Boolean,
@@ -91,7 +91,13 @@ const { hasNoAdherentData } = storeToRefs(useUserStore())
 
 const emit = defineEmits(['update:modelValue'])
 
-const listAccountGlobal = ref<any[]>([
+type AccountMenuItem = {
+  label: string
+  routeName: AccountPageList
+  condition?: string
+}
+
+const listAccountGlobal = ref<AccountMenuItem[]>([
   {
     label: 'Mes commandes',
     routeName: AccountPageList.ORDERS,
@@ -118,7 +124,7 @@ const listAccountGlobal = ref<any[]>([
   // },
 ])
 
-const listAccount = computed((): any[] => {
+const listAccount = computed((): AccountMenuItem[] => {
   const data = listAccountGlobal.value.filter(
     (x) => !x.condition || channelStore.isAllowedToShow(x.condition),
   )

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\ChannelParameter;
@@ -9,8 +11,8 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @extends ServiceEntityRepository<ChannelParameter>
  *
- * @method ChannelParameter|null find($id, $lockMode = null, $lockVersion = null)
- * @method ChannelParameter|null findOneBy(array $criteria, array $orderBy = null)
+ * @method null|ChannelParameter find($id, $lockMode = null, $lockVersion = null)
+ * @method null|ChannelParameter findOneBy(array $criteria, array $orderBy = null)
  * @method ChannelParameter[]    findAll()
  * @method ChannelParameter[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */

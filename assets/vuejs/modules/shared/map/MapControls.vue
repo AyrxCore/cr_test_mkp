@@ -5,7 +5,7 @@
       title="Recentrer sur ma position"
       @click="recenter"
     >
-      <LocationIconComponent class="!m-0" />
+      <LocationIconComponent class="m-0!" />
     </button>
   </LControl>
 </template>

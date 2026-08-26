@@ -34,7 +34,9 @@ const content = computed((): string | null | undefined => {
 </script>
 
 <style scoped>
+@reference '@/style/main.css';
+
 .mentions-legales p {
-  @apply text-justify !text-sm md:!text-base lg:!text-lg;
+@apply text-justify text-sm! md:text-base! lg:text-lg!;
 }
 </style>

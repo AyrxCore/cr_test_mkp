@@ -1,6 +1,6 @@
 <template>
   <BaseTemplate title="Page d'accueil">
-    <div class="m-auto mt-4 flex-1 xl:!pt-5">
+    <div class="m-auto mt-4 flex-1 xl:pt-5!">
       <div class="m-auto max-w-screen-90">
         <CarouselActualitesStoryblokComponent />
       </div>
@@ -201,14 +201,12 @@ import OurCategoriesComponent from '@/vuejs/modules/home/component/OurCategories
 import SellersCarousel from '@/vuejs/modules/shared/SellersCarouselComponent.vue'
 import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
 import ShowcaseModal from '@/vuejs/modules/home/component/ShowcaseModal.vue'
-import SemanticButtonsComponent from '@/vuejs/modules/home/component/SemanticButtonsComponent.vue'
 import MarkerIconComponent from '@/vuejs/modules/shared/icon/MarkerIconComponent.vue'
 
 const productStore = useProductStore()
 // TODO (MKP-1411): Décommenter quand les contenus experts seront disponibles via DJUST
 // const expertContentStore = useExpertContentStore()
 const channelStore = useChannelStore()
-const userStore = useUserStore()
 
 const { adherentTarifShowcases } = storeToRefs(useUserStore())
 const { productsSelection } = storeToRefs(productStore)
@@ -218,8 +216,6 @@ const { productsAccordsCadre } = storeToRefs(productStore)
 // const expertContentsLoaded = ref<boolean>(false)
 const showShowcaseModal = ref<boolean>(false)
 const accordSelected = ref<Product>(null)
-
-const emit = defineEmits(['show-showcase-modal', 'close-showcase-modal'])
 
 onBeforeMount(async () => {
   const promises = []
@@ -257,7 +253,9 @@ const handleShowcaseModal = (accord) => {
 }
 </script>
 
-<style lang="scss">
+<style>
+@reference '@/style/main.css';
+
 .list-categories {
   @apply mt-2 flex h-auto w-full overflow-auto rounded-lg bg-transparent bg-white p-0 text-left text-gray-700 md:flex-wrap;
 }

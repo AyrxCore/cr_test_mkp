@@ -1,0 +1,14 @@
+.tabs-component {
+  .tabs-component-tabs {
+    @apply flex;
+  }
+  .tabs-component-tab {
+    @apply px-2 border-b-2 border-gray-500 text-gray-500 text-lg;
+    &.is-active {
+      @apply text-secondary border-secondary;
+    }
+  }
+  .tabs-component-panel {
+    @apply py-2;
+  }
+}
