@@ -17,7 +17,7 @@
             Découvrez les partenaires et leurs conditions&nbsp;!
           </p>
         </div>
-        <div class="m-auto mt-1 max-w-screen-94 md:mt-5">
+        <div class="m-auto mt-1 mb-4 max-w-screen-94 md:mt-5">
           <AccordsCadreComponent
             :accords-cadres="productsAccordsCadre?.results || []"
             :loading="!productsAccordsCadre"

@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      'relative mb-4 flex w-full flex-col items-center rounded-lg border-2 border-solid p-4',
+      'relative flex w-full flex-col items-center rounded-lg border-2 border-solid p-4',
       isInShowcase ? 'border-gray-400' : 'border-secondary',
     ]"
   >
