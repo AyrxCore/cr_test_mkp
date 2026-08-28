@@ -172,3 +172,21 @@ use App\Service\Djust\DjustDataExtractor;
     \expect($result)->toBe(0);
 });
 
+\it('extracts partnerId from supplierSnapshot.externalId', function () {
+    $result = $this->extractor->extractPartnerId(['supplierSnapshot' => ['externalId' => 'SUGAR-4242']]);
+
+    \expect($result)->toBe('SUGAR-4242');
+});
+
+\it('returns null when supplierSnapshot.externalId is missing', function () {
+    $result = $this->extractor->extractPartnerId(['supplierSnapshot' => ['id' => 69792]]);
+
+    \expect($result)->toBeNull();
+});
+
+\it('returns null when supplierSnapshot is missing entirely for partnerId', function () {
+    $result = $this->extractor->extractPartnerId([]);
+
+    \expect($result)->toBeNull();
+});
+

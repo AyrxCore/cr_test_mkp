@@ -35,6 +35,9 @@ class CartSavings
     #[ORM\Column]
     private ?int $sellerId = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $partnerId = null;
+
     #[ORM\Column]
     private ?int $amount = null;
 
@@ -130,6 +133,18 @@ class CartSavings
     public function setSellerId(int $sellerId): self
     {
         $this->sellerId = $sellerId;
+
+        return $this;
+    }
+
+    public function getPartnerId(): ?string
+    {
+        return $this->partnerId;
+    }
+
+    public function setPartnerId(?string $partnerId): self
+    {
+        $this->partnerId = $partnerId;
 
         return $this;
     }

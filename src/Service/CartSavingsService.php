@@ -119,6 +119,7 @@ class CartSavingsService
 
         foreach ($orderLogistics as $orderLogistic) {
             $sellerId = $this->djustDataExtractor->extractSellerId($orderLogistic);
+            $partnerId = $this->djustDataExtractor->extractPartnerId($orderLogistic);
             $metrics = $this->calculateMetrics($orderLogistic);
             $sellerOrderId = (string) ($orderLogistic['id'] ?? '');
 
@@ -133,6 +134,7 @@ class CartSavingsService
             $cartSaving->setOrderId($orderId);
             $cartSaving->setSellerOrderId($sellerOrderId !== '' ? $sellerOrderId : null);
             $cartSaving->setSellerId($sellerId);
+            $cartSaving->setPartnerId($partnerId);
             $cartSaving->setAmount($metrics['amount']);
             $cartSaving->setOrderTotal($metrics['orderTotal']);
             $cartSaving->setItemsTotalBeforeSavings($metrics['itemsTotalBeforeSavings']);

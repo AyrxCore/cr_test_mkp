@@ -210,6 +210,17 @@ class DjustDataExtractor
         return 0;
     }
 
+    public function extractPartnerId(array $orderLogistic): ?string
+    {
+        $partnerId = $orderLogistic['supplierSnapshot']['externalId'] ?? null;
+
+        if ($partnerId === null || $partnerId === '') {
+            return null;
+        }
+
+        return (string) $partnerId;
+    }
+
     private function extractValueFromCustomField(array $cfv): mixed
     {
         $value = $cfv['value'] ?? null;

@@ -49,6 +49,14 @@ use Symfony\Component\Uid\Uuid;
         })
         ->byDefault();
 
+    $this->djustDataExtractor->shouldReceive('extractPartnerId')
+        ->andReturnUsing(static function (array $orderLogistic) {
+            $partnerId = $orderLogistic['supplierSnapshot']['externalId'] ?? null;
+
+            return ($partnerId === null || $partnerId === '') ? null : (string) $partnerId;
+        })
+        ->byDefault();
+
     $this->service = new CartSavingsService(
         $this->repository,
         $this->accountRepository,
@@ -502,6 +510,56 @@ use Symfony\Component\Uid\Uuid;
 
     \expect($savedSaving)->not->toBeNull();
     \expect(\strlen($savedSaving->getOrderId()))->toBeGreaterThan(4);
+});
+
+\it('stores the supplier externalId as partnerId (MKP-1529)', function () {
+    $order = ($this->makeOrder)('0000012345', 'REF-PARTNER', [
+        [
+            'status' => 'CONFIRMED',
+            'supplierSnapshot' => ['id' => 'supplier-1', 'externalId' => 'SUGAR-4242'],
+            'orderLogisticPrices' => ['totalPriceWithoutTax' => 50.0],
+            'lines' => [
+                [
+                    'quantity' => 1,
+                    'orderLogisticLinePriceDto' => ['itemPriceWithoutTaxes' => 50.0, 'totalPriceWithoutTaxes' => 50.0],
+                ],
+            ],
+        ],
+    ]);
+
+    $saved = null;
+
+    $this->repository->shouldReceive('findOneBy')->andReturn(null);
+    $this->repository->shouldReceive('save')->once()->with(Mockery::on(function (CartSavings $s) use (&$saved) {
+        $saved = $s;
+
+        return true;
+    }));
+    $this->entityManager->shouldReceive('flush')->once();
+
+    $this->service->createFromDjustOrder($order, $this->account);
+
+    \expect($saved->getPartnerId())->toBe('SUGAR-4242');
+});
+
+\it('sets partnerId to null when supplierSnapshot has no externalId', function () {
+    $order = ($this->makeOrder)('0000012346', 'REF-NO-PARTNER', [
+        ($this->makeOrderLogistic)('supplier-1'),
+    ]);
+
+    $saved = null;
+
+    $this->repository->shouldReceive('findOneBy')->andReturn(null);
+    $this->repository->shouldReceive('save')->once()->with(Mockery::on(function (CartSavings $s) use (&$saved) {
+        $saved = $s;
+
+        return true;
+    }));
+    $this->entityManager->shouldReceive('flush')->once();
+
+    $this->service->createFromDjustOrder($order, $this->account);
+
+    \expect($saved->getPartnerId())->toBeNull();
 });
 
 // --- createAfterPayment ---

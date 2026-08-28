@@ -48,6 +48,7 @@ L'API Djust opérateur (`/v1/shop/commercial-orders/{id}`) ne supporte pas les o
 - `cartId` = référence panier Djust (ex: `260-211-8089583`)
 - `orderId` = ID Djust paddé (ex: `0000625247`) 
 - `orderState` = statut de l'`orderLogistics` correspondant au vendeur de la ligne (ex: `WAITING_SUPPLIER_APPROVAL`)
+- `partnerId` = ID SUGAR/NEO du partenaire (vendeur) de l'`orderLogistic` (`supplierSnapshot.externalId`), utilisé pour le reporting PowerBI (MKP-1529). `null` si absent côté Djust.
 
 **Sous le capot**
 
