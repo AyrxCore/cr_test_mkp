@@ -11,13 +11,18 @@ name: Deploy
 #   2. build-and-push               (Docker images -> ECR)
 #   3. app-plan / app-apply         (Terraform for the app/ECS service)
 #
-# Infra is provisioned when the user asks for it (deploy_infra=true) OR when the
-# environment's Terraform state is empty (self-healing, e.g. after a destroy),
-# so the app's `data` lookups (VPC/ECS/ALB) never run against a missing infra.
+# Infra is provisioned when the user asks for it (deploy_infra=true) OR when a
+# non-prod environment's Terraform state is empty (self-healing, e.g. after a
+# destroy), so the app's `data` lookups (VPC/ECS/ALB) never run against a
+# missing infra. Prod has no destroy path (see destroy.yml) and therefore
+# never self-heals: its infra is only (re)provisioned via explicit
+# deploy_infra=true, to avoid a transient backend/state error being
+# misread as "infra missing" and triggering an unwanted apply on live prod.
 #
 # Both "apply" jobs run against a GitHub Environment named after the target
-# environment (staging / preprod / prod). Only "prod" has required reviewers
-# configured (see repo Settings > Environments) — that's what gates
+# environment (staging / preprod / prod). Configure required reviewers on the
+# "prod" GitHub Environment (Settings > Environments) if a manual approval
+# gate is desired before prod applies — that's what gates
 # production applies, for both infra and app.
 on:
   workflow_dispatch:
@@ -97,6 +102,19 @@ jobs:
           if [ "${{ inputs.deploy_infra }}" = "true" ]; then
             echo "Infra requested explicitly (deploy_infra=true)."
             echo "needs_infra=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Prod has no destroy path (see destroy.yml), so its infra state
+          # should never legitimately be empty. Skip the self-heal state
+          # inspection entirely to avoid a false positive (e.g. a transient
+          # state-lock/backend error making `terraform state list` fail)
+          # silently triggering an unintended infra-apply against the live
+          # prod VPC/RDS. Prod infra is only (re)provisioned when explicitly
+          # requested via deploy_infra=true.
+          if [ "${{ inputs.environment }}" = "prod" ]; then
+            echo "Prod never self-heals infra — skipping infra provisioning."
+            echo "needs_infra=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
@@ -188,8 +206,10 @@ jobs:
     if: ${{ needs.detect-infra.outputs.needs_infra == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    # Gated by the target GitHub Environment. Only "prod" has required
-    # reviewers configured — staging and preprod apply immediately.
+    # Gated by the target GitHub Environment. As of now, no environment has
+    # required reviewers configured, so applies run immediately regardless
+    # of target. Configure reviewers on "prod" in Settings > Environments
+    # if a manual approval gate is desired before an apply.
     environment: ${{ inputs.environment }}
 
     steps:
@@ -365,9 +385,9 @@ jobs:
     if: ${{ always() && needs.app-plan.result == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    # Gated by the target GitHub Environment. Only "prod" has required
-    # reviewers configured in repo Settings > Environments — staging and
-    # preprod apply immediately once triggered.
+    # Gated by the target GitHub Environment. As of now, no environment has
+    # required reviewers configured in repo Settings > Environments, so
+    # applies run immediately once triggered, regardless of target.
     environment: ${{ inputs.environment }}
 
     steps:
