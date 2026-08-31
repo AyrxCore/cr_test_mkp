@@ -73,7 +73,7 @@ class DjustCartProductTransformer
         return [
             'type' => 'ITEM',
             'unit' => $unit,
-            'id' => null, // Non présent dans cartItem.json
+            'id' => null,
         ];
     }
 

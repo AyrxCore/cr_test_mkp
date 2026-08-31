@@ -1,0 +1,48 @@
+name: Rapport dépendances obsolètes
+
+on:
+  schedule:
+    - cron: "0 5 * * 1" # lundi 6h Paris (UTC+1, ajuster à 4h UTC en été si besoin)
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Démarrer les conteneurs Docker (php, js)
+        run: docker compose -f docker-compose.yml up -d --build php js
+
+      - name: Composer install (dans le conteneur php)
+        run: docker compose -f docker-compose.yml exec -T php composer install --no-interaction --no-progress
+
+      - name: Composer outdated (dans le conteneur php)
+        run: docker compose -f docker-compose.yml exec -T php composer outdated --direct --format=json > composer-outdated.json || true
+
+      - name: Yarn install (dans le conteneur js)
+        run: docker compose -f docker-compose.yml exec -T js yarn install --frozen-lockfile
+
+      - name: Yarn outdated (dans le conteneur js)
+        run: docker compose -f docker-compose.yml exec -T js yarn outdated --json > yarn-outdated.json || true
+
+      - name: Formater le rapport
+        run: node .github/scripts/format-outdated.cjs
+
+      - name: Créer une issue avec le rapport
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const body = fs.readFileSync('report.md', 'utf8');
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `📋 Rapport dépendances obsolètes — ${new Date().toISOString().slice(0,10)}`,
+              body,
+              labels: ['dependencies']
+            });
+
+      - name: Arrêter les conteneurs Docker
+        if: always()
+        run: docker compose -f docker-compose.yml down
