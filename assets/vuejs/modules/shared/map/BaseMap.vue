@@ -23,7 +23,7 @@
       @ready="onMapReady"
     >
       <LTileLayer
-        :url="TILE_URL"
+        :url="tileUrl"
         :attribution="ATTRIBUTION"
         layer-type="base"
       />
@@ -40,10 +40,12 @@ import type { Map as LeafletMap } from 'leaflet'
 import {
   getMapOptions,
   getZoomControl,
-  TILE_URL,
+  getTileUrl,
   ATTRIBUTION,
 } from '@/vuejs/modules/products/utils/map-utils'
 import { ref } from 'vue'
+
+const tileUrl = getTileUrl()
 
 const props = defineProps({
   zoom: {

@@ -4,8 +4,17 @@ export const PARIS_COORDINATES = [48.8566, 2.3522] as LatLngTuple
 export const DEFAULT_ZOOM = 12
 export const MOBILE_ZOOM = 11
 
-export const TILE_URL =
+const TILE_BASE_URL =
   'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png'
+
+// La clé est injectée au runtime par Twig (window.__CARTO_API_KEY__), pas au build Vite,
+// pour que la même image Docker serve staging/preprod/prod.
+export function getTileUrl(): string {
+  const key = window.__CARTO_API_KEY__
+
+  return key ? `${TILE_BASE_URL}?key=${encodeURIComponent(key)}` : TILE_BASE_URL
+}
+
 export const ATTRIBUTION =
   '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
 

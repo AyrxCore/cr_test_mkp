@@ -71,6 +71,7 @@
   {% endif %}
 
   <script type="text/javascript">
+    window.__CARTO_API_KEY__ = {{ carto_api_key() | json_encode | raw }}
     window.APP_MODE = {{ app.request.server.get('APP_MODE')|default(null)|json_encode|raw }}
     window.MKP_GIT_TAG = {{ app.request.server.get('MKP_GIT_TAG')|default(null)|json_encode|raw }}
   </script>
