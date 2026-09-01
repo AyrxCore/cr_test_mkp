@@ -1,0 +1,35 @@
+{
+  "stories": [
+    {
+      "name": "QANTIS_TEST",
+      "content": {
+        "sectionTitle": "Nos univers",
+        "semanticButton": [
+          {
+            "component": "semanticButton",
+            "label": "Bureautique",
+            "search": "bureautique"
+          },
+          {
+            "component": "semanticButton",
+            "label": "Mobilier",
+            "search": "mobilier"
+          }
+        ]
+      }
+    },
+    {
+      "name": "OTHER_CHANNEL",
+      "content": {
+        "sectionTitle": "Autre titre",
+        "semanticButton": [
+          {
+            "component": "semanticButton",
+            "label": "Autre",
+            "search": "autre"
+          }
+        ]
+      }
+    }
+  ]
+}

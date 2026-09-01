@@ -1,6 +1,6 @@
 export interface SemanticButton {
   id: number
-  label: string
-  search: string
-  channel: string
+  label?: string
+  search?: string
+  sectionTitle?: string
 }

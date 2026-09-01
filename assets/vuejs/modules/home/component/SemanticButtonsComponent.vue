@@ -1,18 +1,18 @@
 <template>
   <div
     v-if="semanticButtons.length > 0"
-    class="m-auto mt-4 max-w-screen-94 md:px-0"
+    class="max-w-screen-94 m-auto mt-4 md:px-0"
   >
     <div class="mt-10 sm:w-[45rem]">
       <h3 class="text-title-primary mb-3">
         {{ sectionTitle }}
       </h3>
     </div>
-    <div class="list-semantic-buttons m-auto max-w-screen-94">
+    <div class="list-semantic-buttons max-w-screen-94 m-auto">
       <div
         v-for="semanticButton in semanticButtons"
         :key="semanticButton.id"
-        class="list-semantic-buttons-items cursor-pointer uppercase hover:bg-primary hover:text-white"
+        class="list-semantic-buttons-items hover:bg-primary cursor-pointer uppercase hover:text-white"
       >
         <RouterLink
           :to="{
@@ -55,7 +55,7 @@ const { semanticButtonsSectionTitle, semanticButtons } = storeToRefs(
 const sectionTitle = computed<string>(() => {
   return semanticButtonsSectionTitle.value
     ? semanticButtonsSectionTitle.value.sectionTitle
-    : 'Titre générique si rien de renseigné'
+    : 'Vos catégories préférées'
 })
 
 onBeforeMount(async () => {
@@ -69,24 +69,10 @@ onBeforeMount(async () => {
 @reference '@/style/main.css';
 
 .list-semantic-buttons {
-  @apply flex flex-col
-  overflow-auto
-  rounded-lg
-  text-left
-  text-gray-700
-  sm:items-center
-  xl:relative
-  xl:mt-2 xl:h-auto xl:flex-row xl:justify-start
-  xl:overflow-auto xl:bg-transparent xl:p-0 xl:text-center;
+  @apply flex flex-col overflow-auto rounded-lg text-left text-gray-700 sm:items-center xl:relative xl:mt-2 xl:h-auto xl:flex-row xl:justify-start xl:overflow-auto xl:bg-transparent xl:p-0 xl:text-center;
 }
 
 .list-semantic-buttons-items {
-  @apply my-2 items-center border-2
-  border-solid border-primary bg-white
-  px-2.5 py-1.5 text-center
-  text-sm text-primary
-  sm:w-1/2 sm:text-base
-  xl:mx-4 xl:w-fit xl:justify-center
-  xl:rounded xl:text-lg;
+  @apply border-primary text-primary my-2 items-center border-2 border-solid bg-white px-2.5 py-1.5 text-center text-sm sm:w-1/2 sm:text-base xl:mx-4 xl:w-fit xl:justify-center xl:rounded xl:text-lg;
 }
 </style>

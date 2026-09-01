@@ -1,7 +1,7 @@
 <template>
   <BaseTemplate title="Page d'accueil">
     <div class="m-auto mt-4 flex-1 xl:pt-5!">
-      <div class="m-auto max-w-screen-90">
+      <div class="max-w-screen-90 m-auto">
         <CarouselActualitesStoryblokComponent />
       </div>
       <!-- Bloc accords cadre -->
@@ -9,7 +9,7 @@
         v-if="!productsAccordsCadre || productsAccordsCadre?.results?.length"
         class="mt-10 bg-white px-6 py-8 md:px-12"
       >
-        <div class="m-auto max-w-screen-98">
+        <div class="max-w-screen-98 m-auto">
           <h3 class="text-title-primary mb-3">
             Les accords-cadres incontournables
           </h3>
@@ -17,7 +17,7 @@
             Découvrez les partenaires et leurs conditions&nbsp;!
           </p>
         </div>
-        <div class="m-auto mt-1 mb-4 max-w-screen-94 md:mt-5">
+        <div class="max-w-screen-94 m-auto mt-1 mb-4 md:mt-5">
           <AccordsCadreComponent
             :accords-cadres="productsAccordsCadre?.results || []"
             :loading="!productsAccordsCadre"
@@ -34,13 +34,13 @@
       <!-- Fin Bloc accords cadre -->
 
       <!-- Bloc boutons sémantiques -->
-<!--      <SemanticButtonsComponent />-->
+      <SemanticButtonsComponent />
       <!-- Fin Bloc boutons sémantiques -->
 
       <!-- Bloc sélection de produits -->
       <div
         v-if="!productsSelection || filteredProductsSelection?.length"
-        class="m-auto mt-4 max-w-screen-94 md:px-0"
+        class="max-w-screen-94 m-auto mt-4 md:px-0"
       >
         <div class="mt-10 sm:w-[45rem]">
           <h3 class="text-title-primary mb-3">Notre sélection de produits</h3>
@@ -49,7 +49,7 @@
             besoins.
           </p>
         </div>
-        <div class="m-auto max-w-screen-94">
+        <div class="max-w-screen-94 m-auto">
           <ProductsCarouselComponent
             :loading="!productsSelection"
             :products="filteredProductsSelection || []"
@@ -62,7 +62,7 @@
             OPTIONAL_FRONT_BLOCKS.SUPPLIER_PARTNERS_HOMEPAGE,
           )
         "
-        class="m-auto max-w-screen-94"
+        class="max-w-screen-94 m-auto"
       >
         <div class="mt-10">
           <h3 class="text-title-primary">Nos partenaires fournisseurs</h3>
@@ -95,7 +95,7 @@
           <div>
             <RouterLink
               :to="{ name: MainPageList.PARTNERS_MAP }"
-              class="button button-primary-outline ml-0 mt-4 flex items-center md:ml-4 md:mt-0"
+              class="button button-primary-outline mt-4 ml-0 flex items-center md:mt-0 md:ml-4"
             >
               <MarkerIconComponent class="mr-2" size="24" />
               Localiser les partenaires
@@ -145,14 +145,14 @@
 
     <div
       v-if="channelStore.isAllowedToShow(OPTIONAL_FRONT_BLOCKS.RSE_HOMEPAGE)"
-      class="text-cotext relative m-auto flex-1 bg-secondary py-14 text-white"
+      class="text-cotext bg-secondary relative m-auto flex-1 py-14 text-white"
     >
       <div class="px-5 text-center">
         <h3
           :style="{
             color: betterTextColor('secondary'),
           }"
-          class="sm:text-title-default-size text-[23px] font-bold leading-[27px] sm:leading-[38.11px]"
+          class="sm:text-title-default-size text-[23px] leading-[27px] font-bold sm:leading-[38.11px]"
         >
           Vous faites des économies tout <br />
           en contribuant à votre démarche RSE
@@ -201,6 +201,7 @@ import OurCategoriesComponent from '@/vuejs/modules/home/component/OurCategories
 import SellersCarousel from '@/vuejs/modules/shared/SellersCarouselComponent.vue'
 import ProductsCarouselComponent from '@/vuejs/modules/shared/ProductsCarouselComponent.vue'
 import ShowcaseModal from '@/vuejs/modules/home/component/ShowcaseModal.vue'
+import SemanticButtonsComponent from '@/vuejs/modules/home/component/SemanticButtonsComponent.vue'
 import MarkerIconComponent from '@/vuejs/modules/shared/icon/MarkerIconComponent.vue'
 
 const productStore = useProductStore()
@@ -261,7 +262,7 @@ const handleShowcaseModal = (accord) => {
 }
 
 .list-categories-items {
-  @apply mx-4 my-2 items-center justify-center text-nowrap rounded border-2 border-solid border-primary bg-white px-2.5 py-1.5 text-lg text-primary sm:text-base;
+  @apply border-primary text-primary mx-4 my-2 items-center justify-center rounded border-2 border-solid bg-white px-2.5 py-1.5 text-lg text-nowrap sm:text-base;
 }
 
 .dropdown:hover .dropdown-menu {

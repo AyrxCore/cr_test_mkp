@@ -15,6 +15,7 @@ class MockClientCallback
     private static bool $simulateStoryblokError = false;
     private static bool $simulateEmptyNews = false;
     private static bool $simulateEmptyAccordCadre = false;
+    private static bool $simulateEmptySemanticButtons = false;
 
     private DjustMockClientCallback $djustMock;
 
@@ -62,11 +63,17 @@ class MockClientCallback
         self::$simulateEmptyAccordCadre = $simulate;
     }
 
+    public static function setSimulateEmptySemanticButtons(bool $simulate): void
+    {
+        self::$simulateEmptySemanticButtons = $simulate;
+    }
+
     public static function reset(): void
     {
         self::$simulateStoryblokError = false;
         self::$simulateEmptyNews = false;
         self::$simulateEmptyAccordCadre = false;
+        self::$simulateEmptySemanticButtons = false;
         DjustMockClientCallback::reset();
     }
 
@@ -78,17 +85,30 @@ class MockClientCallback
     private function getStoryblokResponse(string $path, ?string $query): MockResponse
     {
         \parse_str($query ?? '', $queryParams);
+        $startsWith = $queryParams['starts_with'] ?? null;
 
-        if (self::$simulateEmptyNews || self::$simulateEmptyAccordCadre) {
-            return new MockResponse(JsonHelper::parseJsonDataFile('_mocks/storyblok-response/empty-stories.json'));
-        }
+        if ($startsWith === 'news/') {
+            if (self::$simulateEmptyNews) {
+                return new MockResponse(JsonHelper::parseJsonDataFile('_mocks/storyblok-response/empty-stories.json'));
+            }
 
-        if (isset($queryParams['starts_with']) && $queryParams['starts_with'] === 'news/') {
             return new MockResponse(JsonHelper::parseJsonDataFile('_mocks/storyblok-response/news-list.json'));
         }
 
-        if (isset($queryParams['starts_with']) && $queryParams['starts_with'] === 'accord-cadre/') {
+        if ($startsWith === 'accord-cadre/') {
+            if (self::$simulateEmptyAccordCadre) {
+                return new MockResponse(JsonHelper::parseJsonDataFile('_mocks/storyblok-response/empty-stories.json'));
+            }
+
             return new MockResponse(JsonHelper::parseJsonDataFile('_mocks/storyblok-response/accord-cadre-list.json'));
+        }
+
+        if ($startsWith === 'marques-blanches/') {
+            if (self::$simulateEmptySemanticButtons) {
+                return new MockResponse(JsonHelper::parseJsonDataFile('_mocks/storyblok-response/empty-stories.json'));
+            }
+
+            return new MockResponse(JsonHelper::parseJsonDataFile('_mocks/storyblok-response/semantic-buttons-list.json'));
         }
 
         return new MockResponse(JsonHelper::parseJsonDataFile('_mocks/storyblok-response/empty-stories.json'));
