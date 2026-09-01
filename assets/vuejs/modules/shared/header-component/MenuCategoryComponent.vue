@@ -83,7 +83,7 @@ import { computed, ref } from 'vue'
 import { ProductPageList } from '@/vuejs/router/pages-list'
 import { useCategoryStore } from '@/vuejs/stores/category'
 import { Category } from '@/vuejs/types/Product/Category'
-import { SUSTAINABLE_PURCHASES_CATEGORY_ID } from '@/vuejs/constants/categoryConfigs'
+import { SUSTAINABLE_PURCHASES_CATEGORY_ID, SUSTAINABLE_PURCHASES_CATEGORY_NAME } from '@/vuejs/constants/categoryConfigs'
 
 import MenuCategoryChildComponent from '@/vuejs/modules/shared/header-component/MenuCategoryChildComponent.vue'
 import ChevronLeftIconComponent from '@/vuejs/modules/shared/icon/ChevronLeftIconComponent.vue'
@@ -111,7 +111,7 @@ const categories = computed((): Category[] => {
 const isSustainableCategorySelected = computed((): boolean => {
   return (
     selectedCategory.value?.id === SUSTAINABLE_PURCHASES_CATEGORY_ID ||
-    selectedCategory.value?.name === 'Achats durables'
+    selectedCategory.value?.name === SUSTAINABLE_PURCHASES_CATEGORY_NAME
   )
 })
 

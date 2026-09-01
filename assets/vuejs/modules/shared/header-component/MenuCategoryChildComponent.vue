@@ -49,6 +49,7 @@ import {
   CATEGORY_CONFIGS,
   CategoryConfig,
   SUSTAINABLE_PURCHASES_CATEGORY_ID,
+  SUSTAINABLE_PURCHASES_CATEGORY_NAME,
 } from '@/vuejs/constants/categoryConfigs'
 
 import Chevron2RightIconComponent from '@/vuejs/modules/shared/icon/Chevron2RightIconComponent.vue'
@@ -69,8 +70,8 @@ const categoryConfig = computed<CategoryConfig | undefined>(() => {
     return CATEGORY_CONFIGS[props.category.id]
   }
 
-  // Fallback: certains channels peuvent exposer "Achats durables" avec un autre id.
-  if (props.category.name === 'Achats durables') {
+  // Fallback: certains channels peuvent exposer la catégorie avec un autre id.
+  if (props.category.name === SUSTAINABLE_PURCHASES_CATEGORY_NAME) {
     return CATEGORY_CONFIGS[SUSTAINABLE_PURCHASES_CATEGORY_ID]
   }
 

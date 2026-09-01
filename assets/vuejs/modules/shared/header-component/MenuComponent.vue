@@ -54,16 +54,16 @@
         :class="sustainableCategoryUi?.textClass"
         :to="{
           name: ProductPageList.PRODUCTS,
-          query: { category: SUSTAINABLE_PURCHASES_CATEGORY_ID },
+          query: { category: sustainableCategory?.id },
         }"
         class="ml-3 inline-flex items-center border-b-2 border-b-transparent px-0.5 text-center text-sm last:mr-3 hover:border-green-qantis xl:ml-6 xl:last:mr-6"
         replace
         @click="
           sendGtmEvent('menu_click', {
-            link_text: 'Achats durables',
+            link_text: SUSTAINABLE_PURCHASES_CATEGORY_NAME,
             link_url: router.resolve({
               name: ProductPageList.PRODUCTS,
-              query: { category: SUSTAINABLE_PURCHASES_CATEGORY_ID },
+              query: { category: sustainableCategory?.id },
             }).fullPath,
             origin_url: router.currentRoute.value.fullPath,
           })
@@ -73,7 +73,7 @@
           :is="sustainableCategoryUi?.icon"
           class="mr-1 h-[1em] w-[1em] shrink-0 align-middle"
         />
-        Achats durables
+        {{ SUSTAINABLE_PURCHASES_CATEGORY_NAME }}
       </RouterLink>
     </div>
   </div>
@@ -93,6 +93,7 @@ import {
   CATEGORY_CONFIGS,
   CategoryConfig,
   SUSTAINABLE_PURCHASES_CATEGORY_ID,
+  SUSTAINABLE_PURCHASES_CATEGORY_NAME,
 } from '@/vuejs/constants/categoryConfigs'
 
 import MenuCategoryComponent from '@/vuejs/modules/shared/header-component/MenuCategoryComponent.vue'
@@ -103,13 +104,16 @@ const { categories, isLoaded } = storeToRefs(useCategoryStore())
 
 const isMenuOpen = ref<boolean>(false)
 
+const isNotSustainableCategory = (category: Category): boolean =>
+  category.id !== SUSTAINABLE_PURCHASES_CATEGORY_ID &&
+  category.name !== SUSTAINABLE_PURCHASES_CATEGORY_NAME
+
 const listMenu = computed((): Category[] => {
   const customCategories = channel?.value?.options?.CUSTOM_HEADER_CATEGORIES
   const categoryIds = customCategories ? customCategories.split(',') : []
   if (categoryIds.length) {
     const filteredCategories = categories.value.filter((category: Category) =>
-      categoryIds.includes(category.id) &&
-      category.id !== SUSTAINABLE_PURCHASES_CATEGORY_ID,
+      categoryIds.includes(category.id) && isNotSustainableCategory(category),
     )
     return filteredCategories.sort(
       (a: Category, b: Category) =>
@@ -117,9 +121,7 @@ const listMenu = computed((): Category[] => {
     )
   }
 
-  return categories.value
-    .filter((c: Category) => c.id !== SUSTAINABLE_PURCHASES_CATEGORY_ID)
-    .slice(0, 6)
+  return categories.value.filter(isNotSustainableCategory).slice(0, 6)
 })
 
 const toggleMenu = (): void => {
@@ -127,10 +129,19 @@ const toggleMenu = (): void => {
   sendGtmEvent('menu_selector_click')
 }
 
-const sustainableCategoryUi = computed((): CategoryConfig | null => {
-  const hasAccess = categories.value.some(
-    (c: Category) => c.id === SUSTAINABLE_PURCHASES_CATEGORY_ID,
+const sustainableCategory = computed((): Category | null => {
+  return (
+    categories.value.find(
+      (c: Category) =>
+        c.id === SUSTAINABLE_PURCHASES_CATEGORY_ID ||
+        c.name === SUSTAINABLE_PURCHASES_CATEGORY_NAME,
+    ) ?? null
   )
-  return hasAccess ? CATEGORY_CONFIGS[SUSTAINABLE_PURCHASES_CATEGORY_ID] : null
+})
+
+const sustainableCategoryUi = computed((): CategoryConfig | null => {
+  return sustainableCategory.value
+    ? CATEGORY_CONFIGS[SUSTAINABLE_PURCHASES_CATEGORY_ID]
+    : null
 })
 </script>
