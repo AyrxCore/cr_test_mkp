@@ -18,8 +18,8 @@
       class="swiper-nav-outside"
     >
       <SwiperSlide
-        v-for="(seller, key) in sellers"
-        :key="key"
+        v-for="seller in filteredSellers"
+        :key="seller?.externalId"
         class="flex! h-full items-center justify-center overflow-hidden rounded-lg bg-white p-1.5 border border-primary"
       >
         <RouterLink
@@ -41,7 +41,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { SwiperSlide } from 'swiper/vue'
 import { storeToRefs } from 'pinia'
 
@@ -58,6 +58,10 @@ const props = defineProps({
     type: Object,
     default: undefined,
   },
+  excludeExternalId: {
+    type: String,
+    default: undefined,
+  },
 })
 
 const emit = defineEmits(['click-partner-slider'])
@@ -67,6 +71,12 @@ const { carouselSellers } = storeToRefs(sellerStore)
 
 const sellersLoading = ref<boolean>(false)
 const sellers = ref<Seller[]>([])
+
+const filteredSellers = computed<Seller[]>(() =>
+  props.excludeExternalId
+    ? sellers.value.filter((s) => s.externalId !== props.excludeExternalId)
+    : sellers.value,
+)
 
 let stopCarouselWatch: (() => void) | undefined
 

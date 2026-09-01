@@ -31,6 +31,7 @@
           <SellersCarouselBlock
             v-else-if="block.key === 'sellers'"
             :params="sellersByCategoryParam"
+            :exclude-external-id="accordCadre?.seller?.externalId"
           />
         </div>
       </template>

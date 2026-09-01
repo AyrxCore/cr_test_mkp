@@ -3,7 +3,7 @@
     <h3 class="text-title-primary mb-5">
       Ces partenaires peuvent aussi vous intéresser
     </h3>
-    <SellersCarouselComponent :params="params" />
+    <SellersCarouselComponent :params="params" :exclude-external-id="excludeExternalId" />
     <p class=" mt-12 text-xs text-gray-500">
       Les références, photographies, remises et tarifs des produits fournis
       sur la marketplace n'ont qu'une valeur indicative. Pour toute
@@ -17,5 +17,6 @@ import SellersCarouselComponent from '@/vuejs/modules/shared/SellersCarouselComp
 
 defineProps<{
   params?: object
+  excludeExternalId?: string
 }>()
 </script>
