@@ -31,13 +31,12 @@
           <SellersCarouselBlock
             v-else-if="block.key === 'sellers'"
             :params="sellersByCategoryParam"
-            :exclude-external-id="accordCadre?.seller?.externalId"
           />
         </div>
       </template>
     </div>
     <div
-      v-else-if="errorLoading"
+      v-else-if="showError"
       class="m-auto my-12 w-5/6 rounded-md border p-2 text-center text-gray-500"
     >
       Impossible de charger l'accord-cadre.
@@ -82,7 +81,8 @@ import PartnerStoresMap from '@/vuejs/modules/products/components/accord-cadre/P
 import SellersCarouselBlock from '@/vuejs/modules/products/components/accord-cadre/blocks/SellersCarouselBlock.vue'
 
 const accordCadreStore = useAccordCadreStore()
-const { accordCadre, errorLoading, showStepsBlock } = storeToRefs(accordCadreStore)
+const { accordCadre, showStepsBlock, showRseBlock } =
+  storeToRefs(accordCadreStore)
 
 const showMapBlock = ref<boolean | null>(null)
 provide('showMapBlock', showMapBlock)
@@ -94,6 +94,7 @@ const visibleBlocks = computed(() =>
   [
     { key: 'steps', visible: showStepsBlock.value },
     { key: 'map', visible: showMapBlock.value !== false },
+    { key: 'rse', visible: showRseBlock.value },
     { key: 'sellers', visible: true },
   ].filter((b) => b.visible),
 )
@@ -123,6 +124,13 @@ const isInShowcase = computed<boolean>(() =>
         (showcase) => showcase.accordId === accordCadre.value!.accordId,
       )
     : false,
+)
+
+const showError = computed<boolean>(
+  () =>
+    !isLoading.value &&
+    !isInShowcase.value &&
+    !accordCadre.value?.accordCadreContent,
 )
 
 watch(

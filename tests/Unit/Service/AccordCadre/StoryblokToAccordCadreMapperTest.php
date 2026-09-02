@@ -35,7 +35,7 @@ use App\Tests\Unit\Helper\JsonHelper;
 
     $bannerBlock = $result->getListBlocks()[AccordCadreBlock::BANNER->value];
     \expect($bannerBlock->getComponentName())->toBe('bannerBlock')
-    ->and($bannerBlock->getLogoUrl())->toBe('https://ged-wp-files.s3.amazonaws.com/marketplace/Accords-cadres/PEUGEOT/PEUGEOT-Logo-Marketplace.jpg')
+        ->and($bannerBlock->getLogoUrl())->toBe('https://ged-wp-files.s3.amazonaws.com/marketplace/Accords-cadres/PEUGEOT/PEUGEOT-Logo-Marketplace.jpg')
         ->and($bannerBlock->getImgBannerUrlDesktop())->toBe('https://ged-wp-files.s3.amazonaws.com/marketplace/Accords-cadres/PEUGEOT/Banniere-Peugeot-new.jpg')
         ->and($bannerBlock->getImgBannerUrlMobile())->toBe('https://ged-wp-files.s3.amazonaws.com/marketplace/Accords-cadres/PEUGEOT/Banniere-Peugeot-new-mobile.jpg')
         ->and($bannerBlock->getBadgeTextBottom())->toBe('-70%')
@@ -76,6 +76,21 @@ use App\Tests\Unit\Helper\JsonHelper;
     $result = $this->mapper->mapAccordCadre($storyblokData);
 
     \expect($result->isContactForm())->toBeFalse();
+})->group('StoryblokToAccordCadreMapper', 'storyblok');
+
+\it('ignores unknown blocks instead of throwing', function () {
+    $storyblokData = JsonHelper::getJsonDataFile('_mocks/storyblok/accord-cadre-response.json');
+    $storyblokData['content']['body'][] = ['component' => 'unknownFutureBlock'];
+    $storyblokData['content']['body'][] = ['title' => 'block without component'];
+    $channel = Mockery::mock(Channel::class);
+    $channelParameter = Mockery::mock(ChannelParameter::class);
+    $this->channelContext->shouldReceive('getChannel')->once()->andReturn($channel);
+    $channel->shouldReceive('getChannelParameter')->once()->andReturn($channelParameter);
+    $channelParameter->shouldReceive('isWhiteLabel')->once()->andReturn(false);
+
+    $result = $this->mapper->mapAccordCadre($storyblokData);
+
+    \expect($result->getListBlocks())->not->toHaveKey('unknownFutureBlock');
 })->group('StoryblokToAccordCadreMapper', 'storyblok');
 
 \it('maps contactForm as true when set in storyblok data', function () {

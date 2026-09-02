@@ -17,6 +17,7 @@ export const useAccordCadreStore = defineStore('accordCadre', {
       try {
         this.accordCadre = await ProductHttpClient.get().findProductById(id)
       } catch (_error) {
+        this.accordCadre = null
         this.errorLoading = true
       }
     },
@@ -72,6 +73,18 @@ export const useAccordCadreStore = defineStore('accordCadre', {
     },
     stepsBlockContent: (state) => {
       return state.accordCadre?.accordCadreContent?.listBlocks?.stepsBlock
+    },
+    rseBlockContent: (state) => {
+      return state.accordCadre?.accordCadreContent?.listBlocks?.rseBlock
+    },
+    rseLabels: (state) => {
+      return state.accordCadre?.seller?.rseLabels ?? []
+    },
+    showRseBlock(): boolean {
+      const content = this.rseBlockContent
+      return Boolean(
+        content?.title || content?.description || this.rseLabels.length > 0,
+      )
     },
     showStepsBlock: (state): boolean => {
       const type = state.accordCadre?.accordCadreContent?.type

@@ -12,6 +12,7 @@ use App\Dto\AccordCadre\ListBlocks\Components\ImageItem;
 use App\Dto\AccordCadre\ListBlocks\Components\StepItem;
 use App\Dto\AccordCadre\ListBlocks\NegociatedTermsBlockContent;
 use App\Dto\AccordCadre\ListBlocks\PresentationBlockContent;
+use App\Dto\AccordCadre\ListBlocks\RseBlockContent;
 use App\Dto\AccordCadre\ListBlocks\StepsBlockContent;
 use App\Enum\Djust\DjustAccordCadreType;
 use App\Enum\Storyblok\AccordCadreBlock;
@@ -101,14 +102,17 @@ class StoryblokToAccordCadreMapper
         $content->setContactForm((bool) ($contentData[self::KEY_CONTENT][self::KEY_CONTACT_FORM] ?? false));
 
         foreach ($contentData[self::KEY_CONTENT][self::KEY_BODY] ?? [] as $block) {
-            $mappedBlock = match ($block[self::KEY_COMPONENT]) {
+            $mappedBlock = match ($block[self::KEY_COMPONENT] ?? null) {
                 AccordCadreBlock::BANNER->value => $this->mapBannerBlock($block),
                 AccordCadreBlock::PRESENTATION->value => $this->mapPresentationBlock($block),
                 AccordCadreBlock::NEGOCIATED_TERMS->value => $this->mapNegociatedTermsBlock($block),
                 AccordCadreBlock::STEPS->value => $this->mapStepsBlock($block),
+                default => null,
             };
 
-            $content->addListBlock($mappedBlock);
+            if ($mappedBlock !== null) {
+                $content->addListBlock($mappedBlock);
+            }
         }
 
         return $content;
