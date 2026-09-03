@@ -15,6 +15,7 @@ class StoryblokToSemanticButtonMapper
     private const string KEY_SEMANTIC_BUTTON = 'semanticButton';
     private const string KEY_LABEL = 'label';
     private const string KEY_SEARCH = 'search';
+    private const string KEY_POSITION = 'position';
 
     /**
      * @return SemanticButton[]
@@ -60,9 +61,15 @@ class StoryblokToSemanticButtonMapper
                 $semanticButton->setId($nextId++);
                 $semanticButton->setLabel($buttonData[self::KEY_LABEL] ?? null);
                 $semanticButton->setSearch($buttonData[self::KEY_SEARCH] ?? null);
+                $semanticButton->setPosition((int) $buttonData[self::KEY_POSITION]);
                 $semanticButtons[] = $semanticButton;
             }
         }
+
+        usort(
+            $semanticButtons,
+            fn (SemanticButton $a, SemanticButton $b) => $a->getPosition() > $b->getPosition(),
+        );
 
         return $semanticButtons;
     }
