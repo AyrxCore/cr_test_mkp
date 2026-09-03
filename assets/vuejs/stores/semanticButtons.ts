@@ -30,12 +30,14 @@ export const useSemanticButtonsStore = defineStore('semanticButtons', {
       )
     },
     semanticButtons() {
-      return this.semanticButtonsConfig.filter(
-        (sb) =>
-          typeof sb.sectionTitle === 'undefined' &&
-          typeof sb.label !== 'undefined' &&
-          typeof sb.search !== 'undefined',
-      )
+      return this.semanticButtonsConfig
+        .filter(
+          (sb) =>
+            typeof sb.sectionTitle === 'undefined' &&
+            typeof sb.label !== 'undefined' &&
+            typeof sb.search !== 'undefined',
+        )
+        .sort((a, b) => a.position > b.position)
     },
   },
 })

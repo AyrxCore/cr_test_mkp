@@ -3,4 +3,5 @@ export interface SemanticButton {
   label?: string
   search?: string
   sectionTitle?: string
+  position: number
 }

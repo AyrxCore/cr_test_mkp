@@ -14,6 +14,8 @@ final class SemanticButton
 
     private ?string $sectionTitle = null;
 
+    private int $position = 0;
+
     public function getId(): int
     {
         return $this->id;
@@ -52,5 +54,15 @@ final class SemanticButton
     public function setSectionTitle(?string $sectionTitle): void
     {
         $this->sectionTitle = $sectionTitle;
+    }
+
+    public function getPosition(): int
+    {
+        return $this->position;
+    }
+
+    public function setPosition(int $position): void
+    {
+        $this->position = $position;
     }
 }

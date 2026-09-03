@@ -10,7 +10,7 @@
     </div>
     <div class="list-semantic-buttons max-w-screen-94 m-auto">
       <div
-        v-for="semanticButton in semanticButtons"
+        v-for="semanticButton in visibleButtons"
         :key="semanticButton.id"
         class="list-semantic-buttons-items hover:bg-primary cursor-pointer uppercase hover:text-white"
       >
@@ -35,11 +35,18 @@
         </RouterLink>
       </div>
     </div>
+    <button
+      v-if="semanticButtons.length > MAX_VISIBLE_BUTTONS"
+      class="text-primary mt-4 text-sm underline"
+      @click="isExpanded = !isExpanded"
+    >
+      {{ isExpanded == true ? 'Voir moins' : 'Voir plus' }}
+    </button>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, onBeforeMount } from 'vue'
+import { computed, onBeforeMount, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import router from '@/vuejs/router'
@@ -47,10 +54,21 @@ import { ProductPageList } from '@/vuejs/router/pages-list'
 import { useSemanticButtonsStore } from '@/vuejs/stores/semanticButtons'
 import { sendGtmEvent } from '@/vuejs/services/gtm'
 
+const MAX_VISIBLE_BUTTONS = 8
+
 const semanticButtonsStore = useSemanticButtonsStore()
 const { semanticButtonsSectionTitle, semanticButtons } = storeToRefs(
   useSemanticButtonsStore(),
 )
+
+const isExpanded = ref(false)
+
+const visibleButtons = computed(() => {
+  if (isExpanded.value) {
+    return semanticButtons.value
+  }
+  return semanticButtons.value.slice(0, MAX_VISIBLE_BUTTONS - 1)
+})
 
 const sectionTitle = computed<string>(() => {
   return semanticButtonsSectionTitle.value
